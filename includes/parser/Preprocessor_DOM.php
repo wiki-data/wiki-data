@@ -868,8 +868,36 @@ class PPFrame_DOM implements PPFrame {
 				}
 			}
 		}
-		return new PPTemplateFrame_DOM( $this->preprocessor, $this, $numberedArgs, $namedArgs, $title );
+		return new PPTemplateFrame_DOM( $this->preprocessor, $this, $numberedArgs, $namedArgs, $title, $args );
 	}
+	
+## START HACK
+	
+	/**
+	 * Create a new child frame with custom arguments
+	 * $args is an array containing the template arguments as text
+	 */
+	function newCustomChild( $args = false, $title = false ) {
+		$namedArgs = array();
+		$numberedArgs = array();
+		if ( $title === false ) {
+			$title = $this->title;
+		}
+		if ( $args !== false ) {
+			foreach ( $args as $key=>$val ) {
+				if ( is_numeric($key) ) {
+					// Numbered parameter
+					$numberedArgs[$key] = $val;
+				} else {
+					// Named parameter
+					$namedArgs[$key] = $val;
+				}
+			}
+		}
+		return new PPTemplateFrame_DOM( $this->preprocessor, $this, $numberedArgs, $namedArgs, $title, $args );
+	}
+
+## END HACK
 
 	function expand( $root, $flags = 0 ) {
 		static $expansionDepth = 0;

@@ -1,0 +1,589 @@
+<?php
+XxxInstaller::Install('XwwTemplate');
+
+#
+#  XwwTemplate - Xoo World of Wiki - Templates and transclusions
+#
+#  Part of Xoo (c) 1997-2008 [[w:en:User:Zocky]], mitko.si
+#	GPL3 applies
+#
+#
+#	Wikivariables and parser functions for dealing with template transclusion
+#
+############################################################################
+
+class XwwTemplate extends Xxx
+{	
+	function fl_eval(&$parser,&$frame,&$fnArgs)
+	{
+/*echo "<pre>frame template: ";
+print_r($frame->getArguments());
+print($frame->title);
+print_r($a);
+echo "</pre>";
+*/
+		$a = $fnArgs;
+		
+	    $args= new XxxArgs($frame,$fnArgs);
+	    
+		$command=array_shift($a); #
+		switch ($args->command)
+		{
+		case 'local':
+			$lastArg=array_pop($a); #
+			foreach ($a as $i=>$arg) #
+			{
+				$a[$i]=$a->node; #
+			}
+			$newFrame = $frame->newChild($a); #
+			return $newFrame->expand($lastArg,$newFrame->preprocessor); #
+
+		case 'wrap':
+			#return "aa";
+			$template = $args->trimExpand(1);
+		    $ns=NS_TEMPLATE;
+		    $title = Title::newFromText( $template, $ns);
+		    if (!$title) $this->notFound();
+		    if (!$title->exists()) return "[[".$title->getPrefixedText()."]]";
+		    list( $dom, $title ) = $parser->getTemplateDom( $title );
+		    if (!$dom) return $this->notFound();
+		    
+		    $frameArgs=array();
+			for ($i=1; $i<=$args->count;$i++)
+			{
+				$frameArgs[$args->getName($i)]=$args->cropExpandValue($i);
+			}
+			if ($frame->isTemplate())
+				$frameArgs = array_merge($frame->getArguments(),$frameArgs);
+			elseif (!$frame->isEmpty())
+				$frameArgs = array_merge($frame->args,$frameArgs);
+			
+			$customFrame = $parser->getPreprocessor()->newCustomFrame($frameArgs);
+		    return $customFrame->expand($dom);
+
+		case 'html':
+			if ($frame->title->getNamespace()!=NS_MEDIAWIKI) $this->notFound();
+			$lastArg=array_pop($a);
+			return array($frame->expand($lastArg),'isHTML'=>true);
+
+		case 'html2':
+			#if ($frame->title->getNamespace()!=NS_MEDIAWIKI) return $this->notFound();
+			#$lastArg=array_pop($args);
+			return array($args->cropExpand(1),'isHTML'=>true,'noparse'=>true);
+        
+
+		case 'wiki':
+		    
+		case 'parse':
+			return "aa";	
+			$lastArg=array_pop($a);
+			foreach ($a as $i=>$arg)
+			{
+				$a[$i]=$arg->node;
+			}
+			$newFrame = $frame->newChild($a);
+			$text=$newFrame->expand($lastArg);
+			$newParser = new Parser();
+			$options = ParserOptions::newFromUser($wgUser);
+			return array($newParser->parse( $text, $parser->mTitle, $options, false)->mText,'isHTML'=>true);
+
+		case 'time':
+					return "AAA";
+
+			$before = microtime(true);
+			$ret = $frame->expand($args[0]);
+			$after = microtime(true);
+			$time = $after - $before;
+			return "<br>from ". ((int)($time*1000)/1000) . " seconds<br>$ret";
+		default:
+			return $this->notFound();
+		}
+	}
+
+	function frameFunctions($fnName,&$frame,$arg=false)
+	{
+		switch($fnName)
+		{
+		case 'document':
+			return "[{$frame->document}]";			
+		case 'title':
+			return array($frame->title->getFullText());
+		case 'startpos':
+			return array($frame->startPos);
+		case 'endpos':
+			return array($frame->endPos);
+		case 'editcall':
+			$editText=$arg === false ? wfMsg('edit') : $arg;
+			if ($frame->parent)
+				return array
+				(
+					'isHTML'=>true,
+#					'isChildObj'=>true,
+					'<a href="' . $frame->parent->title->getFullUrl("action=edit&startpos={$frame->startPos}&endpos={$frame->endPos}").'">'.$editText.'</a>'
+				);
+			return $this->notFound();
+
+		case 'edit':
+			$editText=$arg === false ? wfMsg('edit') : $arg;
+			if ($frame->parent)
+				return array
+				(
+					'isHTML'=>true,
+#					'isChildObj'=>true,
+					'<a href="' . $frame->title->getFullUrl("action=edit").'">'.$editText.'</a>'
+				);
+			return $this->notFound();
+			
+		default:
+			return $this->notFound();
+		}
+	}
+
+	function fl_template(&$parser,&$frame,&$inArgs)
+	{
+		$args=new XxxArgs($frame,$inArgs);
+		return $this->frameFunctions($args->command,$frame,$args->trimExpand(1,false));
+	}
+	
+	function fl_caller(&$parser,&$frame,&$inArgs)
+	{
+		$args=new XxxArgs($frame,$inArgs);
+		$which = $args->trimExpand(1,1);
+
+		$callerFrame=&$frame;
+		for ($i=0;$i<$which && $callerFrame->parent;$i++)
+		{
+			$callerFrame=&$callerFrame->parent;
+		}
+		if ($i<$which) return $this->notFound();
+		return $this->frameFunctions($args->command,$callerFrame,$args->trimExpand(2,false));
+	}		
+}	
+
+//####### Used Hooks ######################
+$wgHooks['EditPage::showEditForm:fields'][] = 'efXwwShow';
+$wgHooks['EditPage::attemptSave'][] = 'efXwwSave';
+
+function efXwwShow(&$editPage) 
+{
+	global $wgRequest, $wgOut;
+	
+	if (!$editPage->mTitle->exists()) return true;
+	$startPos=$wgRequest->getInt('startpos',-1);
+	$endPos=$wgRequest->getInt('endpos',-1);
+
+	if ($startPos>-1 && $endPos>-1)
+	{
+		if ($editPage->formtype=='initial')
+		{
+			$editPage->textbox1=substr($editPage->textbox1,$startPos,$endPos-$startPos);
+		}
+		
+		$wgOut->addHTML( '
+	<input type="hidden" value="'.$startPos.'" name="startpos" />
+	<input type="hidden" value="'.$endPos.'" name="endpos" />
+	');
+	}
+	return true;
+}
+
+function efXwwSave(&$editPage) 
+{
+	global $wgRequest, $wgOut;
+	if ($editPage->mTitle->mArticleID==0) return true;
+	$text = $editPage->mArticle->getContent(true);
+	$startPos=$wgRequest->getInt('startpos',-1);
+	$endPos=$wgRequest->getInt('endpos',-1);
+	if ($startPos>-1 && $endPos>-1)
+	{
+		$editPage->textbox1=substr($text,0,$startPos) . $editPage->textbox1 . substr($text,$endPos);
+	}
+	return true;
+}
+	
+/*	
+	function fl_template()
+	{{#template:caller}}
+	{{#template:self}}
+	{{#template:args}}
+	
+	{{{a}}}
+	
+	me/self/this
+	caller
+	args
+	caller's args
+	position in source
+	
+*/
+
+
+XxxInstaller::Install('XxxTemplateProfiler');
+
+#
+#  XxxTemplateProfiler for MediaWiki
+#
+#  Part of Xoo (c) 1997-2008 [[w:en:User:Zocky]], mitko.si
+#	GPL3 applies
+#
+############################################################################
+
+class XxxTemplateProfiler extends Xxx
+{	
+	var $active 		= false;		# for hooks to know whether to collect data or not
+	var $data 			= array(null);	# for collecting profiling data
+	
+	var $outputTree		= array();		# tree of profiling data, for output
+	var $outputList 	= array();		# summary list, for output
+	var $outputSubList 	= array();		# summary sub list, for output
+	var $totalTime  	= 0;			# total time, for use in output
+	var $maxNetTime 	= 0;			# maximum net time, for use in output
+	
+	# arguments:
+	# profile_show  : templates, all, or dump, defaults to templates
+	# profile_min   : smallest time in ms to include in the list, defaults to 10
+	# profile_hl    : total, net or dump, defaults to net
+	
+	var $show = 'templates';
+	var $min  = 10;
+	var $hl   = 'net';
+
+################################
+#
+#   M A I N   F U N C T I O N
+#
+################################
+
+	function hook_UnknownAction($action, &$article)
+	{
+		if ($action!='profile') return true;
+		global $wgRequest, $wgOut;
+		
+		# gather and fix parameters
+		$this->min   = (int) $wgRequest->getVal('profile_min','10');
+		if ($this->min < 0) $this->min = 0;
+
+		switch ($this->show = $wgRequest->getText('profile_show')) {
+			case 'all':	case 'dump': break;
+			default: $show='templates';
+		}
+		
+		switch ($this->hl = $wgRequest->getText('profile_hl')) {
+			case 'dump': case 'total': break;
+			default: $this->hl='net';
+		}
+
+		#collect profiling data for this article
+		$this->collectData($article);
+
+		# if we're just dumping, return print_r 
+		if ($this->show=='dump')
+		{
+			$wgOut->addHTML("<pre>".print_r($this->data,true)."</pre>");
+			return false; 
+		}
+		
+		# otherwise, we need to extract data for display
+		$this->processData();
+		# output the results
+		$wgOut->addHTML('<div id="template-profiler">');
+		$this->outputHeader($article->getTitle());
+		$this->outputData();
+		$wgOut->addHTML('</div>');
+		return false;
+	}
+
+################################
+#
+#   D A T A   C O L L E C T I O N
+#
+################################
+
+	# profiles an article, by using hooks to collect times on braceSubstitution
+	function collectData(&$article)
+	{
+		global $wgParser, $wgUser, $wgRequest;
+
+		#get title for later use
+		$title = $article->getTitle();
+
+		# prepare root node
+		$this->data = array
+		(
+			'parent' => null,
+			'title' => ':'.$title->getFullText(),
+			'children' => array()
+		);
+
+		# prepare the parser
+		$parser =& $wgParser;
+		$this->active = true;
+		$options = ParserOptions::newFromUser($wgUser);
+
+		#get text
+		$text = $article->getContent();
+
+		#parse the page, recording times for the root node 		
+		$this->data['start']= microtime(true);
+		$parser->parse($article->getContent(), $title, $options, false);		
+		$this->data['end']= microtime(true);
+	}
+
+
+	function hook_BeforeBraceSubstitution(&$parser,$titleText,&$args)
+	{
+		# work only if active
+		if (!$this->active) return true;
+		$node = array
+		(
+			'parent' => &$this->data,
+			'start' => microtime(true),
+			'title' => $titleText,
+			'children' => array()
+		);
+
+		$this->data['children'][] =& $node;
+		$this->data =& $node;
+		
+		return true;
+	}
+	
+	function hook_AfterBraceSubstitution(&$parser,$titleText)
+	{
+		if (!$this->active) return true;
+		$end = microtime(true);
+		$this->data['end']= $end;
+		$this->data =& $this->data['parent'];
+		return true;
+	}
+
+
+###################################
+#
+#   D A T A   P R O C E S S I N G
+#
+###################################
+
+	# process collected data, producing $this->outputList and $this->outputTree
+	function processData(&$node=null)
+	{
+		if ($node===null)
+		{
+			$initial=true;
+			$this->outputList=array();
+			$this->outputSubList=array();
+			$this->maxNetTime=0;
+			$theNode =& $this->data;
+			$this->totalTime = $this->data['end']-$this->data['start'];
+		}
+		else
+		{
+			$initial=false;
+			$theNode =& $node;
+		}
+		
+		$newNode = array
+		(
+			'title'    => $theNode['title'],
+			'children' => array(),
+			'time'     => $theNode['end'] - $theNode['start'],
+			'nettime'  => $theNode['end'] - $theNode['start']
+		);
+		foreach ($theNode['children'] as &$child)
+		{
+			$childTime = $child['end'] - $child['start'];
+			
+			if ($this->show='all' || $this->isTemplate($child['title']))
+			{
+				$childNode = $this->processData($child);
+				
+				if ($childTime >= $this->min/1000)
+				{
+					
+					$newNode['children'][] = $childNode;
+					$newNode['nettime'] -= $childTime;
+				}
+				else
+				{
+					$newNode['nettime'] -= $childTime;
+				    $newNode['children'][-1]['nettime']+=$childTime; 
+				    $newNode['children'][-1]['time']+=$childTime; 
+				    $newNode['children'][-1]['title']="{other}"; 
+				}
+				
+				list ($group,$item)=$this->splitTitle($child['title']);
+#				print ("$group,$item," . $childTime - $childNode['nettime'] . "<br>");
+				
+				$this->outputSubList[$group][$item]['time']+=$childTime;
+				$this->outputSubList[$group][$item]['nettime']+=$childNode['nettime'];
+				$this->outputSubList[$group][$item]['count']++;
+				$this->outputList[$group]['time']+=$childTime;
+				$this->outputList[$group]['nettime']+=$childNode['nettime'];
+				$this->outputList[$group]['count']++;
+				if ($childNode['nettime'] > $this->maxNetTime) $this->maxNetTime = $childNode['nettime'];
+			}
+		}
+		if (!$initial) return $newNode;
+		$this->outputTree=$newNode;
+		return true;
+	}
+
+	# is the title a variable?
+	function isVariable($titleText)
+	{
+		global $wgParser;
+		return $wgParser->mVariables->matchStartToEnd($titleText);
+	}
+
+	# is the title a function?
+	function isFunction($titleText)
+	{
+		global $wgParser;
+		$parts = split(':',$titleText,2);
+		return	(
+			count($parts) == 2 
+			&&	(
+				isset( $wgParser->mFunctionSynonyms[0][strtolower($parts[0])] ) 
+				||	
+				isset( $wgParser->mFunctionSynonyms[1][$parts[0]] )
+			)
+		);
+	}
+
+	# is the title a template?
+	function isTemplate($titleText)
+	{
+		return !($this->isVariable($titleText) || $this->isFunction($titleText) || !Title::newFromText($titleText));
+	}
+
+	# split 
+	function splitTitle($titleText)
+	{
+		if ($this->isVariable($titleText)) return array ('variables',$titleText);
+
+		if ($this->isFunction($titleText))
+		{
+			return split(':',$titleText,2);
+		}
+		
+		$title = Title::newFromText($titleText,NS_TEMPLATE);
+		return array($title->getNsText(),$title->getText());
+	}
+
+###################################
+#
+#   O U T P U T
+#
+###################################
+
+	function outputHeader($title)
+	{
+		global $wgOut;
+		
+		$wgOut->addHTML
+		(
+			'show: <a href="' . $title->getFullUrl('action=profile&profile_min=0') . '">all</a>'
+			.' &middot; <a href="' . $title->getFullUrl('action=profile&profile_min=10') . '">over 10 ms</a>'
+			.' &middot; <a href="' . $title->getFullUrl('action=profile&profile_min=100') . '">over 100 ms</a>'
+		);
+	}
+	
+	function outputData()
+	{
+		global $wgOut;
+
+		if ($this->hl=='dump')
+		{
+			$wgOut->addHTML("<pre>".print_r(array('tree'=>$this->outputTree,'list'=>$this->outputList),true)."</pre>");
+			return; 
+		}
+		$this->outputTreeData();
+		$this->outputListData();
+	}
+	
+	function outputTreeData()
+	{
+		global $wgOut;
+
+		$text = $this->outputTreeNode($this->outputTree);
+		$wgOut->addHTML('<ul>');
+		$wgOut->addWikiText($text);
+		$wgOut->addHTML('</ul></div>');
+		return false;
+	}
+	
+
+	function outputTreeNode(&$node)
+	{
+		$time = $node['time'];
+		$nettime = $node['nettime'];
+		
+		$color = 'rgb('.(int)($time/$this->totalTime*100).','.(int)($time/$this->totalTime*100).',0)';
+						
+		$ret = '<li style="background:'.$color.'" class="profiler-treeitem">';
+		
+		$ret .= '<span class="profiler-time">' . (int)($time*1000) . '</span>';
+		$ret.= '<span class="profiler-nettime">' . (int)($nettime*1000) . '</span>';
+		$ret.= '<span class="profiler-title">';
+		$ret.= $this->getTitle($node['title']);
+		$ret.='</span>';
+		if (count($node['children']))
+		{
+			$ret.='<ul>';
+			foreach ($node['children'] as &$child)
+			{
+				$ret.=$this->outputTreeNode(&$child,$minTime);
+			}
+			$ret.='</ul>';
+		}
+		return $ret;
+	}
+
+	function compareNetTime(&$l,&$r)
+	{
+		if ($l['nettime']>$r['nettime']) return -1;
+		elseif ($l['nettime']<$r['nettime']) return 1;
+		else return 0;
+	}
+
+	function outputListData()
+	{
+		global $wgOut;
+		$wgOut->addHTML("<table id=\"profiler-list\"><tr id=\"profiler-listheader\"><th>group / item</th><th>count</th><th>net time (ms)</th><th>total time (ms)</th></th></tr>");
+		uasort($this->outputList,array($this,'compareNetTime'));
+		foreach ($this->outputList as $groupName=>$group)
+		{
+			if ($group['time']>=$this->min/1000)
+			{
+				$wgOut->addHTML("<tr class=\"profiler-listgroup\"><th>".($groupName?$groupName:'(main)').":</th><td>${group['count']}</td><td>"
+								.(int)($group['nettime']*1000)
+								."</td><td>"
+								.(int)($group['time']*1000)
+								."</td></tr>"
+								);
+				uasort($this->outputSubList[$groupName],array($this,'compareNetTime'));
+				foreach ($this->outputSubList[$groupName] as $itemName=>$item)
+				{
+					if ($item['time']>=$this->min/1000)
+					{
+						$wgOut->addHTML("<tr class=\"profiler-listitem\"><th>$itemName</th><td>${item['count']}</td><td>"
+										.(int)($item['nettime']*1000)
+										."</td><td>"
+										.(int)($item['time']*1000)
+										."</td></tr>");	
+					}
+				}
+			}
+		}
+		$wgOut->addHTML("</table>");
+		return; 
+	}
+
+	function getTitle($titleText)
+	{
+		if (!$this->IsTemplate($titleText)) return $titleText;
+		$title = Title::newFromText($titleText,NS_TEMPLATE)->getFullText();
+		return "[[$title]]";
+	}
+}	
+

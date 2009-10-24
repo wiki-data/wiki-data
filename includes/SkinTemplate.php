@@ -505,6 +505,13 @@ class SkinTemplate extends Skin {
 		wfProfileOut( __METHOD__ . '-execute' );
 
 		// result may be an error
+###
+# START HACK
+###		
+		wfRunHooks( 'AfterOutputPage', array(&$res) );
+###
+# END HACK
+###	
 		$this->printOrError( $res );
 		wfProfileOut( __METHOD__ );
 	}

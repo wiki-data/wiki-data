@@ -1230,6 +1230,13 @@ class OutputPage {
 
 		if ($this->mArticleBodyOnly) {
 			$this->out($this->mBodytext);
+#####
+#  START HACK
+#####
+			wfRunHooks( 'AfterOutputPage', array(&$this->mBodytext) );
+#####
+#  END HACK
+#####
 		} else {
 			// Hook that allows last minute changes to the output page, e.g.
 			// adding of CSS or Javascript by extensions.

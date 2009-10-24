@@ -1,0 +1,61 @@
+-----------------------------------------------------
+  Xoo / Xzz / File Cache for MediaWiki
+
+ (c) 2009 [[w:en:User:Zocky]], GPL 3.0 or later
+-----------------------------------------------------
+
+SYNOPSIS:
+---------
+Non-loggedin users are presented with cached versions of files. By default, pages are not cached. 
+Caching is controlled with the {{filecache:command}} parser function. Logged out users are also 
+prevented from using any actions except 'raw' and 'render', so this cache is only appropriate
+for closed wikis. 
+
+USAGE:
+------
+on wiki pages:
+{{#filecache:for|time}}
+	cache the page for time
+{{#filecache:until|time}}
+	cache the page until time
+{{#filecache:clear|filename}}
+
+in urls:
+?action=purge
+	will clear all cached files for this page
+?action=purgeall
+	will clear all files for all pages
+
+EXAMPLES:
+{{#filecache:for|10 min}}
+{{#filecache:until|1 January 2011}}
+{{#filecache:clear|Main page}}
+
+DETAILS:
+Cached pages are stored in a hashed tree of directories per page titles, each combination of CGI 
+parameters has its own file. A cached file is considered expired if its modified time is in the past, 
+or on action=purge or purgeall. The cache for each page is also cleared when the page is saved.
+
+If the user is logged out, the appropriate file name will be figured out, and if the file exists
+and is not expired, it will be shown and the process will die *before* any of the MediaWiki's vast
+php files are loaded. Otherwise, a flag will be set and the file will be potentially cached later. 
+Any actions other then 'render' and 'raw' will be filtered out for logged out users. 
+
+
+INSTALLATION: 
+-------------
+Add this to the *start* of your LocalSettings.php, before anything else:
+##################################################################################################
+$wgXzzCachePath = '/path/to/your/cache'; #this must be writable by your web server, i.e. apache
+include 'path/to/extensions/Xoo/Xzz/FileCacheCheck.php';
+##################################################################################################
+
+Add this to the *end* of your LocalSettings.php, or where you load other extensions:
+##################################################################################################
+include 'path/to/extensions/Xoo/Xzz/FileCache.php';
+##################################################################################################
+
+ISSUES:
+-------
+Requires hacks to OutputPage.php, and SkinTemplate.php (and/or Skin.php, depending on the skin you're using),
+where AfterPageOutput hook was added.

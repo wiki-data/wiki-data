@@ -1,0 +1,94 @@
+/* ### PROFILER ### */
+
+#template-profiler,
+.box {
+ margin:0 0 10px 0;
+ padding:10px;
+ background:#272727;
+ color:white;
+}
+
+#template-profiler a
+{
+  color:orange;
+}
+
+#template-profiler ul
+{
+  margin:0;
+  padding:0;
+}
+
+#profiler-list
+{
+  background:black;
+  width:100%;
+  color:white;
+  border-collapse:collapse;
+}
+
+#profiler-list th,
+#profiler-list td
+{
+  border-top:dotted 1px #022;
+  border-bottom:dotted 1px #022;
+}
+#profiler-list td
+{
+  text-align:right;
+  font-size:90%;
+}
+tr.profiler-listgroup td
+{
+  color:red;
+  background:#111;
+  width:6em;
+  text-align:right;
+  color:white;
+}
+
+.profiler-listgroup th
+{
+  text-align:left;
+  background:#111;
+}
+
+
+.profiler-listitem th
+{
+  text-align:left;
+  font-weight:normal;
+  padding-left:2em;
+}
+
+.profiler-treeitem
+{
+  list-style-type:none;
+  marker-offset:0px;
+  padding:0px 0px 0px 24px;
+  margin:0px -1px -1px 0px;
+  border:dotted 1px #033;
+}
+
+.profiler-time
+{
+  font-size:10px;
+  float:left;
+  height:100%;
+  margin-left:-24px;
+  width:24px;
+  padding-right:6px;
+  text-align:right;
+  color:#8ff;
+}
+
+.profiler-nettime
+{
+  font-size:10px;
+  width:22px;
+  float:right;
+  text-align:right;
+  padding-right:2px;
+  color:#8ff;
+}
+

@@ -2183,9 +2183,21 @@ class User {
 			if( !$wgUseRCPatrol && !$wgUseNPPatrol )
 				return false;
 		}
+###
+# BEGIN HACK
+###
+		$result = false;
+		if( !wfRunHooks( 'userIsAllowed', array( &$this, $action, &$result ) ) ) {
+			return $result === true;
+		}
+		return $result===true ? true : in_array( $action, $this->getRights(), true );
+
 		# Use strict parameter to avoid matching numeric 0 accidentally inserted
 		# by misconfiguration: 0 == 'foo'
-		return in_array( $action, $this->getRights(), true );
+#		return in_array( $action, $this->getRights(), true );
+###
+# END HACK
+###
 	}
 
 	/**

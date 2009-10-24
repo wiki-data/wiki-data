@@ -846,8 +846,42 @@ class PPFrame_Hash implements PPFrame {
 				}
 			}
 		}
-		return new PPTemplateFrame_Hash( $this->preprocessor, $this, $numberedArgs, $namedArgs, $title );
+		return new PPTemplateFrame_Hash( $this->preprocessor, $this, $numberedArgs, $namedArgs, $title, $args );
 	}
+
+## START HACK
+	
+	/**
+	 * Create a new child frame with custom arguments
+	 * $args is an array containing the template arguments as text
+	 */
+	function newCustomChild( $args = false, $title = false ) {
+		$namedArgs = array();
+		$numberedArgs = array();
+		if ( $title === false ) {
+			$title = $this->title;
+		}
+		if ( is_array($args)) {
+			foreach ( $args as $key=>$val ) {
+				if ( is_numeric($key) ) {
+					// Numbered parameter
+					$numberedArgs[$key] = $val;
+				} else {
+					// Named parameter
+					$namedArgs[$key] = $val;
+				}
+			}
+		} else {
+			trigger_error(gettype($args).'there');
+//			debug_print_backtrace();
+//			die("<pre>here\n".);
+		}
+		return new PPTemplateFrame_Hash( $this->preprocessor, $this, $numberedArgs, $namedArgs, $title, $args );
+	}
+
+## END HACK
+
+
 
 	function expand( $root, $flags = 0 ) {
 		static $expansionDepth = 0;

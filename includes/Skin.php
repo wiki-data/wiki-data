@@ -297,36 +297,45 @@ class Skin extends Linker {
 
 		$this->setMembers();
 		$this->initPage( $out );
-
+####
+# START HACK 
+####
 		// See self::afterContentHook() for documentation
 		$afterContent = $this->afterContentHook();
+		$ret ='';
+		$ret .= ( $out->headElement( $this ) );
 
-		$out->out( $out->headElement( $this ) );
-
-		$out->out( "\n<body" );
+		$ret .=( "\n<body" );
 		$ops = $this->getBodyOptions();
 		foreach ( $ops as $name => $val ) {
-			$out->out( " $name='$val'" );
+			$ret .=( " $name='$val'" );
 		}
-		$out->out( ">\n" );
+		$ret .=( ">\n" );
 		if ( $wgDebugComments ) {
-			$out->out( "<!-- Wiki debugging output:\n" .
+			$ret .= ( "<!-- Wiki debugging output:\n" .
 			  $out->mDebugtext . "-->\n" );
 		}
 
-		$out->out( $this->beforeContent() );
+		$ret .=( $this->beforeContent() );
 
-		$out->out( $out->mBodytext . "\n" );
+		$ret .=( $out->mBodytext . "\n" );
 
-		$out->out( $this->afterContent() );
+		$ret .=( $this->afterContent() );
+		
+		$ret .=( $afterContent );
 
-		$out->out( $afterContent );
+		$ret .=( $this->bottomScripts() );
 
-		$out->out( $this->bottomScripts() );
+		$ret .=( wfReportTime() );
 
-		$out->out( wfReportTime() );
-
-		$out->out( "\n</body></html>" );
+		$ret .=( "\n</body></html>" );
+		die ('skin');
+		wfRunHooks( 'AfterOutputPage', array(&$ret) );
+		$out->out($ret);
+####
+# END HACK
+####
+		
 		wfProfileOut( __METHOD__ );
 	}
 
