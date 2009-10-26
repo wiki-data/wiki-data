@@ -1,6 +1,4 @@
 <?php
-
-die("test");
 # 
 # Multiwiki switch board
 #
@@ -41,37 +39,5 @@ elseif (file_exists ($_SERVER['DOCUMENT_ROOT'].'/LocalSettings.php'))
 else
 	die ('<b>Wiki not installed.</b> Try <a href="/w/config">config</a>.');
 	
-
-
-
-######################################################################################################
-#
-#	FILE CACHE WITH CGI PARAMETERS --- MOVE TO APPROPRIATE FILE !!!!
-#
-#	This is only the shortcut for displaying pages from file cache without loading the wiki.
-#	It will figure out if the page should be showed from cache, and if so, show it. Otherwise, it will
-#	set a flag to inform extensions/Xoo/Xxx/FileCache.php that the page should potentially be cached.
-#	The actual caching, if necessary, will occur there.
-#	
-#	By default, pages are not cached. Caching is controlled with the {{#filecache:command}} parser function.
-#	Examples:
-#	{{#filecache:for|10 min}}
-#	{{#filecache:until|1 January 2011}}
-#	{{#filecache:clear|Main page}}
-#
-#	If the user is logged in, action=purge will delete the cache for this page, and action=purgeall 
-#	will clear the cache for all pages. No further caching will take place, and the loggedin user will
-#	see non-cached pages.
-#
-#	If the user is logged out, the appropriate file name will be figured out, and if the file exists
-#	and is not expired, it will be shown and the process will die. Otherwise, a flag will be set and
-#	the file will be potentially cached later. Any actions other then 'render' and 'raw' will be 
-#	filtered out. 
-#	
-#	Cached pages are stored in a hashed tree of directories per page titles, each combination of CGI 
-#	parameters has its own file. A cached file is expired if its modified time is in the past.
-#
-#######################################################################################################
-
 
 
