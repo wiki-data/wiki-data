@@ -1605,7 +1605,7 @@ $wgCacheEpoch = '20030516000000';
  * to ensure that client-side caches do not keep obsolete copies of global
  * styles.
  */
-$wgStyleVersion = '246';
+$wgStyleVersion = '247';
 
 
 # Server-side caching:
@@ -2811,12 +2811,6 @@ $wgEnableJS2system = false;
  * enable api iframe proxy
  */
 $wgEnableIframeApiProxy = false;
-
-/*
- * boolean; if we should minify the output. (note if you send ?debug=true in
- * the page request it will automatically not group and not minify)
- */
-$wgEnableScriptMinify = true;
 
 /*
  * boolean; if we should enable javascript localization (it loads loadGM json

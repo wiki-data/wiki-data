@@ -50,7 +50,7 @@
 * @author Matt Knapp <mdknapp[at]gmail[dot]com>
 * @author Brett Stimmerman <brettstimmerman[at]gmail[dot]com>
 * @copyright 2005 Michal Migurski
-* @version CVS: $Id: Services_JSON.php 56136 2009-09-10 14:33:25Z dale $
+* @version CVS: $Id: Services_JSON.php 58123 2009-10-25 17:46:06Z maxsem $
 * @license http://www.opensource.org/licenses/bsd-license.php
 * @see http://pear.php.net/pepr/pepr-proposal-show.php?id=198
 */
@@ -134,6 +134,19 @@ class Services_JSON
 	function Services_JSON($use = 0)
 	{
 		$this->use = $use;
+	}
+	
+	private static $mHavePear = NULL;
+	/**
+	 * Returns cached result of class_exists('pear'), to avoid calling AutoLoader numerous times
+	 * in cases when PEAR is not present.
+	 * @return boolean
+	 */
+	private static function pearInstalled() {
+		if ( self::$mHavePear === NULL ) {
+			self::$mHavePear = class_exists( 'pear' );
+		}
+		return self::$mHavePear;
 	}
 
 	/**
@@ -815,7 +828,7 @@ class Services_JSON
 	 */
 	function isError($data, $code = null)
 	{
-		if (class_exists('pear')) {
+		if ( self::pearInstalled() ) {
 			//avoid some strict warnings on PEAR isError check (looks like http://pear.php.net/bugs/bug.php?id=9950 has been around for some time)
 			return @PEAR::isError($data, $code);
 		} elseif (is_object($data) && (get_class($data) == 'services_json_error' ||

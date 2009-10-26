@@ -1377,7 +1377,7 @@ These arguments have been omitted.",
 Please check the comparison below to verify that this is what you want to do, and then save the changes below to finish undoing the edit.',
 'undo-failure' => 'The edit could not be undone due to conflicting intermediate edits.',
 'undo-norev'   => 'The edit could not be undone because it does not exist or was deleted.',
-'undo-summary' => 'Undo revision $1 by [[Special:Contributions/$2|$2]] ([[User talk:$2|Talk]])',
+'undo-summary' => 'Undo revision $1 by [[Special:Contributions/$2|$2]] ([[User talk:$2|talk]])',
 
 # Account creation failure
 'cantcreateaccounttitle'          => 'Cannot create account',
@@ -1407,6 +1407,7 @@ The reason given by $3 is ''$2''",
 Legend: '''({{int:cur}})''' = difference with current revision,
 '''({{int:last}})''' = difference with preceding revision, '''{{int:minoreditletter}}''' = minor edit.",
 'history-fieldset-title' => 'Browse history',
+'history-show-deleted'   => 'Deleted only',
 'history_copyright'      => '-', # do not translate or duplicate this message to other languages
 'histfirst'              => 'Earliest',
 'histlast'               => 'Latest',
@@ -1445,6 +1446,10 @@ As an administrator you can still [$1 view this diff] if you wish to proceed.",
 'rev-suppressed-unhide-diff'  => "One of the revisions of this diff has been '''suppressed'''.
 There may be details in the [{{fullurl:{{#Special:Log}}/suppress|page={{FULLPAGENAMEE}}}} suppression log].
 As an administrator you can still [$1 view this diff] if you wish to proceed.",
+'rev-deleted-diff-view'       => "One of the revisions of this diff has been '''deleted'''.
+As an administrator you can view this diff; there may be details in the [{{fullurl:{{#Special:Log}}/delete|page={{FULLPAGENAMEE}}}} deletion log].",
+'rev-suppressed-diff-view'    => "One of the revisions of this diff has been '''suppressed'''.
+As an administrator you can view this diff; there may be details in the [{{fullurl:{{#Special:Log}}/suppress|page={{FULLPAGENAMEE}}}} suppression log].",
 'rev-delundel'                => 'show/hide',
 'revisiondelete'              => 'Delete/undelete revisions',
 'revdelete-nooldid-title'     => 'Invalid target revision',
@@ -1460,9 +1465,8 @@ function, the specified revision does not exist, or you are attempting to hide t
 'revdelete-selected'          => "'''{{PLURAL:$2|Selected revision|Selected revisions}} of [[:$1]]:'''",
 'logdelete-selected'          => "'''{{PLURAL:$1|Selected log event|Selected log events}}:'''",
 'revdelete-text'              => "'''Deleted revisions and events will still appear in the page history and logs, but parts of their content will be inaccessible to the public.'''
-Other administrators on {{SITENAME}} will still be able to access the hidden content and can undelete it again through this same interface, unless additional restrictions are set.
-
-Please confirm that you intend to do this, that you understand the consequences, and that you are doing this in accordance with [[{{MediaWiki:Policy-url}}|the policy]].",
+Other administrators on {{SITENAME}} will still be able to access the hidden content and can undelete it again through this same interface, unless additional restrictions are set.",
+'revdelete-confirm'           => 'Please confirm that you intend to do this, that you understand the consequences, and that you are doing this in accordance with [[{{MediaWiki:Policy-url}}|the policy]].',
 'revdelete-suppress-text'     => "Suppression should '''only''' be used for the following cases:
 * Potentially libelous information
 * Inappropriate personal information
@@ -2710,12 +2714,12 @@ proceed with caution.',
 'rollbackfailed'    => 'Rollback failed',
 'cantrollback'      => 'Cannot revert edit;
 last contributor is only author of this page.',
-'alreadyrolled'     => 'Cannot rollback last edit of [[:$1]] by [[User:$2|$2]] ([[User talk:$2|Talk]]{{int:pipe-separator}}[[Special:Contributions/$2|{{int:contribslink}}]]);
+'alreadyrolled'     => 'Cannot rollback last edit of [[:$1]] by [[User:$2|$2]] ([[User talk:$2|talk]]{{int:pipe-separator}}[[Special:Contributions/$2|{{int:contribslink}}]]);
 someone else has edited or rolled back the page already.
 
-The last edit to the page was by [[User:$3|$3]] ([[User talk:$3|Talk]]{{int:pipe-separator}}[[Special:Contributions/$3|{{int:contribslink}}]]).',
+The last edit to the page was by [[User:$3|$3]] ([[User talk:$3|talk]]{{int:pipe-separator}}[[Special:Contributions/$3|{{int:contribslink}}]]).',
 'editcomment'       => "The edit summary was: \"''\$1''\".",
-'revertpage'        => 'Reverted edits by [[Special:Contributions/$2|$2]] ([[User talk:$2|Talk]]) to last revision by [[User:$1|$1]]',
+'revertpage'        => 'Reverted edits by [[Special:Contributions/$2|$2]] ([[User talk:$2|talk]]) to last revision by [[User:$1|$1]]',
 'revertpage-nouser' => 'Reverted edits by (username removed) to last revision by [[User:$1|$1]]',
 'rollback-success'  => 'Reverted edits by $1;
 changed back to last revision by $2.',

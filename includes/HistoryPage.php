@@ -129,6 +129,20 @@ class HistoryPage {
 		$month = $wgRequest->getInt( 'month' );
 		$tagFilter = $wgRequest->getVal( 'tagfilter' );
 		$tagSelector = ChangeTags::buildTagFilterSelector( $tagFilter );
+		/**
+		 * Option to show only revisions that have been (partially) hidden via RevisionDelete
+		 * Note that this can run a *long* time if there are many revisions to look at.
+		 * We use "isBigDeletion" to determine if the history is too big to go through.
+		 * Additionally, only users with 'deleterevision' right can filter for deleted edits.
+		 */
+		if ( $this->title->userCan( 'deleterevision' ) && ( !$this->article->isBigDeletion() || $this->title->userCan( 'bigdelete' ) ) ) {
+			$conds = ( $wgRequest->getBool( 'deleted' ) ) ? array("rev_deleted != '0'") : array();
+			$checkDeleted = Xml::checkLabel( wfMsg( 'history-show-deleted' ), 'deleted', '', $wgRequest->getBool( 'deleted' ) ) . "\n";
+		}
+		else { # Don't filter and don't add the checkbox for filtering
+			$conds = array();
+			$checkDeleted = '';
+		}
 
 		$action = htmlspecialchars( $wgScript );
 		$wgOut->addHTML(
@@ -140,8 +154,9 @@ class HistoryPage {
 			) .
 			Xml::hidden( 'title', $this->title->getPrefixedDBKey() ) . "\n" .
 			Xml::hidden( 'action', 'history' ) . "\n" .
-			xml::dateMenu( $year, $month ) . '&nbsp;' .
+			Xml::dateMenu( $year, $month ) . '&nbsp;' .
 			( $tagSelector ? ( implode( '&nbsp;', $tagSelector ) . '&nbsp;' ) : '' ) .
+			$checkDeleted .
 			Xml::submitButton( wfMsg( 'allpagessubmit' ) ) . "\n" .
 			'</fieldset></form>'
 		);
@@ -151,7 +166,7 @@ class HistoryPage {
 		/**
 		 * Do the list
 		 */
-		$pager = new HistoryPager( $this, $year, $month, $tagFilter );
+		$pager = new HistoryPager( $this, $year, $month, $tagFilter, $conds );
 		$wgOut->addHTML(
 			$pager->getNavigationBar() .
 			$pager->getBody() .
@@ -284,15 +299,16 @@ class HistoryPage {
  * @ingroup Pager
  */
 class HistoryPager extends ReverseChronologicalPager {
-	public $lastRow = false, $counter, $historyPage, $title, $buttons;
+	public $lastRow = false, $counter, $historyPage, $title, $buttons, $conds;
 	protected $oldIdChecked;
 
-	function __construct( $historyPage, $year='', $month='', $tagFilter = '' ) {
+	function __construct( $historyPage, $year='', $month='', $tagFilter = '', $conds = array() ) {
 		parent::__construct();
 		$this->historyPage = $historyPage;
 		$this->title = $this->historyPage->title;
 		$this->tagFilter = $tagFilter;
 		$this->getDateCond( $year, $month );
+		$this->conds = $conds;
 	}
 
 	// For hook compatibility...
@@ -304,7 +320,7 @@ class HistoryPager extends ReverseChronologicalPager {
 		$queryInfo = array(
 			'tables'  => array('revision'),
 			'fields'  => array_merge( Revision::selectFields(), array('ts_tags') ),
-			'conds'   => array('rev_page' => $this->historyPage->title->getArticleID() ),
+			'conds'   => array_merge( array('rev_page' => $this->historyPage->title->getArticleID() ), $this->conds ),
 			'options' => array( 'USE INDEX' => array('revision' => 'page_timestamp') ),
 			'join_conds' => array( 'tag_summary' => array( 'LEFT JOIN', 'ts_rev_id=rev_id' ) ),
 		);
@@ -476,20 +492,29 @@ class HistoryPager extends ReverseChronologicalPager {
 		$link = $this->revLink( $rev );
 		$classes = array();
 
+		$del = '';
 		if( $wgUser->isAllowed( 'deleterevision' ) ) {
-			// Don't show useless link to people who cannot hide revisions
-			if( !$rev->getVisibility() && !$wgUser->isAllowed( 'deleterevision' ) ) {
-				$del = Xml::check( 'deleterevisions', false, array('class' => 'mw-revdelundel-hidden') );
-			// If revision was hidden from sysops
-			} else if( !$rev->userCan( Revision::DELETED_RESTRICTED ) ) {
-				$del = Xml::check( 'deleterevisions', false, array('disabled' => 'disabled') );
+			// If revision was hidden from sysops, disable the checkbox
+			if( !$rev->userCan( Revision::DELETED_RESTRICTED ) ) {
+				$del = Xml::check( 'deleterevisions', false, array( 'disabled' => 'disabled' ) );
+			// Otherwise, enable the checkbox...
+			} else {
+				$del = Xml::check( 'showhiderevisions', false, array( 'name' => 'ids['.$rev->getId().']' ) );
+			}
+		// User can only view deleted revisions...
+		} else if( $rev->getVisibility() && $wgUser->isAllowed( 'deletedhistory' ) ) {
+			// If revision was hidden from sysops, disable the link
+			if( !$rev->userCan( Revision::DELETED_RESTRICTED ) ) {
+				$del = Xml::tags( 'span', array( 'class'=>'mw-revdelundel-link' ),
+					'(' . $this->historyPage->message['rev-delundel'] . ')' );
 			// Otherwise, show the link...
 			} else {
-				$id = $rev->getId();
-				$del = Xml::check( 'showhiderevisions', false, array( 'name' => "ids[$id]" ) );
+				$query = array( 'type' => 'revision',
+					'target' => $this->title->getPrefixedDbkey(), 'ids' => $rev->getId() ); 	 
+				$del .= $this->getSkin()->revDeleteLink( $query, $rev->isDeleted( Revision::DELETED_RESTRICTED ) );
 			}
-			$s .= " $del ";
 		}
+		if( $del ) $s .= " $del ";
 
 		$s .= " $link";
 		$s .= " <span class='history-user'>" . $this->getSkin()->revUserTools( $rev, true ) . "</span>";
@@ -670,7 +695,7 @@ class HistoryPager extends ReverseChronologicalPager {
 				);
 				$checkmark = array( 'checked' => 'checked' );
 			} else {
-				# Check ility of old revisions
+				# Check visibility of old revisions
 				if( !$rev->userCan( Revision::DELETED_TEXT ) ) {
 					$radio['disabled'] = 'disabled';
 					$checkmark = array(); // We will check the next possible one
