@@ -1,4 +1,6 @@
 <?php
+
+die("test");
 # 
 # Multiwiki switch board
 #
