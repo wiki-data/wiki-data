@@ -1,4 +1,7 @@
 <?php
+
+# ena
+
 # 
 # Multiwiki switch board
 #
