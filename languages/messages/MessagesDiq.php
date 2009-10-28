@@ -495,6 +495,7 @@ Yew formato meqbul de adresê e-posta bınuse ya zi veng bıverde.',
 Cıkewe keyepel u şifreyê xo bıvurne.
 
 Eke no gure şıma bı xetayê kerd no mesaj peygoş bıkere.',
+'usernamehasherror'          => 'Namayê karberî de karakteranê harshî gani mebo',
 'login-throttled'            => 'Demekê cıwa ver de şıma zah teşebbusê hesab akerdış kerd.
 Bıne vındere u newe ra dest pê bıkere.',
 'loginlanguagelabel'         => 'Zıwan: $1',
@@ -730,6 +731,7 @@ Sebebo ke terefê $3 ra diyao ''$2''",
 Cetwel: (pey) = ferqê versiyonê peni,
 (ver) = ferqê versiyonê verni, Q = vurnayışo qıçkek.",
 'history-fieldset-title' => 'Tarixê browsey',
+'history-show-deleted'   => 'Teyna biwedar',
 'histfirst'              => 'Verênêr',
 'histlast'               => 'Peyênêr',
 'historysize'            => '({{PLURAL:$1|1 bayt|$1 bayti}})',
@@ -767,6 +769,10 @@ Beno ke [{{fullurl:{{#Special:Log}}/delete|page={{FULLPAGENAMEE}}}} deletion log
 'rev-suppressed-unhide-diff'  => "Nê revizyonani ra yewi '''çap biyo'''.
 [{{fullurl:{{#Special:Log}}/delete|page={{FULLPAGENAMEE}}}} rocaneyê vındertışi] de teferru'ati esti.
 Eke şıma serkari u devam bıkeri [$1 no vurnayiş şıma eşkeni bıvini].",
+'rev-deleted-diff-view'       => "Yew revizyonê ena diff '''wedariyayo''. 
+Îdarekarî eşkeno ena dif bivîne; belki tiya de [{{fullurl:{{#Special:Log}}/delete|page={{FULLPAGENAMEE}}}} logê wedarnayişî].de detayan esto.",
+'rev-suppressed-diff-view'    => "Yew revizyonê ena diff '''suppress'' biyo. 
+Îdarekarî eşkeno ena dif bivîne; belki tiya de [{{fullurl:{{#Special:Log}}/suppress|page={{FULLPAGENAMEE}}}} logê wedarnayişî] de detayan esto.",
 'rev-delundel'                => 'bımocne/bınımne',
 'revisiondelete'              => 'Bıestere/çımraviyarnayışan peyser bia',
 'revdelete-nooldid-title'     => 'Çımraviyarnayışo waşte nêvêreno',
@@ -782,6 +788,7 @@ Eke şıma serkari u devam bıkeri [$1 no vurnayiş şıma eşkeni bıvini].",
 'logdelete-selected'          => "'''{{PLURAL:$1|Qeydbiyayışo weçinıte|Qeydbiyayışê weçinıtey}}:'''",
 'revdelete-text'              => "'''Çımraviyarnayışê esterıtey u kerdışi hewna tarixê pele u qeydan de asenê, hema parçeyê zerrekê dinan areze nêbenê.'''
 Eke şertê ilawekerdey ke niyê ro, idarekerê bini {{SITENAME}} de nêşenê hewna bıresê zerrekê nımıtey u şenê ey anciya na eyni miyanpele ra peyser biarê.",
+'revdelete-confirm'           => 'Ma rica keno testiq bike ti ena hereket keno u ti zano neticeyanê herketanê xo u ti ena hereket pê ena [[{{MediaWiki:Policy-url}}|polici]] ra keno.',
 'revdelete-suppress-text'     => "Wedardış gani '''tenya''' nê halanê cêrênan de bıxebıtiyo:
 * Melumatê kıfırio mıhtemel
 * Melumatê şexio bêmınasıb
@@ -1319,6 +1326,7 @@ Eka tu wazene ke nameyo raşt xo bide, ma nameyo raşt ti iştirakanê ti de moc
 'upload'                      => 'Dosya bar ke',
 'uploadbtn'                   => 'Dosya bar ke',
 'reuploaddesc'                => 'Barkerdışi iptal ke u peyser şo formê barkerdışi',
+'upload-tryagain'             => 'Deskripyonê dosyayî ke vurîya ey qeyd bike',
 'uploadnologin'               => 'Nicikewte',
 'uploadnologintext'           => 'Ti gani [[Special:UserLogin|cikewte]] biyo ke dosya bar bike.',
 'upload_directory_missing'    => 'Direktorê dosyayê ($1)î biyo vînî u webserver de nieşkeno viraziye.',
@@ -1380,6 +1388,7 @@ eke şıma hhene zi qayili dosyaya xo bar keri ager3e u newe yew name bışuxuln
 'file-deleted-duplicate'      => 'hemzeyê na dosyayi ([[$1]]) cuwa ver battal biya.',
 'successfulupload'            => 'bar biyo',
 'uploadwarning'               => 'Îkazê bar kerdişî',
+'uploadwarning-text'          => 'Bînê de deskripyonê dosyayî bivurne u reyna qeyd bike.',
 'savefile'                    => 'Dosya qeyd ke',
 'uploadedimage'               => '"[[$1]]" bar bi',
 'overwroteimage'              => 'yew versiyonê newvî ye "[[$1]]"î bar bike',
@@ -1389,9 +1398,13 @@ eke şıma hhene zi qayili dosyaya xo bar keri ager3e u newe yew name bışuxuln
 'uploadscripted'              => 'Ena dosya de yew HTML ya zi kodê scriptî este ke belki browserê webî fam nikeno.',
 'uploadcorrupt'               => 'na dosya ya xerebnaye ya ya zi yew qısmê aye şaş a. Dosya kontrol bıkerê u newe ra bar kerê.',
 'uploadvirus'                 => 'Ena dosya de yew virus estê: Qe detayan: $1',
+'upload-source'               => 'Dosyayê henî',
 'sourcefilename'              => 'Nameyê dosyaye çimeyî',
+'sourceurl'                   => 'URLê henî',
 'destfilename'                => 'Destînasyonê nameyêdosya',
 'upload-maxfilesize'          => 'Ebatêî dosya tewr girdî: $1',
+'upload-description'          => 'Deskripsiyonê dosyayî',
+'upload-options'              => 'Tercihanê bar kerdişî',
 'watchthisupload'             => 'Ena dosya seyr bike',
 'filewasdeleted'              => 'no name de yew dosya yew wexto nızdi de bar biya u dıma zi serkaran hewn a kerdo. wexya ke şıma dosya bar keni bıewnê no pel $1.',
 'upload-wasdeleted'           => "'''hişyari: dosyaya ke cuwa ver hewna biya şıma newe ra bar keni.'''
@@ -1720,6 +1733,7 @@ qaydeyê destek biyayeyi: <tt>$1</tt>',
 
 # Special:ActiveUsers
 'activeusers'          => 'Listeyê karberî ke aktiv o.',
+'activeusers-intro'    => 'Ena yew listeye ke karberanê ke $1 {{PLURAL:$1|roc|rocan}} de îştiraq kerdo înan mocneno.',
 'activeusers-count'    => 'ney {{PLURAL:$3|rocê peyin de|$3 rocê peyin de}} $1 {{PLURAL:$1|vuriyayiş|vuriyayiş}}',
 'activeusers-from'     => 'karber ê ke pê ney destpêkeni ramocın:',
 'activeusers-noresult' => 'Karberî çini yo.',
@@ -1853,7 +1867,7 @@ qey hemkari u pêşniyazi:
 'exblank'                => 'zerreyê peli vengo',
 'delete-confirm'         => '"$1" biestere',
 'delete-legend'          => 'Biestere',
-'historywarning'         => 'hişyari: no pel o ke şıma kenê hewn a, verê ey esto:',
+'historywarning'         => 'Hişyari: no pel o ke şıma kenê hewn a, verê ey esto {{PLURAL:$1|revizyon|revizyonan}}::',
 'confirmdeletetext'      => 'Tı ho yew pele u tarixê pele wederneno. 
 Tı ra rica keno, tı zani tı ho sekeno, tı zani neticeyanê eno wedarnayışi u tı zani tı ser [[{{MediaWiki:Policy-url}}|poliçe]] kar keno.',
 'actioncomplete'         => 'Aksiyon temam biyo',
@@ -2111,6 +2125,7 @@ qê referansi qeydê vernigrewtışi cêr de eşkera biyo:',
 'ipblocklist-sh-tempblocks'       => 'blokê arizî  $1',
 'ipblocklist-sh-addressblocks'    => 'Blokê IP ye yewî $1',
 'ipblocklist-submit'              => 'Bigêre',
+'ipblocklist-otherblocks'         => 'Blokane binan',
 'blocklistline'                   => '$1, $2 blok biyê $3 ($4)',
 'infiniteblock'                   => 'ebedî',
 'expiringblock'                   => 'roca $1i saeta $2i de qediyena',
@@ -2261,6 +2276,10 @@ Yewna name bınus.',
 'move-leave-redirect'          => 'pey de yew rayberdış roni',
 'protectedpagemovewarning'     => "'''hişyari:''' no pel kılit biyo, têna serkari eşkeni bıkırışi.",
 'semiprotectedpagemovewarning' => "'''Not:''' no pel kılit biyo, têna karberê qeydkerdeyi eşkeni bıkırışi.",
+'move-over-sharedrepo'         => '== Dosya esto ==
+[[:$1]] enbar ma de esto. Eka ti wazeno ena dosyo ser ena sername de bero, yewna dosya sero nusiyeno.',
+'file-exists-sharedrepo'       => 'Ena sername zaten embar ma de esto. 
+Ma rica keno yewna sername binuse.',
 
 # Export
 'export'            => 'Pelan export bık',

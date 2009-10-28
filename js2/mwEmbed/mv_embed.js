@@ -14,15 +14,6 @@
  * (in cases where media will be hosted in a different place than the embedding page)
  *
  */
-// Fix multiple instances of mv_embed (i.e. include twice from two different servers)
-var MV_DO_INIT=true;
-if( MV_EMBED_VERSION ){
-	MV_DO_INIT=false;
-}
-// Used to grab fresh copies of scripts.
-var MV_EMBED_VERSION = '1.0r20';
-
-
 
 /**
  * AutoLoader paths 
@@ -194,7 +185,8 @@ parseUri.options = {
 // For use when mv_embed with script-loader is in the root MediaWiki path
 var mediaWiki_mvEmbed_path = 'js2/mwEmbed/';
 
-var _global = this; // Global obj (depreciate use window)
+//The global scope: will be depreciated once we get everything into $mw
+var _global = this; 
 
 /*
 * setup the empty global $mw object
@@ -206,9 +198,6 @@ if(!window['$mw']){
 }
 
 //@@todo move these into $mw
-var mv_init_done = false;
-var global_cb_count = 0;
-var global_player_list = new Array(); // The global player list per page
 var global_req_cb = new Array(); // The global request callback array
 
 // Get the mv_embed location if it has not been set
@@ -230,17 +219,17 @@ if( !mv_embed_path ) {
 		'jui_skin' : 'redmond',
 		'video_size' : '400x300'		
 	}
+	// the version of mwEmbed
+	$.version = '1.0r21';
 	
 	/*
-	* global flags
+	* some global containers flags 
 	*/
-	$.g = {
-		'skin_list' : new Array(),
-		'mv_init_done' : false,
-		'global_cb_count' : 0,
-		'global_player_list' : new Array(), // The global player list per page
-		'global_req_cb' : new Array() // The global request callback array
-	}
+	$.skin_list = new Array();
+	$.init_done = false;
+	$.cb_count = 0;
+	$.player_list = new Array(), // The global player list per page
+	$.req_cb = new Array() // The global request callback array	
 	 
 	/*
 	* Language classes $mw.lang
@@ -840,8 +829,8 @@ var mvJsLoader = {
 	missing_path : null,
 	doLoad: function( loadLibs, callback ) {
 		this.ctime++;
-
 		if( loadLibs && loadLibs.length != 0 ) {
+			//js_log("doLoad setup::" + JSON.stringify( loadLibs ) );
 			// Set up this.libs
 			// First check if we already have this library loaded
 			var all_libs_loaded = true;
@@ -852,7 +841,7 @@ var mvJsLoader = {
 				}
 			}
 			if( all_libs_loaded ) {
-				//js_log( 'Libraries ( ' + loadLibs  +  ') already loaded... skipping load request' );
+				js_log( 'Libraries ( ' + loadLibs  +  ') already loaded... skipping load request' );
 				callback();
 				return;
 			}
@@ -877,7 +866,7 @@ var mvJsLoader = {
 						coma = ',';
 					}
 				}
-				//Build the url to the scriptServer striping its request paramaters:
+				//Build the url to the scriptServer striping its request parameters:
 				var puri = parseUri( getMvEmbedURL() );
 				if( ( getMvEmbedURL().indexOf('://') != -1 )
 					&& puri.host != parseUri( document.URL ).host )
@@ -905,14 +894,14 @@ var mvJsLoader = {
 				}
 			}
 		}
+		
 		if( callback ) {
 			this.callbacks.push( callback );
 		}
 		if( this.checkLoading() ) {
 			//@@todo we should check the <script> Element .onLoad property to
-			//make sure its just not a very slow connection or we can run the callback
+			//make sure its just not a very slow connection
 			//(even though the class is not loaded)
-
 			if( this.load_time++ > 4000 ){ // Time out after ~80 seconds
 				js_log( gM('mwe-error_load_lib', [mvGetClassPath(this.missing_path),  this.missing_path]) );
 				this.load_error = true;
@@ -1066,9 +1055,9 @@ var mvJsLoader = {
 			];
 			
 			//add any requested skins (suports multiple skins per single page)
-			if( $mw.g['skin_list'] ){
-				for(var i in $mw.g['skin_list'] ){
-					depReq[0].push( $mw.g['skin_list'][i] + 'Config' );
+			if( $mw.skin_list ){
+				for(var i in $mw.skin_list  ){
+					depReq[0].push( $mw.skin_list[i] + 'Config' );
 				}
 			}
 				
@@ -1125,14 +1114,14 @@ $mw.load = mwLoad;
  * $j(document).ready( function(){ */
 function mwdomReady( force ) {
 	js_log( 'f:mwdomReady:' );
-	if( !force && mv_init_done ) {
-		js_log( "mv_init_done already done, do nothing..." );
+	if( !force && $mw.init_done ) {
+		js_log( "mw done, do nothing..." );
 		return false;
 	}
-	mv_init_done = true;
+	$mw.init_done = true;
 	// Handle the execution of queued functions with jQuery "ready"
 
-	// Check if this page has a video or playlist
+	// Check if this page has a video, audio or playlist tag
 	var e = [
 		document.getElementsByTagName( "video" ),
 		document.getElementsByTagName( "audio" ),
@@ -1145,7 +1134,7 @@ function mwdomReady( force ) {
 				if(e[j][k] && typeof( e[j][k]) == 'object'){
 					var	sn = e[j][k].getAttribute('skin_name')
 					if( sn && sn != ''){
-						$mw.g.skin_list.push( sn );
+						$mw.skin_list.push( sn );
 					}
 				}
 			}
@@ -1205,7 +1194,7 @@ if( window.onload ) {
 window.onload = function () {
     if( temp_f )
         temp_f();
-	mwdomReady();    
+	mwdomReady();
 }
 
 /*
@@ -1314,6 +1303,9 @@ function mv_jqueryBindings() {
 				});
 			});
 		}
+		/*
+		* Sequencer loader
+		*/
 		$.fn.sequencer = function( iObj, callback ) {
 			// Debugger
 			iObj['target_sequence_container'] = this.selector;
@@ -1690,7 +1682,7 @@ function do_api_req( options, callback ) {
 	options.data['format'] = 'json';
 
 	// If action is not set, assume query
-	if( !options.data['action'] )
+	if( ! options.data['action'] )
 		options.data['action'] = 'query';
 
 	// js_log('do api req: ' + options.url +'?' + jQuery.param(options.data) );	
@@ -1726,7 +1718,7 @@ function do_api_req( options, callback ) {
 			req_url += paramAnd + encodeURIComponent( i ) + '=' + encodeURIComponent( options.data[i] );
 			paramAnd = '&';
 		}
-		var fname = 'mycpfn_' + ( global_cb_count++ );
+		var fname = 'mycpfn_' + ( $mw.cb_count++ );
 		_global[ fname ] = callback;
 		req_url += '&' + options.jsonCB + '=' + fname;
 		loadExternalJs( req_url );
@@ -1898,7 +1890,7 @@ function getMvUniqueReqId() {
 		return urid;
 	}
 	// Otherwise, just return the mv_embed version
-	return MV_EMBED_VERSION;
+	return $mw.version;
 }
 /*
  * Set the global mv_embed path based on the script's location
@@ -1955,7 +1947,7 @@ if ( typeof DOMParser == "undefined" ) {
 * Utility functions
 */
 function js_log( string ) {
-	///add any prepend debug strings if nessesary
+	///add any prepend debug strings if nessesary (used for cross browser)
 	if( $mw.conf['debug_pre'] )
 		string = $mw.conf['debug_pre']+ string;
 			

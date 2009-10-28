@@ -91,24 +91,24 @@ dj'artìcoj ancó pa scrit",
 
 'underline-always'  => 'Sempe',
 'underline-never'   => 'Mai',
-'underline-default' => 'Dòvra lë stàndard dël programma ëd navigassion (browser)',
+'underline-default' => 'Deuvra lë stàndard dël programma ëd navigassion (browser)',
 
 # Font style option in Special:Preferences
-'editfont-style'     => "Stil dël font ëd l'area ëd modìfica:",
-'editfont-default'   => 'Default dël browser',
+'editfont-style'     => "Stil dël font ëd l'àrea ëd modìfica:",
+'editfont-default'   => 'Stàndard dël navigator',
 'editfont-monospace' => 'Font mono-spassià',
 'editfont-sansserif' => 'Font sans-serif',
 'editfont-serif'     => 'Font serif',
 
 # Dates
 'sunday'        => 'Dumìnica',
-'monday'        => 'Lun-es',
-'tuesday'       => 'Martes',
+'monday'        => 'Lùn-es',
+'tuesday'       => 'Màrtes',
 'wednesday'     => 'Merco',
 'thursday'      => 'Giòbia',
 'friday'        => 'Vënner',
 'saturday'      => 'Saba',
-'sun'           => 'Domi',
+'sun'           => 'Dum',
 'mon'           => 'Lun-',
 'tue'           => 'Mart',
 'wed'           => 'Mër',
@@ -771,6 +771,7 @@ La rason butà da $3 për ël blocagi a l'é staita: ''$2''",
 Legenda: (cor) = diferense con la version corenta,
 (prim) = diferense con la version prima, M = modìfica cita',
 'history-fieldset-title' => 'Varda la cronologìa',
+'history-show-deleted'   => 'Mach ëscancelà',
 'histfirst'              => 'Prima',
 'histlast'               => 'Ùltima',
 'historysize'            => '({{PLURAL:$1|1|$1}} byte)',
@@ -807,6 +808,10 @@ Com aministrador it peule ancó [$1 vëdde le diferense] se a fà dbzògn.",
 'rev-suppressed-unhide-diff'  => "Un-a dle revision dë sta diferensa-sì a l'é stàita '''scanselà'''.
 A peul ess-je dij detaj ant ël  [{{fullurl:{{#Special:Log}}/suppress|page={{FULLPAGENAMEE}}}} registr ëd le scanselassion].
 Com  aministrador it peule ancò [$1 vëdde sta diferensa-sì] s'it veule.",
+'rev-deleted-diff-view'       => "Un-a dle revision dë sta diferensa-sì a l'é stàita '''scancelà'''.
+Com aministrator it peule ancó vëdde sta diferensa-sì; a peulo ess-ie dij detaj ant ël [{{fullurl:{{#Special:Log}}/delete|page={{FULLPAGENAMEE}}}} registr ëd le scancelassion].",
+'rev-suppressed-diff-view'    => "Un-a dle revision ëd costa diferensa-sì a l'é stàita '''eliminà'''.
+Tanme aministrator, a peul ancora s-ciairé costa diferensa; a peulo esse pì 'd detaj ant ël [{{fullurl:{{#Special:Log}}/suppress|page={{FULLPAGENAMEE}}}} registr ëd j'eliminassion].",
 'rev-delundel'                => 'mostra/stërma',
 'revisiondelete'              => 'Scancela/disdëscancela revision',
 'revdelete-nooldid-title'     => 'Version nen spessificà',
@@ -820,8 +825,9 @@ Com  aministrador it peule ancò [$1 vëdde sta diferensa-sì] s'it veule.",
 'revdelete-show-file-submit'  => "E'!",
 'revdelete-selected'          => "'''{{PLURAL:$2|Revision|Revision}} selessionà për [[:$1]]:'''",
 'logdelete-selected'          => "'''{{PLURAL:$1|Event|Event}} dël registr selessionà:'''",
-'revdelete-text'              => "Le vërsion scanselà e j'event a së s-ciaireran sempe ant la stòria dla pàgina e ant ij registr, ma sò test al pùblich a-j andrà pì nen.'''
-J'àutri aministrator an dzora a {{SITENAME}} a saran ancó sempe bon a s-ciairé ël contnù stërmà e a podran disdëscancelelo andré con la midema antërfacia, sempe che a sia nen staita butà na restrission adissional.",
+'revdelete-text'              => "Le version scancelà e j'event a së s-ciaireran sempe ant la stòria dla pàgina e ant ij registr, ma sò test al pùblich a j'andrà pì nen.'''
+J'àutri aministrator dzora a {{SITENAME}} a saran ancó sempe bon a s-ciairé ël contnù stërmà e a podran disdëscancelelo andré con la midema antërfacia, sempe che a sia nen stàita butà na restrission adissional.",
+'revdelete-confirm'           => "Për piasì, ch'a confema ch'a veul fé sòn, ch'as rend cont dle conseguense, e ch'a lo fa an acòrd con [[{{MediaWiki:Policy-url}}|le régole]].",
 'revdelete-suppress-text'     => "La scanselassion a dovrìa '''mach''' esse dovrà për cost cas:
 * Anformassion përsonaj nen aproprià
 *: ''adrësse ëd ca e nùmer ëd telefono, còdes fiscaj, etc.''",
@@ -1929,7 +1935,7 @@ Për fé dle comunicassion ëd servissi e avej pì d\'agiut:
 'exblank'                => "La pàgina a l'era veujda",
 'delete-confirm'         => 'Scancela "$1"',
 'delete-legend'          => 'Scancela',
-'historywarning'         => "'''Avis:''' La pàgina che a l'é antramentr che a scansela a l'ha na stòria con $1 {{PLURAL:$1|revision|revision}}:",
+'historywarning'         => "'''Avis:''' La pàgina che a l'é antramentr che a scancela a l'ha na stòria con $1 {{PLURAL:$1|revision|revision}}:",
 'confirmdeletetext'      => "A sta për scancelé d'autut da 'nt la base dat na pàgina ò pura na figura, ansema a tuta soa cronologìa.<p>
 Për piasì, che an conferma che sòn a l'é da bon sò but, che a as rend cont ëd le conseguense ëd lòn che a fa, e che sòn a resta an pien an régola con lòn che a l'é stabilì ant la [[{{MediaWiki:Policy-url}}]].",
 'actioncomplete'         => 'Travaj fait e finì',
@@ -2189,6 +2195,7 @@ Varda [[Special:IPBlockList|lista dj'IP blocà]] Për rivëdde ij blòch.",
 'ipblocklist-sh-tempblocks'       => '$1 blòch a temp',
 'ipblocklist-sh-addressblocks'    => "$1 blòch ëd j'IP",
 'ipblocklist-submit'              => 'Arsërca',
+'ipblocklist-otherblocks'         => 'Àutri blocagi',
 'blocklistline'                   => "$1, $2 a l'ha blocà $3 ($4)",
 'infiniteblock'                   => 'për sempe',
 'expiringblock'                   => 'a finiss ël $1 a $2',
@@ -2338,8 +2345,8 @@ L\'artìcol ëd destinassion "[[:$1]]" a-i é già. Veul-lo scancelelo për avej
 'move-leave-redirect'          => 'Lassa na rediression',
 'protectedpagemovewarning'     => "'''Atension:''' Sta pàgina-sì a l'é stàita blocà parèj che mach utent con drit d'aministrador a peusso tramudela.",
 'semiprotectedpagemovewarning' => "'''Nota:''' Sta pàgina-sì a l'é stàita blocà parèj che utent argistrà a peusso tramudela.",
-'move-over-sharedrepo'         => '== Ël file a esist ==
-[[:$1]] a esist an dzora a un depòsit condivis. Tramudé un file a cost tìtol-sì a coaterà ël file condivis.',
+'move-over-sharedrepo'         => "== L'archivi a esist ==
+[[:$1]] a esist già dzora a un depòsit partagià. Tramudé n'archivi a cost tìtol-sì a coaterà l'archivi partagià.",
 'file-exists-sharedrepo'       => "Ël nòm dël file sërnù a l'é già dovrà ant ël depòsit condivis.
 Për piasì sern n'àutr nòm.",
 

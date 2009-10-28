@@ -114,6 +114,9 @@ class ApiParamInfo extends ApiBase {
 			$a = array('name' => $n);
 			if(isset($paramDesc[$n]))
 				$a['description'] = implode("\n", (array)$paramDesc[$n]);
+			if(isset($p[ApiBase::PARAM_DEPRECATED]))
+				if($p[ApiBase::PARAM_DEPRECATED])
+					$a['deprecated'] = '';
 			if(!is_array($p))
 			{
 				if(is_bool($p))
@@ -203,6 +206,6 @@ class ApiParamInfo extends ApiBase {
 	}
 
 	public function getVersion() {
-		return __CLASS__ . ': $Id: ApiParamInfo.php 50425 2009-05-10 09:52:31Z catrope $';
+		return __CLASS__ . ': $Id: ApiParamInfo.php 58237 2009-10-28 00:56:07Z demon $';
 	}
 }
