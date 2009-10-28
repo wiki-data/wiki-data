@@ -2,14 +2,15 @@
 #
 #	Preliminaries, look lower for interesting stuff
 #
-if ( !defined( 'MEDIAWIKI' ) ) { die( 'This file is a MediaWiki extension, it is not a valid entry point' );}
+if ( !defined( 'MEDIAWIKI' ) ) { 
+	die( 'This file is a MediaWiki extension, it is not a valid entry point' );
+}
 require_once ("DataQuery.php");
 XxxInstaller::Install('Xss');
 
-
 #########################
 #
-# TODO: Make namespace settings customizable, but note that Xss::ExtensionSetup runs too late for this to work
+# TODO: Make namespace settings customizable, but note that Xss::ExtensionSetup runs too late for this to work there
 #
 #########################
 define ("NS_XSSDATA",1242);
@@ -436,7 +437,7 @@ END;
 ###
 ###  {{#data:getrow|table|rowid}} returns record array
 ###  {{#data:get|table|rowid|fieldname}} returns field value
-###  {{#data:getrow|table|rowid|template|arg=val|...}} maps the record array to the tempate
+###  {{#data:maprow|table|rowid|template|arg=val|...}} maps the record to the tempate
 ###  {{#data:evalrow|table|rowid|arg=val|...|code}} evals the code with field values as params
 ##############################################################################
 ##############################################################################
@@ -451,7 +452,7 @@ END;
 			# we need exactly two arguments for getrow
 			# TODO: figure out why the following was commented
 #			if ($args->count<2) return $this->notFound();
-		case 'wraprow':
+		case 'maprow':
 		case 'evalrow':
 			#we need at least two arguments for anything
 			if ($args->count<2) return $this->notFound();
@@ -494,7 +495,7 @@ END;
 				if (!$row) return $this->makeResultRow(array());
 				return $this->makeResultRow($row);
 			}
-			elseif ($args->command=='wraprow')
+			elseif ($args->command=='maprow')
 			{
 				if (!$row) return "";
 				
@@ -537,10 +538,11 @@ END;
 #############################################################################
 #############################################################################
 ###
-###  {#data:select|query }}
+###  {#data:schema|format}}
 ###
 ##############################################################################
 ##############################################################################
+
 		case 'schema':
 			if ($args->count>1) return $this->notFound();
 			$format=$args->trimExpand(1,'ajax');
@@ -594,6 +596,16 @@ ORDER BY ta, fi;
 				$ret.="};";
 				return array(0=>$ret,'isHTML'=>true);
 			}
+
+#############################################################################
+#############################################################################
+###
+###  {#data:select|query }}
+###
+##############################################################################
+##############################################################################
+			
+			
 		case 'query':			
 		case 'select':
 		case 'grid':
@@ -604,10 +616,10 @@ ORDER BY ta, fi;
 		case 'selectcolumn':
 			if ($args->count<1) return $this->notFound();		
 			$dbr = $this->getDbr();
-#			print_r($options); die;
 
 			extract ($this->getQueryArgs('SELECT',$args));
-			#we get $fields and $options
+			#we now have $fields and $options
+			
 			$xssQuery = XssQuery::Make($this,$fields,$options);
 
 			if ($errorMessage=$xssQuery->getError()) $returnText =  $this->formatError($errorMessage);
@@ -622,13 +634,12 @@ ORDER BY ta, fi;
 			case 'query':
 				$returnText = "<pre>".$sql."</pre>";
 			case 'grid':
-		#		return $sql;
 			
 				try
 				{
 					$now = time() + microtime();
 					$res=$dbr->query($sql,__METHOD__,true);
-					/*if ($args->command != 'grid')*/ $returnText.=sprintf("%0.5fs<br>",time()+microtime()-$now);
+					if ($args->command != 'grid') $returnText.=sprintf("%0.5fs<br>",time()+microtime()-$now);
 					if(!$res) {$returnText.="<div style=\"font-face:monospace\"> Error:".$dbr->lastError()."</div>"; break;}
 				}
 				catch(DBError $e){ return "<pre>sql</pre>".$e->error."<br>";}
@@ -915,7 +926,6 @@ ORDER BY ta, fi;
 	    $dbr =& $this->getDbr();
     	if (!$dbr) return false; 
 		$tableName = $this->getDataTableName($tableName);
-#		print "<br>$tableName:" . ( $dbr->tableExists($tableName) ? 'yes' : 'no');
 		return $dbr->tableExists($tableName);
 	}
 	
@@ -1927,7 +1937,6 @@ ORDER BY ta, fi;
     	$title=$linksUpdate->getTitle();
     	$pageId=$linksUpdate->mId;
 
-    	#$this->deleteTableData($title,$pageId);
     	$this->deleteRowData($title,$pageId);
     	$this->deleteMultiData($title,$pageId);
 
@@ -1938,7 +1947,6 @@ ORDER BY ta, fi;
 	}
 
 	
-	#TODO: fix this for row page moves vs. table page moves, also make less destructive, especially for table moves. currently just delets old data, should get links and fix in tables instead.
 	function hook_TitleMoveComplete(&$oldTitle,&$newTitle)
 	{
 		$article=new Article($newTitle);
