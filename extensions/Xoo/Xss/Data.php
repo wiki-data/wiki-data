@@ -142,8 +142,10 @@ END;
 #######################	
 
 	var $mOutputTableDef	= null;		# a tableDef
-	var $mOutputRows		= array();	# an array of arrays of actual rows in data tables to save - $this->mOutputRows[tableName][rowNumber][fieldName]=value
-	var $mOutputRowNames	= array();	# an array of arrays of flags for used row names - $this->mOutputRowNames[rowName]=true;
+	var $mOutputRows		= array();	# an array of arrays of actual rows in data tables to save
+										# $this->mOutputRows[tableName][rowNumber][fieldName]=value
+	var $mOutputRowNames	= array();	# an array of arrays of flags for used row names
+										# $this->mOutputRowNames[rowName]=true;
 	var $mSavedPages		= array();	# for debugging;
 	var $mShouldSave		= false;	# for debugging;
 
@@ -160,7 +162,6 @@ END;
 ##
 ###################################################
 	
-	
  	function fl_data(&$parser, &$frame, &$a)
 	{
 		static $rowCounter=0;
@@ -169,77 +170,59 @@ END;
 		switch ($cmd)
 		{
 
-		case 'help':
-		return "<tt>
-;Table definition
-* #data:table|field=''type''|[''default'']|field=#''table''|...		
-;DataInsertion
-*Page based data
-** #data:set|''table name''|[''row name'']|field=''value''|field=''value''...|
-** #data:row|''table name''|[''row name'']|field=''value''|field=''value''...|
-* Other data
-** #data:insert|''table name''|[''row name'']|field=''value''|field=''value''...|[#succes=|#failure=...]
-** #data:replace|''table name''|[''row name'']|field=''value''|field=''value''...|[#succes=|#failure=...]
-** #data:change|''table name''|[''row name'']|field=''value''|field=''value''...|[#succes=|#failure=...]
-* Data manipulation queries
-** #data:update|''table name''.[''reference field''].''field name''|...|[#where=|#from=|#orderby=|#groupby=...]|[#succes=|#failure=...]
-** #data:delete|''table name''.[''reference field''].''field name''|...|[#where=|#from=|#orderby=|#groupby=...]|[#succes=|#failure=...]
-* Data selection queries
-** #data:select|''table name''.[''reference field''].''field name''|...|[#where=|#from=|#orderby=|#groupby=...]|
-** #data:selectrow|''table name''.[''reference field''].''field name''|...|[#where=|#from=|#orderby=|#groupby=...]|
-** #data:selectfield|''table name''.[''reference field''].''field name''|...|[#where=|#from=|#orderby=|#groupby=...]|
-** #data:grid|''table name''.[''reference field''].''field name''|...|[#where=|#from=|#orderby=|#groupby=...]|
-** #data:query|''table name''.[''reference field''].''field name''|...|[#where=|#from=|#orderby=|#groupby=...]|
-** #data:sql|''table name''.[''reference field''].''field name''|...|[#where=|#from=|#orderby=|#groupby=...]|
-</tt>";
-
-	
 ###################################
 ##
 ##  {#data:table
-##	| field =  type 
-##	| field =  type | default value
+##	| field = type 
+##	| field = type | default value
 ##	| field = #table name | name of the reverse reference
+##	| field = ##table name | name of the reverse reference
 ##	| ...
 ##	}}
 ##
 ###################################
 
 		case 'table':
+			#we don't need cache on this page
 			$parser->disableCache();
+			
+			# only allowed in the data namespace
 			$pageTitle=$parser->getTitle();
 			$pageNamespace=$pageTitle->getNamespace();
 			
-			if ($pageNamespace!=NS_XSSDATA) 
-			    return  $this->formatError("Table definitions only allowed in ".$wgExtraNamespaces[NS_XSSDATA]." namespace ($pageNamespace)");
+			if ($pageNamespace!=NS_XSSDATA) { 
+			    return $this->formatError(
+			    	"Table definitions only allowed in ".$wgExtraNamespaces[NS_XSSDATA]." namespace ($pageNamespace)"
+			    );
+			}
 			
-			#only one table per page allowed
+			# only one table per page allowed
 			if ($this->outputTableDefExists(&$parser)) return $this->formatError("Only one data def per page allowed");
 		
 			# construct a table def from arguments
 			
-			$tableName     	= 	$pageTitle->getText(); if(!$this->normalizeName($tableName)) return $this->formatError("Bad table name $tableName");
+			#get the table name
+			$tableName     	= 	$pageTitle->getText();
+			
+			# normalize or die 
+			if(!$this->normalizeName($tableName)) return $this->formatError("Bad table name $tableName");
+			
 			$fieldRows		=	array();	# this is where we put data we gathered
 			$fieldNames		=	array();	# check for duplicate names	
 			$fieldTypes		=	array();	# for showing in the data grid
 			$defaultValues	=	array();	# for showing in the data grid
 
-
 			# loop through arguments, all the continue statements below go here
-			for ($i = 1; $i<=$args->count; $i++)
-			{
-
-				if ($args->isNamed($i))
-				{
+			for ($i = 1; $i<=$args->count; $i++) {
+				if ($args->isNamed($i)) {
+				
     				# named argument, either a field or a special argument			
 					$argName  = $args->getName($i);
 					$argValue = $args->trimExpandValue($i);
 
                     # it's a special argument, i.e. its name starts with a #
-					if ($this->removePrefix($argName,'#')) 
-					{
-						switch ($argName)
-						{
+					if ($this->removePrefix($argName,'#')) {
+						switch ($argName) {
 							#none for now
 							default: 
 							$errorMessage .= $this->formatError("Unrecognized argument $key");
@@ -251,104 +234,114 @@ END;
 
 					#get the field's name
 					$fieldName = $argName;
-					if (!$this->normalizeName($fieldName)) 	
-					{
+					
+					if (!$this->normalizeName($fieldName)) {
 					    # it can't be normalized
 						$errorMessage .= $this->formatError("Bad field name $argName");
 						continue;
 					}
 					
-					if (isset($fieldNames[$fieldName]))
-					{ 	
+					if (isset($fieldNames[$fieldName])) { 	
 					    # already exists
 						$errorMessage .= $this->formatError("Duplicate field name $key");
 						continue;
 					}
 					
-					# it's a new field, so register it and set up defaults
+					# it's a new field
+					
+					# register it for the grid output
 					
 					$fieldNames[$fieldName]		= true;
+					$defaultValues[$fieldName]	= null;
+					
+					# setup defaults for this field
 					$fieldType					= null;
 					$fieldDefault   			= null;
 					$fieldReference 			= null;
 					$fieldReverse   			= null;
-					$defaultValues[$fieldName]	= null;
                     
-                    # get the value, i.e. the part after =
+                    # get the value of the current argument, i.e. the part after =
 					$argValue = $args->trimExpandValue($i);
 
                     # does it start with a # 
-					if (!$this->removePrefix($argValue,'#')) 
-					{
-					    # the value doesn't start with a #, so it's the name of the type for this field
+					if (!$this->removePrefix($argValue,'#')) {
+					    # the value doesn't start with a #, so it's the name of the simple type for this field
 						
-						if (!$this->normalizeName($argValue)) 
-						{
-    						# the type can't be properlly normalized
+						if (!$this->normalizeName($argValue)) {
+    						# the type can't be properly normalized
 						    $errorMessage.=$this->formatError("Bad type name $fieldName = $argValue");
 						    continue;
 						}
                         
-                        #lowercase the typename, and reject if the type is unknown
-						$fieldType = strtolower($argValue);			
-						$fieldTypes[$fieldName]	= $fieldType;
-						if (!Xtt::getDbFieldType($fieldType)) 
-						{
+                        #lowercase the typename
+                        #TODO: this is messy, fix Xtt instead
+						$fieldType = strtolower($argValue);	
+						#reject if if the type doesn't exist
+						#TODO: add function typeExists to Xtt and use it here								
+						if (!Xtt::getDbFieldType($fieldType)) {
 						    $errorMessage .= $this->formatError("Unknown field type $fieldName = $fieldType");
 						    continue;
 						}
-						
+						$fieldTypes[$fieldName]	= $fieldType;
+
 						# if the next argument is nameless, then it's the default value
 						# if it needs to contain "=", start it with a = i.e. |field=type|=default
 						if ($args->exists($i+1) and ($args->isNumbered($i+1) or $args->getKey($i+1)==''))
 						{
-							# the next argument is default valrow_nameue
+							# the next argument is the default value
 							$fieldDefault = $args->cropExpandValue($i+1);
-							if (!Xtt::castValue($fieldType,$fieldDefault))
-							{
-							    $errorMessage .= $this->formatError("Invalid default value $fieldName = $fieldType | $fieldDefault");
+							# fail if it fails to cast to the type
+							if (!Xtt::castValue($fieldType,$fieldDefault)) {
+							    $errorMessage .= $this->formatError(
+							    	"Invalid default value $fieldName = $fieldType | $fieldDefault"
+							    );
 							    continue;
 							}
+							#if everything is right, register the default value and increase the counter
 							$defaultValues[$fieldName]	= $fieldDefault;
 							$i++;
 						}
-					}
-					else 
-					{
-						# the field is a reference to another table
-						# is it a multi-multi reference?						
-						if ($this->removePrefix($argValue,'#')) 
-						{
+					} else {
+						# the field started with a #, so it's a reference to another table
+						# is it a multi-multi reference, i.e. does it have another #?						
+						if ($this->removePrefix($argValue,'#')) {
 							$fieldType='multi';						
-						}
-						else
-						{
+						} else {
 							$fieldType='reference';												
 						}
+						#register the field type for grid display
+						$fieldTypes[$fieldName]	= $fieldType;
+				
+						# we're left with the related table name
 						# normalize or die!
-						if (!$this->normalizeName($argValue)) 
-						{
+						if (!$this->normalizeName($argValue)) {
 							$errorMessage .= ("Bad referenced table name $argValue");
 	                        continue;
 	                    }
-	                    
-						$fieldTypes[$fieldName]	= $fieldType;
 						$fieldReference = $argValue;
 				
-						# check the next field
-						if ($args->exists($i+1) and $args->isNumbered($i+1))
-						{
+						# check if the next field exists and is not named
+						if ($args->exists($i+1) and $args->isNumbered($i+1)) {
 							# the next field is the name of the reverse reference							
-							$fieldReverse = $args->trimExpand($i+1);
-							if (!$this->normalizeName($fieldReverse))
-							{
-								$errorMessage .= $this->formatError("Bad reverse reference name $fieldReverse");
+							#normalize or die
+							$rev = $args->trimExpand($i+1);
+							if (!$this->normalizeName($rev)) {
+								$errorMessage .= $this->formatError("Bad reverse reference name $rev");
 								continue;
 							}
+							#all is right
+							$fieldReverse = $rev;
 							$i++;
 						}
 					}
-					$fieldRows[]=$this->makeFieldDef($tableName, $fieldName, $fieldType, $fieldDefault, $fieldReference, $fieldReverse);
+					$fieldRows[]=$this->makeFieldDef(
+						$tableName, 
+						$fieldName, 
+						$fieldType, 
+						$fieldDefault,
+						$fieldReference, 
+						$fieldReverse
+					);
 				} 
 				# done field definition					
 				else 
@@ -360,153 +353,69 @@ END;
 
 			$tableDef=$this->makeTableDef($tableName, $fieldRows);
 			$this->addOutputTableDef(&$parser, &$pageTitle, $tableDef);
-
-			# done looping through arguments, display stuff
-			$returnText='<h2>Table definition <small><a href="'. $pageTitle->escapeFullUrl('command=browse') .'">(browse)</a></small></h2>';
-			# display table def
-			$tableHead = $this->formatHeaderRow('field name','field type','default value','reference table','reverse reference name');
-			$tableBody='';
-			foreach ($tableDef['fieldsByNumber'] as $fieldRow)
-			{
-				$cellRow = array_slice($fieldRow,1);
-				if ($cellRow['field_reference']) 
-				{
-					$refTitle=Title::newFromText($cellRow['field_reference'],NS_XSSDATA);
-					$cellRow['field_reference']='<a href="'. $refTitle->escapeFullUrl() .'">'. $refTitle->getText() .'</a>';
-				}
-				$tableBody.=$this->formatCellRow($cellRow);
-#				$tableBody.=$this->formatCellRow(array_keys($cellRow));
-			}
-			$returnText.=$this->formatTable($tableHead, $tableBody);
-
-			# if the table exists, show its data with the definition parsed from text
-			# this should allow friendly previews of edits to table definitions
-		
-
-			if ($_GET['command']=='browse') $returnText='';
 			
-			if ($_GET['action'] != 'submit' && $_GET['command']!='browse') return array( $returnText, 'isHTML'=>true);
-			
-			$dbr =&$this->getDbr();
-
-
-			if ($dbr->tableExists($this->getDataTableName($tableName)))
-			{
-				global $wgRequest;
-				$parser->disableCache();
-				$returnText.='<h2> Browse';
-				$returnText.=' <small><a href="' . $pageTitle->escapeFullUrl() . '">(table definition)</a></small>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<small>';
-				$offset = $wgRequest->getInt('data_offset',0);
-				$limit = $wgRequest->getInt('data_limit',20);
-				if ($limit>2000) $limit=2000;
-				if ($offset>0)				
-				{
-					$returnText.='<a href="'. $pageTitle->escapeFullUrl("command=browse&sort={$_GET['sort']}&direction={$_GET['direction']}&data_offset=".($offset-$limit>0?$offset-$limit:0)."&data_limit=$limit").'" onclick="if(window.loadContent) { loadContent(this) ; return false }">◀</a> ';
-				}
-				$returnText.='<a href="'. $pageTitle->escapeFullUrl("command=browse&sort={$_GET['sort']}&direction={$_GET['direction']}&data_offset=".($offset+$limit)."&data_limit=$limit").'" onclick="if(window.loadContent) { loadContent(this) ; return false }">▶</a>';
-				$returnText.='</small></h2>'; 
-				
-				$DIR = $_GET['direction'] == 'desc' ? 'DESC' : 'ASC'; 
-				$ORDERBY = $_GET['sort'] ? "ORDER BY" . $this->escapeName($_GET['sort']) . " $DIR" : '';
-				$res= $dbr->query('SELECT * FROM ' . $this->escapeDataTableName($tableName) ." $ORDERBY LIMIT $limit OFFSET $offset");
-				
-				$headerRow=array();
-				
-				# find missing fields
-				$headerRow=array_keys($fieldNames);
-				array_unshift($headerRow,'_row_ref');
-				array_unshift($headerRow,'_page');
-				
-				$missingFields=array();
-				foreach ($headerRow as $k=>$fName)
-				{
-					$urlAsc = $parser->mTitle->escapeFullUrl("command=browse&sort=$fName&direction=asc");
-					$urlDesc = $parser->mTitle->escapeFullUrl("command=browse&sort=$fName&direction=desc");
-					$headerRow[$k]="<a href=\"$urlDesc\" onclick=\"if(window.loadContent) { loadContent(this) ; return false }\">▼</a>&nbsp;$fName&nbsp;<a href=\"$urlAsc\" onclick=\"if(window.loadContent) { loadContent(this) ; return false }\">▲</a><a name=\"column_$fName\"/>";
-				}
-				for ($i=5;$i<$dbr->numFields($res);$i++)
-				{
-					$fName=$dbr->fieldName($res,$i);
-					
-					if (!$fieldNames[$fName]) 
-					{
-						$missingFields[]=$fName;
-						$headerRow[]="<s>$fName</s>";
-					}
-				}
-				$tableHead = $this->formatHeaderRow($headerRow);
-				$tableBody='';
-				while ($row=$dbr->fetchRow($res))
-				{	
-					$rowTitle=Title::makeTitle($row['_page_ns'],$row['_page_title']);
-					$rowName=preg_replace('/_/',' ',$row['_row_name']);
-					$rowRef=$row['_row_ref'];
-					$cellRow=array
-					(
-						'<a href="' . $rowTitle->escapeFullUrl() .'">' . $rowTitle->getFullText() . '</a>',
-						'<a href="' . $rowTitle->escapeFullUrl() . '#' . $rowName . '">' . $rowRef . '</a>'
-					);
-					foreach ($defaultValues as $fName=>$fValue)
-					{
-						$value=$row[$fName];
-						$fixValue=$value;
-						$fType=$fieldTypes[$fName];
-						$cast = Xtt::castValue($fType,$fixValue);
-						$displayValue=substr(htmlspecialchars($value),0,255);
-#						$displayValue=$fixValue;
-						if (!$cast)
-						{
-							$cellRow[]='<div class="xss-cell" style="position:relative;color:red">'.$displayValue.'</div>';
-						}
-						elseif ($value!=$row[$fName])
-						{
-							$cellRow[]='<div class="xss-cell" style="position:relative;color:navy">'.$displayValue.'</div>';
-						}
-						elseif ($value!==$fValue)
-						{
-							$cellRow[]='<div class="xss-cell" style="position:relative">'.$displayValue.'</div>';
-						}
-						else
-						{
-							$cellRow[]='<div class="xss-cell" style="position:relative;">'.$displayValue.'</div>';
-						}
-					}
-					foreach ($missingFields as $fName)
-					{
-						$cellRow[]="<s>{$row[$fName]}</s>";
-					}
-					$tableBody.=$this->formatCellRow($cellRow);
-				};
-				$returnText.=$this->formatTable($tableHead, $tableBody);
-			}
+			$returnText = $this->formatTableDef($tableDef);
 			return array(0=>$returnText.$errorMessage,'isHTML'=>true,'noParse'=>true);
-		
+###################################
+##
+##  {{#data:row          - set the data and display the row in a table
+##  {{#data:set          - set the data and display nothing
+##  {{#data:guess        - guess the data from likely wikipedia input
+##  | table_name
+##  | row_name           - blank or missing = {{FULLPAGENAME}}
+##                         starting with #  = {{FULLPAGENAME}}{{{2}}}
+##                         ending with #    = {{{2}}}{{#str:random}}
+##                         #                = {{FULLPAGENAME}}#{{#str:random}}
+##                         otherwise        = {{{2}}}
+##	| field = value
+##	| field = value
+##	| field = value
+##	| field = value
+##	| ...
+##	}}
+##
+###################################
+# TODO: fix so that row names really work as described
 		case 'row':
 		case 'set':
 		case 'guess':
 			$pageTitle=$parser->getTitle();
 			$pageNamespace=$pageTitle->getNamespace();
-		    if ($pageNamespace==NS_XSSDATA) return  "<b>Data definitions not allowed in ".$wgExtraNamespaces[NS_XSSDATA]." namespace ($pageNamespace)</b>";
+			
+			# not allowed in data namespace
+		    if ($pageNamespace==NS_XSSDATA) {
+		    	return	  "<b>Data definitions not allowed in "
+		    			. $wgExtraNamespaces[NS_XSSDATA]
+		    			. " namespace ($pageNamespace)</b>";
+		    }
+		    
+		    # we need at least one argument
 			if (!$args->exists(1)) return $this->notFound();
 
+			# we don't need this. TODO: fix getFieldValues so that we don't need this
 			$rowCounter++;
+			
+			# extract fieldvalues from the arguments
 			extract($this->getFieldValues($parser,$frame,$args,$rowCounter,true,$cmd=='guess'));
 			if ($fatal) return $error;
+			$errorMessage .= $error;
 
 			# add a transclusion link, so data gets updated in queue jobs			
-			
 			$tableTitle=Title::makeTitle(NS_XSSDATA,$tableName);
 			$parser->fetchTemplate($tableTitle);
 
 			$pageName = $parser->mTitle->getFullText();
-			#if ($this->outputRowExists($parser,$rowName)) return $this->formatError ("Duplicate row name $rowName"); 
+			if ($this->outputRowExists($parser,$rowName)) return $this->formatError ("Duplicate row name $rowName"); 
 			# TODO: handle this more wiki way, probably display anyway, just not save
 
+			# add to the parser output, to be saved when links are updated, i.e. also in queued jobs
 			$this->addOutputRow (&$parser, &$pageTitle, $tableName, $rowName, $fieldValues);
+			
+			# if we're setting, we're done;
 			if ($args->command=='set') return $errorMessage;
 			
-			$returnText=$error;
-
+			# else format the row as a pretty table
+			$returnText="";
 			$tableHead=$this->formatHeaderRow
 			(
 				'[['.$this->S('nsname').":$tableName|$tableName]]",
@@ -518,7 +427,7 @@ END;
 				$tableBody.=$this->formatCellRow($fName, $fValue);
 			}
 			$returnText .= $this->formatTable($tableHead, $tableBody);
-			
+			$returnText .= $error;
 			return "<h2>$rowName</h2>$returnText $errorMessage";
 
 			
@@ -527,7 +436,7 @@ END;
 ###
 ###  {{#data:getrow|table|rowid}} returns record array
 ###  {{#data:get|table|rowid|fieldname}} returns field value
-###  {{#data:wraprow|table|rowid|template|arg=val|...}} maps the record array to the tempate
+###  {{#data:getrow|table|rowid|template|arg=val|...}} maps the record array to the tempate
 ###  {{#data:evalrow|table|rowid|arg=val|...|code}} evals the code with field values as params
 ##############################################################################
 ##############################################################################
@@ -537,7 +446,10 @@ END;
 			$fieldName = $args->trimExpand(3,''); 
 			if (!$this->normalizeName($fieldName)) return $this->notFound();
 		case 'getrow':
+			# TODO: make it possible to add extra values to the array, as in wraprow and eval row
+			# TODO: make this gracefully fail if the array extension is not installed
 			# we need exactly two arguments for getrow
+			# TODO: figure out why the following was commented
 #			if ($args->count<2) return $this->notFound();
 		case 'wraprow':
 		case 'evalrow':
@@ -803,7 +715,7 @@ ORDER BY ta, fi;
 ############################################################################################
 ####
 ####
-####     END {{#data:}} LOOP
+####     END {{#data:}}
 ####
 ####
 ############################################################################################
@@ -949,6 +861,7 @@ ORDER BY ta, fi;
 	{
 		$tableDef = array
 		(
+			'name'				=> $tableName,
 			'rows' 				=> array(),
 			'fieldsByNumber'	=> array(),
 			'fieldsByName'		=> array(),
@@ -1346,6 +1259,134 @@ ORDER BY ta, fi;
 ##
 ###################################################
 
+	function formatTableDef(&$tableDef)
+	{
+		$tableName = $tableDef['name'];
+		$pageTitle=Title::NewFromText($tableName,NS_XSSDATA);
+		# done looping through arguments, display stuff
+		$returnText = '<h2>Table definition <small><a href="'
+					. $pageTitle->escapeFullUrl('command=browse') 
+					. '">(browse)</a></small></h2>';
+		# display table def
+		$tableHead = $this->formatHeaderRow('field name','field type','default value','reference table','reverse reference name');
+		$tableBody='';
+		foreach ($tableDef['fieldsByNumber'] as $fieldRow)
+		{
+			$cellRow = array_slice($fieldRow,1);
+			if ($cellRow['field_reference']) 
+			{
+				$refTitle=Title::newFromText($cellRow['field_reference'],NS_XSSDATA);
+				$cellRow['field_reference']='<a href="'. $refTitle->escapeFullUrl() .'">'. $refTitle->getText() .'</a>';
+			}
+			$tableBody.=$this->formatCellRow($cellRow);
+#				$tableBody.=$this->formatCellRow(array_keys($cellRow));
+		}
+		$returnText.=$this->formatTable($tableHead, $tableBody);
+
+		# if the table exists, show its data with the definition parsed from text
+		# this should allow friendly previews of edits to table definitions
+	
+
+		if ($_GET['command']=='browse') $returnText='';
+		
+		if ($_GET['action'] != 'submit' && $_GET['command']!='browse') return $returnText;
+		
+		$dbr =&$this->getDbr();
+
+
+		if ($dbr->tableExists($this->getDataTableName($tableName)))
+		{
+			global $wgRequest;
+			$returnText.='<h2> Browse';
+			$returnText.=' <small><a href="' . $pageTitle->escapeFullUrl() . '">(table definition)</a></small>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<small>';
+			$offset = $wgRequest->getInt('data_offset',0);
+			$limit = $wgRequest->getInt('data_limit',20);
+			if ($limit>2000) $limit=2000;
+			if ($offset>0)				
+			{
+				$returnText.='<a href="'. $pageTitle->escapeFullUrl("command=browse&sort={$_GET['sort']}&direction={$_GET['direction']}&data_offset=".($offset-$limit>0?$offset-$limit:0)."&data_limit=$limit").'" onclick="if(window.loadContent) { loadContent(this) ; return false }">◀</a> ';
+			}
+			$returnText.='<a href="'. $pageTitle->escapeFullUrl("command=browse&sort={$_GET['sort']}&direction={$_GET['direction']}&data_offset=".($offset+$limit)."&data_limit=$limit").'" onclick="if(window.loadContent) { loadContent(this) ; return false }">▶</a>';
+			$returnText.='</small></h2>'; 
+			
+			$DIR = $_GET['direction'] == 'desc' ? 'DESC' : 'ASC'; 
+			$ORDERBY = $_GET['sort'] ? "ORDER BY" . $this->escapeName($_GET['sort']) . " $DIR" : '';
+			$res= $dbr->query('SELECT * FROM ' . $this->escapeDataTableName($tableName) ." $ORDERBY LIMIT $limit OFFSET $offset");
+			
+			$headerRow=array();
+			
+			# find missing fields
+			$headerRow=array_keys($tableDef['fieldNames']);
+			array_unshift($headerRow,'_row_ref');
+			array_unshift($headerRow,'_page');
+			
+			$missingFields=array();
+			foreach ($headerRow as $k=>$fName)
+			{
+				$urlAsc = $pageTitle->escapeFullUrl("command=browse&sort=$fName&direction=asc");
+				$urlDesc = $pageTitle->escapeFullUrl("command=browse&sort=$fName&direction=desc");
+				$headerRow[$k]="<a href=\"$urlDesc\" onclick=\"if(window.loadContent) { loadContent(this) ; return false }\">▼</a>&nbsp;$fName&nbsp;<a href=\"$urlAsc\" onclick=\"if(window.loadContent) { loadContent(this) ; return false }\">▲</a><a name=\"column_$fName\"/>";
+			}
+			for ($i=5;$i<$dbr->numFields($res);$i++)
+			{
+				$fName=$dbr->fieldName($res,$i);
+				
+				if (!$fieldNames[$fName]) 
+				{
+					$missingFields[]=$fName;
+					$headerRow[]="<s>$fName</s>";
+				}
+			}
+			$tableHead = $this->formatHeaderRow($headerRow);
+			$tableBody='';
+			while ($row=$dbr->fetchRow($res))
+			{	
+				$rowTitle=Title::makeTitle($row['_page_ns'],$row['_page_title']);
+				$rowName=preg_replace('/_/',' ',$row['_row_name']);
+				$rowRef=$row['_row_ref'];
+				$cellRow=array
+				(
+					'<a href="' . $rowTitle->escapeFullUrl() .'">' . $rowTitle->getFullText() . '</a>',
+					'<a href="' . $rowTitle->escapeFullUrl() . '#' . $rowName . '">' . $rowRef . '</a>'
+				);
+				foreach ($tableDef['fieldsByNumber'] as $fieldNumber=>$fieldDef)
+				{
+					$fName=$fieldDef['field_name'];
+					$fValue=$fieldDef['field_default'];
+					$value=$row[$fName];
+					$fixValue=$value;
+					$fType=$fieldTypes[$fName];
+					$cast = Xtt::castValue($fType,$fixValue);
+					$displayValue=substr(htmlspecialchars($value),0,255);
+#						$displayValue=$fixValue;
+					if (!$cast)
+					{
+						$cellRow[]='<div class="xss-cell" style="position:relative;color:red">'.$displayValue.'</div>';
+					}
+					elseif ($value!=$row[$fName])
+					{
+						$cellRow[]='<div class="xss-cell" style="position:relative;color:navy">'.$displayValue.'</div>';
+					}
+					elseif ($value!==$fValue)
+					{
+						$cellRow[]='<div class="xss-cell" style="position:relative">'.$displayValue.'</div>';
+					}
+					else
+					{
+						$cellRow[]='<div class="xss-cell" style="position:relative;">'.$displayValue.'</div>';
+					}
+				}
+				foreach ($missingFields as $fName)
+				{
+					$cellRow[]="<s>{$row[$fName]}</s>";
+				}
+				$tableBody.=$this->formatCellRow($cellRow);
+			};
+			$returnText.=$this->formatTable($tableHead, $tableBody);
+		}
+		return $returnText;
+	}
+	
 	function formatError($errorText)
 	{
 		return '<span class="xss-error" style="color:red;font-weight:bold">'.$errorText.'</span>';
