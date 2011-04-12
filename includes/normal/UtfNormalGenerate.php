@@ -91,7 +91,7 @@ $canon = 0;
 
 print "Reading character definitions...\n";
 while( false !== ($line = fgets( $in ) ) ) {
-	$columns = split(';', $line);
+	$columns = explode(';', $line);
 	$codepoint = $columns[0];
 	$name = $columns[1];
 	$canonicalCombiningClass = $columns[3];

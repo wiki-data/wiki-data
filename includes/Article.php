@@ -1218,7 +1218,11 @@ class Article {
 					array( 'userpage-userdoesnotexist-view', $rootPart ) );
 			}
 		}
-		wfRunHooks( 'ShowMissingArticle', array( $this ) );
+		
+### BEGIN HACK ###
+		if (!wfRunHooks( 'ShowMissingArticle', array( $this) )) return;
+### END HACK ###
+
 		# Show delete and move logs
 		LogEventsList::showLogExtract( $wgOut, array( 'delete', 'move' ), $this->mTitle->getPrefixedText(), '',
 			array(  'lim' => 10,

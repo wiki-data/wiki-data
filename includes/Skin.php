@@ -329,7 +329,6 @@ class Skin extends Linker {
 		$ret .=( wfReportTime() );
 
 		$ret .=( "\n</body></html>" );
-		die ('skin');
 		wfRunHooks( 'AfterOutputPage', array(&$ret) );
 		$out->out($ret);
 ####
