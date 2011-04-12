@@ -62,8 +62,7 @@ class Xss extends Xxx
 ##  Setup
 ##
 #######################	
-	var $mDefaultSettings = array
-	(
+	var $mDefaultSettings = array (
 		"dbsuffix"			=> '_xss', 		# will be added to the wikibase name, if no dbname is provided
 		"tableprefix"		=> '',			# prefix for data tables
 		"internalprefix"	=> '_xss_',		# prefix for internal tables
@@ -76,8 +75,7 @@ class Xss extends Xxx
 		"nstalk"			=> 'Data_talk'
 	);
 
-	function setupExtension()
-	{
+	function setupExtension() {
 		global $wgExtraNamespaces;
 		global $wgDBname;
 		global $wgDBserver;
@@ -351,6 +349,27 @@ END;
 					$errorMessage .= $this->formatError ("Unrecognized argument ".$args->trimExpand($i));
 				}
 			} 
+			$dbr = $this->getDbr();
+			$res = $dbr->select
+			(
+				$this->escapeInternalTableName('fields'),
+				'*',
+				$this->escapeValue($tableName) . ' = field_reference 
+				AND field_reverse<>\'\' AND field_table <> ' . $this->escapeValue($tableName) 
+			);
+			while ($row=$this->fetchAssoc($dbr,$res)) {
+				$fieldRows[]=$row;
+			}
+			$res = $dbr->select
+			(
+				$this->escapeInternalTableName('fields'),
+				'*',
+				$this->escapeValue($tableName) . " = field_reference 
+				AND (field_reverse IS NULL) AND field_table <> " . $this->escapeValue($tableName) 
+			);
+			while ($row=$this->fetchAssoc($dbr,$res)) {
+				$fieldRows[]=$row;
+			}
 
 			$tableDef=$this->makeTableDef($tableName, $fieldRows);
 			$this->addOutputTableDef(&$parser, &$pageTitle, $tableDef);
@@ -902,7 +921,7 @@ ORDER BY ta, fi;
 				$tableDef['fieldDefaults'][$fieldName]=$fieldDef['field_default'];
 				$fieldCounter++;
 			}
-			elseif ($referenceName == $tableName)
+			else if ($referenceName == $tableName)
 			{
 				$reverseName=$fieldDef['field_reverse'];
 				$tableDef['reverseByNumber'][$reverseCounter]=$myField;
@@ -942,17 +961,15 @@ ORDER BY ta, fi;
 	function getTableDefFromDB($tableName)
 	{
 		$dbr = $this->getDbr();
-		
 		$res = $dbr->select
 		(
 			$this->escapeInternalTableName('fields'),
 			'*',
-			'field_table=' . $this->escapeValue($tableName) . ' or field_reference=' .$this->escapeValue($tableName)
+			$this->escapeValue($tableName) . ' IN (field_reference,field_table)'
 		);
 		
 		$fieldDefs=array();
-		while ($row=$this->fetchAssoc($dbr,$res))
-		{
+		while ($row=$this->fetchAssoc($dbr,$res)){
 			$fieldDefs[]=$row;
 		}
 		if (count($fieldDefs)>0)
@@ -1285,8 +1302,21 @@ ORDER BY ta, fi;
 			if ($cellRow['field_reference']) 
 			{
 				$refTitle=Title::newFromText($cellRow['field_reference'],NS_XSSDATA);
-				$cellRow['field_reference']='<a href="'. $refTitle->escapeFullUrl() .'">'. $refTitle->getText() .'</a>';
+				$cellRow['field_reference']='<a class="'.($refTitle->exists()?'':'new').'" href="'. $refTitle->escapeFullUrl() .'">'. $refTitle->getText() .'</a>';
 			}
+			$tableBody.=$this->formatCellRow($cellRow);
+#				$tableBody.=$this->formatCellRow(array_keys($cellRow));
+		}
+		foreach ($tableDef['reverseByNumber'] as $reverseRow)
+		{
+			$revTitle=Title::newFromText($reverseRow['field_table'],NS_XSSDATA);
+			$cellRow = array(
+				$reverseRow['field_reverse'],
+				$reverseRow['field_reverse'] ? 'reverse' : 'related',
+				'',
+				'<a href="'. $revTitle->escapeFullUrl() .'">'. $revTitle->getText() .'</a>',
+				$reverseRow['field_name']
+			);
 			$tableBody.=$this->formatCellRow($cellRow);
 #				$tableBody.=$this->formatCellRow(array_keys($cellRow));
 		}
@@ -1295,12 +1325,12 @@ ORDER BY ta, fi;
 		# if the table exists, show its data with the definition parsed from text
 		# this should allow friendly previews of edits to table definitions
 	
+		$dbr =&$this->getDbr();
 
 		if ($_GET['command']=='browse') $returnText='';
 		
 		if ($_GET['action'] != 'submit' && $_GET['command']!='browse') return $returnText;
 		
-		$dbr =&$this->getDbr();
 
 
 		if ($dbr->tableExists($this->getDataTableName($tableName)))
