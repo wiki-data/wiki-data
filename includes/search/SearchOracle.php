@@ -1,23 +1,25 @@
 <?php
-# Copyright (C) 2004 Brion Vibber <brion@pobox.com>
-# http://www.mediawiki.org/
-#
-# This program is free software; you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation; either version 2 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License along
-# with this program; if not, write to the Free Software Foundation, Inc.,
-# 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
-# http://www.gnu.org/copyleft/gpl.html
-
 /**
+ * Oracle search engine
+ *
+ * Copyright © 2004 Brion Vibber <brion@pobox.com>
+ * http://www.mediawiki.org/
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program; if not, write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ * http://www.gnu.org/copyleft/gpl.html
+ *
  * @file
  * @ingroup Search
  */
@@ -27,34 +29,66 @@
  * @ingroup Search
  */
 class SearchOracle extends SearchEngine {
+	
+	private $reservedWords = array ('ABOUT' => 1, 
+									'ACCUM' => 1, 
+									'AND' => 1, 
+									'BT' => 1, 
+									'BTG' => 1, 
+									'BTI' => 1, 
+									'BTP' => 1,
+									'FUZZY' => 1, 
+									'HASPATH' => 1, 
+									'INPATH' => 1, 
+									'MINUS' => 1, 
+									'NEAR' => 1, 
+									'NOT' => 1,
+									'NT' => 1, 
+									'NTG' => 1, 
+									'NTI' => 1, 
+									'NTP' => 1, 
+									'OR' => 1, 
+									'PT' => 1, 
+									'RT' => 1, 
+									'SQE' => 1,
+									'SYN' => 1, 
+									'TR' => 1, 
+									'TRSYN' => 1, 
+									'TT' => 1, 
+									'WITHIN' => 1);
+
+	/**
+	 * Creates an instance of this class
+	 * @param $db DatabasePostgres: database object
+	 */
 	function __construct($db) {
-		$this->db = $db;
+		parent::__construct( $db );
 	}
 
 	/**
 	 * Perform a full text search query and return a result set.
 	 *
 	 * @param $term String: raw search term
-	 * @return OracleSearchResultSet
+	 * @return SqlSearchResultSet
 	 */
 	function searchText( $term ) {
 		if ($term == '')
-			return new OracleSearchResultSet(false, '');
-		
+			return new SqlSearchResultSet(false, '');
+
 		$resultSet = $this->db->resultObject($this->db->query($this->getQuery($this->filter($term), true)));
-		return new OracleSearchResultSet($resultSet, $this->searchTerms);
+		return new SqlSearchResultSet($resultSet, $this->searchTerms);
 	}
 
 	/**
 	 * Perform a title-only search query and return a result set.
 	 *
 	 * @param $term String: raw search term
-	 * @return ORacleSearchResultSet
+	 * @return SqlSearchResultSet
 	 */
 	function searchTitle($term) {
 		if ($term == '')
-			return new OracleSearchResultSet(false, '');
-		
+			return new SqlSearchResultSet(false, '');
+
 		$resultSet = $this->db->resultObject($this->db->query($this->getQuery($this->filter($term), false)));
 		return new MySQLSearchResultSet($resultSet, $this->searchTerms);
 	}
@@ -143,8 +177,8 @@ class SearchOracle extends SearchEngine {
 			'WHERE page_id=si_page AND ' . $match;
 	}
 
-	/** 
-	 * Parse a user input search string, and return an SQL fragment to be used 
+	/**
+	 * Parse a user input search string, and return an SQL fragment to be used
 	 * as part of a WHERE clause
 	 */
 	function parseQuery($filteredText, $fulltext) {
@@ -154,23 +188,22 @@ class SearchOracle extends SearchEngine {
 
 		# FIXME: This doesn't handle parenthetical expressions.
 		$m = array();
-		$q = array();
-
+		$searchon = '';
 		if (preg_match_all('/([-+<>~]?)(([' . $lc . ']+)(\*?)|"[^"]*")/',
 			  $filteredText, $m, PREG_SET_ORDER)) {
 			foreach($m as $terms) {
-				
 				// Search terms in all variant forms, only
 				// apply on wiki with LanguageConverter
 				$temp_terms = $wgContLang->autoConvertToAllVariants( $terms[2] );
 				if( is_array( $temp_terms )) {
 					$temp_terms = array_unique( array_values( $temp_terms ));
-					foreach( $temp_terms as $t )
-						$q[] = $terms[1] . $wgContLang->stripForSearch( $t );
+					foreach( $temp_terms as $t ) {
+						$searchon .= ($terms[1] == '-' ? ' ~' : ' & ') . $this->escapeTerm( $t );
+					}
 				}
-				else
-					$q[] = $terms[1] . $wgContLang->stripForSearch( $terms[2] );
-
+				else {
+					$searchon .= ($terms[1] == '-' ? ' ~' : ' & ') . $this->escapeTerm( $terms[2] );
+				}
 				if (!empty($terms[3])) {
 					$regexp = preg_quote( $terms[3], '/' );
 					if ($terms[4])
@@ -182,11 +215,20 @@ class SearchOracle extends SearchEngine {
 			}
 		}
 
-		$searchon = $this->db->addQuotes(join(',', $q));
+
+		$searchon = $this->db->addQuotes(ltrim($searchon, ' &'));
 		$field = $this->getIndexField($fulltext);
 		return " CONTAINS($field, $searchon, 1) > 0 ";
 	}
 
+	private function escapeTerm($t) {
+		global $wgContLang;
+		$t = $wgContLang->normalizeForSearch($t);
+		$t = isset($this->reservedWords[strtoupper($t)]) ? '{'.$t.'}' : $t;
+		$t = preg_replace('/^"(.*)"$/', '($1)', $t);
+		$t = preg_replace('/([-&|])/', '\\\\$1', $t);
+		return $t;
+	}
 	/**
 	 * Create or update the search index record for the given page.
 	 * Title and text should be pre-processed.
@@ -196,6 +238,7 @@ class SearchOracle extends SearchEngine {
 	 * @param $text String
 	 */
 	function update($id, $title, $text) {
+		global $wgDBprefix;
 		$dbw = wfGetDB(DB_MASTER);
 		$dbw->replace('searchindex',
 			array('si_page'),
@@ -204,16 +247,24 @@ class SearchOracle extends SearchEngine {
 				'si_title' => $title,
 				'si_text' => $text
 			), 'SearchOracle::update' );
-		$dbw->query("CALL ctx_ddl.sync_index('si_text_idx')");
-		$dbw->query("CALL ctx_ddl.sync_index('si_title_idx')");
+
+		// Sync the index
+		// We need to specify the DB name (i.e. user/schema) here so that 
+		// it can work from the installer, where
+		//     ALTER SESSION SET CURRENT_SCHEMA = ...
+		// was used.
+		$dbw->query( "CALL ctx_ddl.sync_index(" . 
+			$dbw->addQuotes( $dbw->getDBname() . '.' . trim( $dbw->tableName( 'si_text_idx' ),  '"' ) ) . ")" );
+		$dbw->query( "CALL ctx_ddl.sync_index(" . 
+			$dbw->addQuotes( $dbw->getDBname() . '.' . trim( $dbw->tableName( 'si_title_idx' ),  '"' ) ) . ")" );
 	}
 
 	/**
 	 * Update a search index record's title only.
 	 * Title should be pre-processed.
 	 *
-	 * @param int $id
-	 * @param string $title
+	 * @param $id Integer
+	 * @param $title String
 	 */
 	function updateTitle($id, $title) {
 		$dbw = wfGetDB(DB_MASTER);
@@ -224,36 +275,9 @@ class SearchOracle extends SearchEngine {
 			'SearchOracle::updateTitle',
 			array());
 	}
-}
 
-/**
- * @ingroup Search
- */
-class OracleSearchResultSet extends SearchResultSet {
 
-	function __construct($resultSet, $terms) {
-		$this->mResultSet = $resultSet;
-		$this->mTerms = $terms;
-	}
-
-	function termMatches() {
-		return $this->mTerms;
-	}
-
-	function numRows() {
-		if ($this->mResultSet === false )
-			return 0;
-		else
-			return $this->mResultSet->numRows();
-	}
-
-	function next() {
-		if ($this->mResultSet === false )
-			return false;
-
-		$row = $this->mResultSet->fetchObject();
-		if ($row === false)
-			return false;
-		return new SearchResult($row);
+	public static function legalSearchChars() {
+		return "\"" . parent::legalSearchChars();
 	}
 }

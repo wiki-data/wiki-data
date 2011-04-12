@@ -11,7 +11,7 @@
 
 $messages = array(
 # User preference toggles
-'tog-rememberpassword' => 'Iqtuu uikipitia atiq qakugiq atuinnasivuq uvalumaq qaritaujaq',
+'tog-rememberpassword' => 'Iqtuu uikipitia atiq qakugiq atuinnasivuq uvalumaq qaritaujaq (for a maximum of $1 {{PLURAL:$1|day|days}})',
 
 # Dates
 'sunday'       => 'sanattaili',
@@ -128,7 +128,7 @@ pigivuq qatannguti uikipitia kiinaujaqutiqarvik isuillingaitjapaa. iqtuu suqusiq
 'yourname'           => 'uikipitia atiq',
 'yourpassword'       => 'uikipitia palanngasauti',
 'yourpasswordagain'  => 'tamatumaniiqpaa iksigaqtuq uikipitia palanngasauti',
-'remembermypassword' => 'iqtuu uikipitia atiq qakakuq atuinnasivuq uvalumajuq qaritaujaq',
+'remembermypassword' => 'iqtuu uikipitia atiq qakakuq atuinnasivuq uvalumajuq qaritaujaq (for a maximum of $1 {{PLURAL:$1|day|days}})',
 'login'              => 'akunnapuq',
 'loginprompt'        => 'pigialik imatuaq qaritaujaq quukiis (Cookies) pirqaati akunnapuq {{SITENAME}}.',
 'userlogin'          => 'akunnapuq / pirqaapaa kiinaijakkuvingmi tuqkuqsivik',
@@ -327,10 +327,6 @@ pigivuq qatannguti uikipitia kiinaujaqutiqarvik isuillingaitjapaa. iqtuu suqusiq
 
 # Attribution
 'anonymous' => 'ilisarnanngitittuq qatannguti nakit {{SITENAME}}',
-
-# Math errors
-'math_unknown_error'    => 'tusaumajaunngituq tammanaqtuq',
-'math_unknown_function' => 'tusaumajaunngituq iliurniq',
 
 # Image deletion
 'deletedrevision' => 'nipaq utuqaq titiraqtaugiarngarut $1',

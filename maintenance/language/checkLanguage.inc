@@ -1,12 +1,34 @@
 <?php
 /**
+ * Helper class for checkLanguage.php script.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program; if not, write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ * http://www.gnu.org/copyleft/gpl.html
+ *
+ * @file
  * @ingroup MaintenanceLanguage
  */
 
+/**
+ * @ingroup MaintenanceLanguage
+ */
 class CheckLanguageCLI {
 	protected $code  = null;
 	protected $level = 2;
 	protected $doLinks = false;
+	protected $linksPrefix = '';
 	protected $wikiCode = 'en';
 	protected $checkAll = false;
 	protected $output = 'plain';
@@ -41,6 +63,10 @@ class CheckLanguageCLI {
 		$this->doLinks = isset( $options['links'] );
 		$this->includeExif = !isset( $options['noexif'] );
 		$this->checkAll = isset( $options['all'] );
+
+		if ( isset( $options['prefix'] ) ) {
+			$this->linksPrefix = $options['prefix'];
+		}
 
 		if ( isset( $options['wikilang'] ) ) {
 			$this->wikiCode = $options['wikilang'];
@@ -92,7 +118,7 @@ class CheckLanguageCLI {
 
 	/**
 	 * Get the checks that can easily be treated by non-speakers of the language.
-	 * @return A list of the easy checks.
+	 * @return Array A list of the easy checks.
 	 */
 	protected function easyChecks() {
 		return array(
@@ -185,16 +211,23 @@ class CheckLanguageCLI {
 Run this script to check a specific language file, or all of them.
 Command line settings are in form --parameter[=value].
 Parameters:
-	* lang: Language code (default: the installation default language).
-	* all: Check all customized languages.
-	* help: Show this help.
-	* level: Show the following display level (default: 2).
-	* links: Link the message values (default off).
-	* wikilang: For the links, what is the content language of the wiki to display the output in (default en).
-	* whitelist: Do only the following checks (form: code,code).
-	* blacklist: Don't do the following checks (form: code,code).
-	* easy: Do only the easy checks, which can be treated by non-speakers of the language.
-	* noexif: Don't check for EXIF messages (a bit hard and boring to translate), if you know that they are currently not translated and want to focus on other problems (default off).
+	--help: Show this help.
+	--lang: Language code (default: the installation default language).
+	--all: Check all customized languages.
+	--level: Show the following display level (default: 2):
+		* 0: Skip the checks (useful for checking syntax).
+		* 1: Show only the stub headers and number of wrong messages, without list of messages.
+		* 2: Show only the headers and the message keys, without the message values.
+		* 3: Show both the headers and the complete messages, with both keys and values.
+	--links: Link the message values (default off).
+	--prefix: prefix to add to links.
+	--wikilang: For the links, what is the content language of the wiki to display the output in (default en).
+	--noexif: Don't check for EXIF messages (a bit hard and boring to translate), if you know
+		that they are currently not translated and want to focus on other problems (default off).
+	--whitelist: Do only the following checks (form: code,code).
+	--blacklist: Don't do the following checks (form: code,code).
+	--easy: Do only the easy checks, which can be treated by non-speakers of the language.
+
 Check codes (ideally, all of them should result 0; all the checks are executed by default (except language-specific check blacklists in checkLanguage.inc):
 	* untranslated: Messages which are required to translate, but are not translated.
 	* duplicate: Messages which translation equal to fallback
@@ -214,11 +247,6 @@ Check codes (ideally, all of them should result 0; all the checks are executed b
 	* magic-case: Magic words whose translation changes the case-sensitivity of the original English word.
 	* special: Special page names that were not translated.
 	* special-old: Special page names which do not exist.
-Display levels (default: 2):
-	* 0: Skip the checks (useful for checking syntax).
-	* 1: Show only the stub headers and number of wrong messages, without list of messages.
-	* 2: Show only the headers and the message keys, without the message values.
-	* 3: Show both the headers and the complete messages, with both keys and values.
 
 ENDS;
 	}
@@ -292,7 +320,7 @@ ENDS;
 		foreach ( $this->checks as $check ) {
 			if ( isset( $checkBlacklist[$code] ) &&
 				in_array( $check, $checkBlacklist[$code] ) ) {
-				$result[$check] = array();
+				$results[$check] = array();
 				continue;
 			}
 
@@ -316,9 +344,9 @@ ENDS;
 		if ( $this->doLinks ) {
 			$displayKey = ucfirst( $key );
 			if ( $code == $this->wikiCode ) {
-				return "[[MediaWiki:$displayKey|$key]]";
+				return "[[{$this->linksPrefix}MediaWiki:$displayKey|$key]]";
 			} else {
-				return "[[MediaWiki:$displayKey/$code|$key]]";
+				return "[[{$this->linksPrefix}MediaWiki:$displayKey/$code|$key]]";
 			}
 		} else {
 			return $key;
@@ -376,9 +404,9 @@ ENDS;
 	 * @return The checks results as wiki text.
 	 */
 	function outputWiki() {
-		global $wgContLang, $IP;
+		global $wgContLang;
 		$detailText = '';
-		$rows[] = '! Language !! Code !! Total !! ' . implode( ' !! ', $this->checks );
+		$rows[] = '! Language !! Code !! Total !! ' . implode( ' !! ', array_diff( $this->checks, $this->nonMessageChecks() ) );
 		foreach ( $this->results as $code => $results ) {
 			$detailTextForLang = "==$code==\n";
 			$numbers = array();
@@ -437,8 +465,8 @@ EOL;
 	 * @return True if there are any results, false if not.
 	 */
 	protected function isEmpty() {
-		foreach( $this->results as $code => $results ) {
-			foreach( $results as $check => $messages ) {
+		foreach( $this->results as $results ) {
+			foreach( $results as $messages ) {
 				if( !empty( $messages ) ) {
 					return false;
 				}
@@ -448,6 +476,9 @@ EOL;
 	}
 }
 
+/**
+ * @ingroup MaintenanceLanguage
+ */
 class CheckExtensionsCLI extends CheckLanguageCLI {
 	private $extensions;
 

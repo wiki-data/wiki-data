@@ -1,23 +1,25 @@
 <?php
-# Copyright (C) 2004 Brion Vibber <brion@pobox.com>
-# http://www.mediawiki.org/
-#
-# This program is free software; you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation; either version 2 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License along
-# with this program; if not, write to the Free Software Foundation, Inc.,
-# 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
-# http://www.gnu.org/copyleft/gpl.html
-
 /**
+ * IBM DB2 search engine
+ *
+ * Copyright © 2004 Brion Vibber <brion@pobox.com>
+ * http://www.mediawiki.org/
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program; if not, write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ * http://www.gnu.org/copyleft/gpl.html
+ *
  * @file
  * @ingroup Search
  */
@@ -27,30 +29,35 @@
  * @ingroup Search
  */
 class SearchIBM_DB2 extends SearchEngine {
+
+	/**
+	 * Creates an instance of this class
+	 * @param $db DatabaseIbm_db2: database object
+	 */
 	function __construct($db) {
-		$this->db = $db;
+		parent::__construct( $db );
 	}
 
 	/**
 	 * Perform a full text search query and return a result set.
 	 *
 	 * @param $term String: raw search term
-	 * @return IBM_DB2SearchResultSet
+	 * @return SqlSearchResultSet
 	 */
 	function searchText( $term ) {
 		$resultSet = $this->db->resultObject($this->db->query($this->getQuery($this->filter($term), true)));
-		return new IBM_DB2SearchResultSet($resultSet, $this->searchTerms);
+		return new SqlSearchResultSet($resultSet, $this->searchTerms);
 	}
 
 	/**
 	 * Perform a title-only search query and return a result set.
 	 *
 	 * @param $term String: taw search term
-	 * @return IBM_DB2SearchResultSet
+	 * @return SqlSearchResultSet
 	 */
 	function searchTitle($term) {
 		$resultSet = $this->db->resultObject($this->db->query($this->getQuery($this->filter($term), false)));
-		return new MySQLSearchResultSet($resultSet, $this->searchTerms);
+		return new SqlSearchResultSet($resultSet, $this->searchTerms);
 	}
 
 
@@ -102,8 +109,8 @@ class SearchIBM_DB2 extends SearchEngine {
 	/**
 	 * Construct the full SQL query to do the search.
 	 * The guts shoulds be constructed in queryMain()
-	 * @param string $filteredTerm String
-	 * @param bool $fulltext Boolean
+	 * @param $filteredTerm String
+	 * @param $fulltext Boolean
 	 */
 	function getQuery( $filteredTerm, $fulltext ) {
 		return $this->queryLimit($this->queryMain($filteredTerm, $fulltext) . ' ' .
@@ -125,8 +132,8 @@ class SearchIBM_DB2 extends SearchEngine {
 	/**
 	 * Get the base part of the search query.
 	 *
-	 * @param string $filteredTerm String
-	 * @param bool $fulltext Boolean
+	 * @param $filteredTerm String
+	 * @param $fulltext Boolean
 	 * @return String
 	 */
 	function queryMain( $filteredTerm, $fulltext ) {
@@ -158,10 +165,10 @@ class SearchIBM_DB2 extends SearchEngine {
 				if( is_array( $temp_terms )) {
 					$temp_terms = array_unique( array_values( $temp_terms ));
 					foreach( $temp_terms as $t )
-						$q[] = $terms[1] . $wgContLang->stripForSearch( $t );
+						$q[] = $terms[1] . $wgContLang->normalizeForSearch( $t );
 				}
 				else
-					$q[] = $terms[1] . $wgContLang->stripForSearch( $terms[2] );
+					$q[] = $terms[1] . $wgContLang->normalizeForSearch( $terms[2] );
 
 				if (!empty($terms[3])) {
 					$regexp = preg_quote( $terms[3], '/' );
@@ -220,30 +227,5 @@ class SearchIBM_DB2 extends SearchEngine {
 			array('si_page'  => $id),
 			'SearchIBM_DB2::updateTitle',
 			array());
-	}
-}
-
-/**
- * @ingroup Search
- */
-class IBM_DB2SearchResultSet extends SearchResultSet {
-	function __construct($resultSet, $terms) {
-		$this->mResultSet = $resultSet;
-		$this->mTerms = $terms;
-	}
-
-	function termMatches() {
-		return $this->mTerms;
-	}
-
-	function numRows() {
-		return $this->mResultSet->numRows();
-	}
-
-	function next() {
-		$row = $this->mResultSet->fetchObject();
-		if ($row === false)
-			return false;
-		return new SearchResult($row);
 	}
 }

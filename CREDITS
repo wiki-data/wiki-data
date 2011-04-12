@@ -1,4 +1,4 @@
-MediaWiki 1.16 is a collaborative project released under the
+MediaWiki 1.18 is a collaborative project released under the
 GNU General Public License v2. We would like to recognize the
 following names for their contribution to the product.
 
@@ -14,23 +14,29 @@ following names for their contribution to the product.
 * Bryan Tong Minh
 * Chad Horohoe
 * Charles Melbye
+* church of emacs
 * Daniel Friesen
 * Daniel Kinzler
 * Danny B.
 * David McCabe
 * Derk-Jan Hartman
 * Domas Mituzas
+* Emufarmers
 * Fran Rogers
 * Greg Sabino Mullane
 * Guy Van den Broeck
+* Happy-melon
 * Hojjat
 * Ilmari Karonen
 * Jack D. Pond
 * Jack Phoenix
 * Jason Richey
 * Jon Harald Søby
+* Juliano F. Ravasi
 * Leon Weber
+* Leslie Hoare
 * Marco Schuster
+* Matěj Grabovský
 * Matt Johnston
 * Max Semenik
 * Meno25
@@ -39,6 +45,7 @@ following names for their contribution to the product.
 * Nathaniel Herman
 * Nicolas Dumazet
 * Niklas Laxström
+* Philip Tzou
 * Platonides
 * Purodha Blissenbach
 * Raimond Spekking
@@ -48,47 +55,66 @@ following names for their contribution to the product.
 * Rotem Liss
 * Ryan Lane
 * Ryan Schmidt
+* Sam Reed
 * Shinjiman
 * Siebrand Mazeland
 * SQL
 * Soxred93
 * Thomas Bleher
 * Tim Starling
+* Tom Gries
+* Trevor Parscal
 * Victor Vasiliev
+* Yesid Carrillo
+* Yuri Astrakhan
 
 == Patch Contributors ==
 * Agbad
 * Ahmad Sherif
+* Alejandro Mery
+* Amalthea
 * Antonio Ospite
 * Azliq7
+* Bawolff
 * Borislav Manolov
 * Brad Jorsch
 * Brent G
 * Brianna Laugher
 * Carlin
-* church of emacs
+* Carsten Nielsen
+* Conrad Irwin
+* Dan Barrett
 * Dan Nessett
 * Daniel Arnold
-* Danny B.
+* Denny Vrandecic
 * Derk-Jan Hartman
-* Emufarmers
+* DieBuche
 * FunPika
-* Happy-melon
+* Harry Burt
+* Ireas
+* Jaska Zedlik
 * Jeremy Baron
 * Jidanni
 * Jimmy Xu
-* Juliano F. Ravasi
-* Karun Dambiec
-* Lucas Garczewski
+* John Du Hart
+* Jonathan Wiltshire
+* Karun Dambietz
+* Kim Hyun-Joon
+* Lee Worden
+* Lejonel
+* liangent
 * Louperivois
+* Lucas Garczewski
 * Luigi Corsaro
 * Manuel Menal
 * Marcin Cieślak
 * Marcus Buck
 * Marooned
-* Matěj Grabovský
+* Mathias Ertl
+* Matthew Britton
 * mati
 * Max Sikström
+* Michael Dale
 * Michael De La Rue
 * Michael Walsh
 * Mike Horvath
@@ -100,16 +126,23 @@ following names for their contribution to the product.
 * Nikolaos S. Karastathis
 * Olaf Lenz
 * Paul Copperman
+* Paul Oranje
 * PieRRoMaN
+* quietust
 * René Kijewski
 * Robert Treat
 * RockMFR
 * ST47
 * Scott Colcord
 * Simon Walker
+* Solitarius
 * Stefano Codari
 * Str4nd
 * svip
+* Tisane
+* Umherirrender
+* Ville Stadista
+* Zachary Hauri
 
 == Translators ==
 * Anders Wegge Jakobsen
@@ -118,3 +151,4 @@ following names for their contribution to the product.
 * Meno25
 * Rotem Liss
 * Shinjiman
+* Translatewiki.net Translators http://translatewiki.net/wiki/Special:ListUsers/translator

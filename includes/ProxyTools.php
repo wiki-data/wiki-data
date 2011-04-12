@@ -1,6 +1,7 @@
 <?php
 /**
  * Functions for dealing with proxies
+ *
  * @file
  */
 
@@ -11,10 +12,11 @@
  * @return string
  */
 function wfGetForwardedFor() {
-	if( function_exists( 'apache_request_headers' ) ) {
+	$apacheHeaders = function_exists( 'apache_request_headers' ) ? apache_request_headers() : null;
+	if( is_array( $apacheHeaders ) ) {
 		// More reliable than $_SERVER due to case and -/_ folding
 		$set = array ();
-		foreach ( apache_request_headers() as $tempName => $tempValue ) {
+		foreach ( $apacheHeaders as $tempName => $tempValue ) {
 			$set[ strtoupper( $tempName ) ] = $tempValue;
 		}
 		$index = strtoupper ( 'X-Forwarded-For' );
@@ -67,15 +69,15 @@ function wfGetAgent() {
  * @return string
  */
 function wfGetIP() {
-	global $wgIP, $wgUsePrivateIPs, $wgCommandLineMode;
+	global $wgUsePrivateIPs, $wgCommandLineMode;
+	static $ip = false;
 
 	# Return cached result
-	if ( !empty( $wgIP ) ) {
-		return $wgIP;
+	if ( !empty( $ip ) ) {
+		return $ip;
 	}
 
 	$ipchain = array();
-	$ip = false;
 
 	/* collect the originating ips */
 	# Client connecting to this webserver
@@ -111,12 +113,14 @@ function wfGetIP() {
 		}
 	}
 
+	# Allow extensions to improve our guess
+	wfRunHooks( 'GetIP', array( &$ip ) );
+
 	if( !$ip ) {
 		throw new MWException( "Unable to determine IP" );
 	}
 
 	wfDebug( "IP: $ip\n" );
-	$wgIP = $ip;
 	return $ip;
 }
 
@@ -124,7 +128,7 @@ function wfGetIP() {
  * Checks if an IP is a trusted proxy providor
  * Useful to tell if X-Fowarded-For data is possibly bogus
  * Squid cache servers for the site and AOL are whitelisted
- * @param string $ip
+ * @param $ip String
  * @return bool
  */
 function wfIsTrustedProxy( $ip ) {
@@ -183,9 +187,12 @@ function wfProxyCheck() {
 
 /**
  * Convert a network specification in CIDR notation to an integer network and a number of bits
+ *
+ * @deprecated Call IP::parseCIDR() directly, will be removed in 1.19
  * @return array(string, int)
  */
 function wfParseCIDR( $range ) {
+	wfDeprecated( __FUNCTION__ );
 	return IP::parseCIDR( $range );
 }
 
@@ -195,12 +202,11 @@ function wfParseCIDR( $range ) {
  */
 function wfIsLocallyBlockedProxy( $ip ) {
 	global $wgProxyList;
-	$fname = 'wfIsLocallyBlockedProxy';
 
 	if ( !$wgProxyList ) {
 		return false;
 	}
-	wfProfileIn( $fname );
+	wfProfileIn( __METHOD__ );
 
 	if ( !is_array( $wgProxyList ) ) {
 		# Load from the specified file
@@ -217,7 +223,7 @@ function wfIsLocallyBlockedProxy( $ip ) {
 	} else {
 		$ret = false;
 	}
-	wfProfileOut( $fname );
+	wfProfileOut( __METHOD__ );
 	return $ret;
 }
 

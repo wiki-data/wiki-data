@@ -1,26 +1,32 @@
 <?php
-# Copyright (C) 2009 Aryeh Gregor
-# http://www.mediawiki.org/
-#
-# This program is free software; you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation; either version 2 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License along
-# with this program; if not, write to the Free Software Foundation, Inc.,
-# 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
-# http://www.gnu.org/copyleft/gpl.html
+/**
+ * Collection of methods to generate HTML content
+ *
+ * Copyright © 2009 Aryeh Gregor
+ * http://www.mediawiki.org/
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program; if not, write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ * http://www.gnu.org/copyleft/gpl.html
+ *
+ * @file
+ */
 
 /**
  * This class is a collection of static functions that serve two purposes:
  *
- * 1) Implement any algorithms specified by HTML 5, or other HTML
+ * 1) Implement any algorithms specified by HTML5, or other HTML
  * specifications, in a convenient and self-contained way.
  *
  * 2) Allow HTML elements to be conveniently and safely generated, like the
@@ -38,9 +44,11 @@
  * This class is meant to be confined to utility functions that are called from
  * trusted code paths.  It does not do enforcement of policy like not allowing
  * <a> elements.
+ *
+ * @since 1.16
  */
 class Html {
-	# List of void elements from HTML 5, section 9.1.2 as of 2009-08-10
+	# List of void elements from HTML5, section 9.1.2 as of 2009-08-10
 	private static $voidElements = array(
 		'area',
 		'base',
@@ -59,10 +67,9 @@ class Html {
 	);
 
 	# Boolean attributes, which may have the value omitted entirely.  Manually
-	# collected from the HTML 5 spec as of 2009-08-10.
+	# collected from the HTML5 spec as of 2010-06-07.
 	private static $boolAttribs = array(
 		'async',
-		'autobuffer',
 		'autofocus',
 		'autoplay',
 		'checked',
@@ -72,15 +79,18 @@ class Html {
 		'formnovalidate',
 		'hidden',
 		'ismap',
+		'itemscope',
 		'loop',
 		'multiple',
 		'novalidate',
 		'open',
+		'pubdate',
 		'readonly',
 		'required',
 		'reversed',
 		'scoped',
 		'seamless',
+		'selected',
 	);
 
 	/**
@@ -106,63 +116,16 @@ class Html {
 	 * @return string Raw HTML
 	 */
 	public static function rawElement( $element, $attribs = array(), $contents = '' ) {
-		global $wgHtml5, $wgWellFormedXml;
-		$attribs = (array)$attribs;
-		# This is not required in HTML 5, but let's do it anyway, for
-		# consistency and better compression.
-		$element = strtolower( $element );
-
-		# Element-specific hacks to slim down output and ensure validity
-		if ( $element == 'input' ) {
-			if ( !$wgHtml5 ) {
-				# With $wgHtml5 off we want to validate as XHTML 1, so we
-				# strip out any fancy HTML 5-only input types for now.
-				#
-				# Whitelist of valid types:
-				$validTypes = array(
-					'hidden',
-					'text',
-					'password',
-					'checkbox',
-					'radio',
-					'file',
-					'submit',
-					'image',
-					'reset',
-					'button',
-				);
-				if ( isset( $attribs['type'] )
-				&& !in_array( $attribs['type'], $validTypes ) ) {
-					# Fall back to type=text, the default
-					unset( $attribs['type'] );
-				}
-				# Here we're blacklisting some HTML5-only attributes...
-				$html5attribs = array(
-					'autocomplete',
-					'autofocus',
-					'max',
-					'min',
-					'multiple',
-					'pattern',
-					'placeholder',
-					'required',
-					'step',
-				);
-				foreach ( $html5attribs as $badAttr ) {
-					unset( $attribs[$badAttr] );
-				}
-			}
-		}
-
-		$start = "<$element" . self::expandAttributes(
-			self::dropDefaults( $element, $attribs ) );
+		global $wgWellFormedXml;
+		$start = self::openElement( $element, $attribs );
 		if ( in_array( $element, self::$voidElements ) ) {
 			if ( $wgWellFormedXml ) {
-				return "$start />";
+				# Silly XML.
+				return substr( $start, 0, -1 ) . ' />';
 			}
-			return "$start>";
+			return $start;
 		} else {
-			return "$start>$contents</$element>";
+			return "$start$contents" . self::closeElement( $element );
 		}
 	}
 
@@ -177,6 +140,92 @@ class Html {
 			'&' => '&amp;',
 			'<' => '&lt;'
 		) ) );
+	}
+
+	/**
+	 * Identical to rawElement(), but has no third parameter and omits the end
+	 * tag (and the self-closing '/' in XML mode for empty elements).
+	 */
+	public static function openElement( $element, $attribs = array() ) {
+		global $wgHtml5, $wgWellFormedXml;
+		$attribs = (array)$attribs;
+		# This is not required in HTML5, but let's do it anyway, for
+		# consistency and better compression.
+		$element = strtolower( $element );
+
+		# In text/html, initial <html> and <head> tags can be omitted under
+		# pretty much any sane circumstances, if they have no attributes.  See:
+		# <http://www.whatwg.org/specs/web-apps/current-work/multipage/syntax.html#optional-tags>
+		if ( !$wgWellFormedXml && !$attribs
+		&& in_array( $element, array( 'html', 'head' ) ) ) {
+			return '';
+		}
+
+		# Remove HTML5-only attributes if we aren't doing HTML5, and disable
+		# form validation regardless (see bug 23769 and the more detailed
+		# comment in expandAttributes())
+		if ( $element == 'input' ) {
+			# Whitelist of types that don't cause validation.  All except
+			# 'search' are valid in XHTML1.
+			$validTypes = array(
+				'hidden',
+				'text',
+				'password',
+				'checkbox',
+				'radio',
+				'file',
+				'submit',
+				'image',
+				'reset',
+				'button',
+				'search',
+			);
+			if ( isset( $attribs['type'] )
+			&& !in_array( $attribs['type'], $validTypes ) ) {
+				unset( $attribs['type'] );
+			}
+			if ( isset( $attribs['type'] ) && $attribs['type'] == 'search'
+			&& !$wgHtml5 ) {
+				unset( $attribs['type'] );
+			}
+		}
+		if ( !$wgHtml5 && $element == 'textarea' && isset( $attribs['maxlength'] ) ) {
+			unset( $attribs['maxlength'] );
+		}
+
+		return "<$element" . self::expandAttributes(
+			self::dropDefaults( $element, $attribs ) ) . '>';
+	}
+
+	/**
+	 * Returns "</$element>", except if $wgWellFormedXml is off, in which case
+	 * it returns the empty string when that's guaranteed to be safe.
+	 *
+	 * @since 1.17
+	 * @param $element string Name of the element, e.g., 'a'
+	 * @return string A closing tag, if required
+	 */
+	public static function closeElement( $element ) {
+		global $wgWellFormedXml;
+
+		$element = strtolower( $element );
+
+		# Reference:
+		# http://www.whatwg.org/specs/web-apps/current-work/multipage/syntax.html#optional-tags
+		if ( !$wgWellFormedXml && in_array( $element, array(
+			'html',
+			'head',
+			'body',
+			'li',
+			'dt',
+			'dd',
+			'tr',
+			'td',
+			'th',
+		) ) ) {
+			return '';
+		}
+		return "</$element>";
 	}
 
 	/**
@@ -230,7 +279,7 @@ class Html {
 			'link' => array( 'media' => 'all' ),
 			'menu' => array( 'type' => 'list' ),
 			# Note: the use of text/javascript here instead of other JavaScript
-			# MIME types follows the HTML 5 spec.
+			# MIME types follows the HTML5 spec.
 			'script' => array( 'type' => 'text/javascript' ),
 			'style' => array(
 				'media' => 'all',
@@ -303,7 +352,7 @@ class Html {
 		$ret = '';
 		$attribs = (array)$attribs;
 		foreach ( $attribs as $key => $value ) {
-			if ( $value === false ) {
+			if ( $value === false || is_null( $value ) ) {
 				continue;
 			}
 
@@ -314,11 +363,37 @@ class Html {
 				$key = $value;
 			}
 
-			# Not technically required in HTML 5, but required in XHTML 1.0,
+			# Not technically required in HTML5, but required in XHTML 1.0,
 			# and we'd like consistency and better compression anyway.
 			$key = strtolower( $key );
 
-			# See the "Attributes" section in the HTML syntax part of HTML 5,
+			# Bug 23769: Blacklist all form validation attributes for now.  Current
+			# (June 2010) WebKit has no UI, so the form just refuses to submit
+			# without telling the user why, which is much worse than failing
+			# server-side validation.  Opera is the only other implementation at
+			# this time, and has ugly UI, so just kill the feature entirely until
+			# we have at least one good implementation.
+			if ( in_array( $key, array( 'max', 'min', 'pattern', 'required', 'step' ) ) ) {
+				continue;
+			}
+
+			# Here we're blacklisting some HTML5-only attributes...
+			if ( !$wgHtml5 && in_array( $key, array(
+					'autocomplete',
+					'autofocus',
+					'max',
+					'min',
+					'multiple',
+					'pattern',
+					'placeholder',
+					'required',
+					'step',
+					'spellcheck',
+			) ) ) {
+				continue;
+			}
+
+			# See the "Attributes" section in the HTML syntax part of HTML5,
 			# 9.1.2.3 as of 2009-08-10.  Most attributes can have quotation
 			# marks omitted, but not all.  (Although a literal " is not
 			# permitted, we don't check for that, since it will be escaped
@@ -338,7 +413,7 @@ class Html {
 
 			if ( in_array( $key, self::$boolAttribs ) ) {
 				# In XHTML 1.0 Transitional, the value needs to be equal to the
-				# key.  In HTML 5, we can leave the value empty instead.  If we
+				# key.  In HTML5, we can leave the value empty instead.  If we
 				# don't need well-formed XML, we can omit the = entirely.
 				if ( !$wgWellFormedXml ) {
 					$ret .= " $key";
@@ -365,8 +440,9 @@ class Html {
 					"\t" => '&#9;'
 				);
 				if ( $wgWellFormedXml ) {
-					# '<' must be escaped in attributes for XML for some
-					# reason, per spec: http://www.w3.org/TR/xml/#NT-AttValue
+					# This is allowed per spec: <http://www.w3.org/TR/xml/#NT-AttValue>
+					# But reportedly it breaks some XML tools?  FIXME: is this
+					# really true?
 					$map['<'] = '&lt;';
 				}
 				$ret .= " $key=$quote" . strtr( $value, $map ) . $quote;
@@ -453,7 +529,7 @@ class Html {
 
 	/**
 	 * Convenience function to produce an <input> element.  This supports the
-	 * new HTML 5 input types and attributes, and will silently strip them if
+	 * new HTML5 input types and attributes, and will silently strip them if
 	 * $wgHtml5 is false.
 	 *
 	 * @param $name    string name attribute
@@ -472,8 +548,7 @@ class Html {
 	}
 
 	/**
-	 * Convenience function to produce an input element with type=hidden, like
-	 * Xml::hidden.
+	 * Convenience function to produce an input element with type=hidden
 	 *
 	 * @param $name    string name attribute
 	 * @param $value   string value attribute
@@ -483,5 +558,87 @@ class Html {
 	 */
 	public static function hidden( $name, $value, $attribs = array() ) {
 		return self::input( $name, $value, 'hidden', $attribs );
+	}
+
+	/**
+	 * Convenience function to produce an <input> element.  This supports leaving
+	 * out the cols= and rows= which Xml requires and are required by HTML4/XHTML
+	 * but not required by HTML5 and will silently set cols="" and rows="" if
+	 * $wgHtml5 is false and cols and rows are omitted (HTML4 validates present
+	 * but empty cols="" and rows="" as valid).
+	 *
+	 * @param $name    string name attribute
+	 * @param $value   string value attribute
+	 * @param $attribs array  Associative array of miscellaneous extra
+	 *   attributes, passed to Html::element()
+	 * @return string Raw HTML
+	 */
+	public static function textarea( $name, $value = '', $attribs = array() ) {
+		global $wgHtml5;
+		$attribs['name'] = $name;
+		if ( !$wgHtml5 ) {
+			if ( !isset( $attribs['cols'] ) ) {
+				$attribs['cols'] = "";
+			}
+			if ( !isset( $attribs['rows'] ) ) {
+				$attribs['rows'] = "";
+			}
+		}
+		return self::element( 'textarea', $attribs, $value );
+	}
+
+	/**
+	 * Constructs the opening html-tag with necessary doctypes depending on
+	 * global variables.
+	 *
+	 * @param $attribs array  Associative array of miscellaneous extra
+	 *   attributes, passed to Html::element() of html tag.
+	 * @return string  Raw HTML
+	 */
+	public static function htmlHeader( $attribs = array() ) {
+		$ret = '';
+
+		global $wgMimeType, $wgOutputEncoding;
+		if ( self::isXmlMimeType( $wgMimeType ) ) {
+			$ret .= "<?xml version=\"1.0\" encoding=\"$wgOutputEncoding\" ?" . ">\n";
+		}
+
+		global $wgHtml5, $wgHtml5Version, $wgDocType, $wgDTD;
+		global $wgXhtmlNamespaces, $wgXhtmlDefaultNamespace;
+		if ( $wgHtml5 ) {
+			$ret .= "<!DOCTYPE html>\n";
+			if ( $wgHtml5Version ) {
+				$attribs['version'] = $wgHtml5Version;
+			}
+		} else {
+			$ret .= "<!DOCTYPE html PUBLIC \"$wgDocType\" \"$wgDTD\">\n";
+			$attribs['xmlns'] = $wgXhtmlDefaultNamespace;
+			foreach ( $wgXhtmlNamespaces as $tag => $ns ) {
+				$attribs["xmlns:$tag"] = $ns;
+			}
+		}
+		$html = Html::openElement( 'html', $attribs );
+		if ( $html ) {
+			$html .= "\n";
+		}
+		$ret .= $html;
+		return $ret;
+	}
+
+	/**
+	 * Determines if the given mime type is xml.
+	 *
+	 * @param $mimetype    string MimeType
+	 * @return Boolean
+	 */
+	public static function isXmlMimeType( $mimetype ) {
+		switch ( $mimetype ) {
+			case 'text/xml':
+			case 'application/xhtml+xml':
+			case 'application/xml':
+				return true;
+			default:
+				return false;
+		}
 	}
 }

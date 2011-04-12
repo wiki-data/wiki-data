@@ -7,6 +7,7 @@
  * @ingroup Language
  * @file
  *
+ * @author Reedy
  * @author Seb az86556
  * @author לערי ריינהארט
  */
@@ -14,20 +15,20 @@
 $namespaceNames = array(
 	NS_MEDIA            => 'Media',
 	NS_SPECIAL          => 'Special',
-	NS_TALK             => 'Naaltsoos_baa_yinísht\'į́',
-	NS_USER             => 'Choinish\'įįhí',
-	NS_USER_TALK        => 'Choinish\'įįhí_baa_yinísht\'į́',
-	NS_PROJECT_TALK     => '$1_baa_yinísht\'į́',
-	NS_FILE             => 'E\'elyaaígíí',
-	NS_FILE_TALK        => 'E\'elyaaígíí_baa_yinísht\'į́',
+	NS_TALK             => 'Naaltsoos_baa_yáshtiʼ',
+	NS_USER             => 'Choyoołʼįįhí',
+	NS_USER_TALK        => 'Choyoołʼįįhí_bichʼįʼ_yáshtiʼ',
+	NS_PROJECT_TALK     => '$1_baa_yáshtiʼ',
+	NS_FILE             => 'Eʼelyaaígíí',
+	NS_FILE_TALK        => 'Eʼelyaaígíí_baa_yáshtiʼ',
 	NS_MEDIAWIKI        => 'MediaWiki',
-	NS_MEDIAWIKI_TALK   => 'MediaWiki_baa_yinísht\'į́',
-	NS_TEMPLATE         => 'Template',
-	NS_TEMPLATE_TALK    => 'Template_talk',
-	NS_HELP             => 'Aná\'álwo\'',
-	NS_HELP_TALK        => 'Aná\'álwo\'_baa_yinísht\'į́',
-	NS_CATEGORY         => 'T\'ááłáhági_át\'éego',
-	NS_CATEGORY_TALK    => 'T\'ááłáhági_át\'éego_baa_yinísht\'į́',
+	NS_MEDIAWIKI_TALK   => 'MediaWiki_baa_yáshtiʼ',
+	NS_TEMPLATE         => 'Bee_álnééhí',
+	NS_TEMPLATE_TALK    => 'Bee_álnééhí_baa_yáshtiʼ',
+	NS_HELP             => 'Anáʼálwoʼ',
+	NS_HELP_TALK        => 'Anáʼálwoʼ_baa_yáshtiʼ',
+	NS_CATEGORY         => 'Tʼááłáhági_átʼéego',
+	NS_CATEGORY_TALK    => 'Tʼááłáhági_átʼéego_baa_yáshtiʼ',
 );
 
 $datePreferences = false;
@@ -163,7 +164,7 @@ $messages = array(
 # Login and logout pages
 'yourname'                => 'Choyoołʼįįhí bizhiʼ:',
 'yourpassword'            => 'Passwordígíí:',
-'remembermypassword'      => 'shipassword béédíínih',
+'remembermypassword'      => 'shipassword béédíínih (for a maximum of $1 {{PLURAL:$1|day|days}})',
 'nav-login-createaccount' => 'Log in / accountígíí ádíílííł',
 'nologinlink'             => 'Accountígíí ádíílííł',
 'mailmypassword'          => 'passwordígíí ániidí shichʼįʼ ádíílííł (e-mail)',
@@ -211,8 +212,6 @@ $messages = array(
 'searchresulttext'      => '{{SITENAME}} bikáaʼgi haʼnitáhígíí bíhoołʼaahgo biniiyé [[{{MediaWiki:Helppage}}|{{int:help}}]] yidíiłtah.',
 'searchsubtitle'        => '\'\'\'[[:$1]]\'\'\' hanínítą́ą́ʼ ([[Special:Prefixindex/$1|naaltsoos "$1" wolyéhígíí tʼáá ałtso]]{{int:pipe-separator}}[[Special:WhatLinksHere/$1|"$1" baa atiinígíí tʼáá ałtso]])',
 'searchsubtitleinvalid' => "'''$1''' hanínítą́ą́ʼ",
-'noexactmatch'          => '\'\'\'Naaltssos "$1" wolyéhígíí ádin.\'\'\' Naaltsoos "$1" yaa halneʼígíí [[:$1|ánílééh]] nínízinísh?',
-'noexactmatch-nocreate' => "'''Naaltssos \"\$1\" wolyéhígíí ádin.'''",
 'notitlematches'        => 'naaltsoos ádin',
 'viewprevnext'          => '($1) ($2) ($3) shinááł',
 'search-result-size'    => '$1 ({{PLURAL:$2|1 saad bikáaʼgi hólǫ́|$2 saad bikáaʼgi dahólǫ́}})',
@@ -289,14 +288,13 @@ $3',
 # Watchlist
 'watchlist'         => 'bikʼi déshʼį́į́ʼígíí',
 'mywatchlist'       => 'bikʼi déshʼį́į́ʼígíí',
-'watchlistfor'      => "('''$1''')",
 'addedwatchtext'    => "[[Special:Watchlist|Naaltsoos bikʼi díníʼį́į́ʼígíí]] bíhiniidééh. \"[[:\$1]]\" kʼad bikʼi díníʼį́į́ʼ.<br />Nááná [[Special:RecentChanges|\"áníídí łahgo ályaaígíí\"]] bikáaʼgi díí naaltsoos kʼad kodóó '''ditą́ą''' dooleeł.",
 'removedwatchtext'  => '"[[:$1]]" kʼad doo [[Special:Watchlist|bikʼi díníʼį́į]] da.',
 'watch'             => 'bikʼi déshʼį́į́ʼ nisin',
 'watchthispage'     => 'díí naaltsoos bikʼi déshʼį́į́ʼ nisin',
 'unwatch'           => 'doo bikʼi déshʼį́įʼ nisin da',
 'watchlist-details' => '{{PLURAL:$1|$1 naaltsoos|$1 naaltsoos}} bikʼi díníʼį́į́ʼ',
-'wlshowlast'        => '<div style="text-size:14px; padding:10px; background:#bbeeff;"><small>
+'wlshowlast'        => '<small>
 * ( $1 ) ahééʼílkidę́ędą́ą́ʼ kojįʼ
 * ( $2 ) yiskánídą́ą́ʼ kojįʼ
 * ( $3 )</small>',
@@ -357,7 +355,7 @@ $3',
 'newtitle'        => 'naaltsoos bizhiʼ ániidí:',
 'move-watch'      => 'shinááł',
 'movepagebtn'     => '✔ bee lą́ ashłeeh',
-'movepage-moved'  => '<big>\'\'\'"$1" kʼad "$2" wolyé\'\'\'</big>',
+'movepage-moved'  => '\'\'\'"$1" kʼad "$2" wolyé\'\'\'',
 '1movedto2'       => 'naaltsoos "[[$1]]" → "[[$2]]"-góó yidiyiznááʼ',
 '1movedto2_redir' => 'naaltsoos "[[$1]]" → "[[$2]]"-góó yidiyiznááʼ (dah astsihí ńtʼę́ę́ʼ)',
 'revertmove'      => 'ńdíídleeł!',

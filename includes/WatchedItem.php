@@ -62,7 +62,7 @@ class WatchedItem {
 			'wl_user' => $this->id,
 			'wl_namespace' => MWNamespace::getSubject($this->ns),
 			'wl_title' => $this->ti,
-			'wl_notificationtimestamp' => NULL
+			'wl_notificationtimestamp' => null
 		  ), __METHOD__, 'IGNORE' );
 
 		// Every single watched page needs now to be listed in watchlist;
@@ -72,7 +72,7 @@ class WatchedItem {
 			'wl_user' => $this->id,
 			'wl_namespace' => MWNamespace::getTalk($this->ns),
 			'wl_title' => $this->ti,
-			'wl_notificationtimestamp' => NULL
+			'wl_notificationtimestamp' => null
 		  ), __METHOD__, 'IGNORE' );
 
 		wfProfileOut( __METHOD__ );
@@ -84,6 +84,8 @@ class WatchedItem {
 	 * @return bool
 	 */
 	public function removeWatch() {
+		wfProfileIn( __METHOD__ );
+
 		$success = false;
 		$dbw = wfGetDB( DB_MASTER );
 		$dbw->delete( 'watchlist',
@@ -112,6 +114,8 @@ class WatchedItem {
 		if ( $dbw->affectedRows() ) {
 			$success = true;
 		}
+
+		wfProfileOut( __METHOD__ );
 		return $success;
 	}
 
@@ -143,14 +147,13 @@ class WatchedItem {
 		);
 		# Construct array to replace into the watchlist
 		$values = array();
-		while ( $s = $dbw->fetchObject( $res ) ) {
+		foreach ( $res as $s ) {
 			$values[] = array(
 				'wl_user' => $s->wl_user,
 				'wl_namespace' => $newnamespace,
 				'wl_title' => $newtitle
 			);
 		}
-		$dbw->freeResult( $res );
 
 		if( empty( $values ) ) {
 			// Nothing to do

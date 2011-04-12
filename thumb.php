@@ -20,6 +20,9 @@ wfLogProfilingData();
 
 function wfThumbMain() {
 	wfProfileIn( __METHOD__ );
+
+	$headers = array();
+
 	// Get input parameters
 	if ( get_magic_quotes_gpc() ) {
 		$params = array_map( 'stripslashes', $_REQUEST );
@@ -53,11 +56,13 @@ function wfThumbMain() {
 		$bits = explode( '!', $fileName, 2 );
 		if( !isset($bits[1]) ) {
 			wfThumbError( 404, wfMsg( 'badtitletext' ) );
+			wfProfileOut( __METHOD__ );
 			return;
 		}
 		$title = Title::makeTitleSafe( NS_FILE, $bits[1] );
 		if( is_null($title) ) {
 			wfThumbError( 404, wfMsg( 'badtitletext' ) );
+			wfProfileOut( __METHOD__ );
 			return;
 		}
 		$img = RepoGroup::singleton()->getLocalRepo()->newFromArchiveName( $title, $fileName );
@@ -65,17 +70,32 @@ function wfThumbMain() {
 		$img = wfLocalFile( $fileName );
 	}
 
+	// Check permissions if there are read restrictions
+	if ( !in_array( 'read', User::getGroupPermissions( array( '*' ) ), true ) ) {
+		if ( !$img->getTitle()->userCanRead() ) {
+			wfThumbError( 403, 'Access denied. You do not have permission to access ' . 
+				'the source file.' );
+			wfProfileOut( __METHOD__ );
+			return;
+		}
+		$headers[] = 'Cache-Control: private';
+		$headers[] = 'Vary: Cookie';
+	}
+
 	if ( !$img ) {
 		wfThumbError( 404, wfMsg( 'badtitletext' ) );
+		wfProfileOut( __METHOD__ );
 		return;
 	}
 	if ( !$img->exists() ) {
 		wfThumbError( 404, 'The source file for the specified thumbnail does not exist.' );
+		wfProfileOut( __METHOD__ );
 		return;
 	}
 	$sourcePath = $img->getPath();
 	if ( $sourcePath === false ) {
 		wfThumbError( 500, 'The source file is not locally accessible.' );
+		wfProfileOut( __METHOD__ );
 		return;
 	}
 
@@ -87,10 +107,11 @@ function wfThumbMain() {
 		// Calculate time
 		wfSuppressWarnings();
 		$imsUnix = strtotime( $imsString );
+		$stat = stat( $sourcePath );
 		wfRestoreWarnings();
-		$stat = @stat( $sourcePath );
 		if ( $stat['mtime'] <= $imsUnix ) {
 			header( 'HTTP/1.1 304 Not Modified' );
+			wfProfileOut( __METHOD__ );
 			return;
 		}
 	}
@@ -101,12 +122,14 @@ function wfThumbMain() {
 			$thumbPath = $img->getThumbPath( $thumbName );
 
 			if ( is_file( $thumbPath ) ) {
-				wfStreamFile( $thumbPath );
+				wfStreamFile( $thumbPath, $headers );
+				wfProfileOut( __METHOD__ );
 				return;
 			}
 		}
 	} catch ( MWException $e ) {
 		wfThumbError( 500, $e->getHTML() );
+		wfProfileOut( __METHOD__ );
 		return;
 	}
 
@@ -128,7 +151,7 @@ function wfThumbMain() {
 		$errorMsg = wfMsgHtml( 'thumbnail_error', 'Image was not scaled, ' .
 			'is the requested width bigger than the source?' );
 	} else {
-		wfStreamFile( $thumb->getPath() );
+		wfStreamFile( $thumb->getPath(), $headers );
 	}
 	if ( $errorMsg !== false ) {
 		wfThumbError( 500, $errorMsg );
@@ -143,11 +166,14 @@ function wfThumbError( $status, $msg ) {
 	header( 'Content-Type: text/html; charset=utf-8' );
 	if ( $status == 404 ) {
 		header( 'HTTP/1.1 404 Not found' );
+	} elseif ( $status == 403 ) {
+		header( 'HTTP/1.1 403 Forbidden' );
+		header( 'Vary: Cookie' );
 	} else {
 		header( 'HTTP/1.1 500 Internal server error' );
 	}
 	if( $wgShowHostnames ) {
-		$url = htmlspecialchars( @$_SERVER['REQUEST_URI'] );
+		$url = htmlspecialchars( isset( $_SERVER['REQUEST_URI'] ) ? $_SERVER['REQUEST_URI'] : '' );
 		$hostname = htmlspecialchars( wfHostname() );
 		$debug = "<!-- $url -->\n<!-- $hostname -->\n";
 	} else {

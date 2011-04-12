@@ -1,17 +1,28 @@
 <?php
 /**
- * @defgroup FileRepo FileRepo
+ * Prioritized list of file repositories
  *
  * @file
  * @ingroup FileRepo
  */
 
 /**
- * @ingroup FileRepo
+ * @defgroup FileRepo FileRepo
+ */
+
+/**
  * Prioritized list of file repositories
+ *
+ * @ingroup FileRepo
  */
 class RepoGroup {
-	var $localRepo, $foreignRepos, $reposInitialised = false;
+
+	/**
+	 * @var LocalRepo
+	 */
+	var $localRepo;
+
+	var $foreignRepos, $reposInitialised = false;
 	var $localInfo, $foreignInfo;
 	var $cache;
 
@@ -21,6 +32,7 @@ class RepoGroup {
 	/**
 	 * Get a RepoGroup instance. At present only one instance of RepoGroup is
 	 * needed in a MediaWiki invocation, this may change in the future.
+	 * @return RepoGroup
 	 */
 	static function singleton() {
 		if ( self::$instance ) {
@@ -48,7 +60,9 @@ class RepoGroup {
 
 	/**
 	 * Construct a group of file repositories.
-	 * @param array $data Array of repository info arrays.
+	 *
+	 * @param $localInfo Associative array for local repo's info
+	 * @param $foreignInfo Array of repository info arrays.
 	 *     Each info array is an associative array with the 'class' member
 	 *     giving the class name. The entire array is passed to the repository
 	 *     constructor as the first parameter.
@@ -61,8 +75,9 @@ class RepoGroup {
 
 	/**
 	 * Search repositories for an image.
-	 * You can also use wfGetFile() to do this.
-	 * @param mixed $title Title object or string
+	 * You can also use wfFindFile() to do this.
+	 *
+	 * @param $title Mixed: Title object or string
 	 * @param $options Associative array of options:
 	 *     time:           requested time for an archived image, or false for the
 	 *                     current version. An image object will be returned which was
@@ -70,7 +85,7 @@ class RepoGroup {
 	 *
 	 *     ignoreRedirect: If true, do not follow file redirects
 	 *
-	 *     private:        If true, return restricted (deleted) files if the current 
+	 *     private:        If true, return restricted (deleted) files if the current
 	 *                     user is allowed to view them. Otherwise, such files will not
 	 *                     be found.
 	 *
@@ -92,10 +107,15 @@ class RepoGroup {
 			}
 		}
 
+		if ( $title->getNamespace() != NS_MEDIA && $title->getNamespace() != NS_FILE ) {
+			throw new MWException( __METHOD__ . ' received an Title object with incorrect namespace' );
+		}
+
 		# Check the cache
-		if ( empty( $options['ignoreRedirect'] ) 
-			&& empty( $options['private'] ) 
-			&& empty( $options['bypassCache'] ) ) 
+		if ( empty( $options['ignoreRedirect'] )
+			&& empty( $options['private'] )
+			&& empty( $options['bypassCache'] )
+			&& $title->getNamespace() == NS_FILE )
 		{
 			$useCache = true;
 			$time = isset( $options['time'] ) ? $options['time'] : '';
@@ -164,7 +184,7 @@ class RepoGroup {
 			foreach ( $images as $name => $image ) {
 				unset( $items[$name] );
 			}
-			
+
 			$images = array_merge( $images, $repo->findFiles( $items ) );
 		}
 		return $images;
@@ -190,16 +210,46 @@ class RepoGroup {
 		}
 		return false;
 	}
-	
+
+	/**
+	 * Find an instance of the file with this key, created at the specified time
+	 * Returns false if the file does not exist.
+	 *
+	 * @param $hash String base 36 SHA-1 hash
+	 * @param $options Option array, same as findFile()
+	 * @return File object or false if it is not found
+	 */
+	function findFileFromKey( $hash, $options = array() ) {
+		if ( !$this->reposInitialised ) {
+			$this->initialiseRepos();
+		}
+
+		$file = $this->localRepo->findFileFromKey( $hash, $options );
+		if ( !$file ) {
+			foreach ( $this->foreignRepos as $repo ) {
+				$file = $repo->findFileFromKey( $hash, $options );
+				if ( $file ) break;
+			}
+		}
+		return $file;
+	}
+
+	/**
+	 * Find all instances of files with this key
+	 *
+	 * @param $hash String base 36 SHA-1 hash
+	 * @return Array of File objects
+	 */
 	function findBySha1( $hash ) {
 		if ( !$this->reposInitialised ) {
 			$this->initialiseRepos();
 		}
-		
+
 		$result = $this->localRepo->findBySha1( $hash );
-		foreach ( $this->foreignRepos as $repo )
+		foreach ( $this->foreignRepos as $repo ) {
 			$result = array_merge( $result, $repo->findBySha1( $hash ) );
-		return $result;		
+		}
+		return $result;
 	}
 
 	/**
@@ -224,7 +274,7 @@ class RepoGroup {
 		if ( !$this->reposInitialised ) {
 			$this->initialiseRepos();
 		}
-		foreach ( $this->foreignRepos as $key => $repo ) {
+		foreach ( $this->foreignRepos as $repo ) {
 			if ( $repo->name == $name)
 				return $repo;
 		}
@@ -240,11 +290,11 @@ class RepoGroup {
 	}
 
 	/**
-	 * Call a function for each foreign repo, with the repo object as the 
+	 * Call a function for each foreign repo, with the repo object as the
 	 * first parameter.
 	 *
-	 * @param $callback callback The function to call
-	 * @param $params array Optional additional parameters to pass to the function
+	 * @param $callback Callback: the function to call
+	 * @param $params Array: optional additional parameters to pass to the function
 	 */
 	function forEachForeignRepo( $callback, $params = array() ) {
 		foreach( $this->foreignRepos as $repo ) {
@@ -258,7 +308,7 @@ class RepoGroup {
 
 	/**
 	 * Does the installation have any foreign repos set up?
-	 * @return bool
+	 * @return Boolean
 	 */
 	function hasForeignRepos() {
 		return (bool)$this->foreignRepos;
@@ -294,7 +344,7 @@ class RepoGroup {
 	 */
 	function splitVirtualUrl( $url ) {
 		if ( substr( $url, 0, 9 ) != 'mwrepo://' ) {
-			throw new MWException( __METHOD__.': unknown protoocl' );
+			throw new MWException( __METHOD__.': unknown protocol' );
 		}
 
 		$bits = explode( '/', substr( $url, 9 ), 3 );

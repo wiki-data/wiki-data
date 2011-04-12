@@ -1,26 +1,6 @@
 <?php
 
 /**
- * External database storage will use one (or more) separate connection pools
- * from what the main wiki uses. If we load many revisions, such as when doing
- * bulk backups or maintenance, we want to keep them around over the lifetime
- * of the script.
- *
- * Associative array of LoadBalancer objects, indexed by cluster name.
- */
-global $wgExternalLoadBalancers;
-$wgExternalLoadBalancers = array();
-
-/**
- * One-step cache variable to hold base blobs; operations that
- * pull multiple revisions may often pull multiple times from
- * the same blob. By keeping the last-used one open, we avoid
- * redundant unserialization and decompression overhead.
- */
-global $wgExternalBlobCache;
-$wgExternalBlobCache = array();
-
-/**
  * DB accessable external objects
  * @ingroup ExternalStorage
  */
@@ -30,28 +10,48 @@ class ExternalStoreDB {
 		$this->mParams = $params;
 	}
 
-	/** @todo Document.*/
+	/**
+	 * Get a LoadBalancer for the specified cluster
+	 *
+	 * @param $cluster String: cluster name
+	 * @return LoadBalancer object
+	 */
 	function &getLoadBalancer( $cluster ) {
 		$wiki = isset($this->mParams['wiki']) ? $this->mParams['wiki'] : false;
 		
 		return wfGetLBFactory()->getExternalLB( $cluster, $wiki );
 	}
 
-	/** @todo Document.*/
+	/**
+	 * Get a slave database connection for the specified cluster
+	 *
+	 * @param $cluster String: cluster name
+	 * @return DatabaseBase object
+	 */
 	function &getSlave( $cluster ) {
 		$wiki = isset($this->mParams['wiki']) ? $this->mParams['wiki'] : false;
 		$lb =& $this->getLoadBalancer( $cluster );
 		return $lb->getConnection( DB_SLAVE, array(), $wiki );
 	}
 
-	/** @todo Document.*/
+	/**
+	 * Get a master database connection for the specified cluster
+	 *
+	 * @param $cluster String: cluster name
+	 * @return DatabaseBase object
+	 */
 	function &getMaster( $cluster ) {
 		$wiki = isset($this->mParams['wiki']) ? $this->mParams['wiki'] : false;
 		$lb =& $this->getLoadBalancer( $cluster );
 		return $lb->getConnection( DB_MASTER, array(), $wiki );
 	}
 
-	/** @todo Document.*/
+	/**
+	 * Get the 'blobs' table name for this database
+	 *
+	 * @param $db DatabaseBase
+	 * @return String: table name ('blobs' by default)
+	 */
 	function getTable( &$db ) {
 		$table = $db->getLBInfo( 'blobs table' );
 		if ( is_null( $table ) ) {
@@ -62,7 +62,7 @@ class ExternalStoreDB {
 
 	/**
 	 * Fetch data from given URL
-	 * @param string $url An url of the form DB://cluster/id or DB://cluster/id/itemid for concatened storage.
+	 * @param $url String: an url of the form DB://cluster/id or DB://cluster/id/itemid for concatened storage.
 	 */
 	function fetchFromURL( $url ) {
 		$path = explode( '/', $url );
@@ -93,11 +93,18 @@ class ExternalStoreDB {
 	 * @private
 	 */
 	function &fetchBlob( $cluster, $id, $itemID ) {
-		global $wgExternalBlobCache;
+		/**
+		 * One-step cache variable to hold base blobs; operations that
+		 * pull multiple revisions may often pull multiple times from
+		 * the same blob. By keeping the last-used one open, we avoid
+		 * redundant unserialization and decompression overhead.
+		 */
+		static $externalBlobCache = array();
+
 		$cacheID = ( $itemID === false ) ? "$cluster/$id" : "$cluster/$id/";
-		if( isset( $wgExternalBlobCache[$cacheID] ) ) {
+		if( isset( $externalBlobCache[$cacheID] ) ) {
 			wfDebug( "ExternalStoreDB::fetchBlob cache hit on $cacheID\n" );
-			return $wgExternalBlobCache[$cacheID];
+			return $externalBlobCache[$cacheID];
 		}
 
 		wfDebug( "ExternalStoreDB::fetchBlob cache miss on $cacheID\n" );
@@ -118,7 +125,7 @@ class ExternalStoreDB {
 			$ret = unserialize( $ret );
 		}
 
-		$wgExternalBlobCache = array( $cacheID => &$ret );
+		$externalBlobCache = array( $cacheID => &$ret );
 		return $ret;
 	}
 
@@ -140,7 +147,7 @@ class ExternalStoreDB {
 			throw new MWException( __METHOD__.': no insert ID' );
 		}
 		if ( $dbw->getFlag( DBO_TRX ) ) {
-			$dbw->immediateCommit();
+			$dbw->commit();
 		}
 		return "DB://$cluster/$id";
 	}

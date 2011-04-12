@@ -1,5 +1,9 @@
 <?php
 /**
+ * @defgroup Wikimedia Wikimedia
+ */
+
+/**
  * Add a new wiki
  * Wikimedia specific!
  *
@@ -18,38 +22,44 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  * http://www.gnu.org/copyleft/gpl.html
  *
- * @defgroup Wikimedia Wikimedia
+ * @file
  * @ingroup Maintenance
  * @ingroup Wikimedia
  */
 
-require_once( dirname(__FILE__) . '/Maintenance.php' );
+require_once( dirname( __FILE__ ) . '/Maintenance.php' );
 
 class AddWiki extends Maintenance {
 	public function __construct() {
+		global $wgNoDBParam;
+
 		parent::__construct();
 		$this->mDescription = "Add a new wiki to the family. Wikimedia specific!";
-		$this->addArg( 'language', 'Language code of new site' );
-		$this->addArg( 'site', 'Type of site' );
-		$this->addArg( 'dbname', 'Name of database to create' );
+		$this->addArg( 'language', 'Language code of new site, e.g. en' );
+		$this->addArg( 'site', 'Type of site, e.g. wikipedia' );
+		$this->addArg( 'dbname', 'Name of database to create, e.g. enwiki' );
+		$this->addArg( 'domain', 'Domain name of the wiki, e.g. en.wikipedia.org' );
+
+		$wgNoDBParam = true;
 	}
 
-	protected function getDbType() {
+	public function getDbType() {
 		return Maintenance::DB_ADMIN;
 	}
 
 	public function execute() {
-		global $IP, $wgLanguageNames, $wgDefaultExternalStore, $wgNoDBParam;
+		global $IP, $wgDefaultExternalStore;
 
-		$wgNoDBParam = true;
-		$lang = $this->getArg(0);
-		$site = $this->getArg(1);
-		$dbName = $this->getArg(2);
+		$lang = $this->getArg( 0 );
+		$site = $this->getArg( 1 );
+		$dbName = $this->getArg( 2 );
+		$domain = $this->getArg( 3 );
+		$languageNames = Language::getLanguageNames();
 
-		if ( !isset( $wgLanguageNames[$lang] ) ) {
-			$this->error( "Language $lang not found in \$wgLanguageNames", true );
+		if ( !isset( $languageNames[$lang] ) ) {
+			$this->error( "Language $lang not found in Names.php", true );
 		}
-		$name = $wgLanguageNames[$lang];
+		$name = $languageNames[$lang];
 
 		$dbw = wfGetDB( DB_MASTER );
 		$common = "/home/wikipedia/common";
@@ -71,18 +81,18 @@ class AddWiki extends Maintenance {
 		$dbw->sourceFile( "$IP/extensions/Oversight/hidden.sql" );
 		$dbw->sourceFile( "$IP/extensions/GlobalBlocking/localdb_patches/setup-global_block_whitelist.sql" );
 		$dbw->sourceFile( "$IP/extensions/AbuseFilter/abusefilter.tables.sql" );
-		$dbw->sourceFile( "$IP/extensions/UsabilityInitiative/PrefStats/PrefStats.sql" );
+		$dbw->sourceFile( "$IP/extensions/PrefStats/patches/PrefStats.sql" );
 		$dbw->sourceFile( "$IP/extensions/ProofreadPage/ProofreadPage.sql" );
-		$dbw->sourceFile( "$IP/extensions/UsabilityInitiative/ClickTracking/ClickTrackingEvents.sql" );
-		$dbw->sourceFile( "$IP/extensions/UsabilityInitiative/ClickTracking/ClickTracking.sql" );
-		$dbw->sourceFile( "$IP/extensions/UsabilityInitiative/UserDailyContribs/UserDailyContribs.sql" );
+		$dbw->sourceFile( "$IP/extensions/ClickTracking/patches/ClickTrackingEvents.sql" );
+		$dbw->sourceFile( "$IP/extensions/ClickTracking/patches/ClickTracking.sql" );
+		$dbw->sourceFile( "$IP/extensions/UserDailyContribs/patches/UserDailyContribs.sql" );
 
 		$dbw->query( "INSERT INTO site_stats(ss_row_id) VALUES (1)" );
 
 		# Initialise external storage
 		if ( is_array( $wgDefaultExternalStore ) ) {
 			$stores = $wgDefaultExternalStore;
-		} elseif ( $stores ) {
+		} elseif ( $wgDefaultExternalStore ) {
 			$stores = array( $wgDefaultExternalStore );
 		} else {
 			$stores = array();
@@ -114,17 +124,16 @@ class AddWiki extends Maintenance {
 				$blobsFile = popen( $sedCmd, 'r' );
 				$extdb->sourceStream( $blobsFile );
 				pclose( $blobsFile );
-				$extdb->immediateCommit();
+				$extdb->commit();
 			}
 		}
 
-		global $wgTitle, $wgArticle;
-		$wgTitle = Title::newFromText( wfMsgWeirdKey( "mainpage/$lang" ) );
-		$this->output( "Writing main page to " . $wgTitle->getPrefixedDBkey() . "\n" );
-		$wgArticle = new Article( $wgTitle );
+		$title = Title::newFromText( wfMessage( 'mainpage' )->inLanguage( $lang )->useDatabase( false )->plain() );
+		$this->output( "Writing main page to " . $title->getPrefixedDBkey() . "\n" );
+		$article = new Article( $title );
 		$ucsite = ucfirst( $site );
 
-		$wgArticle->insertNewArticle( $this->getFirstArticle( $ucsite, $name ), '', false, false );
+		$article->doEdit( $this->getFirstArticle( $ucsite, $name ), '', EDIT_NEW | EDIT_AUTOSUMMARY );
 
 		$this->output( "Adding to dblists\n" );
 
@@ -134,11 +143,21 @@ class AddWiki extends Maintenance {
 		fclose( $file );
 
 		# Update the sublists
-		shell_exec("cd $common && ./refresh-dblist");
+		shell_exec( "cd $common && ./refresh-dblist" );
 
-		#print "Constructing interwiki SQL\n";
+		# print "Constructing interwiki SQL\n";
 		# Rebuild interwiki tables
-		#passthru( '/home/wikipedia/conf/interwiki/update' );
+		# passthru( '/home/wikipedia/conf/interwiki/update' );
+
+		$time = wfTimestamp( TS_RFC2822 );
+		// These arguments need to be escaped twice: once for echo and once for at
+		$escDbName = wfEscapeShellArg( wfEscapeShellArg( $dbName ) );
+		$escTime = wfEscapeShellArg( wfEscapeShellArg( $time ) );
+		$escUcsite = wfEscapeShellArg( wfEscapeShellArg( $ucsite ) );
+		$escName = wfEscapeShellArg( wfEscapeShellArg( $name ) );
+		$escLang = wfEscapeShellArg( wfEscapeShellArg( $lang ) );
+		$escDomain = wfEscapeShellArg( wfEscapeShellArg( $domain ) );
+		shell_exec( "echo notifyNewProjects $escDbName $escTime $escUcsite $escName $escLang $escDomain | at now + 15 minutes" );
 
 		$this->output( "Script ended. You still have to:
 	* Add any required settings in InitialiseSettings.php
@@ -146,7 +165,7 @@ class AddWiki extends Maintenance {
 	* Run /home/wikipedia/conf/interwiki/update
 	" );
 	}
-	
+
 	private function getFirstArticle( $ucsite, $name ) {
 		return <<<EOT
 ==This subdomain is reserved for the creation of a [[wikimedia:Our projects|$ucsite]] in '''[[w:en:{$name}|{$name}]]''' language==
@@ -447,4 +466,4 @@ EOT;
 }
 
 $maintClass = "AddWiki";
-require_once( DO_MAINTENANCE );
+require_once( RUN_MAINTENANCE_IF_MAIN );

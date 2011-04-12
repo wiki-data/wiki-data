@@ -14,26 +14,38 @@ $messages = array(
 'underline-always' => 'Njalo',
 
 # Dates
-'sunday'    => 'iSonto',
-'monday'    => 'uMsombuluko',
-'tuesday'   => 'uLwesibili',
-'wednesday' => 'uLwesithathu',
-'thursday'  => 'uLwesine',
-'friday'    => 'uLwesihlanu',
-'saturday'  => 'uMgqibelo',
-'january'   => 'uJanuwali',
-'february'  => 'uFebruwari',
-'march'     => 'uMashi',
-'april'     => 'u-Apreli',
-'may_long'  => 'uMeyi',
-'june'      => 'uJuni',
-'july'      => 'uJulayi',
-'august'    => 'u-Agasti',
-'september' => 'uSepthemba',
-'october'   => 'u-Okthoba',
-'november'  => 'uNovemba',
-'december'  => 'uDisemba',
-'may'       => 'uMeyi',
+'sunday'        => 'iSonto',
+'monday'        => 'uMsombuluko',
+'tuesday'       => 'uLwesibili',
+'wednesday'     => 'uLwesithathu',
+'thursday'      => 'uLwesine',
+'friday'        => 'uLwesihlanu',
+'saturday'      => 'uMgqibelo',
+'january'       => 'uJanuwali',
+'february'      => 'uFebruwari',
+'march'         => 'uMashi',
+'april'         => 'u-Apreli',
+'may_long'      => 'uMeyi',
+'june'          => 'uJuni',
+'july'          => 'uJulayi',
+'august'        => 'u-Agasti',
+'september'     => 'uSepthemba',
+'october'       => 'u-Okthoba',
+'november'      => 'uNovemba',
+'december'      => 'uDisemba',
+'january-gen'   => 'uJanuwali',
+'february-gen'  => 'uFebruwari',
+'march-gen'     => 'uMashi',
+'april-gen'     => 'u-Apreli',
+'may-gen'       => 'uMeyi',
+'june-gen'      => 'uJuni',
+'july-gen'      => 'uJulayi',
+'august-gen'    => 'u-Agasti',
+'september-gen' => 'uSepthemba',
+'october-gen'   => 'u-Okthoba',
+'november-gen'  => 'uNovemba',
+'december-gen'  => 'uDisemba',
+'may'           => 'uMeyi',
 
 'cancel'        => 'Nqamula',
 'moredotdotdot' => 'Amanye...',
@@ -53,6 +65,7 @@ $messages = array(
 'search'           => 'Sesha',
 'searchbutton'     => 'Sesha',
 'go'               => 'Hamba',
+'searcharticle'    => 'Hamba',
 'history_short'    => 'Umlando',
 'printableversion' => 'Inguqulo eshicilelekayo',
 'print'            => 'Shicilela',
@@ -86,6 +99,7 @@ $messages = array(
 
 'newmessageslink'         => 'Imilayezo emisha',
 'youhavenewmessagesmulti' => 'Uyanemilayezo emisha e $1',
+'editsection'             => 'hlela',
 'toc'                     => 'Isiqikili',
 'showtoc'                 => 'Bukisa',
 'hidetoc'                 => 'Fihla',
@@ -105,27 +119,28 @@ $messages = array(
 'internalerror' => 'Icala lingaphakathi',
 
 # Login and logout pages
-'welcomecreation'    => '== Umbingelelo, $1! ==
+'welcomecreation'         => '== Umbingelelo, $1! ==
 
 ikhawundi lakho liyadalwa. musa ukukhohlwa ukuguqula amakhethelo a-{{SITENAME}} wakho.',
-'yourname'           => 'Isiga',
-'yourpassword'       => 'Izwi elingenangozi',
-'yourpasswordagain'  => 'Bhala izwi elingenangozi lakho kabusha',
-'remembermypassword' => 'Ngikhumbule',
-'login'              => 'Ngena',
-'userlogin'          => 'Ngena / Dala ikhawundi',
-'logout'             => 'Phuma',
-'userlogout'         => 'Phuma',
-'notloggedin'        => 'Awungenile',
-'nologin'            => "Awunekhawundi? '''$1'''.",
-'nologinlink'        => 'Dala ikhawundi',
-'createaccount'      => 'Dala ikhawundi',
-'gotaccountlink'     => 'Ngena',
-'loginsuccesstitle'  => 'Ubengena',
-'nosuchuser'         => 'Akukho umsebenzisi unegama "$1". Hlola umbhalo wakho, noma dala ikhawundi elisha.',
-'nosuchusershort'    => 'Akukho umsebenzisi unegama "<nowiki>$1</nowiki>". Hlola umbhalo wakho.',
-'emailconfirmlink'   => 'Qinisekisa ikheli likagesi lakho',
-'loginlanguagelabel' => 'Ulimi: $1',
+'yourname'                => 'Isiga',
+'yourpassword'            => 'Izwi elingenangozi',
+'yourpasswordagain'       => 'Bhala izwi elingenangozi lakho kabusha',
+'remembermypassword'      => 'Ngikhumbule (for a maximum of $1 {{PLURAL:$1|day|days}})',
+'login'                   => 'Ngena',
+'nav-login-createaccount' => 'Ngena / Dala ikhawundi',
+'userlogin'               => 'Ngena / Dala ikhawundi',
+'logout'                  => 'Phuma',
+'userlogout'              => 'Phuma',
+'notloggedin'             => 'Awungenile',
+'nologin'                 => "Awunekhawundi? '''$1'''.",
+'nologinlink'             => 'Dala ikhawundi',
+'createaccount'           => 'Dala ikhawundi',
+'gotaccountlink'          => 'Ngena',
+'loginsuccesstitle'       => 'Ubengena',
+'nosuchuser'              => 'Akukho umsebenzisi unegama "$1". Hlola umbhalo wakho, noma dala ikhawundi elisha.',
+'nosuchusershort'         => 'Akukho umsebenzisi unegama "<nowiki>$1</nowiki>". Hlola umbhalo wakho.',
+'emailconfirmlink'        => 'Qinisekisa ikheli likagesi lakho',
+'loginlanguagelabel'      => 'Ulimi: $1',
 
 # Password reset dialog
 'newpassword' => 'Izwi elingenangozi elisha:',
@@ -133,7 +148,6 @@ ikhawundi lakho liyadalwa. musa ukukhohlwa ukuguqula amakhethelo a-{{SITENAME}} 
 # Edit page toolbar
 'italic_sample' => 'Amazwi ama-italiki',
 'italic_tip'    => 'Amazwi ama-italiki',
-'math_sample'   => 'Faka izibalo lapha',
 'hr_tip'        => 'Umugqa uhleliwe  (use sparingly)',
 
 # Edit pages
@@ -173,7 +187,6 @@ ikhawundi lakho liyadalwa. musa ukukhohlwa ukuguqula amakhethelo a-{{SITENAME}} 
 'mypreferences'     => 'Amakhethelo ami',
 'prefsnologin'      => 'Awungenile',
 'changepassword'    => 'Guqula izwi elingenangozi',
-'prefs-math'        => 'Izibalo',
 'saveprefs'         => 'Saveprefs',
 'searchresultshead' => 'Sesha',
 'timezonelegend'    => 'Isifunda sasikhathi',
@@ -194,11 +207,11 @@ ikhawundi lakho liyadalwa. musa ukukhohlwa ukuguqula amakhethelo a-{{SITENAME}} 
 'recentchangeslinked-toolbox' => 'Izinguquko ezilandiweyo',
 
 # Upload
-'upload'           => 'Layisha ifayili',
-'uploadbtn'        => 'Layisha ifayili',
-'filesource'       => 'Umthombo:',
-'ignorewarnings'   => 'Duba imiyalo',
-'successfulupload' => 'Ukulayisha okuchumile',
+'upload'              => 'Layisha ifayili',
+'uploadbtn'           => 'Layisha ifayili',
+'filesource'          => 'Umthombo:',
+'ignorewarnings'      => 'Duba imiyalo',
+'upload-success-subj' => 'Ukulayisha okuchumile',
 
 'nolicense' => 'Ubekhetha lutho',
 
@@ -252,7 +265,7 @@ ikhawundi lakho liyadalwa. musa ukukhohlwa ukuguqula amakhethelo a-{{SITENAME}} 
 'exblank'    => 'ikhasi elize',
 
 # Protect
-'protectcomment' => 'Isizathu ngenxa yalondoloza',
+'protectcomment' => 'Isizathu',
 
 # Restrictions (nouns)
 'restriction-edit' => 'Ukuhlela',
@@ -363,6 +376,6 @@ ikhawundi lakho liyadalwa. musa ukukhohlwa ukuguqula amakhethelo a-{{SITENAME}} 
 'confirm_purge_button' => 'Kulungile',
 
 # Special:FilePath
-'filepath-submit' => 'Indlela',
+'filepath-submit' => 'Hamba',
 
 );

@@ -13,10 +13,11 @@
  *
  * ----------
  *
- * Copyright (C) 2001-2009 Magnus Manske, Brion Vibber, Lee Daniel Crocker,
+ * Copyright (C) 2001-2011 Magnus Manske, Brion Vibber, Lee Daniel Crocker,
  * Tim Starling, Erik Möller, Gabriel Wicke, Ævar Arnfjörð Bjarmason,
  * Niklas Laxström, Domas Mituzas, Rob Church, Yuri Astrakhan, Aryeh Gregor,
- * Aaron Schulz and others.
+ * Aaron Schulz, Andrew Garrett, Raimond Spekking, Alexandre Emsenhuber
+ * Siebrand Mazeland, Chad Horohoe, Roan Kattouw and others.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,89 +37,89 @@
  * @file
  */
 
+# Initialise common code.  This gives us access to GlobalFunctions, the AutoLoader, and
+# the globals $wgRequest, $wgOut, $wgUser, $wgLang and $wgContLang, amongst others; it
+# does *not* load $wgTitle or $wgArticle
+require ( dirname( __FILE__ ) . '/includes/WebStart.php' );
 
-# Initialise common code
-$preIP = dirname( __FILE__ );
-require_once( "$preIP/includes/WebStart.php" );
-
-# Initialize MediaWiki base class
-require_once( "$preIP/includes/Wiki.php" );
-$mediaWiki = new MediaWiki();
-
-wfProfileIn( 'main-misc-setup' );
-OutputPage::setEncodings(); # Not really used yet
+wfProfileIn( 'index.php' );
+wfProfileIn( 'index.php-setup' );
 
 $maxLag = $wgRequest->getVal( 'maxlag' );
-if( !is_null( $maxLag ) && !$mediaWiki->checkMaxLag( $maxLag ) ) {
-	exit;
+if ( !is_null( $maxLag ) ) {
+	list( $host, $lag ) = wfGetLB()->getMaxLag();
+	if ( $lag > $maxLag ) {
+		header( 'HTTP/1.1 503 Service Unavailable' );
+		header( 'Retry-After: ' . max( intval( $maxLag ), 5 ) );
+		header( 'X-Database-Lag: ' . intval( $lag ) );
+		header( 'Content-Type: text/plain' );
+		if( $wgShowHostnames ) {
+			echo "Waiting for $host: $lag seconds lagged\n";
+		} else {
+			echo "Waiting for a database server: $lag seconds lagged\n";
+		}
+		exit;
+	}
 }
 
-# Query string fields
-$action = $wgRequest->getVal( 'action', 'view' );
-$title = $wgRequest->getVal( 'title' );
+# Initialize MediaWiki base class
+$context = RequestContext::getMain();
+$mediaWiki = new MediaWiki( $context );
 
 # Set title from request parameters
-$wgTitle = $mediaWiki->checkInitialQueries( $title, $action );
-if( $wgTitle === NULL ) {
-	unset( $wgTitle );
-}
+$wgTitle = $mediaWiki->getTitle();
+$action = $wgRequest->getVal( 'action', 'view' );
 
-wfProfileOut( 'main-misc-setup' );
+wfProfileOut( 'index.php-setup' );
 
-#
 # Send Ajax requests to the Ajax dispatcher.
-#
-if( $wgUseAjax && $action == 'ajax' ) {
-	require_once( $IP . '/includes/AjaxDispatcher.php' );
+if ( $wgUseAjax && $action == 'ajax' ) {
 	$dispatcher = new AjaxDispatcher();
 	$dispatcher->performAction();
+	wfProfileOut( 'index.php' );
 	$mediaWiki->restInPeace();
 	exit;
 }
 
-if( $wgUseFileCache && isset( $wgTitle ) ) {
-	wfProfileIn( 'main-try-filecache' );
+if ( $wgUseFileCache && $wgTitle !== null ) {
+	wfProfileIn( 'index.php-filecache' );
 	// Raw pages should handle cache control on their own,
 	// even when using file cache. This reduces hits from clients.
-	if( $action != 'raw' && HTMLFileCache::useFileCache() ) {
+	if ( $action != 'raw' && HTMLFileCache::useFileCache() ) {
 		/* Try low-level file cache hit */
 		$cache = new HTMLFileCache( $wgTitle, $action );
-		if( $cache->isFileCacheGood( /* Assume up to date */ ) ) {
+		if ( $cache->isFileCacheGood( /* Assume up to date */ ) ) {
 			/* Check incoming headers to see if client has this cached */
-			if( !$wgOut->checkLastModified( $cache->fileCacheTime() ) ) {
+			if ( !$context->output->checkLastModified( $cache->fileCacheTime() ) ) {
 				$cache->loadFromFileCache();
 			}
 			# Do any stats increment/watchlist stuff
 			$wgArticle = MediaWiki::articleFromTitle( $wgTitle );
 			$wgArticle->viewUpdates();
-			# Tell $wgOut that output is taken care of
-			wfProfileOut( 'main-try-filecache' );
+			# Tell OutputPage that output is taken care of
+			$context->output->disable();
+			wfProfileOut( 'index.php-filecache' );
+			$mediaWiki->finalCleanup();
+			wfProfileOut( 'index.php' );
 			$mediaWiki->restInPeace();
 			exit;
 		}
 	}
-	wfProfileOut( 'main-try-filecache' );
+	wfProfileOut( 'index.php-filecache' );
 }
 
 # Setting global variables in mediaWiki
-$mediaWiki->setVal( 'action', $action );
-$mediaWiki->setVal( 'CommandLineMode', $wgCommandLineMode );
-$mediaWiki->setVal( 'DisabledActions', $wgDisabledActions );
 $mediaWiki->setVal( 'DisableHardRedirects', $wgDisableHardRedirects );
-$mediaWiki->setVal( 'DisableInternalSearch', $wgDisableInternalSearch );
 $mediaWiki->setVal( 'EnableCreativeCommonsRdf', $wgEnableCreativeCommonsRdf );
 $mediaWiki->setVal( 'EnableDublinCoreRdf', $wgEnableDublinCoreRdf );
-$mediaWiki->setVal( 'JobRunRate', $wgJobRunRate );
 $mediaWiki->setVal( 'Server', $wgServer );
 $mediaWiki->setVal( 'SquidMaxage', $wgSquidMaxage );
 $mediaWiki->setVal( 'UseExternalEditor', $wgUseExternalEditor );
 $mediaWiki->setVal( 'UsePathInfo', $wgUsePathInfo );
 
-$mediaWiki->performRequestForTitle( $wgTitle, $wgArticle, $wgOut, $wgUser, $wgRequest );
-$mediaWiki->finalCleanup( $wgDeferredUpdateList, $wgOut );
+$mediaWiki->performRequestForTitle( $wgArticle );
+$mediaWiki->finalCleanup();
 
-# Not sure when $wgPostCommitUpdateList gets set, so I keep this separate from finalCleanup
-$mediaWiki->doUpdates( $wgPostCommitUpdateList );
+wfProfileOut( 'index.php' );
 
 $mediaWiki->restInPeace();
-

@@ -4,8 +4,7 @@
 -- the CREATE INDEX statement will fail if there are duplicate values.
 --
 -- Ignore duplicates, several tables will have them (e.g. bug 16966) but in 
--- most cases it's harmless to discard them. We'll keep the old tables with 
--- duplicates in so that the user can recover them in case of disaster.
+-- most cases it's harmless to discard them.
 
 --------------------------------------------------------------------------------
 -- Drop temporary tables from aborted runs
@@ -414,4 +413,4 @@ CREATE INDEX /*i*/qcc_type ON /*_*/querycachetwo (qcc_type,qcc_value);
 CREATE INDEX /*i*/qcc_title ON /*_*/querycachetwo (qcc_type,qcc_namespace,qcc_title);
 CREATE INDEX /*i*/qcc_titletwo ON /*_*/querycachetwo (qcc_type,qcc_namespacetwo,qcc_titletwo);
 
-INSERT INTO /*_*/updatelog VALUES ('initial_indexes');
+INSERT INTO /*_*/updatelog (ul_key) VALUES ('initial_indexes');

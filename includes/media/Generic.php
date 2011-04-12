@@ -1,6 +1,7 @@
 <?php
 /**
  * Media-handling base classes and generic functionality
+ *
  * @file
  * @ingroup Media
  */
@@ -20,6 +21,8 @@ abstract class MediaHandler {
 
 	/**
 	 * Get a MediaHandler for a given MIME type from the instance cache
+	 *
+	 * @return MediaHandler
 	 */
 	static function getHandler( $type ) {
 		global $wgMediaHandlers;
@@ -71,18 +74,19 @@ abstract class MediaHandler {
 	 * Get an image size array like that returned by getimagesize(), or false if it
 	 * can't be determined.
 	 *
-	 * @param Image $image The image object, or false if there isn't one
-	 * @param string $fileName The filename
-	 * @return array
+	 * @param $image File: the image object, or false if there isn't one
+	 * @param $path String: the filename
+	 * @return Array
 	 */
 	abstract function getImageSize( $image, $path );
 
 	/**
 	 * Get handler-specific metadata which will be saved in the img_metadata field.
 	 *
-	 * @param Image $image The image object, or false if there isn't one
-	 * @param string $fileName The filename
-	 * @return string
+	 * @param $image File: the image object, or false if there isn't one.
+	 *   Warning, File::getPropsFromPath might pass an (object)array() instead (!)
+	 * @param $path String: the filename
+	 * @return String
 	 */
 	function getMetadata( $image, $path ) { return ''; }
 
@@ -114,10 +118,10 @@ abstract class MediaHandler {
 	 * Get a MediaTransformOutput object representing the transformed output. Does not
 	 * actually do the transform.
 	 *
-	 * @param Image $image The image object
-	 * @param string $dstPath Filesystem destination path
-	 * @param string $dstUrl Destination URL to use in output HTML
-	 * @param array $params Arbitrary set of parameters validated by $this->validateParam()
+	 * @param $image File: the image object
+	 * @param $dstPath String: filesystem destination path
+	 * @param $dstUrl String: Destination URL to use in output HTML
+	 * @param $params Array: Arbitrary set of parameters validated by $this->validateParam()
 	 */
 	function getTransform( $image, $dstPath, $dstUrl, $params ) {
 		return $this->doTransform( $image, $dstPath, $dstUrl, $params, self::TRANSFORM_LATER );
@@ -127,11 +131,11 @@ abstract class MediaHandler {
 	 * Get a MediaTransformOutput object representing the transformed output. Does the
 	 * transform unless $flags contains self::TRANSFORM_LATER.
 	 *
-	 * @param Image $image The image object
-	 * @param string $dstPath Filesystem destination path
-	 * @param string $dstUrl Destination URL to use in output HTML
-	 * @param array $params Arbitrary set of parameters validated by $this->validateParam()
-	 * @param integer $flags A bitfield, may contain self::TRANSFORM_LATER
+	 * @param $image File: the image object
+	 * @param $dstPath String: filesystem destination path
+	 * @param $dstUrl String: destination URL to use in output HTML
+	 * @param $params Array: arbitrary set of parameters validated by $this->validateParam()
+	 * @param $flags Integer: a bitfield, may contain self::TRANSFORM_LATER
 	 */
 	abstract function doTransform( $image, $dstPath, $dstUrl, $params, $flags = 0 );
 
@@ -139,7 +143,19 @@ abstract class MediaHandler {
 	 * Get the thumbnail extension and MIME type for a given source MIME type
 	 * @return array thumbnail extension and MIME type
 	 */
-	function getThumbType( $ext, $mime ) {
+	function getThumbType( $ext, $mime, $params = null ) {
+		$magic = MimeMagic::singleton();
+		if ( !$ext || $magic->isMatchingExtension( $ext, $mime ) === false ) {
+			// The extension is not valid for this mime type and we do 
+			// recognize the mime type
+			$extensions = $magic->getExtensionsForType( $mime );
+			if ( $extensions ) {
+				return array( strtok( $extensions, ' ' ), $mime );
+			}
+		}
+		
+		// The extension is correct (true) or the mime type is unknown to
+		// MediaWiki (null)
 		return array( $ext, $mime );
 	}
 
@@ -161,6 +177,10 @@ abstract class MediaHandler {
 	 */
 	function pageCount( $file ) { return false; }
 	/**
+	 * The material is vectorized and thus scaling is lossless
+	 */
+	function isVectorized( $file ) { return false; }
+	/**
 	 * False if the handler is disabled for all files
 	 */
 	function isEnabled() { return true; }
@@ -170,6 +190,8 @@ abstract class MediaHandler {
 	 * Currently "width" and "height" are understood, but this might be
 	 * expanded in the future.
 	 * Returns false if unknown or if the document is not multi-page.
+	 *
+	 * @param $image File
 	 */
 	function getPageDimensions( $image, $page ) {
 		$gis = $this->getImageSize( $image, $image->getPath() );
@@ -218,7 +240,7 @@ abstract class MediaHandler {
 	}
 
 	/**
-	 * @fixme document this!
+	 * @todo Fixme: document this!
 	 * 'value' thingy goes into a wikitext table; it used to be escaped but
 	 * that was incompatible with previous practice of customized display
 	 * with wikitext formatting via messages such as 'exif-model-value'.
@@ -233,13 +255,21 @@ abstract class MediaHandler {
 		);
 	}
 
+	/**
+	 * @param $file File
+	 * @return string
+	 */
 	function getShortDesc( $file ) {
 		global $wgLang;
-		$nbytes = '(' . wfMsgExt( 'nbytes', array( 'parsemag', 'escape' ),
-			$wgLang->formatNum( $file->getSize() ) ) . ')';
+		$nbytes = wfMsgExt( 'nbytes', array( 'parsemag', 'escape' ),
+			$wgLang->formatNum( $file->getSize() ) );
 		return "$nbytes";
 	}
 
+	/**
+	 * @param $file File
+	 * @return string
+	 */
 	function getLongDesc( $file ) {
 		global $wgUser;
 		$sk = $wgUser->getSkin();
@@ -247,14 +277,22 @@ abstract class MediaHandler {
 			$sk->formatSize( $file->getSize() ),
 			$file->getMimeType() );
 	}
-	
+
+	/**
+	 * @param $file File
+	 * @return string
+	 */
 	static function getGeneralShortDesc( $file ) {
 		global $wgLang;
-		$nbytes = '(' . wfMsgExt( 'nbytes', array( 'parsemag', 'escape' ),
-			$wgLang->formatNum( $file->getSize() ) ) . ')';
+		$nbytes = wfMsgExt( 'nbytes', array( 'parsemag', 'escape' ),
+			$wgLang->formatNum( $file->getSize() ) );
 		return "$nbytes";
 	}
 
+	/**
+	 * @param $file File
+	 * @return string
+	 */
 	static function getGeneralLongDesc( $file ) {
 		global $wgUser;
 		$sk = $wgUser->getSkin();
@@ -271,6 +309,20 @@ abstract class MediaHandler {
 	 * Modify the parser object post-transform
 	 */
 	function parserTransformHook( $parser, $file ) {}
+
+	/**
+	 * File validation hook called on upload.
+	 *
+	 * If the file at the given local path is not valid, or its MIME type does not 
+	 * match the handler class, a Status object should be returned containing
+	 * relevant errors.
+	 * 
+	 * @param $fileName The local path to the file.
+	 * @return Status object
+	 */
+	function verifyUpload( $fileName ) {
+		return Status::newGood();
+	}
 
 	/**
 	 * Check for zero-sized thumbnails. These can be generated when
@@ -301,12 +353,13 @@ abstract class MediaHandler {
  * @ingroup Media
  */
 abstract class ImageHandler extends MediaHandler {
+
+	/**
+	 * @param $file File
+	 * @return bool
+	 */
 	function canRender( $file ) {
-		if ( $file->getWidth() && $file->getHeight() ) {
-			return true;
-		} else {
-			return false;
-		}
+		return ( $file->getWidth() && $file->getHeight() );
 	}
 
 	function getParamMap() {
@@ -351,15 +404,30 @@ abstract class ImageHandler extends MediaHandler {
 		return array( 'width' => $params['width'] );
 	}
 
+	/**
+	 * @param $image File
+	 * @param  $params
+	 * @return bool
+	 */
 	function normaliseParams( $image, &$params ) {
 		$mimeType = $image->getMimeType();
 
 		if ( !isset( $params['width'] ) ) {
 			return false;
 		}
+
 		if ( !isset( $params['page'] ) ) {
 			$params['page'] = 1;
+		} else  {
+			if ( $params['page'] > $image->pageCount() ) {
+				$params['page'] = $image->pageCount();
+			}
+
+			if ( $params['page'] < 1 ) {
+				$params['page'] = 1;
+			}
 		}
+
 		$srcWidth = $image->getWidth( $params['page'] );
 		$srcHeight = $image->getHeight( $params['page'] );
 		if ( isset( $params['height'] ) && $params['height'] != -1 ) {
@@ -384,8 +452,11 @@ abstract class ImageHandler extends MediaHandler {
 	/**
 	 * Validate thumbnail parameters and fill in the correct height
 	 *
-	 * @param integer &$width Specified width (input/output)
-	 * @param integer &$height Height (output only)
+	 * @param $width Integer: specified width (input/output)
+	 * @param $height Integer: height (output only)
+	 * @param $srcWidth Integer: width of the source image
+	 * @param $srcHeight Integer: height of the source image
+	 * @param $mimeType Unused
 	 * @return false to indicate that an error should be returned to the user.
 	 */
 	function validateThumbParams( &$width, &$height, $srcWidth, $srcHeight, $mimeType ) {
@@ -405,6 +476,12 @@ abstract class ImageHandler extends MediaHandler {
 		return true;
 	}
 
+	/**
+	 * @param $image File
+	 * @param  $script
+	 * @param  $params
+	 * @return bool|ThumbnailImage
+	 */
 	function getScriptedTransform( $image, $script, $params ) {
 		if ( !$this->normaliseParams( $image, $params ) ) {
 			return false;
@@ -424,6 +501,14 @@ abstract class ImageHandler extends MediaHandler {
 		return $gis;
 	}
 
+	function isAnimatedImage( $image ) {
+		return false;
+	}
+
+	/**
+	 * @param $file File
+	 * @return string
+	 */
 	function getShortDesc( $file ) {
 		global $wgLang;
 		$nbytes = wfMsgExt( 'nbytes', array( 'parsemag', 'escape' ),
@@ -433,6 +518,10 @@ abstract class ImageHandler extends MediaHandler {
 		return "$widthheight ($nbytes)";
 	}
 
+	/**
+	 * @param $file File
+	 * @return string
+	 */
 	function getLongDesc( $file ) {
 		global $wgLang;
 		return wfMsgExt('file-info-size', 'parseinline',
@@ -442,6 +531,10 @@ abstract class ImageHandler extends MediaHandler {
 			$file->getMimeType() );
 	}
 
+	/**
+	 * @param $file File
+	 * @return string
+	 */
 	function getDimensionsString( $file ) {
 		global $wgLang;
 		$pages = $file->pageCount();

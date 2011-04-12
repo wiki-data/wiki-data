@@ -1,10 +1,14 @@
 <?php
 /**
+ * Handler for DjVu images
+ *
  * @file
  * @ingroup Media
  */
  
 /**
+ * Handler for DjVu images
+ *
  * @ingroup Media
  */
 class DjVuHandler extends ImageHandler {
@@ -64,6 +68,14 @@ class DjVuHandler extends ImageHandler {
 		);
 	}
 
+	/**
+	 * @param $image File
+	 * @param  $dstPath
+	 * @param  $dstUrl
+	 * @param  $params
+	 * @param int $flags
+	 * @return MediaTransformError|ThumbnailImage|TransformParameterError
+	 */
 	function doTransform( $image, $dstPath, $dstUrl, $params, $flags = 0 ) {
 		global $wgDjvuRenderer, $wgDjvuPostProcessor;
 
@@ -104,6 +116,7 @@ class DjVuHandler extends ImageHandler {
 		$cmd .= ' > ' . wfEscapeShellArg($dstPath) . ') 2>&1';
 		wfProfileIn( 'ddjvu' );
 		wfDebug( __METHOD__.": $cmd\n" );
+		$retval = '';
 		$err = wfShellExec( $cmd, $retval );
 		wfProfileOut( 'ddjvu' );
 
@@ -134,6 +147,7 @@ class DjVuHandler extends ImageHandler {
 
 	/**
 	 * Cache a document tree for the DjVu XML metadata
+	 * @param $image File
 	 */
 	function getMetaTree( $image , $gettext = false ) {
 		if ( isset( $image->dejaMetaTree ) ) {
@@ -181,7 +195,7 @@ class DjVuHandler extends ImageHandler {
 		return $this->getDjVuImage( $image, $path )->getImageSize();
 	}
 
-	function getThumbType( $ext, $mime ) {
+	function getThumbType( $ext, $mime, $params = null ) {
 		global $wgDjvuOutputExtension;
 		static $mime;
 		if ( !isset( $mime ) ) {

@@ -1,11 +1,10 @@
 <?php
-
-/*
+/**
+ *
+ *
  * Created on Oct 05, 2007
  *
- * API for MediaWiki 1.8+
- *
- * Copyright (C) 2007 Yuri Astrakhan <Firstname><Lastname>@gmail.com
+ * Copyright © 2007 Yuri Astrakhan <Firstname><Lastname>@gmail.com
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,13 +18,15 @@
  *
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
- * 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  * http://www.gnu.org/copyleft/gpl.html
+ *
+ * @file
  */
 
-if (!defined('MEDIAWIKI')) {
+if ( !defined( 'MEDIAWIKI' ) ) {
 	// Eclipse helper - will be ignored in production
-	require_once ("ApiBase.php");
+	require_once( "ApiBase.php" );
 }
 
 /**
@@ -37,26 +38,30 @@ if (!defined('MEDIAWIKI')) {
  */
 class ApiExpandTemplates extends ApiBase {
 
-	public function __construct($main, $action) {
-		parent :: __construct($main, $action);
+	public function __construct( $main, $action ) {
+		parent::__construct( $main, $action );
 	}
 
 	public function execute() {
+		// Cache may vary on $wgUser because ParserOptions gets data from it
+		$this->getMain()->setCacheMode( 'anon-public-user-private' );
+
 		// Get parameters
 		$params = $this->extractRequestParams();
 
-		//Create title for parser
-		$title_obj = Title :: newFromText( $params['title'] );
-		if(!$title_obj)
-			$title_obj = Title :: newFromText( "API" ); // default
+		// Create title for parser
+		$title_obj = Title::newFromText( $params['title'] );
+		if ( !$title_obj ) {
+			$title_obj = Title::newFromText( 'API' ); // default
+		}
 
 		$result = $this->getResult();
 
 		// Parse text
 		global $wgParser;
 		$options = new ParserOptions();
-		if ( $params['generatexml'] )
-		{
+
+		if ( $params['generatexml'] ) {
 			$wgParser->startExternalParse( $title_obj, $options, OT_PREPROCESS );
 			$dom = $wgParser->preprocessToDom( $params['text'] );
 			if ( is_callable( array( $dom, 'saveXML' ) ) ) {
@@ -66,7 +71,7 @@ class ApiExpandTemplates extends ApiBase {
 			}
 			$xml_result = array();
 			$result->setContent( $xml_result, $xml );
-			$result->addValue( null, 'parsetree', $xml_result);
+			$result->addValue( null, 'parsetree', $xml_result );
 		}
 		$retval = $wgParser->preprocess( $params['text'], $title_obj, $options );
 
@@ -77,9 +82,9 @@ class ApiExpandTemplates extends ApiBase {
 	}
 
 	public function getAllowedParams() {
-		return array (
+		return array(
 			'title' => array(
-				ApiBase :: PARAM_DFLT => 'API',
+				ApiBase::PARAM_DFLT => 'API',
 			),
 			'text' => null,
 			'generatexml' => false,
@@ -87,7 +92,7 @@ class ApiExpandTemplates extends ApiBase {
 	}
 
 	public function getParamDescription() {
-		return array (
+		return array(
 			'text' => 'Wikitext to convert',
 			'title' => 'Title of page',
 			'generatexml' => 'Generate XML parse tree',
@@ -99,12 +104,12 @@ class ApiExpandTemplates extends ApiBase {
 	}
 
 	protected function getExamples() {
-		return array (
+		return array(
 			'api.php?action=expandtemplates&text={{Project:Sandbox}}'
 		);
 	}
 
 	public function getVersion() {
-		return __CLASS__ . ': $Id: ApiExpandTemplates.php 44719 2008-12-17 16:34:01Z catrope $';
+		return __CLASS__ . ': $Id: ApiExpandTemplates.php 78829 2010-12-22 20:52:06Z reedy $';
 	}
 }

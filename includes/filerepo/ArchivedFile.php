@@ -1,15 +1,21 @@
 <?php
+/**
+ * Deleted file in the 'filearchive' table
+ *
+ * @file
+ * @ingroup FileRepo
+ */
 
 /**
- * @ingroup Media
+ * Class representing a row of the 'filearchive' table
+ *
+ * @ingroup FileRepo
  */
-class ArchivedFile
-{
+class ArchivedFile {
 	/**#@+
 	 * @private
 	 */
 	var $id, # filearchive row ID
-		$title, # image title
 		$name, # image name
 		$group,	# FileStore storage group
 		$key, # FileStore sha1 key
@@ -25,11 +31,28 @@ class ArchivedFile
 		$user_text, # user name of uploader
 		$timestamp, # time of upload
 		$dataLoaded, # Whether or not all this has been loaded from the database (loadFromXxx)
-		$deleted; # Bitfield akin to rev_deleted
+		$deleted, # Bitfield akin to rev_deleted
+		$pageCount,
+		$archive_name;
+
+	/**
+	 * @var MediaHandler
+	 */
+	var $handler;
+	/**
+	 * @var Title
+	 */
+	var $title; # image title
 
 	/**#@-*/
 
-	function ArchivedFile( $title, $id=0, $key='' ) {
+	/**
+	 * @throws MWException
+	 * @param Title $title
+	 * @param int $id
+	 * @param string $key
+	 */
+	function __construct( $title, $id=0, $key='' ) {
 		$this->id = -1;
 		$this->title = false;
 		$this->name = false;
@@ -45,48 +68,54 @@ class ArchivedFile
 		$this->description = '';
 		$this->user = 0;
 		$this->user_text = '';
-		$this->timestamp = NULL;
+		$this->timestamp = null;
 		$this->deleted = 0;
 		$this->dataLoaded = false;
 		$this->exists = false;
-		
-		if( is_object($title) ) {
+
+		if( is_object( $title ) ) {
 			$this->title = $title;
 			$this->name = $title->getDBkey();
 		}
-		
-		if ($id)
+
+		if ($id) {
 			$this->id = $id;
-		
-		if ($key)
+		}
+
+		if ($key) {
 			$this->key = $key;
-		
-		if (!$id && !$key && !is_object($title))
+		}
+
+		if ( !$id && !$key && !is_object( $title ) ) {
 			throw new MWException( "No specifications provided to ArchivedFile constructor." );
+		}
 	}
 
 	/**
 	 * Loads a file object from the filearchive table
-	 * @return ResultWrapper
+	 * @return true on success or null
 	 */
 	public function load() {
 		if ( $this->dataLoaded ) {
 			return true;
 		}
 		$conds = array();
-		
-		if( $this->id > 0 )
+
+		if( $this->id > 0 ) {
 			$conds['fa_id'] = $this->id;
+		}
 		if( $this->key ) {
-			$conds['fa_storage_group'] = $this->group;	
+			$conds['fa_storage_group'] = $this->group;
 			$conds['fa_storage_key'] = $this->key;
 		}
-		if( $this->title )
+		if( $this->title ) {
 			$conds['fa_name'] = $this->title->getDBkey();
-			
-		if( !count($conds))
+		}
+
+		if( !count($conds)) {
 			throw new MWException( "No specific information for retrieving archived file" );
-		
+		}
+
 		if( !$this->title || $this->title->getNamespace() == NS_FILE ) {
 			$dbr = wfGetDB( DB_SLAVE );
 			$res = $dbr->select( 'filearchive',
@@ -112,8 +141,7 @@ class ArchivedFile
 				$conds,
 				__METHOD__,
 				array( 'ORDER BY' => 'fa_timestamp DESC' ) );
-
-			if ( $dbr->numRows( $res ) == 0 ) {
+			if ( $res == false || $dbr->numRows( $res ) == 0 ) {
 			// this revision does not exist?
 				return;
 			}
@@ -140,7 +168,6 @@ class ArchivedFile
 			$this->deleted = $row->fa_deleted;
 		} else {
 			throw new MWException( 'This title does not correspond to an image page.' );
-			return;
 		}
 		$this->dataLoaded = true;
 		$this->exists = true;
@@ -150,7 +177,7 @@ class ArchivedFile
 
 	/**
 	 * Loads a file object from the filearchive table
-	 * @return ResultWrapper
+	 * @return ArchivedFile
 	 */
 	public static function newFromRow( $row ) {
 		$file = new ArchivedFile( Title::makeTitle( NS_FILE, $row->fa_name ) );
@@ -178,7 +205,6 @@ class ArchivedFile
 
 	/**
 	 * Return the associated title object
-	 * @public
 	 */
 	public function getTitle() {
 		return $this->title;
@@ -195,7 +221,7 @@ class ArchivedFile
 		$this->load();
 		return $this->id;
 	}
-	
+
 	public function exists() {
 		$this->load();
 		return $this->exists;
@@ -220,7 +246,7 @@ class ArchivedFile
 	 * Return the FileStore storage group
 	 */
 	public function getGroup() {
-		return $file->group;
+		return $this->group;
 	}
 
 	/**
@@ -249,7 +275,6 @@ class ArchivedFile
 
 	/**
 	 * Return the size of the image file, in bytes
-	 * @public
 	 */
 	public function getSize() {
 		$this->load();
@@ -258,7 +283,6 @@ class ArchivedFile
 
 	/**
 	 * Return the bits of the image file, in bytes
-	 * @public
 	 */
 	public function getBits() {
 		$this->load();
@@ -271,6 +295,32 @@ class ArchivedFile
 	public function getMimeType() {
 		$this->load();
 		return $this->mime;
+	}
+
+	/**
+	 * Get a MediaHandler instance for this file
+	 * @return MediaHandler
+	 */
+	function getHandler() {
+		if ( !isset( $this->handler ) ) {
+			$this->handler = MediaHandler::getHandler( $this->getMimeType() );
+		}
+		return $this->handler;
+	}
+
+	/**
+	 * Returns the number of pages of a multipage document, or false for
+	 * documents which aren't multipage documents
+	 */
+	function pageCount() {
+		if ( !isset( $this->pageCount ) ) {
+			if ( $this->getHandler() && $this->handler->isMultiPage( $this ) ) {
+				$this->pageCount = $this->handler->pageCount( $this );
+			} else {
+				$this->pageCount = false;
+			}
+		}
+		return $this->pageCount;
 	}
 
 	/**
@@ -360,8 +410,9 @@ class ArchivedFile
 	}
 
 	/**
-	 * int $field one of DELETED_* bitfield constants
 	 * for file or revision rows
+	 *
+	 * @param $field Integer: one of DELETED_* bitfield constants
 	 * @return bool
 	 */
 	public function isDeleted( $field ) {
@@ -372,7 +423,7 @@ class ArchivedFile
 	/**
 	 * Determine if the current user is allowed to view a particular
 	 * field of this FileStore image file, if it's marked as deleted.
-	 * @param int $field
+	 * @param $field Integer
 	 * @return bool
 	 */
 	public function userCan( $field ) {

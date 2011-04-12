@@ -1,4 +1,10 @@
 <?php
+/**
+ * Generic operation result for FileRepo-related operations
+ *
+ * @file
+ * @ingroup FileRepo
+ */
 
 /**
  * Generic operation result class for FileRepo-related operations
@@ -22,6 +28,9 @@ class FileRepoStatus extends Status {
 		return $result;
 	}
 
+	/**
+	 * @param $repo FileRepo
+	 */
 	function __construct( $repo = false ) {
 		if ( $repo ) {
 			$this->cleanCallback = $repo->getErrorCleanupFunction();

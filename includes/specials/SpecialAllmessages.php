@@ -1,10 +1,40 @@
 <?php
 /**
+ * Implements Special:Allmessages
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program; if not, write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ * http://www.gnu.org/copyleft/gpl.html
+ *
+ * @file
+ * @ingroup SpecialPage
+ */
+
+/**
  * Use this special page to get a list of the MediaWiki system messages.
+ *
  * @file
  * @ingroup SpecialPage
  */
 class SpecialAllmessages extends SpecialPage {
+
+	/**
+	 * @var AllmessagesTablePager
+	 */
+	protected $table;
+
+	protected $filter, $prefix, $langCode;
 
 	/**
 	 * Constructor
@@ -19,30 +49,33 @@ class SpecialAllmessages extends SpecialPage {
 	 * @param $par Mixed: parameter passed to the page or null
 	 */
 	public function execute( $par ) {
-		global $wgOut, $wgRequest;
+		$request = $this->getRequest();
+		$out = $this->getOutput();
 
 		$this->setHeaders();
 
 		global $wgUseDatabaseMessages;
 		if( !$wgUseDatabaseMessages ) {
-			$wgOut->addWikiMsg( 'allmessagesnotsupportedDB' );
+			$out->addWikiMsg( 'allmessagesnotsupportedDB' );
 			return;
 		} else {
 			$this->outputHeader( 'allmessagestext' );
 		}
 
-		$this->filter = $wgRequest->getVal( 'filter', 'all' );
-		$this->prefix = $wgRequest->getVal( 'prefix', '' );
+		$out->addModuleStyles( 'mediawiki.special' );
+
+		$this->filter = $request->getVal( 'filter', 'all' );
+		$this->prefix = $request->getVal( 'prefix', '' );
 
 		$this->table = new AllmessagesTablePager(
 			$this,
-			$conds = array(),
-			wfGetLangObj( $wgRequest->getVal( 'lang', $par ) )
+			array(),
+			wfGetLangObj( $request->getVal( 'lang', $par ) )
 		);
 
 		$this->langCode = $this->table->lang->getCode();
 
-		$wgOut->addHTML( $this->buildForm() .
+		$out->addHTML( $this->buildForm() .
 			$this->table->getNavigationBar() .
 			$this->table->getLimitForm() .
 			$this->table->getBody() .
@@ -58,7 +91,7 @@ class SpecialAllmessages extends SpecialPage {
 
 		$out  = Xml::openElement( 'form', array( 'method' => 'get', 'action' => $wgScript, 'id' => 'mw-allmessages-form' ) ) .
 			Xml::fieldset( wfMsg( 'allmessages-filter-legend' ) ) .
-			Xml::hidden( 'title', $this->getTitle() ) .
+			Html::hidden( 'title', $this->getTitle()->getPrefixedText() ) .
 			Xml::openElement( 'table', array( 'class' => 'mw-allmessages-table' ) ) . "\n" .
 			'<tr>
 				<td class="mw-label">' .
@@ -77,19 +110,19 @@ class SpecialAllmessages extends SpecialPage {
 						'filter',
 						'unmodified',
 						'mw-allmessages-form-filter-unmodified',
-						( $this->filter == 'unmodified' ? true : false )
+						( $this->filter == 'unmodified' )
 					) .
 					Xml::radioLabel( wfMsg( 'allmessages-filter-all' ),
 						'filter',
 						'all',
 						'mw-allmessages-form-filter-all',
-						( $this->filter == 'all' ? true : false )
+						( $this->filter == 'all' )
 					) .
 					Xml::radioLabel( wfMsg( 'allmessages-filter-modified' ),
 						'filter',
 						'modified',
 						'mw-allmessages-form-filter-modified',
-					( $this->filter == 'modified' ? true : false )
+					( $this->filter == 'modified' )
 				) .
 				"</td>\n
 			</tr>
@@ -101,7 +134,7 @@ class SpecialAllmessages extends SpecialPage {
 					Xml::openElement( 'select', array( 'id' => 'mw-allmessages-form-lang', 'name' => 'lang' ) );
 
 		foreach( $languages as $lang => $name ) {
-			$selected = $lang == $this->langCode ? true : false;
+			$selected = $lang == $this->langCode;
 			$out .= Xml::option( $lang . ' - ' . $name, $lang, $selected ) . "\n";
 		}
 		$out .= Xml::closeElement( 'select' ) .
@@ -121,14 +154,28 @@ class SpecialAllmessages extends SpecialPage {
 	}
 }
 
-/* use TablePager for prettified output. We have to pretend that we're
+/**
+ * Use TablePager for prettified output. We have to pretend that we're
  * getting data from a table when in fact not all of it comes from the database.
  */
 class AllmessagesTablePager extends TablePager {
 
-	var $messages  = null;
-	var $talkPages = null;
 	public $mLimitsShown;
+
+	/**
+	 * @var Skin
+	 */
+	protected $mSkin;
+
+	/**
+	 * @var Language
+	 */
+	public $lang;
+
+	/**
+	 * @var null|bool
+	 */
+	public $custom;
 
 	function __construct( $page, $conds, $langObj = null ) {
 		parent::__construct();
@@ -136,10 +183,7 @@ class AllmessagesTablePager extends TablePager {
 		$this->mPage = $page;
 		$this->mConds = $conds;
 		$this->mDefaultDirection = true; // always sort ascending
-		// We want to have an option for people to view *all* the messages, 
-		// so they can use Ctrl+F to search them.  5000 is the maximum that 
-		// will get through WebRequest::getLimitOffset().
-		$this->mLimitsShown = array( 20, 50, 100, 250, 500, 5000 => wfMsg('limitall') );
+		$this->mLimitsShown = array( 20, 50, 100, 250, 500, 5000 );
 
 		global $wgLang, $wgContLang, $wgRequest;
 
@@ -152,7 +196,7 @@ class AllmessagesTablePager extends TablePager {
 		if( $wgRequest->getVal( 'filter', 'all' ) === 'all' ){
 			$this->custom = null; // So won't match in either case
 		} else {
-			$this->custom = $wgRequest->getVal( 'filter' ) == 'unmodified' ? 1 : 0;
+			$this->custom = ($wgRequest->getVal( 'filter' ) == 'unmodified');
 		}
 
 		$prefix = $wgLang->ucfirst( $wgRequest->getVal( 'prefix', '' ) );
@@ -173,46 +217,33 @@ class AllmessagesTablePager extends TablePager {
 		}
 	}
 
-	function getAllMessages( $desc ){
-		wfProfileIn( __METHOD__ . '-cache' );
-
-		# Make sure all extension messages are available
-		global $wgMessageCache;
-		$wgMessageCache->loadAllMessages( 'en' );
-		$sortedArray = Language::getMessagesFor( 'en' );
-		if( $desc ){
-			krsort( $sortedArray );
+	function getAllMessages( $descending ) {
+		wfProfileIn( __METHOD__ );
+		$messageNames = Language::getLocalisationCache()->getSubitemList( 'en', 'messages' );
+		if( $descending ){
+			rsort( $messageNames );
 		} else {
-			ksort( $sortedArray );
+			asort( $messageNames );
 		}
 
-		$this->messages = array();
-		foreach( $sortedArray as $key => $value ) {
-			// All messages start with lowercase, but wikis might have both
-			// upper and lowercase MediaWiki: pages if $wgCapitalLinks=false.
-			$ukey = $this->lang->ucfirst( $key );
+		// Normalise message names so they look like page titles
+		$messageNames = array_map( array( $this->lang, 'ucfirst' ), $messageNames );
 
-			// The value without any overrides from the MediaWiki: namespace
-			$this->messages[$ukey]['default'] = wfMsgGetKey( $key, /*useDB*/false, $this->langcode, false );
-
-			// The message that's actually used by the site
-			$this->messages[$ukey]['actual'] = wfMsgGetKey( $key, /*useDB*/true, $this->langcode, false );
-
-			$this->messages[$ukey]['customised'] = 0; //for now
-
-			$sortedArray[$key] = null; // trade bytes from $sortedArray to this
-		}
-
-		wfProfileOut( __METHOD__ . '-cache' );
-
-		return true;
+		wfProfileOut( __METHOD__ );
+		return $messageNames;
 	}
 
-	# We only need a list of which messages have *been* customised;
-	# their content is already in the message cache.
-	function markCustomisedMessages(){
-		$this->talkPages = array();
-
+	/**
+	 * Determine which of the MediaWiki and MediaWiki_talk namespace pages exist.
+	 * Returns array( 'pages' => ..., 'talks' => ... ), where the subarrays have
+	 * an entry for each existing page, with the key being the message name and
+	 * value arbitrary.
+	 *
+	 * @param array $messageNames
+	 * @param string $langcode What language code
+	 * @param bool $foreign Whether the $langcode is not the content language
+	 */
+	public static function getCustomisedStatuses( $messageNames, $langcode = 'en', $foreign = false ) {
 		wfProfileIn( __METHOD__ . '-db' );
 
 		$dbr = wfGetDB( DB_SLAVE );
@@ -222,56 +253,64 @@ class AllmessagesTablePager extends TablePager {
 			__METHOD__,
 			array( 'USE INDEX' => 'name_title' )
 		);
+		$xNames = array_flip( $messageNames );
 
-		while( $s = $dbr->fetchObject( $res ) ) {
-			if( $s->page_namespace == NS_MEDIAWIKI ){
-				if( $this->foreign ){
+		$pageFlags = $talkFlags = array();
+
+		foreach ( $res as $s ) {
+			if( $s->page_namespace == NS_MEDIAWIKI ) {
+				if( $foreign ) {
 					$title = explode( '/', $s->page_title );
-					if( count( $title ) === 2 && $this->langcode == $title[1] && array_key_exists( $title[0], $this->messages ) ){
-						$this->messages["{$title[0]}"]['customised'] = 1;
+					if( count( $title ) === 2 && $langcode == $title[1]
+						&& isset( $xNames[$title[0]] ) ) {
+						$pageFlags["{$title[0]}"] = true;
 					}
-				} else if( array_key_exists( $s->page_title, $this->messages ) ){
-					$this->messages[$s->page_title]['customised'] = 1;
+				} elseif( isset( $xNames[$s->page_title] ) ) {
+					$pageFlags[$s->page_title] = true;
 				}
 			} else if( $s->page_namespace == NS_MEDIAWIKI_TALK ){
-				$this->talkPages[$s->page_title] = 1;
+				$talkFlags[$s->page_title] = true;
 			}
 		}
-		$dbr->freeResult( $res );
 
 		wfProfileOut( __METHOD__ . '-db' );
 
-		return true;
+		return array( 'pages' => $pageFlags, 'talks' => $talkFlags );
 	}
 
-	/* This function normally does a database query to get the results; we need
+	/**
+	 *  This function normally does a database query to get the results; we need
 	 * to make a pretend result using a FakeResultWrapper.
 	 */
-	function reallyDoQuery( $offset, $limit, $descending ){
-		$mResult = new FakeResultWrapper( array() );
+	function reallyDoQuery( $offset, $limit, $descending ) {
+		$result = new FakeResultWrapper( array() );
 
-		if( !$this->messages ) $this->getAllMessages( $descending );
-		if( $this->talkPages === null ) $this->markCustomisedMessages();
+		$messageNames = $this->getAllMessages( $descending );
+		$statuses = self::getCustomisedStatuses( $messageNames, $this->langcode, $this->foreign );
 
 		$count = 0;
-		foreach( $this->messages as $key => $value ){
-			if( $value['customised'] !== $this->custom &&
+		foreach( $messageNames as $key ) {
+			$customised = isset( $statuses['pages'][$key] );
+			if( $customised !== $this->custom &&
 				( $descending && ( $key < $offset || !$offset ) || !$descending && $key > $offset ) &&
 				( ( $this->prefix && preg_match( $this->prefix, $key ) ) || $this->prefix === false )
-			){
-				$mResult->result[] = array(
+			) {
+				$actual = wfMessage( $key )->inLanguage( $this->langcode )->plain();
+				$default = wfMessage( $key )->inLanguage( $this->langcode )->useDatabase( false )->plain();
+				$result->result[] = array(
 					'am_title'      => $key,
-					'am_actual'     => $value['actual'],
-					'am_default'    => $value['default'],
-					'am_customised' => $value['customised'],
+					'am_actual'     => $actual,
+					'am_default'    => $default,
+					'am_customised' => $customised,
+					'am_talk_exists' => isset( $statuses['talks'][$key] )
 				);
-				unset( $this->messages[$key] );	// save a few bytes
 				$count++;
 			}
-			if( $count == $limit ) break;
+			if( $count == $limit ) {
+				break;
+			}
 		}
-		unset( $this->messages ); // no longer needed, free up some memory
-		return $mResult;
+		return $result;
 	}
 
 	function getStartBody() {
@@ -311,7 +350,7 @@ class AllmessagesTablePager extends TablePager {
 						array( 'broken' )
 					);
 				}
-				if( array_key_exists( $talk->getDBkey() , $this->talkPages ) ) {
+				if ( $this->mCurrentRow->am_talk_exists ) {
 					$talk = $this->mSkin->linkKnown( $talk , $this->talk );
 				} else {
 					$talk = $this->mSkin->link(
@@ -325,7 +364,6 @@ class AllmessagesTablePager extends TablePager {
 				return $title . ' (' . $talk . ')';
 
 			case 'am_default' :
-				return Sanitizer::escapeHtmlAllowEntities( $value, ENT_QUOTES );
 			case 'am_actual' :
 				return Sanitizer::escapeHtmlAllowEntities( $value, ENT_QUOTES );
 		}
@@ -341,7 +379,7 @@ class AllmessagesTablePager extends TablePager {
 			$s .= Xml::openElement( 'tr', $this->getRowAttrs( $row, true ) );
 			$formatted = strval( $this->formatValue( 'am_actual', $row->am_actual ) );
 			if ( $formatted == '' ) {
-				$formatted = '&nbsp;';
+				$formatted = '&#160;';
 			}
 			$s .= Xml::tags( 'td', $this->getCellAttrs( 'am_actual', $row->am_actual ), $formatted )
 				. "</tr>\n";
@@ -376,56 +414,21 @@ class AllmessagesTablePager extends TablePager {
 			'am_default' => wfMsg( 'allmessagesdefault' )
 		);
 	}
+
 	function getTitle() {
 		return SpecialPage::getTitleFor( 'Allmessages', false );
 	}
+
 	function isFieldSortable( $x ){
 		return false;
 	}
+
 	function getDefaultSort(){
 		return '';
 	}
+
 	function getQueryInfo(){
 		return '';
 	}
 }
-/* Overloads the relevant methods of the real ResultsWrapper so it
- * doesn't go anywhere near an actual database.
- */
-class FakeResultWrapper extends ResultWrapper {
 
-	var $result     = array();
-	var $db         = null;	// And it's going to stay that way :D
-	var $pos        = 0;
-	var $currentRow = null;
-
-	function __construct( $array ){
-		$this->result = $array;
-	}
-
-	function numRows() {
-		return count( $this->result );
-	}
-
-	function fetchRow() {
-		$this->currentRow = $this->result[$this->pos++];
-		return $this->currentRow;
-	}
-
-	function seek( $row ) {
-		$this->pos = $row;
-	}
-
-	function free() {}
-
-	// Callers want to be able to access fields with $this->fieldName
-	function fetchObject(){
-		$this->currentRow = $this->result[$this->pos++];
-		return (object)$this->currentRow;
-	}
-
-	function rewind() {
-		$this->pos = 0;
-		$this->currentRow = null;
-	}
-}

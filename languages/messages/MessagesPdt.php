@@ -29,6 +29,7 @@ $messages = array(
 'tog-editsectiononrightclick' => 'Eenzelne Aufschnette mett eenem Rajsch-Klick beoabeide (JavaScript)',
 'tog-showtoc'                 => 'Wies dee List mettem Enhault (fe Siede mett meea aus dree Ewaschrefte)',
 'tog-rememberpassword'        => 'Login bewoare, dee Brucka blift aun disem Computer aunjemaldt',
+'tog-previewontop'            => 'Wies Preview bowe em Beoabeide-Fensta',
 'tog-showhiddencats'          => "Wies fe'stoakne Kategorien",
 
 'underline-always' => 'Emma',
@@ -299,6 +300,9 @@ Bitte nemm eenen aundren.',
 # Revision feed
 'history-feed-item-nocomment' => '$1 omm $2',
 
+# Revision deletion
+'rev-delundel' => 'wies/vestopp',
+
 # Diffs
 'lineno'   => 'Lien $1:',
 'editundo' => 'trigjsate',
@@ -315,6 +319,8 @@ Bitte nemm eenen aundren.',
 'search-mwsuggest-enabled'  => 'mett Veaschlag',
 'search-mwsuggest-disabled' => 'Tjeen Veaschlag',
 'powersearch'               => 'Bätre Sääk',
+'powersearch-legend'        => 'Betret Setje',
+'powersearch-field'         => 'Setj no',
 
 # Preferences page
 'preferences'          => 'Ennstalinje',
@@ -367,6 +373,7 @@ Bitte nemm eenen aundren.',
 
 # File description page
 'file-anchor-link'    => 'Datei',
+'filehist'            => 'Dokument-Jeschicht',
 'filehist-datetime'   => 'Tiet',
 'filehist-user'       => 'Brucker',
 'filehist-dimensions' => 'Moten',
@@ -412,7 +419,6 @@ Bitte nemm eenen aundren.',
 
 # Watchlist
 'mywatchlist'   => 'Miene Oppaussied',
-'watchlistfor'  => "(fer '''$1''')",
 'addedwatch'    => "No Oppausssied bieje'done",
 'watch'         => 'Oppausse',
 'watchthispage' => 'Op dise Sied oppausse',
@@ -562,7 +568,7 @@ Dee Grunt es: "$2"',
 'nostalgia.js'   => '/* Daut neachste JavaScript woat fe Brucka mett Nostalgie-Skin jelode. */',
 'cologneblue.js' => '/* Daut neachste JavaScript woat fe Brucka mett Keloonsch-Blau-Skin jelode */',
 'monobook.js'    => '/* Daut neachste JavaScript woat fe Brucka mett Monobook-Skin jelode */',
-'myskin.js'      => '/* Daut neachste JavaScript woat fe Brucka mett Myskin-Skin jelode */',
+'myskin.js'      => '/* Daut neachste JavaScript woat fe Brucka mett MySkin-Skin jelode */',
 'chick.js'       => '/* Daut neachste JavaScript woat fe Brucka mett Chick-Skin jelode */',
 'simple.js'      => '/* Daut neachste JavaScript woat fe Brucka mett Eenfach-Skin jelode */',
 'modern.js'      => '/* Daut neachste JavaScript woat fe Brucka mett Modern-Skin jelode. */',
@@ -599,14 +605,6 @@ Daut woat aun eenem Link lidje, woona no eene externe Sied wiest.',
 'numauthors'     => 'Zohl von Autore (Sied): $1',
 'numtalkauthors' => 'Zohl von Autore (Diskussioonssied): $1',
 
-# Math options
-'mw_math_png'    => 'Emma aus PNG wiese',
-'mw_math_simple' => 'HTML es zimlich eenfach, sonst PNG',
-'mw_math_html'   => 'Wan meajlich aus HTML wiese, sonst PNG',
-'mw_math_source' => 'Aus TeX lote (fe Tatjstbrowser)',
-'mw_math_modern' => 'Goot fe moderne Browser',
-'mw_math_mathml' => 'MathML wan meajlich (experimental)',
-
 # Patrolling
 'markaspatrolleddiff'   => 'Aus kontrolliet markere',
 'markaspatrolledtext'   => 'Dise Sied aus kontrolliet markere',
@@ -617,6 +615,9 @@ Daut woat aun eenem Link lidje, woona no eene externe Sied wiest.',
 'bad_image_list' => 'Format:
 
 Bloos items, woone mett eenem * aunfange, woare jenome. Dee eschta Link no dem * mott een Link opp een schlajchtet Dokument (file) senne. Dee Links, woone dan kome, wiese opp Utnohme, aulsoo soone Siede, woo daut Dokument (file) jewese en jeseene woare kaun.',
+
+# Metadata
+'metadata' => 'Meta-Dote',
 
 # 'all' in various places, this might be different for inflected languages
 'watchlistall2' => 'aule',

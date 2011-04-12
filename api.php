@@ -17,14 +17,14 @@
  *
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
- * 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  * http://www.gnu.org/copyleft/gpl.html
  *
  * @file
  */
 
-/** 
- * This file is the entry point for all API queries. It begins by checking 
+/**
+ * This file is the entry point for all API queries. It begins by checking
  * whether the API is enabled on this wiki; if not, it informs the user that
  * s/he should set $wgEnableAPI to true and exits. Otherwise, it constructs
  * a new ApiMain using the parameter passed to it as an argument in the URL
@@ -34,10 +34,13 @@
  * in the URL.
  */
 
-// Initialise common code
-require (dirname(__FILE__) . '/includes/WebStart.php');
+// So extensions (and other code) can check whether they're running in API mode
+define( 'MW_API', true );
 
-wfProfileIn('api.php');
+// Initialise common code
+require ( dirname( __FILE__ ) . '/includes/WebStart.php' );
+
+wfProfileIn( 'api.php' );
 $starttime = microtime( true );
 
 // URL safety checks
@@ -50,18 +53,17 @@ $starttime = microtime( true );
 // which will end up triggering HTML detection and execution, hence
 // XSS injection and all that entails.
 //
-if( $wgRequest->isPathInfoBad() ) {
+if ( $wgRequest->isPathInfoBad() ) {
 	wfHttpError( 403, 'Forbidden',
-		'Invalid file extension found in PATH_INFO. ' . 
-		'The API must be accessed through the primary script entry point.' );
+		'Invalid file extension found in PATH_INFO or QUERY_STRING.' );
 	return;
 }
 
 // Verify that the API has not been disabled
-if (!$wgEnableAPI) {
+if ( !$wgEnableAPI ) {
 	echo 'MediaWiki API is not enabled for this site. Add the following line to your LocalSettings.php';
 	echo '<pre><b>$wgEnableAPI=true;</b></pre>';
-	die(1);
+	die( 1 );
 }
 
 // Selectively allow cross-site AJAX
@@ -82,7 +84,7 @@ function convertWildcard( $search ) {
 	return "/$search/";
 }
 
-if ( $wgCrossSiteAJAXdomains && isset($_SERVER['HTTP_ORIGIN']) ) {	
+if ( $wgCrossSiteAJAXdomains && isset( $_SERVER['HTTP_ORIGIN'] ) ) {
 	$exceptions = array_map( 'convertWildcard', $wgCrossSiteAJAXdomainExceptions );
 	$regexes = array_map( 'convertWildcard', $wgCrossSiteAJAXdomains );
 	foreach ( $regexes as $regex ) {
@@ -99,18 +101,15 @@ if ( $wgCrossSiteAJAXdomains && isset($_SERVER['HTTP_ORIGIN']) ) {
 	}
 }
 
-// So extensions can check whether they're running in API mode
-define('MW_API', true);
-
 // Set a dummy $wgTitle, because $wgTitle == null breaks various things
 // In a perfect world this wouldn't be necessary
-$wgTitle = Title::newFromText('API');
+$wgTitle = Title::makeTitle( NS_MAIN, 'API' );
 
 /* Construct an ApiMain with the arguments passed via the URL. What we get back
  * is some form of an ApiMain, possibly even one that produces an error message,
  * but we don't care here, as that is handled by the ctor.
  */
-$processor = new ApiMain($wgRequest, $wgEnableWriteAPI);
+$processor = new ApiMain( $wgRequest, $wgEnableWriteAPI );
 
 // Process data & print results
 $processor->execute();
@@ -120,7 +119,7 @@ wfDoUpdates();
 
 // Log what the user did, for book-keeping purposes.
 $endtime = microtime( true );
-wfProfileOut('api.php');
+wfProfileOut( 'api.php' );
 wfLogProfilingData();
 
 // Log the request

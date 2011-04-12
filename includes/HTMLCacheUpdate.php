@@ -18,14 +18,19 @@
  * batches, but of course LIMIT with an offset is inefficient on the DB side.
  *
  * The class is nevertheless a vast improvement on the previous method of using
- * Image::getLinksTo() and Title::touchArray(), which uses about 2KB of memory per
+ * File::getLinksTo() and Title::touchArray(), which uses about 2KB of memory per
  * link.
  *
  * @ingroup Cache
  */
 class HTMLCacheUpdate
 {
-	public $mTitle, $mTable, $mPrefix, $mStart, $mEnd;
+	/**
+	 * @var Title
+	 */
+	public $mTitle;
+
+	public $mTable, $mPrefix, $mStart, $mEnd;
 	public $mRowsPerJob, $mRowsPerQuery;
 
 	function __construct( $titleTo, $table, $start = false, $end = false ) {
@@ -63,7 +68,6 @@ class HTMLCacheUpdate
 				$this->invalidateTitles( $titleArray );
 			}
 		}
-		wfRunHooks( 'HTMLCacheUpdate::doUpdate', array($this->mTitle) );
 	}
 
 	/**
@@ -76,7 +80,7 @@ class HTMLCacheUpdate
 			$this->invalidateTitles( $titleArray );
 		} else {
 			# Partitioning was excessively inaccurate. Divide the job further.
-			# This can occur when a large number of links are added in a short 
+			# This can occur when a large number of links are added in a short
 			# period of time, say by updating a heavily-used template.
 			$this->insertJobsFromTitles( $titleArray );
 		}
@@ -96,7 +100,7 @@ class HTMLCacheUpdate
 		$numTitles = 0;
 		foreach ( $titleArray as $title ) {
 			$id = $title->getArticleID();
-			# $numTitles is now the number of titles in the current job not 
+			# $numTitles is now the number of titles in the current job not
 			# including the current ID
 			if ( $numTitles >= $this->mRowsPerJob ) {
 				# Add a job up to but not including the current ID
@@ -122,7 +126,7 @@ class HTMLCacheUpdate
 
 		if ( count( $jobs ) < 2 ) {
 			# I don't think this is possible at present, but handling this case
-			# makes the code a bit more robust against future code updates and 
+			# makes the code a bit more robust against future code updates and
 			# avoids a potential infinite loop of repartitioning
 			wfDebug( __METHOD__.": repartitioning failed!\n" );
 			$this->invalidateTitles( $titleArray );
@@ -206,7 +210,7 @@ class HTMLCacheUpdate
 /**
  * Job wrapper for HTMLCacheUpdate. Gets run whenever a related
  * job gets called from the queue.
- * 
+ *
  * @ingroup JobQueue
  */
 class HTMLCacheUpdateJob extends Job {
@@ -214,9 +218,9 @@ class HTMLCacheUpdateJob extends Job {
 
 	/**
 	 * Construct a job
-	 * @param Title $title The title linked to
-	 * @param array $params Job parameters (table, start and end page_ids)
-	 * @param integer $id job_id
+	 * @param $title Title: the title linked to
+	 * @param $params Array: job parameters (table, start and end page_ids)
+	 * @param $id Integer: job id
 	 */
 	function __construct( $title, $params, $id = 0 ) {
 		parent::__construct( 'htmlCacheUpdate', $title, $params, $id );

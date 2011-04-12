@@ -1,23 +1,25 @@
 <?php
-# Copyright (C) 2004 Brion Vibber <brion@pobox.com>
-# http://www.mediawiki.org/
-#
-# This program is free software; you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation; either version 2 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License along
-# with this program; if not, write to the Free Software Foundation, Inc.,
-# 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
-# http://www.gnu.org/copyleft/gpl.html
-
 /**
+ * MySQL search engine
+ *
+ * Copyright (C) 2004 Brion Vibber <brion@pobox.com>
+ * http://www.mediawiki.org/
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program; if not, write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ * http://www.gnu.org/copyleft/gpl.html
+ *
  * @file
  * @ingroup Search
  */
@@ -28,10 +30,14 @@
  */
 class SearchMySQL extends SearchEngine {
 	var $strictMatching = true;
+	static $mMinSearchLength;
 
-	/** @todo document */
+	/**
+	 * Creates an instance of this class
+	 * @param $db DatabaseMysql: database object
+	 */
 	function __construct( $db ) {
-		$this->db = $db;
+		parent::__construct( $db );
 	}
 
 	/** 
@@ -50,7 +56,7 @@ class SearchMySQL extends SearchEngine {
 			  $filteredText, $m, PREG_SET_ORDER ) ) {
 			foreach( $m as $bits ) {
 				@list( /* all */, $modifier, $term, $nonQuoted, $wildcard ) = $bits;
-				
+
 				if( $nonQuoted != '' ) {
 					$term = $nonQuoted;
 					$quote = '';
@@ -58,13 +64,13 @@ class SearchMySQL extends SearchEngine {
 					$term = str_replace( '"', '', $term );
 					$quote = '"';
 				}
-			
+
 				if( $searchon !== '' ) $searchon .= ' ';
 				if( $this->strictMatching && ($modifier == '') ) {
 					// If we leave this out, boolean op defaults to OR which is rarely helpful.
 					$modifier = '+';
 				}
-				
+
 				// Some languages such as Serbian store the input form in the search index,
 				// so we may need to search for matches in multiple writing system variants.
 				$convertedVariants = $wgContLang->autoConvertToAllVariants( $term );
@@ -73,27 +79,28 @@ class SearchMySQL extends SearchEngine {
 				} else {
 					$variants = array( $term );
 				}
-				
+
 				// The low-level search index does some processing on input to work
 				// around problems with minimum lengths and encoding in MySQL's
 				// fulltext engine.
 				// For Chinese this also inserts spaces between adjacent Han characters.
 				$strippedVariants = array_map(
-					array( $wgContLang, 'stripForSearch' ),
+					array( $wgContLang, 'normalizeForSearch' ),
 					$variants );
-				
+
 				// Some languages such as Chinese force all variants to a canonical
 				// form when stripping to the low-level search index, so to be sure
 				// let's check our variants list for unique items after stripping.
 				$strippedVariants = array_unique( $strippedVariants );
-				
+
 				$searchon .= $modifier;
 				if( count( $strippedVariants) > 1 )
 					$searchon .= '(';
 				foreach( $strippedVariants as $stripped ) {
+					$stripped = $this->normalizeText( $stripped );
 					if( $nonQuoted && strpos( $stripped, ' ' ) !== false ) {
 						// Hack for Chinese: we need to toss in quotes for
-						// multiple-character phrases since stripForSearch()
+						// multiple-character phrases since normalizeForSearch()
 						// added spaces between them to make word breaks.
 						$stripped = '"' . trim( $stripped ) . '"';
 					}
@@ -101,7 +108,7 @@ class SearchMySQL extends SearchEngine {
 				}
 				if( count( $strippedVariants) > 1 )
 					$searchon .= ')';
-				
+
 				// Match individual terms or quoted phrase in result highlighting...
 				// Note that variants will be introduced in a later stage for highlighting!
 				$regexp = $this->regexTerm( $term, $wildcard );
@@ -117,10 +124,10 @@ class SearchMySQL extends SearchEngine {
 		$field = $this->getIndexField( $fulltext );
 		return " MATCH($field) AGAINST('$searchon' IN BOOLEAN MODE) ";
 	}
-	
+
 	function regexTerm( $string, $wildcard ) {
 		global $wgContLang;
-		
+
 		$regex = preg_quote( $string, '/' );
 		if( $wgContLang->hasWordBreaks() ) {
 			if( $wildcard ) {
@@ -160,15 +167,15 @@ class SearchMySQL extends SearchEngine {
 	function searchTitle( $term ) {
 		return $this->searchInternal( $term, false );
 	}
-	
+
 	protected function searchInternal( $term, $fulltext ) {
-		global $wgSearchMySQLTotalHits;
-		
+		global $wgCountTotalSearchHits;
+
 		$filteredTerm = $this->filter( $term );
 		$resultSet = $this->db->query( $this->getQuery( $filteredTerm, $fulltext ) );
-		
+
 		$total = null;
-		if( $wgSearchMySQLTotalHits ) {
+		if( $wgCountTotalSearchHits ) {
 			$totalResult = $this->db->query( $this->getCountQuery( $filteredTerm, $fulltext ) );
 			$row = $totalResult->fetchObject();
 			if( $row ) {
@@ -176,7 +183,7 @@ class SearchMySQL extends SearchEngine {
 			}
 			$totalResult->free();
 		}
-		
+
 		return new MySQLSearchResultSet( $resultSet, $this->searchTerms, $total );
 	}
 
@@ -189,7 +196,7 @@ class SearchMySQL extends SearchEngine {
 		if( $this->showRedirects ) {
 			return '';
 		} else {
-			return 'AND page_is_redirect=0';
+			return 'page_is_redirect=0';
 		}
 	}
 
@@ -205,7 +212,7 @@ class SearchMySQL extends SearchEngine {
 		} else {
 			$namespaces = $this->db->makeList( $this->namespaces );
 		}
-		return 'AND page_namespace IN (' . $namespaces . ')';
+		return 'page_namespace IN (' . $namespaces . ')';
 	}
 
 	/**
@@ -232,13 +239,26 @@ class SearchMySQL extends SearchEngine {
 	 * @param $fulltext Boolean
 	 */
 	function getQuery( $filteredTerm, $fulltext ) {
-		return $this->queryMain( $filteredTerm, $fulltext ) . ' ' .
-			$this->queryRedirect() . ' ' .
-			$this->queryNamespaces() . ' ' .
-			$this->queryRanking( $filteredTerm, $fulltext ) . ' ' .
+		$query = $this->queryMain( $filteredTerm, $fulltext ) . ' ';
+
+		$redir = $this->queryRedirect();
+
+		if ( $redir ) {
+			$query .= 'AND ' . $redir . ' ';
+		}
+
+		$namespace = $this->queryNamespaces();
+
+		if ( $namespace ) {
+			$query .= 'AND ' . $namespace . ' ';
+		}
+
+		$query .= $this->queryRanking( $filteredTerm, $fulltext ) . ' ' .
 			$this->queryLimit();
+
+		return $query;
 	}
-	
+
 	/**
 	 * Picks which field to index on, depending on what type of query.
 	 * @param $fulltext Boolean
@@ -269,13 +289,17 @@ class SearchMySQL extends SearchEngine {
 
 	function getCountQuery( $filteredTerm, $fulltext ) {
 		$match = $this->parseQuery( $filteredTerm, $fulltext );
-		$page        = $this->db->tableName( 'page' );
-		$searchindex = $this->db->tableName( 'searchindex' );
-		return "SELECT COUNT(*) AS c " .
-			"FROM $page,$searchindex " .
-			'WHERE page_id=si_page AND ' . $match .
-			$this->queryRedirect() . ' ' .
-			$this->queryNamespaces();
+
+		return $this->db->selectSQLText( array( 'page', 'searchindex' ),
+			'COUNT(*) AS c',
+			array(
+				'page_id=si_page',
+				$match,
+				$this->queryRedirect(),
+				$this->queryNamespaces()
+			),
+			__METHOD__
+		);
 	}
 
 	/**
@@ -292,8 +316,8 @@ class SearchMySQL extends SearchEngine {
 			array( 'si_page' ),
 			array(
 				'si_page' => $id,
-				'si_title' => $title,
-				'si_text' => $text
+				'si_title' => $this->normalizeText( $title ),
+				'si_text' => $this->normalizeText( $text )
 			), __METHOD__ );
 	}
 
@@ -304,49 +328,105 @@ class SearchMySQL extends SearchEngine {
 	 * @param $id Integer
 	 * @param $title String
 	 */
-    function updateTitle( $id, $title ) {
+	function updateTitle( $id, $title ) {
 		$dbw = wfGetDB( DB_MASTER );
 
 		$dbw->update( 'searchindex',
-			array( 'si_title' => $title ),
+			array( 'si_title' => $this->normalizeText( $title ) ),
 			array( 'si_page'  => $id ),
 			__METHOD__,
 			array( $dbw->lowPriorityOption() ) );
+	}
+
+	/**
+	 * Converts some characters for MySQL's indexing to grok it correctly,
+	 * and pads short words to overcome limitations.
+	 */
+	function normalizeText( $string ) {
+		global $wgContLang;
+
+		wfProfileIn( __METHOD__ );
+
+		$out = parent::normalizeText( $string );
+
+		// MySQL fulltext index doesn't grok utf-8, so we
+		// need to fold cases and convert to hex
+		$out = preg_replace_callback(
+			"/([\\xc0-\\xff][\\x80-\\xbf]*)/",
+			array( $this, 'stripForSearchCallback' ),
+			$wgContLang->lc( $out ) );
+
+		// And to add insult to injury, the default indexing
+		// ignores short words... Pad them so we can pass them
+		// through without reconfiguring the server...
+		$minLength = $this->minSearchLength();
+		if( $minLength > 1 ) {
+			$n = $minLength - 1;
+			$out = preg_replace(
+				"/\b(\w{1,$n})\b/",
+				"$1u800",
+				$out );
+		}
+
+		// Periods within things like hostnames and IP addresses
+		// are also important -- we want a search for "example.com"
+		// or "192.168.1.1" to work sanely.
+		//
+		// MySQL's search seems to ignore them, so you'd match on
+		// "example.wikipedia.com" and "192.168.83.1" as well.
+		$out = preg_replace(
+			"/(\w)\.(\w|\*)/u",
+			"$1u82e$2",
+			$out );
+
+		wfProfileOut( __METHOD__ );
+
+		return $out;
+	}
+
+	/**
+	 * Armor a case-folded UTF-8 string to get through MySQL's
+	 * fulltext search without being mucked up by funny charset
+	 * settings or anything else of the sort.
+	 */
+	protected function stripForSearchCallback( $matches ) {
+		return 'u8' . bin2hex( $matches[1] );
+	}
+
+	/**
+	 * Check MySQL server's ft_min_word_len setting so we know
+	 * if we need to pad short words...
+	 * 
+	 * @return int
+	 */
+	protected function minSearchLength() {
+		if( is_null( self::$mMinSearchLength ) ) {
+			$sql = "SHOW GLOBAL VARIABLES LIKE 'ft\\_min\\_word\\_len'";
+
+			$dbr = wfGetDB( DB_SLAVE );
+			$result = $dbr->query( $sql );
+			$row = $result->fetchObject();
+			$result->free();
+
+			if( $row && $row->Variable_name == 'ft_min_word_len' ) {
+				self::$mMinSearchLength = intval( $row->Value );
+			} else {
+				self::$mMinSearchLength = 0;
+			}
+		}
+		return self::$mMinSearchLength;
 	}
 }
 
 /**
  * @ingroup Search
  */
-class MySQLSearchResultSet extends SearchResultSet {
-	function MySQLSearchResultSet( $resultSet, $terms, $totalHits=null ) {
-		$this->mResultSet = $resultSet;
-		$this->mTerms = $terms;
+class MySQLSearchResultSet extends SqlSearchResultSet {
+	function __construct( $resultSet, $terms, $totalHits=null ) {
+		parent::__construct( $resultSet, $terms );
 		$this->mTotalHits = $totalHits;
 	}
 
-	function termMatches() {
-		return $this->mTerms;
-	}
-
-	function numRows() {
-		return $this->mResultSet->numRows();
-	}
-
-	function next() {
-		$row = $this->mResultSet->fetchObject();
-		if( $row === false ) {
-			return false;
-		} else {
-			return new SearchResult( $row );
-		}
-	}
-
-	function free() {
-		$this->mResultSet->free();
-	}
-
-	
 	function getTotalHits() {
 		return $this->mTotalHits;
 	}

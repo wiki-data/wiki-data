@@ -1,5 +1,27 @@
 <?php
 /**
+ * Implements Special:DeletedContributions
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program; if not, write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ * http://www.gnu.org/copyleft/gpl.html
+ *
+ * @file
+ * @ingroup SpecialPage
+ */
+
+/**
  * Implements Special:DeletedContributions to display archived revisions
  * @ingroup SpecialPage
  */
@@ -123,7 +145,7 @@ class DeletedContribsPager extends IndexPager {
 				'user_text'  => $row->ar_user_text,
 				'timestamp'  => $row->ar_timestamp,
 				'minor_edit' => $row->ar_minor_edit,
-				'deleted' => $row->ar_deleted,
+				'deleted'    => $row->ar_deleted,
 				) );
 
 		$page = Title::makeTitle( $row->ar_namespace, $row->ar_title );
@@ -189,21 +211,19 @@ class DeletedContribsPager extends IndexPager {
 		} else {
 			$mflag = '';
 		}
-		
-		// Don't show useless link to people who cannot hide revisions
-		if( $wgUser->isAllowed('deleterevision') || ($rev->getVisibility() && $wgUser->isAllowed('deletedhistory')) ) {
-			// If revision was hidden from sysops
+
+		// Revision delete link
+		$canHide = $wgUser->isAllowed( 'deleterevision' );
+		if( $canHide || ($rev->getVisibility() && $wgUser->isAllowed('deletedhistory')) ) {
 			if( !$rev->userCan( Revision::DELETED_RESTRICTED ) ) {
-				$del = Xml::tags( 'span', array( 'class'=>'mw-revdelundel-link' ),
-					'(' . $this->message['rev-delundel'] . ')' ) . ' ';
-			// Otherwise, show the link...
+				$del = $this->mSkin->revDeleteLinkDisabled( $canHide ); // revision was hidden from sysops
 			} else {
 				$query = array(
 					'type' => 'archive',
 					'target' => $page->getPrefixedDbkey(),
 					'ids' => $rev->getTimestamp() );
 				$del = $this->mSkin->revDeleteLink( $query,
-					$rev->isDeleted( Revision::DELETED_RESTRICTED ) ) . ' ';
+					$rev->isDeleted( Revision::DELETED_RESTRICTED ), $canHide ) . ' ';
 			}
 		} else {
 			$del = '';
@@ -215,11 +235,14 @@ class DeletedContribsPager extends IndexPager {
 			wfMsg( 'parentheses', $wgLang->pipeList( array( $last, $dellog, $reviewlink ) ) )
 		);
 
-		$ret = Html::rawElement(
-			'li',
-			array(),
-			"{$del}{$link} {$tools} . . {$mflag} {$pagelink} {$comment}"
-		) . "\n";
+		$ret = "{$del}{$link} {$tools} . . {$mflag} {$pagelink} {$comment}";
+
+		# Denote if username is redacted for this edit
+		if( $rev->isDeleted( Revision::DELETED_USER ) ) {
+			$ret .= " <strong>" . wfMsgHtml('rev-deleted-user-contribs') . "</strong>";
+		}
+
+		$ret = Html::rawElement( 'li', array(), $ret ) . "\n";
 
 		wfProfileOut( __METHOD__ );
 		return $ret;
@@ -257,7 +280,7 @@ class DeletedContributionsPage extends SpecialPage {
 			return;
 		}
 
-		global $wgUser, $wgOut, $wgLang, $wgRequest;
+		global $wgOut, $wgRequest;
 
 		$wgOut->setPageTitle( wfMsgExt( 'deletedcontributions-title', array( 'parsemag' ) ) );
 
@@ -317,9 +340,7 @@ class DeletedContributionsPage extends SpecialPage {
 				? 'sp-contributions-footer-anon'
 				: 'sp-contributions-footer';
 
-
-			$text = wfMsgNoTrans( $message, $target );
-			if( !wfEmptyMsg( $message, $text ) && $text != '-' ) {
+			if( !wfMessage( $message )->isDisabled() ) {
 				$wgOut->wrapWikiMsg( "<div class='mw-contributions-footer'>\n$1\n</div>", array( $message, $target ) );
 			}
 		}
@@ -327,29 +348,50 @@ class DeletedContributionsPage extends SpecialPage {
 
 	/**
 	 * Generates the subheading with links
-	 * @param $nt @see Title object for the target
+	 * @param $nt Title object for the target
+	 * @param $id Integer: User ID for the target
+	 * @return String: appropriately-escaped HTML to be output literally
+	 * @todo Fixme: almost the same as contributionsSub in SpecialContributions.php. Could be combined.
 	 */
 	function getSubTitle( $nt, $id ) {
-		global $wgSysopUserBans, $wgLang, $wgUser;
+		global $wgLang, $wgUser, $wgOut;
 
 		$sk = $wgUser->getSkin();
 
-		if ( 0 == $id ) {
+		if ( $id === null ) {
 			$user = htmlspecialchars( $nt->getText() );
 		} else {
 			$user = $sk->link( $nt, htmlspecialchars( $nt->getText() ) );
 		}
+		$userObj = User::newFromName( $nt->getText(), /* check for username validity not needed */ false );
 		$talk = $nt->getTalkPage();
 		if( $talk ) {
 			# Talk page link
-			$tools[] = $sk->link( $talk, wfMsgHtml( 'talkpagelinktext' ) );
-			if( ( $id != 0 && $wgSysopUserBans ) || ( $id == 0 && User::isIP( $nt->getText() ) ) ) {
-				# Block link
-				if( $wgUser->isAllowed( 'block' ) )
-					$tools[] = $sk->linkKnown(
-						SpecialPage::getTitleFor( 'Blockip', $nt->getDBkey() ),
-						wfMsgHtml( 'blocklink' )
-					);
+			$tools[] = $sk->link( $talk, wfMsgHtml( 'sp-contributions-talk' ) );
+			if( ( $id !== null ) || ( $id === null && IP::isIPAddress( $nt->getText() ) ) ) {
+				if( $wgUser->isAllowed( 'block' ) ) { # Block / Change block / Unblock links
+					if ( $userObj->isBlocked() ) {
+						$tools[] = $sk->linkKnown( # Change block link
+							SpecialPage::getTitleFor( 'Block', $nt->getDBkey() ),
+							wfMsgHtml( 'change-blocklink' )
+						);
+						$tools[] = $sk->linkKnown( # Unblock link
+							SpecialPage::getTitleFor( 'BlockList' ),
+							wfMsgHtml( 'unblocklink' ),
+							array(),
+							array(
+								'action' => 'unblock',
+								'ip' => $nt->getDBkey()
+							)
+						);
+					}
+					else { # User is not blocked
+						$tools[] = $sk->linkKnown( # Block link
+							SpecialPage::getTitleFor( 'Block', $nt->getDBkey() ),
+							wfMsgHtml( 'blocklink' )
+						);
+					}
+				}
 				# Block log link
 				$tools[] = $sk->linkKnown(
 					SpecialPage::getTitleFor( 'Log' ),
@@ -368,22 +410,50 @@ class DeletedContributionsPage extends SpecialPage {
 				array(),
 				array( 'user' => $nt->getText() )
 			);
-			# Link to undeleted contributions
+			# Link to contributions
 			$tools[] = $sk->linkKnown(
 				SpecialPage::getTitleFor( 'Contributions', $nt->getDBkey() ),
 				wfMsgHtml( 'sp-deletedcontributions-contribs' )
 			);
 
+			# Add a link to change user rights for privileged users
+			$userrightsPage = new UserrightsPage();
+			if( $id !== null && $userrightsPage->userCanChangeRights( User::newFromId( $id ) ) ) {
+				$tools[] = $sk->linkKnown(
+					SpecialPage::getTitleFor( 'Userrights', $nt->getDBkey() ),
+					wfMsgHtml( 'sp-contributions-userrights' )
+				);
+			}
+
 			wfRunHooks( 'ContributionsToolLinks', array( $id, $nt, &$tools ) );
 
 			$links = $wgLang->pipeList( $tools );
+
+			// Show a note if the user is blocked and display the last block log entry.
+			if ( $userObj->isBlocked() ) {
+				LogEventsList::showLogExtract(
+					$wgOut,
+					'block',
+					$nt->getPrefixedText(),
+					'',
+					array(
+						'lim' => 1,
+						'showIfEmpty' => false,
+						'msgKey' => array(
+							'sp-contributions-blocked-notice',
+							$nt->getText() # Support GENDER in 'sp-contributions-blocked-notice'
+						),
+						'offset' => '' # don't use $wgRequest parameter offset
+					)
+				);
+			}
 		}
 
 		// Old message 'contribsub' had one parameter, but that doesn't work for
 		// languages that want to put the "for" bit right after $user but before
 		// $links.  If 'contribsub' is around, use it for reverse compatibility,
 		// otherwise use 'contribsub2'.
-		if( wfEmptyMsg( 'contribsub', wfMsg( 'contribsub' ) ) ) {
+		if( wfEmptyMsg( 'contribsub' ) ) {
 			return wfMsgHtml( 'contribsub2', $user, $links );
 		} else {
 			return wfMsgHtml( 'contribsub', "$user ($links)" );
@@ -395,7 +465,7 @@ class DeletedContributionsPage extends SpecialPage {
 	 * @param $options Array: the options to be included.
 	 */
 	function getForm( $options ) {
-		global $wgScript, $wgRequest;
+		global $wgScript;
 
 		$options['title'] = SpecialPage::getTitleFor( 'DeletedContributions' )->getPrefixedText();
 		if ( !isset( $options['target'] ) ) {
@@ -422,7 +492,7 @@ class DeletedContributionsPage extends SpecialPage {
 			if ( in_array( $name, array( 'namespace', 'target', 'contribs' ) ) ) {
 				continue;
 			}
-			$f .= "\t" . Xml::hidden( $name, $value ) . "\n";
+			$f .= "\t" . Html::hidden( $name, $value ) . "\n";
 		}
 
 		$f .=  Xml::openElement( 'fieldset' ) .

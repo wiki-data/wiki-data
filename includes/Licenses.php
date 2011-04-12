@@ -31,7 +31,7 @@ class Licenses extends HTMLFormField {
 	 */
 	public function __construct( $params ) {
 		parent::__construct( $params );
-		
+
 		$this->msg = empty( $params['licenses'] ) ? wfMsgForContent( 'licenses' ) : $params['licenses'];
 		$this->selected = null;
 
@@ -68,14 +68,9 @@ class Licenses extends HTMLFormField {
 		}
 	}
 
-	protected static function trimStars( $str ) {
-		$i = $count = 0;
-
-		$length = strlen( $str );
-		for ( $i = 0; $i < $length; $i++ ) {
-			if ( $str[$i] != '*' )
-				return array( $i, ltrim( $str, '* ' ) );
-		}
+	protected function trimStars( $str ) {
+		$numStars = strspn( $str, '*' );
+		return array( $numStars, ltrim( substr( $str, $numStars ), ' ' ) );
 	}
 
 	protected function stackItem( &$list, $path, $item ) {
@@ -110,14 +105,14 @@ class Licenses extends HTMLFormField {
 	protected function outputOption( $text, $value, $attribs = null, $depth = 0 ) {
 		$attribs['value'] = $value;
 		if ( $value === $this->selected )
-			$attribs['selected'] = 'selected';		
+			$attribs['selected'] = 'selected';
 		$val = str_repeat( /* &nbsp */ "\xc2\xa0", $depth * 2 ) . $text;
 		return str_repeat( "\t", $depth ) . Xml::element( 'option', $attribs, $val ) . "\n";
 	}
 
 	protected function msg( $str ) {
-		$out = wfMsg( $str );
-		return wfEmptyMsg( $str, $out ) ? $str : $out;
+		$msg = wfMessage( $str );
+		return $msg->exists() ? $msg->text() : $str;
 	}
 
 	/**#@-*/
@@ -136,18 +131,18 @@ class Licenses extends HTMLFormField {
 	 */
 	public function getInputHTML( $value ) {
 		$this->selected = $value;
-		
+
 		$this->html = $this->outputOption( wfMsg( 'nolicense' ), '',
 			(bool)$this->selected ? null : array( 'selected' => 'selected' ) );
 		$this->makeHtml( $this->getLicenses() );
-		
+
 		$attribs = array(
 			'name' => $this->mName,
 			'id' => $this->mID
 		);
 		if ( !empty( $this->mParams['disabled'] ) )
 			$attibs['disabled'] = 'disabled';
-		
+
 		return Html::rawElement( 'select', $attribs, $this->html );
 	}
 }
@@ -171,7 +166,7 @@ class License {
 	 *
 	 * @param $str String: license name??
 	 */
-	function License( $str ) {
+	function __construct( $str ) {
 		list( $text, $template ) = explode( '|', strrev( $str ), 2 );
 
 		$this->template = strrev( $template );

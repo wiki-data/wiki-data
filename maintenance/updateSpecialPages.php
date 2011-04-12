@@ -18,10 +18,11 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  * http://www.gnu.org/copyleft/gpl.html
  *
+ * @file
  * @ingroup Maintenance
  */
- 
-require_once( dirname(__FILE__) . '/Maintenance.php' );
+
+require_once( dirname( __FILE__ ) . '/Maintenance.php' );
 
 class UpdateSpecialPages extends Maintenance {
 	public function __construct() {
@@ -32,12 +33,12 @@ class UpdateSpecialPages extends Maintenance {
 	}
 
 	public function execute() {
-		global $IP, $wgOut, $wgSpecialPageCacheUpdates, $wgQueryPages, $wgQueryCacheLimit, $wgDisableQueryPageUpdate;
-		$wgOut->disable();
+		global $IP, $wgSpecialPageCacheUpdates, $wgQueryPages, $wgQueryCacheLimit, $wgDisableQueryPageUpdate;
+
 		$dbw = wfGetDB( DB_MASTER );
 
-		foreach( $wgSpecialPageCacheUpdates as $special => $call ) {
-			if( !is_callable($call) ) {
+		foreach ( $wgSpecialPageCacheUpdates as $special => $call ) {
+			if ( !is_callable( $call ) ) {
 				$this->error( "Uncallable function $call!" );
 				continue;
 			}
@@ -45,7 +46,7 @@ class UpdateSpecialPages extends Maintenance {
 			call_user_func( $call, $dbw );
 			$t2 = explode( ' ', microtime() );
 			$this->output( sprintf( '%-30s ', $special ) );
-			$elapsed = ($t2[0] - $t1[0]) + ($t2[1] - $t1[1]);
+			$elapsed = ( $t2[0] - $t1[0] ) + ( $t2[1] - $t1[1] );
 			$hours = intval( $elapsed / 3600 );
 			$minutes = intval( $elapsed % 3600 / 60 );
 			$seconds = $elapsed - $hours * 3600 - $minutes * 60;
@@ -63,32 +64,36 @@ class UpdateSpecialPages extends Maintenance {
 		// This is needed to initialise $wgQueryPages
 		require_once( "$IP/includes/QueryPage.php" );
 
-		foreach( $wgQueryPages as $page ) {
+		foreach ( $wgQueryPages as $page ) {
 			@list( $class, $special, $limit ) = $page;
-	
+
 			# --list : just show the name of pages
-			if( $this->hasOption('list') ) {
+			if ( $this->hasOption( 'list' ) ) {
 				$this->output( "$special\n" );
 				continue;
 			}
-	
-			if ( !$this->hasOption('override') && $wgDisableQueryPageUpdate && in_array( $special, $wgDisableQueryPageUpdate ) ) {
+
+			if ( !$this->hasOption( 'override' ) && $wgDisableQueryPageUpdate && in_array( $special, $wgDisableQueryPageUpdate ) ) {
 				$this->output( sprintf( "%-30s disabled\n", $special ) );
 				continue;
 			}
-	
+
 			$specialObj = SpecialPage::getPage( $special );
 			if ( !$specialObj ) {
 				$this->output( "No such special page: $special\n" );
 				exit;
 			}
-			if ( !class_exists( $class ) ) {
-				$file = $specialObj->getFile();
-				require_once( $file );
+			if ( $specialObj instanceof QueryPage ) {
+				$queryPage = $specialObj;
+			} else {
+				if ( !class_exists( $class ) ) {
+					$file = $specialObj->getFile();
+					require_once( $file );
+				}
+				$queryPage = new $class;
 			}
-			$queryPage = new $class;
-	
-			if( !$this->hasOption('only') || $this->getOption('only') == $queryPage->getName() ) {
+
+			if ( !$this->hasOption( 'only' ) || $this->getOption( 'only' ) == $queryPage->getName() ) {
 				$this->output( sprintf( '%-30s ',  $special ) );
 				if ( $queryPage->isExpensive() ) {
 					$t1 = explode( ' ', microtime() );
@@ -99,8 +104,8 @@ class UpdateSpecialPages extends Maintenance {
 						$this->output( "FAILED: database error\n" );
 					} else {
 						$this->output( "got $num rows in " );
-	
-						$elapsed = ($t2[0] - $t1[0]) + ($t2[1] - $t1[1]);
+
+						$elapsed = ( $t2[0] - $t1[0] ) + ( $t2[1] - $t1[1] );
 						$hours = intval( $elapsed / 3600 );
 						$minutes = intval( $elapsed % 3600 / 60 );
 						$seconds = $elapsed - $hours * 3600 - $minutes * 60;
@@ -113,7 +118,7 @@ class UpdateSpecialPages extends Maintenance {
 						$this->output( sprintf( "%.2fs\n", $seconds ) );
 					}
 					# Reopen any connections that have closed
-					if ( !wfGetLB()->pingAll())  {
+					if ( !wfGetLB()->pingAll() )  {
 						$this->output( "\n" );
 						do {
 							$this->error( "Connection failed, reconnecting in 10 seconds..." );
@@ -122,7 +127,7 @@ class UpdateSpecialPages extends Maintenance {
 						$this->output( "Reconnected\n\n" );
 					} else {
 						# Commit the results
-						$dbw->immediateCommit();
+						$dbw->commit();
 					}
 					# Wait for the slave to catch up
 					wfWaitForSlaves( 5 );
@@ -135,4 +140,4 @@ class UpdateSpecialPages extends Maintenance {
 }
 
 $maintClass = "UpdateSpecialPages";
-require_once( DO_MAINTENANCE );
+require_once( RUN_MAINTENANCE_IF_MAIN );

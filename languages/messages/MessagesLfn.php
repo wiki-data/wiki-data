@@ -9,6 +9,7 @@
  *
  * @author Cgboeree
  * @author Malafaya
+ * @author Reedy
  * @author Urhixidur
  */
 
@@ -47,8 +48,7 @@ $messages = array(
 'tog-editsection'             => 'Engrana la edita de sesion via lias de {edita}.',
 'tog-editsectiononrightclick' => 'Engrana la edita de sesion par clica a la destra a titulos de sesion (JavaScript)',
 'tog-showtoc'                 => 'Mostra la table de contenis (per pajes con plu ce tre titulos)',
-'tog-rememberpassword'        => 'Memora me sinia per entra a esta computador',
-'tog-editwidth'               => 'La caxa de editas ave la longia masima',
+'tog-rememberpassword'        => 'Memora me sinia per entra a esta computador (for a maximum of $1 {{PLURAL:$1|day|days}})',
 'tog-watchcreations'          => 'Junta la pajes ce me ia creada a me lista de pajes oservada',
 'tog-watchdefault'            => 'Junta pajes ce me ia edita a me lista de pajes oservada',
 'tog-watchmoves'              => 'Junta pajes ce me ia moveda a me lista de pajes oservada',
@@ -136,7 +136,7 @@ $messages = array(
 'hidden-category-category' => 'Categorias ascondeda',
 'listingcontinuesabbrev'   => 'cont.',
 
-'mainpagetext'      => "<big>'''MediaWiki es aora instalada.'''</big>",
+'mainpagetext'      => "'''MediaWiki es aora instalada.'''",
 'mainpagedocfooter' => 'Atenda la [http://meta.wikimedia.org/wiki/Help:Contents Gida per Usores] per informa supra la usa de la programa de vici.
 
 == Comensa ==
@@ -164,9 +164,6 @@ $messages = array(
 'qbpageinfo'     => 'Situa',
 'qbmyoptions'    => 'Me pajes',
 'qbspecialpages' => 'Pajes spesial',
-
-# Metadata in edit box
-'metadata_help' => 'Metadata:',
 
 'errorpagetitle'    => 'Era',
 'returnto'          => 'Restora a $1.',
@@ -291,7 +288,7 @@ $messages = array(
 'yourname'                => 'Nom de usor:',
 'yourpassword'            => 'Sinia de entra:',
 'yourpasswordagain'       => 'Retape la sinia:',
-'remembermypassword'      => 'Memora me sinia de entra a esta computador',
+'remembermypassword'      => 'Memora me sinia de entra a esta computador (for a maximum of $1 {{PLURAL:$1|day|days}})',
 'yourdomainname'          => 'Tu domina:',
 'login'                   => 'Identifia',
 'nav-login-createaccount' => 'Sinia per entra',
@@ -349,8 +346,6 @@ Ante alga otra eposta es enviada a la conta, tu va nesesa segue la instruis en l
 'extlink_tip'     => 'Lia esterna (recorda la prefis http://)',
 'headline_sample' => 'Testo de titulo',
 'headline_tip'    => 'Titulo de nivel 2',
-'math_sample'     => 'Introdui formula asi',
-'math_tip'        => 'Formula matematical (LaTeX)',
 'nowiki_sample'   => 'Introdui testo nonformida asi',
 'nowiki_tip'      => 'Iniora la forma de la vici',
 'image_tip'       => 'Fix interna',
@@ -371,7 +366,7 @@ Ante alga otra eposta es enviada a la conta, tu va nesesa segue la instruis en l
 Tu adirije de IP va es memorada en la istoria de revisas de esta paje.",
 'summary-preview'            => 'Previde soma:',
 'blockedtitle'               => 'Usor es impedida',
-'blockedtext'                => "<big>'''Tu nom de usor o adirije de IP ia es impedida.'''</big>
+'blockedtext'                => "'''Tu nom de usor o adirije de IP ia es impedida.'''
 
 La impedi ia es fada par $1.
 La razon donada es ''$2''.
@@ -381,7 +376,7 @@ La razon donada es ''$2''.
 * Ci algun intende impedi: $7
 
 Tu pote contata $1 o un otra [[{{MediaWiki:Grouppage-sysop}}|dirijor]] per discute esta impedi.
-Tu no pote usa la 'envia un eposta a esta usor' sin un adirije de eposta legal es indicada en tu 
+Tu no pote usa la 'envia un eposta a esta usor' sin un adirije de eposta legal es indicada en tu
 [[Special:Preferences|preferis de conta]] e tu no es impedida de usa el.
 Tu adirije de IP es aora $3, e la identia de la impedi es #$5.
 Per favore inclui tota esta detales en tu demandas.",
@@ -392,8 +387,8 @@ Per crea la paje, comensa scrive en la caxa a su
 Si tu es asi par era, clica a la boton '''retro''' de tu surfador.",
 'noarticletext'              => 'Es aora no testo a esta paje.
 Tu pote [[Special:Search/{{PAGENAME}}|xerca per la titulo de esta paje]] en otra pajes,
-<span class="plainlinks">[{{fullurl:{{#Special:Log}}|page={{urlencode:{{FULLPAGENAME}}}}}} xerca la arcivos relatada],
-o [{{fullurl:{{FULLPAGENAME}}|action=edit}} edita esta paje].',
+<span class="plainlinks">[{{fullurl:{{#Special:Log}}|page={{FULLPAGENAMEE}}}} xerca la arcivos relatada],
+o [{{fullurl:{{FULLPAGENAME}}|action=edit}} edita esta paje]</span>.',
 'previewnote'                => "'''Esta sola un previde; cambias no es fisada ja'''",
 'editing'                    => 'En la prosede de edita $1',
 'editingsection'             => 'Edita $1 (sesion)',
@@ -402,10 +397,8 @@ o [{{fullurl:{{FULLPAGENAME}}|action=edit}} edita esta paje].',
 'copyrightwarning'           => "Per favore nota ce tota labora a {{SITENAME}} es judida ce el es relasada su la $2 (vide $1 per detalias). Si tu no desira ce tu scrives ta es editada sin compati e redistribui sin tu permite, no sumita el asi!<br />
 Tu ance promete a nos ce tu ia scriveda esta par tu mesma, o copiada esta de un domina publica o otra orijin libre.
 '''NO SUMITA LABORA SU DIRETOS DE AUTOR SIN PERMITE!!'''",
-'longpagewarning'            => "'''AVISA: Esta paje usa $1 kilotetas; alga surfadores pote ave problemes con la edita de pajes plu grande ce 32 ko.
-Per favore, considera parti la paje en pesos plu poca.'''",
-'templatesused'              => 'Modeles usada a esta paje:',
-'templatesusedpreview'       => 'Modeles usada en esta previde:',
+'templatesused'              => '{{PLURAL:$1|Modele|Modeles}} usada en esta paje:',
+'templatesusedpreview'       => '{{PLURAL:$1|Modele|Modeles}} usada en esta previde:',
 'template-protected'         => '(protejeda)',
 'template-semiprotected'     => '(proteje en parte)',
 'nocreatetext'               => '{{SITENAME}} ave un restringe a la capas per crea pajes nova.
@@ -451,12 +444,9 @@ La arcivo de sutraes per esta paje es asi per conveni:",
 'compareselectedversions' => 'Compare varias elejeda',
 'editundo'                => 'desfa',
 'diff-multi'              => '({{PLURAL:$1|$1 revise|$1 revises}} medial no mostrada.)',
-'diff-with'               => '&#32;con $1 $2',
-'diff-with-final'         => '&#32;e $1 $2',
 
 # Search results
 'searchresults'             => 'Resultas de xerca',
-'noexactmatch'              => "'''Es no paje clamada \"\$1\".''' Tu pote [[:\$1|crea esta paje]].",
 'prevn'                     => '{{PLURAL:$1|$1}} presedente',
 'nextn'                     => '{{PLURAL:$1|$1}} seguente',
 'viewprevnext'              => 'Vide ($1 {{int:pipe-separator}} $2) ($3)',
@@ -474,7 +464,6 @@ La arcivo de sutraes per esta paje es asi per conveni:",
 'preferences'               => 'Preferis',
 'mypreferences'             => 'Me preferis',
 'skin-preview'              => 'Previde',
-'prefs-math'                => 'Matematica',
 'saveprefs'                 => 'Fisa',
 'rows'                      => 'Linias:',
 'columns'                   => 'Colonas:',
@@ -638,7 +627,7 @@ Pajes a [[Special:Watchlist|tu lista de pajes oservada]] es en leteras '''forte'
 'mostcategories'          => 'Pajes con la plu categorias',
 'mostimages'              => 'Fixes a ce es la plu lias',
 'mostrevisions'           => 'Pajes con la plu revisas',
-'prefixindex'             => 'Catalogo de prefises',
+'prefixindex'             => 'Tota pajes con prefisa',
 'shortpages'              => 'Pajes corta',
 'longpages'               => 'Pajes longa',
 'deadendpages'            => 'Pajes sin sorti',
@@ -677,7 +666,9 @@ Pajes a [[Special:Watchlist|tu lista de pajes oservada]] es en leteras '''forte'
 
 # Special:Categories
 'categories'         => 'Categorias',
-'categoriespagetext' => 'Es la categorias seguente en la vici.',
+'categoriespagetext' => 'Es la categorias seguente en la vici.
+[[Special:UnusedCategories|Unused categories]] are not shown here.
+Also see [[Special:WantedCategories|wanted categories]].',
 
 # Special:LinkSearch
 'linksearch-ok' => 'Xerca',
@@ -694,7 +685,6 @@ Pajes a [[Special:Watchlist|tu lista de pajes oservada]] es en leteras '''forte'
 # Watchlist
 'watchlist'         => 'Pajes oservada',
 'mywatchlist'       => 'Me lista de pajes oservada',
-'watchlistfor'      => "(per '''$1''')",
 'nowatchlist'       => 'Tu ave no cosas en tu lista oservada',
 'addedwatch'        => 'Juntada a la lista de pajes oservada',
 'addedwatchtext'    => "La paje \"[[:\$1]]\" ia es juntada a tu [[Special:Watchlist|lista de pajes oservada]].
@@ -702,7 +692,7 @@ Cambias future a esta paje e se paje de discutes va es listada ala, e la paje va
 
 Si tu vole sutrae la paje de tu lista de pajes oservada en la futur, clica a \"no oserva\" en la bara a la lado.",
 'removedwatch'      => 'Sutraeda de la lista de pajes oservada',
-'removedwatchtext'  => 'La paje "[[:$1]]" ia es sutraeda de tu lista de pajes oservada.',
+'removedwatchtext'  => 'La paje "[[:$1]]" ia es sutraeda de [[Special:Watchlist|tu lista de pajes oservada]].',
 'watch'             => 'Oserva',
 'watchthispage'     => 'Oserva esta paje',
 'unwatch'           => 'Nonoserva',
@@ -727,7 +717,7 @@ Si tu vole sutrae la paje de tu lista de pajes oservada en la futur, clica a \"n
 Vide $2 per un catalogo de sutraes resente.',
 'deletedarticle'        => 'sutraeda "[[$1]]"',
 'dellogpage'            => 'catalogo de sutraes',
-'deletecomment'         => 'Razona per esta sutrae:',
+'deletecomment'         => 'Razona:',
 'deleteotherreason'     => 'Otra/plu razona:',
 'deletereasonotherlist' => 'Otra razona',
 
@@ -741,16 +731,15 @@ Vide $2 per un catalogo de sutraes resente.',
 'protect-title'               => 'Fisa nivel de proteje a "$1"',
 'prot_1movedto2'              => '[[$1]] es moveda a [[$2]]',
 'protect-legend'              => 'Aproba la proteje',
-'protectcomment'              => 'Razona per proteje',
+'protectcomment'              => 'Razona:',
 'protectexpiry'               => 'Fini:',
 'protect_expiry_invalid'      => 'Ora de fini no es legal.',
 'protect_expiry_old'          => 'Ora de fini es en la pasada.',
-'protect-unchain'             => 'Desecura la permetes de move',
 'protect-text'                => "Tu pote vide e cambia la nivel de proteje asi per la paje '''<nowiki>$1</nowiki>'''.",
 'protect-locked-access'       => "Tu conta no ave permite per cambia niveles de proteje.
 Asi es la ajustas presente per la paje '''$1''':",
 'protect-cascadeon'           => 'Esta paje es aora protejeda per ce el es incluida en esta {{PLURAL:$1|paje|pajes}} ce ave proteje cascadente ativa. Tu pote cambia la nivel de proteje per esta paje, ma esta no va influense la proteje cascadente.',
-'protect-default'             => '(costumal)',
+'protect-default'             => 'Permete tota usores',
 'protect-fallback'            => 'Nesesa permite "$1"',
 'protect-level-autoconfirmed' => 'Impedi usores nova e nonenscriveda',
 'protect-level-sysop'         => 'Sola sysopes',
@@ -790,19 +779,20 @@ Asi es la ajustas presente per la paje '''$1''':",
 'sp-contributions-submit'      => 'Xerca',
 
 # What links here
-'whatlinkshere'           => 'Ce es liada a asi',
-'whatlinkshere-title'     => 'Pajes ci lia a "$1"',
-'whatlinkshere-page'      => 'Paje:',
-'linkshere'               => "Esta pajes lia a '''[[:$1]]''':",
-'nolinkshere'             => "No pajes lia a '''[[:$1]]'''.",
-'isredirect'              => 'redirije paje',
-'istemplate'              => 'inclui',
-'isimage'                 => 'lia de imaje',
-'whatlinkshere-prev'      => '{{PLURAL:$1|presesdente|$1 presedente}}',
-'whatlinkshere-next'      => '{{PLURAL:$1|seguente|$1 seguente}}',
-'whatlinkshere-links'     => '← lias',
-'whatlinkshere-hidelinks' => '$1 lias',
-'whatlinkshere-filters'   => 'Filtros',
+'whatlinkshere'            => 'Ce es liada a asi',
+'whatlinkshere-title'      => 'Pajes ci lia a "$1"',
+'whatlinkshere-page'       => 'Paje:',
+'linkshere'                => "Esta pajes lia a '''[[:$1]]''':",
+'nolinkshere'              => "No pajes lia a '''[[:$1]]'''.",
+'isredirect'               => 'redirije paje',
+'istemplate'               => 'inclui',
+'isimage'                  => 'lia de imaje',
+'whatlinkshere-prev'       => '{{PLURAL:$1|presesdente|$1 presedente}}',
+'whatlinkshere-next'       => '{{PLURAL:$1|seguente|$1 seguente}}',
+'whatlinkshere-links'      => '← lias',
+'whatlinkshere-hideredirs' => '$1 redirijes',
+'whatlinkshere-hidelinks'  => '$1 lias',
+'whatlinkshere-filters'    => 'Filtros',
 
 # Block/unblock
 'blockip'            => 'Impedi usor',
@@ -843,7 +833,7 @@ En esta casos, tu va nesesa move o fusa la paje per mano, si desirada.",
 'move-watch'       => 'Oserva esta paje',
 'movepagebtn'      => 'Move paje',
 'pagemovedsub'     => 'La move ia susede',
-'movepage-moved'   => '<big>\'\'\'"$1" ia es moveda a "$2"\'\'\'</big>',
+'movepage-moved'   => '\'\'\'"$1" ia es moveda a "$2"\'\'\'',
 'articleexists'    => 'Un paje con acel nom esiste ja, o la nom ce tu ia eleje no es un nom legal. Per favore, eleje un otra nom.',
 'talkexists'       => "'''La paje se mesma ia es moveda, ma la paje de discutes no pote es moveda, per ce un esiste ja a la titulo nova. Per favore, fusa los per mano'''",
 'movedto'          => 'moveda a',
@@ -852,7 +842,7 @@ En esta casos, tu va nesesa move o fusa la paje per mano, si desirada.",
 '1movedto2_redir'  => '[[$1]] es moveda a [[$2]] tra redirije',
 'movelogpage'      => 'Move arcive',
 'movelogpagetext'  => 'A su es un lista de pajes moveda',
-'movereason'       => 'Razona',
+'movereason'       => 'Razona:',
 'revertmove'       => 'retro',
 
 # Export
@@ -889,7 +879,9 @@ En esta casos, tu va nesesa move o fusa la paje per mano, si desirada.",
 'tooltip-ca-watch'                => 'Junta esta paje a tu lista de pajes oservada',
 'tooltip-ca-unwatch'              => 'Sutrae esta paje de tu lista de pajes oservada',
 'tooltip-search'                  => 'Xerca {{SITENAME}}',
+'tooltip-p-logo'                  => 'Visita la paje prima',
 'tooltip-n-mainpage'              => 'Visita la paje prima',
+'tooltip-n-mainpage-description'  => 'Visita la paje prima',
 'tooltip-n-portal'                => 'De la projeta, ce tu pote fa, do tu pote trova cosas',
 'tooltip-n-currentevents'         => 'Trova informa presedente de avenis nova',
 'tooltip-n-recentchanges'         => 'La lista de cambias resente en la vici.',
@@ -921,12 +913,11 @@ En esta casos, tu va nesesa move o fusa la paje per mano, si desirada.",
 'nextdiff'     => 'Difere plu nova →',
 
 # Media information
-'widthheightpage'      => '$1×$2, $3 {{PLURAL:$3|paje|pajes}}',
-'file-info-size'       => '($1 × $2 pixel, grandia de fix: $3, MIME tipo: $4)',
-'file-nohires'         => '<small>No plu densia posable.</small>',
-'svg-long-desc'        => '(SVG fix, per nom $1 × $2 pixeles, grandia de fix: $3)',
-'show-big-image'       => 'Densia masima',
-'show-big-image-thumb' => '<small>Grandia de eesta previde: $1 × $2 pixeles</small>',
+'widthheightpage' => '$1×$2, $3 {{PLURAL:$3|paje|pajes}}',
+'file-info-size'  => '$1 × $2 pixel, grandia de fix: $3, MIME tipo: $4',
+'file-nohires'    => '<small>No plu densia posable.</small>',
+'svg-long-desc'   => 'SVG fix, per nom $1 × $2 pixeles, grandia de fix: $3',
+'show-big-image'  => 'Densia masima',
 
 # Special:NewFiles
 'newimages' => 'Imajes nova',

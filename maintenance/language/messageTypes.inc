@@ -2,6 +2,21 @@
 /**
  * Several types of messages.
  *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program; if not, write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ * http://www.gnu.org/copyleft/gpl.html
+ *
  * @file
  * @ingroup MaintenanceLanguage
  */
@@ -67,9 +82,14 @@ $wgIgnoredMessages = array(
 	'accesskey-preview',
 	'accesskey-diff',
 	'accesskey-compareselectedversions',
-	'accesskey-visualcomparison',
 	'accesskey-watch',
 	'accesskey-upload',
+	'accesskey-preferences-save',
+	'accesskey-summary',
+	'accesskey-userrights-set',
+	'accesskey-blockip-block',
+	'accesskey-export',
+	'accesskey-import',
 	'addsection',
 	'talkpageheader',
 	'anonnotice',
@@ -85,9 +105,12 @@ $wgIgnoredMessages = array(
 	'loginstart',
 	'loginend',
 	'loginlanguagelinks',
+	'pear-mail-error',
+	'php-mail-error',
 	'markaspatrolledlink',
 	'newarticletextanon',
 	'newsectionheaderdefaultlevel',
+	'mainpage-nstab',
 	'newtalkseparator',
 	'noarticletextanon',
 	'number_of_watching_users_RCview',
@@ -95,13 +118,13 @@ $wgIgnoredMessages = array(
 	'pubmedurl',
 	'randompage-url',
 	'recentchanges-url',
-	'cantcreateaccount-nonblock-text',
 	'revision-info-current',
 	'revision-nav',
 	'rfcurl',
 	'shareddescriptionfollows',
 	'signature',
 	'signature-anon',
+	'signupstart',
 	'signupend',
 	'sitenotice',
 	'sitesubtitle',
@@ -117,7 +140,7 @@ $wgIgnoredMessages = array(
 	'allpages-summary',
 	'booksources-summary',
 	'categories-summary',
-	'ipblocklist-summary',
+	'blocklist-summary',
 	'protectedtitles-summary',
 	'listusers-summary',
 	'longpages-summary',
@@ -157,7 +180,11 @@ $wgIgnoredMessages = array(
 	'newuserlogentry',
 	'wantedtemplates-summary',
 	'activeusers-summary',
+	'search-summary',
 	'editpage-tos-summary',
+	'addsection-preload',
+	'addsection-editintro',
+	'longpage-hint',
 );
 
 /** Optional messages, which may be translated only if changed in the target language. */
@@ -225,6 +252,11 @@ $wgOptionalMessages = array(
 	'vector.css',
 	'print.css',
 	'handheld.css',
+	'noscript.css',
+	'autoconfirmed.css',
+	'bot.css',
+	'sysop.css',
+	'bureaucrat.css',
 	'common.js',
 	'standard.js',
 	'nostalgia.js',
@@ -235,6 +267,10 @@ $wgOptionalMessages = array(
 	'simple.js',
 	'modern.js',
 	'vector.js',
+	'autoconfirmed.js',
+	'bot.js',
+	'sysop.js',
+	'bureaucrat.js',
 	'widthheight',
 	'exif-fnumber-format',
 	'exif-focallength-format',
@@ -266,11 +302,11 @@ $wgOptionalMessages = array(
 	'filerevert-backlink',
 	'filedelete-backlink',
 	'delete-backlink',
-	'move-page-backlink',
 	'protect-backlink',
 	'pagetitle',
 	'filename-prefix-blacklist',
 	'edittools',
+	'edittools-upload',
 	'size-bytes',
 	'size-kilobytes',
 	'size-megabytes',
@@ -350,6 +386,11 @@ $wgOptionalMessages = array(
 	'trackbackexcerpt',
 	'prefs-registration-date-time',
 	'prefs-memberingroups-type',
+	'shared-repo-name-wikimediacommons',
+	'usermessage-template',
+	'revisionmove-backlink',
+	'filepage.css',
+	'nocookiesforlogin',
 );
 
 /** EXIF messages, which may be set as optional in several checks, but are generally mandatory */
@@ -586,4 +627,5 @@ $wgEXIFMessages = array(
 	'exif-gpsdestdistance-n',
 	'exif-gpsdirection-t',
 	'exif-gpsdirection-m',
+	'exif-objectname',
 );

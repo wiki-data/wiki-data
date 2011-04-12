@@ -24,7 +24,7 @@
  * @todo More efficient cleanup of text records
  */
 
-require_once( dirname(__FILE__) . '/Maintenance.php' );
+require_once( dirname( __FILE__ ) . '/Maintenance.php' );
 
 class DeleteOrphanedRevisions extends Maintenance {
 	public function __construct() {
@@ -36,55 +36,54 @@ class DeleteOrphanedRevisions extends Maintenance {
 	public function execute() {
 		$this->output( "Delete Orphaned Revisions\n" );
 
-		$report = $this->hasOption('report');
+		$report = $this->hasOption( 'report' );
 
 		$dbw = wfGetDB( DB_MASTER );
-		$dbw->immediateBegin();
+		$dbw->begin();
 		list( $page, $revision ) = $dbw->tableNamesN( 'page', 'revision' );
 
 		# Find all the orphaned revisions
 		$this->output( "Checking for orphaned revisions..." );
 		$sql = "SELECT rev_id FROM {$revision} LEFT JOIN {$page} ON rev_page = page_id WHERE page_namespace IS NULL";
 		$res = $dbw->query( $sql, 'deleteOrphanedRevisions' );
-	
+
 		# Stash 'em all up for deletion (if needed)
 		$revisions = array();
-		foreach( $res as $row )
+		foreach ( $res as $row )
 			$revisions[] = $row->rev_id;
-		$dbw->freeResult( $res );
 		$count = count( $revisions );
 		$this->output( "found {$count}.\n" );
-	
+
 		# Nothing to do?
-		if( $report || $count == 0 ) {
-			$dbw->immediateCommit();
-			exit(0);
+		if ( $report || $count == 0 ) {
+			$dbw->commit();
+			exit( 0 );
 		}
-	
+
 		# Delete each revision
 		$this->output( "Deleting..." );
 		$this->deleteRevs( $revisions, $dbw );
 		$this->output( "done.\n" );
-	
+
 		# Close the transaction and call the script to purge unused text records
-		$dbw->immediateCommit();
+		$dbw->commit();
 		$this->purgeRedundantText( true );
 	}
-	
+
 	/**
 	 * Delete one or more revisions from the database
 	 * Do this inside a transaction
 	 *
 	 * @param $id Array of revision id values
-	 * @param $db Database class (needs to be a master)
+	 * @param $dbw DatabaseBase class (needs to be a master)
 	 */
 	private function deleteRevs( $id, &$dbw ) {
-		if( !is_array( $id ) )
+		if ( !is_array( $id ) )
 			$id = array( $id );
 		$dbw->delete( 'revision', array( 'rev_id' => $id ), __METHOD__ );
 	}
 }
 
 $maintClass = "DeleteOrphanedRevisions";
-require_once( DO_MAINTENANCE );
+require_once( RUN_MAINTENANCE_IF_MAIN );
 

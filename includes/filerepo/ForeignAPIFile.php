@@ -1,28 +1,71 @@
 <?php
+/**
+ * Foreign file accessible through api.php requests.
+ *
+ * @file
+ * @ingroup FileRepo
+ */
 
-/** 
- * Very hacky and inefficient
- * do not use :D
+/**
+ * Foreign file accessible through api.php requests.
+ * Very hacky and inefficient, do not use :D
  *
  * @ingroup FileRepo
  */
 class ForeignAPIFile extends File {
 	
 	private $mExists;
-	
+
+	/**
+	 * @param  $title
+	 * @param  $repo ForeignApiRepo
+	 * @param  $info
+	 * @param bool $exists
+	 */
 	function __construct( $title, $repo, $info, $exists = false ) {
 		parent::__construct( $title, $repo );
 		$this->mInfo = $info;
 		$this->mExists = $exists;
 	}
-	
+
+	/**
+	 * @static
+	 * @param  $title Title
+	 * @param  $repo ForeignApiRepo
+	 * @return ForeignAPIFile|null
+	 */
 	static function newFromTitle( $title, $repo ) {
-		$info = $repo->getImageInfo( $title );
+		$data = $repo->fetchImageQuery( array(
+                        'titles' => 'File:' . $title->getDBKey(),
+                        'iiprop' => self::getProps(),
+                        'prop' => 'imageinfo' ) );
+
+		$info = $repo->getImageInfo( $data );
+
 		if( $info ) {
-			return new ForeignAPIFile( $title, $repo, $info, true );
+			$lastRedirect = isset( $data['query']['redirects'] )
+				? count( $data['query']['redirects'] ) - 1
+				: -1;
+			if( $lastRedirect >= 0 ) {
+				$newtitle = Title::newFromText( $data['query']['redirects'][$lastRedirect]['to']);
+				$img = new ForeignAPIFile( $newtitle, $repo, $info, true );
+				if( $img ) {
+					$img->redirectedFrom( $title->getDBkey() );
+				}
+			} else {
+				$img = new ForeignAPIFile( $title, $repo, $info, true );
+			}
+			return $img;
 		} else {
 			return null;
 		}
+	}
+	
+	/**
+	 * Get the property string for iiprop and aiprop
+	 */
+	static function getProps() {
+		return 'timestamp|user|comment|url|size|sha1|metadata|mime';
 	}
 	
 	// Dummy functions...
@@ -39,14 +82,17 @@ class ForeignAPIFile extends File {
 			// show icon
 			return parent::transform( $params, $flags );
 		}
+
+		// Note, the this->canRender() check above implies
+		// that we have a handler, and it can do makeParamString.
+		$otherParams = $this->handler->makeParamString( $params );
+
 		$thumbUrl = $this->repo->getThumbUrlFromCache(
-				$this->getName(),
-				isset( $params['width'] ) ? $params['width'] : -1,
-				isset( $params['height'] ) ? $params['height'] : -1 );
-		if( $thumbUrl ) {
-			return $this->handler->getTransform( $this, 'bogus', $thumbUrl, $params );;
-		}
-		return false;
+			$this->getName(),
+			isset( $params['width'] ) ? $params['width'] : -1,
+			isset( $params['height'] ) ? $params['height'] : -1,
+			$otherParams );
+		return $this->handler->getTransform( $this, 'bogus', $thumbUrl, $params );
 	}
 
 	// Info we can get from API...
@@ -77,27 +123,33 @@ class ForeignAPIFile extends File {
 	}
 	
 	public function getSize() {
-		return intval( @$this->mInfo['size'] );
+		return isset( $this->mInfo['size'] ) ? intval( $this->mInfo['size'] ) : null;
 	}
 	
 	public function getUrl() {
-		return strval( @$this->mInfo['url'] );
+		return isset( $this->mInfo['url'] ) ? strval( $this->mInfo['url'] ) : null;
 	}
 
 	public function getUser( $method='text' ) {
-		return strval( @$this->mInfo['user'] );
+		return isset( $this->mInfo['user'] ) ? strval( $this->mInfo['user'] ) : null;
 	}
 	
 	public function getDescription() {
-		return strval( @$this->mInfo['comment'] );
+		return isset( $this->mInfo['comment'] ) ? strval( $this->mInfo['comment'] ) : null;
 	}
 
 	function getSha1() {
-		return wfBaseConvert( strval( @$this->mInfo['sha1'] ), 16, 36, 31 );
+		return isset( $this->mInfo['sha1'] ) ? 
+			wfBaseConvert( strval( $this->mInfo['sha1'] ), 16, 36, 31 ) : 
+			null;
 	}
 	
 	function getTimestamp() {
-		return wfTimestamp( TS_MW, strval( @$this->mInfo['timestamp'] ) );
+		return wfTimestamp( TS_MW, 
+			isset( $this->mInfo['timestamp'] ) ?
+			strval( $this->mInfo['timestamp'] ) : 
+			null
+		);
 	}
 	
 	function getMimeType() {
@@ -108,7 +160,7 @@ class ForeignAPIFile extends File {
 		return $this->mInfo['mime'];
 	}
 	
-	/// @fixme May guess wrong on file types that can be eg audio or video
+	/// @todo Fixme: may guess wrong on file types that can be eg audio or video
 	function getMediaType() {
 		$magic = MimeMagic::singleton();
 		return $magic->getMediaType( null, $this->getMimeType() );
@@ -125,15 +177,13 @@ class ForeignAPIFile extends File {
 	 */
 	function getThumbPath( $suffix = '' ) {
 		if ( $this->repo->canCacheThumbs() ) {
-			global $wgUploadDirectory;
-			$path = $wgUploadDirectory . '/thumb/' . $this->getHashPath( $this->getName() );
+			$path = $this->repo->getZonePath('thumb') . '/' . $this->getHashPath( $this->getName() );
 			if ( $suffix ) {
 				$path = $path . $suffix . '/';
 			}
 			return $path;
-		}
-		else {
-			return null;	
+		} else {
+			return null;
 		}
 	}
 	

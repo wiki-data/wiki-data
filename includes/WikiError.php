@@ -1,7 +1,8 @@
 <?php
 /**
  * MediaWiki error classes
- * Copyright (C) 2005 Brion Vibber <brion@pobox.com>
+ *
+ * Copyright © 2005 Brion Vibber <brion@pobox.com>
  * http://www.mediawiki.org/
  *
  * This program is free software; you can redistribute it and/or modify
@@ -19,6 +20,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  * http://www.gnu.org/copyleft/gpl.html
  *
+ * @file
  */
 
 /**
@@ -31,6 +33,7 @@ class WikiError {
 	 * @param $message string
 	 */
 	function __construct( $message ) {
+		wfDeprecated( __METHOD__ );
 		$this->mMessage = $message;
 	}
 
@@ -58,7 +61,14 @@ class WikiError {
 	 * @return bool
 	 */
 	public static function isError( $object ) {
-		return $object instanceof WikiError;
+		wfDeprecated( __METHOD__ );
+		if ( $object instanceof WikiError ) {
+			return true;
+		} elseif ( $object instanceof Status ) {
+			return !$object->isOK();
+		} else {
+			return false;
+		}
 	}
 }
 
@@ -71,7 +81,8 @@ class WikiErrorMsg extends WikiError {
 	 * @param $message String: wiki message name
 	 * @param ... parameters to pass to wfMsg()
 	 */
-	function WikiErrorMsg( $message/*, ... */ ) {
+	function __construct( $message/*, ... */ ) {
+		wfDeprecated( __METHOD__ );
 		$args = func_get_args();
 		array_shift( $args );
 		$this->mMessage = wfMsgReal( $message, $args, true );
@@ -100,7 +111,8 @@ class WikiXmlError extends WikiError {
 	 * @param $context
 	 * @param $offset Int
 	 */
-	function WikiXmlError( $parser, $message = 'XML parsing error', $context = null, $offset = 0 ) {
+	function __construct( $parser, $message = 'XML parsing error', $context = null, $offset = 0 ) {
+		wfDeprecated( __METHOD__ );
 		$this->mXmlError = xml_get_error_code( $parser );
 		$this->mColumn = xml_get_current_column_number( $parser );
 		$this->mLine = xml_get_current_line_number( $parser );

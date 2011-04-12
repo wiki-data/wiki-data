@@ -87,19 +87,12 @@ $messages = array(
 'faqpage'        => 'Project:Cam caeuq dap',
 
 # Vector skin
-'vector-action-delete'       => 'Ca',
-'vector-action-move'         => 'Daen',
-'vector-action-protect'      => 'Bauj',
-'vector-namespace-category'  => 'Faendingz',
-'vector-namespace-help'      => 'Yieb bangcoh',
-'vector-namespace-image'     => 'Vwnzgen',
-'vector-namespace-main'      => 'Yieb',
-'vector-namespace-media'     => 'Yieb moizdij',
-'vector-namespace-mediawiki' => 'Siusik',
-'vector-namespace-template'  => 'Mozbanj',
-'vector-view-create'         => 'Laeb',
-'vector-view-edit'           => 'gaij',
-'vector-view-history'        => 'Cazyawj lizsij',
+'vector-action-delete'  => 'Ca',
+'vector-action-move'    => 'Daen',
+'vector-action-protect' => 'Bauj',
+'vector-view-create'    => 'Laeb',
+'vector-view-edit'      => 'gaij',
+'vector-view-history'   => 'Cazyawj lizsij',
 
 'errorpagetitle'   => 'Loengloek',
 'tagline'          => 'okcih {{SITENAME}}',
@@ -219,7 +212,7 @@ $messages = array(
 'action-edit' => 'gaij yieb neix',
 
 # Recent changes
-'recentchanges'   => 'Gaeqgaij suijnej',
+'recentchanges'   => 'Gaeqgaij seizneix',
 'diff'            => 'Faenbied',
 'hide'            => 'Cangz',
 'show'            => "Yienh'ok",
@@ -272,7 +265,7 @@ $messages = array(
 'allpagessubmit' => 'Bae',
 
 # Watchlist
-'watchlist'     => 'Gaeq gou demq',
+'watchlist'     => 'Yieb gou yawj',
 'mywatchlist'   => 'Gaeq gou demq',
 'watchnologin'  => 'Maengx laezhaej',
 'watch'         => 'Demq',
@@ -319,10 +312,12 @@ $messages = array(
 'revertmove'       => 'siu',
 
 # Tooltip help for the actions
+'tooltip-pt-mytalk'      => 'Yieb daujlun mwngz',
 'tooltip-pt-preferences' => 'Doenghgaeq gou hae',
+'tooltip-pt-logout'      => 'Doiq ok',
 'tooltip-ca-talk'        => 'Gvanhyih cingqfaenz yieb gij daojun',
 'tooltip-ca-history'     => 'yieb neix gij banj lizsij',
-'tooltip-ca-move'        => 'dean yieb neix',
+'tooltip-ca-move'        => 'Dean yieb neix',
 'tooltip-search'         => 'Ra {{SITENAME}}',
 'tooltip-p-logo'         => 'Mae meh',
 'tooltip-n-mainpage'     => 'Raen Yiebdaeuz',

@@ -1,37 +1,34 @@
 <?php
-# Copyright (C) 2004 Brion Vibber <brion@pobox.com>
-# http://www.mediawiki.org/
-#
-# This program is free software; you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation; either version 2 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License along
-# with this program; if not, write to the Free Software Foundation, Inc.,
-# 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
-# http://www.gnu.org/copyleft/gpl.html
+/**
+ * Unicode normalization routines
+ *
+ * Copyright © 2004 Brion Vibber <brion@pobox.com>
+ * http://www.mediawiki.org/
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program; if not, write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ * http://www.gnu.org/copyleft/gpl.html
+ *
+ * @file
+ * @ingroup UtfNormal
+ */
 
 /**
  * @defgroup UtfNormal UtfNormal
  */
 
-/** */
 require_once dirname(__FILE__).'/UtfNormalUtil.php';
-
-global $utfCombiningClass, $utfCanonicalComp, $utfCanonicalDecomp;
-$utfCombiningClass = NULL;
-$utfCanonicalComp = NULL;
-$utfCanonicalDecomp = NULL;
-
-# Load compatibility decompositions on demand if they are needed.
-global $utfCompatibilityDecomp;
-$utfCompatibilityDecomp = NULL;
 
 /**
  * For using the ICU wrapper
@@ -45,6 +42,7 @@ define( 'UNORM_NFKC', 5 );
 define( 'UNORM_FCD',  6 );
 
 define( 'NORMALIZE_ICU', function_exists( 'utf8_normalize' ) );
+define( 'NORMALIZE_INTL', function_exists( 'normalizer_normalize' ) );
 
 /**
  * Unicode normalization routines for working with UTF-8 strings.
@@ -61,6 +59,15 @@ define( 'NORMALIZE_ICU', function_exists( 'utf8_normalize' ) );
  * @ingroup UtfNormal
  */
 class UtfNormal {
+	static $utfCombiningClass = null;
+	static $utfCanonicalComp = null;
+	static $utfCanonicalDecomp = null;
+
+	# Load compatibility decompositions on demand if they are needed.
+	static $utfCompatibilityDecomp = null;
+
+	static $utfCheckNFC;
+
 	/**
 	 * The ultimate convenience function! Clean up invalid UTF-8 sequences,
 	 * and convert to normal form C, canonical composition.
@@ -72,7 +79,7 @@ class UtfNormal {
 	 * @return string a clean, shiny, normalized UTF-8 string
 	 */
 	static function cleanUp( $string ) {
-		if( NORMALIZE_ICU ) {
+		if( NORMALIZE_ICU || NORMALIZE_INTL ) {
 			# We exclude a few chars that ICU would not.
 			$string = preg_replace(
 				'/[\x00-\x08\x0b\x0c\x0e-\x1f]/',
@@ -83,7 +90,8 @@ class UtfNormal {
 
 			# UnicodeString constructor fails if the string ends with a
 			# head byte. Add a junk char at the end, we'll strip it off.
-			return rtrim( utf8_normalize( $string . "\x01", UNORM_NFC ), "\x01" );
+			if ( NORMALIZE_ICU ) return rtrim( utf8_normalize( $string . "\x01", UNORM_NFC ), "\x01" );
+			if ( NORMALIZE_INTL ) return normalizer_normalize( $string, Normalizer::FORM_C );
 		} elseif( UtfNormal::quickIsNFCVerify( $string ) ) {
 			# Side effect -- $string has had UTF-8 errors cleaned up.
 			return $string;
@@ -101,7 +109,9 @@ class UtfNormal {
 	 * @return string a UTF-8 string in normal form C
 	 */
 	static function toNFC( $string ) {
-		if( NORMALIZE_ICU )
+		if( NORMALIZE_INTL )
+			return normalizer_normalize( $string, Normalizer::FORM_C );
+		elseif( NORMALIZE_ICU )
 			return utf8_normalize( $string, UNORM_NFC );
 		elseif( UtfNormal::quickIsNFC( $string ) )
 			return $string;
@@ -117,7 +127,9 @@ class UtfNormal {
 	 * @return string a UTF-8 string in normal form D
 	 */
 	static function toNFD( $string ) {
-		if( NORMALIZE_ICU )
+		if( NORMALIZE_INTL )
+			return normalizer_normalize( $string, Normalizer::FORM_D );
+		elseif( NORMALIZE_ICU )
 			return utf8_normalize( $string, UNORM_NFD );
 		elseif( preg_match( '/[\x80-\xff]/', $string ) )
 			return UtfNormal::NFD( $string );
@@ -134,7 +146,9 @@ class UtfNormal {
 	 * @return string a UTF-8 string in normal form KC
 	 */
 	static function toNFKC( $string ) {
-		if( NORMALIZE_ICU )
+		if( NORMALIZE_INTL )
+			return normalizer_normalize( $string, Normalizer::FORM_KC );
+		elseif( NORMALIZE_ICU )
 			return utf8_normalize( $string, UNORM_NFKC );
 		elseif( preg_match( '/[\x80-\xff]/', $string ) )
 			return UtfNormal::NFKC( $string );
@@ -151,7 +165,9 @@ class UtfNormal {
 	 * @return string a UTF-8 string in normal form KD
 	 */
 	static function toNFKD( $string ) {
-		if( NORMALIZE_ICU )
+		if( NORMALIZE_INTL )
+			return normalizer_normalize( $string, Normalizer::FORM_KD );
+		elseif( NORMALIZE_ICU )
 			return utf8_normalize( $string, UNORM_NFKD );
 		elseif( preg_match( '/[\x80-\xff]/', $string ) )
 			return UtfNormal::NFKD( $string );
@@ -164,8 +180,7 @@ class UtfNormal {
 	 * @private
 	 */
 	static function loadData() {
-		global $utfCombiningClass;
-		if( !isset( $utfCombiningClass ) ) {
+		if( !isset( self::$utfCombiningClass ) ) {
 			require_once( dirname(__FILE__) . '/UtfNormalData.inc' );
 		}
 	}
@@ -182,7 +197,6 @@ class UtfNormal {
 		if( !preg_match( '/[\x80-\xff]/', $string ) ) return true;
 
 		UtfNormal::loadData();
-		global $utfCheckNFC, $utfCombiningClass;
 		$len = strlen( $string );
 		for( $i = 0; $i < $len; $i++ ) {
 			$c = $string{$i};
@@ -199,11 +213,11 @@ class UtfNormal {
 				$c = substr( $string, $i, 2 );
 				$i++;
 			}
-			if( isset( $utfCheckNFC[$c] ) ) {
+			if( isset( self::$utfCheckNFC[$c] ) ) {
 				# If it's NO or MAYBE, bail and do the slow check.
 				return false;
 			}
-			if( isset( $utfCombiningClass[$c] ) ) {
+			if( isset( self::$utfCombiningClass[$c] ) ) {
 				# Combining character? We might have to do sorting, at least.
 				return false;
 			}
@@ -229,9 +243,8 @@ class UtfNormal {
 		if( !isset( $checkit ) ) {
 			# Load/build some scary lookup tables...
 			UtfNormal::loadData();
-			global $utfCheckNFC, $utfCombiningClass;
 
-			$utfCheckOrCombining = array_merge( $utfCheckNFC, $utfCombiningClass );
+			$utfCheckOrCombining = array_merge( self::$utfCheckNFC, self::$utfCombiningClass );
 
 			# Head bytes for sequences which we should do further validity checks
 			$checkit = array_flip( array_map( 'chr',
@@ -295,7 +308,8 @@ class UtfNormal {
 			$len = $chunk + 1; # Counting down is faster. I'm *so* sorry.
 
 			for( $i = -1; --$len; ) {
-				if( $remaining = $tailBytes[$c = $str{++$i}] ) {
+				$remaining = $tailBytes[$c = $str{++$i}];
+				if( $remaining ) {
 					# UTF-8 head byte!
 					$sequence = $head = $c;
 					do {
@@ -446,9 +460,9 @@ class UtfNormal {
 	 */
 	static function NFD( $string ) {
 		UtfNormal::loadData();
-		global $utfCanonicalDecomp;
+
 		return UtfNormal::fastCombiningSort(
-			UtfNormal::fastDecompose( $string, $utfCanonicalDecomp ) );
+			UtfNormal::fastDecompose( $string, self::$utfCanonicalDecomp ) );
 	}
 
 	/**
@@ -466,12 +480,11 @@ class UtfNormal {
 	 * @private
 	 */
 	static function NFKD( $string ) {
-		global $utfCompatibilityDecomp;
-		if( !isset( $utfCompatibilityDecomp ) ) {
+		if( !isset( self::$utfCompatibilityDecomp ) ) {
 			require_once( 'UtfNormalDataK.inc' );
 		}
-		return UtfNormal::fastCombiningSort(
-			UtfNormal::fastDecompose( $string, $utfCompatibilityDecomp ) );
+		return self::fastCombiningSort(
+			self::fastDecompose( $string, self::$utfCompatibilityDecomp ) );
 	}
 
 
@@ -546,7 +559,6 @@ class UtfNormal {
 	 */
 	static function fastCombiningSort( $string ) {
 		UtfNormal::loadData();
-		global $utfCombiningClass;
 		$len = strlen( $string );
 		$out = '';
 		$combiners = array();
@@ -565,8 +577,8 @@ class UtfNormal {
 					$c = substr( $string, $i, 2 );
 					$i++;
 				}
-				if( isset( $utfCombiningClass[$c] ) ) {
-					$lastClass = $utfCombiningClass[$c];
+				if( isset( self::$utfCombiningClass[$c] ) ) {
+					$lastClass = self::$utfCombiningClass[$c];
 					if( isset( $combiners[$lastClass] ) ) {
 						$combiners[$lastClass] .= $c;
 					} else {
@@ -599,7 +611,6 @@ class UtfNormal {
 	 */
 	static function fastCompose( $string ) {
 		UtfNormal::loadData();
-		global $utfCanonicalComp, $utfCombiningClass;
 		$len = strlen( $string );
 		$out = '';
 		$lastClass = -1;
@@ -631,14 +642,14 @@ class UtfNormal {
 			}
 			$pair = $startChar . $c;
 			if( $n > 0x80 ) {
-				if( isset( $utfCombiningClass[$c] ) ) {
+				if( isset( self::$utfCombiningClass[$c] ) ) {
 					# A combining char; see what we can do with it
-					$class = $utfCombiningClass[$c];
+					$class = self::$utfCombiningClass[$c];
 					if( !empty( $startChar ) &&
 						$lastClass < $class &&
 						$class > 0 &&
-						isset( $utfCanonicalComp[$pair] ) ) {
-						$startChar = $utfCanonicalComp[$pair];
+						isset( self::$utfCanonicalComp[$pair] ) ) {
+						$startChar = self::$utfCanonicalComp[$pair];
 						$class = 0;
 					} else {
 						$combining .= $c;
@@ -650,8 +661,8 @@ class UtfNormal {
 			}
 			# New start char
 			if( $lastClass == 0 ) {
-				if( isset( $utfCanonicalComp[$pair] ) ) {
-					$startChar = $utfCanonicalComp[$pair];
+				if( isset( self::$utfCanonicalComp[$pair] ) ) {
+					$startChar = self::$utfCanonicalComp[$pair];
 					$lastHangul = 0;
 					continue;
 				}

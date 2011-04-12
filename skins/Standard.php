@@ -6,75 +6,50 @@
  * @ingroup Skins
  */
 
-if( !defined( 'MEDIAWIKI' ) )
+if( !defined( 'MEDIAWIKI' ) ) {
 	die( -1 );
+}
 
 /**
  * @todo document
  * @ingroup Skins
  */
-class SkinStandard extends Skin {
-	/*
-	 * OutputPage
-	 */
-	function outputPage( OutputPage $out ) {
-		global $wgStylePath;
-		if ( 3 == $this->qbSetting() ) { # Floating left
-			$out->addScriptFile ( "{$wgStylePath}/common/sticky.js" );
-		}
-		parent::outputPage( $out );
-	}
+class SkinStandard extends SkinLegacy {
+	var $skinname = 'standard', $stylename = 'standard',
+		$template = 'StandardTemplate';
 
-	/**
-	 *
-	 */
 	function setupSkinUserCss( OutputPage $out ){
-		if ( 3 == $this->qbSetting() ) { # Floating left
-			$out->addStyle( 'common/quickbar.css' );
-		} else if ( 4 == $this->qbSetting() ) { # Floating right
-			$out->addStyle( 'common/quickbar-right.css' );
-		}
 		parent::setupSkinUserCss( $out );
-	}
+		$out->AddModuleStyles( 'skins.standard' );
 
-	/**
-	 *
-	 */
-	function reallyGenerateUserStylesheet() {
-		$s = parent::reallyGenerateUserStylesheet();
+		global $wgContLang;
 		$qb = $this->qbSetting();
+		$rules = array();
 
 		if ( 2 == $qb ) { # Right
-			$s .= "#quickbar { position: absolute; top: 4px; right: 4px; " .
-			  "border-left: 2px solid #000000; }\n" .
-			  "#article, #mw-data-after-content { margin-left: 4px; margin-right: 152px; }\n";
-		} else if ( 1 == $qb || 3 == $qb ) {
-			$s .= "#quickbar { position: absolute; top: 4px; left: 4px; " .
-			  "border-right: 1px solid gray; }\n" .
-			  "#article, #mw-data-after-content { margin-left: 152px; margin-right: 4px; }\n";
-		} else if ( 4 == $qb) {
-			$s .= "#quickbar { border-right: 1px solid gray; }\n" .
-			  "#article, #mw-data-after-content { margin-right: 152px; margin-left: 4px; }\n";
-		}
-		return $s;
-	}
-
-	/**
-	 *
-	 */
-	function getBodyOptions() {
-		$a = parent::getBodyOptions();
-
-		if ( 3 == $this->qbSetting() ) { # Floating left
-			$qb = "setup(\"quickbar\")";
-			if( $a['onload'] ) {
-				$a['onload'] .= ";$qb";
-			} else {
-				$a['onload'] = $qb;
+			$rules[] = "#quickbar { position: absolute; top: 4px; right: 4px; border-left: 2px solid #000000; }";
+			$rules[] = "#article, #mw-data-after-content { margin-left: 4px; margin-right: 152px; }";
+		} elseif ( 1 == $qb || 3 == $qb ) {
+			$rules[] = "#quickbar { position: absolute; top: 4px; left: 4px; border-right: 1px solid gray; }";
+			$rules[] = "#article, #mw-data-after-content { margin-left: 152px; margin-right: 4px; }";
+			if( 3 == $qb ) {
+				$rules[] = "#quickbar { position: fixed; padding: 4px; }";
 			}
+		} elseif ( 4 == $qb ) {
+			$rules[] = "#quickbar { position: fixed; right: 0px; top: 0px; padding: 4px;}";
+			$rules[] = "#quickbar { border-right: 1px solid gray; }";
+			$rules[] = "#article, #mw-data-after-content { margin-right: 152px; margin-left: 4px; }";
 		}
-		return $a;
+ 		$style = implode( "\n", $rules );
+ 		if ( $wgContLang->getDir() === 'rtl' ) {
+ 			$style = CSSJanus::transform( $style, true, false );
+		}
+		$out->addInlineStyle( $style );
 	}
+
+}
+
+class StandardTemplate extends LegacyTemplate {
 
 	function doAfterContent() {
 		global $wgContLang, $wgLang;
@@ -88,13 +63,12 @@ class SkinStandard extends Skin {
 		wfProfileOut( __METHOD__ . '-1' );
 		wfProfileIn( __METHOD__ . '-2' );
 
-		$qb = $this->qbSetting();
+		$qb = $this->getSkin()->qbSetting();
 		$shove = ( $qb != 0 );
 		$left = ( $qb == 1 || $qb == 3 );
-		if( $wgContLang->isRTL() ) $left = !$left;
 
 		if ( $shove && $left ) { # Left
-				$s .= $this->getQuickbarCompensator();
+			$s .= $this->getQuickbarCompensator();
 		}
 		wfProfileOut( __METHOD__ . '-2' );
 		wfProfileIn( __METHOD__ . '-3' );
@@ -103,11 +77,11 @@ class SkinStandard extends Skin {
 
 		$s .= $this->bottomLinks();
 		$s .= "\n<br />" . $wgLang->pipeList( array(
-			$this->mainPageLink(),
-			$this->aboutLink(),
-			$this->specialLink( 'recentchanges' ),
+			$this->getSkin()->mainPageLink(),
+			$this->getSkin()->aboutLink(),
+			$this->getSkin()->specialLink( 'Recentchanges' ),
 			$this->searchForm() ) )
-		  . '<br /><span id="pagestats">' . $this->pageStats() . '</span>';
+			. '<br /><span id="pagestats">' . $this->pageStats() . '</span>';
 
 		$s .= '</td>';
 		if ( $shove && !$left ) { # Right
@@ -127,45 +101,52 @@ class SkinStandard extends Skin {
 
 	function quickBar() {
 		global $wgOut, $wgUser, $wgRequest, $wgContLang;
-		global $wgEnableUploads, $wgRemoteUploads;
 
 		wfProfileIn( __METHOD__ );
 
 		$action = $wgRequest->getText( 'action' );
 		$wpPreview = $wgRequest->getBool( 'wpPreview' );
-		$tns = $this->mTitle->getNamespace();
+		$tns = $this->getSkin()->getTitle()->getNamespace();
 
 		$s = "\n<div id='quickbar'>";
-		$s .= "\n" . $this->logoText() . "\n<hr class='sep' />";
+		$s .= "\n" . $this->getSkin()->logoText() . "\n<hr class='sep' />";
 
 		$sep = "\n<br />";
 
 		# Use the first heading from the Monobook sidebar as the "browse" section
-		$bar = $this->buildSidebar();
+		$bar = $this->getSkin()->buildSidebar();
 		unset( $bar['SEARCH'] );
 		unset( $bar['LANGUAGES'] );
 		unset( $bar['TOOLBOX'] );
-		$browseLinks = reset( $bar );
 
-		foreach ( $browseLinks as $link ) {
-			if ( $link['text'] != '-' ) {
-				$s .= "<a href=\"{$link['href']}\">" .
-					htmlspecialchars( $link['text'] ) . '</a>' . $sep;
+		$barnumber = 1;
+		foreach ( $bar as $heading => $browseLinks ) {
+			if ( $barnumber > 1 ) {
+				$s .= "\n<hr class='sep' />";
+			} 
+			foreach ( $browseLinks as $link ) {
+				if ( $link['text'] != '-' ) {
+					$s .= "<a href=\"{$link['href']}\">" .
+						htmlspecialchars( $link['text'] ) . '</a>' . $sep;
+				}
 			}
+			if ( $barnumber == 1 ) {
+				// only show watchlist link if logged in
+				if( $wgUser->isLoggedIn() ) {
+					$s.= $this->getSkin()->specialLink( 'Watchlist' ) ;
+					$s .= $sep . $this->getSkin()->linkKnown(
+						SpecialPage::getTitleFor( 'Contributions' ),
+						wfMsg( 'mycontris' ),
+						array(),
+						array( 'target' => $wgUser->getName() )
+					);
+				}
+			}
+			$barnumber = $barnumber + 1;
 		}
 
-		if( $wgUser->isLoggedIn() ) {
-			$s.= $this->specialLink( 'watchlist' ) ;
-			$s .= $sep . $this->linkKnown(
-				SpecialPage::getTitleFor( 'Contributions' ),
-				wfMsg( 'mycontris' ),
-				array(),
-				array( 'target' => $wgUser->getName() )
-			);
-		}
-		// only show watchlist link if logged in
 		$s .= "\n<hr class='sep' />";
-		$articleExists = $this->mTitle->getArticleId();
+		$articleExists = $this->getSkin()->getTitle()->getArticleId();
 		if ( $wgOut->isArticle() || $action == 'edit' || $action == 'history' || $wpPreview ) {
 			if( $wgOut->isArticle() ) {
 				$s .= '<strong>' . $this->editThisPage() . '</strong>';
@@ -210,16 +191,17 @@ class SkinStandard extends Skin {
 							$text = wfMsg( 'articlepage' );
 					}
 
-					$link = $this->mTitle->getText();
-					if( $nstext = $wgContLang->getNsText( $tns ) ) { # add namespace if necessary
+					$link = $this->getSkin()->getTitle()->getText();
+					$nstext = $wgContLang->getNsText( $tns );
+					if( $nstext ) { # add namespace if necessary
 						$link = $nstext . ':' . $link;
 					}
 
-					$s .= $this->link(
+					$s .= $this->getSkin()->link(
 						Title::newFromText( $link ),
 						$text
 					);
-				} elseif( $this->mTitle->getNamespace() != NS_SPECIAL ) {
+				} elseif( $this->getSkin()->getTitle()->getNamespace() != NS_SPECIAL ) {
 					# we just throw in a "New page" text to tell the user that he's in edit mode,
 					# and to avoid messing with the separator that is prepended to the next item
 					$s .= '<strong>' . wfMsg( 'newpage' ) . '</strong>';
@@ -227,9 +209,9 @@ class SkinStandard extends Skin {
 			}
 
 			# "Post a comment" link
-			if( ( $this->mTitle->isTalkPage() || $wgOut->showNewSectionLink() ) && $action != 'edit' && !$wpPreview )
-				$s .= '<br />' . $this->link(
-					$this->mTitle,
+			if( ( $this->getSkin()->getTitle()->isTalkPage() || $wgOut->showNewSectionLink() ) && $action != 'edit' && !$wpPreview )
+				$s .= '<br />' . $this->getSkin()->link(
+					$this->getSkin()->getTitle(),
 					wfMsg( 'postcomment' ),
 					array(),
 					array(
@@ -239,24 +221,20 @@ class SkinStandard extends Skin {
 					array( 'known', 'noclasses' )
 				);
 
-			#if( $tns%2 && $action!='edit' && !$wpPreview) {
-				#$s.= '<br />'.$this->linkKnown( Title::newFromText( $wgTitle->getPrefixedText() ),wfMsg('postcomment'),array(),array('action'=>'edit','section'=>'new'));
-			#}
-
 			/*
 			watching could cause problems in edit mode:
 			if user edits article, then loads "watch this article" in background and then saves
 			article with "Watch this article" checkbox disabled, the article is transparently
 			unwatched. Therefore we do not show the "Watch this page" link in edit mode
 			*/
-			if ( $wgUser->isLoggedIn() && $articleExists) {
-				if( $action != 'edit' && $action != 'submit' ){
+			if ( $wgUser->isLoggedIn() && $articleExists ) {
+				if( $action != 'edit' && $action != 'submit' ) {
 					$s .= $sep . $this->watchThisPage();
 				}
-				if ( $this->mTitle->userCan( 'edit' ) )
+				if ( $this->getSkin()->getTitle()->userCan( 'edit' ) )
 					$s .= $sep . $this->moveThisPage();
 			}
-			if ( $wgUser->isAllowed( 'delete' ) and $articleExists ) {
+			if ( $wgUser->isAllowed( 'delete' ) && $articleExists ) {
 				$s .= $sep . $this->deleteThisPage() .
 				$sep . $this->protectThisPage();
 			}
@@ -264,32 +242,35 @@ class SkinStandard extends Skin {
 			if( $articleExists && $action != 'history' ) {
 				$s .= $sep . $this->historyLink();
 			}
-			$s.= $sep . $this->whatLinksHere();
+			$s .= $sep . $this->whatLinksHere();
 
 			if( $wgOut->isArticleRelated() ) {
 				$s .= $sep . $this->watchPageLinksLink();
 			}
 
-			if ( NS_USER == $this->mTitle->getNamespace()
-				|| $this->mTitle->getNamespace() == NS_USER_TALK ) {
+			if (
+				NS_USER == $this->getSkin()->getTitle()->getNamespace() ||
+				$this->getSkin()->getTitle()->getNamespace() == NS_USER_TALK
+			) {
 
-				$id = User::idFromName( $this->mTitle->getText() );
-				$ip = User::isIP( $this->mTitle->getText() );
+				$id = User::idFromName( $this->getSkin()->getTitle()->getText() );
+				$ip = User::isIP( $this->getSkin()->getTitle()->getText() );
 
 				if( $id || $ip ){
 					$s .= $sep . $this->userContribsLink();
 				}
-				if( $this->showEmailUser( $id ) ) {
+				if( $this->getSkin()->showEmailUser( $id ) ) {
 					$s .= $sep . $this->emailUserLink();
 				}
 			}
 			$s .= "\n<br /><hr class='sep' />";
 		}
 
-		if ( $wgUser->isLoggedIn() && ( $wgEnableUploads || $wgRemoteUploads ) ) {
-			$s .= $this->specialLink( 'upload' ) . $sep;
+		if( UploadBase::isEnabled() && UploadBase::isAllowed( $wgUser ) === true ) {
+			$s .= $this->getUploadLink() . $sep;
 		}
-		$s .= $this->specialLink( 'specialpages' );
+
+		$s .= $this->getSkin()->specialLink( 'Specialpages' );
 
 		global $wgSiteSupportPage;
 		if( $wgSiteSupportPage ) {

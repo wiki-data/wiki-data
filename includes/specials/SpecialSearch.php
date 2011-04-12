@@ -1,66 +1,78 @@
 <?php
-# Copyright (C) 2004 Brion Vibber <brion@pobox.com>
-# http://www.mediawiki.org/
-#
-# This program is free software; you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation; either version 2 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License along
-# with this program; if not, write to the Free Software Foundation, Inc.,
-# 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
-# http://www.gnu.org/copyleft/gpl.html
-
 /**
- * Run text & title search and display the output
+ * Implements Special:Search
+ *
+ * Copyright © 2004 Brion Vibber <brion@pobox.com>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program; if not, write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ * http://www.gnu.org/copyleft/gpl.html
+ *
  * @file
  * @ingroup SpecialPage
  */
 
 /**
- * Entry point
- *
- * @param $par String: (default '')
- */
-function wfSpecialSearch( $par = '' ) {
-	global $wgRequest, $wgUser;
-	// Strip underscores from title parameter; most of the time we'll want
-	// text form here. But don't strip underscores from actual text params!
-	$titleParam = str_replace( '_', ' ', $par );
-	// Fetch the search term
-	$search = str_replace( "\n", " ", $wgRequest->getText( 'search', $titleParam ) );
-	$searchPage = new SpecialSearch( $wgRequest, $wgUser );
-	if( $wgRequest->getVal( 'fulltext' )
-		|| !is_null( $wgRequest->getVal( 'offset' ))
-		|| !is_null( $wgRequest->getVal( 'searchx' )) )
-	{
-		$searchPage->showResults( $search );
-	} else {
-		$searchPage->goResult( $search );
-	}
-}
-
-/**
  * implements Special:Search - Run text & title search and display the output
  * @ingroup SpecialPage
  */
-class SpecialSearch {
+class SpecialSearch extends SpecialPage {
+
+	public function __construct() {
+		parent::__construct( 'Search' );
+	}
+
+	/**
+	 * Entry point
+	 *
+	 * @param $par String or null
+	 */
+	public function execute( $par ) {
+		global $wgRequest, $wgUser, $wgOut;
+
+		$this->setHeaders();
+		$this->outputHeader();
+		$wgOut->allowClickjacking();
+		$wgOut->addModuleStyles( 'mediawiki.special' );
+
+		// Strip underscores from title parameter; most of the time we'll want
+		// text form here. But don't strip underscores from actual text params!
+		$titleParam = str_replace( '_', ' ', $par );
+
+		// Fetch the search term
+		$search = str_replace( "\n", " ", $wgRequest->getText( 'search', $titleParam ) );
+
+		$this->load( $wgRequest, $wgUser );
+
+		if ( $wgRequest->getVal( 'fulltext' )
+			|| !is_null( $wgRequest->getVal( 'offset' ) )
+			|| !is_null( $wgRequest->getVal( 'searchx' ) ) )
+		{
+			$this->showResults( $search );
+		} else {
+			$this->goResult( $search );
+		}
+	}
 
 	/**
 	 * Set up basic search parameters from the request and user settings.
 	 * Typically you'll pass $wgRequest and $wgUser.
 	 *
-	 * @param WebRequest $request
-	 * @param User $user
-	 * @public
+	 * @param $request WebRequest
+	 * @param $user User
 	 */
-	function __construct( &$request, &$user ) {
+	public function load( &$request, &$user ) {
 		list( $this->limit, $this->offset ) = $request->getLimitOffset( 20, 'searchlimit' );
 		$this->mPrefix = $request->getVal('prefix', '');
 		# Extract requested namespaces
@@ -68,7 +80,7 @@ class SpecialSearch {
 		if( empty( $this->namespaces ) ) {
 			$this->namespaces = SearchEngine::userNamespaces( $user );
 		}
-		$this->searchRedirects = $request->getcheck( 'redirs' ) ? true : false;
+		$this->searchRedirects = $request->getCheck( 'redirs' );
 		$this->searchAdvanced = $request->getVal( 'advanced' );
 		$this->active = 'advanced';
 		$this->sk = $user->getSkin();
@@ -78,7 +90,8 @@ class SpecialSearch {
 
 	/**
 	 * If an exact title match can be found, jump straight ahead to it.
-	 * @param string $term
+	 *
+	 * @param $term String
 	 */
 	public function goResult( $term ) {
 		global $wgOut;
@@ -91,6 +104,12 @@ class SpecialSearch {
 		}
 		# If there's an exact or very near match, jump right there.
 		$t = SearchEngine::getNearMatch( $term );
+
+		if ( !wfRunHooks( 'SpecialSearchGo', array( &$t, &$term ) ) ) {
+			# Hook requested termination
+			return;
+		}
+
 		if( !is_null( $t ) ) {
 			$wgOut->redirect( $t->getFullURL() );
 			return;
@@ -100,6 +119,8 @@ class SpecialSearch {
 		if( !is_null( $t ) ) {
 			global $wgGoToEdit;
 			wfRunHooks( 'SpecialSearchNogomatch', array( &$t ) );
+			wfDebugLog( 'nogomatch', $t->getText(), false );
+
 			# If the feature is enabled, go straight to the edit page
 			if( $wgGoToEdit ) {
 				$wgOut->redirect( $t->getFullURL( array( 'action' => 'edit' ) ) );
@@ -110,7 +131,7 @@ class SpecialSearch {
 	}
 
 	/**
-	 * @param string $term
+	 * @param $term String
 	 */
 	public function showResults( $term ) {
 		global $wgOut, $wgUser, $wgDisableTextSearch, $wgContLang, $wgScript;
@@ -168,7 +189,7 @@ class SpecialSearch {
 			# mirror Go/Search behaviour of original request ..
 			$didYouMeanParams = array( 'search' => $textMatches->getSuggestionQuery() );
 
-			if($this->fulltext != NULL)
+			if($this->fulltext != null)
 				$didYouMeanParams['fulltext'] = $this->fulltext;
 
 			$stParams = array_merge(
@@ -213,18 +234,17 @@ class SpecialSearch {
 
 		// Sometimes the search engine knows there are too many hits
 		if( $titleMatches instanceof SearchResultTooMany ) {
-			$wgOut->addWikiText( '==' . wfMsg( 'toomanymatches' ) . "==\n" );
+			$wgOut->wrapWikiMsg( "==$1==\n", 'toomanymatches' );
 			wfProfileOut( __METHOD__ );
 			return;
 		}
 
 		$filePrefix = $wgContLang->getFormattedNsText(NS_FILE).':';
-		if( '' === trim( $term ) || $filePrefix === trim( $term ) ) {
-			$wgOut->addHTML( $this->searchFocus() );
+		if( trim( $term ) === '' || $filePrefix === trim( $term ) ) {
 			$wgOut->addHTML( $this->formHeader($term, 0, 0));
 			if( $this->searchAdvanced ) {
 				$wgOut->addHTML( $this->powerSearchBox( $term ) );
-			} 
+			}
 			$wgOut->addHTML( '</form>' );
 			// Empty query -- straight view of search form
 			wfProfileOut( __METHOD__ );
@@ -236,7 +256,7 @@ class SpecialSearch {
 		$textMatchesNum = $textMatches ? $textMatches->numRows() : 0;
 		// Total initial query matches (possible false positives)
 		$num = $titleMatchesNum + $textMatchesNum;
-		
+
 		// Get total actual results (after second filtering, if any)
 		$numTitleMatches = $titleMatches && !is_null( $titleMatches->getTotalHits() ) ?
 			$titleMatches->getTotalHits() : $titleMatchesNum;
@@ -249,13 +269,13 @@ class SpecialSearch {
 			$totalRes += $titleMatches->getTotalHits();
 		if($textMatches && !is_null( $textMatches->getTotalHits() ))
 			$totalRes += $textMatches->getTotalHits();
-			
+
 		// show number of results and current offset
 		$wgOut->addHTML( $this->formHeader($term, $num, $totalRes));
 		if( $this->searchAdvanced ) {
 			$wgOut->addHTML( $this->powerSearchBox( $term ) );
 		}
-		
+
 		$wgOut->addHtml( Xml::closeElement( 'form' ) );
 		$wgOut->addHtml( "<div class='searchresults'>" );
 
@@ -272,8 +292,9 @@ class SpecialSearch {
 			wfRunHooks( 'SpecialSearchResults', array( $term, &$titleMatches, &$textMatches ) );
 		} else {
 			wfRunHooks( 'SpecialSearchNoResults', array( $term ) );
-		} 
+		}
 
+		$wgOut->parserOptions()->setEditSection( false );
 		if( $titleMatches ) {
 			if( $numTitleMatches > 0 ) {
 				$wgOut->wrapWikiMsg( "==$1==\n", 'titlematches' );
@@ -302,33 +323,36 @@ class SpecialSearch {
 			$textMatches->free();
 		}
 		if( $num === 0 ) {
-			$wgOut->addWikiMsg( 'search-nonefound', wfEscapeWikiText( $term ) );
+			$wgOut->wrapWikiMsg( "<p class=\"mw-search-nonefound\">\n$1</p>", array( 'search-nonefound', wfEscapeWikiText( $term ) ) );
 			$this->showCreateLink( $t );
 		}
 		$wgOut->addHtml( "</div>" );
-		if( $num === 0 ) {
-			$wgOut->addHTML( $this->searchFocus() );
-		}
 
 		if( $num || $this->offset ) {
 			$wgOut->addHTML( "<p class='mw-search-pager-bottom'>{$prevnext}</p>\n" );
 		}
 		wfProfileOut( __METHOD__ );
 	}
-	
+
 	protected function showCreateLink( $t ) {
 		global $wgOut;
-		
-		// show direct page/create link
+
+		// show direct page/create link if applicable
+		$messageName = null;
 		if( !is_null($t) ) {
-			if( !$t->isKnown() ) {
-				$wgOut->addWikiMsg( 'searchmenu-new', wfEscapeWikiText( $t->getPrefixedText() ) );
+			if( $t->isKnown() ) {
+				$messageName = 'searchmenu-exists';
+			} elseif( $t->userCan( 'create' ) ) {
+				$messageName = 'searchmenu-new';
 			} else {
-				$wgOut->addWikiMsg( 'searchmenu-exists', wfEscapeWikiText( $t->getPrefixedText() ) );
+				$messageName = 'searchmenu-new-nocreate';
 			}
+		}
+		if( $messageName ) {
+			$wgOut->wrapWikiMsg( "<p class=\"mw-search-createlink\">\n$1</p>", array( $messageName, wfEscapeWikiText( $t->getPrefixedText() ) ) );
 		} else {
 			// preserve the paragraph for margins etc...
-			$wgOut->addHTML('<p></p>');
+			$wgOut->addHtml( '<p></p>' );
 		}
 	}
 
@@ -338,17 +362,16 @@ class SpecialSearch {
 	protected function setupPage( $term ) {
 		global $wgOut;
 		// Figure out the active search profile header
-		$nsAllSet = array_keys( SearchEngine::searchableNamespaces() );
-		if( $this->searchAdvanced )
+		if( $this->searchAdvanced ) {
 			$this->active = 'advanced';
-		else {
+		} else {
 			$profiles = $this->getSearchProfiles();
-			
+
 			foreach( $profiles as $key => $data ) {
 				if ( $this->namespaces == $data['namespaces'] && $key != 'advanced')
 					$this->active = $key;
 			}
-			
+
 		}
 		# Should advanced UI be used?
 		$this->searchAdvanced = ($this->active === 'advanced');
@@ -356,18 +379,17 @@ class SpecialSearch {
 			$wgOut->setPageTitle( wfMsg( 'searchresults') );
 			$wgOut->setHTMLTitle( wfMsg( 'pagetitle', wfMsg( 'searchresults-title', $term ) ) );
 		}
-		$wgOut->setArticleRelated( false );
-		$wgOut->setRobotPolicy( 'noindex,nofollow' );
 		// add javascript specific to special:search
-		$wgOut->addScriptFile( 'search.js' );
+		$wgOut->addModules( 'mediawiki.legacy.search' );
+		$wgOut->addModules( 'mediawiki.special.search' );
 	}
 
 	/**
 	 * Extract "power search" namespace settings from the request object,
 	 * returning a list of index numbers to search.
 	 *
-	 * @param WebRequest $request
-	 * @return array
+	 * @param $request WebRequest
+	 * @return Array
 	 */
 	protected function powerSearch( &$request ) {
 		$arr = array();
@@ -381,7 +403,8 @@ class SpecialSearch {
 
 	/**
 	 * Reconstruct the 'power search' options for links
-	 * @return array
+	 *
+	 * @return Array
 	 */
 	protected function powerSearchOptions() {
 		$opt = array();
@@ -398,7 +421,7 @@ class SpecialSearch {
 	/**
 	 * Show whole set of results
 	 *
-	 * @param SearchResultSet $matches
+	 * @param $matches SearchResultSet
 	 */
 	protected function showMatches( &$matches ) {
 		global $wgContLang;
@@ -411,7 +434,6 @@ class SpecialSearch {
 		if( !is_null($infoLine) ) {
 			$out .= "\n<!-- {$infoLine} -->\n";
 		}
-		$off = $this->offset + 1;
 		$out .= "<ul class='mw-search-results'>\n";
 		while( $result = $matches->next() ) {
 			$out .= $this->showHit( $result, $terms );
@@ -426,11 +448,12 @@ class SpecialSearch {
 
 	/**
 	 * Format a single hit result
-	 * @param SearchResult $result
-	 * @param array $terms terms to highlight
+	 *
+	 * @param $result SearchResult
+	 * @param $terms Array: terms to highlight
 	 */
 	protected function showHit( $result, $terms ) {
-		global $wgContLang, $wgLang, $wgUser;
+		global $wgLang, $wgUser;
 		wfProfileIn( __METHOD__ );
 
 		if( $result->isBrokenTitle() ) {
@@ -445,9 +468,9 @@ class SpecialSearch {
 
 		if( $titleSnippet == '' )
 			$titleSnippet = null;
-		
+
 		$link_t = clone $t;
-		
+
 		wfRunHooks( 'ShowSearchHitTitle',
 					array( &$link_t, &$titleSnippet, $result, $terms, $this ) );
 
@@ -496,7 +519,6 @@ class SpecialSearch {
 
 		$section = '';
 
-
 		if( !is_null($sectionTitle) ) {
 			if( $sectionText == '' )
 				$sectionText = null;
@@ -534,6 +556,18 @@ class SpecialSearch {
 			$this->sk->formatSize( $byteSize ),
 			$wgLang->formatNum( $wordCount )
 		);
+
+		if( $t->getNamespace() == NS_CATEGORY ) {
+			$cat = Category::newFromTitle( $t );
+			$size = wfMsgExt(
+				'search-result-category-size',
+				array( 'parsemag', 'escape' ),
+				$wgLang->formatNum( $cat->getPageCount() ),
+				$wgLang->formatNum( $cat->getSubcatCount() ),
+				$wgLang->formatNum( $cat->getFileCount() )
+			);
+		}
+
 		$date = $wgLang->timeanddate( $timestamp );
 
 		// link to related articles if supported
@@ -562,7 +596,7 @@ class SpecialSearch {
 			if( $img ) {
 				$thumb = $img->transform( array( 'width' => 120, 'height' => 120 ) );
 				if( $thumb ) {
-					$desc = $img->getShortDesc();
+					$desc = wfMsg( 'parentheses', $img->getShortDesc() );
 					wfProfileOut( __METHOD__ );
 					// Float doesn't seem to interact well with the bullets.
 					// Table messes up vertical alignment of the bullets.
@@ -586,7 +620,7 @@ class SpecialSearch {
 		}
 
 		wfProfileOut( __METHOD__ );
-		return "<li>{$link} {$redirect} {$section} {$extract}\n" .
+		return "<li><div class='mw-search-result-heading'>{$link} {$redirect} {$section}</div> {$extract}\n" .
 			"<div class='mw-search-result-data'>{$score}{$size} - {$date}{$related}</div>" .
 			"</li>\n";
 
@@ -595,7 +629,8 @@ class SpecialSearch {
 	/**
 	 * Show results from other wikis
 	 *
-	 * @param SearchResultSet $matches
+	 * @param $matches SearchResultSet
+	 * @param $query String
 	 */
 	protected function showInterwiki( &$matches, $query ) {
 		global $wgContLang;
@@ -604,7 +639,6 @@ class SpecialSearch {
 
 		$out = "<div id='mw-search-interwiki'><div id='mw-search-interwiki-caption'>".
 			wfMsg('search-interwiki-caption')."</div>\n";
-		$off = $this->offset + 1;
 		$out .= "<ul class='mw-search-iwresults'>\n";
 
 		// work out custom project captions
@@ -633,15 +667,14 @@ class SpecialSearch {
 	/**
 	 * Show single interwiki link
 	 *
-	 * @param SearchResult $result
-	 * @param string $lastInterwiki
-	 * @param array $terms
-	 * @param string $query
-	 * @param array $customCaptions iw prefix -> caption
+	 * @param $result SearchResult
+	 * @param $lastInterwiki String
+	 * @param $terms Array
+	 * @param $query String
+	 * @param $customCaptions Array: iw prefix -> caption
 	 */
 	protected function showInterwikiHit( $result, $lastInterwiki, $terms, $query, $customCaptions) {
 		wfProfileIn( __METHOD__ );
-		global $wgContLang, $wgLang;
 
 		if( $result->isBrokenTitle() ) {
 			wfProfileOut( __METHOD__ );
@@ -714,12 +747,11 @@ class SpecialSearch {
 
 	/**
 	 * Generates the power search box at bottom of [[Special:Search]]
-	 * @param $term string: search term
-	 * @return $out string: HTML form
+	 *
+	 * @param $term String: search term
+	 * @return String: HTML form
 	 */
 	protected function powerSearchBox( $term ) {
-		global $wgScript, $wgContLang;
-		
 		// Groups namespaces into rows according to subject
 		$rows = array();
 		foreach( SearchEngine::searchableNamespaces() as $namespace => $name ) {
@@ -745,7 +777,7 @@ class SpecialSearch {
 		}
 		$rows = array_values( $rows );
 		$numRows = count( $rows );
-		
+
 		// Lays out namespaces in multiple floating two-column tables so they'll
 		// be arranged nicely while still accommodating different screen widths
 		$namespaceTables = '';
@@ -804,23 +836,16 @@ class SpecialSearch {
 			$namespaceTables .
 			Xml::element( 'div', array( 'class' => 'divider' ), '', false ) .
 			$redirects .
-			Xml::hidden( 'title', SpecialPage::getTitleFor( 'Search' )->getPrefixedText() ) .
-			Xml::hidden( 'advanced', $this->searchAdvanced ) .
-			Xml::hidden( 'fulltext', 'Advanced search' ) .
+			Html::hidden( 'title', SpecialPage::getTitleFor( 'Search' )->getPrefixedText() ) .
+			Html::hidden( 'advanced', $this->searchAdvanced ) .
+			Html::hidden( 'fulltext', 'Advanced search' ) .
 			Xml::closeElement( 'fieldset' );
 	}
 
-	protected function searchFocus() {
-		return Html::inlineScript(
-			"hookEvent(\"load\", function() {" .
-				"document.getElementById('searchText').focus();" .
-			"});" );
-	}
-	
 	protected function getSearchProfiles() {
 		// Builds list of Search Types (profiles)
 		$nsAllSet = array_keys( SearchEngine::searchableNamespaces() );
-		
+
 		$profiles = array(
 			'default' => array(
 				'message' => 'searchprofile-articles',
@@ -855,30 +880,29 @@ class SpecialSearch {
 				'parameters' => array( 'advanced' => 1 ),
 			)
 		);
-		
+
 		wfRunHooks( 'SpecialSearchProfiles', array( &$profiles ) );
 
-		foreach( $profiles as $key => &$data ) {
+		foreach( $profiles as &$data ) {
 			sort($data['namespaces']);
 		}
-		
+
 		return $profiles;
 	}
 
 	protected function formHeader( $term, $resultsShown, $totalNum ) {
-		global $wgContLang, $wgLang;
-		
+		global $wgLang;
+
 		$out = Xml::openElement('div', array( 'class' =>  'mw-search-formheader' ) );
-		
+
 		$bareterm = $term;
 		if( $this->startsWithImage( $term ) ) {
 			// Deletes prefixes
 			$bareterm = substr( $term, strpos( $term, ':' ) + 1 );
 		}
 
-		
 		$profiles = $this->getSearchProfiles();
-		
+
 		// Outputs XML for Search Types
 		$out .= Xml::openElement( 'div', array( 'class' => 'search-types' ) );
 		$out .= Xml::openElement( 'ul' );
@@ -895,7 +919,7 @@ class SpecialSearch {
 					$profile['namespaces'],
 					wfMsg( $profile['message'] ),
 					wfMsg( $profile['tooltip'], $tooltipParam ),
-					isset( $profile['parameters'] ) ? $profile['parameters'] : array() 
+					isset( $profile['parameters'] ) ? $profile['parameters'] : array()
 				)
 			);
 		}
@@ -921,38 +945,46 @@ class SpecialSearch {
 				Xml::tags( 'ul', null, Xml::tags( 'li', null, $top ) )
 			);
 		}
-		
+
 		$out .= Xml::element( 'div', array( 'style' => 'clear:both' ), '', false );
 		$out .= Xml::closeElement('div');
-		
+
 		// Adds hidden namespace fields
 		if ( !$this->searchAdvanced ) {
 			foreach( $this->namespaces as $ns ) {
-				$out .= Xml::hidden( "ns{$ns}", '1' );
+				$out .= Html::hidden( "ns{$ns}", '1' );
 			}
 		}
-		
+
 		return $out;
 	}
 
 	protected function shortDialog( $term ) {
 		$searchTitle = SpecialPage::getTitleFor( 'Search' );
-		$searchable = SearchEngine::searchableNamespaces();
 		$out = Html::hidden( 'title', $searchTitle->getPrefixedText() ) . "\n";
 		// Keep redirect setting
 		$out .= Html::hidden( "redirs", (int)$this->searchRedirects ) . "\n";
 		// Term box
 		$out .= Html::input( 'search', $term, 'search', array(
-			'id' => 'searchText',
+			'id' => $this->searchAdvanced ? 'powerSearchText' : 'searchText',
 			'size' => '50',
 			'autofocus'
 		) ) . "\n";
 		$out .= Html::hidden( 'fulltext', 'Search' ) . "\n";
 		$out .= Xml::submitButton( wfMsg( 'searchbutton' ) ) . "\n";
-		return $out . $this->didYouMeanHtml;		
+		return $out . $this->didYouMeanHtml;
 	}
 
-	/** Make a search link with some target namespaces */
+	/**
+	 * Make a search link with some target namespaces
+	 *
+	 * @param $term String
+	 * @param $namespaces Array
+	 * @param $label String: link's text
+	 * @param $tooltip String: link's tooltip
+	 * @param $params Array: query string parameters
+	 * @return String: HTML fragment
+	 */
 	protected function makeSearchLink( $term, $namespaces, $label, $tooltip, $params=array() ) {
 		$opt = $params;
 		foreach( $namespaces as $n ) {
@@ -973,14 +1005,19 @@ class SpecialSearch {
 			'a',
 			array(
 				'href' => $st->getLocalURL( $stParams ),
-				'title' => $tooltip, 
+				'title' => $tooltip,
 				'onmousedown' => 'mwSearchHeaderClick(this);',
 				'onkeydown' => 'mwSearchHeaderClick(this);'),
 			$label
 		);
 	}
 
-	/** Check if query starts with image: prefix */
+	/**
+	 * Check if query starts with image: prefix
+	 *
+	 * @param $term String: the string to check
+	 * @return Boolean
+	 */
 	protected function startsWithImage( $term ) {
 		global $wgContLang;
 
@@ -990,12 +1027,17 @@ class SpecialSearch {
 		}
 		return false;
 	}
-	
-	/** Check if query starts with all: prefix */
+
+	/**
+	 * Check if query starts with all: prefix
+	 *
+	 * @param $term String: the string to check
+	 * @return Boolean
+	 */
 	protected function startsWithAll( $term ) {
 
 		$allkeyword = wfMsgForContent('searchall');
-		
+
 		$p = explode( ':', $term );
 		if( count( $p ) > 1 ) {
 			return $p[0]  == $allkeyword;
@@ -1003,4 +1045,3 @@ class SpecialSearch {
 		return false;
 	}
 }
-

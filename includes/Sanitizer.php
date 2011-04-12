@@ -2,7 +2,7 @@
 /**
  * XHTML sanitizer for MediaWiki
  *
- * Copyright (C) 2002-2005 Brion Vibber <brion@pobox.com> et al
+ * Copyright © 2002-2005 Brion Vibber <brion@pobox.com> et al
  * http://www.mediawiki.org/
  *
  * This program is free software; you can redistribute it and/or modify
@@ -25,312 +25,323 @@
  */
 
 /**
- * Regular expression to match various types of character references in
- * Sanitizer::normalizeCharReferences and Sanitizer::decodeCharReferences
- */
-define( 'MW_CHAR_REFS_REGEX',
-	'/&([A-Za-z0-9\x80-\xff]+);
-	 |&\#([0-9]+);
-	 |&\#x([0-9A-Za-z]+);
-	 |&\#X([0-9A-Za-z]+);
-	 |(&)/x' );
-
-/**
- * Regular expression to match HTML/XML attribute pairs within a tag.
- * Allows some... latitude.
- * Used in Sanitizer::fixTagAttributes and Sanitizer::decodeTagAttributes
- */
-$attrib = '[A-Za-z0-9]';
-$space = '[\x09\x0a\x0d\x20]';
-define( 'MW_ATTRIBS_REGEX',
-	"/(?:^|$space)($attrib+)
-	  ($space*=$space*
-		(?:
-		 # The attribute value: quoted or alone
-		  \"([^<\"]*)\"
-		 | '([^<']*)'
-		 |  ([a-zA-Z0-9!#$%&()*,\\-.\\/:;<>?@[\\]^_`{|}~]+)
-		 |  (\#[0-9a-fA-F]+) # Technically wrong, but lots of
-							 # colors are specified like this.
-							 # We'll be normalizing it.
-		)
-	   )?(?=$space|\$)/sx" );
-
-/**
- * List of all named character entities defined in HTML 4.01
- * http://www.w3.org/TR/html4/sgml/entities.html
- * @private
- */
-global $wgHtmlEntities;
-$wgHtmlEntities = array(
-	'Aacute'   => 193,
-	'aacute'   => 225,
-	'Acirc'    => 194,
-	'acirc'    => 226,
-	'acute'    => 180,
-	'AElig'    => 198,
-	'aelig'    => 230,
-	'Agrave'   => 192,
-	'agrave'   => 224,
-	'alefsym'  => 8501,
-	'Alpha'    => 913,
-	'alpha'    => 945,
-	'amp'      => 38,
-	'and'      => 8743,
-	'ang'      => 8736,
-	'Aring'    => 197,
-	'aring'    => 229,
-	'asymp'    => 8776,
-	'Atilde'   => 195,
-	'atilde'   => 227,
-	'Auml'     => 196,
-	'auml'     => 228,
-	'bdquo'    => 8222,
-	'Beta'     => 914,
-	'beta'     => 946,
-	'brvbar'   => 166,
-	'bull'     => 8226,
-	'cap'      => 8745,
-	'Ccedil'   => 199,
-	'ccedil'   => 231,
-	'cedil'    => 184,
-	'cent'     => 162,
-	'Chi'      => 935,
-	'chi'      => 967,
-	'circ'     => 710,
-	'clubs'    => 9827,
-	'cong'     => 8773,
-	'copy'     => 169,
-	'crarr'    => 8629,
-	'cup'      => 8746,
-	'curren'   => 164,
-	'dagger'   => 8224,
-	'Dagger'   => 8225,
-	'darr'     => 8595,
-	'dArr'     => 8659,
-	'deg'      => 176,
-	'Delta'    => 916,
-	'delta'    => 948,
-	'diams'    => 9830,
-	'divide'   => 247,
-	'Eacute'   => 201,
-	'eacute'   => 233,
-	'Ecirc'    => 202,
-	'ecirc'    => 234,
-	'Egrave'   => 200,
-	'egrave'   => 232,
-	'empty'    => 8709,
-	'emsp'     => 8195,
-	'ensp'     => 8194,
-	'Epsilon'  => 917,
-	'epsilon'  => 949,
-	'equiv'    => 8801,
-	'Eta'      => 919,
-	'eta'      => 951,
-	'ETH'      => 208,
-	'eth'      => 240,
-	'Euml'     => 203,
-	'euml'     => 235,
-	'euro'     => 8364,
-	'exist'    => 8707,
-	'fnof'     => 402,
-	'forall'   => 8704,
-	'frac12'   => 189,
-	'frac14'   => 188,
-	'frac34'   => 190,
-	'frasl'    => 8260,
-	'Gamma'    => 915,
-	'gamma'    => 947,
-	'ge'       => 8805,
-	'gt'       => 62,
-	'harr'     => 8596,
-	'hArr'     => 8660,
-	'hearts'   => 9829,
-	'hellip'   => 8230,
-	'Iacute'   => 205,
-	'iacute'   => 237,
-	'Icirc'    => 206,
-	'icirc'    => 238,
-	'iexcl'    => 161,
-	'Igrave'   => 204,
-	'igrave'   => 236,
-	'image'    => 8465,
-	'infin'    => 8734,
-	'int'      => 8747,
-	'Iota'     => 921,
-	'iota'     => 953,
-	'iquest'   => 191,
-	'isin'     => 8712,
-	'Iuml'     => 207,
-	'iuml'     => 239,
-	'Kappa'    => 922,
-	'kappa'    => 954,
-	'Lambda'   => 923,
-	'lambda'   => 955,
-	'lang'     => 9001,
-	'laquo'    => 171,
-	'larr'     => 8592,
-	'lArr'     => 8656,
-	'lceil'    => 8968,
-	'ldquo'    => 8220,
-	'le'       => 8804,
-	'lfloor'   => 8970,
-	'lowast'   => 8727,
-	'loz'      => 9674,
-	'lrm'      => 8206,
-	'lsaquo'   => 8249,
-	'lsquo'    => 8216,
-	'lt'       => 60,
-	'macr'     => 175,
-	'mdash'    => 8212,
-	'micro'    => 181,
-	'middot'   => 183,
-	'minus'    => 8722,
-	'Mu'       => 924,
-	'mu'       => 956,
-	'nabla'    => 8711,
-	'nbsp'     => 160,
-	'ndash'    => 8211,
-	'ne'       => 8800,
-	'ni'       => 8715,
-	'not'      => 172,
-	'notin'    => 8713,
-	'nsub'     => 8836,
-	'Ntilde'   => 209,
-	'ntilde'   => 241,
-	'Nu'       => 925,
-	'nu'       => 957,
-	'Oacute'   => 211,
-	'oacute'   => 243,
-	'Ocirc'    => 212,
-	'ocirc'    => 244,
-	'OElig'    => 338,
-	'oelig'    => 339,
-	'Ograve'   => 210,
-	'ograve'   => 242,
-	'oline'    => 8254,
-	'Omega'    => 937,
-	'omega'    => 969,
-	'Omicron'  => 927,
-	'omicron'  => 959,
-	'oplus'    => 8853,
-	'or'       => 8744,
-	'ordf'     => 170,
-	'ordm'     => 186,
-	'Oslash'   => 216,
-	'oslash'   => 248,
-	'Otilde'   => 213,
-	'otilde'   => 245,
-	'otimes'   => 8855,
-	'Ouml'     => 214,
-	'ouml'     => 246,
-	'para'     => 182,
-	'part'     => 8706,
-	'permil'   => 8240,
-	'perp'     => 8869,
-	'Phi'      => 934,
-	'phi'      => 966,
-	'Pi'       => 928,
-	'pi'       => 960,
-	'piv'      => 982,
-	'plusmn'   => 177,
-	'pound'    => 163,
-	'prime'    => 8242,
-	'Prime'    => 8243,
-	'prod'     => 8719,
-	'prop'     => 8733,
-	'Psi'      => 936,
-	'psi'      => 968,
-	'quot'     => 34,
-	'radic'    => 8730,
-	'rang'     => 9002,
-	'raquo'    => 187,
-	'rarr'     => 8594,
-	'rArr'     => 8658,
-	'rceil'    => 8969,
-	'rdquo'    => 8221,
-	'real'     => 8476,
-	'reg'      => 174,
-	'rfloor'   => 8971,
-	'Rho'      => 929,
-	'rho'      => 961,
-	'rlm'      => 8207,
-	'rsaquo'   => 8250,
-	'rsquo'    => 8217,
-	'sbquo'    => 8218,
-	'Scaron'   => 352,
-	'scaron'   => 353,
-	'sdot'     => 8901,
-	'sect'     => 167,
-	'shy'      => 173,
-	'Sigma'    => 931,
-	'sigma'    => 963,
-	'sigmaf'   => 962,
-	'sim'      => 8764,
-	'spades'   => 9824,
-	'sub'      => 8834,
-	'sube'     => 8838,
-	'sum'      => 8721,
-	'sup'      => 8835,
-	'sup1'     => 185,
-	'sup2'     => 178,
-	'sup3'     => 179,
-	'supe'     => 8839,
-	'szlig'    => 223,
-	'Tau'      => 932,
-	'tau'      => 964,
-	'there4'   => 8756,
-	'Theta'    => 920,
-	'theta'    => 952,
-	'thetasym' => 977,
-	'thinsp'   => 8201,
-	'THORN'    => 222,
-	'thorn'    => 254,
-	'tilde'    => 732,
-	'times'    => 215,
-	'trade'    => 8482,
-	'Uacute'   => 218,
-	'uacute'   => 250,
-	'uarr'     => 8593,
-	'uArr'     => 8657,
-	'Ucirc'    => 219,
-	'ucirc'    => 251,
-	'Ugrave'   => 217,
-	'ugrave'   => 249,
-	'uml'      => 168,
-	'upsih'    => 978,
-	'Upsilon'  => 933,
-	'upsilon'  => 965,
-	'Uuml'     => 220,
-	'uuml'     => 252,
-	'weierp'   => 8472,
-	'Xi'       => 926,
-	'xi'       => 958,
-	'Yacute'   => 221,
-	'yacute'   => 253,
-	'yen'      => 165,
-	'Yuml'     => 376,
-	'yuml'     => 255,
-	'Zeta'     => 918,
-	'zeta'     => 950,
-	'zwj'      => 8205,
-	'zwnj'     => 8204 );
-
-/**
- * Character entity aliases accepted by MediaWiki
- */
-global $wgHtmlEntityAliases;
-$wgHtmlEntityAliases = array(
-	'רלמ' => 'rlm',
-	'رلم' => 'rlm',
-);
-
-
-/**
  * XHTML sanitizer for MediaWiki
  * @ingroup Parser
  */
 class Sanitizer {
+	/**
+	 * Regular expression to match various types of character references in
+	 * Sanitizer::normalizeCharReferences and Sanitizer::decodeCharReferences
+	 */
+	const CHAR_REFS_REGEX = 
+		'/&([A-Za-z0-9\x80-\xff]+);
+		 |&\#([0-9]+);
+		 |&\#[xX]([0-9A-Fa-f]+);
+		 |(&)/x';
+
+	const EVIL_URI_PATTERN = '!(^|\s|\*/\s*)(javascript|vbscript)([^\w]|$)!i';
+	const XMLNS_ATTRIBUTE_PATTERN = "/^xmlns:[:A-Z_a-z-.0-9]+$/";
+
+	/**
+	 * List of all named character entities defined in HTML 4.01
+	 * http://www.w3.org/TR/html4/sgml/entities.html
+	 * @private
+	 */
+	static $htmlEntities = array(
+		'Aacute'   => 193,
+		'aacute'   => 225,
+		'Acirc'    => 194,
+		'acirc'    => 226,
+		'acute'    => 180,
+		'AElig'    => 198,
+		'aelig'    => 230,
+		'Agrave'   => 192,
+		'agrave'   => 224,
+		'alefsym'  => 8501,
+		'Alpha'    => 913,
+		'alpha'    => 945,
+		'amp'      => 38,
+		'and'      => 8743,
+		'ang'      => 8736,
+		'Aring'    => 197,
+		'aring'    => 229,
+		'asymp'    => 8776,
+		'Atilde'   => 195,
+		'atilde'   => 227,
+		'Auml'     => 196,
+		'auml'     => 228,
+		'bdquo'    => 8222,
+		'Beta'     => 914,
+		'beta'     => 946,
+		'brvbar'   => 166,
+		'bull'     => 8226,
+		'cap'      => 8745,
+		'Ccedil'   => 199,
+		'ccedil'   => 231,
+		'cedil'    => 184,
+		'cent'     => 162,
+		'Chi'      => 935,
+		'chi'      => 967,
+		'circ'     => 710,
+		'clubs'    => 9827,
+		'cong'     => 8773,
+		'copy'     => 169,
+		'crarr'    => 8629,
+		'cup'      => 8746,
+		'curren'   => 164,
+		'dagger'   => 8224,
+		'Dagger'   => 8225,
+		'darr'     => 8595,
+		'dArr'     => 8659,
+		'deg'      => 176,
+		'Delta'    => 916,
+		'delta'    => 948,
+		'diams'    => 9830,
+		'divide'   => 247,
+		'Eacute'   => 201,
+		'eacute'   => 233,
+		'Ecirc'    => 202,
+		'ecirc'    => 234,
+		'Egrave'   => 200,
+		'egrave'   => 232,
+		'empty'    => 8709,
+		'emsp'     => 8195,
+		'ensp'     => 8194,
+		'Epsilon'  => 917,
+		'epsilon'  => 949,
+		'equiv'    => 8801,
+		'Eta'      => 919,
+		'eta'      => 951,
+		'ETH'      => 208,
+		'eth'      => 240,
+		'Euml'     => 203,
+		'euml'     => 235,
+		'euro'     => 8364,
+		'exist'    => 8707,
+		'fnof'     => 402,
+		'forall'   => 8704,
+		'frac12'   => 189,
+		'frac14'   => 188,
+		'frac34'   => 190,
+		'frasl'    => 8260,
+		'Gamma'    => 915,
+		'gamma'    => 947,
+		'ge'       => 8805,
+		'gt'       => 62,
+		'harr'     => 8596,
+		'hArr'     => 8660,
+		'hearts'   => 9829,
+		'hellip'   => 8230,
+		'Iacute'   => 205,
+		'iacute'   => 237,
+		'Icirc'    => 206,
+		'icirc'    => 238,
+		'iexcl'    => 161,
+		'Igrave'   => 204,
+		'igrave'   => 236,
+		'image'    => 8465,
+		'infin'    => 8734,
+		'int'      => 8747,
+		'Iota'     => 921,
+		'iota'     => 953,
+		'iquest'   => 191,
+		'isin'     => 8712,
+		'Iuml'     => 207,
+		'iuml'     => 239,
+		'Kappa'    => 922,
+		'kappa'    => 954,
+		'Lambda'   => 923,
+		'lambda'   => 955,
+		'lang'     => 9001,
+		'laquo'    => 171,
+		'larr'     => 8592,
+		'lArr'     => 8656,
+		'lceil'    => 8968,
+		'ldquo'    => 8220,
+		'le'       => 8804,
+		'lfloor'   => 8970,
+		'lowast'   => 8727,
+		'loz'      => 9674,
+		'lrm'      => 8206,
+		'lsaquo'   => 8249,
+		'lsquo'    => 8216,
+		'lt'       => 60,
+		'macr'     => 175,
+		'mdash'    => 8212,
+		'micro'    => 181,
+		'middot'   => 183,
+		'minus'    => 8722,
+		'Mu'       => 924,
+		'mu'       => 956,
+		'nabla'    => 8711,
+		'nbsp'     => 160,
+		'ndash'    => 8211,
+		'ne'       => 8800,
+		'ni'       => 8715,
+		'not'      => 172,
+		'notin'    => 8713,
+		'nsub'     => 8836,
+		'Ntilde'   => 209,
+		'ntilde'   => 241,
+		'Nu'       => 925,
+		'nu'       => 957,
+		'Oacute'   => 211,
+		'oacute'   => 243,
+		'Ocirc'    => 212,
+		'ocirc'    => 244,
+		'OElig'    => 338,
+		'oelig'    => 339,
+		'Ograve'   => 210,
+		'ograve'   => 242,
+		'oline'    => 8254,
+		'Omega'    => 937,
+		'omega'    => 969,
+		'Omicron'  => 927,
+		'omicron'  => 959,
+		'oplus'    => 8853,
+		'or'       => 8744,
+		'ordf'     => 170,
+		'ordm'     => 186,
+		'Oslash'   => 216,
+		'oslash'   => 248,
+		'Otilde'   => 213,
+		'otilde'   => 245,
+		'otimes'   => 8855,
+		'Ouml'     => 214,
+		'ouml'     => 246,
+		'para'     => 182,
+		'part'     => 8706,
+		'permil'   => 8240,
+		'perp'     => 8869,
+		'Phi'      => 934,
+		'phi'      => 966,
+		'Pi'       => 928,
+		'pi'       => 960,
+		'piv'      => 982,
+		'plusmn'   => 177,
+		'pound'    => 163,
+		'prime'    => 8242,
+		'Prime'    => 8243,
+		'prod'     => 8719,
+		'prop'     => 8733,
+		'Psi'      => 936,
+		'psi'      => 968,
+		'quot'     => 34,
+		'radic'    => 8730,
+		'rang'     => 9002,
+		'raquo'    => 187,
+		'rarr'     => 8594,
+		'rArr'     => 8658,
+		'rceil'    => 8969,
+		'rdquo'    => 8221,
+		'real'     => 8476,
+		'reg'      => 174,
+		'rfloor'   => 8971,
+		'Rho'      => 929,
+		'rho'      => 961,
+		'rlm'      => 8207,
+		'rsaquo'   => 8250,
+		'rsquo'    => 8217,
+		'sbquo'    => 8218,
+		'Scaron'   => 352,
+		'scaron'   => 353,
+		'sdot'     => 8901,
+		'sect'     => 167,
+		'shy'      => 173,
+		'Sigma'    => 931,
+		'sigma'    => 963,
+		'sigmaf'   => 962,
+		'sim'      => 8764,
+		'spades'   => 9824,
+		'sub'      => 8834,
+		'sube'     => 8838,
+		'sum'      => 8721,
+		'sup'      => 8835,
+		'sup1'     => 185,
+		'sup2'     => 178,
+		'sup3'     => 179,
+		'supe'     => 8839,
+		'szlig'    => 223,
+		'Tau'      => 932,
+		'tau'      => 964,
+		'there4'   => 8756,
+		'Theta'    => 920,
+		'theta'    => 952,
+		'thetasym' => 977,
+		'thinsp'   => 8201,
+		'THORN'    => 222,
+		'thorn'    => 254,
+		'tilde'    => 732,
+		'times'    => 215,
+		'trade'    => 8482,
+		'Uacute'   => 218,
+		'uacute'   => 250,
+		'uarr'     => 8593,
+		'uArr'     => 8657,
+		'Ucirc'    => 219,
+		'ucirc'    => 251,
+		'Ugrave'   => 217,
+		'ugrave'   => 249,
+		'uml'      => 168,
+		'upsih'    => 978,
+		'Upsilon'  => 933,
+		'upsilon'  => 965,
+		'Uuml'     => 220,
+		'uuml'     => 252,
+		'weierp'   => 8472,
+		'Xi'       => 926,
+		'xi'       => 958,
+		'Yacute'   => 221,
+		'yacute'   => 253,
+		'yen'      => 165,
+		'Yuml'     => 376,
+		'yuml'     => 255,
+		'Zeta'     => 918,
+		'zeta'     => 950,
+		'zwj'      => 8205,
+		'zwnj'     => 8204
+	);
+
+	/**
+	 * Character entity aliases accepted by MediaWiki
+	 */
+	static $htmlEntityAliases = array(
+		'רלמ' => 'rlm',
+		'رلم' => 'rlm',
+	);
+
+	/**
+	 * Lazy-initialised attributes regex, see getAttribsRegex()
+	 */
+	static $attribsRegex;
+
+	/**
+	 * Regular expression to match HTML/XML attribute pairs within a tag.
+	 * Allows some... latitude.
+	 * Used in Sanitizer::fixTagAttributes and Sanitizer::decodeTagAttributes
+	 */
+	static function getAttribsRegex() {
+		if ( self::$attribsRegex === null ) {
+			$attribFirst = '[:A-Z_a-z0-9]';
+			$attrib = '[:A-Z_a-z-.0-9]';
+			$space = '[\x09\x0a\x0d\x20]';
+			self::$attribsRegex = 
+				"/(?:^|$space)({$attribFirst}{$attrib}*)
+				  ($space*=$space*
+					(?:
+					 # The attribute value: quoted or alone
+					  \"([^<\"]*)\"
+					 | '([^<']*)'
+					 |  ([a-zA-Z0-9!#$%&()*,\\-.\\/:;<>?@[\\]^_`{|}~]+)
+					 |  (\#[0-9a-fA-F]+) # Technically wrong, but lots of
+										 # colors are specified like this.
+										 # We'll be normalizing it.
+					)
+				)?(?=$space|\$)/sx";
+		}
+		return self::$attribsRegex;
+	}
+
 	/**
 	 * Cleans up HTML, removes dangerous tags and attributes, and
 	 * removes HTML comments
@@ -357,7 +368,8 @@ class Sanitizer {
 				'h2', 'h3', 'h4', 'h5', 'h6', 'cite', 'code', 'em', 's',
 				'strike', 'strong', 'tt', 'var', 'div', 'center',
 				'blockquote', 'ol', 'ul', 'dl', 'table', 'caption', 'pre',
-				'ruby', 'rt' , 'rb' , 'rp', 'p', 'span', 'u', 'abbr'
+				'ruby', 'rt' , 'rb' , 'rp', 'p', 'span', 'abbr', 'dfn',
+				'kbd', 'samp'
 			);
 			$htmlsingle = array(
 				'br', 'hr', 'li', 'dt', 'dd'
@@ -378,6 +390,12 @@ class Sanitizer {
 			$listtags = array( # Tags that can appear in a list
 				'li',
 			);
+
+			global $wgAllowImageTag;
+			if ( $wgAllowImageTag ) {
+				$htmlsingle[] = 'img';
+				$htmlsingleonly[] = 'img';
+			}
 
 			$htmlsingleallowed = array_unique( array_merge( $htmlsingle, $tabletags ) );
 			$htmlelementsStatic = array_unique( array_merge( $htmlsingle, $htmlpairsStatic, $htmlnest ) );
@@ -400,37 +418,43 @@ class Sanitizer {
 		$text = Sanitizer::removeHTMLcomments( $text );
 		$bits = explode( '<', $text );
 		$text = str_replace( '>', '&gt;', array_shift( $bits ) );
-		if(!$wgUseTidy) {
+		if ( !$wgUseTidy ) {
 			$tagstack = $tablestack = array();
 			foreach ( $bits as $x ) {
 				$regs = array();
+				# $slash: Does the current element start with a '/'?
+				# $t: Current element name
+				# $params: String between element name and >
+				# $brace: Ending '>' or '/>'
+				# $rest: Everything until the next element of $bits
 				if( preg_match( '!^(/?)(\\w+)([^>]*?)(/{0,1}>)([^<]*)$!', $x, $regs ) ) {
 					list( /* $qbar */, $slash, $t, $params, $brace, $rest ) = $regs;
 				} else {
 					$slash = $t = $params = $brace = $rest = null;
 				}
 
-				$badtag = 0 ;
+				$badtag = false;
 				if ( isset( $htmlelements[$t = strtolower( $t )] ) ) {
 					# Check our stack
-					if ( $slash ) {
-						# Closing a tag...
-						if( isset( $htmlsingleonly[$t] ) ) {
-							$badtag = 1;
-						} elseif ( ( $ot = @array_pop( $tagstack ) ) != $t ) {
+					if ( $slash && isset( $htmlsingleonly[$t] ) ) {
+						$badtag = true;
+					} elseif ( $slash ) {
+						# Closing a tag... is it the one we just opened?
+						$ot = @array_pop( $tagstack );
+						if ( $ot != $t ) {
 							if ( isset( $htmlsingleallowed[$ot] ) ) {
 								# Pop all elements with an optional close tag
 								# and see if we find a match below them
 								$optstack = array();
-								array_push ($optstack, $ot);
-								while ( ( ( $ot = @array_pop( $tagstack ) ) != $t ) &&
-										isset( $htmlsingleallowed[$ot] ) )
-								{
-									array_push ($optstack, $ot);
+								array_push( $optstack, $ot );
+								$ot = @array_pop( $tagstack );
+								while ( $ot != $t && isset( $htmlsingleallowed[$ot] ) ) {
+									array_push( $optstack, $ot );
+									$ot = @array_pop( $tagstack );
 								}
 								if ( $t != $ot ) {
-									# No match. Push the optinal elements back again
-									$badtag = 1;
+									# No match. Push the optional elements back again
+									$badtag = true;
 									while ( $ot = @array_pop( $optstack ) ) {
 										array_push( $tagstack, $ot );
 									}
@@ -438,8 +462,8 @@ class Sanitizer {
 							} else {
 								@array_push( $tagstack, $ot );
 								# <li> can be nested in <ul> or <ol>, skip those cases:
-								if(!(isset( $htmllist[$ot] ) && isset( $listtags[$t] ) )) {
-									$badtag = 1;
+								if ( !isset( $htmllist[$ot] ) || !isset( $listtags[$t] ) ) {
+									$badtag = true;
 								}
 							}
 						} else {
@@ -451,23 +475,23 @@ class Sanitizer {
 					} else {
 						# Keep track for later
 						if ( isset( $tabletags[$t] ) &&
-						! in_array( 'table', $tagstack ) ) {
-							$badtag = 1;
-						} else if ( in_array( $t, $tagstack ) &&
-						! isset( $htmlnest [$t ] ) ) {
-							$badtag = 1 ;
+						!in_array( 'table', $tagstack ) ) {
+							$badtag = true;
+						} elseif ( in_array( $t, $tagstack ) &&
+						!isset( $htmlnest [$t ] ) ) {
+							$badtag = true;
 						# Is it a self closed htmlpair ? (bug 5487)
-						} else if( $brace == '/>' &&
+						} elseif ( $brace == '/>' &&
 						isset( $htmlpairs[$t] ) ) {
-							$badtag = 1;
-						} elseif( isset( $htmlsingleonly[$t] ) ) {
+							$badtag = true;
+						} elseif ( isset( $htmlsingleonly[$t] ) ) {
 							# Hack to force empty tag for uncloseable elements
 							$brace = '/>';
-						} else if( isset( $htmlsingle[$t] ) ) {
+						} elseif ( isset( $htmlsingle[$t] ) ) {
 							# Hack to not close $htmlsingle tags
-							$brace = NULL;
-						} else if( isset( $tabletags[$t] )
-						&&  in_array($t ,$tagstack) ) {
+							$brace = null;
+						} elseif ( isset( $tabletags[$t] )
+						&& in_array( $t, $tagstack ) ) {
 							// New table tag but forgot to close the previous one
 							$text .= "</$t>";
 						} else {
@@ -487,7 +511,7 @@ class Sanitizer {
 						# Strip non-approved attributes from the tag
 						$newparams = Sanitizer::fixTagAttributes( $params, $t );
 					}
-					if ( ! $badtag ) {
+					if ( !$badtag ) {
 						$rest = str_replace( '>', '&gt;', $rest );
 						$close = ( $brace == '/>' && !$slash ) ? ' /' : '';
 						$text .= "<$slash$t$newparams$close>$rest";
@@ -604,31 +628,72 @@ class Sanitizer {
 	 * @todo Check for unique id attribute :P
 	 */
 	static function validateAttributes( $attribs, $whitelist ) {
+		global $wgAllowRdfaAttributes, $wgAllowMicrodataAttributes, $wgHtml5;
+
 		$whitelist = array_flip( $whitelist );
+		$hrefExp = '/^(' . wfUrlProtocols() . ')[^\s]+$/';
+
 		$out = array();
 		foreach( $attribs as $attribute => $value ) {
-			if( !isset( $whitelist[$attribute] ) ) {
+			#allow XML namespace declaration if RDFa is enabled
+			if ( $wgAllowRdfaAttributes && preg_match( self::XMLNS_ATTRIBUTE_PATTERN, $attribute ) ) {
+				if ( !preg_match( self::EVIL_URI_PATTERN, $value ) ) {
+					$out[$attribute] = $value;
+				}
+
 				continue;
 			}
+
+			# Allow any attribute beginning with "data-", if in HTML5 mode
+			if ( !($wgHtml5 && preg_match( '/^data-/i', $attribute )) && !isset( $whitelist[$attribute] ) ) {
+				continue;
+			}
+
 			# Strip javascript "expression" from stylesheets.
 			# http://msdn.microsoft.com/workshop/author/dhtml/overview/recalc.asp
 			if( $attribute == 'style' ) {
 				$value = Sanitizer::checkCss( $value );
-				if( $value === false ) {
-					# haxx0r
-					continue;
-				}
 			}
 
 			if ( $attribute === 'id' ) {
-				global $wgEnforceHtmlIds;
-				$value = Sanitizer::escapeId( $value,
-					$wgEnforceHtmlIds ? 'noninitial' : 'xml' );
+				$value = Sanitizer::escapeId( $value, 'noninitial' );
+			}
+
+			//RDFa and microdata properties allow URLs, URIs and/or CURIs. check them for sanity
+			if ( $attribute === 'rel' || $attribute === 'rev' || 
+				$attribute === 'about' || $attribute === 'property' || $attribute === 'resource' || #RDFa
+				$attribute === 'datatype' || $attribute === 'typeof' ||                             #RDFa
+				$attribute === 'itemid' || $attribute === 'itemprop' || $attribute === 'itemref' || #HTML5 microdata
+				$attribute === 'itemscope' || $attribute === 'itemtype' ) {                         #HTML5 microdata
+
+				//Paranoia. Allow "simple" values but suppress javascript
+				if ( preg_match( self::EVIL_URI_PATTERN, $value ) ) {
+					continue; 
+				}
+			}
+
+			# NOTE: even though elements using href/src are not allowed directly, supply
+			#       validation code that can be used by tag hook handlers, etc
+			if ( $attribute === 'href' || $attribute === 'src' ) {
+				if ( !preg_match( $hrefExp, $value ) ) {
+					continue; //drop any href or src attributes not using an allowed protocol.
+						  //NOTE: this also drops all relative URLs
+				}
 			}
 
 			// If this attribute was previously set, override it.
 			// Output should only have one attribute of each name.
 			$out[$attribute] = $value;
+		}
+
+		if ( $wgAllowMicrodataAttributes ) {
+			# itemtype, itemid, itemref don't make sense without itemscope
+			if ( !array_key_exists( 'itemscope', $out ) ) {
+				unset( $out['itemtype'] );
+				unset( $out['itemid'] );
+				unset( $out['itemref'] );
+			}
+			# TODO: Strip itemprop if we aren't descendants of an itemscope.
 		}
 		return $out;
 	}
@@ -657,32 +722,93 @@ class Sanitizer {
 
 	/**
 	 * Pick apart some CSS and check it for forbidden or unsafe structures.
-	 * Returns a sanitized string, or false if it was just too evil.
+	 * Returns a sanitized string. This sanitized string will have
+	 * character references and escape sequences decoded, and comments
+	 * stripped. If the input is just too evil, only a comment complaining
+	 * about evilness will be returned.
 	 *
 	 * Currently URL references, 'expression', 'tps' are forbidden.
 	 *
+	 * NOTE: Despite the fact that character references are decoded, the
+	 * returned string may contain character references given certain
+	 * clever input strings. These character references must
+	 * be escaped before the return value is embedded in HTML.
+	 * 
 	 * @param $value String
-	 * @return Mixed
+	 * @return String
 	 */
 	static function checkCss( $value ) {
-		$stripped = Sanitizer::decodeCharReferences( $value );
+		// Decode character references like &#123;
+		$value = Sanitizer::decodeCharReferences( $value );
 
+		// Decode escape sequences and line continuation
+		// See the grammar in the CSS 2 spec, appendix D.
+		// This has to be done AFTER decoding character references.
+		// This means it isn't possible for this function to return
+		// unsanitized escape sequences. It is possible to manufacture
+		// input that contains character references that decode to
+		// escape sequences that decode to character references, but
+		// it's OK for the return value to contain character references
+		// because the caller is supposed to escape those anyway.
+		static $decodeRegex;
+		if ( !$decodeRegex ) {
+			$space = '[\\x20\\t\\r\\n\\f]';
+			$nl = '(?:\\n|\\r\\n|\\r|\\f)';
+			$backslash = '\\\\';
+			$decodeRegex = "/ $backslash 
+				(?:
+					($nl) |  # 1. Line continuation
+					([0-9A-Fa-f]{1,6})$space? |  # 2. character number
+					(.) | # 3. backslash cancelling special meaning
+					() | # 4. backslash at end of string
+				)/xu";
+		}
+		$value = preg_replace_callback( $decodeRegex,
+			array( __CLASS__, 'cssDecodeCallback' ), $value );
+		
 		// Remove any comments; IE gets token splitting wrong
-		$stripped = StringUtils::delimiterReplace( '/*', '*/', ' ', $stripped );
+		// This must be done AFTER decoding character references and
+		// escape sequences, because those steps can introduce comments
+		// This step cannot introduce character references or escape
+		// sequences, because it replaces comments with spaces rather
+		// than removing them completely.
+		$value = StringUtils::delimiterReplace( '/*', '*/', ' ', $value );
 
-		$value = $stripped;
-
-		// ... and continue checks
-		$stripped = preg_replace( '!\\\\([0-9A-Fa-f]{1,6})[ \\n\\r\\t\\f]?!e',
-			'codepointToUtf8(hexdec("$1"))', $stripped );
-		$stripped = str_replace( '\\', '', $stripped );
-		if( preg_match( '/(?:expression|tps*:\/\/|url\\s*\().*/is',
-				$stripped ) ) {
-			# haxx0r
-			return false;
+		// Remove anything after a comment-start token, to guard against
+		// incorrect client implementations.
+		$commentPos = strpos( $value, '/*' );
+		if ( $commentPos !== false ) {
+			$value = substr( $value, 0, $commentPos );
 		}
 
+		// Reject problematic keywords and control characters
+		if ( preg_match( '/[\000-\010\016-\037\177]/', $value ) ) {
+			return '/* invalid control char */';
+		} elseif ( preg_match( '! expression | filter\s*: | accelerator\s*: | url\s*\( !ix', $value ) ) {
+			return '/* insecure input */';
+		}
 		return $value;
+	}
+
+	static function cssDecodeCallback( $matches ) {
+		if ( $matches[1] !== '' ) {
+			// Line continuation
+			return '';
+		} elseif ( $matches[2] !== '' ) {
+			$char = codepointToUtf8( hexdec( $matches[2] ) );
+		} elseif ( $matches[3] !== '' ) {
+			$char = $matches[3];
+		} else {
+			$char = '\\';
+		}
+		if ( $char == "\n" || $char == '"' || $char == "'" || $char == '\\' ) {
+			// These characters need to be escaped in strings
+			// Clean up the escape sequence to avoid parsing errors by clients
+			return '\\' . dechex( ord( $char ) ) . ' ';
+		} else {
+			// Decode unnecessary escape
+			return $char;
+		}
 	}
 
 	/**
@@ -776,63 +902,66 @@ class Sanitizer {
 	}
 
 	/**
-	 * Given a value escape it so that it can be used in an id attribute and
-	 * return it, this does not validate the value however (see first link)
+	 * Given a value, escape it so that it can be used in an id attribute and
+	 * return it.  This will use HTML5 validation if $wgExperimentalHtmlIds is
+	 * true, allowing anything but ASCII whitespace.  Otherwise it will use
+	 * HTML 4 rules, which means a narrow subset of ASCII, with bad characters
+	 * escaped with lots of dots.
+	 *
+	 * To ensure we don't have to bother escaping anything, we also strip ', ",
+	 * & even if $wgExperimentalIds is true.  TODO: Is this the best tactic?
+	 * We also strip # because it upsets IE, and % because it could be
+	 * ambiguous if it's part of something that looks like a percent escape
+	 * (which don't work reliably in fragments cross-browser).
 	 *
 	 * @see http://www.w3.org/TR/html401/types.html#type-name Valid characters
 	 *                                                          in the id and
 	 *                                                          name attributes
 	 * @see http://www.w3.org/TR/html401/struct/links.html#h-12.2.3 Anchors with the id attribute
+	 * @see http://www.whatwg.org/specs/web-apps/current-work/multipage/elements.html#the-id-attribute
+	 *   HTML5 definition of id attribute
 	 *
-	 * @param $id String: id to validate
+	 * @param $id String: id to escape
 	 * @param $options Mixed: string or array of strings (default is array()):
 	 *   'noninitial': This is a non-initial fragment of an id, not a full id,
 	 *       so don't pay attention if the first character isn't valid at the
-	 *       beginning of an id.
-	 *   'xml': Don't restrict the id to be HTML4-compatible.  This option
-	 *       allows any alphabetic character to be used, per the XML standard.
-	 *       Therefore, it also completely changes the type of escaping: instead
-	 *       of weird dot-encoding, runs of invalid characters (mostly
-	 *       whitespace) are just compressed into a single underscore.
+	 *       beginning of an id.  Only matters if $wgExperimentalHtmlIds is
+	 *       false.
+	 *   'legacy': Behave the way the old HTML 4-based ID escaping worked even
+	 *       if $wgExperimentalHtmlIds is used, so we can generate extra
+	 *       anchors and links won't break.
 	 * @return String
 	 */
 	static function escapeId( $id, $options = array() ) {
+		global $wgHtml5, $wgExperimentalHtmlIds;
 		$options = (array)$options;
 
-		if ( !in_array( 'xml', $options ) ) {
-			# HTML4-style escaping
-			static $replace = array(
-				'%3A' => ':',
-				'%' => '.'
-			);
-
-			$id = urlencode( Sanitizer::decodeCharReferences( strtr( $id, ' ', '_' ) ) );
-			$id = str_replace( array_keys( $replace ), array_values( $replace ), $id );
-
-			if ( !preg_match( '/^[a-zA-Z]/', $id )
-			&& !in_array( 'noninitial', $options ) )  {
-				// Initial character must be a letter!
-				$id = "x$id";
+		if ( $wgHtml5 && $wgExperimentalHtmlIds && !in_array( 'legacy', $options ) ) {
+			$id = Sanitizer::decodeCharReferences( $id );
+			$id = preg_replace( '/[ \t\n\r\f_\'"&#%]+/', '_', $id );
+			$id = trim( $id, '_' );
+			if ( $id === '' ) {
+				# Must have been all whitespace to start with.
+				return '_';
+			} else {
+				return $id;
 			}
-			return $id;
 		}
 
-		# XML-style escaping.  For the patterns used, see the XML 1.0 standard,
-		# 5th edition, NameStartChar and NameChar: <http://www.w3.org/TR/REC-xml/>
-		$nameStartChar = ':a-zA-Z_\xC0-\xD6\xD8-\xF6\xF8-\x{2FF}\x{370}-\x{37D}'
-			. '\x{37F}-\x{1FFF}\x{200C}-\x{200D}\x{2070}-\x{218F}\x{2C00}-\x{2FEF}'
-			. '\x{3001}-\x{D7FF}\x{F900}-\x{FDCF}\x{FDF0}-\x{FFFD}\x{10000}-\x{EFFFF}';
-		$nameChar = $nameStartChar . '.\-0-9\xB7\x{0300}-\x{036F}'
-			. '\x{203F}-\x{2040}';
-		# Replace _ as well so we don't get multiple consecutive underscores
-		$id = preg_replace( "/([^$nameChar]|_)+/u", '_', $id );
-		$id = trim( $id, '_' );
+		# HTML4-style escaping
+		static $replace = array(
+			'%3A' => ':',
+			'%' => '.'
+		);
 
-		if ( !preg_match( "/^[$nameStartChar]/u", $id )
-		&& !in_array( 'noninitial', $options ) ) {
-			$id = "_$id";
+		$id = urlencode( Sanitizer::decodeCharReferences( strtr( $id, ' ', '_' ) ) );
+		$id = str_replace( array_keys( $replace ), array_values( $replace ), $id );
+
+		if ( !preg_match( '/^[a-zA-Z]/', $id )
+		&& !in_array( 'noninitial', $options ) )  {
+			// Initial character must be a letter!
+			$id = "x$id";
 		}
-
 		return $id;
 	}
 
@@ -857,17 +986,16 @@ class Sanitizer {
 
 	/**
 	 * Given HTML input, escape with htmlspecialchars but un-escape entites.
-	 * This allows (generally harmless) entities like &nbsp; to survive.
+	 * This allows (generally harmless) entities like &#160; to survive.
 	 *
 	 * @param $html String to escape
 	 * @return String: escaped input
 	 */
 	static function escapeHtmlAllowEntities( $html ) {
+		$html = Sanitizer::decodeCharReferences( $html );
 		# It seems wise to escape ' as well as ", as a matter of course.  Can't
 		# hurt.
 		$html = htmlspecialchars( $html, ENT_QUOTES );
-		$html = str_replace( '&amp;', '&', $html );
-		$html = Sanitizer::normalizeCharReferences( $html );
 		return $html;
 	}
 
@@ -889,15 +1017,14 @@ class Sanitizer {
 	 * @return Array
 	 */
 	public static function decodeTagAttributes( $text ) {
-		$attribs = array();
-
 		if( trim( $text ) == '' ) {
-			return $attribs;
+			return array();
 		}
 
+		$attribs = array();
 		$pairs = array();
 		if( !preg_match_all(
-			MW_ATTRIBS_REGEX,
+			self::getAttribsRegex(),
 			$text,
 			$pairs,
 			PREG_SET_ORDER ) ) {
@@ -920,7 +1047,7 @@ class Sanitizer {
 
 	/**
 	 * Pick the appropriate attribute value from a match set from the
-	 * MW_ATTRIBS_REGEX matches.
+	 * attribs regex matches.
 	 *
 	 * @param $set Array
 	 * @return String
@@ -972,11 +1099,24 @@ class Sanitizer {
 	}
 
 	/**
+	 * Normalizes whitespace in a section name, such as might be returned
+	 * by Parser::stripSectionName(), for use in the id's that are used for
+	 * section links.
+	 *
+	 * @param $section String
+	 * @return String
+	 */
+	static function normalizeSectionNameWhitespace( $section ) {
+		return trim( preg_replace( '/[ _]+/', ' ', $section ) );
+	}
+
+	/**
 	 * Ensure that any entities and character references are legal
 	 * for XML and XHTML specifically. Any stray bits will be
 	 * &amp;-escaped to result in a valid text fragment.
 	 *
-	 * a. any named char refs must be known in XHTML
+	 * a. named char refs can only be &lt; &gt; &amp; &quot;, others are
+	 *   numericized (this way we're well-formed even without a DTD)
 	 * b. any numeric char refs must be legal chars, not invalid or forbidden
 	 * c. use &#x, not &#X
 	 * d. fix or reject non-valid attributes
@@ -987,7 +1127,7 @@ class Sanitizer {
 	 */
 	static function normalizeCharReferences( $text ) {
 		return preg_replace_callback(
-			MW_CHAR_REFS_REGEX,
+			self::CHAR_REFS_REGEX,
 			array( 'Sanitizer', 'normalizeCharReferencesCallback' ),
 			$text );
 	}
@@ -1003,8 +1143,6 @@ class Sanitizer {
 			$ret = Sanitizer::decCharReference( $matches[2] );
 		} elseif( $matches[3] != ''  ) {
 			$ret = Sanitizer::hexCharReference( $matches[3] );
-		} elseif( $matches[4] != '' ) {
-			$ret = Sanitizer::hexCharReference( $matches[4] );
 		}
 		if( is_null( $ret ) ) {
 			return htmlspecialchars( $matches[0] );
@@ -1015,19 +1153,22 @@ class Sanitizer {
 
 	/**
 	 * If the named entity is defined in the HTML 4.0/XHTML 1.0 DTD,
-	 * return the named entity reference as is. If the entity is a
-	 * MediaWiki-specific alias, returns the HTML equivalent. Otherwise,
-	 * returns HTML-escaped text of pseudo-entity source (eg &amp;foo;)
+	 * return the equivalent numeric entity reference (except for the core &lt;
+	 * &gt; &amp; &quot;). If the entity is a MediaWiki-specific alias, returns
+	 * the HTML equivalent. Otherwise, returns HTML-escaped text of
+	 * pseudo-entity source (eg &amp;foo;)
 	 *
 	 * @param $name String
 	 * @return String
 	 */
 	static function normalizeEntity( $name ) {
-		global $wgHtmlEntities, $wgHtmlEntityAliases;
-		if ( isset( $wgHtmlEntityAliases[$name] ) ) {
-			return "&{$wgHtmlEntityAliases[$name]};";
-		} elseif( isset( $wgHtmlEntities[$name] ) ) {
+		if ( isset( self::$htmlEntityAliases[$name] ) ) {
+			return '&' . self::$htmlEntityAliases[$name] . ';';
+		} elseif ( in_array( $name,
+		array( 'lt', 'gt', 'amp', 'quot' ) ) ) {
 			return "&$name;";
+		} elseif ( isset( self::$htmlEntities[$name] ) ) {
+			return '&#' . self::$htmlEntities[$name] . ';';
 		} else {
 			return "&amp;$name;";
 		}
@@ -1074,9 +1215,33 @@ class Sanitizer {
 	 */
 	public static function decodeCharReferences( $text ) {
 		return preg_replace_callback(
-			MW_CHAR_REFS_REGEX,
+			self::CHAR_REFS_REGEX,
 			array( 'Sanitizer', 'decodeCharReferencesCallback' ),
 			$text );
+	}
+
+	/**
+	 * Decode any character references, numeric or named entities,
+	 * in the next and normalize the resulting string. (bug 14952)
+	 *
+	 * This is useful for page titles, not for text to be displayed,
+	 * MediaWiki allows HTML entities to escape normalization as a feature.
+	 *
+	 * @param $text String (already normalized, containing entities)
+	 * @return String (still normalized, without entities)
+	 */
+	public static function decodeCharReferencesAndNormalize( $text ) {
+		global $wgContLang;
+		$text = preg_replace_callback(
+			self::CHAR_REFS_REGEX,
+			array( 'Sanitizer', 'decodeCharReferencesCallback' ),
+			$text, /* limit */ -1, $count );
+
+		if ( $count ) {
+			return $wgContLang->normalize( $text );
+		} else {
+			return $text;
+		}
 	}
 
 	/**
@@ -1090,8 +1255,6 @@ class Sanitizer {
 			return  Sanitizer::decodeChar( intval( $matches[2] ) );
 		} elseif( $matches[3] != ''  ) {
 			return  Sanitizer::decodeChar( hexdec( $matches[3] ) );
-		} elseif( $matches[4] != '' ) {
-			return  Sanitizer::decodeChar( hexdec( $matches[4] ) );
 		}
 		# Last case should be an ampersand by itself
 		return $matches[0];
@@ -1121,12 +1284,11 @@ class Sanitizer {
 	 * @return String
 	 */
 	static function decodeEntity( $name ) {
-		global $wgHtmlEntities, $wgHtmlEntityAliases;
-		if ( isset( $wgHtmlEntityAliases[$name] ) ) {
-			$name = $wgHtmlEntityAliases[$name];
+		if ( isset( self::$htmlEntityAliases[$name] ) ) {
+			$name = self::$htmlEntityAliases[$name];
 		}
-		if( isset( $wgHtmlEntities[$name] ) ) {
-			return codepointToUtf8( $wgHtmlEntities[$name] );
+		if( isset( self::$htmlEntities[$name] ) ) {
+			return codepointToUtf8( self::$htmlEntities[$name] );
 		} else {
 			return "&$name;";
 		}
@@ -1154,7 +1316,24 @@ class Sanitizer {
 	 * @return Array
 	 */
 	static function setupAttributeWhitelist() {
+		global $wgAllowRdfaAttributes, $wgHtml5, $wgAllowMicrodataAttributes;
+
 		$common = array( 'id', 'class', 'lang', 'dir', 'title', 'style' );
+
+		if ( $wgAllowRdfaAttributes ) {
+			#RDFa attributes as specified in section 9 of http://www.w3.org/TR/2008/REC-rdfa-syntax-20081014
+			$common = array_merge( $common, array(
+			    'about', 'property', 'resource', 'datatype', 'typeof', 
+			) );
+		}
+
+		if ( $wgHtml5 && $wgAllowMicrodataAttributes ) {
+			# add HTML5 microdata tages as pecified by http://www.whatwg.org/specs/web-apps/current-work/multipage/microdata.html#the-microdata-model
+			$common = array_merge( $common, array(
+			    'itemid', 'itemprop', 'itemref', 'itemscope', 'itemtype'
+			) );
+		}
+
 		$block = array_merge( $common, array( 'align' ) );
 		$tablealign = array( 'align', 'char', 'charoff', 'valign' );
 		$tablecell = array( 'abbr',
@@ -1195,10 +1374,10 @@ class Sanitizer {
 			'em'         => $common,
 			'strong'     => $common,
 			'cite'       => $common,
-			# dfn
+			'dfn'        => $common,
 			'code'       => $common,
-			# samp
-			# kbd
+			'samp'       => $common,
+			'kbd'        => $common,
 			'var'        => $common,
 			'abbr'       => $common,
 			# acronym
@@ -1260,10 +1439,14 @@ class Sanitizer {
 			'td'         => array_merge( $common, $tablecell, $tablealign ),
 			'th'         => array_merge( $common, $tablecell, $tablealign ),
 
+			# 12.2 # NOTE: <a> is not allowed directly, but the attrib whitelist is used from the Parser object
+			'a'          => array_merge( $common, array( 'href', 'rel', 'rev' ) ), # rel/rev esp. for RDFa 
+
 			# 13.2
 			# Not usually allowed, but may be used for extension-style hooks
-			# such as <math> when it is rasterized
-			'img'        => array_merge( $common, array( 'alt' ) ),
+			# such as <math> when it is rasterized, or if $wgAllowImageTag is
+			# true
+			'img'        => array_merge( $common, array( 'alt', 'src', 'width', 'height' ) ),
 
 			# 15.2.1
 			'tt'         => $common,
@@ -1330,9 +1513,8 @@ class Sanitizer {
 	 * @return String
 	 */
 	static function hackDocType() {
-		global $wgHtmlEntities;
 		$out = "<!DOCTYPE html [\n";
-		foreach( $wgHtmlEntities as $entity => $codepoint ) {
+		foreach( self::$htmlEntities as $entity => $codepoint ) {
 			$out .= "<!ENTITY $entity \"&#$codepoint;\">";
 		}
 		$out .= "]>\n";
@@ -1345,7 +1527,8 @@ class Sanitizer {
 		$url = Sanitizer::decodeCharReferences( $url );
 
 		# Escape any control characters introduced by the above step
-		$url = preg_replace( '/[\][<>"\\x00-\\x20\\x7F]/e', "urlencode('\\0')", $url );
+		$url = preg_replace_callback( '/[\][<>"\\x00-\\x20\\x7F\|]/', 
+			array( __CLASS__, 'cleanUrlCallback' ), $url );
 
 		# Validate hostname portion
 		$matches = array();
@@ -1373,7 +1556,7 @@ class Sanitizer {
 
 			$host = preg_replace( $strip, '', $host );
 
-			// @fixme: validate hostnames here
+			// @todo Fixme: validate hostnames here
 
 			return $protocol . $host . $rest;
 		} else {
@@ -1381,4 +1564,7 @@ class Sanitizer {
 		}
 	}
 
+	static function cleanUrlCallback( $matches ) {
+		return urlencode( $matches[0] );
+	}
 }

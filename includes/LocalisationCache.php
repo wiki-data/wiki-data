@@ -78,30 +78,24 @@ class LocalisationCache {
 	var $recachedLangs = array();
 
 	/**
-	 * Data added by extensions using the deprecated $wgMessageCache->addMessages() 
-	 * interface.
-	 */
-	var $legacyData = array();
-
-	/**
 	 * All item keys
 	 */
 	static public $allKeys = array(
-		'fallback', 'namespaceNames', 'mathNames', 'bookstoreList',
+		'fallback', 'namespaceNames', 'bookstoreList',
 		'magicWords', 'messages', 'rtl', 'capitalizeAllNouns', 'digitTransformTable',
 		'separatorTransformTable', 'fallback8bitEncoding', 'linkPrefixExtension',
 		'defaultUserOptionOverrides', 'linkTrail', 'namespaceAliases',
 		'dateFormats', 'datePreferences', 'datePreferenceMigrationMap',
 		'defaultDateFormat', 'extraUserToggles', 'specialPageAliases',
-		'imageFiles', 'preloadedMessages',
+		'imageFiles', 'preloadedMessages', 'namespaceGenderAliases',
 	);
 
 	/**
 	 * Keys for items which consist of associative arrays, which may be merged
 	 * by a fallback sequence.
 	 */
-	static public $mergeableMapKeys = array( 'messages', 'namespaceNames', 'mathNames',
-		'dateFormats', 'defaultUserOptionOverrides', 'magicWords', 'imageFiles',
+	static public $mergeableMapKeys = array( 'messages', 'namespaceNames',
+		'dateFormats', 'defaultUserOptionOverrides', 'imageFiles',
 		'preloadedMessages',
 	);
 
@@ -122,6 +116,11 @@ class LocalisationCache {
 	 * key is removed after the first merge.
 	 */
 	static public $optionalMergeKeys = array( 'bookstoreList' );
+
+	/**
+	 * Keys for items that are formatted like $magicWords
+	 */
+	static public $magicWordKeys = array( 'magicWords' );
 
 	/**
 	 * Keys for items where the subitems are stored in the backend separately.
@@ -160,7 +159,7 @@ class LocalisationCache {
 					break;
 				default:
 					throw new MWException( 
-						'Please set $wgLocalisationConf[\'store\'] to something sensible.' );
+						'Please set $wgLocalisationCacheConf[\'store\'] to something sensible.' );
 			}
 		}
 
@@ -187,7 +186,8 @@ class LocalisationCache {
 				self::$mergeableMapKeys,
 				self::$mergeableListKeys,
 				self::$mergeableAliasListKeys,
-				self::$optionalMergeKeys
+				self::$optionalMergeKeys,
+				self::$magicWordKeys
 			) );
 		}
 		return isset( $this->mergeableKeys[$key] );
@@ -215,23 +215,40 @@ class LocalisationCache {
 	 * Get a subitem, for instance a single message for a given language.
 	 */
 	public function getSubitem( $code, $key, $subkey ) {
-		if ( isset( $this->legacyData[$code][$key][$subkey] ) ) {
-			return $this->legacyData[$code][$key][$subkey];
+		if ( !isset( $this->loadedSubitems[$code][$key][$subkey] ) 
+			&& !isset( $this->loadedItems[$code][$key] ) ) 
+		{
+			wfProfileIn( __METHOD__.'-load' );
+			$this->loadSubitem( $code, $key, $subkey );
+			wfProfileOut( __METHOD__.'-load' );
 		}
-		if ( !isset( $this->loadedSubitems[$code][$key][$subkey] ) ) {
-			if ( isset( $this->loadedItems[$code][$key] ) ) {
-				if ( isset( $this->data[$code][$key][$subkey] ) ) {
-					return $this->data[$code][$key][$subkey];
-				} else {
-					return null;
-				}
+		if ( isset( $this->data[$code][$key][$subkey] ) ) {
+			return $this->data[$code][$key][$subkey];
+		} else {
+			return null;
+		}
+	}
+
+	/**
+	 * Get the list of subitem keys for a given item.
+	 *
+	 * This is faster than array_keys($lc->getItem(...)) for the items listed in 
+	 * self::$splitKeys.
+	 *
+	 * Will return null if the item is not found, or false if the item is not an 
+	 * array.
+	 */
+	public function getSubitemList( $code, $key ) {
+		if ( in_array( $key, self::$splitKeys ) ) {
+			return $this->getSubitem( $code, 'list', $key );
+		} else {
+			$item = $this->getItem( $code, $key );
+			if ( is_array( $item ) ) {
+				return array_keys( $item );
 			} else {
-				wfProfileIn( __METHOD__.'-load' );
-				$this->loadSubitem( $code, $key, $subkey );
-				wfProfileOut( __METHOD__.'-load' );
+				return false;
 			}
 		}
-		return $this->data[$code][$key][$subkey];
 	}
 
 	/**
@@ -326,6 +343,12 @@ class LocalisationCache {
 		}
 		$this->initialisedLangs[$code] = true;
 
+		# If the code is of the wrong form for a Messages*.php file, do a shallow fallback
+		if ( !Language::isValidBuiltInCode( $code ) ) {
+			$this->initShallowFallback( $code, 'en' );
+			return;
+		}
+
 		# Recache the data if necessary
 		if ( !$this->manualRecache && $this->isExpired( $code ) ) {
 			if ( file_exists( Language::getMessagesFileName( $code ) ) ) {
@@ -415,10 +438,26 @@ class LocalisationCache {
 					if ( isset( $value['inherit'] ) ) {
 						unset( $value['inherit'] );
 					}
+				} elseif ( in_array( $key, self::$magicWordKeys ) ) {
+					$this->mergeMagicWords( $value, $fallbackValue );
 				}
 			}
 		} else {
 			$value = $fallbackValue;
+		}
+	}
+
+	protected function mergeMagicWords( &$value, $fallbackValue ) {
+		foreach ( $fallbackValue as $magicName => $fallbackInfo ) {
+			if ( !isset( $value[$magicName] ) ) {
+				$value[$magicName] = $fallbackInfo;
+			} else {
+				$oldSynonyms = array_slice( $fallbackInfo, 1 );
+				$newSynonyms = array_slice( $value[$magicName], 1 );
+				$synonyms = array_values( array_unique( array_merge( 
+					$newSynonyms, $oldSynonyms ) ) );
+				$value[$magicName] = array_merge( array( $fallbackInfo[0] ), $synonyms );
+			}
 		}
 	}
 
@@ -566,9 +605,6 @@ class LocalisationCache {
 			$allData['defaultUserOptionOverrides'] = array();
 		}
 
-		# Set the preload key
-		$allData['preload'] = $this->buildPreload( $allData );
-
 		# Set the list keys
 		$allData['list'] = array();
 		foreach ( self::$splitKeys as $key ) {
@@ -582,6 +618,9 @@ class LocalisationCache {
 			throw new MWException( __METHOD__.': Localisation data failed sanity check! ' . 
 				'Check that your languages/messages/MessagesEn.php file is intact.' );
 		}
+
+		# Set the preload key
+		$allData['preload'] = $this->buildPreload( $allData );
 
 		# Save to the process cache and register the items loaded
 		$this->data[$code] = $allData;
@@ -601,6 +640,13 @@ class LocalisationCache {
 			}
 		}
 		$this->store->finishWrite();
+		
+		# Clear out the MessageBlobStore
+		# HACK: If using a null (i.e. disabled) storage backend, we
+		# can't write to the MessageBlobStore either
+		if ( !$this->store instanceof LCStore_Null ) {
+			MessageBlobStore::clear();
+		}
 
 		wfProfileOut( __METHOD__ );
 	}
@@ -636,8 +682,6 @@ class LocalisationCache {
 		unset( $this->loadedItems[$code] );
 		unset( $this->loadedSubitems[$code] );
 		unset( $this->initialisedLangs[$code] );
-		// We don't unload legacyData because there's no way to get it back 
-		// again, it's not really a cache
 		foreach ( $this->shallowFallbacks as $shallowCode => $fbCode ) {
 			if ( $fbCode === $code ) {
 				$this->unload( $shallowCode );
@@ -651,22 +695,6 @@ class LocalisationCache {
 	public function unloadAll() {
 		foreach ( $this->initialisedLangs as $lang => $unused ) {
 			$this->unload( $lang );
-		}
-	}
-
-	/**
-	 * Add messages to the cache, from an extension that has not yet been 
-	 * migrated to $wgExtensionMessages or the LocalisationCacheRecache hook. 
-	 * Called by deprecated function $wgMessageCache->addMessages(). 
-	 */
-	public function addLegacyMessages( $messages ) {
-		foreach ( $messages as $lang => $langMessages ) {
-			if ( isset( $this->legacyData[$lang]['messages'] ) ) {
-				$this->legacyData[$lang]['messages'] = 
-					$langMessages + $this->legacyData[$lang]['messages'];
-			} else {
-				$this->legacyData[$lang]['messages'] = $langMessages;
-			}
 		}
 	}
 
@@ -702,24 +730,24 @@ interface LCStore {
 	 * @param $code Language code
 	 * @param $key Cache key
 	 */
-	public function get( $code, $key );
+	function get( $code, $key );
 
 	/**
 	 * Start a write transaction.
 	 * @param $code Language code
 	 */
-	public function startWrite( $code );
+	function startWrite( $code );
 
 	/**
 	 * Finish a write transaction.
 	 */
-	public function finishWrite();
+	function finishWrite();
 
 	/**
 	 * Set a key to a given value. startWrite() must be called before this
 	 * is called, and finishWrite() must be called afterwards.
 	 */
-	public function set( $key, $value );
+	function set( $key, $value );
 
 }
 

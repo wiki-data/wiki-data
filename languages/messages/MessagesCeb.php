@@ -10,6 +10,7 @@
  * @author Abastillas
  * @author Jordz
  * @author Palang hernan
+ * @author Reedy
  * @author לערי ריינהארט
  */
 
@@ -78,8 +79,7 @@ $messages = array(
 'tog-editsection'             => 'Mausab ang mga seksiyon gamit ang [usba] nga sumpay',
 'tog-editsectiononrightclick' => 'Mahimo ang pag-usab sa seksyon pinaagi sa pag-right click sa titulo sa seksyon (JavaScript kinahanglan)',
 'tog-showtoc'                 => 'Ipakita ang talaan sa sulod (alang sa mga panid nga may daghan pa sa 3 ka heading)',
-'tog-rememberpassword'        => 'Hinumdomi ako sa kining kompyuter',
-'tog-editwidth'               => 'Palapdan ang kahon sa pag-usab aron mapuno sa tibuok screen',
+'tog-rememberpassword'        => 'Hinumdomi ako sa kining kompyuter (for a maximum of $1 {{PLURAL:$1|day|days}})',
 'tog-watchcreations'          => 'Bantayi ang akong gisugdang mga panid',
 'tog-watchdefault'            => 'Bantayi ang akong giusab nga mga panid',
 'tog-watchmoves'              => 'Bantayi ang akong gibalhin nga mga panid',
@@ -190,7 +190,7 @@ $messages = array(
 'category-file-count-limited'    => 'Ang mosunod nga {{PLURAL:$1|payl|$1 ka mga payl}} anaa niining kategoryaha.',
 'listingcontinuesabbrev'         => 'pad.',
 
-'mainpagetext'      => "<big>'''Malamposon ang pag-instalar sa MediaWiki.'''</big>",
+'mainpagetext'      => "'''Malamposon ang pag-instalar sa MediaWiki.'''",
 'mainpagedocfooter' => 'Konsultaha ang [http://meta.wikimedia.org/wiki/Help:Contents Giya sa mga gumagamit] alang sa impormasyon unsaon paggamit niining wiki nga software.
 
 == Pagsugod ==
@@ -221,34 +221,20 @@ $messages = array(
 'faqpage'        => 'Project:FAQ',
 
 # Vector skin
-'vector-action-addsection'   => 'Pagdugang og topiko',
-'vector-action-delete'       => 'Papasa',
-'vector-action-move'         => 'Ibalhin',
-'vector-action-protect'      => 'Protektahi',
-'vector-action-undelete'     => 'Ayaw papasa',
-'vector-action-unprotect'    => 'Ayaw protektahi',
-'vector-namespace-category'  => 'Kategoriya',
-'vector-namespace-help'      => 'Panid sa tabang',
-'vector-namespace-image'     => 'Payl',
-'vector-namespace-main'      => 'Panid',
-'vector-namespace-media'     => 'Panid sa medya',
-'vector-namespace-mediawiki' => 'Mensahe',
-'vector-namespace-project'   => 'Panid sa proyekto',
-'vector-namespace-special'   => 'Espesyal nga panid',
-'vector-namespace-talk'      => 'Panaghisgot-hisgot',
-'vector-namespace-template'  => 'Plantilya',
-'vector-namespace-user'      => 'Panid sa tiggamit',
-'vector-view-create'         => 'Himoa',
-'vector-view-edit'           => 'Usba',
-'vector-view-history'        => 'Tan-awa ang kaagi',
-'vector-view-view'           => 'Basaha',
-'vector-view-viewsource'     => 'Tan-awa ang ginikanan',
-'actions'                    => 'Mga lihok',
-'namespaces'                 => 'Mga ngalang espasyo',
-'variants'                   => 'Mga baryant',
-
-# Metadata in edit box
-'metadata_help' => 'Metadata:',
+'vector-action-addsection' => 'Pagdugang og topiko',
+'vector-action-delete'     => 'Papasa',
+'vector-action-move'       => 'Ibalhin',
+'vector-action-protect'    => 'Protektahi',
+'vector-action-undelete'   => 'Ayaw papasa',
+'vector-action-unprotect'  => 'Ayaw protektahi',
+'vector-view-create'       => 'Himoa',
+'vector-view-edit'         => 'Usba',
+'vector-view-history'      => 'Tan-awa ang kaagi',
+'vector-view-view'         => 'Basaha',
+'vector-view-viewsource'   => 'Tan-awa ang ginikanan',
+'actions'                  => 'Mga lihok',
+'namespaces'               => 'Mga ngalang espasyo',
+'variants'                 => 'Mga baryant',
 
 'errorpagetitle'    => 'Sayop',
 'returnto'          => 'Balik sa $1.',
@@ -464,6 +450,7 @@ Ang rason nga gihatag mao ang "\'\'$2\'\'".',
 
 # Login and logout pages
 'logouttext'              => "'''Nakabiya ka na.'''
+
 Mahimo kang magpadayon sa paggamit sa {{SITENAME}} bisan wala ka magpaila o puyde usab nga [[Special:UserLogin|mag-log in ka'g usab]] o isip laing gumagamit. Palihog hinumdomi nga may ubang mga panid nga magpakita sama nga ikaw naka-log in pa; kini tungod kay wala pa nimo malimpiyohi ang cache sa imong brawser.",
 'welcomecreation'         => '== Maayong pag-abot, $1! ==
 Nahimo na ang imong akawnt.
@@ -471,7 +458,7 @@ Ayaw kalimot sa pag-usab sa imong [[Special:Preferences|{{SITENAME}} mga prepere
 'yourname'                => 'Ngalan sa tiggamit:',
 'yourpassword'            => 'Pasword:',
 'yourpasswordagain'       => 'Itayp og usab ang pasword:',
-'remembermypassword'      => 'Hinumdomi ako niini nga kompyuter',
+'remembermypassword'      => 'Hinumdomi ako niining brawser (sa kadugayon nga $1 {{PLURAL:$1|ka adlaw|ka mga adlaw}})',
 'yourdomainname'          => 'Ang imong domain:',
 'externaldberror'         => 'May nahitabong authentication database error o kaha wala ka tugoti nga mag-update sa imong eksternal nga akawnt.',
 'login'                   => 'Sulod',
@@ -496,7 +483,7 @@ Ang {{SITENAME}} migamit og mga koki aron ma-log in ang mga gumagamit.
 Naka-disable ang imong mga koki.
 Palihog i-enable kini, unya pag-log-in gamit ang imong bag-ong username ug pasword.',
 'nocookieslogin'          => "Ang {{SITENAME}} migamit og mga koki aron ma-log in ang mga gumagamit.
-Naka-disable ang imong mga koki. 
+Naka-disable ang imong mga koki.
 Palihog i-enable kini, ug sulayi'g balik.",
 'noname'                  => 'Wala ikaw mag-specify og valid nga user name.',
 'loginsuccesstitle'       => 'Malamposon ang pagpaila',
@@ -504,7 +491,7 @@ Palihog i-enable kini, ug sulayi'g balik.",
 'nosuchuser'              => 'Walay gumagamit nga may pangalang "$1".
 Case sensitive ang mga user name.
 I-tsek ang imong espeling, o [[Special:UserLogin/signup|paghimo og bag-ong akawnt]].',
-'nosuchusershort'         => 'Walay gumagamit nga may pangalang "<nowiki>$1</nowiki>". 
+'nosuchusershort'         => 'Walay gumagamit nga may pangalang "<nowiki>$1</nowiki>".
 I-tsek ang imong espeling.',
 'nouserspecified'         => 'Kinahanglan mag-specify ka og username.',
 'wrongpassword'           => "Sayop nga pasword ang naentra.
@@ -523,8 +510,6 @@ Palihog sulayi'g usab.",
 'extlink_tip'     => 'Sumpay sa gawas (hinumdomi http:// prefix)',
 'headline_sample' => 'Teksto sa hedlayn',
 'headline_tip'    => 'Level 2 nga hedlayn',
-'math_sample'     => 'I-insert dinhi ang formula',
-'math_tip'        => 'Mathematical formula (LaTeX)',
 'nowiki_sample'   => 'Dinhi ang dili-pormaton nga teksto',
 'nowiki_tip'      => 'Dili i-wikipormat',
 'image_tip'       => 'Embedded nga payl',
@@ -549,8 +534,8 @@ Ang imong ''IP address'' maoy itala sa kaagi niini nga panid.",
 Aron mahimo ang maong panid, pagtayp sa kahon sa ubos (tan-awa ang [[{{MediaWiki:Helppage}}|panid sa tabang]] alang sa dugang impormasyon).
 Kon miabot ka dinhi pinaagi sa usa ka sayop, palihog tuploka ang back nga tuplokanan sa imong brawser.',
 'noarticletext'                    => 'Sa kasamtangan walay sulod nga teksto ang kining panid.
-Puyde nimong  [[Special:Search/{{PAGENAME}}|pangitaon kining titulo sa panid]] sa ubang mga panid, <span class="plainlinks">[{{fullurl:{{#Special:Log}}|page={{urlencode:{{FULLPAGENAME}}}}}} pangitaa ang related nga mga log],
-o [{{fullurl:{{FULLPAGENAME}}|action=edit}} usba kining panid].',
+Puyde nimong  [[Special:Search/{{PAGENAME}}|pangitaon kining titulo sa panid]] sa ubang mga panid, <span class="plainlinks">[{{fullurl:{{#Special:Log}}|page={{FULLPAGENAMEE}}}} pangitaa ang related nga mga log],
+o [{{fullurl:{{FULLPAGENAME}}|action=edit}} usba kining panid]</span>.',
 'userpage-userdoesnotexist'        => 'Ang akawnt sa tiggamit nga "$1" wala marehistro. Palihug tan-awa kon buot nimong himoon/usbon ang kining panid.',
 'previewnote'                      => "'''Hinumdomi nga kini usa lang ka paunang tan-aw; wala pa matipigi ang imong giusab!'''",
 'editing'                          => 'Nagausab sa $1',
@@ -560,8 +545,8 @@ o [{{fullurl:{{FULLPAGENAME}}|action=edit}} usba kining panid].',
 'copyrightwarning'                 => "Palihog hinumdomi nga ang tanang kontribusyon sa {{SITENAME}} giisip nga ubos sa $2 (basaha ang $1 alang sa dugang detalye). Kon dili nimo buot nga ang imong mga sinulat mausab ni bisan kinsa ug maapud-apod bisan dili ka pangayoan og pagtugot, ayaw sila ibutang dinhi.<br />
 Nagatimaan ka usab nga ikaw mismo ang nagsulat niini, o gikopya nimo kini gikan sa usa ka publikong rekursos o susamang libreng rekursos.
 '''AYAW PAGBUTANG DINHI OG MGA BINUHAT NGA MAY NANAG-IYA SA KATUNGOD SA PAGPATIK NGA WA KAY PERMISO!'''",
-'templatesused'                    => 'Ang mga plantilyang gigamit niini nga panid:',
-'templatesusedpreview'             => 'Mga plantilyang gigamit niining paunang tan-aw:',
+'templatesused'                    => '{{PLURAL:$1|Ang plantilya|Ang mga plantilya}} nga gigagamit niining panid:',
+'templatesusedpreview'             => '{{PLURAL:$1|Plantilya|Mga plantilya}} nga gigamit niining paunang tan-aw:',
 'template-protected'               => '(giprotektahan)',
 'template-semiprotected'           => '(medyo giprotektahan)',
 'hiddencategories'                 => 'Ang kining panid nahiapil sa {{PLURAL:$1|1 ka kategoriya nga nakatago|$1 ka mga kategoriya nga nakatago}}:',
@@ -648,7 +633,7 @@ Isip tagdumala, puyde nimo kini tan-awon; puyde nga may mga detalye sa [{{fullur
 Isip tagdumala, puyde nimo kini tan-awon; puyde nga may mga detalye sa [{{fullurl:{{#Special:Log}}/suppress|page={{FULLPAGENAMEE}}}} log sa supresyon].",
 'rev-deleted-no-diff'         => "Dili ka puyde motan-aw niining diff tungod kay usa sa mga rebisyon '''napapas'''.
 Puyde nga may mga detalye sa [{{fullurl:{{#Special:Log}}/delete|page={{FULLPAGENAMEE}}}} log sa pagpapas].",
-'rev-deleted-unhide-diff'     => "Usa sa mga rebisyon niining diff '''napapas'''. 
+'rev-deleted-unhide-diff'     => "Usa sa mga rebisyon niining diff '''napapas'''.
 Puyde nga may mga detalye sa [{{fullurl:{{#Special:Log}}/delete|page={{FULLPAGENAMEE}}}} log sa pagpapas].
 Isip tagdumala, puyde nimo [$1 tan-awon ang diff] kon gusto ka magpadayon.",
 'rev-delundel'                => 'ipakita/tagoa',
@@ -669,14 +654,14 @@ Isip tagdumala, puyde nimo [$1 tan-awon ang diff] kon gusto ka magpadayon.",
 *: ''adres sa panimalay ug numero sa telepono, social security number, ubp.''",
 'revdelete-legend'            => 'I-set ang restriksyon sa bisibilidad',
 'revdelete-hide-text'         => 'Tagoa ang teksto sa rebisyon',
+'revdelete-hide-image'        => 'Tagoa ang sulod sa payl',
 'revdelete-hide-name'         => 'Tagoa ang lihok ug target',
 'revdelete-hide-comment'      => 'Tagoa ang komento sa pag-usab',
 'revdelete-hide-user'         => 'Tagoa ang username/IP sa tag-usab',
 'revdelete-hide-restricted'   => 'I-suppress ang data gikan sa mga tagdumala ug sa uban pa',
 'revdelete-suppress'          => 'I-suppress ang data gikan sa mga tagdumala ug sa uban pa',
-'revdelete-hide-image'        => 'Tagoa ang sulod sa payl',
 'revdelete-unsuppress'        => 'Tangtanga ang mga restriksyon sa nabalik nga mga rebisyon',
-'revdelete-log'               => 'Komento sa log:',
+'revdelete-log'               => 'Rason:',
 'revdelete-submit'            => 'I-aplay sa napiling rebisyon',
 'revdelete-logentry'          => 'giusab ang bisibilidad sa rebisyon sa [[$1]]',
 'logdelete-logentry'          => 'giusab ang bisibilidad sa event sa [[$1]]',
@@ -702,7 +687,7 @@ $1",
 Dili puyde kini tagoon.',
 'revdelete-show-no-access'    => 'Sayop sa pagtago sa item sa petsa sa $2, $1: namarkahan kini isip "restricted".
 Wala kay akses niini.',
-'revdelete-modify-no-access'  => 'Sayop sa pagmodipikar sa item sa petsa sa $2, $1: namarkahan kini isip "restricted". 
+'revdelete-modify-no-access'  => 'Sayop sa pagmodipikar sa item sa petsa sa $2, $1: namarkahan kini isip "restricted".
 Wala kay akses niini.',
 'revdelete-modify-missing'    => 'Sayop sa pagmodipikar sa item ID $1: nawala kini sa database!',
 'revdelete-no-change'         => "'''Pahibalo:''' ang item sa petsa sa $2, $1 anaa nay mga setting sa bisibilidad nga gihangyo.",
@@ -745,9 +730,6 @@ Hinumdomi nga ang paggamit sa mga sumpay sa nabigasyon mo-reset sa column.',
 'searchresulttext'          => 'Para sa dugang impormasyon mahitungod sa pagpangita sa {{SITENAME}}, tan-awa ang [[{{MediaWiki:Helppage}}|{{int:help}}]].',
 'searchsubtitle'            => 'Gipangita nimo ang \'\'\'[[:$1]]\'\'\' ([[Special:Prefixindex/$1|tanang panid nga nagsugod sa "$1"]]{{int:pipe-separator}}[[Special:WhatLinksHere/$1|tanang panid nga misumpay sa "$1"]])',
 'searchsubtitleinvalid'     => "Imong gipangita ang '''$1'''",
-'noexactmatch'              => "'''Walay panid nga ginganla'g \"\$1\".'''
-Mahimo mong [[:\$1|isulat kini nga panid]].",
-'noexactmatch-nocreate'     => "'''Walay panid nga may titulong \"\$1\".'''",
 'notitlematches'            => 'Walay nag-match nga titulo sa panid',
 'notextmatches'             => 'Walay misaktong teksto sa panid',
 'prevn'                     => 'miaging {{PLURAL:$1|$1}}',
@@ -797,7 +779,6 @@ Hinumdomi nga ang ilang indeks sa sulod sa {{SITENAME}} mahimong dugay-dugay na.
 'changepassword'                => 'Usba ang pasword',
 'prefs-skin'                    => 'Panit',
 'skin-preview'                  => 'Paunang tan-aw',
-'prefs-math'                    => 'Math',
 'datedefault'                   => 'Walay preperensiya',
 'prefs-datetime'                => 'Petsa ug oras',
 'prefs-personal'                => 'Profile sa gumagamit',
@@ -1006,7 +987,9 @@ Ang mga panid sa [[Special:Watchlist|imong gibantayan]] '''nakalugom'''.",
 
 # Special:Categories
 'categories'                  => 'Mga kategoriya',
-'categoriespagetext'          => 'Ang mosunod nga mga kategoriya adunay sulod nga panid o medya.',
+'categoriespagetext'          => 'Ang mosunod nga mga kategoriya adunay sulod nga panid o medya.
+[[Special:UnusedCategories|Unused categories]] are not shown here.
+Also see [[Special:WantedCategories|wanted categories]].',
 'special-categories-sort-abc' => 'han-aya nga paalpabetikal',
 
 # Special:LinkSearch
@@ -1028,7 +1011,6 @@ Ang mga panid sa [[Special:Watchlist|imong gibantayan]] '''nakalugom'''.",
 # Watchlist
 'watchlist'         => 'Akong gibantayan',
 'mywatchlist'       => 'Akong gibantayan',
-'watchlistfor'      => "(para kang '''$1''')",
 'addedwatch'        => 'Nadugang sa gibantayan',
 'addedwatchtext'    => "Ang panid \"[[:\$1]]\" nadugang na sa imong [[Special:Watchlist|gibantayan]].
 Ang mga pag-usab puhon sa kining panid ug ang kaubang panid sa hisgot dinhi maitala, ug ang panid mopakita nga '''nakalugom''' sa [[Special:RecentChanges|talaan sa mga bag-ong pag-usab]] aron dali kini pilion.",
@@ -1054,7 +1036,7 @@ Palihog ikompirma nga imo gyud ni buhaton, nga nakasabot ka sa mga puyde idangat
 Tan-awa ang $2 para sa rekord sa mga bag-ong napapas.',
 'deletedarticle'        => 'gitangtang "[[$1]]"',
 'dellogpage'            => 'Log sa pagtangtang',
-'deletecomment'         => 'Rason sa pagpapas:',
+'deletecomment'         => 'Rason:',
 'deleteotherreason'     => 'Uban pa/dugang nga rason:',
 'deletereasonotherlist' => 'Uban pang rason',
 
@@ -1069,7 +1051,6 @@ Tan-awa ang $2 para sa rekord sa mga bag-ong napapas.',
 'protectexpiry'               => 'Matapos:',
 'protect_expiry_invalid'      => 'Dili puyde ang expiry time.',
 'protect_expiry_old'          => 'Ang expiry time miagi na.',
-'protect-unchain'             => 'I-unlock ang permiso sa pagbalhin',
 'protect-text'                => "Puyde nimo tan-awon ug usbon ang proteksyon dinhi para sa panid nga '''<nowiki>$1</nowiki>'''.",
 'protect-locked-access'       => "Walay permiso ang imong akawnt nga mag-usab og level sa proteksyon sa panid.
 Kini ang kasamtangan nga mga setting sa panid nga '''$1''':",
@@ -1163,7 +1144,7 @@ Sa maong mga kaso, manwal nga imo ibalhin o i-merge ang panid kon gustohon.",
 'move-watch'       => 'Bantayi kining panid',
 'movepagebtn'      => 'Ibalhin ang panid',
 'pagemovedsub'     => 'Malamposon ang pagbalhin',
-'movepage-moved'   => '<big>Ang \'\'\'"$1" nabalhin na ngadto sa "$2"\'\'\'</big>',
+'movepage-moved'   => 'Ang \'\'\'"$1" nabalhin na ngadto sa "$2"\'\'\'',
 'articleexists'    => 'May panid na sa maong ngalan, o ang ngalan nga imong napili ginadili.
 Palihog pagpili og laing ngalan.',
 'talkexists'       => "'''Ang panid mismo malamposon nga nabalhin, pero ang panid sa hisgot dili mabalhin tungod kay duna nay sulod ang panid sa hisgot sa bag-ong titulo.
@@ -1205,6 +1186,7 @@ Pwede nimong tan-awon ang ginikanan.',
 'tooltip-search-go'               => 'Moadto sa panid nga may saktong ngalan kon anaa kini',
 'tooltip-search-fulltext'         => 'Mangita sa mga panid kabahin niining teksto',
 'tooltip-n-mainpage'              => 'Bisitaha ang Unang Panid',
+'tooltip-n-mainpage-description'  => 'Bisitaha ang Unang Panid',
 'tooltip-n-portal'                => 'Kabahin sa proyekto, unsay imong mahimo, asa mangita sa mga impormasyon',
 'tooltip-n-currentevents'         => 'Pangita og nahaunang impormasyon sa mga bag-ong panghitabo',
 'tooltip-n-recentchanges'         => 'Ang talaan sa mga bag-ong giusab sa wiki.',
@@ -1242,11 +1224,10 @@ Puyde dugangan og rason sa mubong sugid.',
 'nextdiff'     => 'Mas bag-ong pag-usab →',
 
 # Media information
-'file-info-size'       => '($1 × $2 pixels, size sa payl: $3, MIME type: $4)',
-'file-nohires'         => '<small>Walay mas taas nga resolusyon.</small>',
-'svg-long-desc'        => '(SVG nga payl, nominally $1 × $2 pixels, size sa payl: $3)',
-'show-big-image'       => 'Tibuok resolusyon',
-'show-big-image-thumb' => '<small>Size niining preview: $1 × $2 pixels</small>',
+'file-info-size' => '$1 × $2 pixels, size sa payl: $3, MIME type: $4',
+'file-nohires'   => '<small>Walay mas taas nga resolusyon.</small>',
+'svg-long-desc'  => 'SVG nga payl, nominally $1 × $2 pixels, size sa payl: $3',
+'show-big-image' => 'Tibuok resolusyon',
 
 # Bad image list
 'bad_image_list' => 'Ang pormat mao ang mosunod:

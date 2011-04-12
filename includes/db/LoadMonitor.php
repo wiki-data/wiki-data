@@ -1,20 +1,29 @@
 <?php
+/**
+ * Database load monitoring
+ *
+ * @file
+ * @ingroup Database
+ */
 
 /**
  * An interface for database load monitoring
+ *
+ * @ingroup Database
  */
-
 interface LoadMonitor {
 	/**
 	 * Construct a new LoadMonitor with a given LoadBalancer parent
+	 *
+	 * @param LoadBalancer $parent
 	 */
 	function __construct( $parent );
 	
 	/**
 	 * Perform pre-connection load ratio adjustment.
-	 * @param array $loads
-	 * @param string $group The selected query group
-	 * @param string $wiki
+	 * @param $loads Array
+	 * @param $group String: the selected query group
+	 * @param $wiki String
 	 */
 	function scaleLoads( &$loads, $group = false, $wiki = false );
 
@@ -31,8 +40,8 @@ interface LoadMonitor {
 	 * to the running thread count. The threshold may be false, which indicates
 	 * that the sysadmin has not configured this feature.
 	 *
-	 * @param Database $conn
-	 * @param float $threshold
+	 * @param $conn DatabaseBase
+	 * @param $threshold Float
 	 */
 	function postConnectionBackoff( $conn, $threshold );
 
@@ -46,11 +55,19 @@ interface LoadMonitor {
 /**
  * Basic MySQL load monitor with no external dependencies
  * Uses memcached to cache the replication lag for a short time
+ *
+ * @ingroup Database
  */
-
 class LoadMonitor_MySQL implements LoadMonitor {
-	var $parent; // LoadBalancer
 
+	/**
+	 * @var LoadBalancer
+	 */
+	var $parent;
+
+	/**
+	 * @param LoadBalancer $parent
+	 */
 	function __construct( $parent ) {
 		$this->parent = $parent;
 	}
@@ -109,6 +126,11 @@ class LoadMonitor_MySQL implements LoadMonitor {
 		return $lagTimes;
 	}
 
+	/**
+	 * @param $conn DatabaseBase
+	 * @param $threshold
+	 * @return int
+	 */
 	function postConnectionBackoff( $conn, $threshold ) {
 		if ( !$threshold ) {
 			return 0;

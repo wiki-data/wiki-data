@@ -1,5 +1,22 @@
 <?php
 /**
+ * Helper functions for compressOld.php script.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program; if not, write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ * http://www.gnu.org/copyleft/gpl.html
+ *
  * @file
  * @ingroup Maintenance ExternalStorage
  */
@@ -18,12 +35,11 @@ function compressOldPages( $start = 0, $extdb = '' ) {
 			break;
 		}
 		$last = $start;
-		while( $row = $dbw->fetchObject( $res ) ) {
+		foreach ( $res as $row ) {
 			# print "  {$row->old_id} - {$row->old_namespace}:{$row->old_title}\n";
 			compressPage( $row, $extdb );
 			$last = $row->old_id;
 		}
-		$dbw->freeResult( $res );
 		$start = $last + 1; # Deletion may leave long empty stretches
 		print "$start...\n";
 	} while( true );
@@ -67,7 +83,7 @@ define( 'LS_INDIVIDUAL', 0 );
 define( 'LS_CHUNKED', 1 );
 
 /** @todo document */
-function compressWithConcat( $startId, $maxChunkSize, $beginDate, 
+function compressWithConcat( $startId, $maxChunkSize, $beginDate,
 	$endDate, $extdb="", $maxPageId = false )
 {
 	$fname = 'compressWithConcat';
@@ -94,19 +110,19 @@ function compressWithConcat( $startId, $maxChunkSize, $beginDate,
 		$pageConds[] = 'page_namespace<>0';
 	}
 	if ( $queryExtra ) {
-                $pageConds[] = $queryExtra;
+				$pageConds[] = $queryExtra;
 	}
 	 */
 
 	# For each article, get a list of revisions which fit the criteria
-	
+
 	# No recompression, use a condition on old_flags
 	# Don't compress object type entities, because that might produce data loss when
 	# overwriting bulk storage concat rows. Don't compress external references, because
 	# the script doesn't yet delete rows from external storage.
 	$conds = array(
-		'old_flags NOT ' . $dbr->buildLike( MATCH_STRING, 'object', MATCH_STRING ) . ' AND old_flags NOT '
-			. $dbr->buildLike( MATCH_STRING, 'external', MATCH_STRING ) );
+		'old_flags NOT ' . $dbr->buildLike( $dbr->anyString(), 'object', $dbr->anyString() ) . ' AND old_flags NOT '
+			. $dbr->buildLike( $dbr->anyString(), 'external', $dbr->anyString() ) );
 
 	if ( $beginDate ) {
 		if ( !preg_match( '/^\d{14}$/', $beginDate ) ) {
@@ -142,10 +158,10 @@ function compressWithConcat( $startId, $maxChunkSize, $beginDate,
 		wfWaitForSlaves( 5 );
 
 		# Wake up
-		$dbr->ping();		
+		$dbr->ping();
 
 		# Get the page row
-		$pageRes = $dbr->select( 'page', 
+		$pageRes = $dbr->select( 'page',
 			array('page_id', 'page_namespace', 'page_title','page_latest'),
 			$pageConds + array('page_id' => $pageId), $fname );
 		if ( $dbr->numRows( $pageRes ) == 0 ) {
@@ -159,10 +175,10 @@ function compressWithConcat( $startId, $maxChunkSize, $beginDate,
 
 		# Load revisions
 		$revRes = $dbw->select( $tables, $fields,
-			array_merge( array( 
-				'rev_page' => $pageRow->page_id, 
+			array_merge( array(
+				'rev_page' => $pageRow->page_id,
 				# Don't operate on the current revision
-				# Use < instead of <> in case the current revision has changed 
+				# Use < instead of <> in case the current revision has changed
 				# since the page select, which wasn't locking
 				'rev_id < ' . $pageRow->page_latest
 			), $conds ),
@@ -170,7 +186,7 @@ function compressWithConcat( $startId, $maxChunkSize, $beginDate,
 			$revLoadOptions
 		);
 		$revs = array();
-		while ( $revRow = $dbw->fetchObject( $revRes ) ) {
+		foreach ( $revRes as $revRow ) {
 			$revs[] = $revRow;
 		}
 

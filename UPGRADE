@@ -1,3 +1,4 @@
+
 This file provides an overview of the MediaWiki upgrade process. For help with
 specific problems, check
 
@@ -50,13 +51,36 @@ deleted file archives, and any custom skins.
 
 === Perform the database upgrade ===
 
-You will need to have $wgDBadminuser and $wgDBadminpass set in your
+You will need to have $wgDBadminuser and $wgDBadminpassword set in your
 LocalSettings.php, see there for more info.
 
-From the command line, browse to the "maintenance" directory and run the 
+==== From the web ====
+
+You will need to set $wgUpgradeKey in your LocalSettings.php in order to use
+the updater.
+
+If you browse to the web-based installation script (usually at /config/index.php)
+from your wiki installation you can follow the script and upgrade your database
+in place.
+
+You may change some settings during the install, but be very careful!
+Changing the encoding in particular will generally leave you with a
+lot of corrupt pages, particularly if your wiki is not in English.
+
+==== From the command line ====
+
+From the command line, browse to the "maintenance" directory and run the
 update.php script to check and update the schema. This will insert missing
 tables, update existing tables, and move data around as needed. In most cases,
 this is successful and nothing further needs to be done.
+
+If you have a Chinese or Japanese wiki ($wgLanguageCode is set to one
+of "zh", "ja", or "yue") and you are using MySQL fulltext search, you
+will probably want to update the search index.
+
+In the "maintenance" directory, run the updateDoubleWidthSearch.php
+script.  This will update the searchindex table for those pages that
+contain double-byte latin characters.
 
 === Check configuration settings ===
 
@@ -67,9 +91,10 @@ notes to check for configuration changes which would alter the expected
 behaviour of MediaWiki.
 
 === Check installed extensions ===
+
 In MediaWiki 1.14 some extensions are migrated into the core. Please see the
-RELEASE-NOTES section "Migrated extensions" and disable these extensions in your
-localSettings.php
+HISTORY section "Migrated extensions" and disable these extensions in your
+LocalSettings.php
 
 === Test ===
 
@@ -94,9 +119,7 @@ Note that the large number of deletions may cause older edits to expire
 from the list on Special:Recentchanges, although the deletions themselves
 will be hidden by default. (Click "show bot edits" to list them.)
 
-
 See RELEASE-NOTES for more details about new and changed options.
-
 
 == Upgrading from 1.7 wikis ==
 
@@ -107,9 +130,6 @@ to set only specific items as recommended in DefaultSettings.php.
 == Upgrading from 1.6 wikis ==
 
 $wgLocalTZoffset was in hours, it is now using minutes.
-Link autonumbering got fixed (#5918) for protocols other than http.
- - 'irc://irc.server.tld/' render as a link with a chat icon
- - '[irc://irc.server.tld]' render as an autonumbered link: [1]
 
 == Upgrading from pre-1.5 wikis ==
 
@@ -167,34 +187,6 @@ If using Memcached, you must enabled it differently now:
 should be replaced with:
   $wgMainCacheType = CACHE_MEMCACHED;
 
-
-=== Web installer ===
-
-You can use the web-based installer wizard if you first remove the
-LocalSettings.php file; be sure to give the installer the same 
-information as you did on the original install (language/encoding, 
-database name, password, etc). This will also generate a fresh 
-LocalSettings.php, which you may need to customize.
-
-You may change some settings during the install, but be very careful!
-Changing the encoding in particular will generally leave you with a
-lot of corrupt pages, particularly if your wiki is not in English.
-
-=== Command-line upgrade ===
-
-Additionally, as of 1.4.0 you can run an in-place upgrade script from
-the command line, keeping your existing LocalSettings.php. This requires
-that you set $wgDBadminuser and $wgDBadminpassword with  an appropriate 
-database user and password with privileges to modify the database structure.
-
-Once the new files are in place, go into the maintenance subdirectory and
-run the script:
-
-  php update.php
-
-See caveats below on upgrading from 1.3.x or earlier.
-
-
 == Backups! ==
 
 To upgrade an existing MediaWiki installation, first BACK UP YOUR WIKI!
@@ -218,16 +210,7 @@ option to 'latin1' to avoid the conversion.
 For general help on pg_dump:
 http://www.postgresql.org/docs/current/static/app-pgdump.html
 
-
 == Caveats ==
-
-=== Postgres ===
-
-Postgres support is new, and much of the upgrade instructions may 
-not apply. The schema was changed significantly from 1.7 to 1.8, 
-so you will need to at least use the update.php or web installer, 
-as described above.
-
 
 === Upgrading from 1.4.2 or earlier ===
 
@@ -272,19 +255,20 @@ to this:
 As well as new messages, the processing of some messages has changed.
 If you have customized them, please compare the new format using
 Special:Allmessages or the relevant LanguageXX.php files:
-  copyrightwarning
-  dberrortext
-  editingcomment  (was named commentedit)
-  editingsection  (was named sectionedit)
-  numauthors
-  numedits
-  numtalkauthors
-  numtalkedits
-  numwatchers
-  protectedarticle
-  searchresulttext
-  showhideminor
-  unprotectedarticle
+
+* copyrightwarning
+* dberrortext
+* editingcomment  (was named commentedit)
+* editingsection  (was named sectionedit)
+* numauthors
+* numedits
+* numtalkauthors
+* numtalkedits
+* numwatchers
+* protectedarticle
+* searchresulttext
+* showhideminor
+* unprotectedarticle
 
 Note that the 1.3 beta releases included a potential vulnerability if PHP
 is configured with register_globals on and the includes directory is

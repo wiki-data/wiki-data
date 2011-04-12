@@ -7,7 +7,7 @@
  * @ingroup Language
  * @file
  *
- * @author Philip
+ * @author PhiLiP
  * @author Wong128hk
  */
 
@@ -49,8 +49,8 @@ $namespaceAliases = array(
 	'用户讨论' => NS_USER_TALK,
 	'用戶討論' => NS_USER_TALK,
 	# This has never worked so it's unlikely to annoy anyone if I disable it -- TS
-	#'{{SITENAME}}_对话' => NS_PROJECT_TALK
-	#"{{SITENAME}}_對話" => NS_PROJECT_TALK
+	# '{{SITENAME}}_对话' => NS_PROJECT_TALK
+	# "{{SITENAME}}_對話" => NS_PROJECT_TALK
 	'图像' => NS_FILE,
 	'圖像' => NS_FILE,
 	'档案' => NS_FILE,
@@ -87,9 +87,9 @@ $namespaceAliases = array(
 	'幫助討論' => NS_HELP_TALK,
 	'分类'	=> NS_CATEGORY,
 	'分類'  => NS_CATEGORY,
-	'分类对话'=> NS_CATEGORY_TALK,
+	'分类对话' => NS_CATEGORY_TALK,
 	'分類對話' => NS_CATEGORY_TALK,
-	'分类讨论'=> NS_CATEGORY_TALK,
+	'分类讨论' => NS_CATEGORY_TALK,
 	'分類討論' => NS_CATEGORY_TALK,
 );
 
@@ -113,7 +113,7 @@ $specialPageAliases = array(
 	'Uncategorizedpages'        => array( '未归类页面', '未歸類頁面' ),
 	'Uncategorizedcategories'   => array( '未归类分类', '未歸類分類' ),
 	'Uncategorizedimages'       => array( '未归类文件', '未歸類文件', '未歸類檔案', '未归类档案' ),
-	'Uncategorizedtemplates'    => array( '未归类模版', '未歸類模板' ),
+	'Uncategorizedtemplates'    => array( '未归类模板', '未歸類模板' ),
 	'Unusedcategories'          => array( '未使用分类', '未使用分類' ),
 	'Unusedimages'              => array( '未使用文件', '未使用檔案', '未使用档案' ),
 	'Wantedpages'               => array( '待撰页面', '待撰頁面' ),
@@ -122,7 +122,7 @@ $specialPageAliases = array(
 	'Wantedtemplates'           => array( '需要的模板' ),
 	'Mostlinked'                => array( '最多链接页面', '最多連結頁面' ),
 	'Mostlinkedcategories'      => array( '最多链接分类', '最多連結分類' ),
-	'Mostlinkedtemplates'       => array( '最多链接模版', '最多連結模板' ),
+	'Mostlinkedtemplates'       => array( '最多链接模板', '最多連結模板' ),
 	'Mostimages'                => array( '最多链接文件', '最多鏈接文件', '最多連結檔案', '最多连结档案' ),
 	'Mostcategories'            => array( '最多分类页面', '最多分類頁面' ),
 	'Mostrevisions'             => array( '最多修订页面', '最多修訂頁面' ),
@@ -136,7 +136,7 @@ $specialPageAliases = array(
 	'Protectedtitles'           => array( '已保护标题', '已保護標題' ),
 	'Allpages'                  => array( '所有页面', '所有頁面' ),
 	'Prefixindex'               => array( '前缀索引', '前綴索引' ),
-	'Ipblocklist'               => array( '封禁列表' ),
+	'BlockList'                 => array( '封禁列表' ),
 	'Specialpages'              => array( '特殊页面', '特殊頁面' ),
 	'Contributions'             => array( '用户贡献', '用戶貢獻' ),
 	'Emailuser'                 => array( '电邮用户', '電郵用戶' ),
@@ -185,12 +185,12 @@ Variants for Chinese language
 */
 'variantname-zh-hans' => '简体',
 'variantname-zh-hant' => '繁體',
-'variantname-zh-cn'   => '大陆',
-'variantname-zh-tw'   => '台灣',
-'variantname-zh-hk'   => '香港',
-'variantname-zh-mo'   => '澳門',
-'variantname-zh-sg'   => '新加坡',
-'variantname-zh-my'   => '大马',
-'variantname-zh'      => '中文原文',
+'variantname-zh-cn'   => '大陆简体',
+'variantname-zh-tw'   => '台灣正體',
+'variantname-zh-hk'   => '香港繁體',
+'variantname-zh-mo'   => '澳門繁體',
+'variantname-zh-sg'   => '新加坡简体',
+'variantname-zh-my'   => '大马简体',
+'variantname-zh'      => '不转换',
 
 );

@@ -27,8 +27,7 @@ $messages = array(
 'tog-editsection'             => 'ಪುಟೊತ ಭಾಗಲೊನ್ [ಸಂಪಾದನೆ] ಲಿಂಕ್’ಲೆನ್ ಒತ್ತ್’ದ್ ಬದಲ್ ಮನ್ಪುಲೆಕ ಉಪ್ಪಡ್',
 'tog-editsectiononrightclick' => 'ಪುಟೊತ ವಿಭಾಗೊಲೆನ್ ಐತ ಹೆಡ್ಡಿಂಗ್’ನ್ ರೈಟ್ ಕ್ಲಿಕ್ ಮಲ್ತ್’ದ್ ಸಂಪಾದನೆ ಮಲ್ಪುಲೆಕ ಉಪ್ಪಡ್ (JavaScript)',
 'tog-showtoc'                 => 'ಪರಿವಿಡಿನ್(ಟೇಬಲ್ ಆಫ್ ಕಂಟೆಂಟ್ಸ್) ತೊಜ್ಪಾಲೆ (ಮೂಜೆರ್ದ್ ಜಾಸ್ತಿ ಹೆಡ್ಡಿಂಗ್ ಉಪ್ಪುನಂಚಿನ ಪುಟೊಲೆಗ್)',
-'tog-rememberpassword'        => 'ಈ ಕಂಪ್ಯೂಟರ್’ಡ್ ಎನ್ನ ಲಾಗಿನ್ನ್ ನೆನಪುಡು ದೀಲ',
-'tog-editwidth'               => 'ಸಂಪಾದನೆ ಅಂಕಣ ಪೂರ್ತಿ ಅಗೆಲ ಉಪ್ಪಡ್',
+'tog-rememberpassword'        => 'ಈ ಕಂಪ್ಯೂಟರ್’ಡ್ ಎನ್ನ ಲಾಗಿನ್ನ್ ನೆನಪುಡು ದೀಲ (for a maximum of $1 {{PLURAL:$1|day|days}})',
 'tog-watchcreations'          => 'ಯಾನ್ ಶುರು ಮಲ್ತಿನ ಪುಟೊಲೆನ್ ಯೆನ್ನ ವೀಕ್ಷಣಾಪಟ್ಟಿಗ್ ಸೇರ್ಪಾಲೆ',
 'tog-watchdefault'            => 'ಯಾನ್ ಸಂಪಾದನೆ ಮನ್ಪುನಂಚಿನ ಪುಟೊಲೆನ್ ವೀಕ್ಷಣಾಪಟ್ಟಿಗ್ ಸೇರ್ಪಾಲೆ',
 'tog-watchmoves'              => 'ಯಾನ್ ಮೂವ್ ಮಲ್ತಿನಂಚಿನ ಪುಟೊಲೆನ್ ಎನ್ನ ವೀಕ್ಷಣಾಪಟ್ಟಿಗ್ ಸೇರ್ಪಾಲೆ',
@@ -128,7 +127,7 @@ $messages = array(
 'category-file-count-limited'    => 'ಪ್ರಸಕ್ತ ವರ್ಗೊಡು ಈ ತಿರ್ತ್’ದ {{PLURAL:$1|ಫೈಲ್ ಉಂಡು|$1 ಫೈಲ್’ಲು ಉಂಡು}}.',
 'listingcontinuesabbrev'         => 'ಮುಂದು.',
 
-'mainpagetext'      => "<big>'''ಮೀಡಿಯವಿಕಿ ಯಶಸ್ವಿಯಾದ್ ಇನ್’ಸ್ಟಾಲ್ ಆಂಡ್.'''</big>",
+'mainpagetext'      => "'''ಮೀಡಿಯವಿಕಿ ಯಶಸ್ವಿಯಾದ್ ಇನ್’ಸ್ಟಾಲ್ ಆಂಡ್.'''",
 'mainpagedocfooter' => 'ವಿಕಿ ತಂತ್ರಾಂಶನ್ ಉಪಗೋಗ ಮನ್ಪುನ ಬಗ್ಗೆ ಮಾಹಿತಿಗ್ [http://meta.wikimedia.org/wiki/Help:Contents ಸದಸ್ಯೆರ್ನ ನಿರ್ದೇಶನ ಪುಟ] ತೂಲೆ.
 
 == ಎಂಚ ಶುರು ಮಲ್ಪುನಿ ==
@@ -158,9 +157,6 @@ $messages = array(
 'qbspecialpages' => 'ವಿಶೇಷ ಪುಟೊಲು',
 'faq'            => 'ಸಾಮಾನ್ಯವಾದ್ ಕೇನುನ ಪ್ರಶ್ನೆಲು',
 'faqpage'        => 'Project:ಸಾಮಾನ್ಯವಾದ್ ಕೇನುನ ಪ್ರಶ್ನೆಲು',
-
-# Metadata in edit box
-'metadata_help' => 'ಮೂಲಮಾಹಿತಿ:',
 
 'errorpagetitle'    => 'ದೋಷ',
 'returnto'          => '$1 ಗ್ ಪಿರ ಪೋಲೆ.',
@@ -242,7 +238,7 @@ $messages = array(
 'badaccess-groups' => 'ಈರ್ ಕೇನಿನಂಚಿನ ಕ್ರಿಯೆ ಖಾಲಿ $1 ಗುಂಪುಲೆಡ್ ಒಂಜೆಕ್ ಸೇರ್ದುಪ್ಪುನ ಬಳಕೆದಾರೆರೆಗ್ ಮಾತ್ರ.',
 
 'versionrequired'     => 'ಮೀಡಿಯವಿಕಿಯದ $1 ನೇ ಅವೃತ್ತಿ ಬೋಡು',
-'versionrequiredtext' => 'ಈ ಪುಟೊನು ತೂಯೆರೆ ಮೀಡಿಯವಿಕಿಯದ $1 ನೇ ಆವೃತ್ತಿ ಬೋಡು. 
+'versionrequiredtext' => 'ಈ ಪುಟೊನು ತೂಯೆರೆ ಮೀಡಿಯವಿಕಿಯದ $1 ನೇ ಆವೃತ್ತಿ ಬೋಡು.
 [[Special:Version|ಆವೃತ್ತಿ]] ಪುಟನು ತೂಲೆ.',
 
 'ok'                      => 'ಸರಿ',
@@ -341,8 +337,6 @@ $messages = array(
 'extlink_tip'     => 'ಪಿದಯಿದ ಲಿಂಕ್ (http:// ರ್ದ್ ಶುರು ಮಲ್ಪೆರೆ ಮರಪೊಚಿ)',
 'headline_sample' => 'ಹೆಡ್-ಲೈನ್’ದ ಬರಹ',
 'headline_tip'    => '2ನೇ ಲೆವೆಲ್ದ ಹೆಡ್-ಲೈನ್',
-'math_sample'     => 'ಮುಲ್ಪ ಸೂತ್ರೊನು ಪಾಡ್’ಲೆ',
-'math_tip'        => 'ಗಣಿತ ಸೂತ್ರ (LaTeX)',
 'nowiki_sample'   => 'ಈ ಜಾಗೆಡ್ ಬರೆತಿನಂಚಿನ ಬರಹ ವಿಕೀಕರಣ ಆಪುಜಿ',
 'nowiki_tip'      => 'ವಿಕಿ ರಚನಾಕ್ರಮೊನು(ಫೋರ್ಮ್ಯಾಟ್) ಅಳವಡಿಸೊಚಿ',
 'image_tip'       => 'ಎ೦ಬೆಡ್ ಮಲ್ತಿನ ಫೈಲ್',
@@ -423,9 +417,6 @@ $messages = array(
 'searchresulttext'          => '{{SITENAME}} ಡ್ ನಾಡಟ ಮಲ್ಪುನ ಬಗ್ಗೆ ಜಾಸ್ತಿ ಮಾಹಿತಿಗ್ [[{{MediaWiki:Helppage}}|{{int:help}}]] ನ್ ತೂಲೆ.',
 'searchsubtitle'            => 'ಈರ್ \'\'\'[[:$1]]\'\'\' ನ್ ನಾಡಿಯರ್ ([[Special:Prefixindex/$1|"$1" ರ್ದ್ ಶುರುವಾಪುನ ಪೂರ ಪುಟೊಲು]]{{int:pipe-separator}}[[Special:WhatLinksHere/$1|"$1" ಗ್ ಲಿಂಕ್ ಕೊರ್ಪುನ ಪೂರ ಪುಟೊಲು]])',
 'searchsubtitleinvalid'     => "'''$1''' ನ್ ಈರ್ ನಾಡಿಯರ್.",
-'noexactmatch'              => "'''\"\$1\". ಅ೦ಚಿನ ವಾ ಪುಟಲಾ ಇಜ್ಜಿ. '''
-ಈರ್ [[:\$1| ಐನ್ ಸುರು ಮಲ್ಪೊಲಿ]].",
-'noexactmatch-nocreate'     => "'''\"\$1\" ಪುದರ್ದ ವಾ ಪುಟೊಲಾ ಇಜ್ಜಿ.'''",
 'notitlematches'            => 'ವಾ ಪುಟೊತ ಶಿರ್ಷಿಕೆಲಾ ಹೊಂದಿಕೆ ಆವೊಂದಿಜ್ಜಿ',
 'notextmatches'             => 'ವಾ ಪುಟೊತ ಪಠ್ಯೊಡುಲಾ ಹೋಲಿಕೆ ಇಜ್ಜಿ',
 'prevn'                     => 'ದುಂಬುದ {{PLURAL:$1|$1}}',
@@ -490,7 +481,7 @@ $messages = array(
 'recentchangeslinked-toolbox'  => 'ಸಂಬಂಧ ಉಪ್ಪುನಂಚಿನ ಬದಲಾವಣೆಲು',
 'recentchangeslinked-title'    => '"$1" ಪುಟೊಟು ಆತಿನ ಬದಲಾವಣೆಲು',
 'recentchangeslinked-noresult' => 'ಕೊರ್ತಿನ ಸಮಯೊಡು ಲಿಂಕ್ ಉಪ್ಪುನ ಪುಟೊಲೆಡ್ ಓವುಲಾ ಬದಲಾವಣೆಲು ಆತಿಜಿ.',
-'recentchangeslinked-summary'  => "ಒಂಜಿ ನಿರ್ದಿಷ್ಟ ಪುಟೊರ್ದು (ಅತ್ತ್’ನ್ಡ ನಿರ್ದಿಷ್ಟ ವರ್ಗೊಗು ಸೇರ್ದಿನ ಪುಟೊಲೆರ್ದ್) ಸಂಪರ್ಕ ಉಪ್ಪುನ ಪುಟೊಲೆಡ್ ಇಂಚಿಪ ಮಲ್ತಿನಂಚಿನ ಬದಲಾವಣೆಲೆನ್ ತಿರ್ತ್ ಪಟ್ಟಿ ಮಲ್ಪೆರಾತ್’ನ್ಡ್. 
+'recentchangeslinked-summary'  => "ಒಂಜಿ ನಿರ್ದಿಷ್ಟ ಪುಟೊರ್ದು (ಅತ್ತ್’ನ್ಡ ನಿರ್ದಿಷ್ಟ ವರ್ಗೊಗು ಸೇರ್ದಿನ ಪುಟೊಲೆರ್ದ್) ಸಂಪರ್ಕ ಉಪ್ಪುನ ಪುಟೊಲೆಡ್ ಇಂಚಿಪ ಮಲ್ತಿನಂಚಿನ ಬದಲಾವಣೆಲೆನ್ ತಿರ್ತ್ ಪಟ್ಟಿ ಮಲ್ಪೆರಾತ್’ನ್ಡ್.
 [[Special:Watchlist|ಇರೆನ ವೀಕ್ಷಣಾಪಟ್ಟಿಡ್]] ಉಪ್ಪುನ ಪುಟೊಲು '''ದಪ್ಪ ಅಕ್ಷರೊಡು''' ಉಂಡು.",
 'recentchangeslinked-page'     => 'ಪುಟೊತ ಪುದರ್:',
 'recentchangeslinked-to'       => 'ಇಂದೆತ ಬದಲಿಗ್ ಕೊರ್ತಿನ ಪುಟೊಗು ಲಿಂಕ್ ಉಪ್ಪುನಂಚಿನ ಪುಟೊಲೆದ ಬದಲಾವಣೆಲೆನ್ ತೊಜ್ಪಾವು',
@@ -561,7 +552,6 @@ $messages = array(
 # Watchlist
 'watchlist'         => 'ವೀಕ್ಷಣಾ ಪಟ್ಟಿ',
 'mywatchlist'       => 'ಎನ್ನ ವೀಕ್ಷಣಾಪಟ್ಟಿ',
-'watchlistfor'      => "('''$1''' ಇಂದೆತ)",
 'watch'             => 'ತೂಲೆ',
 'watchthispage'     => 'ಈ ಪುಟೊನು ತೂಲೆ',
 'unwatch'           => 'ವೀಕ್ಷಣಾಪಟ್ಟಿರ್ದ್ ದೆಪ್ಪು',
@@ -573,7 +563,7 @@ $messages = array(
 
 # Delete
 'actioncomplete' => 'ಕಾರ್ಯ ಸಂಪೂರ್ಣ',
-'deletedarticle' => '"$1" ನೆನ್ನ್ ದೆತ್ತ್ ದಾ೦ಡ್',
+'deletedarticle' => '"[[$1]]" ನೆನ್ನ್ ದೆತ್ತ್ ದಾ೦ಡ್',
 'dellogpage'     => 'ಡಿಲೀಟ್ ಮಲ್ತಿನ ಫೈಲ್’ಲೆದ ದಾಖಲೆ',
 
 # Rollback
@@ -711,11 +701,10 @@ $messages = array(
 'nextdiff'     => 'ಪೊಸ ಎಡಿಟ್ →',
 
 # Media information
-'file-info-size'       => '($1 × $2 ಪಿಕ್ಸೆಲ್, ಫೈಲ್’ದ ಗಾತ್ರ: $3, MIME ಪ್ರಕಾರ: $4)',
-'file-nohires'         => '<small>ಇಂದೆರ್ದ್ ಜಾಸ್ತಿ ವಿವರವಾಯಿನ ನೋಟ ಇಜ್ಜಿ.</small>',
-'svg-long-desc'        => '(ಎಸ್.ವಿ.ಜಿ ಫೈಲ್, ಸುಮಾರಾದ್ $1 × $2 ಪಿಕ್ಸೆಲ್, ಫೈಲ್’ದ ಗಾತ್ರ: $3)',
-'show-big-image'       => 'ಪೂರ್ತಿ ರೆಸೊಲ್ಯೂಶನ್',
-'show-big-image-thumb' => '<small>ಈ ಮುನ್ನೋಟದ ಗಾತ್ರ: $1 × $2 ಪಿಕ್ಸೆಲ್</small>',
+'file-info-size' => '$1 × $2 ಪಿಕ್ಸೆಲ್, ಫೈಲ್’ದ ಗಾತ್ರ: $3, MIME ಪ್ರಕಾರ: $4',
+'file-nohires'   => '<small>ಇಂದೆರ್ದ್ ಜಾಸ್ತಿ ವಿವರವಾಯಿನ ನೋಟ ಇಜ್ಜಿ.</small>',
+'svg-long-desc'  => 'ಎಸ್.ವಿ.ಜಿ ಫೈಲ್, ಸುಮಾರಾದ್ $1 × $2 ಪಿಕ್ಸೆಲ್, ಫೈಲ್’ದ ಗಾತ್ರ: $3',
+'show-big-image' => 'ಪೂರ್ತಿ ರೆಸೊಲ್ಯೂಶನ್',
 
 # Bad image list
 'bad_image_list' => 'ವ್ಯವಸ್ಥೆದ ಆಕಾರ ಈ ರೀತಿ ಉಂಡು:

@@ -17,7 +17,7 @@ class FileRevertForm {
 	/**
 	 * Constructor
 	 *
-	 * @param File $file File we're reverting
+	 * @param $file File we're reverting
 	 */
 	public function __construct( $file ) {
 		$this->title = $file->getTitle();
@@ -88,11 +88,11 @@ class FileRevertForm {
 	 * Show the confirmation form
 	 */
 	protected function showForm() {
-		global $wgOut, $wgUser, $wgRequest, $wgLang, $wgContLang;
+		global $wgOut, $wgUser, $wgLang, $wgContLang;
 		$timestamp = $this->getTimestamp();
 
 		$form  = Xml::openElement( 'form', array( 'method' => 'post', 'action' => $this->getAction() ) );
-		$form .= Xml::hidden( 'wpEditToken', $wgUser->editToken( $this->archiveName ) );
+		$form .= Html::hidden( 'wpEditToken', $wgUser->editToken( $this->archiveName ) );
 		$form .= '<fieldset><legend>' . wfMsgHtml( 'filerevert-legend' ) . '</legend>';
 		$form .= wfMsgExt( 'filerevert-intro', 'parse', $this->title->getText(),
 			$wgLang->date( $timestamp, true ), $wgLang->time( $timestamp, true ),

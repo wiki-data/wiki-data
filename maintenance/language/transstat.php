@@ -2,20 +2,35 @@
 /**
  * Statistics about the localisation.
  *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program; if not, write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ * http://www.gnu.org/copyleft/gpl.html
+ *
  * @file
  * @ingroup MaintenanceLanguage
  *
  * @author Ævar Arnfjörð Bjarmason <avarab@gmail.com>
- * @author Ashar Voultoiz <thoane@altern.org>
+ * @author Ashar Voultoiz <hashar at free dot fr>
  *
  * Output is posted from time to time on:
- * http://meta.wikimedia.org/wiki/Localization_statistics
+ * http://www.mediawiki.org/wiki/Localisation_statistics
  */
 $optionsWithArgs = array( 'output' );
 
-require_once( dirname(__FILE__).'/../commandLine.inc' );
+require_once( dirname( __FILE__ ) . '/../commandLine.inc' );
 require_once( 'languages.inc' );
-require_once( dirname(__FILE__).'/StatOutputs.php' );
+require_once( dirname( __FILE__ ) . '/StatOutputs.php' );
 
 
 if ( isset( $options['help'] ) ) {
@@ -29,18 +44,17 @@ if ( !isset( $options['output'] ) ) {
 
 /** Print a usage message*/
 function showUsage() {
-	print <<<END
+	print <<<TEXT
 Usage: php transstat.php [--help] [--output=csv|text|wiki]
 	--help : this helpful message
 	--output : select an output engine one of:
 		* 'csv'      : Comma Separated Values.
 		* 'wiki'     : MediaWiki syntax (default).
-		* 'metawiki' : MediaWiki syntax used for Meta-Wiki.
 		* 'text'     : Text with tabs.
 Example: php maintenance/transstat.php --output=text
 
-END;
-	exit(1);
+TEXT;
+	exit( 1 );
 }
 
 
@@ -49,9 +63,6 @@ END;
 switch ( $options['output'] ) {
 	case 'wiki':
 		$output = new wikiStatsOutput();
-		break;
-	case 'metawiki':
-		$output = new metawikiStatsOutput();
 		break;
 	case 'text':
 		$output = new textStatsOutput();

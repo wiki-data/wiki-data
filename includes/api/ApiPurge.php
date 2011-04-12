@@ -1,11 +1,11 @@
 <?php
 
-/*
- * Created on Sep 2, 2008
- *
+/**
  * API for MediaWiki 1.14+
  *
- * Copyright (C) 2008 Chad Horohoe
+ * Created on Sep 2, 2008
+ *
+ * Copyright © 2008 Chad Horohoe
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,12 +19,14 @@
  *
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
- * 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  * http://www.gnu.org/copyleft/gpl.html
+ *
+ * @file
  */
 
-if (!defined('MEDIAWIKI')) {
-	require_once ('ApiBase.php');
+if ( !defined( 'MEDIAWIKI' ) ) {
+	require_once( 'ApiBase.php' );
 }
 
 /**
@@ -33,8 +35,8 @@ if (!defined('MEDIAWIKI')) {
  */
 class ApiPurge extends ApiBase {
 
-	public function __construct($main, $action) {
-		parent :: __construct($main, $action);
+	public function __construct( $main, $action ) {
+		parent::__construct( $main, $action );
 	}
 
 	/**
@@ -43,40 +45,59 @@ class ApiPurge extends ApiBase {
 	public function execute() {
 		global $wgUser;
 		$params = $this->extractRequestParams();
-		if(!$wgUser->isAllowed('purge'))
-			$this->dieUsageMsg(array('cantpurge'));
-		if(!isset($params['titles']))
-			$this->dieUsageMsg(array('missingparam', 'titles'));
+		if ( !$wgUser->isAllowed( 'purge' ) && !$this->getMain()->isInternalMode() &&
+				!$this->getMain()->getRequest()->wasPosted() ) {
+			$this->dieUsageMsg( array( 'mustbeposted', $this->getModuleName() ) );
+		}
+
+		$forceLinkUpdate = $params['forcelinkupdate'];
+
 		$result = array();
-		foreach($params['titles'] as $t) {
+		foreach ( $params['titles'] as $t ) {
 			$r = array();
-			$title = Title::newFromText($t);
-			if(!$title instanceof Title)
-			{
+			$title = Title::newFromText( $t );
+			if ( !$title instanceof Title ) {
 				$r['title'] = $t;
 				$r['invalid'] = '';
 				$result[] = $r;
 				continue;
 			}
-			ApiQueryBase::addTitleInfo($r, $title);
-			if(!$title->exists())
-			{
+			ApiQueryBase::addTitleInfo( $r, $title );
+			if ( !$title->exists() ) {
 				$r['missing'] = '';
 				$result[] = $r;
 				continue;
 			}
-			$article = Mediawiki::articleFromTitle( $title );
+			$article = MediaWiki::articleFromTitle( $title );
 			$article->doPurge(); // Directly purge and skip the UI part of purge().
 			$r['purged'] = '';
+			
+			if( $forceLinkUpdate ) {
+				if ( !$wgUser->pingLimiter() ) {
+					global $wgParser, $wgEnableParserCache;
+					$popts = new ParserOptions();
+					$p_result = $wgParser->parse( $article->getContent(), $title, $popts );
+
+					# Update the links tables
+					$u = new LinksUpdate( $title, $p_result );
+					$u->doUpdate();
+
+					$r['linkupdate'] = '';
+
+					if ( $wgEnableParserCache ) {
+						$pcache = ParserCache::singleton();
+						$pcache->save( $p_result, $article, $popts );
+					}
+				} else {
+					$this->setWarning( $this->parseMsg( array( 'actionthrottledtext' ) ) );
+					$forceLinkUpdate = false;
+				}
+			}
+			
 			$result[] = $r;
 		}
-		$this->getResult()->setIndexedTagName($result, 'page');
-		$this->getResult()->addValue(null, $this->getModuleName(), $result);
-	}
-
-	public function mustBePosted() {
-		global $wgUser;
-		return $wgUser->isAnon();
+		$this->getResult()->setIndexedTagName( $result, 'page' );
+		$this->getResult()->addValue( null, $this->getModuleName(), $result );
 	}
 
 	public function isWriteMode() {
@@ -84,23 +105,32 @@ class ApiPurge extends ApiBase {
 	}
 
 	public function getAllowedParams() {
-		return array (
+		return array(
 			'titles' => array(
-				ApiBase :: PARAM_ISMULTI => true
-			)
+				ApiBase::PARAM_ISMULTI => true,
+				ApiBase::PARAM_REQUIRED => true
+			),
+			'forcelinkupdate' => false,
 		);
 	}
 
 	public function getParamDescription() {
-		return array (
+		return array(
 			'titles' => 'A list of titles',
+			'forcelinkupdate' => 'Update the links tables',
 		);
 	}
 
 	public function getDescription() {
-		return array (
-			'Purge the cache for the given titles.'
+		return array( 'Purge the cache for the given titles.',
+			'This module requires a POST request if the user is not logged in.'
 		);
+	}
+
+	public function getPossibleErrors() {
+		return array_merge( parent::getPossibleErrors(), array(
+			array( 'cantpurge' ),
+		) );
 	}
 
 	protected function getExamples() {
@@ -110,6 +140,6 @@ class ApiPurge extends ApiBase {
 	}
 
 	public function getVersion() {
-		return __CLASS__ . ': $Id: ApiPurge.php 49151 2009-04-03 13:27:30Z demon $';
+		return __CLASS__ . ': $Id: ApiPurge.php 79969 2011-01-10 22:36:26Z reedy $';
 	}
 }

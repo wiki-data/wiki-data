@@ -55,8 +55,7 @@ $messages = array(
 'tog-editsection'             => '[सम्पादन] लिङ्कं सेक्सन सम्पादन यायेज्युगु यानादिसँ',
 'tog-editsectiononrightclick' => 'सेक्सनया छ्यँआखले राइट क्लिक याना सेक्सन सम्पादन यायेज्युगु यानादिसँ (जाभास्क्रिप्ट)',
 'tog-showtoc'                 => 'कन्टेण्टया धलः क्यनादिसँ (३गु स्वया अप्व शिर्षक दुगु पौया निंति)',
-'tog-rememberpassword'        => 'जिगु लग इन थ्व कम्प्युतरय् लुमंकादिसँ',
-'tog-editwidth'               => 'सम्पादन सन्दुकया ब्याः जायेधुंकल',
+'tog-rememberpassword'        => 'जिगु लग इन थ्व कम्प्युतरय् लुमंकादिसँ (for a maximum of $1 {{PLURAL:$1|day|days}})',
 'tog-watchcreations'          => 'जिं देकागु / न्ह्यथनागु पौयात जिगु दृष्टिधलः(watchlist)य् तयादिसँ',
 'tog-watchdefault'            => 'जिं सम्पादन यानागु पौयात जिगु वाचलिस्टय् तयादिसँ',
 'tog-watchmoves'              => 'जिं संकागु (move) पौयात जिगु वाचलिस्टय् तयादिसँ',
@@ -172,9 +171,6 @@ $messages = array(
 'faq'     => 'आपालं न्यनिगु न्ह्यसः (FAQ)',
 'faqpage' => 'Project:आपालं न्यनिगु न्ह्यसःत (FAQ)',
 
-# Metadata in edit box
-'metadata_help' => 'मेटाडेटा:',
-
 'returnto'         => '$1य् लिहाँझासँ।',
 'tagline'          => '{{SITENAME}}नं',
 'help'             => 'ग्वहालि',
@@ -262,9 +258,9 @@ $messages = array(
 'databaseerror'   => 'डेटाबेस इरर',
 'dberrortext'     => 'छगू डेटाबेस क्वेरी सिन्ट्याक्स इरर जूगु दु।
 थ्व इररं सफ्टवेयरय् bug दूगु इंगीत यायेफु।
-थ्व स्वया न्हः कोशिस जूगु डेटाबेस क्वेरी 
-"<tt>$2</tt>" फंक्सनया 
-<blockquote><tt>$1</tt></blockquote> ख। 
+थ्व स्वया न्हः कोशिस जूगु डेटाबेस क्वेरी
+"<tt>$2</tt>" फंक्सनया
+<blockquote><tt>$1</tt></blockquote> ख।
 MySQL नं इरर "<tt>$3: $4</tt>" क्यंगु दु।',
 'laggedslavemode' => 'चेतावनी: पतिइ न्हुगु अपदेत मदेफु ।',
 'readonly'        => 'देताबेस संरक्षित',
@@ -311,11 +307,6 @@ MySQL नं इरर "<tt>$3: $4</tt>" क्यंगु दु।',
 'revisionasof'     => '$1 तक्कया संस्करण',
 'previousrevision' => '←पुलांगु संस्करण',
 
-# Diffs
-'diff-i'      => "'''ब्यक्वःगु'''",
-'diff-b'      => "'''गाढा'''",
-'diff-strong' => "'''कडा'''",
-
 # Search results
 'searchhelp-url' => 'Help:धलःपौ',
 'searchrelated'  => 'स्वापू दुःगु',
@@ -325,7 +316,6 @@ MySQL नं इरर "<tt>$3: $4</tt>" क्यंगु दु।',
 # Preferences page
 'mypreferences'  => 'जिगु प्राथमिकता',
 'changepassword' => 'पासवर्द हिलादिसँ',
-'prefs-math'     => 'गणित',
 'prefs-datetime' => 'दिं व ई',
 'prefs-personal' => 'छ्य्‌लामि प्रोफाइल',
 'prefs-rc'       => 'न्हुगु हिलेज्या',

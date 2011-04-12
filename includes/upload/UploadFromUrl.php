@@ -1,105 +1,222 @@
 <?php
 /**
+ * Implements uploading from a HTTP resource.
+ *
  * @file
  * @ingroup upload
- * 
- * Implements uploading from a HTTP resource.
- * 
  * @author Bryan Tong Minh
  * @author Michael Dale
  */
-class UploadFromUrl extends UploadBase {
-	protected $mTempDownloadPath;
 
-	// by default do a SYNC_DOWNLOAD
-	protected $dl_mode =  Http::SYNC_DOWNLOAD;
+class UploadFromUrl extends UploadBase {
+	protected $mAsync, $mUrl;
+	protected $mIgnoreWarnings = true;
+
+	protected $mTempPath;
 
 	/**
-	 * Checks if the user is allowed to use the upload-by-URL feature. If the 
+	 * Checks if the user is allowed to use the upload-by-URL feature. If the
 	 * user is allowed, pass on permissions checking to the parent.
+	 *
+	 * @param $user User
 	 */
 	public static function isAllowed( $user ) {
-		if( !$user->isAllowed( 'upload_by_url' ) )
+		if ( !$user->isAllowed( 'upload_by_url' ) )
 			return 'upload_by_url';
 		return parent::isAllowed( $user );
 	}
 
 	/**
 	 * Checks if the upload from URL feature is enabled
+	 * @return bool
 	 */
 	public static function isEnabled() {
 		global $wgAllowCopyUploads;
 		return $wgAllowCopyUploads && parent::isEnabled();
 	}
 
-	/** 
-	 * Entry point for API upload:: ASYNC_DOWNLOAD (if possible) 
+	/**
+	 * Entry point for API upload
+	 *
+	 * @param $name string
+	 * @param $url string
+	 * @param $async mixed Whether the download should be performed
+	 * asynchronous. False for synchronous, async or async-leavemessage for
+	 * asynchronous download.
 	 */
-	public function initialize( $name, $url, $asyncdownload, $na = false ) {
-		global $wgTmpDirectory, $wgPhpCli;
+	public function initialize( $name, $url, $async = false ) {
+		global $wgAllowAsyncCopyUploads;
 
-		// check for $asyncdownload request:
-		if( $asyncdownload !== false){
-			if( $wgPhpCli && wfShellExecEnabled() ){
-				$this->dl_mode = Http::ASYNC_DOWNLOAD;
-			} else {
-				$this->dl_mode = Http::SYNC_DOWNLOAD;
-			}
+		$this->mUrl = $url;
+		$this->mAsync = $wgAllowAsyncCopyUploads ? $async : false;
+		if ( $async ) {
+			throw new MWException( 'Asynchronous copy uploads are no longer possible as of r81612.' );
 		}
 
-		$localFile = tempnam( $wgTmpDirectory, 'WEBUPLOAD' );
-		parent::initialize( $name, $localFile, 0, true );
-
-		$this->mUrl = trim( $url );
-	}
-
-	public function isAsync(){
-		return $this->dl_mode == Http::ASYNC_DOWNLOAD;
+		$tempPath = $this->mAsync ? null : $this->makeTemporaryFile();
+		# File size and removeTempFile will be filled in later
+		$this->initializePathInfo( $name, $tempPath, 0, false );
 	}
 
 	/**
-	 * Entry point for SpecialUpload no ASYNC_DOWNLOAD possible
-	 * @param $request Object: WebRequest object
+	 * Entry point for SpecialUpload
+	 * @param $request WebRequest object
 	 */
 	public function initializeFromRequest( &$request ) {
 		$desiredDestName = $request->getText( 'wpDestFile' );
-		if( !$desiredDestName )
+		if ( !$desiredDestName )
 			$desiredDestName = $request->getText( 'wpUploadFileURL' );
 		return $this->initialize(
 			$desiredDestName,
-	 		$request->getVal( 'wpUploadFileURL' ),
+			trim( $request->getVal( 'wpUploadFileURL' ) ),
 			false
 		);
 	}
 
 	/**
-	 * Do the real fetching stuff
+	 * @param $request WebRequest object
 	 */
+	public static function isValidRequest( $request ) {
+		global $wgUser;
+
+		$url = $request->getVal( 'wpUploadFileURL' );
+		return !empty( $url )
+			&& Http::isValidURI( $url )
+			&& $wgUser->isAllowed( 'upload_by_url' );
+	}
+
+	public function getSourceType() { return 'url'; }
+
 	public function fetchFile() {
-		// Entry point for SpecialUpload
-		if( Http::isValidURI( $this->mUrl ) === false ) {
-			return Status::newFatal( 'upload-proto-error' );
+		if ( !Http::isValidURI( $this->mUrl ) ) {
+			return Status::newFatal( 'http-invalid-url' );
 		}
 
-		// Now do the actual download to the target file:
-		$status = Http::doDownload( $this->mUrl, $this->mTempPath, $this->dl_mode );
+		if ( !$this->mAsync ) {
+			return $this->reallyFetchFile();
+		}
+		return Status::newGood();
+	}
+	/**
+	 * Create a new temporary file in the URL subdirectory of wfTempDir().
+	 *
+	 * @return string Path to the file
+	 */
+	protected function makeTemporaryFile() {
+		return tempnam( wfTempDir(), 'URL' );
+	}
+	/**
+	 * Save the result of a HTTP request to the temporary file
+	 *
+	 * @param $req MWHttpRequest
+	 * @return Status
+	 */
+	private function saveTempFile( $req ) {
+		if ( $this->mTempPath === false ) {
+			return Status::newFatal( 'tmp-create-error' );
+		}
+		if ( file_put_contents( $this->mTempPath, $req->getContent() ) === false ) {
+			return Status::newFatal( 'tmp-write-error' );
+		}
 
-		// Update the local filesize var:
 		$this->mFileSize = filesize( $this->mTempPath );
+
+		return Status::newGood();
+	}
+	/**
+	 * Download the file, save it to the temporary file and update the file
+	 * size and set $mRemoveTempFile to true.
+	 */
+	protected function reallyFetchFile() {
+		$req = MWHttpRequest::factory( $this->mUrl );
+		$status = $req->execute();
+
+		if ( !$status->isOk() ) {
+			return $status;
+		}
+
+		$status = $this->saveTempFile( $req );
+		if ( !$status->isGood() ) {
+			return $status;
+		}
+		$this->mRemoveTempFile = true;
 
 		return $status;
 	}
 
 	/**
-	 * @param $request Object: WebRequest object
+	 * Wrapper around the parent function in order to defer verifying the
+	 * upload until the file really has been fetched.
 	 */
-	public static function isValidRequest( $request ){
-		if( !$request->getVal( 'wpUploadFileURL' ) )
-			return false;
-		// check that is a valid url:
-		return Http::isValidURI( $request->getVal( 'wpUploadFileURL' ) );
+	public function verifyUpload() {
+		if ( $this->mAsync ) {
+			return array( 'status' => UploadBase::OK );
+		}
+		return parent::verifyUpload();
 	}
 
+	/**
+	 * Wrapper around the parent function in order to defer checking warnings
+	 * until the file really has been fetched.
+	 */
+	public function checkWarnings() {
+		if ( $this->mAsync ) {
+			$this->mIgnoreWarnings = false;
+			return array();
+		}
+		return parent::checkWarnings();
+	}
 
+	/**
+	 * Wrapper around the parent function in order to defer checking protection
+	 * until we are sure that the file can actually be uploaded
+	 */
+	public function verifyTitlePermissions( $user ) {
+		if ( $this->mAsync ) {
+			return true;
+		}
+		return parent::verifyTitlePermissions( $user );
+	}
+
+	/**
+	 * Wrapper around the parent function in order to defer uploading to the
+	 * job queue for asynchronous uploads
+	 */
+	public function performUpload( $comment, $pageText, $watch, $user ) {
+		if ( $this->mAsync ) {
+			$sessionKey = $this->insertJob( $comment, $pageText, $watch, $user );
+
+			$status = new Status;
+			$status->error( 'async', $sessionKey );
+			return $status;
+		}
+
+		return parent::performUpload( $comment, $pageText, $watch, $user );
+	}
+
+	/**
+	 * @param  $comment
+	 * @param  $pageText
+	 * @param  $watch
+	 * @param  $user User
+	 * @return
+	 */
+	protected function insertJob( $comment, $pageText, $watch, $user ) {
+		$sessionKey = $this->stashSession();
+		$job = new UploadFromUrlJob( $this->getTitle(), array(
+			'url' => $this->mUrl,
+			'comment' => $comment,
+			'pageText' => $pageText,
+			'watch' => $watch,
+			'userName' => $user->getName(),
+			'leaveMessage' => $this->mAsync == 'async-leavemessage',
+			'ignoreWarnings' => $this->mIgnoreWarnings,
+			'sessionId' => session_id(),
+			'sessionKey' => $sessionKey,
+		) );
+		$job->initializeSessionData();
+		$job->insert();
+		return $sessionKey;
+	}
 
 }

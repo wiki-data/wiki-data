@@ -7,6 +7,7 @@
  * @ingroup Language
  * @file
  *
+ * @author Diego Grez
  * @author Erebedhel
  * @author Kanon6917
  */
@@ -29,8 +30,7 @@ $messages = array(
 'tog-editsection'             => '[Turkaña] sipitampi tuqitaki turkawi luräña',
 'tog-editsectiononrightclick' => '(JavaScript munawiwa) titulxat tuqina kupi suxuqiñampi tuqitaki turkawi luräña',
 'tog-showtoc'                 => 'Waruchataw uñachayaña (kimsa tituljampi uñstawitaki)',
-'tog-rememberpassword'        => "Akax jasanchirin imt'awija amtaña",
-'tog-editwidth'               => 'Akiptawit llataxa taqi anchuniwa',
+'tog-rememberpassword'        => "Akax jasanchirin imt'awija amtaña (for a maximum of $1 {{PLURAL:$1|day|days}})",
 'tog-watchcreations'          => "Unch'ukit waruchatajana nayaxa uñstawix uñstayawajata yapxataña",
 'tog-watchdefault'            => "Unch'ukit waruchatajana nayaxa uñstawix turkajata yapxataña",
 'tog-watchmoves'              => "Unch'ukit waruchatajana nayaxa uñstawix sutiyarajata yapxataña",
@@ -197,11 +197,13 @@ $messages = array(
 'loginlanguagelabel' => 'Aru: $1',
 
 # Edit pages
-'summary'  => 'Juk’aptayawi:',
-'subject'  => 'Yatsuwi/titulu:',
-'yourdiff' => 'Jalaqtatanaka',
+'summary'   => 'Juk’aptayäwi:',
+'subject'   => 'Yatsuwi/titulu:',
+'minoredit' => 'Akax janiw taqpachäkiti',
+'yourdiff'  => 'Jalaqtatanaka',
 
 # Preferences page
+'preferences'    => 'Amtajarjama',
 'prefs-rc'       => 'Jichha kutikiptatanaka',
 'timezoneoffset' => 'Jalaqtata',
 'yourlanguage'   => 'Aru:',
@@ -228,6 +230,9 @@ $messages = array(
 
 # Miscellaneous special pages
 'move' => 'Qillqaraña',
+
+# Book sources
+'booksources-go' => 'Saraña',
 
 # Special:Log
 'specialloguserlabel'  => 'Apnaqiri:',

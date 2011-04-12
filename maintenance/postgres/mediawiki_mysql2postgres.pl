@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 ## Convert data from a MySQL mediawiki database into a Postgres mediawiki database
-## svn: $Id: mediawiki_mysql2postgres.pl 43845 2008-11-22 06:44:45Z greg $
+## svn: $Id: mediawiki_mysql2postgres.pl 65542 2010-04-26 13:46:04Z demon $
 
 ## NOTE: It is probably easier to dump your wiki using maintenance/dumpBackup.php
 ## and then import it with maintenance/importDump.php
@@ -181,7 +181,7 @@ $MYSQLSOCKET and $conninfo .= "\n--   socket    $MYSQLSOCKET";
 print qq{
 -- Dump of MySQL Mediawiki tables for import into a Postgres Mediawiki schema
 -- Performed by the program: $0
--- Version: $VERSION (subversion }.q{$LastChangedRevision: 43845 $}.qq{)
+-- Version: $VERSION (subversion }.q{$LastChangedRevision: 65542 $}.qq{)
 -- Author: Greg Sabino Mullane <greg\@turnstep.com> Comments welcome
 --
 -- This file was created: $now
@@ -416,15 +416,9 @@ SELECT setval('page_page_id_seq',      1+coalesce(max(page_id),0),false) FROM pa
 SELECT setval('pr_id_val',             1+coalesce(max(pr_id)  ,0),false) FROM page_restrictions;
 SELECT setval('rc_rc_id_seq',          1+coalesce(max(rc_id)  ,0),false) FROM recentchanges;
 SELECT setval('rev_rev_id_val',        1+coalesce(max(rev_id) ,0),false) FROM revision;
-SELECT setval('text_old_id_val',       1+coalesce(max(old_id) ,0),false) FROM pagecontent;
+SELECT setval('text_old_id_seq',       1+coalesce(max(old_id) ,0),false) FROM pagecontent;
 SELECT setval('trackbacks_tb_id_seq',  1+coalesce(max(tb_id)  ,0),false) FROM trackbacks;
 SELECT setval('user_user_id_seq',      1+coalesce(max(user_id),0),false) FROM mwuser;
-};
-
-## Finally, make a record in the mediawiki_version table about this import
-print qq{
-INSERT INTO mediawiki_version (type,mw_version,notes) VALUES ('MySQL import','??',
-'Imported from file created on $now. Old version: $current_version');
 };
 
 print "COMMIT;\n\\o\n\n-- End of dump\n\n";
@@ -438,7 +432,6 @@ __DATA__
 ## or leave blank if it should be skipped
 pagecontent text
 mwuser user
-mediawiki_version
 archive2
 profiling
 objectcache

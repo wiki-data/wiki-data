@@ -9,9 +9,11 @@
  *
  * @author Arastein
  * @author Asoxor
+ * @author George Animal
+ * @author Marmzok
  */
 
-$fallback = 'ckb-arab';
+$fallback = 'ckb';
 
 $digitTransformTable = array(
 	'0' => '٠', # &#x0660;
@@ -29,13 +31,15 @@ $digitTransformTable = array(
 );
 
 $messages = array(
+'underline-never' => 'Qet na',
+
 # Dates
 'january' => 'کانوونی دووەم',
 
 # Categories related messages
 'hidden-category-category' => 'هاوپۆلە شاردراوەکان',
 
-'talkpagelinktext' => 'قسە',
+'talkpagelinktext' => 'لێدوان',
 
 # All link text and link target definitions of links into project namespace that get used by other message strings, with the exception of user group pages (see grouppage) and the disambiguation template definition (see disambiguations).
 'aboutsite' => 'دەربارەی {{SITENAME}}',

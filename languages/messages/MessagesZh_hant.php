@@ -8,14 +8,24 @@
  * @file
  *
  * @author Alexsh
+ * @author Andrew971218
  * @author Bencmq
  * @author FireJackey
+ * @author Frankou
+ * @author Gaoxuewei
+ * @author Hakka
+ * @author Horacewai2
  * @author Jidanni
+ * @author Jimmy xu wrk
  * @author KaiesTse
  * @author Liangent
+ * @author Mark85296341
+ * @author Pbdragonwang
+ * @author PhiLiP
  * @author Philip
  * @author Shinjiman
  * @author Skjackey tse
+ * @author Waihorace
  * @author Wmr89502270
  * @author Wong128hk
  * @author Wrightbus
@@ -54,7 +64,7 @@ $namespaceAliases = array(
 	"用戶對話" => NS_USER_TALK,
 	"用戶討論" => NS_USER_TALK,
 	# This has never worked so it's unlikely to annoy anyone if I disable it -- TS
-	#"{{SITENAME}}_對話" => NS_PROJECT_TALK
+	# "{{SITENAME}}_對話" => NS_PROJECT_TALK
 	"圖像" => NS_FILE,
 	"檔案" => NS_FILE,
 	"文件" => NS_FILE,
@@ -83,34 +93,35 @@ $namespaceAliases = array(
 $specialPageAliases = array(
 	'DoubleRedirects'           => array( '雙重重定向頁面' ),
 	'BrokenRedirects'           => array( '損壞的重定向頁' ),
-	'Userlogin'                 => array( '用戶登入' ),
+	'Disambiguations'           => array( '消歧義頁' ),
+	'Userlogin'                 => array( '用戶登錄' ),
 	'Userlogout'                => array( '用戶登出' ),
-	'CreateAccount'             => array( '創建帳戶' ),
+	'CreateAccount'             => array( '創建賬戶' ),
 	'Preferences'               => array( '參數設置' ),
 	'Watchlist'                 => array( '監視列表' ),
 	'Recentchanges'             => array( '最近更改' ),
-	'Upload'                    => array( '上載檔案' ),
-	'Listfiles'                 => array( '檔案列表' ),
-	'Newimages'                 => array( '新建檔案' ),
+	'Upload'                    => array( '上傳文件' ),
+	'Listfiles'                 => array( '文件列表' ),
+	'Newimages'                 => array( '新建文件' ),
 	'Listusers'                 => array( '用戶列表' ),
 	'Listgrouprights'           => array( '群組權限' ),
-	'Statistics'                => array( '統計资讯' ),
+	'Statistics'                => array( '統計信息' ),
 	'Randompage'                => array( '隨機頁面' ),
 	'Lonelypages'               => array( '孤立頁面' ),
 	'Uncategorizedpages'        => array( '未歸類頁面' ),
 	'Uncategorizedcategories'   => array( '未歸類分類' ),
-	'Uncategorizedimages'       => array( '未歸類檔案' ),
+	'Uncategorizedimages'       => array( '未歸類文件' ),
 	'Uncategorizedtemplates'    => array( '未歸類模板' ),
 	'Unusedcategories'          => array( '未使用分類' ),
-	'Unusedimages'              => array( '未使用檔案' ),
+	'Unusedimages'              => array( '未使用文件' ),
 	'Wantedpages'               => array( '待撰頁面' ),
 	'Wantedcategories'          => array( '待撰分類' ),
-	'Wantedfiles'               => array( '需要的檔案' ),
+	'Wantedfiles'               => array( '需要的文件' ),
 	'Wantedtemplates'           => array( '需要的模板' ),
-	'Mostlinked'                => array( '最多連結頁面' ),
-	'Mostlinkedcategories'      => array( '最多連結分類' ),
-	'Mostlinkedtemplates'       => array( '最多連結模板' ),
-	'Mostimages'                => array( '最多連結檔案' ),
+	'Mostlinked'                => array( '最多鏈接頁面' ),
+	'Mostlinkedcategories'      => array( '最多鏈接分類' ),
+	'Mostlinkedtemplates'       => array( '最多鏈接模板' ),
+	'Mostimages'                => array( '最多鏈接文件' ),
 	'Mostcategories'            => array( '最多分類頁面' ),
 	'Mostrevisions'             => array( '最多修訂頁面' ),
 	'Fewestrevisions'           => array( '最少修訂頁面' ),
@@ -118,45 +129,60 @@ $specialPageAliases = array(
 	'Longpages'                 => array( '長頁面' ),
 	'Newpages'                  => array( '最新頁面' ),
 	'Ancientpages'              => array( '最早頁面' ),
-	'Deadendpages'              => array( '斷連頁面' ),
+	'Deadendpages'              => array( '斷鏈頁面' ),
 	'Protectedpages'            => array( '已保護頁面' ),
 	'Protectedtitles'           => array( '已保護標題' ),
 	'Allpages'                  => array( '所有頁面' ),
 	'Prefixindex'               => array( '前綴索引' ),
-	'Ipblocklist'               => array( '封禁列表' ),
+	'BlockList'                 => array( '封禁列表' ),
+	'Unblock'                   => array( '解除封禁' ),
 	'Specialpages'              => array( '特殊頁面' ),
 	'Contributions'             => array( '用戶貢獻' ),
 	'Emailuser'                 => array( '電郵用戶' ),
 	'Confirmemail'              => array( '確認電子郵件' ),
-	'Whatlinkshere'             => array( '連入頁面' ),
-	'Recentchangeslinked'       => array( '連出更改' ),
+	'Whatlinkshere'             => array( '鏈入頁面' ),
+	'Recentchangeslinked'       => array( '鏈出更改' ),
 	'Movepage'                  => array( '移動頁面' ),
-	'Booksources'               => array( '網路書源' ),
+	'Blockme'                   => array( '封禁我' ),
+	'Booksources'               => array( '網絡書源' ),
 	'Categories'                => array( '頁面分類' ),
 	'Export'                    => array( '導出頁面' ),
-	'Version'                   => array( '版本資訊' ),
-	'Allmessages'               => array( '所有訊息' ),
+	'Version'                   => array( '版本信息' ),
+	'Allmessages'               => array( '所有信息' ),
 	'Log'                       => array( '日誌' ),
+	'Block'                     => array( '查封用戶' ),
 	'Undelete'                  => array( '恢復被刪頁面' ),
 	'Import'                    => array( '導入頁面' ),
+	'Lockdb'                    => array( '鎖定數據庫' ),
+	'Unlockdb'                  => array( '解除數據庫鎖定' ),
 	'Userrights'                => array( '用戶權限' ),
-	'MIMEsearch'                => array( 'MIME搜尋' ),
+	'MIMEsearch'                => array( 'MIME搜索' ),
+	'FileDuplicateSearch'       => array( '搜索重複文件' ),
+	'Unwatchedpages'            => array( '未被監視的頁面' ),
+	'Listredirects'             => array( '重定向頁面列表' ),
+	'Revisiondelete'            => array( '刪除或恢復版本' ),
 	'Unusedtemplates'           => array( '未使用模板' ),
+	'Randomredirect'            => array( '隨機重定向頁面' ),
 	'Mypage'                    => array( '我的用戶頁' ),
 	'Mytalk'                    => array( '我的討論頁' ),
 	'Mycontributions'           => array( '我的貢獻' ),
 	'Listadmins'                => array( '管理員列表' ),
 	'Listbots'                  => array( '機器人列表' ),
 	'Popularpages'              => array( '熱點頁面' ),
-	'Search'                    => array( '搜尋' ),
+	'Search'                    => array( '搜索' ),
 	'Resetpass'                 => array( '修改密碼' ),
+	'Withoutinterwiki'          => array( '沒有跨語言鏈接的頁面' ),
 	'MergeHistory'              => array( '合併歷史' ),
-	'Filepath'                  => array( '檔案路徑' ),
+	'Filepath'                  => array( '文件路徑' ),
 	'Invalidateemail'           => array( '不可識別的電郵地址' ),
 	'Blankpage'                 => array( '空白頁面' ),
+	'LinkSearch'                => array( '搜索網頁鏈接' ),
 	'DeletedContributions'      => array( '已刪除的用戶貢獻' ),
 	'Tags'                      => array( '標籤' ),
 	'Activeusers'               => array( '活躍用戶' ),
+	'RevisionMove'              => array( '版本移動' ),
+	'ComparePages'              => array( '頁面比較' ),
+	'Badtitle'                  => array( '不好的標題' ),
 );
 
 $bookstoreList = array(
@@ -168,13 +194,13 @@ $bookstoreList = array(
 
 $messages = array(
 # User preference toggles
-'tog-underline'               => '鏈結加底線:',
-'tog-highlightbroken'         => '毀壞的鏈結格式<a href="" class="new">像這樣</a> （或者像這個<a href="" class="internal">?</a>）',
+'tog-underline'               => '連結加底線：',
+'tog-highlightbroken'         => '損毀連結格式為<a href="" class="new">這樣</a>（否則：像這樣<a href="" class="internal">?</a>）',
 'tog-justify'                 => '段落對齊',
 'tog-hideminor'               => '最近更改中隱藏小修改',
 'tog-hidepatrolled'           => '於最近更改中隱藏巡查過的編輯',
 'tog-newpageshidepatrolled'   => '於新頁面清單中隱藏巡查過的頁面',
-'tog-extendwatchlist'         => '增強監視清單以顯示所有更改，不只是最近的',
+'tog-extendwatchlist'         => '展開監視清單以顯示所有更改，不只是最近的',
 'tog-usenewrc'                => '使用增強最近更改 （需要JavaScript）',
 'tog-numberheadings'          => '標題自動編號',
 'tog-showtoolbar'             => '顯示編輯工具欄 （需要JavaScript）',
@@ -182,16 +208,15 @@ $messages = array(
 'tog-editsection'             => '允許通過點擊[編輯]連結編輯段落',
 'tog-editsectiononrightclick' => '允許右擊標題編輯段落 （需要JavaScript）',
 'tog-showtoc'                 => '顯示目錄 （針對一頁超過3個標題的頁面）',
-'tog-rememberpassword'        => '在這部電腦上記住我的密碼',
-'tog-editwidth'               => '加寬編輯欄位到整個螢光幕',
-'tog-watchcreations'          => '將我創建的頁面添加到我的監視列表中',
+'tog-rememberpassword'        => '在這個瀏覽器上記住我的登入資訊（可維持 $1 {{PLURAL:$1|天|天}}）',
+'tog-watchcreations'          => '將我建立的頁面添加到我的監視列表中',
 'tog-watchdefault'            => '將我更改的頁面添加到我的監視列表中',
 'tog-watchmoves'              => '將我移動的頁面加入我的監視列表',
 'tog-watchdeletion'           => '將我刪除的頁面加入我的監視列表',
 'tog-minordefault'            => '預設將編輯設定為小編輯',
 'tog-previewontop'            => '在編輯框上方顯示預覽',
 'tog-previewonfirst'          => '第一次編輯時顯示原文內容的預覽',
-'tog-nocache'                 => '停用頁面快取',
+'tog-nocache'                 => '禁止瀏覽器頁面快取',
 'tog-enotifwatchlistpages'    => '當在我的監視列表中的頁面改變時發電子郵件給我',
 'tog-enotifusertalkpages'     => '當我的對話頁發生改變時發電子郵件給我',
 'tog-enotifminoredits'        => '即使是頁面的小修改也向我發電子郵件',
@@ -199,8 +224,8 @@ $messages = array(
 'tog-shownumberswatching'     => '顯示監視用戶的數目',
 'tog-oldsig'                  => '原有簽名的預覽：',
 'tog-fancysig'                => '將簽名以維基文字對待 （不產生自動連結）',
-'tog-externaleditor'          => '預設使用外部編輯器 （進階者專用，需要在您的電腦上作出一些特別設定）',
-'tog-externaldiff'            => '預設使用外部差異分析 （進階者專用，需要在您的電腦上作出一些特別設定）',
+'tog-externaleditor'          => '預設使用外部編輯器 （進階者專用，需要在您的電腦上作出一些特別設定。[http://www.mediawiki.org/wiki/Manual:External_editors 更多信息。]）',
+'tog-externaldiff'            => '預設使用外部差異分析 （進階者專用，需要在您的電腦上作出一些特別設定。[http://www.mediawiki.org/wiki/Manual:External_editors 更多信息。]）',
 'tog-showjumplinks'           => '啟用「跳轉到」訪問連結',
 'tog-uselivepreview'          => '使用實時預覽 （需要JavaScript） （試驗中）',
 'tog-forceeditsummary'        => '當沒有輸入摘要時提醒我',
@@ -282,40 +307,39 @@ $messages = array(
 
 # Categories related messages
 'pagecategories'                 => '$1個分類',
-'category_header'                => '類別「$1」中的頁面',
+'category_header'                => '「$1」分類中的頁面',
 'subcategories'                  => '附分類',
-'category-media-header'          => '"$1"分類中的媒體',
+'category-media-header'          => '「$1」分類中的媒體',
 'category-empty'                 => "''這個分類中尚未包含任何頁面或媒體。''",
 'hidden-categories'              => '$1個隱藏分類',
 'hidden-category-category'       => '隱藏分類',
-'category-subcat-count'          => '{{PLURAL:$2|這個分類中只有以下的附分類。|這個分類中有以下的$1個附分類，共有$2個附分類。}}',
-'category-subcat-count-limited'  => '這個分類下有$1個子分類。',
-'category-article-count'         => '{{PLURAL:$2|這個分類中只有以下的頁面。|這個分類中有以下的$1個頁面，共有$2個頁面。}}',
+'category-subcat-count'          => '{{PLURAL:$2|這個分類中只有以下的子分類。|這個分類中有以下的 $1 個子分類，共有 $2 個子分類。}}',
+'category-subcat-count-limited'  => '這個分類下有$1個附分類。',
+'category-article-count'         => '{{PLURAL:$2|這個分類中只有以下的頁面。|這個分類中有以下的 $1 個頁面，共有 $2 個頁面。}}',
 'category-article-count-limited' => '這個分類下有$1個頁面。',
-'category-file-count'            => '{{PLURAL:$2|這個分類中只有以下的檔案。|這個分類中有以下的$1個檔案，共有$2個檔案。}}',
+'category-file-count'            => '{{PLURAL:$2|這個分類中只有以下的檔案。|這個分類中有以下的 $1 個檔案，共有 $2 個檔案。}}',
 'category-file-count-limited'    => '這個分類下有$1個檔案。',
 'listingcontinuesabbrev'         => '續',
 'index-category'                 => '已做索引的頁面',
 'noindex-category'               => '未做索引的頁面',
 
-'mainpagetext'      => "<big>'''已成功安裝 MediaWiki。'''</big>",
-'mainpagedocfooter' => '請參閱 [http://meta.wikimedia.org/wiki/Help:Contents 用戶手冊] 以獲得使用此 wiki 軟件的訊息！
+'mainpagetext'      => "'''已成功安裝 MediaWiki。'''",
+'mainpagedocfooter' => '請參閱[http://meta.wikimedia.org/wiki/Help:Contents 用戶手冊]以獲得使用此 wiki 軟體的訊息！
 
 == 入門 ==
-
 * [http://www.mediawiki.org/wiki/Manual:Configuration_settings MediaWiki 配置設定清單]
 * [http://www.mediawiki.org/wiki/Manual:FAQ MediaWiki 常見問題解答]
 * [https://lists.wikimedia.org/mailman/listinfo/mediawiki-announce MediaWiki 發佈郵件清單]',
 
 'about'         => '關於',
-'article'       => '頁面',
-'newwindow'     => '（在新視窗中打開）',
+'article'       => '內容頁面',
+'newwindow'     => '（以新視窗開啟）',
 'cancel'        => '取消',
 'moredotdotdot' => '更多...',
 'mypage'        => '我的頁面',
 'mytalk'        => '我的對話頁',
 'anontalk'      => '該IP的對話頁',
-'navigation'    => '導航',
+'navigation'    => '導覽',
 'and'           => '和',
 
 # Cologne Blue skin
@@ -330,40 +354,27 @@ $messages = array(
 'faqpage'        => 'Project:常見問題解答',
 
 # Vector skin
-'vector-action-addsection'   => '加入主題',
-'vector-action-delete'       => '刪除',
-'vector-action-move'         => '移動',
-'vector-action-protect'      => '保護',
-'vector-action-undelete'     => '恢復被刪頁面',
-'vector-action-unprotect'    => '解除保護',
-'vector-namespace-category'  => '分類',
-'vector-namespace-help'      => '幫助頁面',
-'vector-namespace-image'     => '檔案',
-'vector-namespace-main'      => '頁面',
-'vector-namespace-media'     => '媒體頁面',
-'vector-namespace-mediawiki' => '界面',
-'vector-namespace-project'   => '計劃頁面',
-'vector-namespace-special'   => '特殊頁面',
-'vector-namespace-talk'      => '討論',
-'vector-namespace-template'  => '模板',
-'vector-namespace-user'      => '用戶頁面',
-'vector-view-create'         => '建立',
-'vector-view-edit'           => '編輯',
-'vector-view-history'        => '查看歷史',
-'vector-view-view'           => '閱讀',
-'vector-view-viewsource'     => '查看原始碼',
-'actions'                    => '動作',
-'namespaces'                 => '名字空間',
-'variants'                   => '變換',
-
-# Metadata in edit box
-'metadata_help' => '元數據:',
+'vector-action-addsection'       => '加入主題',
+'vector-action-delete'           => '刪除',
+'vector-action-move'             => '移動',
+'vector-action-protect'          => '保護',
+'vector-action-undelete'         => '恢復被刪頁面',
+'vector-action-unprotect'        => '解除保護',
+'vector-simplesearch-preference' => '啟用加強搜尋建議（僅限 Vector 外觀）',
+'vector-view-create'             => '建立',
+'vector-view-edit'               => '編輯',
+'vector-view-history'            => '檢視歷史',
+'vector-view-view'               => '閱讀',
+'vector-view-viewsource'         => '檢視原始碼',
+'actions'                        => '動作',
+'namespaces'                     => '名字空間',
+'variants'                       => '變換',
 
 'errorpagetitle'    => '錯誤',
 'returnto'          => '返回到$1。',
 'tagline'           => '出自{{SITENAME}}',
 'help'              => '幫助',
-'search'            => '搜索',
+'search'            => '搜尋',
 'searchbutton'      => '搜尋',
 'go'                => '進入',
 'searcharticle'     => '進入',
@@ -374,6 +385,7 @@ $messages = array(
 'printableversion'  => '可列印版',
 'permalink'         => '永久連結',
 'print'             => '列印',
+'view'              => '檢視',
 'edit'              => '編輯',
 'create'            => '建立',
 'editthispage'      => '編輯本頁',
@@ -381,6 +393,7 @@ $messages = array(
 'delete'            => '刪除',
 'deletethispage'    => '刪除本頁',
 'undelete_short'    => '反刪除$1項修訂',
+'viewdeleted_short' => '查看$1項已刪除的修訂',
 'protect'           => '保護',
 'protect_change'    => '更改',
 'protectthispage'   => '保護本頁',
@@ -391,36 +404,39 @@ $messages = array(
 'talkpagelinktext'  => '對話',
 'specialpage'       => '特殊頁面',
 'personaltools'     => '個人工具',
-'postcomment'       => '新小節',
-'articlepage'       => '查看頁面',
+'postcomment'       => '新段落',
+'articlepage'       => '檢視內容頁面',
 'talk'              => '討論',
 'views'             => '檢視',
 'toolbox'           => '工具箱',
-'userpage'          => '查看用戶頁面',
-'projectpage'       => '查看計劃頁面',
-'imagepage'         => '查看檔案頁面',
+'userpage'          => '檢視用戶頁面',
+'projectpage'       => '檢視計劃頁面',
+'imagepage'         => '檢視檔案頁面',
 'mediawikipage'     => '檢視使用者介面訊息',
 'templatepage'      => '檢視模板頁面',
 'viewhelppage'      => '檢視說明頁面',
 'categorypage'      => '檢視分類頁面',
 'viewtalkpage'      => '檢視討論頁面',
-'otherlanguages'    => '其它語言',
+'otherlanguages'    => '其他語言',
 'redirectedfrom'    => '（重定向自$1）',
 'redirectpagesub'   => '重定向頁面',
-'lastmodifiedat'    => '這頁的最後修訂在 $1 $2。',
+'lastmodifiedat'    => '此頁面最後修訂於 $1 $2。',
 'viewcount'         => '本頁面已經被瀏覽$1次。',
 'protectedpage'     => '被保護頁',
 'jumpto'            => '跳轉到:',
-'jumptonavigation'  => '導航',
-'jumptosearch'      => '搜索',
+'jumptonavigation'  => '導覽',
+'jumptosearch'      => '搜尋',
 'view-pool-error'   => '抱歉，伺服器在這段時間中已經超出負荷。
-太多用戶嘗試查看這個頁面。
+太多用戶嘗試檢視這個頁面。
 在嘗試訪問這個頁面之前請再稍等一會。
 
 $1',
+'pool-timeout'      => '等待鎖死時超時',
+'pool-queuefull'    => '請求池已滿',
+'pool-errorunknown' => '未知錯誤',
 
 # All link text and link target definitions of links into project namespace that get used by other message strings, with the exception of user group pages (see grouppage) and the disambiguation template definition (see disambiguations).
-'aboutsite'            => '關於{{SITENAME}}',
+'aboutsite'            => '關於 {{SITENAME}}',
 'aboutpage'            => 'Project:關於',
 'copyright'            => '本站的全部文本內容在$1之條款下提供。',
 'copyrightpage'        => '{{ns:project}}:版權訊息',
@@ -434,14 +450,14 @@ $1',
 'mainpage'             => '首頁',
 'mainpage-description' => '首頁',
 'policy-url'           => 'Project:方針',
-'portal'               => '社區',
-'portal-url'           => 'Project:社區',
-'privacy'              => '隱私政策',
-'privacypage'          => 'Project:隱私政策',
+'portal'               => '社群入口',
+'portal-url'           => 'Project:社群入口',
+'privacy'              => '隱私權政策',
+'privacypage'          => 'Project:隱私權政策',
 
 'badaccess'        => '權限錯誤',
-'badaccess-group0' => '您剛才的請求不允許執行。',
-'badaccess-groups' => '您剛才的請求只有{{PLURAL:$2|這個|這些}}用戶組的用戶才能使用: $1',
+'badaccess-group0' => '你所請求執行的操作被禁止。',
+'badaccess-groups' => '您剛才的請求只有{{PLURAL:$2|這個|這些}}用戶組的用戶才能使用：$1',
 
 'versionrequired'     => '需要MediaWiki $1 版',
 'versionrequiredtext' => '需要版本$1的 MediaWiki 才能使用此頁。參見[[Special:Version|版本頁]]。',
@@ -461,8 +477,10 @@ $1',
 'toc'                     => '目錄',
 'showtoc'                 => '顯示',
 'hidetoc'                 => '隱藏',
-'thisisdeleted'           => '查看或恢復$1?',
-'viewdeleted'             => '檢視$1',
+'collapsible-collapse'    => '摺叠',
+'collapsible-expand'      => '展開',
+'thisisdeleted'           => '檢視或恢復$1？',
+'viewdeleted'             => '檢視 $1？',
 'restorelink'             => '$1個被刪除的版本',
 'feedlinks'               => '訂閱:',
 'feed-invalid'            => '無效的訂閱類型。',
@@ -480,7 +498,7 @@ $1',
 'nstab-special'   => '特殊頁面',
 'nstab-project'   => '計劃頁面',
 'nstab-image'     => '檔案',
-'nstab-mediawiki' => '界面',
+'nstab-mediawiki' => '訊息',
 'nstab-template'  => '模板',
 'nstab-help'      => '幫助頁面',
 'nstab-category'  => '分類',
@@ -488,8 +506,8 @@ $1',
 # Main script and global functions
 'nosuchaction'      => '這個命令不存在',
 'nosuchactiontext'  => '該URL所指定的動作無效。
-您可能打錯URL，或跟隨不正確的連結。
-這又可能是{{SITENAME}}所使用的軟件出現臭蟲。',
+您可能打錯URL，或點了錯誤連結。
+這也可能是{{SITENAME}}所使用的軟件出現了錯誤。',
 'nosuchspecialpage' => '此特殊頁面不存在',
 'nospecialpagetext' => '<strong>您請求的特殊頁面無效。</strong>
 
@@ -525,7 +543,8 @@ $1',
 'missingarticle-diff'  => '（差異: $1, $2）',
 'readonly_lag'         => '附屬資料庫伺服器正在將快取更新到主伺服器，資料庫已被自動鎖定',
 'internalerror'        => '內部錯誤',
-'internalerror_info'   => '內部錯誤: $1',
+'internalerror_info'   => '內部錯誤：$1',
+'fileappenderrorread'  => '當附加時無法讀取"$1"。',
 'fileappenderror'      => '不能附加"$1"到"$2"。',
 'filecopyerror'        => '無法複製檔案"$1"到"$2"。',
 'filerenameerror'      => '無法重新命名檔案"$1"到"$2"。',
@@ -535,14 +554,14 @@ $1',
 'fileexistserror'      => '無法寫入檔案"$1": 檔案已存在',
 'unexpected'           => '不正常值："$1"="$2"。',
 'formerror'            => '錯誤：無法提交表單',
-'badarticleerror'      => '無法在本頁上進行此項操作。',
-'cannotdelete'         => '無法刪除頁面或圖像 "$1"。
+'badarticleerror'      => '無法在此頁進行該操作。',
+'cannotdelete'         => '無法刪除頁面或圖片"$1"。
 它可能已經被其他人刪除了。',
 'badtitle'             => '錯誤的標題',
-'badtitletext'         => '所請求頁面的標題是無效的、不存在，跨語言或跨wiki連結的標題錯誤。',
+'badtitletext'         => '所請求頁面的標題是無效的、不存在，跨語言或跨wiki連結的標題錯誤。它可能包含一個或更多的不能用於標題的字符。',
 'perfcached'           => '下列是快取資料，因此可能不是最新的:',
 'perfcachedts'         => '下列是快取資料，其最後更新時間是$1。',
-'querypage-no-updates' => '當前禁止對此頁面進行更新。此處的資料將不能被立即重新整理。',
+'querypage-no-updates' => '目前禁止對此頁面進行更新。此處的資料將不能被立即重新整理。',
 'wrong_wfQuery_params' => '錯誤的參數被傳遞到 wfQuery（）<br />
 函數：$1<br />
 查詢：$2',
@@ -550,9 +569,9 @@ $1',
 'viewsourcefor'        => '$1的原始碼',
 'actionthrottled'      => '動作已壓制',
 'actionthrottledtext'  => '基於反垃圾的考量，您現在於這段短時間之中限制去作這一個動作，而您已經超過這個上限。請在數分鐘後再嘗試。',
-'protectedpagetext'    => '該頁面已被鎖定以防止編輯。',
+'protectedpagetext'    => '該頁面已被保護以防止編輯。',
 'viewsourcetext'       => '{{GENDER:|你|妳|你}}可以檢視並複製本頁面的原始碼。',
-'protectedinterface'   => '該頁提供了軟體的介面文字，它已被鎖定以防止隨意的修改。',
+'protectedinterface'   => '該頁提供了軟體的介面文字，它已被保護以防止隨意的修改。',
 'editinginterface'     => "'''警告:''' 您正在編輯的頁面是用於提供軟體的介面文字。改變此頁將影響其他用戶的介面外觀。如要翻譯，請考慮使用[http://translatewiki.net/wiki/Main_Page?setlang=zh-hant translatewiki.net]，一個用來為MediaWiki軟件本地化的計劃。",
 'sqlhidden'            => '（隱藏SQL查詢）',
 'cascadeprotected'     => '這個頁面已經被保護，因為這個頁面被以下已標註"聯鎖保護"的{{PLURAL:$1|一個|多個}}被保護頁面包含:
@@ -568,34 +587,43 @@ $2',
 'virus-unknownscanner' => '未知的防病毒:',
 
 # Login and logout pages
-'logouttext'                 => '您現在已經退出。
-您可以繼續以匿名方式使用{{SITENAME}}，或再次以相同或不同用戶身份[[Special:UserLogin|登入]]。',
-'welcomecreation'            => '<h2>歡迎，$1!</h2><p>您的帳號已經建立，不要忘記設置[[Special:Preferences|{{SITENAME}}個人參數]]。</p>',
-'yourname'                   => '您的用戶名:',
-'yourpassword'               => '您的密碼:',
+'logouttext'                 => '您已經登出。
+
+您可以以匿名方式繼續使用{{SITENAME}}，或以相同或不同用戶身份[[Special:UserLogin|登入]]。
+請注意，如果你再次登入，此頁或會繼續顯示，直到您清除瀏覽器緩存。',
+'welcomecreation'            => '== 歡迎，$1！ ==
+您的賬號已經建立。
+不要忘記設置[[Special:Preferences|{{SITENAME}}的個人參數]]。',
+'yourname'                   => '您的使用者名稱：',
+'yourpassword'               => '您的密碼：',
 'yourpasswordagain'          => '再次輸入密碼:',
-'remembermypassword'         => '下次登入記住密碼。',
+'remembermypassword'         => '在這個瀏覽器上記住我的登入資訊（可維持 $1 {{PLURAL:$1|天|天}}）',
+'securelogin-stick-https'    => '登入後繼續以HTTPS連接',
 'yourdomainname'             => '您的網域:',
-'externaldberror'            => '這可能是由於驗證資料庫錯誤或您被禁止更新您的外部帳號。',
+'externaldberror'            => '這可能是由於驗證資料庫錯誤或您被禁止更新您的外部賬號。',
 'login'                      => '登入',
-'nav-login-createaccount'    => '登入／建立新賬號',
-'loginprompt'                => '您必須允許瀏覽器紀錄Cookie才能成功登入 {{SITENAME}} 並順利進行操作',
-'userlogin'                  => '登入／建立新賬號',
+'nav-login-createaccount'    => '登入／建立新帳號',
+'loginprompt'                => '您必須允許瀏覽器紀錄 Cookie 才能成功登入 {{SITENAME}}。',
+'userlogin'                  => '登入／建立新帳號',
+'userloginnocreate'          => '登入',
 'logout'                     => '登出',
 'userlogout'                 => '登出',
 'notloggedin'                => '未登入',
-'nologin'                    => '您還沒有賬號嗎？$1。',
-'nologinlink'                => '建立新賬號',
-'createaccount'              => '建立新賬號',
-'gotaccount'                 => '已經擁有賬號？$1。',
+'nologin'                    => '您還沒有帳號嗎？$1。',
+'nologinlink'                => '建立新帳號',
+'createaccount'              => '建立新帳號',
+'gotaccount'                 => '已經擁有帳號？$1。',
 'gotaccountlink'             => '登入',
 'createaccountmail'          => '通過電郵',
+'createaccountreason'        => '理由：',
 'badretype'                  => '您所輸入的密碼並不相同。',
 'userexists'                 => '您所輸入的用戶名稱已經存在，請另選一個名稱。',
 'loginerror'                 => '登入錯誤',
-'createaccounterror'         => '無法建立賬戶：$1',
-'nocookiesnew'               => '已成功創建新賬戶！偵測到您已關閉 Cookies，請開啟它並登入。',
+'createaccounterror'         => '無法建立帳號：$1',
+'nocookiesnew'               => '已成功建立新帳號！偵測到您已關閉 Cookies，請開啟它並登入。',
 'nocookieslogin'             => '本站利用 Cookies 進行用戶登入，偵測到您已關閉 Cookies，請開啟它並重新登入。',
+'nocookiesfornew'            => '這位用戶的賬戶未建立，我們不能確認它的來源。
+請肯定您已經開啟 cookies，重新載入後再試。',
 'noname'                     => '{{GENDER:|你|妳|你}}沒有輸入一個有效的用戶名。',
 'loginsuccesstitle'          => '登入成功',
 'loginsuccess'               => '{{GENDER:|你|妳|你}}正在以"$1"的身份在{{SITENAME}}登入。',
@@ -604,10 +632,12 @@ $2',
 檢查您的拼寫，或者用下面的表格[[Special:UserLogin/signup|建立一個新賬號]]。',
 'nosuchusershort'            => '沒有一個名為「<nowiki>$1</nowiki>」的用戶。請檢查您輸入的文字是否有錯誤。',
 'nouserspecified'            => '{{GENDER:|你|妳|你}}需要指定一個用戶名。',
+'login-userblocked'          => '這位用戶已被封鎖。不容許登入。',
 'wrongpassword'              => '您輸入的密碼錯誤，請再試一次。',
 'wrongpasswordempty'         => '沒有輸入密碼！請重試。',
 'passwordtooshort'           => '您的密碼不能少於$1個字元。',
 'password-name-match'        => '您的密碼必須跟您的用戶名不相同。',
+'password-login-forbidden'   => '這個用戶名稱及密碼的使用是被禁止的。',
 'mailmypassword'             => '將新密碼寄給我',
 'passwordremindertitle'      => '{{SITENAME}}的新臨時密碼',
 'passwordremindertext'       => '有人（可能是您，來自IP位址$1）已請求{{SITENAME}}的新密碼 （$4）。
@@ -621,27 +651,40 @@ $2',
 'noemailcreate'              => '您需要提供一個有效的電子郵件地址',
 'passwordsent'               => '用戶"$1"的新密碼已經寄往所登記的電子郵件地址。
 請在收到後再登入。',
-'blocked-mailpassword'       => '由於這個用戶被封禁，我們暫時禁止您請求申請新密碼。造成不便敬請見諒',
-'eauthentsent'               => '一封確認信已經發送到所示的地址。在發送其它郵件到此帳戶前，您必須首先依照這封信中的指導確認這個電子郵件信箱真實有效。',
+'blocked-mailpassword'       => '您的IP地址處於查封狀態而不允許編輯，為了安全起見，密碼恢復功能已被禁用。',
+'eauthentsent'               => '一封確認信已經發送到所示的地址。在發送其它郵件到此賬戶前，您必須首先依照這封信中的指導確認這個電子郵件信箱真實有效。',
 'throttled-mailpassword'     => '密碼提醒已經在前$1小時內發送。為防止濫用，限定在$1小時內僅發送一次密碼提醒。',
 'mailerror'                  => '發送郵件錯誤: $1',
 'acct_creation_throttle_hit' => '在這個wiki上的訪客利用您的IP地址在昨天創建了$1個賬戶，是在這段時間中的上限。
 結果利用這個IP地址的訪客在這段時間中不能創建更多的賬戶。',
 'emailauthenticated'         => '您的電子郵件地址已經於$2 $3確認有效。',
 'emailnotauthenticated'      => '您的郵箱位址<strong>還沒被認証</strong>。以下功能將不會發送任何郵件。',
-'noemailprefs'               => '在您的參數設置中指定一個電子郵件地址以使用此功能',
+'noemailprefs'               => '在您的參數設置中指定一個電子郵件地址以使用此功能。',
 'emailconfirmlink'           => '確認您的郵箱地址',
 'invalidemailaddress'        => '郵箱地址格式不正確，請輸入正確的郵箱位址或清空該輸入框。',
-'accountcreated'             => '已建立帳戶',
-'accountcreatedtext'         => '$1的帳戶已經被創建。',
-'createaccount-title'        => '在{{SITENAME}}中創建新帳戶',
-'createaccount-text'         => '有人在{{SITENAME}}中利用您的電郵創建了一個名為 "$2" 的新帳戶（$4），密碼是 "$3" 。您應該立即登入並更改密碼。
+'accountcreated'             => '已建立賬戶',
+'accountcreatedtext'         => '$1的賬戶已經被建立。',
+'createaccount-title'        => '在{{SITENAME}}中建立新賬戶',
+'createaccount-text'         => '有人在{{SITENAME}}中利用您的電郵創建了一個名為 "$2" 的新賬戶（$4），密碼是 "$3" 。您應該立即登入並更改密碼。
 
-如果該帳戶創建錯誤的話，您可以忽略此信息。',
+如果該賬戶建立錯誤的話，您可以忽略此訊息。',
 'usernamehasherror'          => '用戶名稱不可以包含切細字元',
 'login-throttled'            => '您已經嘗試多次的登入動作。
 請稍等多一會再試。',
 'loginlanguagelabel'         => '語言: $1',
+'suspicious-userlogout'      => '您登出的要求已經被拒絕，因為它可能是由已損壞的瀏覽器或者快取代理傳送。',
+
+# E-mail sending
+'php-mail-error-unknown' => '在 PHP 的 mail() 參數中的未知錯誤',
+
+# JavaScript password checks
+'password-strength'            => '預估密碼強度： $1',
+'password-strength-bad'        => '差',
+'password-strength-mediocre'   => '一般',
+'password-strength-acceptable' => '可接受',
+'password-strength-good'       => '好',
+'password-retype'              => '再次輸入密碼',
+'password-retype-mismatch'     => '密碼不匹配',
 
 # Password reset dialog
 'resetpass'                 => '更改密碼',
@@ -652,10 +695,12 @@ $2',
 'newpassword'               => '新密碼:',
 'retypenew'                 => '確認密碼:',
 'resetpass_submit'          => '設定密碼並登入',
-'resetpass_success'         => '您的密碼已經被成功更改！現在正為您登入...',
+'resetpass_success'         => '您的密碼已經被成功更改！
+現在正為您登入...',
 'resetpass_forbidden'       => '無法更改密碼',
 'resetpass-no-info'         => '您必須登入後直接進入這個頁面。',
 'resetpass-submit-loggedin' => '更改密碼',
+'resetpass-submit-cancel'   => '取消',
 'resetpass-wrong-oldpass'   => '無效的臨時或現有的密碼。
 您可能已成功地更改了您的密碼，或者已經請求一個新的臨時密碼。',
 'resetpass-temp-password'   => '臨時密碼:',
@@ -671,8 +716,6 @@ $2',
 'extlink_tip'     => '外部連結（加前綴 http://）',
 'headline_sample' => '大標題文字',
 'headline_tip'    => '2級標題文字',
-'math_sample'     => '在此插入數學公式',
-'math_tip'        => '插入數學公式 （LaTeX）',
 'nowiki_sample'   => '在此插入非格式文字',
 'nowiki_tip'      => '插入非格式文字',
 'image_tip'       => '嵌入檔案',
@@ -681,23 +724,25 @@ $2',
 'hr_tip'          => '水平線 （小心使用）',
 
 # Edit pages
-'summary'                          => '摘要:',
+'summary'                          => '摘要：',
 'subject'                          => '主題:',
 'minoredit'                        => '這是一個小修改',
 'watchthis'                        => '監視本頁',
-'savearticle'                      => '保存本頁',
+'savearticle'                      => '儲存頁面',
 'preview'                          => '預覽',
 'showpreview'                      => '顯示預覽',
 'showlivepreview'                  => '即時預覽',
 'showdiff'                         => '顯示差異',
-'anoneditwarning'                  => "'''警告:'''您沒有登錄，您的IP位址將記錄在此頁的編輯歷史中。",
-'missingsummary'                   => "'''提示:''' 您沒有提供一個編輯摘要。如果您再次單擊儲存，您的編輯將不帶編輯摘要儲存。",
+'anoneditwarning'                  => "'''警告：'''您沒有登入。
+您的IP位址將記錄在此頁的編輯歷史中。",
+'anonpreviewwarning'               => "''您沒有登入。保存頁面將會把您的IP位址記錄在此頁的編輯歷史中。''",
+'missingsummary'                   => "'''提示:''' 您沒有提供一個編輯摘要。如果您再次單擊「{{int:savearticle}}」，您的編輯將不帶編輯摘要儲存。",
 'missingcommenttext'               => '請在下面輸入評論。',
-'missingcommentheader'             => "'''提示:''' 您沒有為此評論提供一個標題。如果您再次單擊儲存，您的編輯將不帶標題儲存。",
+'missingcommentheader'             => "'''提示:''' 您沒有為此評論提供一個標題。如果您再次單擊「{{int:savearticle}}」，您的編輯將不帶標題儲存。",
 'summary-preview'                  => '摘要預覽:',
 'subject-preview'                  => '主題/標題預覽:',
 'blockedtitle'                     => '用戶被查封',
-'blockedtext'                      => "<big>{{GENDER:|你|妳|你}}的用戶名或IP地址已經被$1查封。</big>
+'blockedtext'                      => "{{GENDER:|你|妳|你}}的用戶名或IP地址已經被$1查封。
 
 這次查封是由$1所封的。當中的原因是''$2''。
 
@@ -706,7 +751,7 @@ $2',
 * 對於被查封者：$7
 
 {{GENDER:|你|妳|你}}可以聯絡$1或者其他的[[{{MediaWiki:Grouppage-sysop}}|管理員]]，討論這次查封。
-除非{{GENDER:|你|妳|你}}已經在{{GENDER:|你|妳|你}}的[[Special:Preferences|帳號參數設置]]中設定了一個有效的電子郵件地址，否則{{GENDER:|你|妳|你}}是不能使用「電郵這位用戶」的功能。當設定了一個有效的電子郵件地址後，這個功能是不會封鎖的。
+除非{{GENDER:|你|妳|你}}已經在{{GENDER:|你|妳|你}}的[[Special:Preferences|賬號參數設置]]中設定了一個有效的電子郵件地址，否則{{GENDER:|你|妳|你}}是不能使用「電郵這位用戶」的功能。當設定了一個有效的電子郵件地址後，這個功能是不會封鎖的。
 
 {{GENDER:|你|妳|你}}目前的IP地址是$3，而該查封ID是 #$5。 請在{{GENDER:|你|妳|你}}的查詢中註明以上所有的資料。",
 'autoblockedtext'                  => "{{GENDER:|你|妳|你}}的IP地址已經被自動查封，由於先前的另一位用戶被$1所查封。
@@ -719,53 +764,62 @@ $2',
 * 對於被查封者：$7
 
 {{GENDER:|你|妳|你}}可以聯絡$1或者其他的[[{{MediaWiki:Grouppage-sysop}}|管理員]]，討論這次查封。
-除非{{GENDER:|你|妳|你}}已經在{{GENDER:|你|妳|你}}的[[Special:Preferences|帳號參數設置]]中設定了一個有效的電子郵件地址，否則{{GENDER:|你|妳|你}}是不能使用「電郵這位用戶」的功能。當設定了一個有效的電子郵件地址後，這個功能是不會封鎖的。
+除非{{GENDER:|你|妳|你}}已經在{{GENDER:|你|妳|你}}的[[Special:Preferences|賬號參數設置]]中設定了一個有效的電子郵件地址，否則{{GENDER:|你|妳|你}}是不能使用「電郵這位用戶」的功能。當設定了一個有效的電子郵件地址後，這個功能是不會封鎖的。
 
 您現時正在使用的 IP 地址是 $3，查封ID是 #$5。 請在{{GENDER:|你|妳|你}}的查詢中註明以上所有的資料。",
 'blockednoreason'                  => '無給出原因',
-'blockedoriginalsource'            => "以下是'''$1'''的原始碼:",
+'blockedoriginalsource'            => "以下是'''$1'''的源碼：",
 'blockededitsource'                => "{{GENDER:|你|妳|你}}對'''$1'''進行'''編輯'''的文字如下:",
 'whitelistedittitle'               => '登入後才可編輯',
 'whitelistedittext'                => '您必須先$1才可編輯頁面。',
-'confirmedittext'                  => '在編輯此頁之前您必須確認您的郵箱位址。請透過[[Special:Preferences|參數設定]]設定並驗証您的郵箱位址。',
-'nosuchsectiontitle'               => '沒有這個段落',
-'nosuchsectiontext'                => '您嘗試編輯的段落並不存在。在這裡是無第$1個段落，所以是沒有一個地方去儲存{{GENDER:|你|妳|你}}的編輯。',
+'confirmedittext'                  => '在編輯此頁之前您必須確認您的郵箱位址。請透過[[Special:Preferences|偏好設定]]設定並驗證您的郵箱地址。',
+'nosuchsectiontitle'               => '找不到段落',
+'nosuchsectiontext'                => '您嘗試編輯的章節並不存在。
+可能在您查看頁面時已經移動或刪除。',
 'loginreqtitle'                    => '需要登入',
 'loginreqlink'                     => '登入',
 'loginreqpagetext'                 => '您必須$1才能檢視其它頁面。',
 'accmailtitle'                     => '密碼已寄出',
-'accmailtext'                      => "'[[User talk:$1|$1]]'的隨機產生密碼已經寄到$2。
+'accmailtext'                      => "'[[User talk:$1|$1]]'的隨機產生密碼已經寄到 $2。
 
-這個新賬戶的密碼可以在登入後的''[[Special:ChangePassword|更改密碼]]''頁面中更改。",
+這個新帳號的密碼可以在登入後的''[[Special:ChangePassword|更改密碼]]''頁面中更改。",
 'newarticle'                       => '（新）',
-'newarticletext'                   => '您進入了一個尚未創建的頁面。
-要創建該頁面，請在下面的編輯框中輸入內容（詳情參見[[{{MediaWiki:Helppage}}|幫助]]）。
-如果您是不小心來到此頁面，直接點擊您瀏覽器中的"返回"按鈕返回。',
-'anontalkpagetext'                 => "---- ''這是一個還未建立帳號的匿名用戶的對話頁。我們因此只能用IP地址來與他／她聯絡。該IP地址可能由幾名用戶共享。如果您是一名匿名用戶並認為本頁上的評語與您無關，請[[Special:UserLogin/signup|創建新帳號]]或[[Special:UserLogin|登入]]以避免在未來於其他匿名用戶混淆。''",
+'newarticletext'                   => '您進入了一個尚未建立的頁面。
+要建立該頁面，請在下面的編輯框中輸入內容（詳情參見[[{{MediaWiki:Helppage}}|幫助]]）。
+如果您是不小心來到此頁面，直接點擊您瀏覽器中的“返回”按鈕返回。',
+'anontalkpagetext'                 => "---- ''這是一個還未建立賬號的匿名用戶的對話頁。我們因此只能用IP地址來與他／她聯絡。該IP地址可能由幾名用戶共享。如果您是一名匿名用戶並認為本頁上的評語與您無關，請[[Special:UserLogin/signup|創建新賬號]]或[[Special:UserLogin|登入]]以避免在未來於其他匿名用戶混淆。''",
 'noarticletext'                    => '此頁目前沒有內容，您可以在其它頁[[Special:Search/{{PAGENAME}}|搜索此頁標題]]，
-<span class="plainlinks">[{{fullurl:{{#Special:Log}}|page={{urlencode:{{FULLPAGENAME}}}}}} 搜索有關日誌]，
+<span class="plainlinks">[{{fullurl:{{#Special:Log}}|page={{FULLPAGENAMEE}}}} 搜索有關日誌]，
 或[{{fullurl:{{FULLPAGENAME}}|action=edit}} 編輯此頁]</span>。',
 'noarticletext-nopermission'       => '此頁目前沒有內容，您可以在其它頁[[Special:Search/{{PAGENAME}}|搜索此頁標題]]，
-或<span class="plainlinks">[{{fullurl:{{#Special:Log}}|page={{urlencode:{{FULLPAGENAME}}}}}} 搜索有關日誌]</span>。',
+或<span class="plainlinks">[{{fullurl:{{#Special:Log}}|page={{FULLPAGENAMEE}}}} 搜索有關日誌]</span>。',
 'userpage-userdoesnotexist'        => '未曾創建用戶名「$1」。請在創建／編輯這個頁面前先檢查一下。',
-'userpage-userdoesnotexist-view'   => '未曾創建用戶名「$1」。',
-'clearyourcache'                   => "'''注意 - 在儲存以後，您必須清除瀏覽器的快取才能看到所作出的改變。'''
+'userpage-userdoesnotexist-view'   => '未曾建立用戶名「$1」。',
+'blocked-notice-logextract'        => '這位用戶現正被封鎖。
+下面有最近的封鎖紀錄以供參考：',
+'clearyourcache'                   => "'''注意：在儲存以後，您必須清除瀏覽器的快取才能看到所作出的改變。'''
 '''Mozilla / Firefox / Safari''': 按著 ''Shift'' 再點擊''重新整理''，或按下''Ctrl-F5''或''Ctrl-R''（在Macintosh上按下''Command-R''）；
 '''Konqueror''': 只需點擊 ''重新整理''或按下''F5''；
 '''Opera''': 在 ''工具→設定'' 中完整地清除它們的快取，或按下''Alt-F5''；
 '''Internet Explorer''': 按著 ''Ctrl'' 再點擊 ''重新整理''，或按下 ''Ctrl-F5''。",
-'usercssyoucanpreview'             => "'''提示:''' 在保存前請用'顯示預覽'按鈕來測試您新的 CSS 。",
-'userjsyoucanpreview'              => "'''提示:''' 在保存前請用'顯示預覽'按鈕來測試您新的 JS 。",
-'usercsspreview'                   => "'''注意您只是在預覽您的個人 CSS。'''
+'usercssyoucanpreview'             => "'''提示:''' 在保存前請用「{{int:showpreview}}」按鈕來測試您新的 CSS 。",
+'userjsyoucanpreview'              => "'''提示:''' 在保存前請用「{{int:showpreview}}」按鈕來測試您新的 JavaScript 。",
+'usercsspreview'                   => "'''記住您只是在預覽您的個人 CSS。'''
 '''還沒有儲存﹗'''",
-'userjspreview'                    => "'''注意您只是在測試／預覽您的個人 JavaScript。'''
+'userjspreview'                    => "'''記住您只是在測試／預覽您的個人 JavaScript。'''
 '''還沒有儲存﹗'''",
-'userinvalidcssjstitle'            => "'''警告:''' 不存在面板\"\$1\"。注意自訂的 .css 和 .js 頁要使用小寫標題，例如，{{ns:user}}:Foo/monobook.css 不同於 {{ns:user}}:Foo/Monobook.css。",
+'sitecsspreview'                   => "'''記住你現在只是預覽此 CSS。'''
+'''還沒有儲存！'''",
+'sitejspreview'                    => "'''記住你現在只是預覽此 JavaScript 代碼。'''
+'''還沒有儲存！'''",
+'userinvalidcssjstitle'            => "'''警告:''' 不存在面板\"\$1\"。注意自訂的 .css 和 .js 頁要使用小寫標題，例如，{{ns:user}}:Foo/vector.css 不同於 {{ns:user}}:Foo/Vector.css。",
 'updated'                          => '（已更新）',
 'note'                             => "'''注意:'''",
-'previewnote'                      => "'''請記住這只是預覽。'''內容還未保存！",
+'previewnote'                      => "'''請記住這只是預覽，內容尚未儲存！'''",
 'previewconflict'                  => '這個預覽顯示了上面文字編輯區中的內容。它將在{{GENDER:|你|妳|你}}選擇保存後出現。',
-'session_fail_preview'             => "'''抱歉！由於部份資料遺失，我們無法處理您的編輯。'''請再試一次，如果仍然失敗，請[[Special:UserLogout|登出]]後重新登入。",
+'session_fail_preview'             => "'''很抱歉！由於部份資料遺失，我們無法處理您的編輯。'''
+請再試一次。
+如果仍然失敗，請[[Special:UserLogout|登出]]後重新登入。",
 'session_fail_preview_html'        => "'''抱歉！部份資料已遺失，我們無法處理您的編輯。'''
 
 ''由於{{SITENAME}}已經開放原始 HTML 碼，預覽已經隱藏以預防 JavaScript 的攻擊。''
@@ -773,22 +827,23 @@ $2',
 '''如果這個編輯過程沒有問題，請再試一次。如果仍然有問題，請[[Special:UserLogout|登出]]後再重新登入一次。'''",
 'token_suffix_mismatch'            => "'''由於您用戶端中的編輯信符毀損了一些標點符號字元，為防止編輯的文字損壞，您的編輯已經被拒絕。'''
 這種情況通常出現於使用含有很多臭蟲、以網絡為主的匿名代理服務的時候。",
+'edit_form_incomplete'             => '編輯表單的某些部分沒有到達伺服器 ；請檢查您的編輯內容是否完整並再試一次。',
 'editing'                          => '正在編輯$1',
-'editingsection'                   => '正在編輯$1 （段落）',
-'editingcomment'                   => '正在編輯$1 （新段落）',
+'editingsection'                   => '正在編輯$1（段落）',
+'editingcomment'                   => '正在編輯$1（新段落）',
 'editconflict'                     => '編輯衝突：$1',
-'explainconflict'                  => '有人在{{GENDER:|你|妳|你}}開始編輯後更改了頁面。
+'explainconflict'                  => "有人在{{GENDER:|你|妳|你}}開始編輯後更改了頁面。
 上面的文字框內顯示的是目前本頁的內容。
 {{GENDER:|你|妳|你}}所做的修改顯示在下面的文字框中。
 {{GENDER:|你|妳|你}}應當將{{GENDER:|你|妳|你}}所做的修改加入現有的內容中。
-<b>只有</b>在上面文字框中的內容會在{{GENDER:|你|妳|你}}點擊"保存頁面"後被保存。<br />',
+'''只有'''在上面文字框中的內容會在{{GENDER:|你|妳|你}}點擊「{{int:savearticle}}」後被保存。",
 'yourtext'                         => '您的文字',
 'storedversion'                    => '已保存修訂版本',
 'nonunicodebrowser'                => "'''警告: 您的瀏覽器不兼容Unicode編碼。'''這裡有一個工作區將使您能安全地編輯頁面: 非ASCII字元將以十六進製編碼模式出現在編輯框中。",
 'editingold'                       => "'''警告：{{GENDER:|你|妳|你}}正在編輯的是本頁的舊版本。'''
-如果{{GENDER:|你|妳|你}}保存它的話，在本版本之後的任何修改都會丟失。",
+如果{{GENDER:|你|妳|你}}保存它的話，在本版本之後的任何修改都會遺失。",
 'yourdiff'                         => '差異',
-'copyrightwarning'                 => "請注意您對{{SITENAME}}的所有貢獻都被認為是在$2下發佈，請查看在$1的細節。
+'copyrightwarning'                 => "請注意您對{{SITENAME}}的所有貢獻都被認為是在$2下發佈，請檢視在$1的細節。
 如果您不希望您的文字被任意修改和再散佈，請不要提交。<br />
 您同時也要向我們保證您所提交的內容是您自己所作，或得自一個不受版權保護或相似自由的來源。
 '''不要在未獲授權的情況下發表！'''<br />",
@@ -797,35 +852,39 @@ $2',
 如果您不希望您的文字被任意修改和再散佈，請不要提交。<br />
 您同時也要向我們保證您所提交的內容是您自己所作，或得自一個不受版權保護或相似自由的來源（參閱$1的細節）。
 '''不要在未獲授權的情況下發表！'''",
-'longpagewarning'                  => "'''警告''': 本頁長度達$1KB；一些瀏覽器將無法編輯長過32KB頁面。請考慮將本文切割成幾個小段落。",
 'longpageerror'                    => "'''錯誤: 您所提交的文字長度有$1KB，這大於$2KB的最大值。'''該文本不能被儲存。",
-'readonlywarning'                  => "'''警告: 資料庫被鎖以進行維護，所以您目前將無法保存您的修改。'''您或許希望先將本段文字複製並保存到文字文件，然後等一會兒再修改。
+'readonlywarning'                  => "'''警告: 資料庫被鎖定以進行維護，所以您目前將無法保存您的修改。'''您或許希望先將本段文字複製並保存到文字文件，然後等一會兒再修改。
 
-管理員有如下解釋: $1",
-'protectedpagewarning'             => "'''警告: 本頁已經被保護，只有擁有管理員許可權的用戶才可修改。'''",
-'semiprotectedpagewarning'         => "'''注意:''' 本頁面被鎖定，僅限註冊用戶編輯。",
-'cascadeprotectedwarning'          => '警告: 本頁已經被保護，只有擁有管理員權限的用戶才可修改，因為本頁已被以下連鎖保護的{{PLURAL:$1|一個|多個}}頁面所包含:',
-'titleprotectedwarning'            => "'''警告: 本頁面已被鎖上，需要[[Special:ListGroupRights|指定權限]]方可創建。'''",
-'templatesused'                    => '此頁面包含以下模板:',
-'templatesusedpreview'             => '此次預覽中使用的模板有:',
-'templatesusedsection'             => '在這個段落上使用的模板有:',
+鎖定資料庫的管理員有如下解釋：$1",
+'protectedpagewarning'             => "'''警告：本頁已經被保護，只有擁有管理員許可權的用戶才可修改。'''
+最近的日誌在下面提供以便參考：",
+'semiprotectedpagewarning'         => "'''注意：'''本頁面被保護，僅限註冊用戶編輯。
+最近的日誌在下面提供以便參考：",
+'cascadeprotectedwarning'          => "'''警告：'''本頁已經被保護，只有擁有管理員權限的用戶才可修改，因為本頁已被以下連鎖保護的{{PLURAL:$1|一個|多個}}頁面所包含:",
+'titleprotectedwarning'            => "'''警告：本頁面已被保護，需要[[Special:ListGroupRights|指定權限]]方可創建。'''
+最近的日誌在下面提供以便參考：",
+'templatesused'                    => '此頁面包含以下{{PLURAL:$1|模板|模板}}:',
+'templatesusedpreview'             => '此次預覽中使用的{{PLURAL:$1|模板|模板}}有:',
+'templatesusedsection'             => '在這個段落上使用的{{PLURAL:$1|模板|模板}}有:',
 'template-protected'               => '（保護）',
 'template-semiprotected'           => '（半保護）',
 'hiddencategories'                 => '這個頁面是屬於$1個隱藏分類的成員:',
-'edittools'                        => '<!-- 此處的文字將被顯示在以下編輯和上傳表單中。 -->',
+'edittools'                        => '<!-- 此處的文字將被顯示在編輯和上傳表單以下。 -->',
 'nocreatetitle'                    => '創建頁面受限',
 'nocreatetext'                     => '{{SITENAME}}限制了創建新頁面的功能。{{GENDER:|你|妳|你}}可以返回並編輯已有的頁面，或者[[Special:UserLogin|登錄或創建新賬戶]]。',
 'nocreate-loggedin'                => '您並無許可權去創建新頁面。',
+'sectioneditnotsupported-title'    => '不支持段落編輯',
+'sectioneditnotsupported-text'     => '此頁面不支持段落編輯。',
 'permissionserrors'                => '權限錯誤',
 'permissionserrorstext'            => '根據以下的{{PLURAL:$1|原因|原因}}，您並無權限去做以下的動作:',
 'permissionserrorstext-withaction' => '根據以下的{{PLURAL:$1|原因|原因}}，您並無權限去做$2:',
-'recreate-moveddeleted-warn'       => "'''警告: {{GENDER:|你|妳|你}}現在重新創建一個先前曾經刪除過的頁面。'''
+'recreate-moveddeleted-warn'       => "'''警告: {{GENDER:|你|妳|你}}現在重新建立一個先前曾經刪除過的頁面。'''
 
 {{GENDER:|你|妳|你}}應該要考慮一下繼續編輯這一個頁面是否合適。
 為方便起見，這一個頁面的刪除記錄已經在下面提供:",
 'moveddeleted-notice'              => '這個頁面已經刪除。
 這個頁面的刪除和移動日誌已在下面提供以便參考。',
-'log-fulllog'                      => '查看完整日誌',
+'log-fulllog'                      => '檢視完整日誌',
 'edit-hook-aborted'                => '編輯被鈎取消。
 它並無給出解釋。',
 'edit-gone-missing'                => '不能更新頁面。
@@ -848,6 +907,7 @@ $2',
 'post-expand-template-argument-category'  => '包含着略過模板參數的頁面',
 'parser-template-loop-warning'            => '已偵測迴歸模板: [[$1]]',
 'parser-template-recursion-depth-warning' => '已超過迴歸模板深度限制 （$1）',
+'language-converter-depth-warning'        => '已超過字詞轉換器深度限制（$1）',
 
 # "Undo" feature
 'undo-success' => '該編輯可以被撤銷。請檢查以下對比以核實這正是您想做的，然後儲存以下更改以完成撤銷編輯。',
@@ -856,29 +916,30 @@ $2',
 'undo-summary' => '取消由[[Special:Contributions/$2|$2]] （[[User talk:$2|對話]]）所作出的修訂 $1',
 
 # Account creation failure
-'cantcreateaccounttitle' => '無法創建帳戶',
-'cantcreateaccount-text' => "從這個IP地址 （<b>$1</b>） 創建帳戶已經被[[User:$3|$3]]禁止。
+'cantcreateaccounttitle' => '無法建立帳號',
+'cantcreateaccount-text' => "從這個 IP 位址 （<b>$1</b>） 建立帳號已經被 [[User:$3|$3]] 禁止。
 
-當中被$3封禁的原因是''$2''",
+當中被 $3 封禁的原因是 ''$2''",
 
 # History pages
 'viewpagelogs'           => '查詢這個頁面的日誌',
 'nohistory'              => '沒有本頁的修訂記錄。',
-'currentrev'             => '當前修訂版本',
-'currentrev-asof'        => '在$1的當前修訂版本',
+'currentrev'             => '最新修訂版本',
+'currentrev-asof'        => '在$1的最新修訂版本',
 'revisionasof'           => '在$1所做的修訂版本',
 'revision-info'          => '在$1由$2所做的修訂版本',
 'previousrevision'       => '←上一修訂',
 'nextrevision'           => '下一修訂→',
-'currentrevisionlink'    => '當前修訂',
-'cur'                    => '當前',
+'currentrevisionlink'    => '最新修訂',
+'cur'                    => '目前',
 'next'                   => '後繼',
 'last'                   => '先前',
 'page_first'             => '最前',
 'page_last'              => '最後',
-'histlegend'             => "差異選擇: 標記要比較修訂版本的單選按鈕並點擊底部的按鈕進行比較。<br />
-說明: '''（{{int:cur}}）''' 指與當前修訂版本比較，'''（{{int:last}}）''' 指與前一個修訂修訂版本比較，'''{{int:minoreditletter}}''' = 小修改。",
+'histlegend'             => "差異選擇：標記要比較修訂版本的單選按鈕並點擊底部的按鈕進行比較。<br />
+說明：'''（{{int:cur}}）''' 指與最新修訂版本比較，'''（{{int:last}}）''' 指與前一個修訂修訂版本比較，'''{{int:minoreditletter}}''' = 小修改。",
 'history-fieldset-title' => '瀏覽歷史',
+'history-show-deleted'   => '僅已刪除的',
 'histfirst'              => '最早版本',
 'histlast'               => '最新版本',
 'historysize'            => '（$1 位元組）',
@@ -887,35 +948,42 @@ $2',
 # Revision feed
 'history-feed-title'          => '修訂歷史',
 'history-feed-description'    => '本站上此頁的修訂歷史',
-'history-feed-item-nocomment' => '$1在$2',
+'history-feed-item-nocomment' => '$1 在 $2',
 'history-feed-empty'          => '所請求的頁面不存在。它可能已被刪除或重新命名。
 嘗試[[Special:Search|搜索本站]]獲得相關的新建頁面。',
 
 # Revision deletion
-'rev-deleted-comment'         => '（註釋已移除）',
+'rev-deleted-comment'         => '（註釋已除）',
 'rev-deleted-user'            => '（用戶名已移除）',
-'rev-deleted-event'           => '（日誌動作已移除）',
-'rev-deleted-text-permission' => "該頁面修訂已經被'''刪除'''。
-在[{{fullurl:{{#Special:Log}}/delete|page={{PAGENAMEE}}}} 刪除日誌]中您可能會檢視到詳細的訊息。",
+'rev-deleted-event'           => '（日誌已除）',
+'rev-deleted-user-contribs'   => '[用戶名或IP地址已移除 - 從貢獻中隱藏編輯]',
+'rev-deleted-text-permission' => "該頁面修訂已被'''刪除'''。
+在[{{fullurl:{{#Special:Log}}/delete|page={{PAGENAMEE}}}} 刪除日誌]中可以找到詳細的訊息。",
 'rev-deleted-text-unhide'     => "該頁面修訂已經被'''刪除'''。
-在[{{fullurl:{{#Special:Log}}/delete|page={{PAGENAMEE}}}} 刪除日誌]中您可能會檢視到詳細的訊息。
-作為管理員，如果您想繼續的話，您可以仍然[$1 去查看這次修訂]。",
+在[{{fullurl:{{#Special:Log}}/delete|page={{PAGENAMEE}}}} 刪除日誌]中可以找到詳細的訊息。
+作為管理員，如果您想繼續的話，您可以仍然[$1 去檢視這次修訂]。",
 'rev-suppressed-text-unhide'  => "該頁面修訂已經被'''廢止'''。
-在[{{fullurl:{{#Special:Log}}/suppress|page={{PAGENAMEE}}}} 廢止日誌]中您可能會檢視到詳細的訊息。
-作為管理員，如果您想繼續的話，您可以仍然[$1 去查看這次修訂]。",
+在[{{fullurl:{{#Special:Log}}/suppress|page={{PAGENAMEE}}}} 廢止日誌]中可以找到詳細的訊息。
+作為管理員，如果您想繼續的話，您可以仍然[$1 去檢視這次修訂]。",
 'rev-deleted-text-view'       => "該頁面修訂已經被'''刪除'''。作為管理員，您可以檢視它；
-在[{{fullurl:{{#Special:Log}}/delete|page={{FULLPAGENAMEE}}}} 刪除日誌]中您可能會檢視到詳細的訊息。",
+在[{{fullurl:{{#Special:Log}}/delete|page={{FULLPAGENAMEE}}}} 刪除日誌]中可以找到詳細的訊息。",
 'rev-suppressed-text-view'    => "該頁面修訂已經被'''廢止'''。作為管理員，您可以檢視它；
-在[{{fullurl:{{#Special:Log}}/suppress|page={{FULLPAGENAMEE}}}} 廢止日誌]中您可能會檢視到詳細的訊息。",
-'rev-deleted-no-diff'         => "因為其中一次修訂'''刪除'''，您不可以查看這個差異。
-在[{{fullurl:{{#Special:Log}}/delete|page={{FULLPAGENAMEE}}}} 刪除日誌]中可能有更多的資料。",
+在[{{fullurl:{{#Special:Log}}/suppress|page={{FULLPAGENAMEE}}}} 廢止日誌]中可以找到詳細的訊息。",
+'rev-deleted-no-diff'         => "因為其中一次修訂已被'''刪除'''，您不可以檢視這個差異。
+在[{{fullurl:{{#Special:Log}}/delete|page={{FULLPAGENAMEE}}}} 刪除日誌]中可以找到更多的資料。",
+'rev-suppressed-no-diff'      => "該頁面的其中一次修訂已經被'''刪除'''，你不可以查看這次的修訂。",
 'rev-deleted-unhide-diff'     => "該頁面的其中一次修訂已經被'''刪除'''。
-在[{{fullurl:{{#Special:Log}}/delete|page={{FULLPAGENAMEE}}}} 刪除日誌]中可能有更多的資料。
-作為管理員，如果您想繼續的話，您可以仍然[$1 去查看這次修訂]。",
+在[{{fullurl:{{#Special:Log}}/delete|page={{FULLPAGENAMEE}}}} 刪除日誌]中可以找到更多的資料。
+作為管理員，如果您想繼續的話，您可以仍然[$1 去檢視這次修訂]。",
 'rev-suppressed-unhide-diff'  => "該頁面的其中一次修訂已經被'''廢止'''。
-在[{{fullurl:{{#Special:Log}}/suppress|page={{FULLPAGENAMEE}}}} 廢止日誌]中可能有更多的資料。
-作為管理員，如果您想繼續的話，您可以仍然[$1 去查看這次修訂]。",
+在[{{fullurl:{{#Special:Log}}/suppress|page={{FULLPAGENAMEE}}}} 廢止日誌]中可以找到更多的資料。
+作為管理員，如果您想繼續的話，您可以仍然[$1 去檢視這次修訂]。",
+'rev-deleted-diff-view'       => "差異中的一次修訂已被'''刪除'''。
+作為管理員，您可以檢視此差異。詳細訊息可在[{{fullurl:{{#Special:Log}}/delete|page={{FULLPAGENAMEE}}}} 刪除日誌]中找到。",
+'rev-suppressed-diff-view'    => "差異中的一次修訂已被'''廢止'''。
+作為管理員，您可以檢視此差異。詳細訊息可在[{{fullurl:{{#Special:Log}}/suppress|page={{FULLPAGENAMEE}}}} 廢止日誌]中找到。",
 'rev-delundel'                => '顯示/隱藏',
+'rev-showdeleted'             => '顯示',
 'revisiondelete'              => '刪除/恢復刪除修訂',
 'revdelete-nooldid-title'     => '無效的目標修訂',
 'revdelete-nooldid-text'      => '您尚未指定一個目標修訂去進行這個功能、
@@ -925,35 +993,41 @@ $2',
 'revdelete-nologid-title'     => '無效的日誌項目',
 'revdelete-nologid-text'      => '您尚未指定一個目標日誌項目去進行這個動作或指定的項目不存在。',
 'revdelete-no-file'           => '指定的檔案不存在。',
-'revdelete-show-file-confirm' => '{{GENDER:|你|妳|你}}是否真的是想去查看於$2 $3刪除 "$1" 的檔案修訂？',
+'revdelete-show-file-confirm' => '{{GENDER:|你|妳|你}}是否真的是想去檢視於$2 $3刪除 "$1" 的檔案修訂？',
 'revdelete-show-file-submit'  => '是',
 'revdelete-selected'          => "'''選取[[:$1]]的$2次修訂:'''",
 'logdelete-selected'          => "'''選取'''$1'''的日誌項目:'''",
 'revdelete-text'              => "'''刪除的修訂仍將顯示在頁面歷史中, 但它們的文字內容已不能被公眾訪問。'''
 在{{SITENAME}}的其他管理員將仍能訪問隱藏的內容並透過與此相同的介面恢復刪除，除非網站工作者進行了一些附加的限制。",
+'revdelete-confirm'           => '請確認您肯定去做的話，您就要明白到後果，以及這個程序符合[[{{MediaWiki:Policy-url}}|政策]]。',
 'revdelete-suppress-text'     => "壓制'''只'''應在以下的情況下進行:
 * 不合適的個人資料
 *: ''住家地址、電話號碼、社群保安號碼等。''",
 'revdelete-legend'            => '設定可見性之限制',
 'revdelete-hide-text'         => '隱藏修訂文字',
+'revdelete-hide-image'        => '隱藏檔案內容',
 'revdelete-hide-name'         => '隱藏動作和目標',
-'revdelete-hide-comment'      => '隱藏編輯說明',
+'revdelete-hide-comment'      => '隱藏編輯摘要',
 'revdelete-hide-user'         => '隱藏編輯者的用戶名/IP地址',
 'revdelete-hide-restricted'   => '同時廢止由操作員以及其他用戶的資料',
+'revdelete-radio-same'        => '(勿更改)',
+'revdelete-radio-set'         => '是',
+'revdelete-radio-unset'       => '否',
 'revdelete-suppress'          => '同時廢止由操作員以及其他用戶的資料',
-'revdelete-hide-image'        => '隱藏檔案內容',
 'revdelete-unsuppress'        => '在已恢復的修訂中移除限制',
-'revdelete-log'               => '日誌註釋：',
-'revdelete-submit'            => '應用於選取的修訂',
-'revdelete-logentry'          => '[[$1]]的修訂可見性已更改',
-'logdelete-logentry'          => '[[$1]]的事件可見性已更改',
-'revdelete-success'           => "'''修訂的可見性已經成功設定。'''",
-'revdelete-failure'           => "'''修訂的可見性無法設定：'''
+'revdelete-log'               => '理由：',
+'revdelete-submit'            => '應用於選取的{{PLURAL:$1|修訂}}',
+'revdelete-logentry'          => '已更改「[[$1]]」之修訂可見度',
+'logdelete-logentry'          => '「[[$1]]」的事件可見性已更改',
+'revdelete-success'           => "'''修訂的可見性已經成功更新。'''",
+'revdelete-failure'           => "'''修訂的可見性無法更新：'''
 $1",
 'logdelete-success'           => "'''事件的可見性已經成功設定。'''",
 'logdelete-failure'           => "'''事件的可見性無法設定：'''
 $1",
 'revdel-restore'              => '更改可見性',
+'revdel-restore-deleted'      => '已刪除的修訂版本',
+'revdel-restore-visible'      => '可見的修訂版本',
 'pagehist'                    => '頁面歷史',
 'deletedhist'                 => '已刪除之歷史',
 'revdelete-content'           => '內容',
@@ -971,7 +1045,7 @@ $1",
 'revdelete-modify-missing'    => '正在更改項目ID $1錯誤：它在資料庫中遺失！',
 'revdelete-no-change'         => '警告：於$1 $2之項目已經請求了可見性的設定。',
 'revdelete-concurrent-change' => '正在更改於$1 $2之項目錯誤：當我們嘗試更改它的設定時，已經被另一些人更改過。請檢查紀錄。',
-'revdelete-only-restricted'   => '您不可以廢止管理員可以看見的項目，而不選另外其中一個廢止選項。',
+'revdelete-only-restricted'   => '在隱藏$1 $2的項目時發生錯誤：您不能在選擇了另一可見性選項後廢止管理員查看該項目。',
 'revdelete-reason-dropdown'   => '*常用刪除理由
 ** 侵犯版權
 ** 不合適的個人資料',
@@ -984,6 +1058,26 @@ $1",
 'suppressionlog'     => '廢止日誌',
 'suppressionlogtext' => '以下是刪除以及由操作員牽涉到內容封鎖的清單。
 參看[[Special:IPBlockList|IP封鎖名單]]去參看現時進行中的禁止以及封鎖之名單。',
+
+# Revision move
+'moverevlogentry'              => '移動了$1的{{PLURAL:$3|一次修訂版本|$3次修訂版本}}至$2',
+'revisionmove'                 => '由 "$1" 移動修訂版本',
+'revmove-explain'              => '以下的修訂版本將會由$1移動至所指定的目標頁面。如果目標不存在的話，它就將會建立。否則，這些的修訂版本就將會合併到頁面歷史中。',
+'revmove-legend'               => '設定目標頁面以及摘要',
+'revmove-submit'               => '移動修訂版本到所選定的頁面上',
+'revisionmoveselectedversions' => '移動已選取的修訂版本',
+'revmove-reasonfield'          => '理由：',
+'revmove-titlefield'           => '目標頁面：',
+'revmove-badparam-title'       => '壞的參數',
+'revmove-badparam'             => '您的請求含有不合法的者不足的參數。
+請返回先前的頁面再試。',
+'revmove-norevisions-title'    => '無效的目標修訂版本',
+'revmove-norevisions'          => '您尚未指定一個或者多個目標修訂版本去做這項功能或者所指定的修訂版本不存在。',
+'revmove-nullmove-title'       => '壞的標題',
+'revmove-nullmove'             => '目標頁面不可以跟來源頁面相同。
+請返回先前的頁面再輸入跟 "$1" 不相同的名字。',
+'revmove-success-existing'     => '由[[$2]]中的{{PLURAL:$1|一次修訂版本|$1次修訂版本}}已經移動至現有的頁面[[$3]]。',
+'revmove-success-created'      => '由[[$2]]中的{{PLURAL:$1|一次修訂版本|$1次修訂版本}}已經移動至新建的頁面[[$3]]。',
 
 # History merging
 'mergehistory'                     => '合併頁面歷史',
@@ -1006,7 +1100,7 @@ $1",
 'mergehistory-autocomment'         => '已經合併[[:$1]]去到[[:$2]]',
 'mergehistory-comment'             => '已經合併[[:$1]]去到[[:$2]]: $3',
 'mergehistory-same-destination'    => '來源頁面與目的頁面不可以相同',
-'mergehistory-reason'              => '理由:',
+'mergehistory-reason'              => '理由：',
 
 # Merge log
 'mergelog'           => '合併日誌',
@@ -1016,78 +1110,23 @@ $1",
 
 # Diffs
 'history-title'            => '「$1」的修訂歷史',
-'difference'               => '（修訂版本間差異）',
+'difference'               => '（修訂版本間的差異）',
+'difference-multipage'     => '（頁面間的差異）',
 'lineno'                   => '第$1行：',
 'compareselectedversions'  => '比較選定的修訂版本',
 'showhideselectedversions' => '顯示／隱藏選定的修訂版本',
-'visualcomparison'         => '可見比較',
-'wikicodecomparison'       => 'Wikitext比較',
 'editundo'                 => '撤銷',
-'diff-multi'               => '（$1個中途的修訂版本沒有顯示）',
-'diff-movedto'             => '移動到$1',
-'diff-styleadded'          => '已加入$1樣式表',
-'diff-added'               => '已加入$1',
-'diff-changedto'           => '更改到$1',
-'diff-movedoutof'          => '移除自$1',
-'diff-styleremoved'        => '已移除$1樣式表',
-'diff-removed'             => '已移除$1',
-'diff-changedfrom'         => '更改自$1',
-'diff-src'                 => '源碼',
-'diff-withdestination'     => '跟$1目的地',
-'diff-with'                => '跟 $1 $2',
-'diff-with-final'          => '和 $1 $2',
-'diff-width'               => '闊',
-'diff-height'              => '高',
-'diff-p'                   => '段落',
-'diff-blockquote'          => '語錄',
-'diff-h1'                  => '標題（1級）',
-'diff-h2'                  => '標題（2級）',
-'diff-h3'                  => '標題（3級）',
-'diff-h4'                  => '標題（4級）',
-'diff-h5'                  => '標題（5級）',
-'diff-pre'                 => '預先設定的方塊',
-'diff-div'                 => '部分',
-'diff-ul'                  => '未排列的表',
-'diff-ol'                  => '已排列的表',
-'diff-li'                  => '表項目',
-'diff-table'               => '表',
-'diff-tbody'               => '表內容',
-'diff-tr'                  => '行',
-'diff-td'                  => '格',
-'diff-th'                  => '表頭',
-'diff-br'                  => '斷行',
-'diff-hr'                  => '橫線',
-'diff-code'                => '電腦碼方塊',
-'diff-dl'                  => '定義表',
-'diff-dt'                  => '定義字',
-'diff-dd'                  => '解釋',
-'diff-input'               => '輸入',
-'diff-form'                => '表',
-'diff-img'                 => '圖像',
-'diff-span'                => '樣式',
-'diff-a'                   => '連結',
-'diff-i'                   => '斜體',
-'diff-b'                   => '粗體',
-'diff-strong'              => '強調',
-'diff-em'                  => '重點',
-'diff-font'                => '字體',
-'diff-big'                 => '大',
-'diff-del'                 => '已刪除',
-'diff-tt'                  => '固定闊度',
-'diff-sub'                 => '下標',
-'diff-sup'                 => '上標',
-'diff-strike'              => '刪除線',
+'diff-multi'               => '（由{{PLURAL:$2|1名用戶|$2名用戶}}作出的{{PLURAL:$1|一個中途修訂版本|$1個中途修訂版本}}未被顯示）',
+'diff-multi-manyusers'     => '（由多於$2名用戶作出的{{PLURAL:$1|一個中途修訂版本|$1個中途修訂版本}} 未被顯示）',
 
 # Search results
-'searchresults'                    => '搜索結果',
-'searchresults-title'              => '對"$1"的搜尋結果',
+'searchresults'                    => '搜尋結果',
+'searchresults-title'              => '對「$1」的搜尋結果',
 'searchresulttext'                 => '有關搜索{{SITENAME}}的更多詳情,參見[[{{MediaWiki:Helppage}}|{{int:help}}]]。',
-'searchsubtitle'                   => '查詢\'\'\'[[:$1]]\'\'\'（[[Special:Prefixindex/$1|所有以 "$1" 開頭的頁面]]{{int:pipe-separator}}[[Special:WhatLinksHere/$1|所有鏈接到 "$1" 的頁面]]）',
+'searchsubtitle'                   => '查詢\'\'\'[[:$1]]\'\'\'（[[Special:Prefixindex/$1|所有以 "$1" 開頭的頁面]]{{int:pipe-separator}}[[Special:WhatLinksHere/$1|所有連結到 "$1" 的頁面]]）',
 'searchsubtitleinvalid'            => '查詢"$1"',
-'noexactmatch'                     => "'''沒找到標題為\"\$1\"的頁面。''' 您可以[[:\$1|創建此頁面]]。",
-'noexactmatch-nocreate'            => "'''沒找到標題為\"\$1\"的頁面。'''",
 'toomanymatches'                   => '過多的匹配已回應，請嘗試一個不同的查詢',
-'titlematches'                     => '頁面題目相符',
+'titlematches'                     => '頁面標題相符',
 'notitlematches'                   => '沒有找到匹配頁面題目',
 'textmatches'                      => '頁面內容相符',
 'notextmatches'                    => '沒有頁面內容匹配',
@@ -1098,8 +1137,9 @@ $1",
 'shown-title'                      => '每頁顯示$1項結果',
 'viewprevnext'                     => '檢視 （$1 {{int:pipe-separator}} $2） （$3）',
 'searchmenu-legend'                => '搜尋選項',
-'searchmenu-exists'                => "'''在這個wiki上有一頁面叫做\"[[:\$1]]\"'''",
-'searchmenu-new'                   => "'''在這個wiki上新建這個頁面\"[[:\$1]]\"！'''",
+'searchmenu-exists'                => "'''在這個 wiki 上已有一頁面叫做「[[:$1]]」。'''",
+'searchmenu-new'                   => "'''在這個 wiki 上建立這個頁面「[[:$1]]」！'''",
+'searchmenu-new-nocreate'          => '「$1」是一個無效的頁面名稱或無法被您創建。',
 'searchhelp-url'                   => 'Help:目錄',
 'searchmenu-prefix'                => '[[Special:PrefixIndex/$1|去瀏覽以此為首的頁面]]',
 'searchprofile-articles'           => '內容頁面',
@@ -1113,6 +1153,7 @@ $1",
 'searchprofile-everything-tooltip' => '搜尋全部（包括討論頁面）',
 'searchprofile-advanced-tooltip'   => '在自定名字空間中度搜尋',
 'search-result-size'               => '$1 （$2個字）',
+'search-result-category-size'      => '$1位成員（$2個子分類，$3個檔案）',
 'search-result-score'              => '相關度: $1%',
 'search-redirect'                  => '（重定向 $1）',
 'search-section'                   => '（段落 $1）',
@@ -1127,15 +1168,15 @@ $1",
 'searcheverything-enable'          => '在所有名字空間中搜尋',
 'searchrelated'                    => '相關',
 'searchall'                        => '所有',
-'showingresults'                   => '下面顯示從第<b>$2</b>條開始的<b>$1</b>條結果:',
-'showingresultsnum'                => '下面顯示從第<b>$2</b>條開始的<b>$3</b>條結果:',
+'showingresults'                   => '下面顯示從第 <b>$2</b> 條開始的 <b>$1</b> 條結果：',
+'showingresultsnum'                => "下面顯示從第 '''$2''' 條開始的 '''{{PLURAL:$3|1|$3}}''' 條結果。",
 'showingresultsheader'             => "對'''$4'''的{{PLURAL:$5|第'''$1'''至第'''$3'''項結果|第'''$1 - $2'''項，共'''$3'''項結果}}",
 'nonefound'                        => "'''注意''': 只有一些名字空間是會作為預設搜尋。嘗試''all:''去搜尋全部的頁面（包埋討論頁面、模板等），或可用需要的名字空間作為前綴。",
-'search-nonefound'                 => '在查詢中無結果配合。',
-'powersearch'                      => '進階搜索',
-'powersearch-legend'               => '進階搜索',
-'powersearch-ns'                   => '在以下的名字空間中搜尋:',
-'powersearch-redir'                => '重新定向清單',
+'search-nonefound'                 => '在查詢中無結果相符。',
+'powersearch'                      => '進階搜尋',
+'powersearch-legend'               => '進階搜尋',
+'powersearch-ns'                   => '在以下的名字空間中搜尋：',
+'powersearch-redir'                => '重定向清單',
 'powersearch-field'                => '搜尋',
 'powersearch-togglelabel'          => '核取：',
 'powersearch-toggleall'            => '所有',
@@ -1152,53 +1193,53 @@ $1",
 'qbsettings-floatingright' => '右側漂移',
 
 # Preferences page
-'preferences'                   => '參數設置',
-'mypreferences'                 => '我的參數設置',
-'prefs-edits'                   => '編輯數量:',
+'preferences'                   => '偏好設定',
+'mypreferences'                 => '我的偏好設定',
+'prefs-edits'                   => '編輯數量：',
 'prefsnologin'                  => '還未登入',
 'prefsnologintext'              => '您必須先<span class="plainlinks">[{{fullurl:{{#Special:UserLogin}}|returnto=$1}} 登入]</span>才能設置個人參數。',
 'changepassword'                => '更改密碼',
-'prefs-skin'                    => '面板',
+'prefs-skin'                    => '外觀',
 'skin-preview'                  => '預覽',
-'prefs-math'                    => '數學公式',
 'datedefault'                   => '預設值',
 'prefs-datetime'                => '日期和時間',
 'prefs-personal'                => '用戶資料',
 'prefs-rc'                      => '最近更改',
 'prefs-watchlist'               => '監視列表',
 'prefs-watchlist-days'          => '監視列表中顯示記錄的天數:',
-'prefs-watchlist-days-max'      => '最大7天',
+'prefs-watchlist-days-max'      => '最多 7 天',
 'prefs-watchlist-edits'         => '在增強的監視列表中顯示的最多更改次數:',
-'prefs-watchlist-edits-max'     => '最多數量: 1000',
-'prefs-watchlist-token'         => '監視列表幣：',
+'prefs-watchlist-edits-max'     => '最大數量：1000',
+'prefs-watchlist-token'         => '監視列表密鑰：',
 'prefs-misc'                    => '雜項',
 'prefs-resetpass'               => '更改密碼',
 'prefs-email'                   => '電郵選項',
 'prefs-rendering'               => '外觀',
-'saveprefs'                     => '保存',
+'saveprefs'                     => '儲存',
 'resetprefs'                    => '清除未保存的更改',
 'restoreprefs'                  => '恢復所有預設設定',
 'prefs-editing'                 => '編輯',
 'prefs-edit-boxsize'            => '編輯框尺寸',
 'rows'                          => '列:',
 'columns'                       => '欄:',
-'searchresultshead'             => '搜索結果設定',
+'searchresultshead'             => '搜尋結果設定',
 'resultsperpage'                => '每頁顯示連結數',
 'contextlines'                  => '每連結行數:',
 'contextchars'                  => '每行字數:',
 'stub-threshold'                => '<a href="#" class="stub">短頁面連結</a>格式門檻值 （位元組）:',
+'stub-threshold-disabled'       => '已停用',
 'recentchangesdays'             => '最近更改中的顯示日數:',
-'recentchangesdays-max'         => '最大 $1 日',
+'recentchangesdays-max'         => '最多 $1 {{PLURAL:$1|天|天}}',
 'recentchangescount'            => '預設顯示的編輯數：',
 'prefs-help-recentchangescount' => '這個包括最近更改、頁面歷史以及日誌。',
-'prefs-help-watchlist-token'    => '在這欄加入一個秘密鑰會生成一個對您監視列表中的RSS源。
+'prefs-help-watchlist-token'    => '在這欄加入一個秘密鑰會生成一個對您監視列表中的 RSS 源。
 任何一位知道在這個欄位上的匙可以閱讀到您的監視列表，請選擇一個安全的值。
-這裏有一個任意生成的值，供您選擇：$1',
-'savedprefs'                    => '您的個人參數設置已經保存。',
-'timezonelegend'                => '時區:',
+這裡有一個任意生成的值，供您選擇：$1',
+'savedprefs'                    => '您的個人偏好設定已經儲存。',
+'timezonelegend'                => '時區：',
 'localtime'                     => '當地時間:',
 'timezoneuseserverdefault'      => '使用伺服器預設值',
-'timezoneuseoffset'             => '其它 （指定偏移）',
+'timezoneuseoffset'             => '其他 （指定偏移）',
 'timezoneoffset'                => '時差¹:',
 'servertime'                    => '伺服器時間:',
 'guesstimezone'                 => '從瀏覽器填寫',
@@ -1215,11 +1256,12 @@ $1",
 'allowemail'                    => '接受來自其他用戶的郵件',
 'prefs-searchoptions'           => '搜尋選項',
 'prefs-namespaces'              => '頁面名稱空間',
-'defaultns'                     => '否則在這些名字空間搜索：',
+'defaultns'                     => '否則在這些名字空間搜尋：',
 'default'                       => '預設',
 'prefs-files'                   => '檔案',
 'prefs-custom-css'              => '自定CSS',
-'prefs-custom-js'               => '自定JS',
+'prefs-custom-js'               => '自定JavaScript',
+'prefs-common-css-js'           => '共用 CSS/JavaScript 於所有的外觀中：',
 'prefs-reset-intro'             => '您可以利用這個頁面去重設您的參數設置到網站預設值。這個動作無法復原。',
 'prefs-emailconfirm-label'      => '電子郵件確認：',
 'prefs-textboxsize'             => '編輯框大小',
@@ -1228,23 +1270,24 @@ $1",
 'uid'                           => '用戶ID:',
 'prefs-memberingroups'          => '{{PLURAL:$1|一|多}}組的成員:',
 'prefs-registration'            => '註冊時間:',
-'yourrealname'                  => '真實姓名:',
-'yourlanguage'                  => '介面語言:',
+'yourrealname'                  => '真實姓名：',
+'yourlanguage'                  => '介面語言：',
 'yourvariant'                   => '字體變換:',
 'yournick'                      => '新簽名:',
-'prefs-help-signature'          => '在討論頁面上的評論應該要用 "<nowiki>~~~~</nowiki>" 簽名，這樣便會轉換成{{GENDER:|你|妳|你}}的簽名以及一個時間截記。',
-'badsig'                        => '錯誤的原始簽名。檢查一下HTML標籤。',
+'prefs-help-signature'          => '在討論頁面上的評論應該要用「<nowiki>~~~~</nowiki>」簽名，這樣便會轉換成{{GENDER:|你|妳|你}}的簽名以及一個時間截記。',
+'badsig'                        => '錯誤的原始簽名。請檢查HTML標籤。',
 'badsiglength'                  => '您的簽名過長。
 它的長度不可超過$1個字元。',
-'yourgender'                    => '性別:',
+'yourgender'                    => '性別：',
 'gender-unknown'                => '未指定',
 'gender-male'                   => '男',
 'gender-female'                 => '女',
-'prefs-help-gender'             => '可選: 用以軟件中的性別指定。此項資料將會被公開。',
+'prefs-help-gender'             => '可選：用於軟體中的性別指定。此項資料將會被公開。',
 'email'                         => '電子郵件',
 'prefs-help-realname'           => '真實姓名是可選的。
 如果您選擇提供它，那它便用以對您的貢獻署名。',
-'prefs-help-email'              => '電子郵件是可選的，但當您忘記您的個密碼時需要將新密碼重設寄回給您。您亦可以在您沒有公開自己的用戶身分時透過您的用戶頁或用戶討論頁與您聯繫。',
+'prefs-help-email'              => '電子郵件是可選的，但當您忘記您的密碼時需要將新密碼重設，就會用電郵寄回給您。',
+'prefs-help-email-others'       => '您亦可以在您沒有公開自己的用戶身分時透過您的用戶頁或用戶討論頁與您聯繫。',
 'prefs-help-email-required'     => '需要電子郵件地址。',
 'prefs-info'                    => '基本資料',
 'prefs-i18n'                    => '國際化',
@@ -1256,29 +1299,36 @@ $1",
 'prefs-advancedrendering'       => '進階選項',
 'prefs-advancedsearchoptions'   => '進階選項',
 'prefs-advancedwatchlist'       => '進階選項',
-'prefs-display'                 => '顯示選項',
+'prefs-displayrc'               => '顯示選項',
+'prefs-displaysearchoptions'    => '顯示選項',
+'prefs-displaywatchlist'        => '顯示選項',
 'prefs-diffs'                   => '差異',
 
+# User preference: e-mail validation using jQuery
+'email-address-validity-valid'   => '電子郵件地址有效',
+'email-address-validity-invalid' => '請提供一個有效的電子郵件地址',
+
 # User rights
-'userrights'                  => '用戶權限管理',
-'userrights-lookup-user'      => '管理用戶群組',
-'userrights-user-editname'    => '輸入用戶名:',
-'editusergroup'               => '編輯用戶群組',
-'editinguser'                 => "正在更改用戶'''[[User:$1|$1]]''' （[[User talk:$1|{{int:talkpagelinktext}}]]{{int:pipe-separator}}[[Special:Contributions/$1|{{int:contribslink}}]]） 的用戶權限",
-'userrights-editusergroup'    => '編輯用戶群組',
-'saveusergroups'              => '保存用戶群組',
-'userrights-groupsmember'     => '屬於:',
-'userrights-groups-help'      => '您可以改動這位用戶所屬的群組:
+'userrights'                   => '用戶權限管理',
+'userrights-lookup-user'       => '管理用戶群組',
+'userrights-user-editname'     => '輸入用戶名:',
+'editusergroup'                => '編輯用戶群組',
+'editinguser'                  => "正在更改用戶'''[[User:$1|$1]]''' （[[User talk:$1|{{int:talkpagelinktext}}]]{{int:pipe-separator}}[[Special:Contributions/$1|{{int:contribslink}}]]） 的用戶權限",
+'userrights-editusergroup'     => '編輯用戶群組',
+'saveusergroups'               => '保存用戶群組',
+'userrights-groupsmember'      => '屬於:',
+'userrights-groupsmember-auto' => '固有屬於:',
+'userrights-groups-help'       => '您可以改動這位用戶所屬的群組:
 * 已剔選的核取方塊代表該用戶屬於該群組。
 * 未剔選的核取方塊代表該用戶不是屬於該群組。
 * 有 * 項目表示一旦您加入該群組之後便不能移除它，反之亦然。',
-'userrights-reason'           => '更改原因:',
-'userrights-no-interwiki'     => '您並沒有權限去編輯在其它wiki上的用戶權限。',
-'userrights-nodatabase'       => '資料庫$1不存在或並非為本地的。',
-'userrights-nologin'          => '您必須要以操作員帳戶[[Special:UserLogin|登入]]之後才可以指定用戶權限。',
-'userrights-notallowed'       => '您的帳戶無權限去指定用戶權限。',
-'userrights-changeable-col'   => '您可以更改的群組',
-'userrights-unchangeable-col' => '您不可以更改的群組',
+'userrights-reason'            => '原因：',
+'userrights-no-interwiki'      => '您並沒有權限去編輯在其它wiki上的用戶權限。',
+'userrights-nodatabase'        => '資料庫$1不存在或並非為本地的。',
+'userrights-nologin'           => '您必須要以操作員賬戶[[Special:UserLogin|登入]]之後才可以指定用戶權限。',
+'userrights-notallowed'        => '您的賬戶無權限去指定用戶權限。',
+'userrights-changeable-col'    => '您可以更改的群組',
+'userrights-unchangeable-col'  => '您不可以更改的群組',
 
 # Groups
 'group'               => '群組:',
@@ -1312,11 +1362,11 @@ $1",
 'right-createaccount'         => '創建新用戶賬戶',
 'right-minoredit'             => '標示作小編輯',
 'right-move'                  => '移動頁面',
-'right-move-subpages'         => '移動頁面跟它的字頁面',
+'right-move-subpages'         => '移動頁面跟它的子頁面',
 'right-move-rootuserpages'    => '移動根用戶頁面',
 'right-movefile'              => '移動檔案',
 'right-suppressredirect'      => '當移動頁面時不建立來源頁面之重定向',
-'right-upload'                => '上載檔案',
+'right-upload'                => '上傳檔案',
 'right-reupload'              => '覆蓋現有的檔案',
 'right-reupload-own'          => '覆蓋由同一位上載的檔案',
 'right-reupload-shared'       => '於本地無視共用媒體檔案庫上的檔案',
@@ -1324,29 +1374,30 @@ $1",
 'right-purge'                 => '不需要確認之下清除網站快取',
 'right-autoconfirmed'         => '編輯半保護頁面',
 'right-bot'                   => '視為一個自動程序',
-'right-nominornewtalk'        => '小編輯不引發新信息提示',
+'right-nominornewtalk'        => '小編輯不引發新訊息提示',
 'right-apihighlimits'         => '在API查詢中使用更高的上限',
 'right-writeapi'              => '使用API編寫',
 'right-delete'                => '刪除頁面',
 'right-bigdelete'             => '刪除大量歷史之頁面',
 'right-deleterevision'        => '刪除及同反刪除頁面中的指定修訂',
-'right-deletedhistory'        => '查看已刪除之項目，不含有關的字',
-'right-deletedtext'           => '查看已刪除修訂中之已刪除的字以及更改',
+'right-deletedhistory'        => '檢視已刪除之歷史項目，不含關聯的文本',
+'right-deletedtext'           => '檢視已刪除修訂中之已刪除的字以及更改',
 'right-browsearchive'         => '搜尋已刪除之頁面',
 'right-undelete'              => '反刪除頁面',
-'right-suppressrevision'      => '查看及恢復由操作員隱藏之修訂',
-'right-suppressionlog'        => '查看私人的日誌',
+'right-suppressrevision'      => '檢視及恢復由操作員隱藏之修訂',
+'right-suppressionlog'        => '檢視私人的日誌',
 'right-block'                 => '封鎖其他用戶防止編輯',
 'right-blockemail'            => '封鎖用戶不可發電郵',
 'right-hideuser'              => '封鎖用戶名，對公眾隱藏',
 'right-ipblock-exempt'        => '繞過IP封鎖、自動封鎖以及範圍封鎖',
 'right-proxyunbannable'       => '繞過Proxy的自動封鎖',
-'right-protect'               => '更改保護等級以及埋編輯保護頁面',
+'right-unblockself'           => '自我解除封鎖',
+'right-protect'               => '更改保護等級以及編輯保護頁面',
 'right-editprotected'         => '編輯保護頁面（無連鎖保護）',
 'right-editinterface'         => '編輯用戶界面',
-'right-editusercssjs'         => '編輯其他用戶的CSS和JS檔案',
+'right-editusercssjs'         => '編輯其他用戶的CSS和JavaScript檔案',
 'right-editusercss'           => '編輯其他用戶的CSS檔案',
-'right-edituserjs'            => '編輯其他用戶的JS檔案',
+'right-edituserjs'            => '編輯其他用戶的JavaScript檔案',
 'right-rollback'              => '快速復原上位用戶對某一頁面之編輯',
 'right-markbotedits'          => '標示復原編輯作機械人編輯',
 'right-noratelimit'           => '沒有使用頻率限制',
@@ -1355,7 +1406,7 @@ $1",
 'right-patrol'                => '標示其它的編輯作已巡查的',
 'right-autopatrol'            => '將自己的編輯自動標示為已巡查的',
 'right-patrolmarks'           => '檢視最近巡查標記更改',
-'right-unwatchedpages'        => '查看未監視之頁面',
+'right-unwatchedpages'        => '檢視未監視之頁面',
 'right-trackback'             => '遞交一個trackback',
 'right-mergehistory'          => '合併頁面歷史',
 'right-userrights'            => '編輯所有用戶的權限',
@@ -1363,14 +1414,15 @@ $1",
 'right-siteadmin'             => '鎖定和解除鎖定資料庫',
 'right-reset-passwords'       => '重設其他用戶的密碼',
 'right-override-export-depth' => '匯出含有五層深度連結頁面之頁面',
-'right-versiondetail'         => '顯示延伸軟件版本的資料',
 'right-sendemail'             => '發電子郵件給其他用戶',
+'right-revisionmove'          => '移動修訂版本',
+'right-disableaccount'        => '禁用帳號',
 
 # User rights log
 'rightslog'      => '用戶權限日誌',
 'rightslogtext'  => '以下記錄了用戶權限的更改記錄。',
 'rightslogentry' => '將 $1 的權限從 $2 改為 $3',
-'rightsnone'     => '（無）',
+'rightsnone'     => '無',
 
 # Associated actions - in the sentence "You do not have permission to X"
 'action-read'                 => '閱讀這個頁面',
@@ -1380,7 +1432,7 @@ $1",
 'action-createaccount'        => '建立這個用戶賬戶',
 'action-minoredit'            => '標示這個編輯為小的',
 'action-move'                 => '移動這個頁面',
-'action-move-subpages'        => '移動這個頁面跟它的字頁面',
+'action-move-subpages'        => '移動這個頁面跟它的子頁面',
 'action-move-rootuserpages'   => '移動根用戶頁面',
 'action-movefile'             => '移動這個檔案',
 'action-upload'               => '上載這個檔案',
@@ -1390,47 +1442,43 @@ $1",
 'action-writeapi'             => '用來寫API',
 'action-delete'               => '刪除這個頁面',
 'action-deleterevision'       => '刪除這次修訂',
-'action-deletedhistory'       => '查看這個頁面的刪除歷史',
+'action-deletedhistory'       => '檢視這個頁面的刪除歷史',
 'action-browsearchive'        => '搜尋已刪除的頁面',
 'action-undelete'             => '反刪除這個頁面',
 'action-suppressrevision'     => '翻查和恢復這次隱藏修訂',
-'action-suppressionlog'       => '查看這個私有日誌',
+'action-suppressionlog'       => '檢視這個私有日誌',
 'action-block'                => '封鎖這位用戶的編輯',
 'action-protect'              => '更改這個頁面的保護等級',
 'action-import'               => '由另一個wiki匯入這個頁面',
 'action-importupload'         => '由一個檔案上載中匯入這個頁面',
 'action-patrol'               => '標示其它的編輯為已巡查的',
 'action-autopatrol'           => '將您的編輯標示為已巡查的',
-'action-unwatchedpages'       => '查看未被人監視的頁面',
+'action-unwatchedpages'       => '檢視未被人監視的頁面',
 'action-trackback'            => '遞交一個trackback',
 'action-mergehistory'         => '合併這個頁面的歷史',
 'action-userrights'           => '編輯所有的權限',
 'action-userrights-interwiki' => '編輯在其它wiki上用戶的權限',
 'action-siteadmin'            => '鎖定和解除鎖定資料庫',
+'action-revisionmove'         => '移動修訂',
 
 # Recent changes
 'nchanges'                          => '$1次更改',
-'recentchanges'                     => '最近更改',
+'recentchanges'                     => '近期變動',
 'recentchanges-legend'              => '最近更改選項',
 'recentchangestext'                 => '跟蹤這個wiki上的最新更改。',
-'recentchanges-feed-description'    => '跟蹤此訂閱在 wiki 上的最近更改。',
-'recentchanges-label-legend'        => '圖例： $1',
-'recentchanges-legend-newpage'      => '$1 - 新頁面',
+'recentchanges-feed-description'    => '追蹤此訂閱在 wiki 上的最近更改。',
 'recentchanges-label-newpage'       => '這次編輯建立了一個新頁面',
-'recentchanges-legend-minor'        => '$1 - 小編輯',
 'recentchanges-label-minor'         => '這是一個小編輯',
-'recentchanges-legend-bot'          => '$1 - 機器人編輯',
 'recentchanges-label-bot'           => '這次編輯是由機器人進行',
-'recentchanges-legend-unpatrolled'  => '$1 - 未巡查過的編輯',
 'recentchanges-label-unpatrolled'   => '這次編輯尚未巡查過',
-'rcnote'                            => "以下是在$4 $5，最近'''$2'''天內的'''$1'''次最近更改記錄:",
+'rcnote'                            => "以下是在$4 $5，最近 '''$2''' 天內的 '''$1''' 次最近更改記錄。",
 'rcnotefrom'                        => "下面是自'''$2'''（最多顯示'''$1'''）:",
 'rclistfrom'                        => '顯示自$1以來的新更改',
 'rcshowhideminor'                   => '$1小編輯',
 'rcshowhidebots'                    => '$1機器人的編輯',
 'rcshowhideliu'                     => '$1已登入用戶的編輯',
 'rcshowhideanons'                   => '$1匿名用戶的編輯',
-'rcshowhidepatr'                    => '$1檢查過的編輯',
+'rcshowhidepatr'                    => '$1巡查過的編輯',
 'rcshowhidemine'                    => '$1我的編輯',
 'rclinks'                           => '顯示最近$2天內最新的$1次改動。<br />$3',
 'diff'                              => '差異',
@@ -1448,10 +1496,10 @@ $1",
 'rc-enhanced-hide'                  => '隱藏細節',
 
 # Recent changes linked
-'recentchangeslinked'          => '鏈出更改',
-'recentchangeslinked-feed'     => '鏈出更改',
-'recentchangeslinked-toolbox'  => '鏈出更改',
-'recentchangeslinked-title'    => '對於「$1」有關的鏈出更改',
+'recentchangeslinked'          => '連出更改',
+'recentchangeslinked-feed'     => '連出更改',
+'recentchangeslinked-toolbox'  => '連出更改',
+'recentchangeslinked-title'    => '對於「$1」有關的連出更改',
 'recentchangeslinked-noresult' => '在這一段時間中連結的頁面並無更改。',
 'recentchangeslinked-summary'  => "這一個特殊頁面列示''由''所給出的一個頁面之連結到頁面的最近更改（或者是對於指定分類的成員）。
 在[[Special:Watchlist|您的監視列表]]中的頁面會以'''粗體'''顯示。",
@@ -1462,48 +1510,61 @@ $1",
 'upload'                      => '上傳檔案',
 'uploadbtn'                   => '上傳檔案',
 'reuploaddesc'                => '取消上載並返回上載表單',
+'upload-tryagain'             => '提交修改後的檔案描述',
 'uploadnologin'               => '未登入',
 'uploadnologintext'           => '您必須先[[Special:UserLogin|登入]]
 才能上載檔案。',
 'upload_directory_missing'    => '上傳目錄（$1）遺失，不能由網頁伺服器建立。',
 'upload_directory_read_only'  => '上傳目錄（$1）不存在或無寫權限。',
 'uploaderror'                 => '上載錯誤',
-'uploadtext'                  => "使用下面的表單來上傳檔案。
-要檢視或搜索以前上傳的檔案
-可以進入[[Special:FileList|檔案上傳清單]]，
-（重新）上傳將在[[Special:Log/upload|上傳日誌]]中記錄，
-而刪除將在[[Special:Log/delete|刪除日誌]]中記錄。
+'upload-recreate-warning'     => "'''警告：一個相同名字的檔案曾經被刪除或者移動至別處。'''
 
-要在頁面中加入檔案，使用以下其中一種形式的連接:
-* '''<tt><nowiki>[[</nowiki>{{ns:file}}<nowiki>:file.jpg]]</nowiki></tt>'''去用檔案的完整版本
-* '''<tt><nowiki>[[</nowiki>{{ns:file}}<nowiki>:file.png|200px|thumb|left|替換文字]]</nowiki></tt>'''去用一個200像素寬，左面盒上有'替換文字'的描述
-* '''<tt><nowiki>[[</nowiki>{{ns:media}}<nowiki>:file.ogg]]</nowiki></tt>'''去直接連接到檔案而不顯示檔案",
+這個頁面的刪除和移動日誌在這裏提供以便參考：",
+'uploadtext'                  => "使用下面的表單來上傳檔案。
+要檢視或搜尋以前上傳的檔案，可以進入[[Special:FileList|檔案上傳清單]]，（重新）上傳也將在[[Special:Log/upload|上傳日誌]]中記錄，而刪除將在[[Special:Log/delete|刪除日誌]]中記錄。
+
+要在頁面中加入檔案，使用以下其中一種形式的連結：
+* '''<tt><nowiki>[[</nowiki>{{ns:file}}<nowiki>:File.jpg]]</nowiki></tt>'''使用檔案的完整版本
+* '''<tt><nowiki>[[</nowiki>{{ns:file}}<nowiki>:File.png|200px|thumb|left|替換文字]]</nowiki></tt>'''使用放置於左側的一個框內的 200 像素寬的圖片，同時使用「替換文字」作為描述
+* '''<tt><nowiki>[[</nowiki>{{ns:media}}<nowiki>:File.ogg]]</nowiki></tt>'''直接連結到檔案而不顯示檔案",
 'upload-permitted'            => '准許的檔案類型: $1。',
 'upload-preferred'            => '建議的檔案類型: $1。',
 'upload-prohibited'           => '禁止的檔案類型: $1。',
 'uploadlog'                   => '上載紀錄',
 'uploadlogpage'               => '上載紀錄',
 'uploadlogpagetext'           => '以下是最近上載的檔案的一覽表。
-查看[[Special:NewFiles|新檔案畫廊]]去看更富圖像的總覽。',
+檢視[[Special:NewFiles|新檔案畫廊]]去看更富圖片的總覽。',
 'filename'                    => '檔案名',
 'filedesc'                    => '檔案描述',
 'fileuploadsummary'           => '檔案描述:',
-'filereuploadsummary'         => '檔案更改:',
+'filereuploadsummary'         => '檔案更改說明：',
 'filestatus'                  => '版權狀態:',
-'filesource'                  => '來源:',
+'filesource'                  => '來源：',
 'uploadedfiles'               => '已上載檔案',
 'ignorewarning'               => '忽略警告並儲存檔案',
 'ignorewarnings'              => '忽略所有警告',
 'minlength1'                  => '檔案名字必須至少有一個字母。',
 'illegalfilename'             => '檔案名“$1”包含有頁面標題所禁止的字符。請改名後重新上傳。',
-'badfilename'                 => '檔案名已被改為“$1”。',
+'badfilename'                 => '檔案名已被改為「$1」。',
+'filetype-mime-mismatch'      => '檔案擴展名 ".$1" 不配所偵測檔案的MIME類型 ($2)。',
 'filetype-badmime'            => 'MIME類別"$1"不是容許的檔案格式。',
 'filetype-bad-ie-mime'        => '不可以上傳這個檔案，因為 Internet Explorer 會將它偵測為 "$1"，它是一種不容許以及有潛在危險性之檔案類型。',
 'filetype-unwanted-type'      => "'''\".\$1\"'''是一種不需要的檔案類型。
 建議的{{PLURAL:\$3|一種|多種}}檔案類型有\$2。",
-'filetype-banned-type'        => "'''\".\$1\"'''是一種不准許的檔案類型。
-容許的{{PLURAL:\$3|一種|多種}}檔案類型有\$2。",
+'filetype-banned-type'        => "'''「.$1」'''{{PLURAL:$4|不是允許的檔案類型|是不允許的檔案類型}}。 
+允許的{{PLURAL:$3|檔案類型|檔案類型}} $2。",
 'filetype-missing'            => '該檔案名稱並沒有副檔名 （像 ".jpg"）。',
+'empty-file'                  => '您所提交的檔案為空檔案。',
+'file-too-large'              => '您所提交的檔案過大。',
+'filename-tooshort'           => '檔案名過短。',
+'filetype-banned'             => '此類檔案被禁止。',
+'verification-error'          => '檔案未通過驗證。',
+'hookaborted'                 => '您所嘗試的修改被擴展鈎捨棄。',
+'illegal-filename'            => '檔案名非法。',
+'overwrite'                   => '不允許覆蓋現有檔案。',
+'unknown-error'               => '發生未知錯誤。',
+'tmp-create-error'            => '無法建立臨時檔案。',
+'tmp-write-error'             => '臨時檔案寫入發生錯誤。',
 'large-file'                  => '建議檔案大小不能超過 $1；本檔案大小為 $2。',
 'largefileserver'             => '這個檔案的大小比伺服器配置允許的大小還要大。',
 'emptyfile'                   => '您所上傳的檔案不存在。這可能是由於檔案名鍵入錯誤。請檢查您是否真的要上傳此檔案。',
@@ -1514,27 +1575,31 @@ $1",
 * 上載檔案的檔名: '''<tt>[[:$1]]</tt>'''
 * 現有檔案的檔名: '''<tt>[[:$2]]</tt>'''
 請選擇一個不同的名字。",
-'fileexists-thumbnail-yes'    => "這個檔案好像是一幅圖像的縮圖版本''（縮圖）''。 [[$1|thumb]]
+'fileexists-thumbnail-yes'    => "這個檔案好像是一幅圖片的縮圖版本''（縮圖）''。 [[$1|thumb]]
 請檢查清楚該檔案'''<tt>[[:$1]]</tt>'''。
-如果檢查後的檔案是同原本圖像的大小是一樣的話，就不用再上載多一幅縮圖。",
-'file-thumbnail-no'           => "此圖像的檔案名稱以'''<tt>$1</tt>'''開始。它好像某幅圖像的縮小版本''（縮圖）''。
-如果{{GENDER:|你|妳|你}}有該圖像的完整大小版本，請上載它；否則請修改檔名。",
+如果檢查後的檔案是同原本圖片的大小是一樣的話，就不用再上載多一幅縮圖。",
+'file-thumbnail-no'           => "此圖片的檔案名稱以'''<tt>$1</tt>'''開始。它好像某幅圖片的縮小版本''（縮圖）''。
+如果{{GENDER:|你|妳|你}}有該圖片的完整大小版本，請上載它；否則請修改檔名。",
 'fileexists-forbidden'        => '已存在相同名稱的檔案，且不能覆蓋；請返回並用一個新的名稱來上傳此檔案。[[File:$1|thumb|center|$1]]',
 'fileexists-shared-forbidden' => '在共享檔案庫中已存在此名稱的檔案。
 如果{{GENDER:|你|妳|你}}仍然想去上載它的話，請返回並用一個新的名稱來上傳此檔案。[[File:$1|thumb|center|$1]]',
 'file-exists-duplicate'       => '這個檔案是跟以下的{{PLURAL:$1|一|多}}個檔案重覆:',
-'file-deleted-duplicate'      => '一個相同名稱的檔案 （[[$1]]） 在先前刪除過。您應該在重新上傳之前檢查一下該檔案之刪除紀錄。',
-'successfulupload'            => '上傳成功',
+'file-deleted-duplicate'      => '一個相同名稱的檔案 （[[:$1]]） 在先前刪除過。您應該在重新上傳之前檢查一下該檔案之刪除紀錄。',
 'uploadwarning'               => '上載警告',
+'uploadwarning-text'          => '請修改以下的檔案描述並重試。',
 'savefile'                    => '保存檔案',
-'uploadedimage'               => '已上載"[[$1]]"',
-'overwroteimage'              => '已經上載"[[$1]]"的新版本',
-'uploaddisabled'              => '無法上傳',
+'uploadedimage'               => '已上載「[[$1]]」',
+'overwroteimage'              => '已經上傳「[[$1]]」的新版本',
+'uploaddisabled'              => '上傳己停用。',
+'copyuploaddisabled'          => '通過網址上傳功能未開通。',
+'uploadfromurl-queued'        => '上傳已被列入隊列。',
 'uploaddisabledtext'          => '檔案上傳不可用。',
 'php-uploaddisabledtext'      => 'PHP 檔案上載已經停用。請檢查 file_uploads 設定。',
 'uploadscripted'              => '該檔案包含可能被網路瀏覽器錯誤解釋的 HTML 或腳本代碼。',
-'uploadcorrupt'               => '該檔案包含或具有一個不正確的擴展名。請檢查此檔案並重新上傳。',
-'uploadvirus'                 => '該檔案包含有病毒！詳情: $1',
+'uploadvirus'                 => '該檔案包含有病毒！
+詳情: $1',
+'uploadjava'                  => '該文件是 ZIP 文件，其中包含 Java 的.class 文件。
+不允許上傳 Java 文件，是因為他們可能會跳過安全限制。',
 'upload-source'               => '來源檔案',
 'sourcefilename'              => '來源檔案名：',
 'sourceurl'                   => '來源網址：',
@@ -1549,6 +1614,14 @@ $1",
 您應該要考慮一下繼續上傳一個檔案頁面是否合適。
 為方便起見，這一個檔案的刪除記錄已經在下面提供:",
 'filename-bad-prefix'         => "您上傳的檔案名稱是以'''「$1」'''作為開頭，通常這種沒有含意的檔案名稱是由數碼相機中自動編排。請在您的檔案中重新選擇一個更加有意義的檔案名稱。",
+'upload-success-subj'         => '上傳成功',
+'upload-success-msg'          => '您在[$2]的上传已经成功，可以在这里找到：[[:{{ns:file}}:$1]]',
+'upload-failure-subj'         => '上傳問題',
+'upload-failure-msg'          => '您在[$2]的上傳出現了問題：
+
+$1',
+'upload-warning-subj'         => '上傳警告',
+'upload-warning-msg'          => '您自[$2]的上傳出錯。您可以返回[[Special:Upload/stash/$1|上傳表單]]並更正問題。',
 
 'upload-proto-error'        => '協議錯誤',
 'upload-proto-error-text'   => '遠程上傳要求 URL 以 <code>http://</code> 或 <code>ftp://</code> 開頭。',
@@ -1559,6 +1632,23 @@ $1",
 'upload-too-many-redirects' => '在網址中有太多重新定向',
 'upload-unknown-size'       => '未知的大小',
 'upload-http-error'         => '已發生一個HTTP錯誤：$1',
+
+# ZipDirectoryReader
+'zip-file-open-error' => '打開文件的 ZIP 檢查時遇到一個錯誤。',
+'zip-wrong-format'    => '指定的檔案不是ZIP文件。',
+'zip-bad'             => '該文件是已損壞或以其它方式無法讀取的 ZIP 文件。
+不能正確檢查安全。',
+'zip-unsupported'     => '該文件是 ZIP 文件，其中使用不支持的 MediaWiki 的壓缩功能。
+不能正確檢查安全。',
+
+# Special:UploadStash
+'uploadstash'          => '上傳貯藏',
+'uploadstash-summary'  => '這個頁面提供已經上傳（或者上傳中）但未發佈到wiki之檔案存取。這些檔案除了上傳的用戶之外不會被其他人可見。',
+'uploadstash-clear'    => '清除貯藏檔案',
+'uploadstash-nofiles'  => '{{GENDER:|你|妳|你}}沒有已貯藏的檔案。',
+'uploadstash-badtoken' => '進行這個動作不成功，或者{{GENDER:|你|妳|你}}的編輯資訊已經過期。請再試。',
+'uploadstash-errclear' => '清除檔案不成功。',
+'uploadstash-refresh'  => '更新檔案清單',
 
 # img_auth script messages
 'img-auth-accessdenied' => '拒絕存取',
@@ -1577,6 +1667,16 @@ $1",
 這個wiki是已經設定做一個公共wiki。
 基於保安最佳化，img_auth.php已經停用。',
 'img-auth-noread'       => '用戶無存取權去讀"$1"。',
+
+# HTTP errors
+'http-invalid-url'      => '無效的URL：$1',
+'http-invalid-scheme'   => '不支援含有「$1」的URL。',
+'http-request-error'    => '未知的錯誤令到HTTP請求失敗。',
+'http-read-error'       => 'HTTP讀取錯誤。',
+'http-timed-out'        => 'HTTP請求已過時。',
+'http-curl-error'       => '擷取URL時出錯：$1',
+'http-host-unreachable' => '無法到達URL。',
+'http-bad-status'       => '進行HTTP請求時出現問題：$1 $2',
 
 # Some likely curl errors. More could be added from <http://curl.haxx.se/libcurl/c/libcurl-errors.html>
 'upload-curl-error6'       => '無法訪問 URL',
@@ -1598,6 +1698,7 @@ $1",
 'listfiles_search_for'  => '按檔案名稱搜索:',
 'imgfile'               => '檔案',
 'listfiles'             => '檔案列表',
+'listfiles_thumb'       => '縮圖',
 'listfiles_date'        => '日期',
 'listfiles_name'        => '名稱',
 'listfiles_user'        => '用戶',
@@ -1606,47 +1707,48 @@ $1",
 'listfiles_count'       => '版本',
 
 # File description page
-'file-anchor-link'          => '檔案',
-'filehist'                  => '檔案歷史',
-'filehist-help'             => '點擊日期／時間以檢視當時出現過的檔案。',
-'filehist-deleteall'        => '刪除全部',
-'filehist-deleteone'        => '刪除',
-'filehist-revert'           => '恢復',
-'filehist-current'          => '當前',
-'filehist-datetime'         => '日期／時間',
-'filehist-thumb'            => '縮圖',
-'filehist-thumbtext'        => '於$1的縮圖版本',
-'filehist-nothumb'          => '沒有縮圖',
-'filehist-user'             => '用戶',
-'filehist-dimensions'       => '維度',
-'filehist-filesize'         => '檔案大小',
-'filehist-comment'          => '註解',
-'filehist-missing'          => '檔案遺失',
-'imagelinks'                => '檔案連結',
-'linkstoimage'              => '以下的$1個頁面連接到本檔案:',
-'linkstoimage-more'         => '多於$1個頁面連接到這個檔案。
+'file-anchor-link'                  => '檔案',
+'filehist'                          => '檔案歷史',
+'filehist-help'                     => '點擊日期／時間以檢視當時出現過的檔案。',
+'filehist-deleteall'                => '刪除全部',
+'filehist-deleteone'                => '刪除',
+'filehist-revert'                   => '恢復',
+'filehist-current'                  => '目前',
+'filehist-datetime'                 => '日期／時間',
+'filehist-thumb'                    => '縮圖',
+'filehist-thumbtext'                => '於$1的縮圖版本',
+'filehist-nothumb'                  => '沒有縮圖',
+'filehist-user'                     => '用戶',
+'filehist-dimensions'               => '維度',
+'filehist-filesize'                 => '檔案大小',
+'filehist-comment'                  => '註解',
+'filehist-missing'                  => '檔案遺失',
+'imagelinks'                        => '檔案連結',
+'linkstoimage'                      => '以下的$1個頁面連接到本檔案:',
+'linkstoimage-more'                 => '多於$1個頁面連接到這個檔案。
 下面的清單只列示了連去這個檔案的最首$1個頁面。
 一個[[Special:WhatLinksHere/$2|完整的清單]]可以提供。',
-'nolinkstoimage'            => '沒有頁面連接到本檔案。',
-'morelinkstoimage'          => '查看連接到這個檔案的[[Special:WhatLinksHere/$1|更多連結]]。',
-'redirectstofile'           => '以下的$1個檔案重新定向到這個檔案:',
-'duplicatesoffile'          => '以下的$1個文件跟這個文件重覆（[[Special:FileDuplicateSearch/$2|更多細節]]）：',
-'sharedupload'              => '該檔案來自於$1，它可能在其它計劃項目中被應用。',
-'sharedupload-desc-there'   => '該檔案來自於$1，它可能在其它計劃項目中被應用。
+'nolinkstoimage'                    => '沒有頁面連接到本檔案。',
+'morelinkstoimage'                  => '檢視連接到這個檔案的[[Special:WhatLinksHere/$1|更多連結]]。',
+'redirectstofile'                   => '以下的$1個檔案重新定向到這個檔案:',
+'duplicatesoffile'                  => '以下的$1個檔案跟這個檔案重覆（[[Special:FileDuplicateSearch/$2|更多細節]]）：',
+'sharedupload'                      => '該檔案來自於$1，它可能在其它計劃項目中被應用。',
+'sharedupload-desc-there'           => '該檔案來自於$1，它可能在其它計劃項目中被應用。
 請參閱在[$2 檔案描述頁面]以了解其相關資訊。',
-'sharedupload-desc-here'    => '該檔案來自於$1，它可能在其它計劃項目中被應用。
+'sharedupload-desc-here'            => '該檔案來自於$1，它可能在其它計劃項目中被應用。
 它在[$2 檔案描述頁面]那邊上的描述於下面顯示。',
-'filepage-nofile'           => '不存在此名稱的檔案。',
-'filepage-nofile-link'      => '不存在此名稱的檔案，但您可以[$1 上傳它]。',
-'uploadnewversion-linktext' => '上傳該檔案的新版本',
-'shared-repo-from'          => '出自$1',
-'shared-repo'               => '一個共用檔案庫',
+'filepage-nofile'                   => '不存在此名稱的檔案。',
+'filepage-nofile-link'              => '不存在此名稱的檔案，但您可以[$1 上傳它]。',
+'uploadnewversion-linktext'         => '上傳該檔案的新版本',
+'shared-repo-from'                  => '出自$1',
+'shared-repo'                       => '一個共用檔案庫',
+'shared-repo-name-wikimediacommons' => '維基共享資源',
 
 # File reversion
 'filerevert'                => '恢復$1',
 'filerevert-legend'         => '恢復檔案',
 'filerevert-intro'          => "您現正在恢復檔案'''[[Media:$1|$1]]'''到[$4 於$2 $3的版本]。",
-'filerevert-comment'        => '註解:',
+'filerevert-comment'        => '理由：',
 'filerevert-defaultcomment' => '已經恢復到於$1 $2的版本',
 'filerevert-submit'         => '恢復',
 'filerevert-success'        => "'''[[Media:$1|$1]]'''已經恢復到[$4 於$2 $3的版本]。",
@@ -1657,7 +1759,7 @@ $1",
 'filedelete-legend'           => '刪除檔案',
 'filedelete-intro'            => "您現正刪除檔案'''[[Media:$1|$1]]'''。",
 'filedelete-intro-old'        => "{{GENDER:|你|妳|你}}現正刪除'''[[Media:$1|$1]]'''於[$4 $2 $3]的版本。",
-'filedelete-comment'          => '刪除理由:',
+'filedelete-comment'          => '理由：',
 'filedelete-submit'           => '刪除',
 'filedelete-success'          => "'''$1'''已經刪除。",
 'filedelete-success-old'      => "'''[[Media:$1|$1]]'''於 $2 $3 的版本已經刪除。",
@@ -1673,7 +1775,7 @@ $1",
 'filedelete-maintenance'      => '當在維護時已經暫時停用檔案刪除和恢復。',
 
 # MIME search
-'mimesearch'         => 'MIME 搜索',
+'mimesearch'         => 'MIME 搜尋',
 'mimesearch-summary' => '本頁面啟用檔案MIME類型過濾器。輸入︰內容類型/子類型，如 <tt>image/jpeg</tt>。',
 'mimetype'           => 'MIME 類型:',
 'download'           => '下載',
@@ -1686,7 +1788,7 @@ $1",
 
 # Unused templates
 'unusedtemplates'     => '未使用的模板',
-'unusedtemplatestext' => '本頁面列出{{ns:template}}名字空間下所有未被其他頁面使用的頁面。請在刪除這些模板前檢查其他鏈入該模板的頁面。',
+'unusedtemplatestext' => '本頁面列出{{ns:template}}名字空間下所有未被其他頁面使用的頁面。請在刪除這些模板前檢查其他連入該模板的頁面。',
 'unusedtemplateswlh'  => '其他連結',
 
 # Random page
@@ -1701,18 +1803,18 @@ $1",
 'statistics'                   => '統計',
 'statistics-header-pages'      => '頁面統計',
 'statistics-header-edits'      => '編輯統計',
-'statistics-header-views'      => '查看統計',
+'statistics-header-views'      => '檢視統計',
 'statistics-header-users'      => '用戶統計',
 'statistics-header-hooks'      => '其它統計',
 'statistics-articles'          => '內容頁面',
 'statistics-pages'             => '頁面',
 'statistics-pages-desc'        => '在wiki上的所有頁面，包括對話頁面、重新定向等',
-'statistics-files'             => '已經上載的檔案',
+'statistics-files'             => '已經上傳的檔案',
 'statistics-edits'             => '自從{{SITENAME}}設定的頁面編輯數',
 'statistics-edits-average'     => '每一頁面的平均編輯數',
-'statistics-views-total'       => '查看總數',
-'statistics-views-peredit'     => '每次編輯查看數',
-'statistics-jobqueue'          => '[http://www.mediawiki.org/wiki/Manual:Job_queue 工作隊列]長度',
+'statistics-views-total'       => '檢視總數',
+'statistics-views-total-desc'  => '不存在頁面和特殊頁面的查看數未計入',
+'statistics-views-peredit'     => '每次編輯檢視數',
 'statistics-users'             => '已註冊[[Special:ListUsers|用戶]]',
 'statistics-users-active'      => '活躍用戶',
 'statistics-users-active-desc' => '在前$1天中操作過的用戶',
@@ -1726,21 +1828,22 @@ Template:消歧义
 Template:消除歧义
 Template:消歧義
 Template:消除歧義',
-'disambiguations-text' => '以下的頁面都有到<b>消含糊頁</b>的鏈接, 但它們應該是連到適當的標題。<br />一個頁面會被視為消含糊頁如果它是連自[[MediaWiki:Disambiguationspage]]。',
+'disambiguations-text' => '以下的頁面都有到<b>消含糊頁</b>的連結，但它們應該是連到適當的標題。<br />一個頁面會被視為消含糊頁如果它是連自[[MediaWiki:Disambiguationspage]]。',
 
-'doubleredirects'            => '雙重重定向頁面',
-'doubleredirectstext'        => '這一頁列出所有重定向頁面重定向到另一個重定向頁的頁面。每一行都包含到第一和第二個重定向頁面的鏈接，以及第二個重定向頁面的目標，通常顯示的都會是"真正"的目標頁面，也就是第一個重定向頁面應該指向的頁面。
-<s>已劃去</s>的為已經解決之項目。',
-'double-redirect-fixed-move' => '[[$1]]已經完成移動，它現在重新定向到[[$2]]。',
-'double-redirect-fixer'      => '重新定向修正器',
+'doubleredirects'                   => '雙重重定向頁面',
+'doubleredirectstext'               => '這一頁列出所有重定向頁面重定向到另一個重定向頁的頁面。每一行都包含到第一和第二個重定向頁面的連結，以及第二個重定向頁面的目標，通常顯示的都會是"真正"的目標頁面，也就是第一個重定向頁面應該指向的頁面。
+<del>已劃去</del>的為已經解決之項目。',
+'double-redirect-fixed-move'        => '[[$1]]已經完成移動，它現在重新定向到[[$2]]。',
+'double-redirect-fixed-maintenance' => '修復從[[$1]]到[[$2]]的雙重重定向。',
+'double-redirect-fixer'             => '重新定向修正器',
 
 'brokenredirects'        => '損壞的重定向頁',
 'brokenredirectstext'    => '以下的重定向頁指向的是不存在的頁面:',
 'brokenredirects-edit'   => '編輯',
 'brokenredirects-delete' => '刪除',
 
-'withoutinterwiki'         => '未有語言鏈接的頁面',
-'withoutinterwiki-summary' => '以下的頁面是未有語言鏈接到其它語言版本。',
+'withoutinterwiki'         => '未有語言連結的頁面',
+'withoutinterwiki-summary' => '以下的頁面是未有語言連結到其它語言版本。',
 'withoutinterwiki-legend'  => '前綴',
 'withoutinterwiki-submit'  => '顯示',
 
@@ -1753,15 +1856,17 @@ Template:消除歧義',
 'nmembers'                => '$1個成員',
 'nrevisions'              => '$1個修訂',
 'nviews'                  => '$1次瀏覽',
+'nimagelinks'             => '用於$1個頁面中',
+'ntransclusions'          => '用於$1個頁面中',
 'specialpage-empty'       => '這個報告的結果為空。',
 'lonelypages'             => '孤立頁面',
 'lonelypagestext'         => '以下頁面尚未被{{SITENAME}}中的其它頁面連結或被之包含。',
 'uncategorizedpages'      => '待分類頁面',
 'uncategorizedcategories' => '待分類類別',
 'uncategorizedimages'     => '待分類檔案',
-'uncategorizedtemplates'  => '待分類模版',
+'uncategorizedtemplates'  => '待分類模板',
 'unusedcategories'        => '未使用的分類',
-'unusedimages'            => '未使用圖像',
+'unusedimages'            => '未使用圖片',
 'popularpages'            => '熱點頁面',
 'wantedcategories'        => '需要的分類',
 'wantedpages'             => '待撰頁面',
@@ -1770,14 +1875,14 @@ Template:消除歧義',
 'wantedtemplates'         => '需要的模板',
 'mostlinked'              => '最多連結頁面',
 'mostlinkedcategories'    => '最多連結分類',
-'mostlinkedtemplates'     => '最多連結模版',
+'mostlinkedtemplates'     => '最多連結模板',
 'mostcategories'          => '最多分類頁面',
 'mostimages'              => '最多連結檔案',
 'mostrevisions'           => '最多修訂頁面',
 'prefixindex'             => '所有頁面之前綴',
 'shortpages'              => '短頁面',
 'longpages'               => '長頁面',
-'deadendpages'            => '斷鏈頁面',
+'deadendpages'            => '斷連頁面',
 'deadendpagestext'        => '以下頁面沒有連結到{{SITENAME}}中的其它頁面。',
 'protectedpages'          => '已保護頁面',
 'protectedpages-indef'    => '只有無期之保護頁面',
@@ -1790,14 +1895,15 @@ Template:消除歧義',
 'listusers'               => '用戶列表',
 'listusers-editsonly'     => '只顯示有編輯的用戶',
 'listusers-creationsort'  => '按建立日期排序',
-'usereditcount'           => '$1次編輯',
+'usereditcount'           => '$1 次編輯',
 'usercreated'             => '於$1 $2建立',
 'newpages'                => '最新頁面',
 'newpages-username'       => '用戶名:',
 'ancientpages'            => '最舊頁面',
 'move'                    => '移動',
 'movethispage'            => '移動本頁',
-'unusedimagestext'        => '<p>請注意其它網站可能直接透過 URL 鏈接此檔案，所以這裡列出的圖像有可能依然被使用。</p>',
+'unusedimagestext'        => '下列檔案未有嵌入任何頁面但它仍然存在。
+請注意其它網站可能直接透過 URL 連結此檔案，所以這裡列出的圖片有可能依然被使用。',
 'unusedcategoriestext'    => '雖然沒有被其它頁面或者分類所採用，但列表中的分類頁依然存在。',
 'notargettitle'           => '無目標',
 'notargettext'            => '您還沒有指定一個目標頁面或用戶以進行此項操作。',
@@ -1806,6 +1912,7 @@ Template:消除歧義',
 'pager-newer-n'           => '新$1次',
 'pager-older-n'           => '舊$1次',
 'suppress'                => '監督',
+'querypage-disabled'      => '此特殊頁面基於效能的原因已經被停用。',
 
 # Book sources
 'booksources'               => '網路書源',
@@ -1815,11 +1922,11 @@ Template:消除歧義',
 'booksources-invalid-isbn'  => '提供的ISBN號碼並不正確，請檢查原始複製來源號碼是否有誤。',
 
 # Special:Log
-'specialloguserlabel'  => '用戶:',
-'speciallogtitlelabel' => '標題:',
+'specialloguserlabel'  => '用戶︰',
+'speciallogtitlelabel' => '標題：',
 'log'                  => '日誌',
 'all-logs-page'        => '所有公共日誌',
-'alllogstext'          => '綜合{{SITENAME}}的顯示上傳、刪除、保護、查封以及站務日誌。',
+'alllogstext'          => '綜合顯示 {{SITENAME}} 的上傳、刪除、保護、查封以及站務日誌。',
 'logempty'             => '在日誌中不存在匹配項。',
 'log-title-wildcard'   => '搜尋以這個文字開始的標題',
 
@@ -1857,7 +1964,7 @@ Template:消除歧義',
 # Special:LinkSearch
 'linksearch'       => '外部連結',
 'linksearch-pat'   => '搜尋網址:',
-'linksearch-ns'    => '名稱空間:',
+'linksearch-ns'    => '名字空間：',
 'linksearch-ok'    => '搜尋',
 'linksearch-text'  => '可以使用類似"*.wikipedia.org"的萬用字元。<br />
 已支援：<tt>$1</tt>',
@@ -1871,19 +1978,21 @@ Template:消除歧義',
 'listusers-blocked'  => '（已封鎖）',
 
 # Special:ActiveUsers
-'activeusers'          => '活躍用戶列表',
-'activeusers-intro'    => '這個是在最近$1天之內有一些動作的用戶列表。',
-'activeusers-count'    => '於$3天內的$1次編輯',
-'activeusers-from'     => '顯示用戶開始於：',
-'activeusers-noresult' => '找不到用戶。',
+'activeusers'            => '活躍用戶列表',
+'activeusers-intro'      => '這個是在最近$1天之內有一些動作的用戶列表。',
+'activeusers-count'      => '於$3天內的$1次編輯',
+'activeusers-from'       => '顯示用戶開始於：',
+'activeusers-hidebots'   => '隱藏機器人',
+'activeusers-hidesysops' => '隱藏管理員',
+'activeusers-noresult'   => '找不到用戶。',
 
 # Special:Log/newusers
 'newuserlogpage'              => '新進用戶名冊',
 'newuserlogpagetext'          => '這是一個最近被創建用戶的新日誌',
 'newuserlog-byemail'          => '密碼已由電子郵件寄出',
-'newuserlog-create-entry'     => '新用戶賬戶',
+'newuserlog-create-entry'     => '新進使用者帳戶',
 'newuserlog-create2-entry'    => '已創建$1的新賬戶',
-'newuserlog-autocreate-entry' => '已自動建立賬戶',
+'newuserlog-autocreate-entry' => '自動建立的帳號',
 
 # Special:ListGroupRights
 'listgrouprights'                      => '用戶群組權限',
@@ -1905,46 +2014,49 @@ Template:消除歧義',
 'listgrouprights-removegroup-self-all' => '在自己的賬戶中移除所有群組',
 
 # E-mail user
-'mailnologin'      => '無電郵地址',
-'mailnologintext'  => '您必須先[[Special:UserLogin|登入]]
-並在[[Special:Preferences|參數設置]]
-中有一個有效的e-mail地址才可以電郵其他用戶。',
-'emailuser'        => 'E-mail該用戶',
-'emailpage'        => 'E-mail用戶',
-'emailpagetext'    => '您可以用下面的表格去寄一封電郵給這位用戶。
+'mailnologin'          => '無電郵地址',
+'mailnologintext'      => '您必須先[[Special:UserLogin|登入]]
+並在[[Special:Preferences|偏好設定]]
+中有一個有效的 e-mail 地址才可以電郵其他用戶。',
+'emailuser'            => 'E-mail該用戶',
+'emailpage'            => 'E-mail用戶',
+'emailpagetext'        => '您可以用下面的表格去寄一封電郵給這位用戶。
 您在[[Special:Preferences|您參數設置]]中所輸入的e-mail地址將出現在郵件「發件人」一欄中，這樣該用戶就可以回覆您。',
-'usermailererror'  => '目標郵件地址返回錯誤：',
-'defemailsubject'  => '{{SITENAME}}電子郵件',
-'noemailtitle'     => '無e-mail地址',
-'noemailtext'      => '該用戶還沒有指定一個有效的e-mail地址。',
-'nowikiemailtitle' => '不容許電子郵件',
-'nowikiemailtext'  => '這位用戶選擇不接收其他用戶的電子郵件。',
-'email-legend'     => '發一封電子郵件至另一位{{SITENAME}}用戶',
-'emailfrom'        => '發件人:',
-'emailto'          => '收件人:',
-'emailsubject'     => '主題:',
-'emailmessage'     => '訊息:',
-'emailsend'        => '發送',
-'emailccme'        => '將我的消息的副本發送一份到我的電郵信箱。',
-'emailccsubject'   => '將您的訊息複製到 $1: $2',
-'emailsent'        => '電子郵件已發送',
-'emailsenttext'    => '您的電子郵件已經發出。',
-'emailuserfooter'  => '這封電郵是由$1寄給$2經{{SITENAME}}的「電郵用戶」功能發出的。',
+'usermailererror'      => '目標郵件地址返回錯誤：',
+'defemailsubject'      => '{{SITENAME}}電子郵件',
+'usermaildisabled'     => '用戶電郵已停用',
+'usermaildisabledtext' => '您不可以發送電郵到這個wiki上的其他用戶',
+'noemailtitle'         => '無e-mail地址',
+'noemailtext'          => '該用戶還沒有指定一個有效的e-mail地址。',
+'nowikiemailtitle'     => '不容許電子郵件',
+'nowikiemailtext'      => '這位用戶選擇不接收其他用戶的電子郵件。',
+'email-legend'         => '發一封電子郵件至另一位{{SITENAME}}用戶',
+'emailfrom'            => '發件人：',
+'emailto'              => '收件人：',
+'emailsubject'         => '主題：',
+'emailmessage'         => '訊息：',
+'emailsend'            => '發送',
+'emailccme'            => '將我的消息的副本發送一份到我的電郵信箱。',
+'emailccsubject'       => '將您的訊息複製到 $1: $2',
+'emailsent'            => '電子郵件已發送',
+'emailsenttext'        => '您的電子郵件已經發出。',
+'emailuserfooter'      => '這封電郵是由$1寄給$2經{{SITENAME}}的「電郵用戶」功能發出的。',
+
+# User Messenger
+'usermessage-summary' => '給系統消息。',
+'usermessage-editor'  => '系統界面',
 
 # Watchlist
 'watchlist'            => '監視列表',
 'mywatchlist'          => '我的監視列表',
-'watchlistfor'         => "（'''$1'''的監視列表）",
+'watchlistfor2'        => '$1的監視列表 $2',
 'nowatchlist'          => '您的監視列表為空。',
 'watchlistanontext'    => '請$1以檢視或編輯您的監視列表。',
 'watchnologin'         => '未登入',
 'watchnologintext'     => '您必須先[[Special:UserLogin|登入]]
 才能更改您的監視列表',
 'addedwatch'           => '加入到監視列表',
-'addedwatchtext'       => "頁面\"[[:\$1]]\"已經被加入到您的[[Special:Watchlist|監視清單]]中。
-將來有關此頁面及其討論頁的任何修改將會在那裡列出，
-而且還會在[[Special:RecentChanges|最近更改]]中
-以'''粗體'''形式列出以使起更容易識別。",
+'addedwatchtext'       => "頁面「[[:$1]]」已經被加入到您的[[Special:Watchlist|監視清單]]中。將來有關此頁面及其討論頁的任何修改將會在那裡列出，而且還會在[[Special:RecentChanges|近期變動]]中以'''粗體'''形式列出以使起更容易識別。",
 'removedwatch'         => '已停止監視',
 'removedwatchtext'     => '[[:$1]]已經從[[Special:Watchlist|您的監視頁面]]中移除。',
 'watch'                => '監視',
@@ -1960,7 +2072,7 @@ Template:消除歧義',
 'watchmethod-recent'   => '檢查被監視頁面的最近編輯',
 'watchmethod-list'     => '檢查最近編輯的被監視頁面',
 'watchlistcontains'    => '您的監視列表包含$1個頁面。',
-'iteminvalidname'      => "頁面'$1'錯誤，無效命名...",
+'iteminvalidname'      => "頁面 '$1' 錯誤，無效命名...",
 'wlnote'               => '以下是最近<b>$2</b>小時內的最後$1次修改。',
 'wlshowlast'           => '顯示最近$1小時；$2天；$3的修改。',
 'watchlist-options'    => '監視列表選項',
@@ -1981,7 +2093,7 @@ Template:消除歧義',
 'enotif_anon_editor'           => '匿名用戶$1',
 'enotif_body'                  => '親愛的 $WATCHINGUSERNAME，
 
-$PAGEEDITOR 已經在 $PAGEEDITDATE $CHANGEDORCREATED{{SITENAME}}的 $PAGETITLE 頁面，請到 $PAGETITLE_URL 檢視當前修訂版本。
+$PAGEEDITOR 已經在 $PAGEEDITDATE $CHANGEDORCREATED{{SITENAME}}的 $PAGETITLE 頁面，請到 $PAGETITLE_URL 檢視目前修訂版本。
 
 $NEWPAGE
 
@@ -2001,31 +2113,34 @@ $NEWPAGE
 要改變您的監視列表設定，請參閱
 {{fullurl:{{#special:Watchlist}}/edit}}
 
+要刪除您監視清單中的該頁面，請參閱
+$UNWATCHURL
+
 回饋和進一步的幫助:
 {{fullurl:{{MediaWiki:Helppage}}}}',
 
 # Delete
 'deletepage'             => '刪除頁面',
 'confirm'                => '確認',
-'excontent'              => '內容為: "$1"',
-'excontentauthor'        => '內容為：「$1」（而且唯一貢獻者為[[Special:Contributions/$2|$2]]）',
-'exbeforeblank'          => '被清空前的內容為: "$1"',
+'excontent'              => '內容為: 「$1」',
+'excontentauthor'        => '內容為：「$1」（而且唯一貢獻者為「[[Special:Contributions/$2|$2]]」）',
+'exbeforeblank'          => '被清空前的內容為：「$1」',
 'exblank'                => '頁面為空',
 'delete-confirm'         => '刪除「$1」',
 'delete-legend'          => '刪除',
-'historywarning'         => '警告: 您將要刪除的頁內含有歷史',
-'confirmdeletetext'      => '您即將刪除一個頁面或圖像以及其歷史。
+'historywarning'         => "'''警告: '''您將要刪除的頁內含有約$1次{{PLURAL:$1|修訂|修訂}}的歷史：",
+'confirmdeletetext'      => '您即將刪除一個頁面或圖片以及其歷史。
 請確定您要進行此項操作，並且了解其後果，同時您的行為符合[[{{MediaWiki:Policy-url}}]]。',
 'actioncomplete'         => '操作完成',
 'actionfailed'           => '操作失敗',
-'deletedtext'            => '「<nowiki>$1</nowiki>」已經被刪除。最近刪除的紀錄請參見$2。',
+'deletedtext'            => '「<nowiki>$1</nowiki>」已經被刪除。最近刪除的記錄請參見$2。',
 'deletedarticle'         => '已刪除「[[$1]]」',
 'suppressedarticle'      => '已廢止「[[$1]]」',
 'dellogpage'             => '刪除紀錄',
-'dellogpagetext'         => '以下是最近刪除的紀錄列表。',
+'dellogpagetext'         => '以下是最近的刪除的列表。',
 'deletionlog'            => '刪除紀錄',
 'reverted'               => '恢復到早期版本',
-'deletecomment'          => '刪除理由:',
+'deletecomment'          => '理由：',
 'deleteotherreason'      => '其它／附加的理由:',
 'deletereasonotherlist'  => '其它理由',
 'deletereason-dropdown'  => '*常用刪除理由
@@ -2042,36 +2157,42 @@ $NEWPAGE
 'rollbacklink'      => '恢復',
 'rollbackfailed'    => '無法恢復',
 'cantrollback'      => '無法恢復編輯；最後的貢獻者是本文的唯一作者。',
-'alreadyrolled'     => '無法恢復由[[User:$2|$2]] （[[User talk:$2|討論]] {{int:pipe-separator}}[[Special:Contributions/$2|{{int:contribslink}}]]在[[:$1]]上的編輯；其他人已經編輯或恢復了該頁。
+'alreadyrolled'     => '無法回退由[[User:$2|$2]]（[[User talk:$2|討論]]{{int:pipe-separator}}[[Special:Contributions/$2|{{int:contribslink}}]]在[[:$1]]上的編輯；其他人已經編輯或者回退了該頁。
 
-該頁最後的編輯者是: [[User:$3|$3]] （[[User talk:$3|討論]]{{int:pipe-separator}}[[Special:Contributions/$3|{{int:contribslink}}]]）。',
+該頁最後的編輯者是[[User:$3|$3]]（[[User talk:$3|討論]]{{int:pipe-separator}}[[Special:Contributions/$3|{{int:contribslink}}]]）。',
 'editcomment'       => "編輯摘要: \"''\$1''\"。",
-'revertpage'        => '恢復由[[Special:Contributions/$2|$2]] （[[User talk:$2|對話]]）的編輯至[[User:$1|$1]]的最後一個修訂版本',
+'revertpage'        => '已恢復由[[Special:Contributions/$2|$2]]（[[User talk:$2|對話]]）的編輯至[[User:$1|$1]]的最後一個修訂版本',
 'revertpage-nouser' => '恢復由（移除了的用戶名）的編輯到[[User:$1|$1]]的最後一個修訂版本',
-'rollback-success'  => '恢復由$1的編輯；更改回$2的最後一個修訂版本。',
-'sessionfailure'    => '您的登入資訊似乎有問題，為防止此該訊息被攔截，本次操作已經取消，請按「上一頁」重新載入。',
+'rollback-success'  => '已恢復$1的編輯；
+更改回$2的最後修訂版本。',
+
+# Edit tokens
+'sessionfailure-title' => '登入資訊失敗',
+'sessionfailure'       => '似乎您的登錄會話有問題；
+為了防止會話劫持，這個操作已經被取消。
+請返回先前的頁面，重新載入該頁面，然後重試。',
 
 # Protect
 'protectlogpage'              => '保護日誌',
-'protectlogtext'              => '下面是頁面鎖定和取消鎖定的列表。請參考[[Special:ProtectedPages|保護頁面清單]]以檢視當前進行的頁面保護。',
+'protectlogtext'              => '下面是頁面保護和取消保護的列表。請參考[[Special:ProtectedPages|保護頁面清單]]以檢視目前進行的頁面保護。',
 'protectedarticle'            => '已保護"[[$1]]"',
-'modifiedarticleprotection'   => '已經更改 "[[$1]]" 的保護等級',
+'modifiedarticleprotection'   => '已經更改「[[$1]]」的保護等級',
 'unprotectedarticle'          => '已解除保護"[[$1]]"',
-'movedarticleprotection'      => '已經更改由「[[$2]]」至「[[$1]]」的保護設定',
-'protect-title'               => '正在更改"$1"的保護等級',
+'movedarticleprotection'      => '已將「[[$2]]」的保護設定移動至「[[$1]]」',
+'protect-title'               => '更改「$1」的保護等級',
 'prot_1movedto2'              => '[[$1]]移動到[[$2]]',
 'protect-legend'              => '確認保護',
-'protectcomment'              => '理由:',
-'protectexpiry'               => '到期:',
+'protectcomment'              => '理由：',
+'protectexpiry'               => '到期：',
 'protect_expiry_invalid'      => '輸入的終止時間無效。',
 'protect_expiry_old'          => '終止時間已過去。',
-'protect-unchain'             => '移動權限解鎖',
+'protect-unchain-permissions' => '解除鎖定更多的保護選項',
 'protect-text'                => "{{GENDER:|你|妳|你}}可以在這裡瀏覽和修改對頁面'''<nowiki>$1</nowiki>'''的保護級別。",
 'protect-locked-blocked'      => "您不能在被查封時更改保護級別。
 以下是'''$1'''現時的保護級別:",
 'protect-locked-dblock'       => "在資料庫鎖定時無法更改保護級別。
 以下是'''$1'''現時的保護級別:",
-'protect-locked-access'       => "您的帳戶權限不能修改保護級別。
+'protect-locked-access'       => "您的賬戶權限不能修改保護級別。
 以下是'''$1'''現時的保護級別:",
 'protect-cascadeon'           => '以下的{{PLURAL:$1|一個|多個}}頁面包含着本頁面的同時，啟動了連鎖保護，因此本頁面目前也被保護，未能編輯。您可以設定本頁面的保護級別，但這並不會對連鎖保護有所影響。',
 'protect-default'             => '容許所有用戶',
@@ -2080,14 +2201,14 @@ $NEWPAGE
 'protect-level-sysop'         => '僅操作員',
 'protect-summary-cascade'     => '連鎖',
 'protect-expiring'            => '終止於 $1 （UTC）',
-'protect-expiry-indefinite'   => '無期',
+'protect-expiry-indefinite'   => '永久',
 'protect-cascade'             => '保護本頁中包含的頁面 （連鎖保護）',
 'protect-cantedit'            => '您無法更改這個頁面的保護等級，因為您沒有權限去編輯它。',
 'protect-othertime'           => '其它時間:',
 'protect-othertime-op'        => '其它時間',
 'protect-existing-expiry'     => '現時到期之時間: $2 $3',
 'protect-otherreason'         => '其它／附加的理由:',
-'protect-otherreason-op'      => '其它／附加的理由',
+'protect-otherreason-op'      => '其它理由',
 'protect-dropdown'            => '*通用保護理由
 ** 過量的破壞
 ** 過量的灌水
@@ -2120,29 +2241,29 @@ $NEWPAGE
 'undeletepagetext'             => '以下的$1個頁面已經被刪除，但依然在檔案中並可以被恢復。
 檔案庫可能被定時清理。',
 'undelete-fieldset-title'      => '恢復修訂',
-'undeleteextrahelp'            => "恢復整個頁面時，請清除所有複選框後按 '''''恢復''''' 。
-恢復特定版本時，請選擇相應版本前的複選框後按'''''恢復''''' 。
-按 '''''重設''''' 將清除評論內容及所有複選框。",
+'undeleteextrahelp'            => "恢復整個頁面時，請清除所有複選框後按 '''''{{int:undeletebtn}}''''' 。
+恢復特定版本時，請選擇相應版本前的複選框後按'''''{{int:undeletebtn}}''''' 。
+按 '''''{{int:undeletereset}}''''' 將清除評論內容及所有複選框。",
 'undeleterevisions'            => '$1版本存檔',
 'undeletehistory'              => '如果您恢復了該頁面，所有版本都會被恢復到修訂歷史中。
-如果本頁刪除後有一個同名的新頁面建立，被恢復的版本將會稱為較新的歷史。',
+如果本頁刪除後有一個同名的新頁面建立，被恢復的版本將會出現在先前的歷史中。',
 'undeleterevdel'               => '如果把最新修訂部份刪除，反刪除便無法進行。如果遇到這種情況，您必須反選或反隱藏最新已刪除的修訂。',
 'undeletehistorynoadmin'       => '這個頁面已經被刪除，刪除原因顯示在下方編輯摘要中。被刪除前的所有修訂版本，連同刪除前貢獻用戶等等細節只有管理員可以看見。',
 'undelete-revision'            => '刪除$1時由$3（在$4 $5）所編寫的修訂版本:',
 'undeleterevision-missing'     => '此版本的內容不正確或已經遺失。可能連結錯誤、被移除或已經被恢復。',
 'undelete-nodiff'              => '找不到先前的修訂版本。',
 'undeletebtn'                  => '恢復',
-'undeletelink'                 => '查看／恢復',
-'undeleteviewlink'             => '查看',
+'undeletelink'                 => '檢視／恢復',
+'undeleteviewlink'             => '檢視',
 'undeletereset'                => '重設',
 'undeleteinvert'               => '反向選擇',
-'undeletecomment'              => '原因',
+'undeletecomment'              => '理由：',
 'undeletedarticle'             => '已經恢復「$1」',
 'undeletedrevisions'           => '$1個修訂版本已經恢復',
 'undeletedrevisions-files'     => '$1 個版本和 $2 個檔案被恢復',
 'undeletedfiles'               => '$1 個檔案被恢復',
 'cannotundelete'               => '恢復失敗；可能之前已經被其他人恢復。',
-'undeletedpage'                => "<big>'''$1已經被恢復'''</big> 請參考[[Special:Log/delete|刪除日誌]]來查詢刪除及恢復記錄。",
+'undeletedpage'                => "'''$1已經被恢復''' 請參考[[Special:Log/delete|刪除日誌]]來查詢刪除及恢復記錄。",
 'undelete-header'              => '如要查詢最近的記錄請參閱[[Special:Log/delete|刪除日誌]]。',
 'undelete-search-box'          => '搜尋已刪除頁面',
 'undelete-search-prefix'       => '顯示頁面自:',
@@ -2160,7 +2281,7 @@ $1',
 'undelete-show-file-submit'    => '是',
 
 # Namespace form on various pages
-'namespace'      => '名字空間:',
+'namespace'      => '名字空間：',
 'invert'         => '反向選擇',
 'blanknamespace' => '（主）',
 
@@ -2170,36 +2291,41 @@ $1',
 'mycontris'           => '我的貢獻',
 'contribsub2'         => '$1的貢獻 （$2）',
 'nocontribs'          => '沒有找到符合特徵的更改。',
-'uctop'               => '（最新修改）',
+'uctop'               => '(最新修改)',
 'month'               => '從該月份 （或更早）:',
 'year'                => '從該年份 （或更早）:',
 
-'sp-contributions-newbies'        => '只顯示新建立之用戶的貢獻',
-'sp-contributions-newbies-sub'    => '新手',
-'sp-contributions-newbies-title'  => '新手的用戶貢獻',
-'sp-contributions-blocklog'       => '封禁記錄',
-'sp-contributions-deleted'        => '已刪除的用戶貢獻',
-'sp-contributions-logs'           => '日誌',
-'sp-contributions-talk'           => '對話',
-'sp-contributions-userrights'     => '用戶權限管理',
-'sp-contributions-blocked-notice' => '這位用戶現時正在被封鎖中。最近的封鎖日誌項目在下面提供以便參考：',
-'sp-contributions-search'         => '搜尋貢獻記錄',
-'sp-contributions-username'       => 'IP位址或用戶名稱：',
-'sp-contributions-submit'         => '搜尋',
+'sp-contributions-newbies'             => '只顯示新建立之用戶的貢獻',
+'sp-contributions-newbies-sub'         => '新手',
+'sp-contributions-newbies-title'       => '新手的用戶貢獻',
+'sp-contributions-blocklog'            => '封禁記錄',
+'sp-contributions-deleted'             => '已刪除的用戶貢獻',
+'sp-contributions-uploads'             => '上載',
+'sp-contributions-logs'                => '日誌',
+'sp-contributions-talk'                => '對話',
+'sp-contributions-userrights'          => '用戶權限管理',
+'sp-contributions-blocked-notice'      => '這位用戶現時正在被封鎖中。
+最近的封鎖日誌項目在下面提供以便參考：',
+'sp-contributions-blocked-notice-anon' => '這個IP地址現時正在被封鎖中。
+最近的封鎖日誌項目在下面提供以便參考：',
+'sp-contributions-search'              => '搜尋貢獻記錄',
+'sp-contributions-username'            => 'IP位址或用戶名稱：',
+'sp-contributions-toponly'             => '只顯示最新修訂版本的編輯',
+'sp-contributions-submit'              => '搜尋',
 
 # What links here
-'whatlinkshere'            => '鏈入頁面',
-'whatlinkshere-title'      => '鏈接到「$1」的頁面',
-'whatlinkshere-page'       => '頁面:',
+'whatlinkshere'            => '連入頁面',
+'whatlinkshere-title'      => '連結到「$1」的頁面',
+'whatlinkshere-page'       => '頁面：',
 'linkshere'                => '以下頁面連結到[[:$1]]：',
 'nolinkshere'              => '沒有頁面連結到[[:$1]]。',
-'nolinkshere-ns'           => '在所選的名字空間內沒有頁面鏈接到[[:$1]]。',
+'nolinkshere-ns'           => '在所選的名字空間內沒有頁面連結到[[:$1]]。',
 'isredirect'               => '重定向頁',
 'istemplate'               => '包含',
 'isimage'                  => '檔案連結',
 'whatlinkshere-prev'       => '前$1個',
 'whatlinkshere-next'       => '後$1個',
-'whatlinkshere-links'      => '← 鏈入',
+'whatlinkshere-links'      => '← 連入',
 'whatlinkshere-hideredirs' => '$1重定向',
 'whatlinkshere-hidetrans'  => '$1包含',
 'whatlinkshere-hidelinks'  => '$1連結',
@@ -2207,15 +2333,15 @@ $1',
 'whatlinkshere-filters'    => '過濾器',
 
 # Block/unblock
-'blockip'                         => '查封用戶',
+'blockip'                         => '封禁用戶',
+'blockip-title'                   => '封禁用戶',
 'blockip-legend'                  => '查封用戶',
 'blockiptext'                     => '用下面的表單來禁止來自某一特定IP地址的修改許可權。
 只有在為防止破壞，及符合[[{{MediaWiki:Policy-url}}|守則]]的情況下才可採取此行動。
 請在下面輸入一個具體的理由（例如引述一個被破壞的頁面）。',
-'ipaddress'                       => 'IP地址:',
 'ipadressorusername'              => 'IP地址或用戶名:',
-'ipbexpiry'                       => '期限:',
-'ipbreason'                       => '原因:',
+'ipbexpiry'                       => '期限：',
+'ipbreason'                       => '原因：',
 'ipbreasonotherlist'              => '其它原因',
 'ipbreason-dropdown'              => '*一般的封禁理由
 ** 屢次增加不實資料
@@ -2223,29 +2349,26 @@ $1',
 ** 外部連結廣告
 ** 在頁面中增加無意義文字
 ** 無禮的行為、攻擊／騷擾別人
-** 濫用多個帳號
+** 濫用多個賬號
 ** 不能接受的用戶名',
-'ipbanononly'                     => '僅阻止匿名用戶',
-'ipbcreateaccount'                => '阻止創建新帳號',
+'ipbcreateaccount'                => '阻止創建新賬號',
 'ipbemailban'                     => '阻止用戶傳送電郵',
 'ipbenableautoblock'              => '自動查封此用戶最後所用的IP位址，以及後來試圖編輯所用的所有位址',
 'ipbsubmit'                       => '查封該地址',
 'ipbother'                        => '其它時間:',
 'ipboptions'                      => '2小時:2 hours,1天:1 day,3天:3 days,1周:1 week,2周:2 weeks,1個月:1 month,3個月:3 months,6個月:6 months,1年:1 year,永久:infinite',
-'ipbotheroption'                  => '其它',
+'ipbotheroption'                  => '其他',
 'ipbotherreason'                  => '其它／附帶原因:',
 'ipbhidename'                     => '在編輯及列表中隱藏用戶名',
 'ipbwatchuser'                    => '監視這位用戶的用戶頁面以及其對話頁面',
-'ipballowusertalk'                => '當被封鎖時容許這位用戶去編輯自己的討論頁面',
 'ipb-change-block'                => '利用這些設定重新封鎖用戶',
-'badipaddress'                    => 'IP地址不正確。',
+'badipaddress'                    => '無效IP地址',
 'blockipsuccesssub'               => '查封成功',
 'blockipsuccesstext'              => '[[Special:Contributions/$1|$1]]已經被查封。
 <br />參看[[Special:IPBlockList|被封IP地址列表]]以覆審查封。',
 'ipb-edit-dropdown'               => '編輯查封原因',
-'ipb-unblock-addr'                => '解除封禁$1',
+'ipb-unblock-addr'                => '解封$1',
 'ipb-unblock'                     => '解除禁封用戶名或IP地址',
-'ipb-blocklist-addr'              => '$1的現有封禁',
 'ipb-blocklist'                   => '檢視現有的封禁',
 'ipb-blocklist-contribs'          => '$1的貢獻',
 'unblockip'                       => '解封用戶',
@@ -2255,19 +2378,16 @@ $1',
 'unblocked-id'                    => '封禁 $1 已經被移除',
 'ipblocklist'                     => '被封IP地址列表',
 'ipblocklist-legend'              => '搜尋一位已經被查封的用戶',
-'ipblocklist-username'            => '用戶名稱或IP地址:',
-'ipblocklist-sh-userblocks'       => '$1次賬戶封鎖',
-'ipblocklist-sh-tempblocks'       => '$1次臨時封鎖',
-'ipblocklist-sh-addressblocks'    => '$1次單IP封鎖',
 'ipblocklist-submit'              => '搜尋',
-'blocklistline'                   => '$1，$2禁封$3 （$4）',
+'ipblocklist-localblock'          => '本地封鎖',
+'ipblocklist-otherblocks'         => '其他{{PLURAL:$1|封鎖|封鎖}}',
 'infiniteblock'                   => '永久',
 'expiringblock'                   => '$1 $2 到期',
 'anononlyblock'                   => '僅限匿名用戶',
 'noautoblockblock'                => '禁用自動查封',
 'createaccountblock'              => '禁止創建賬戶',
 'emailblock'                      => '禁止電子郵件',
-'blocklist-nousertalk'            => '不可以編輯自己的對話頁',
+'blocklist-nousertalk'            => '禁止編輯自己的用戶討論頁',
 'ipblocklist-empty'               => '查封列表為空。',
 'ipblocklist-no-results'          => '所要求的IP地址/用戶名沒有被查封。',
 'blocklink'                       => '查封',
@@ -2276,39 +2396,43 @@ $1',
 'contribslink'                    => '貢獻',
 'autoblocker'                     => '因為您與“[[User:$1|$1]]”共享一個IP地址而被自動查封。
 $1被封禁的理由是“$2”',
-'blocklogpage'                    => '封鎖記錄',
+'blocklogpage'                    => '查封日誌',
 'blocklog-showlog'                => '這位用戶曾經被封鎖過。在下列提供封鎖記錄以便參考：',
 'blocklog-showsuppresslog'        => '這位用戶曾經被封鎖和隱藏過。在下列提供廢止記錄以便參考：',
-'blocklogentry'                   => '已封鎖[[$1]]，到期時間為$2 $3',
+'blocklogentry'                   => '已封禁“[[$1]]” $3而終止時間為$2',
 'reblock-logentry'                => '更改[[$1]]的封禁設定時間 $2 $3',
 'blocklogtext'                    => '這是關於用戶封禁和解除封禁操作的記錄。被自動封禁的IP地址沒有被列出。請參閱[[Special:IPBlockList|被查封的IP地址和用戶列表]]。',
-'unblocklogentry'                 => '$1已被解封',
+'unblocklogentry'                 => '已解封 $1',
 'block-log-flags-anononly'        => '僅限匿名用戶',
-'block-log-flags-nocreate'        => '禁止此IP/用戶建立新帳戶',
+'block-log-flags-nocreate'        => '建立帳號已禁用',
 'block-log-flags-noautoblock'     => '停用自動封禁',
 'block-log-flags-noemail'         => '禁止電子郵件',
-'block-log-flags-nousertalk'      => '不可編輯自己的討論頁面',
+'block-log-flags-nousertalk'      => '禁止編輯自己的用戶討論頁',
 'block-log-flags-angry-autoblock' => '加強自動封鎖已啟用',
 'block-log-flags-hiddenname'      => '隱藏用戶名稱',
 'range_block_disabled'            => '只有管理員才能創建禁止查封的範圍。',
 'ipb_expiry_invalid'              => '無效的終止時間。',
 'ipb_expiry_temp'                 => '隱藏用戶名封鎖必須是永久性的。',
 'ipb_hide_invalid'                => '不能壓止這個賬戶；它可能有太多編輯。',
-'ipb_already_blocked'             => '已經封鎖"$1"',
-'ipb-needreblock'                 => '== 已經封鎖 ==
-$1已經被封鎖。您是否想更改這個設定？',
+'ipb_already_blocked'             => '已經封鎖「$1」',
+'ipb-needreblock'                 => '$1已經被封鎖。您是否想更改這個設定？',
+'ipb-otherblocks-header'          => '其他{{PLURAL:$1|封鎖|封鎖}}',
 'ipb_cant_unblock'                => '錯誤: 找不到查封ID$1。可能已經解除封禁。',
 'ipb_blocked_as_range'            => '錯誤: 該IP $1 無直接查封，不可以解除封禁。但是它是在 $2 的查封範圍之內，該段範圍是可以解除封禁的。',
 'ip_range_invalid'                => '無效的IP範圍。',
+'ip_range_toolarge'               => '大於 /$1 的封鎖範圍是不容許的。',
 'blockme'                         => '查封我',
 'proxyblocker'                    => '代理封鎖器',
 'proxyblocker-disabled'           => '這個功能已經停用。',
 'proxyblockreason'                => '您的IP位址是一個開放的代理，它已經被封鎖。請聯繫您的網際網路服務提供商或技術支援者並告知告知他們該嚴重的安全問題。',
 'proxyblocksuccess'               => '完成。',
 'sorbsreason'                     => '您的IP位址在{{SITENAME}}中被 DNSBL列為屬於開放代理服務器。',
-'sorbs_create_account_reason'     => '由於您的IP位址在{{SITENAME}}中被 DNSBL列為屬於開放代理服務器，所以您無法建立帳號。',
+'sorbs_create_account_reason'     => '由於您的IP位址在{{SITENAME}}中被 DNSBL列為屬於開放代理服務器，所以您無法建立賬號。',
 'cant-block-while-blocked'        => '當您被封鎖時不可以封鎖其他用戶。',
-'cant-see-hidden-user'            => '您現正嘗試封鎖的用戶已經被封鎖或隱藏。您現在沒有隱藏用戶的權限，您不可以查看或者編輯這位用戶的封鎖。',
+'cant-see-hidden-user'            => '您現正嘗試封鎖的用戶已經被封鎖或隱藏。
+您現在沒有隱藏用戶的權限，您不可以檢視或者編輯這位用戶的封鎖。',
+'ipbblocked'                      => '您無法封禁或解封其他用戶，因為您自己已被封禁',
+'ipbnounblockself'                => '您不容許自我解除封禁',
 
 # Developer tools
 'lockdb'              => '禁止更改資料庫',
@@ -2344,9 +2468,22 @@ $1已經被封鎖。您是否想更改這個設定？',
 這意味著您再必要時可以在移動到新頁面後再移回老的頁面，
 同時您也無法覆蓋現有頁面。
 
-<b>警告！</b>
+'''警告！'''
 對一個經常被訪問的頁面而言這可能是一個重大與唐突的更改；
-請在行動前先了結其所可能帶來的後果。",
+請在行動前先了解其所可能帶來的後果。",
+'movepagetext-noredirectfixer' => "用下面的表單來重命名一個頁面，並將其修訂歷史同時移動到新頁面。
+老的頁面將成為新頁面的重定向頁。
+請檢查[[Special:DoubleRedirects|雙重重定向]]或[[Special:BrokenRedirects|損壞重定向]]連結。
+您應當負責確定所有連結依然會連到指定的頁面。
+
+注意如果新頁面已經有內容的話，頁面將'''不會'''被移動，
+除非新頁面無內容或是重定向頁，而且沒有修訂歷史。
+這意味著您再必要時可以在移動到新頁面後再移回老的頁面，
+同時您也無法覆蓋現有頁面。
+
+'''警告！'''
+對一個經常被訪問的頁面而言這可能是一個重大與唐突的更改；
+請在行動前先確定您了解其所可能帶來的後果。",
 'movepagetalktext'             => "有關的對話頁（如果有的話）將被自動與該頁面一起移動，'''除非'''：
 *您將頁面移動到不同的名字空間；
 *新頁面已經有一個包含內容的對話頁，或者
@@ -2354,18 +2491,19 @@ $1已經被封鎖。您是否想更改這個設定？',
 
 在這些情況下，您在必要時必須手工移動或合併頁面。",
 'movearticle'                  => '移動頁面:',
+'moveuserpage-warning'         => "'''警告：'''您將會移動一個用戶頁面。請留意該頁面在移動後該用戶的名字是''不會''變更的。",
 'movenologin'                  => '未登入',
 'movenologintext'              => '您必須是一名登記用戶並且[[Special:UserLogin|登入]]
 後才可移動一個頁面。',
 'movenotallowed'               => '您並沒有許可權去移動頁面。',
 'movenotallowedfile'           => '您並沒有許可權去移動檔案。',
-'cant-move-user-page'          => '您並沒有許可權去移動用戶頁面（它的字頁面除外）。',
-'cant-move-to-user-page'       => '您並沒有許可權去移動到用戶頁面（它的字頁面除外）。',
+'cant-move-user-page'          => '您並沒有許可權去移動用戶頁面（它的子頁面除外）。',
+'cant-move-to-user-page'       => '您並沒有許可權去移動到用戶頁面（它的子頁面除外）。',
 'newtitle'                     => '新標題:',
-'move-watch'                   => '監視此頁',
+'move-watch'                   => '監視來源以及目標頁',
 'movepagebtn'                  => '移動頁面',
 'pagemovedsub'                 => '移動成功',
-'movepage-moved'               => "<big>'''「$1」已經移動到「$2」'''</big>",
+'movepage-moved'               => "'''「$1」已經移動到「$2」'''",
 'movepage-moved-redirect'      => '一個重新定向已經被創建。',
 'movepage-moved-noredirect'    => '已經壓制創建重新定向。',
 'articleexists'                => '該名字的頁面已經存在，或者您選擇的名字無效。請再選一個名字。',
@@ -2376,12 +2514,12 @@ $1已經被封鎖。您是否想更改這個設定？',
 'movetalk'                     => '移動關聯的對話頁',
 'move-subpages'                => '移動子頁面（上至$1頁）',
 'move-talk-subpages'           => '移動子對話頁面（上至$1頁）',
-'movepage-page-exists'         => '頁面$1已經存在，不可以自動地覆寫。',
-'movepage-page-moved'          => '頁面$1已經移動到$2。',
-'movepage-page-unmoved'        => '頁面$1不可以移動到$2。',
+'movepage-page-exists'         => '頁面 $1 已經存在，不可以自動地覆寫。',
+'movepage-page-moved'          => '頁面 $1 已經移動到 $2。',
+'movepage-page-unmoved'        => '頁面 $1 不可以移動到 $2。',
 'movepage-max-pages'           => '最多有$1個頁面已經移動同時不可以自動地再移動更多。',
 '1movedto2'                    => '[[$1]]移動到[[$2]]',
-'1movedto2_redir'              => '[[$1]]透過重定向移動到[[$2]]',
+'1movedto2_redir'              => '[[$1]]移動到重定向頁[[$2]]',
 'move-redirect-suppressed'     => '已禁止重新定向',
 'movelogpage'                  => '移動日誌',
 'movelogpagetext'              => '以下是所有移動的頁面清單:',
@@ -2403,23 +2541,30 @@ $1已經被封鎖。您是否想更改這個設定？',
 'immobile-source-page'         => '這個頁面不能移動。',
 'immobile-target-page'         => '無法移動至目標標題中。',
 'imagenocrossnamespace'        => '不可以移動檔案到非檔案名字空間',
+'nonfile-cannot-move-to-file'  => '不可以移動非檔案到檔案名字空間',
 'imagetypemismatch'            => '該新副檔名不匹配它的類型',
 'imageinvalidfilename'         => '目標檔案名稱是無效的',
 'fix-double-redirects'         => '更新指到原先標題的任何重新定向',
 'move-leave-redirect'          => '留下重新定向',
-'protectedpagemovewarning'     => "'''警告：'''這個頁面已經被鎖上，只有擁有管理員權限的用戶才可以移動它。",
-'semiprotectedpagemovewarning' => "'''注意：'''這個頁面已經被鎖上，只有已經註冊的用戶才可以移動它。",
+'protectedpagemovewarning'     => "'''警告：'''這個頁面已經被保護，只有擁有管理員權限的用戶才可以移動它。
+最近的日誌在下面提供以便參考：",
+'semiprotectedpagemovewarning' => "'''注意：'''這個頁面已經被保護，只有已經註冊的用戶才可以移動它。
+最近的日誌在下面提供以便參考：",
+'move-over-sharedrepo'         => '== 檔案已存在 ==
+[[:$1]]已於共享資源存在，將檔案移動到此標題會覆蓋共享資源中的檔案。',
+'file-exists-sharedrepo'       => '同名檔案已於共享資源存在。
+請選擇另一個檔案名。',
 
 # Export
 'export'            => '匯出頁面',
-'exporttext'        => '您可以將特定頁面或一組頁面的文本以及編輯歷史以 XML 格式匯出；這樣可以將有關頁面透過"[[Special:Import|匯入頁面]]"頁面匯入到另一個運行 MediaWiki 的網站。
+'exporttext'        => '您可以將特定頁面或一組頁面的文字以及編輯歷史以 XML 格式匯出；這樣可以將有關頁面透過「[[Special:Import|匯入頁面]]」頁面匯入到另一個執行 MediaWiki 的網站。
 
 要匯出頁面，請在下面的文字框中輸入頁面標題，每行一個標題，
 並選擇{{GENDER:|你|妳|你}}是否需要匯出帶有頁面歷史的以前的修訂版本，
-或是只選擇匯出帶有最後一次編輯訊息的當前修訂版本。
+或是只選擇匯出帶有最後一次編輯訊息的目前修訂版本。
 
-此外{{GENDER:|你|妳|你}}還可以利用連結匯出檔案，例如{{GENDER:|你|妳|你}}可以使用[[{{#Special:Export}}/{{MediaWiki:Mainpage}}]]匯出"[[{{MediaWiki:Mainpage}}]]"頁面。',
-'exportcuronly'     => '僅包含當前的修訂，而不是全部的歷史。',
+此外{{GENDER:|你|妳|你}}還可以利用連結匯出檔案，例如{{GENDER:|你|妳|你}}可以使用 [[{{#Special:Export}}/{{MediaWiki:Mainpage}}]] 匯出「[[{{MediaWiki:Mainpage}}]]」頁面。',
+'exportcuronly'     => '僅包含目前的修訂，而不是全部的歷史。',
 'exportnohistory'   => "----
 '''注意:''' 由於性能原因，從此表單匯出頁面的全部歷史已被停用。",
 'export-submit'     => '匯出',
@@ -2428,14 +2573,14 @@ $1已經被封鎖。您是否想更改這個設定？',
 'export-addnstext'  => '由名字空間中加入頁面:',
 'export-addns'      => '加入',
 'export-download'   => '另存為檔案',
-'export-templates'  => '包含模版',
+'export-templates'  => '包含模板',
 'export-pagelinks'  => '包含到這個深度連結之頁面:',
 
 # Namespace 8 related
 'allmessages'                   => '系統界面',
 'allmessagesname'               => '名稱',
-'allmessagesdefault'            => '預設的信息文字',
-'allmessagescurrent'            => '現時的信息文字',
+'allmessagesdefault'            => '預設的訊息文字',
+'allmessagescurrent'            => '現時的訊息文字',
 'allmessagestext'               => '這裡列出所有可定製的系統界面。
 如果想貢獻正宗的MediaWiki本地化的話，請參閱[http://www.mediawiki.org/wiki/Localisation MediaWiki本地化]以及[http://translatewiki.net translatewiki.net]。',
 'allmessagesnotsupportedDB'     => "這個頁面無法使用，因為'''\$wgUseDatabaseMessages'''已被設定關閉。",
@@ -2456,7 +2601,7 @@ $1已經被封鎖。您是否想更改這個設定？',
 'djvu_no_xml'              => '無法在DjVu檔案中擷取XML',
 'thumbnail_invalid_params' => '不正確的縮圖參數',
 'thumbnail_dest_directory' => '無法建立目標目錄',
-'thumbnail_image-type'     => '圖像類型不支援',
+'thumbnail_image-type'     => '圖片類型不支援',
 'thumbnail_gd-library'     => '未完成的GD設定: 功能遺失 $1',
 'thumbnail_image-missing'  => '檔案似乎遺失: $1',
 
@@ -2471,13 +2616,14 @@ $1已經被封鎖。您是否想更改這個設定？',
 'import-interwiki-templates' => '包含所有模板',
 'import-interwiki-submit'    => '匯入',
 'import-interwiki-namespace' => '目的名字空間:',
-'import-upload-filename'     => '檔案名：',
+'import-upload-filename'     => '檔案名稱：',
 'import-comment'             => '註解:',
-'importtext'                 => '請使用[[Special:Export|匯出功能]]從源 wiki 匯出檔案，
+'importtext'                 => '請使用[[Special:Export|匯出功能]]從來源 wiki 匯出檔案，
 儲存到您的磁片並上傳到這裡。',
 'importstart'                => '正在匯入頁面...',
 'import-revision-count'      => '$1個修訂',
 'importnopages'              => '沒有匯入的頁面。',
+'imported-log-entries'       => '匯入了$1項日誌記錄。',
 'importfailed'               => '匯入失敗: <nowiki>$1</nowiki>',
 'importunknownsource'        => '未知的源匯入類型',
 'importcantopen'             => '無法打開匯入檔案',
@@ -2507,11 +2653,11 @@ $1已經被封鎖。您是否想更改這個設定？',
 'import-logentry-interwiki-detail' => '來自$2的$1個修訂',
 
 # Tooltip help for the actions
-'tooltip-pt-userpage'             => '您的用戶頁',
+'tooltip-pt-userpage'             => '您的使用者頁面',
 'tooltip-pt-anonuserpage'         => '您編輯本站所用IP的對應用戶頁',
 'tooltip-pt-mytalk'               => '您的對話頁',
 'tooltip-pt-anontalk'             => '對於來自此IP地址編輯的對話',
-'tooltip-pt-preferences'          => '您的參數設置',
+'tooltip-pt-preferences'          => '您的偏好設定',
 'tooltip-pt-watchlist'            => '您所監視頁面的更改列表',
 'tooltip-pt-mycontris'            => '您的貢獻列表',
 'tooltip-pt-login'                => '建議您登入，儘管並非必須。',
@@ -2520,7 +2666,7 @@ $1已經被封鎖。您是否想更改這個設定？',
 'tooltip-ca-talk'                 => '關於頁面正文的討論',
 'tooltip-ca-edit'                 => '您可以編輯此頁，請在保存之前先預覽一下。',
 'tooltip-ca-addsection'           => '開始一個新小節',
-'tooltip-ca-viewsource'           => '該頁面已被保護。{{GENDER:|你|妳|你}}可以查看該頁原始碼。',
+'tooltip-ca-viewsource'           => '該頁面已被保護。{{GENDER:|你|妳|你}}可以檢視該頁原始碼。',
 'tooltip-ca-history'              => '本頁面的早前修訂版本',
 'tooltip-ca-protect'              => '保護這個頁面',
 'tooltip-ca-unprotect'            => '解除保護這個頁面',
@@ -2536,40 +2682,42 @@ $1已經被封鎖。您是否想更改這個設定？',
 'tooltip-n-mainpage'              => '訪問首頁',
 'tooltip-n-mainpage-description'  => '訪問首頁',
 'tooltip-n-portal'                => '關於本計劃、{{GENDER:|你|妳|你}}可以做什麼、應該如何做',
-'tooltip-n-currentevents'         => '提供當前新聞事件的背景資料',
+'tooltip-n-currentevents'         => '提供目前新聞事件的背景資料',
 'tooltip-n-recentchanges'         => '列出該網站中的最近修改',
 'tooltip-n-randompage'            => '隨機載入一個頁面',
 'tooltip-n-help'                  => '尋求幫助',
-'tooltip-t-whatlinkshere'         => '列出所有與本頁相鏈的頁面',
-'tooltip-t-recentchangeslinked'   => '頁面鏈出所有頁面的更改',
+'tooltip-t-whatlinkshere'         => '列出所有與本頁相連的頁面',
+'tooltip-t-recentchangeslinked'   => '頁面連出所有頁面的更改',
 'tooltip-feed-rss'                => '訂閱本頁面歷史的RSS資訊',
 'tooltip-feed-atom'               => '訂閱本頁面歷史的Atom訊息',
-'tooltip-t-contributions'         => '查看該用戶的貢獻列表',
+'tooltip-t-contributions'         => '檢視該用戶的貢獻列表',
 'tooltip-t-emailuser'             => '向該用戶發送電子郵件',
 'tooltip-t-upload'                => '上傳檔案',
 'tooltip-t-specialpages'          => '全部特殊頁面的列表',
 'tooltip-t-print'                 => '這個頁面的可列印版本',
 'tooltip-t-permalink'             => '這個頁面修訂版本的永久連結',
-'tooltip-ca-nstab-main'           => '查看頁面內容',
-'tooltip-ca-nstab-user'           => '查看用戶頁',
-'tooltip-ca-nstab-media'          => '查看多媒體檔案資訊頁面',
+'tooltip-ca-nstab-main'           => '檢視頁面內容',
+'tooltip-ca-nstab-user'           => '檢視使用者頁面',
+'tooltip-ca-nstab-media'          => '檢視多媒體檔案資訊頁面',
 'tooltip-ca-nstab-special'        => '本頁面會隨著資料庫的數據即時更新，任何人均不能直接編輯',
-'tooltip-ca-nstab-project'        => '查看項目頁面',
-'tooltip-ca-nstab-image'          => '查看檔案頁面',
-'tooltip-ca-nstab-mediawiki'      => '查看系統資訊',
-'tooltip-ca-nstab-template'       => '查看模板',
-'tooltip-ca-nstab-help'           => '查看幫助頁面',
-'tooltip-ca-nstab-category'       => '查看分類頁面',
+'tooltip-ca-nstab-project'        => '檢視項目頁面',
+'tooltip-ca-nstab-image'          => '檢視檔案頁面',
+'tooltip-ca-nstab-mediawiki'      => '檢視系統資訊',
+'tooltip-ca-nstab-template'       => '檢視模板',
+'tooltip-ca-nstab-help'           => '檢視幫助頁面',
+'tooltip-ca-nstab-category'       => '檢視分類頁面',
 'tooltip-minoredit'               => '標記為小修改',
 'tooltip-save'                    => '保存您的修改',
 'tooltip-preview'                 => '預覽您的編輯，請先使用本功能再保存！',
 'tooltip-diff'                    => '顯示您對頁面的貢獻',
-'tooltip-compareselectedversions' => '查看本頁被點選的兩個修訂版本間的差異',
+'tooltip-compareselectedversions' => '檢視本頁被點選的兩個修訂版本間的差異',
 'tooltip-watch'                   => '將此頁加入您的監視列表',
 'tooltip-recreate'                => '重建該頁面，無論是否被刪除。',
 'tooltip-upload'                  => '開始上傳',
 'tooltip-rollback'                => '『反轉』可以一按恢復上一位貢獻者對這個頁面的編輯',
 'tooltip-undo'                    => '『復原』可以在編輯模式上開啟編輯表格以便復原。它容許在摘要中加入原因。',
+'tooltip-preferences-save'        => '儲存使用偏好',
+'tooltip-summary'                 => '輸入一個簡短的摘要',
 
 # Stylesheets
 'common.css'      => '/* 此處的 CSS 將應用於所有的面板 */',
@@ -2577,7 +2725,7 @@ $1已經被封鎖。您是否想更改這個設定？',
 'nostalgia.css'   => '/* 此處的 CSS 將影響使用懷舊面板的用戶 */',
 'cologneblue.css' => '/* 此處的 CSS 將影響使用科隆香水藍面板的用戶 */',
 'monobook.css'    => '/* 此處的 CSS 將影響使用 Monobook 面板的用戶 */',
-'myskin.css'      => '/* 此處的 CSS 將影響使用 Myskin 面板的用戶 */',
+'myskin.css'      => '/* 此處的 CSS 將影響使用 MySkin 面板的用戶 */',
 'chick.css'       => '/* 此處的 CSS 將影響使用 Chick 面板的用戶 */',
 'simple.css'      => '/* 此處的 CSS 將影響使用 Simple 面板的用戶 */',
 'modern.css'      => '/* 此處的 CSS 將影響使用 Modern 面板的用戶 */',
@@ -2591,7 +2739,7 @@ $1已經被封鎖。您是否想更改這個設定？',
 'nostalgia.js'   => '/* 此處的JavaScript將載入於使用懷舊面板的用戶 */',
 'cologneblue.js' => '/* 此處的JavaScript將載入於使用科隆香水藍面板的用戶 */',
 'monobook.js'    => '/* 此處的JavaScript將載入於使用Monobook面板的用戶 */',
-'myskin.js'      => '/* 此處的JavaScript將載入於使用Myskin面板的用戶 */',
+'myskin.js'      => '/* 此處的JavaScript將載入於使用MySkin面板的用戶 */',
 'chick.js'       => '/* 此處的JavaScript將載入於使用Chick面板的用戶 */',
 'simple.js'      => '/* 此處的JavaScript將載入於使用Simple面板的用戶 */',
 'modern.js'      => '/* 此處的JavaScript將載入於使用Modern面板的用戶 */',
@@ -2606,7 +2754,7 @@ $1已經被封鎖。您是否想更改這個設定？',
 'anonymous'        => '{{SITENAME}}的匿名{{PLURAL:$1|用戶|用戶}}',
 'siteuser'         => '{{SITENAME}}用戶$1',
 'anonuser'         => '{{SITENAME}}匿名用戶$1',
-'lastmodifiedatby' => '此頁由$3於$1 $2的最後更改。',
+'lastmodifiedatby' => '此頁由 $3 於 $1 $2 的最後更改。',
 'othercontribs'    => '在$1的工作基礎上。',
 'others'           => '其他',
 'siteusers'        => '{{SITENAME}}{{PLURAL:$2|用戶|用戶}}$1',
@@ -2616,8 +2764,8 @@ $1已經被封鎖。您是否想更改這個設定？',
 
 # Spam protection
 'spamprotectiontitle' => '垃圾過濾器',
-'spamprotectiontext'  => '您要儲存的頁面被垃圾過濾器阻止。
-這可能是由於一個到外部站點的鏈接引起的。',
+'spamprotectiontext'  => '您要保存的文字被垃圾過濾器阻止。
+這可能是由於一個連往匹配黑名單的外部站點的連結引起的。',
 'spamprotectionmatch' => '觸發了我們的垃圾過濾器的文本如下：$1',
 'spambot_username'    => 'MediaWiki 廣告清除',
 'spam_reverting'      => '恢復到不包含連結至$1的最近修訂版本',
@@ -2637,30 +2785,11 @@ $1已經被封鎖。您是否想更改這個設定？',
 'skinname-cologneblue' => '科隆香水藍',
 'skinname-modern'      => '現代',
 
-# Math options
-'mw_math_png'    => '永遠使用PNG圖像',
-'mw_math_simple' => '如果是簡單的公式使用HTML，否則使用PNG圖像',
-'mw_math_html'   => '如果可以用HTML，否則用PNG圖像',
-'mw_math_source' => '顯示為TeX代碼 （使用文字瀏覽器時）',
-'mw_math_modern' => '推薦為新版瀏覽器使用',
-'mw_math_mathml' => '儘可能使用MathML （試驗中）',
-
-# Math errors
-'math_failure'          => '解析失敗',
-'math_unknown_error'    => '未知錯誤',
-'math_unknown_function' => '未知函數',
-'math_lexing_error'     => '句法錯誤',
-'math_syntax_error'     => '語法錯誤',
-'math_image_error'      => 'PNG 轉換失敗；請檢查是否正確安裝了 latex, dvips, gs 和 convert',
-'math_bad_tmpdir'       => '無法寫入或建立數學公式臨時目錄',
-'math_bad_output'       => '無法寫入或建立數學公式輸出目錄',
-'math_notexvc'          => '無法執行"texvc"；請參照 math/README 進行配置。',
-
 # Patrolling
-'markaspatrolleddiff'                 => '標記為已檢查',
-'markaspatrolledtext'                 => '標記此頁面為已檢查',
+'markaspatrolleddiff'                 => '標記為已巡查',
+'markaspatrolledtext'                 => '標記此頁面為已巡查',
 'markedaspatrolled'                   => '標記為已檢查',
-'markedaspatrolledtext'               => '選定的版本已被標記為已檢查。',
+'markedaspatrolledtext'               => '[[:$1]]的已選定修訂版本已被標識為已巡查。',
 'rcpatroldisabled'                    => '最新更改檢查被關閉',
 'rcpatroldisabledtext'                => '最新更改檢查的功能目前已關閉。',
 'markedaspatrollederror'              => '不能標誌為已檢查',
@@ -2690,40 +2819,40 @@ $1',
 'previousdiff' => '←上一版本',
 'nextdiff'     => '下一版本→',
 
-# Visual comparison
-'visual-comparison' => '可見比較',
-
 # Media information
-'mediawarning'         => "'''警告''': 該檔案可能包含惡意代碼，執行它可能對您的系統帶來危險。<hr />",
-'imagemaxsize'         => "圖像大小限制:<br />''（用在檔案描述頁面中）''",
+'mediawarning'         => "'''警告''': 該檔案類型可能包含惡意代碼。
+執行它可能對您的系統帶來危險。",
+'imagemaxsize'         => "影像大小限制:<br />''（用在檔案描述頁面中）''",
 'thumbsize'            => '略圖大小:',
 'widthheightpage'      => '$1×$2, $3頁',
-'file-info'            => '（檔案大小: $1, MIME 類型: $2）',
-'file-info-size'       => '（$1 × $2 像素，檔案大小：$3 ，MIME類型：$4）',
+'file-info'            => '檔案大小: $1, MIME 類型: $2',
+'file-info-size'       => '$1 × $2 像素，檔案大小：$3，MIME類型：$4',
 'file-nohires'         => '<small>無更高解像度可提供。</small>',
-'svg-long-desc'        => '（SVG檔案，表面大小： $1 × $2 像素，檔案大小：$3）',
+'svg-long-desc'        => 'SVG 檔案，表面大小：$1 × $2 像素，檔案大小：$3',
 'show-big-image'       => '完整解像度',
-'show-big-image-thumb' => '<small>這幅縮圖的解像度: $1 × $2 像素</small>',
 'file-info-gif-looped' => '循環',
 'file-info-gif-frames' => '$1幀',
+'file-info-png-looped' => '循環',
+'file-info-png-repeat' => '已播放$1次',
+'file-info-png-frames' => '$1幀',
 
 # Special:NewFiles
-'newimages'             => '新建圖像畫廊',
+'newimages'             => '新建圖片畫廊',
 'imagelisttext'         => "以下是按$2排列的'''$1'''個檔案列表。",
 'newimages-summary'     => '這個特殊頁面中顯示最後已上傳的檔案。',
 'newimages-legend'      => '過濾',
 'newimages-label'       => '檔案名稱（或它的一部份）:',
-'showhidebots'          => '（$1機器人）',
-'noimages'              => '無可檢視圖像。',
+'showhidebots'          => '(機器人$1)',
+'noimages'              => '無可檢視圖片。',
 'ilsubmit'              => '搜尋',
 'bydate'                => '按日期',
 'sp-newimages-showfrom' => '從$1 $2開始顯示新檔案',
 
 # Bad image list
-'bad_image_list' => '請根據以下的格式去編寫:
+'bad_image_list' => '請按照下列格式編寫：
 
-只有列示項目（以 * 開頭的項目）會被考慮。第一個連結一定要連接去壞檔案中。
-然後在同一行的連結會考慮作例外，即是該檔案可以在哪一個頁面中同時顯示。',
+只有（以 * 開頭）列出的項目會被考慮。每一行的第一個連結必須是不雅文件的連結。
+然後同一行後方的連結會被視為例外，即是該文件可以在哪些頁面內被顯示。',
 
 /*
 Short names for language variants used for language conversion links.
@@ -2770,7 +2899,7 @@ Variants for Chinese language
 'exif-xresolution'                 => '水準分辨率',
 'exif-yresolution'                 => '垂直分辨率',
 'exif-resolutionunit'              => 'X 軸與 Y 軸分辨率單位',
-'exif-stripoffsets'                => '圖像數據區',
+'exif-stripoffsets'                => '圖片數據區',
 'exif-rowsperstrip'                => '每帶行數',
 'exif-stripbytecounts'             => '每壓縮帶位元組數',
 'exif-jpeginterchangeformat'       => 'JPEG SOI 偏移',
@@ -2781,7 +2910,7 @@ Variants for Chinese language
 'exif-ycbcrcoefficients'           => '顏色空間轉換矩陣系數',
 'exif-referenceblackwhite'         => '黑白參照值對',
 'exif-datetime'                    => '檔案更改日期和時間',
-'exif-imagedescription'            => '圖像標題',
+'exif-imagedescription'            => '圖片標題',
 'exif-make'                        => '照相機製造商',
 'exif-model'                       => '照相機型號',
 'exif-software'                    => '所用軟體',
@@ -2791,9 +2920,9 @@ Variants for Chinese language
 'exif-flashpixversion'             => '支援的 Flashpix 版本',
 'exif-colorspace'                  => '顏色空間',
 'exif-componentsconfiguration'     => '每分量含義',
-'exif-compressedbitsperpixel'      => '圖像壓縮模式',
-'exif-pixelydimension'             => '有效圖像寬度',
-'exif-pixelxdimension'             => '有效圖像高度',
+'exif-compressedbitsperpixel'      => '圖片壓縮模式',
+'exif-pixelydimension'             => '有效圖片寬度',
+'exif-pixelxdimension'             => '有效圖片高度',
 'exif-makernote'                   => '製造商註釋',
 'exif-usercomment'                 => '用戶註釋',
 'exif-relatedsoundfile'            => '相關的音頻檔案',
@@ -2831,7 +2960,7 @@ Variants for Chinese language
 'exif-filesource'                  => '檔案源',
 'exif-scenetype'                   => '場景類型',
 'exif-cfapattern'                  => 'CFA 模式',
-'exif-customrendered'              => '自定義圖像處理',
+'exif-customrendered'              => '自訂圖片處理',
 'exif-exposuremode'                => '曝光模式',
 'exif-whitebalance'                => '白平衡',
 'exif-digitalzoomratio'            => '數字變焦比率',
@@ -2843,7 +2972,7 @@ Variants for Chinese language
 'exif-sharpness'                   => '銳化',
 'exif-devicesettingdescription'    => '設備設定描述',
 'exif-subjectdistancerange'        => '主體距離範圍',
-'exif-imageuniqueid'               => '唯一圖像ID',
+'exif-imageuniqueid'               => '唯一圖片ID',
 'exif-gpsversionid'                => 'GPS 標籤（tag）版本',
 'exif-gpslatituderef'              => '北緯或南緯',
 'exif-gpslatitude'                 => '緯度',
@@ -2860,8 +2989,8 @@ Variants for Chinese language
 'exif-gpsspeed'                    => 'GPS 接收器速度',
 'exif-gpstrackref'                 => '運動方位參照',
 'exif-gpstrack'                    => '運動方位',
-'exif-gpsimgdirectionref'          => '圖像方位參照',
-'exif-gpsimgdirection'             => '圖像方位',
+'exif-gpsimgdirectionref'          => '圖片方位參照',
+'exif-gpsimgdirection'             => '圖片方位',
 'exif-gpsmapdatum'                 => '使用地理測繪數據',
 'exif-gpsdestlatituderef'          => '目標緯度參照',
 'exif-gpsdestlatitude'             => '目標緯度',
@@ -2875,6 +3004,7 @@ Variants for Chinese language
 'exif-gpsareainformation'          => 'GPS 區域名稱',
 'exif-gpsdatestamp'                => 'GPS 日期',
 'exif-gpsdifferential'             => 'GPS 差動修正',
+'exif-objectname'                  => '簡稱',
 
 # EXIF attributes
 'exif-compression-1' => '未壓縮',
@@ -2914,7 +3044,7 @@ Variants for Chinese language
 'exif-meteringmode-4'   => '多點測',
 'exif-meteringmode-5'   => '模式測量',
 'exif-meteringmode-6'   => '局部測量',
-'exif-meteringmode-255' => '其它',
+'exif-meteringmode-255' => '其他',
 
 'exif-lightsource-0'   => '未知',
 'exif-lightsource-1'   => '日光燈',
@@ -3032,28 +3162,28 @@ Variants for Chinese language
 'limitall'         => '全部',
 
 # E-mail address confirmation
-'confirmemail'             => '確認郵箱位址',
-'confirmemail_noemail'     => '您沒有在您的[[Special:Preferences|用戶設定]]裡面輸入一個有效的 email 位址。',
-'confirmemail_text'        => '{{SITENAME}}要求您在使用郵件功能之前驗證您的郵箱位址。
+'confirmemail'              => '確認郵箱位址',
+'confirmemail_noemail'      => '您沒有在您的[[Special:Preferences|用戶設定]]裡面輸入一個有效的 email 位址。',
+'confirmemail_text'         => '{{SITENAME}}要求您在使用郵件功能之前驗證您的郵箱位址。
 點擊以下按鈕可向您的郵箱發送一封確認郵件。該郵件包含有一行代碼連結；
 請在您的瀏覽器中加載此連結以確認您的郵箱位址是有效的。',
-'confirmemail_pending'     => '一個確認代碼已經被發送到您的郵箱，您可能需要等幾分鐘才能收到。如果無法收到，請在申請一個新的確認碼！',
-'confirmemail_send'        => '郵發確認代碼',
-'confirmemail_sent'        => '確認郵件已發送。',
-'confirmemail_oncreate'    => '一個確認代碼已經被發送到您的郵箱。該代碼並不要求您進行登錄，
+'confirmemail_pending'      => '一個確認碼已經被發送到您的郵箱，您可能需要等幾分鐘才能收到。如果無法收到，請再申請一個新的確認碼。',
+'confirmemail_send'         => '郵發確認代碼',
+'confirmemail_sent'         => '確認郵件已發送。',
+'confirmemail_oncreate'     => '一個確認代碼已經被發送到您的郵箱。該代碼並不要求您進行登入，
 但若您要啟用在此 wiki 上的任何基於電子郵件的功能，您必須先提交此代碼。',
-'confirmemail_sendfailed'  => '{{SITENAME}}無法發送確認郵件，請檢查郵箱位址是否包含非法字元。
+'confirmemail_sendfailed'   => '{{SITENAME}}無法發送確認郵件，請檢查郵箱位址是否包含非法字元。
 
 郵件傳送員回應: $1',
-'confirmemail_invalid'     => '無效的確認碼，該代碼可能已經過期。',
-'confirmemail_needlogin'   => '您需要$1以確認您的郵箱位址。',
-'confirmemail_success'     => '您的郵箱已經被確認。您現在可以[[Special:UserLogin|登錄]]並使用此網站了。',
-'confirmemail_loggedin'    => '您的郵箱位址現下已被確認。',
-'confirmemail_error'       => '{{GENDER:|你|妳|你}}的確認過程發生錯誤。',
-'confirmemail_subject'     => '{{SITENAME}}郵箱位址確認',
-'confirmemail_body'        => '擁有IP位址$1的用戶（可能是您）在{{SITENAME}}創建了帳戶"$2"，並提交了您的電子郵箱位址。
+'confirmemail_invalid'      => '無效的確認碼，該代碼可能已經過期。',
+'confirmemail_needlogin'    => '您需要$1以確認您的郵箱位址。',
+'confirmemail_success'      => '您的郵箱已經被確認。您現在可以[[Special:UserLogin|登錄]]並使用此網站了。',
+'confirmemail_loggedin'     => '您的郵箱位址現下已被確認。',
+'confirmemail_error'        => '{{GENDER:|你|妳|你}}的確認過程發生錯誤。',
+'confirmemail_subject'      => '{{SITENAME}}郵箱位址確認',
+'confirmemail_body'         => '擁有IP位址$1的用戶（可能是您）在{{SITENAME}}創建了賬戶"$2"，並提交了您的電子郵箱位址。
 
-請確認這個帳戶是屬於您的，並同時啟用在{{SITENAME}}上的
+請確認這個賬戶是屬於您的，並同時啟用在{{SITENAME}}上的
 電子郵件功能。請在瀏覽器中打開下面的連結:
 
 $3
@@ -3064,8 +3194,32 @@ $3
 $5
 
 確認碼會在$4過期。',
-'confirmemail_invalidated' => '電郵地址確認已取消',
-'invalidateemail'          => '取消電郵確認',
+'confirmemail_body_changed' => '擁有IP位址$1的用戶（可能是您）在{{SITENAME}}更改了賬戶"$2"的電子郵箱位址。
+
+請確認這個賬戶是屬於您的，並同時重新啟用在{{SITENAME}}上的
+電子郵件功能。請在瀏覽器中打開下面的連結:
+
+$3
+
+如果這個賬戶*不是*屬於您的，
+請打開下面的連結去取消電子郵件確認:
+
+$5
+
+確認碼會在$4過期。',
+'confirmemail_body_set'     => '有人，可能是您，來自IP地址$1，已設置的戶口"$2"這個地址{{SITENAME}}網站名稱電郵地址。
+
+為了確認這個帳戶確實屬於自己的，重新確認電子郵件功能於{{SITENAME}}網站名稱，請在瀏覽器中打開這個鏈接：
+
+$3
+
+如果這帳戶*不*是你的，請點此鏈接取消電子郵件地址確認：
+
+$5
+
+這個確認碼會在$4時過期。',
+'confirmemail_invalidated'  => '電郵地址確認已取消',
+'invalidateemail'           => '取消電郵確認',
 
 # Scary transclusion
 'scarytranscludedisabled' => '[跨wiki轉換代碼不可用]',
@@ -3103,21 +3257,22 @@ $1',
 'imgmultigoto'     => '到第$1頁',
 
 # Table pager
-'ascending_abbrev'         => '遞增',
+'ascending_abbrev'         => '升',
 'descending_abbrev'        => '遞減',
 'table_pager_next'         => '下一頁',
 'table_pager_prev'         => '上一頁',
 'table_pager_first'        => '第一頁',
 'table_pager_last'         => '最末頁',
 'table_pager_limit'        => '每頁顯示 $1 筆記錄',
+'table_pager_limit_label'  => '每頁項目數︰',
 'table_pager_limit_submit' => '送出',
 'table_pager_empty'        => '沒有結果',
 
 # Auto-summaries
 'autosumm-blank'   => '清空頁面',
-'autosumm-replace' => "替換內容為 '$1'",
-'autoredircomment' => '重定向頁面到 [[$1]]',
-'autosumm-new'     => "創建新頁面為 '$1'",
+'autosumm-replace' => '以「$1」替換內容',
+'autoredircomment' => '重定向頁面到[[$1]]',
+'autosumm-new'     => '以內容「$1」創建新頁面',
 
 # Size units
 'size-bytes' => '$1 位元組',
@@ -3125,8 +3280,10 @@ $1',
 # Live preview
 'livepreview-loading' => '正在載入…',
 'livepreview-ready'   => '正在載入… 完成!',
-'livepreview-failed'  => '實時預覽失敗! 嘗試標準預覽。',
-'livepreview-error'   => '連接失敗: $1 "$2" 嘗試標準預覽。',
+'livepreview-failed'  => '實時預覽失敗!
+嘗試標準預覽。',
+'livepreview-error'   => '連接失敗: $1 "$2"。
+嘗試標準預覽。',
 
 # Friendlier slave lag warnings
 'lag-warn-normal' => '過去$1秒內的更改未必會在這個清單中顯示。',
@@ -3137,13 +3294,13 @@ $1',
 'watchlistedit-noitems'        => '您的監視列表並無標題。',
 'watchlistedit-normal-title'   => '編輯監視列表',
 'watchlistedit-normal-legend'  => '從監視列表中移除標題',
-'watchlistedit-normal-explain' => '在您的監視列表中的標題在下面顯示。要移除一個標題，在它前面剔一下，接著點擊移除標題。您亦都可以[[Special:Watchlist/raw|編輯原始監視列表]]。',
+'watchlistedit-normal-explain' => '在您的監視列表中的標題在下面顯示。要移除一個標題，在它前面剔一下，接著點擊「{{int:Watchlistedit-normal-submit}}」。您亦可以[[Special:EditWatchlist/raw|編輯原始監視列表]]。',
 'watchlistedit-normal-submit'  => '移除標題',
 'watchlistedit-normal-done'    => '$1個標題已經從您的監視列表中移除:',
 'watchlistedit-raw-title'      => '編輯原始監視列表',
 'watchlistedit-raw-legend'     => '編輯原始監視列表',
-'watchlistedit-raw-explain'    => '您的監視列表中的標題在下面顯示，同時亦都可以透過編輯這個表去加入以及移除標題；一行一個標題。當完成以後，點擊更新監視列表。{{GENDER:|你|妳|你}}亦都可以去用[[Special:Watchlist/edit|標準編輯器]]。',
-'watchlistedit-raw-titles'     => '標題:',
+'watchlistedit-raw-explain'    => '您的監視列表中的標題在下面顯示，同時亦都可以透過編輯這個表去加入以及移除標題；一行一個標題。當完成以後，點擊{{int:Watchlistedit-raw-submit}}。{{GENDER:|你|妳|你}}亦都可以去用[[Special:EditWatchlist|標準編輯器]]。',
+'watchlistedit-raw-titles'     => '標題：',
 'watchlistedit-raw-submit'     => '更新監視列表',
 'watchlistedit-raw-done'       => '您的監視列表已經更新。',
 'watchlistedit-raw-added'      => '已經加入了$1個標題:',
@@ -3164,7 +3321,9 @@ $1',
 'version-specialpages'             => '特殊頁面',
 'version-parserhooks'              => '語法鈎',
 'version-variables'                => '變數',
-'version-other'                    => '其它',
+'version-antispam'                 => '垃圾防止',
+'version-skins'                    => '外觀',
+'version-other'                    => '其他',
 'version-mediahandlers'            => '媒體處理器',
 'version-hooks'                    => '鈎',
 'version-extension-functions'      => '擴展函數',
@@ -3175,32 +3334,38 @@ $1',
 'version-hook-subscribedby'        => '利用於',
 'version-version'                  => '（版本 $1）',
 'version-license'                  => '授權',
+'version-poweredby-credits'        => "這個 Wiki 由 '''[http://www.mediawiki.org/ MediaWiki]''' 驅動，版權所有 © 2001-$1 $2。",
+'version-poweredby-others'         => '其他',
+'version-license-info'             => 'MediaWiki為自由軟件；您可依據自由軟件基金會所發表的GNU通用公共授權條款規定，就本程式再為發佈與／或修改；無論您依據的是本授權的第二版或（您自行選擇的）任一日後發行的版本。
+
+MediaWiki是基於使用目的而加以發佈，然而不負任何擔保責任；亦無對適售性或特定目的適用性所為的默示性擔保。詳情請參照GNU通用公共授權。
+
+您應已收到附隨於本程式的[{{SERVER}}{{SCRIPTPATH}}/COPYING GNU通用公共授權的副本]；如果沒有，請寫信至自由軟件基金會：51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA，或[http://www.gnu.org/licenses/old-licenses/gpl-2.0.html 線上閱讀]。',
 'version-software'                 => '已經安裝的軟件',
 'version-software-product'         => '產品',
 'version-software-version'         => '版本',
 
 # Special:FilePath
 'filepath'         => '檔案路徑',
-'filepath-page'    => '檔案名:',
-'filepath-submit'  => '搜尋路徑',
-'filepath-summary' => '這個特殊頁面擷取一個檔案的完整路徑。圖像會以完整的解像度顯示，其它的檔案類型會以同它們已關聯程式啟動。
+'filepath-page'    => '檔案名：',
+'filepath-submit'  => '前往',
+'filepath-summary' => '這個特殊頁面擷取一個檔案的完整路徑。圖片會以完整的解像度顯示，其它的檔案類型會以同它們已關聯程式啟動。
 
 請輸入檔名，不要包含"{{ns:file}}:"開頭。',
 
 # Special:FileDuplicateSearch
-'fileduplicatesearch'          => '選擇重覆檔案',
-'fileduplicatesearch-summary'  => '用重覆檔案的切細值去找出檔案是否重覆。
-
-輸入檔名時不需要輸入 "{{ns:file}}:" 開頭。',
-'fileduplicatesearch-legend'   => '找重覆',
-'fileduplicatesearch-filename' => '檔案名稱:',
-'fileduplicatesearch-submit'   => '找',
-'fileduplicatesearch-info'     => '$1 × $2 像素<br />檔案大小: $3<br />MIME類型: $4',
-'fileduplicatesearch-result-1' => '檔案 "$1" 無完全相同的重覆。',
-'fileduplicatesearch-result-n' => '檔案 "$1" 有$2項完全相同的重覆。',
+'fileduplicatesearch'           => '選擇重覆檔案',
+'fileduplicatesearch-summary'   => '用重覆檔案的切細值去找出檔案是否重覆。',
+'fileduplicatesearch-legend'    => '找重覆',
+'fileduplicatesearch-filename'  => '檔案名稱：',
+'fileduplicatesearch-submit'    => '找',
+'fileduplicatesearch-info'      => '$1 × $2 像素<br />檔案大小：$3<br />MIME 類型：$4',
+'fileduplicatesearch-result-1'  => '檔案 "$1" 無完全相同的重覆。',
+'fileduplicatesearch-result-n'  => '檔案 "$1" 有$2項完全相同的重覆。',
+'fileduplicatesearch-noresults' => '沒有發現名為"$1"的文件。',
 
 # Special:SpecialPages
-'specialpages'                   => '所有特殊頁面',
+'specialpages'                   => '特殊頁面',
 'specialpages-note'              => '----
 * 標準特殊頁面。
 * <strong class="mw-specialpagerestricted">有限制的特殊頁面。</strong>',
@@ -3213,7 +3378,7 @@ $1',
 'specialpages-group-highuse'     => '高度使用頁面',
 'specialpages-group-pages'       => '頁面清單',
 'specialpages-group-pagetools'   => '頁面工具',
-'specialpages-group-wiki'        => 'Wiki資料和工具',
+'specialpages-group-wiki'        => 'Wiki 資料和工具',
 'specialpages-group-redirects'   => '重新定向特殊頁面',
 'specialpages-group-spam'        => '反垃圾工具',
 
@@ -3224,8 +3389,8 @@ $1',
 # External image whitelist
 'external_image_whitelist' => ' #留下這行一樣的文字<pre>
 #在下面（//之中間部份）輸入正規表達式
-#這些將會跟外部（已超連結的）圖像配合
-#那些配合到出來的會顯示成圖像，否則就只會顯示成連結
+#這些將會跟外部（已超連結的）圖片配合
+#那些配合到出來的會顯示成圖片，否則就只會顯示成連結
 #有 # 開頭的行會當成註解
 #大小寫並無區分
 
@@ -3244,9 +3409,19 @@ $1',
 'tags-edit'               => '編輯',
 'tags-hitcount'           => '$1次更改',
 
+# Special:ComparePages
+'comparepages'     => '比較頁面',
+'compare-selector' => '比較頁面的修訂',
+'compare-page1'    => '第1頁',
+'compare-page2'    => '第2頁',
+'compare-rev1'     => '修訂版本1',
+'compare-rev2'     => '修訂版本2',
+'compare-submit'   => '比較',
+
 # Database error messages
 'dberr-header'      => '這個 wiki 出現了問題',
-'dberr-problems'    => '抱歉！這個網站出現了一些技術上的問題。',
+'dberr-problems'    => '抱歉！
+這個網站出現了一些技術上的問題。',
 'dberr-again'       => '嘗試等候數分鐘後，然後再試。',
 'dberr-info'        => '（無法連繫到資料庫伺服器: $1）',
 'dberr-usegoogle'   => '在現階段您可以嘗試透過 Google 搜尋。',
@@ -3254,29 +3429,31 @@ $1',
 'dberr-cachederror' => '這個是所要求出來的快取複本，可能不是最新的。',
 
 # HTML forms
-'htmlform-invalid-input'       => '在您的輸入中出現了一些問題',
-'htmlform-select-badoption'    => '您所指定的值不是一個有效的選項。',
+'htmlform-invalid-input'       => '您輸入的內容存在問題',
+'htmlform-select-badoption'    => '您所指定的值不是有效的選項。',
 'htmlform-int-invalid'         => '您所指定的值不是一個整數。',
 'htmlform-float-invalid'       => '您所指定的值不是一個數字。',
 'htmlform-int-toolow'          => '您所指定的值低於最小值$1',
 'htmlform-int-toohigh'         => '您所指定的值高於最大值$1',
+'htmlform-required'            => '此值是必填項',
 'htmlform-submit'              => '遞交',
-'htmlform-reset'               => '復原更改',
-'htmlform-selectorother-other' => '其它',
+'htmlform-reset'               => '撤銷更改',
+'htmlform-selectorother-other' => '其他',
 
-# Add categories per AJAX
-'ajax-add-category'            => '加入分類',
-'ajax-add-category-submit'     => '加入',
-'ajax-confirm-title'           => '確認動作',
-'ajax-confirm-prompt'          => '您可以在下面提供一個編輯摘要。
-點擊「保存」去保存您的編輯。',
-'ajax-confirm-save'            => '保存',
-'ajax-add-category-summary'    => '加入分類「$1」',
-'ajax-remove-category-summary' => '移除分類「$1」',
-'ajax-confirm-actionsummary'   => '已進行的動作：',
-'ajax-error-title'             => '錯誤',
-'ajax-error-dismiss'           => '好',
-'ajax-remove-category-error'   => '不能移除這個分類。
-通常是發生在一個模板中加入該分類。',
+# SQLite database support
+'sqlite-has-fts' => '帶全文搜尋的版本$1',
+'sqlite-no-fts'  => '不帶全文搜尋的版本$1',
+
+# Special:DisableAccount
+'disableaccount'             => '禁用用戶賬戶',
+'disableaccount-user'        => '用戶名：',
+'disableaccount-reason'      => '理由：',
+'disableaccount-confirm'     => "禁用此使用者帳號。
+該使用者將無法登入、重設其密碼或收到電子郵件通知。如果用戶目前仍保持登入，其帳號將會被強制登出。
+''留意若無系統管理員的干預，被禁用的帳號不可重新啟用。''",
+'disableaccount-mustconfirm' => '請確認您的確要禁用此賬戶。',
+'disableaccount-nosuchuser'  => '用戶賬戶「$1」不存在。',
+'disableaccount-success'     => '用戶賬戶「$1」已被永久禁用。',
+'disableaccount-logentry'    => '永久禁用用戶賬戶[[$1]]',
 
 );

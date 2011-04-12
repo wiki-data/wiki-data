@@ -12,7 +12,7 @@ $wgProfiling = true;
 
 /**
  * Begin profiling of a function
- * @param $functioname name of the function we will profile
+ * @param $functionname String: name of the function we will profile
  */
 function wfProfileIn( $functionname ) {
 	global $wgProfiler;
@@ -21,7 +21,7 @@ function wfProfileIn( $functionname ) {
 
 /**
  * Stop profiling of a function
- * @param $functioname name of the function we have profiled
+ * @param $functionname String: name of the function we have profiled
  */
 function wfProfileOut( $functionname = 'missing' ) {
 	global $wgProfiler;
@@ -31,8 +31,8 @@ function wfProfileOut( $functionname = 'missing' ) {
 /**
  * Returns a profiling output to be stored in debug file
  *
- * @param float $start
- * @param float $elapsed time elapsed since the beginning of the request
+ * @param $start Float
+ * @param $elapsed Float: time elapsed since the beginning of the request
  */
 function wfGetProfilingOutput( $start, $elapsed ) {
 	global $wgProfiler;
@@ -61,6 +61,7 @@ if (!function_exists('memory_get_usage')) {
 class Profiler {
 	var $mStack = array (), $mWorkStack = array (), $mCollated = array ();
 	var $mCalls = array (), $mTotals = array ();
+	var $mTemplated = false;
 
 	function __construct() {
 		// Push an entry for the pre-profile setup time onto the stack
@@ -75,7 +76,8 @@ class Profiler {
 
 	/**
 	 * Called by wfProfieIn()
-	 * @param $functionname string
+	 *
+	 * @param $functionname String
 	 */
 	function profileIn( $functionname ) {
 		global $wgDebugFunctionEntry, $wgProfiling;
@@ -89,7 +91,8 @@ class Profiler {
 
 	/**
 	 * Called by wfProfieOut()
-	 * @param $functionname string
+	 *
+	 * @param $functionname String
 	 */
 	function profileOut($functionname) {
 		global $wgDebugFunctionEntry, $wgProfiling;
@@ -140,7 +143,16 @@ class Profiler {
 	}
 
 	/**
-	 * called by wfGetProfilingOutput()
+	 * Mark this call as templated or not
+	 *
+	 * @param $t Boolean
+	 */
+	function setTemplated( $t ) {
+		$this->mTemplated = $t;
+	}
+
+	/**
+	 * Called by wfGetProfilingOutput()
 	 */
 	function getOutput() {
 		global $wgDebugFunctionEntry, $wgProfileCallTree;
@@ -164,7 +176,7 @@ class Profiler {
 	}
 
 	/**
-	 * returns a tree of function call instead of a list of functions
+	 * Returns a tree of function call instead of a list of functions
 	 */
 	function getCallTree() {
 		return implode( '', array_map( array( &$this, 'getCallTreeLine' ), $this->remapCallTree( $this->mStack ) ) );
@@ -251,14 +263,10 @@ class Profiler {
 
 		# Estimate profiling overhead
 		$profileCount = count($this->mStack);
-		wfProfileIn( '-overhead-total' );
-		for( $i = 0; $i < $profileCount; $i ++ ){
-			wfProfileIn( '-overhead-internal' );
-			wfProfileOut( '-overhead-internal' );
-		}
-		wfProfileOut( '-overhead-total' );
+		self::calculateOverhead( $profileCount );
 
 		# First, subtract the overhead!
+		$overheadTotal = $overheadMemory = $overheadInternal = array();
 		foreach( $this->mStack as $entry ){
 			$fname = $entry[0];
 			$start = $entry[2];
@@ -274,9 +282,9 @@ class Profiler {
 				$overheadInternal[] = $elapsed;
 			}
 		}
-		$overheadTotal = array_sum( $overheadTotal ) / count( $overheadInternal );
-		$overheadMemory = array_sum( $overheadMemory ) / count( $overheadInternal );
-		$overheadInternal = array_sum( $overheadInternal ) / count( $overheadInternal );
+		$overheadTotal = $overheadTotal ? array_sum( $overheadTotal ) / count( $overheadInternal ) : 0;
+		$overheadMemory = $overheadMemory ? array_sum( $overheadMemory ) / count( $overheadInternal ) : 0;
+		$overheadInternal = $overheadInternal ? array_sum( $overheadInternal ) / count( $overheadInternal ) : 0;
 
 		# Collate
 		foreach( $this->mStack as $index => $entry ){
@@ -335,6 +343,18 @@ class Profiler {
 	}
 
 	/**
+	 * Dummy calls to wfProfileIn/wfProfileOut to calculate its overhead
+	 */
+	protected static function calculateOverhead( $profileCount ) {
+		wfProfileIn( '-overhead-total' );
+		for( $i = 0; $i < $profileCount; $i++ ){
+			wfProfileIn( '-overhead-internal' );
+			wfProfileOut( '-overhead-internal' );
+		}
+		wfProfileOut( '-overhead-total' );
+	}
+	
+	/**
 	 * Counts the number of profiled function calls sitting under
 	 * the given point in the call graph. Not the most efficient algo.
 	 *
@@ -355,9 +375,10 @@ class Profiler {
 	/**
 	 * Log a function into the database.
 	 *
-	 * @param $name string: function name
-	 * @param $timeSum float
-	 * @param $eventCount int: number of times that function was called
+	 * @param $name String: function name
+	 * @param $timeSum Float
+	 * @param $eventCount Integer: number of times that function was called
+	 * @param $memorySum Integer: memory used by the function
 	 */
 	static function logToDB( $name, $timeSum, $eventCount, $memorySum ){
 		# Do not log anything if database is readonly (bug 5375)
@@ -419,7 +440,8 @@ class Profiler {
 
 	/**
 	 * Get function caller
-	 * @param $level int
+	 *
+	 * @param $level Integer
 	 */
 	static function getCaller( $level ) {
 		$backtrace = wfDebugBacktrace();
@@ -437,7 +459,8 @@ class Profiler {
 
 	/**
 	 * Add an entry in the debug log file
-	 * @param $s string to output
+	 *
+	 * @param $s String to output
 	 */
 	function debug( $s ) {
 		if( function_exists( 'wfDebug' ) ) {

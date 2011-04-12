@@ -1,4 +1,10 @@
 <?php
+/**
+ * Old file in the in the oldimage table
+ *
+ * @file
+ * @ingroup FileRepo
+ */
 
 /**
  * Class to represent a file in the oldimage table
@@ -28,16 +34,21 @@ class OldLocalFile extends LocalFile {
 		$file->loadFromRow( $row, 'oi_' );
 		return $file;
 	}
-	
-	static function newFromKey( $sha1, $repo, $timestamp = false ) {
-		# Polymorphic function name to distinguish foreign and local fetches
-		$fname = get_class( $this ) . '::' . __FUNCTION__;
 
+	/**
+	 * @static
+	 * @param  $sha1
+	 * @param $repo LocalRepo
+	 * @param bool $timestamp
+	 * @return bool|OldLocalFile
+	 */
+	static function newFromKey( $sha1, $repo, $timestamp = false ) {
 		$conds = array( 'oi_sha1' => $sha1 );
 		if( $timestamp ) {
 			$conds['oi_timestamp'] = $timestamp;
 		}
-		$row = $dbr->selectRow( 'oldimage', $this->getCacheFields( 'oi_' ), $conds, $fname );
+		$dbr = $repo->getSlaveDB();
+		$row = $dbr->selectRow( 'oldimage', self::selectFields(), $conds, __METHOD__ );
 		if( $row ) {
 			return self::newFromRow( $row, $repo );
 		} else {
@@ -70,10 +81,10 @@ class OldLocalFile extends LocalFile {
 	}
 
 	/**
-	 * @param Title $title
-	 * @param FileRepo $repo
-	 * @param string $time Timestamp or null to load by archive name
-	 * @param string $archiveName Archive name or null to load by timestamp
+	 * @param $title Title
+	 * @param $repo FileRepo
+	 * @param $time String: timestamp or null to load by archive name
+	 * @param $archiveName String: archive name or null to load by timestamp
 	 */
 	function __construct( $title, $repo, $time, $archiveName ) {
 		parent::__construct( $title, $repo );
@@ -135,7 +146,7 @@ class OldLocalFile extends LocalFile {
 	}
 
 	function getUrlRel() {
-		return 'archive/' . $this->getHashPath() . urlencode( $this->getArchiveName() );
+		return 'archive/' . $this->getHashPath() . rawurlencode( $this->getArchiveName() );
 	}
 
 	function upgradeRow() {
@@ -149,8 +160,12 @@ class OldLocalFile extends LocalFile {
 			return;
 		}
 
-		$dbw = $this->repo->getMasterDB();
 		list( $major, $minor ) = self::splitMime( $this->mime );
+
+		// https://bugzilla.wikimedia.org/show_bug.cgi?id=27639
+		// Create and use a new loadBalancer object, to prevent "1205: Lock wait timeout exceeded;"
+		$lb = wfGetLBFactory()->newMainLB();
+		$dbw = $lb->getConnection( DB_MASTER );
 
 		wfDebug(__METHOD__.': upgrading '.$this->archive_name." to the current schema\n");
 		$dbw->update( 'oldimage',
@@ -168,12 +183,15 @@ class OldLocalFile extends LocalFile {
 				'oi_archive_name' => $this->archive_name ),
 			__METHOD__
 		);
+
+		$lb->commitMasterChanges();
+		$lb->closeAll();
 		wfProfileOut( __METHOD__ );
 	}
 
 	/**
-	 * int $field one of DELETED_* bitfield constants
-	 * for file or revision rows
+	 * @param $field Integer: one of DELETED_* bitfield constants
+	 *               for file or revision rows
 	 * @return bool
 	 */
 	function isDeleted( $field ) {
@@ -193,11 +211,79 @@ class OldLocalFile extends LocalFile {
 	/**
 	 * Determine if the current user is allowed to view a particular
 	 * field of this image file, if it's marked as deleted.
-	 * @param int $field
+	 *
+	 * @param $field Integer
 	 * @return bool
 	 */
 	function userCan( $field ) {
 		$this->load();
 		return Revision::userCanBitfield( $this->deleted, $field );
 	}
+	
+	/**
+	 * Upload a file directly into archive. Generally for Special:Import.
+	 * 
+	 * @param $srcPath string File system path of the source file
+	 * @param $archiveName string Full archive name of the file, in the form 
+	 * 	$timestamp!$filename, where $filename must match $this->getName()
+	 */
+	function uploadOld( $srcPath, $archiveName, $comment, $user ) {
+		$this->lock();
+		$status = $this->publish( $srcPath, $flags, $archiveName );
+		
+		if ( $status->isGood() ) {
+			if ( !$this->recordOldUpload( $srcPath, $archiveName, $comment, $user ) ) {
+				$status->fatal( 'filenotfound', $srcPath );
+			}
+		}
+		
+		$this->unlock();
+		
+		return $status;
+	}
+	
+	/**
+	 * Record a file upload in the oldimage table, without adding log entries.
+	 * 
+	 * @param $srcPath string File system path to the source file
+	 * @param $archiveName string The archive name of the file
+	 * @param $comment string Upload comment
+	 * @param $user User User who did this upload
+	 * @return bool
+	 */
+	function recordOldUpload( $srcPath, $archiveName, $comment, $user ) {
+		$dbw = $this->repo->getMasterDB();
+		$dbw->begin();
+
+		$dstPath = $this->repo->getZonePath( 'public' ) . '/' . $this->getRel();
+		$props = self::getPropsFromPath( $dstPath );
+		if ( !$props['fileExists'] ) {
+			return false;
+		}
+
+		$dbw->insert( 'oldimage',
+			array(
+				'oi_name'         => $this->getName(),
+				'oi_archive_name' => $archiveName,
+				'oi_size'         => $props['size'],
+				'oi_width'        => intval( $props['width'] ),
+				'oi_height'       => intval( $props['height'] ),
+				'oi_bits'         => $props['bits'],
+				'oi_timestamp'    => $props['timestamp'],
+				'oi_description'  => $comment,
+				'oi_user'         => $user->getId(),
+				'oi_user_text'    => $user->getName(),
+				'oi_metadata'     => $props['metadata'],
+				'oi_media_type'   => $props['media_type'],
+				'oi_major_mime'   => $props['major_mime'],
+				'oi_minor_mime'   => $props['minor_mime'],
+				'oi_sha1'         => $props['sha1'],
+			), __METHOD__
+		);
+
+		$dbw->commit();
+
+		return true;
+	}
+	
 }

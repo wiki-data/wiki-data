@@ -1,4 +1,10 @@
 <?php
+/**
+ * A repository for files accessible via the local filesystem.
+ *
+ * @file
+ * @ingroup FileRepo
+ */
 
 /**
  * A repository for files accessible via the local filesystem. Does not support
@@ -132,24 +138,31 @@ class FSRepo extends FileRepo {
 	/**
 	 * Store a batch of files
 	 *
-	 * @param array $triplets (src,zone,dest) triplets as per store()
-	 * @param integer $flags Bitwise combination of the following flags:
+	 * @param $triplets Array: (src,zone,dest) triplets as per store()
+	 * @param $flags Integer: bitwise combination of the following flags:
 	 *     self::DELETE_SOURCE     Delete the source file after upload
 	 *     self::OVERWRITE         Overwrite an existing destination file instead of failing
 	 *     self::OVERWRITE_SAME    Overwrite the file if the destination exists and has the
 	 *                             same contents as the source
 	 */
 	function storeBatch( $triplets, $flags = 0 ) {
+		wfDebug( __METHOD__  . ': Storing ' . count( $triplets ) . 
+			" triplets; flags: {$flags}\n" );
+		
+		// Try creating directories
 		if ( !wfMkdirParents( $this->directory ) ) {
 			return $this->newFatal( 'upload_directory_missing', $this->directory );
 		}
 		if ( !is_writable( $this->directory ) ) {
 			return $this->newFatal( 'upload_directory_read_only', $this->directory );
 		}
+		
+		// Validate each triplet 
 		$status = $this->newGood();
 		foreach ( $triplets as $i => $triplet ) {
 			list( $srcPath, $dstZone, $dstRel ) = $triplet;
 
+			// Resolve destination path
 			$root = $this->getZonePath( $dstZone );
 			if ( !$root ) {
 				throw new MWException( "Invalid zone: $dstZone" );
@@ -160,6 +173,7 @@ class FSRepo extends FileRepo {
 			$dstPath = "$root/$dstRel";
 			$dstDir = dirname( $dstPath );
 
+			// Create destination directories for this triplet
 			if ( !is_dir( $dstDir ) ) {
 				if ( !wfMkdirParents( $dstDir ) ) {
 					return $this->newFatal( 'directorycreateerror', $dstDir );
@@ -169,6 +183,7 @@ class FSRepo extends FileRepo {
 				}
 			}
 
+			// Resolve source 
 			if ( self::isVirtualUrl( $srcPath ) ) {
 				$srcPath = $triplets[$i][0] = $this->resolveVirtualUrl( $srcPath );
 			}
@@ -177,6 +192,8 @@ class FSRepo extends FileRepo {
 				$status->fatal( 'filenotfound', $srcPath );
 				continue;
 			}
+			
+			// Check overwriting
 			if ( !( $flags & self::OVERWRITE ) && file_exists( $dstPath ) ) {
 				if ( $flags & self::OVERWRITE_SAME ) {
 					$hashSource = sha1_file( $srcPath );
@@ -190,6 +207,7 @@ class FSRepo extends FileRepo {
 			}
 		}
 
+		// Windows does not support moving over existing files, so explicitly delete them
 		$deleteDest = wfIsWindows() && ( $flags & self::OVERWRITE );
 
 		// Abort now on failure
@@ -197,7 +215,8 @@ class FSRepo extends FileRepo {
 			return $status;
 		}
 
-		foreach ( $triplets as $triplet ) {
+		// Execute the store operation for each triplet
+		foreach ( $triplets as $i => $triplet ) {
 			list( $srcPath, $dstZone, $dstRel ) = $triplet;
 			$root = $this->getZonePath( $dstZone );
 			$dstPath = "$root/$dstRel";
@@ -216,6 +235,20 @@ class FSRepo extends FileRepo {
 					$status->error( 'filecopyerror', $srcPath, $dstPath );
 					$good = false;
 				}
+				if ( !( $flags & self::SKIP_VALIDATION ) ) {
+					wfSuppressWarnings();
+					$hashSource = sha1_file( $srcPath );
+					$hashDest = sha1_file( $dstPath );
+					wfRestoreWarnings();
+					
+					if ( $hashDest === false || $hashSource !== $hashDest ) {
+						wfDebug( __METHOD__ . ': File copy validation failed: ' . 
+							"$srcPath ($hashSource) to $dstPath ($hashDest)\n" );
+						
+						$status->error( 'filecopyerror', $srcPath, $dstPath );
+						$good = false;
+					}
+				}
 			}
 			if ( $good ) {
 				$this->chmod( $dstPath );
@@ -223,11 +256,42 @@ class FSRepo extends FileRepo {
 			} else {
 				$status->failCount++;
 			}
+			$status->success[$i] = $good;
 		}
 		return $status;
 	}
+	
+	/**
+	 * Deletes a batch of files. Each file can be a (zone, rel) pairs, a
+	 * virtual url or a real path. It will try to delete each file, but 
+	 * ignores any errors that may occur
+	 * 
+	 * @param $pairs array List of files to delete
+	 */
+	function cleanupBatch( $files ) {
+		foreach ( $files as $file ) {
+			if ( is_array( $file ) ) {
+				// This is a pair, extract it
+				list( $zone, $rel ) = $file;
+				$root = $this->getZonePath( $zone );
+				$path = "$root/$rel";
+			} else {
+				if ( self::isVirtualUrl( $file ) ) {
+					// This is a virtual url, resolve it 
+					$path = $this->resolveVirtualUrl( $file );
+				} else {
+					// This is a full file name
+					$path = $file;
+				}
+			}
+			
+			wfSuppressWarnings();
+			unlink( $path );
+			wfRestoreWarnings();
+		}
+	}
 
-	function append( $srcPath, $toAppendPath ) {
+	function append( $srcPath, $toAppendPath, $flags = 0 ) {
 		$status = $this->newGood();
 
 		// Resolve the virtual URL
@@ -236,20 +300,30 @@ class FSRepo extends FileRepo {
 		}
 		// Make sure the files are there
 		if ( !is_file( $srcPath ) )
-			$status->fatal( 'append-src-filenotfound', $srcPath );
+			$status->fatal( 'filenotfound', $srcPath );
 
 		if ( !is_file( $toAppendPath ) )
-			$status->fatal( 'append-toappend-filenotfound', $toAppendPath );
+			$status->fatal( 'filenotfound', $toAppendPath );
+
+		if ( !$status->isOk() ) return $status;
 
 		// Do the append
-		if( file_put_contents( $srcPath, file_get_contents( $toAppendPath ), FILE_APPEND ) ) {
-			$status->value = $srcPath;
-		} else {
-			$status->fatal( 'fileappenderror', $toAppendPath,  $srcPath);
+		$chunk = file_get_contents( $toAppendPath );
+		if( $chunk === false ) {
+			$status->fatal( 'fileappenderrorread', $toAppendPath );
 		}
 
-		// Remove the source file
-		unlink( $toAppendPath );
+		if( $status->isOk() ) {
+			if ( file_put_contents( $srcPath, $chunk, FILE_APPEND ) ) {
+				$status->value = $srcPath;
+			} else {
+				$status->fatal( 'fileappenderror', $toAppendPath,  $srcPath);
+			}
+		}
+
+		if ( $flags & self::DELETE_SOURCE ) {
+			unlink( $toAppendPath );
+		}
 
 		return $status;
 	}
@@ -257,8 +331,8 @@ class FSRepo extends FileRepo {
 	/**
 	 * Checks existence of specified array of files.
 	 *
-	 * @param array $files URLs of files to check
-	 * @param integer $flags Bitwise combination of the following flags:
+	 * @param $files Array: URLs of files to check
+	 * @param $flags Integer: bitwise combination of the following flags:
 	 *     self::FILES_ONLY     Mark file as existing only if it is a file (not directory)
 	 * @return Either array of files and existence flags, or false
 	 */
@@ -297,9 +371,9 @@ class FSRepo extends FileRepo {
 
 	/**
 	 * Pick a random name in the temp zone and store a file to it.
-	 * @param string $originalName The base name of the file as specified
+	 * @param $originalName String: the base name of the file as specified
 	 *     by the user. The file extension will be maintained.
-	 * @param string $srcPath The current location of the file.
+	 * @param $srcPath String: the current location of the file.
 	 * @return FileRepoStatus object with the URL in the value.
 	 */
 	function storeTemp( $originalName, $srcPath ) {
@@ -315,8 +389,8 @@ class FSRepo extends FileRepo {
 
 	/**
 	 * Remove a temporary file or mark it for garbage collection
-	 * @param string $virtualUrl The virtual URL returned by storeTemp
-	 * @return boolean True on success, false on failure
+	 * @param $virtualUrl String: the virtual URL returned by storeTemp
+	 * @return Boolean: true on success, false on failure
 	 */
 	function freeTemp( $virtualUrl ) {
 		$temp = "mwrepo://{$this->name}/temp";
@@ -333,8 +407,8 @@ class FSRepo extends FileRepo {
 
 	/**
 	 * Publish a batch of files
-	 * @param array $triplets (source,dest,archive) triplets as per publish()
-	 * @param integer $flags Bitfield, may be FileRepo::DELETE_SOURCE to indicate
+	 * @param $triplets Array: (source,dest,archive) triplets as per publish()
+	 * @param $flags Integer: bitfield, may be FileRepo::DELETE_SOURCE to indicate
 	 *        that the source files should be deleted if possible
 	 */
 	function publishBatch( $triplets, $flags = 0 ) {
@@ -444,7 +518,7 @@ class FSRepo extends FileRepo {
 	 * If no valid deletion archive is configured, this may either delete the
 	 * file or throw an exception, depending on the preference of the repository.
 	 *
-	 * @param array $sourceDestPairs Array of source/destination pairs. Each element
+	 * @param $sourceDestPairs Array of source/destination pairs. Each element
 	 *        is a two-element array containing the source file path relative to the
 	 *        public root in the first element, and the archive file path relative
 	 *        to the deleted zone root in the second element.
@@ -548,8 +622,11 @@ class FSRepo extends FileRepo {
 				continue;
 			}
 			$dir = opendir( $path );
-			while ( false !== ( $name = readdir( $dir ) ) ) {
-				call_user_func( $callback, $path . '/' . $name );
+			if ($dir) {
+				while ( false !== ( $name = readdir( $dir ) ) ) {
+					call_user_func( $callback, $path . '/' . $name );
+				}
+				closedir( $dir );
 			}
 		}
 	}
@@ -602,10 +679,10 @@ class FSRepo extends FileRepo {
 		}
 		return strtr( $param, $this->simpleCleanPairs );
 	}
-	
+
 	/**
 	 * Chmod a file, supressing the warnings.
-	 * @param String $path The path to change
+	 * @param $path String: the path to change
 	 */
 	protected function chmod( $path ) {
 		wfSuppressWarnings();

@@ -1,58 +1,74 @@
 <?php
 /**
- * @file
- * @ingroup upload
- *
  * Implements uploading from previously stored file.
  *
+ * @file
+ * @ingroup upload
  * @author Bryan Tong Minh
  */
 
 class UploadFromStash extends UploadBase {
+
+	protected $initializePathInfo, $mSessionKey, $mVirtualTempPath,
+		$mFileProps, $mSourceType;
+
 	public static function isValidSessionKey( $key, $sessionData ) {
 		return !empty( $key ) &&
 			is_array( $sessionData ) &&
 			isset( $sessionData[$key] ) &&
 			isset( $sessionData[$key]['version'] ) &&
-			$sessionData[$key]['version'] == self::SESSION_VERSION;
+			$sessionData[$key]['version'] == UploadBase::SESSION_VERSION;
 	}
 
+	/**
+	 * @param $request WebRequest
+	 *
+	 * @return Boolean
+	 */
 	public static function isValidRequest( $request ) {
-		$sessionData = $request->getSessionData( 'wsUploadData' );
+		$sessionData = $request->getSessionData( UploadBase::SESSION_KEYNAME );
 		return self::isValidSessionKey(
-			$request->getInt( 'wpSessionKey' ),
+			$request->getText( 'wpSessionKey' ),
 			$sessionData
 		);
 	}
-	/*
-	 * some $na vars for uploadBase method compatibility.
-	 */
-	public function initialize( $name, $sessionData, $na, $na2=false ) {
-			/**
-			 * Confirming a temporarily stashed upload.
-			 * We don't want path names to be forged, so we keep
-			 * them in the session on the server and just give
-			 * an opaque key to the user agent.
-			 */
 
-			parent::initialize( $name,
-				$this->getRealPath ( $sessionData['mTempPath'] ),
-				$sessionData['mFileSize'],
-				false
-			);
+	public function initialize( $name, $sessionKey, $sessionData ) {
+		/**
+		 * Confirming a temporarily stashed upload.
+		 * We don't want path names to be forged, so we keep
+		 * them in the session on the server and just give
+		 * an opaque key to the user agent.
+		 */
 
-			$this->mVirtualTempPath = $sessionData['mTempPath'];
-			$this->mFileProps = $sessionData['mFileProps'];
+		$this->initializePathInfo( $name,
+			$this->getRealPath ( $sessionData['mTempPath'] ),
+			$sessionData['mFileSize'],
+			false
+		);
+
+		$this->mSessionKey = $sessionKey;
+		$this->mVirtualTempPath = $sessionData['mTempPath'];
+		$this->mFileProps = $sessionData['mFileProps'];
+		$this->mSourceType = isset( $sessionData['mSourceType'] ) ?
+			$sessionData['mSourceType'] : null;
 	}
 
+	/**
+	 * @param $request WebRequest
+	 */
 	public function initializeFromRequest( &$request ) {
-		$this->mSessionKey = $request->getInt( 'wpSessionKey' );
-		$sessionData = $request->getSessionData('wsUploadData');
+		$sessionKey = $request->getText( 'wpSessionKey' );
+		$sessionData = $request->getSessionData( UploadBase::SESSION_KEYNAME );
 
 		$desiredDestName = $request->getText( 'wpDestFile' );
 		if( !$desiredDestName )
 			$desiredDestName = $request->getText( 'wpUploadFile' );
-		return $this->initialize( $desiredDestName, $sessionData[$this->mSessionKey], false );
+		return $this->initialize( $desiredDestName, $sessionKey, $sessionData[$sessionKey] );
+	}
+
+	public function getSourceType() { 
+		return $this->mSourceType; 
 	}
 
 	/**
@@ -62,11 +78,10 @@ class UploadFromStash extends UploadBase {
 		return true;
 	}
 
-	
 	/**
 	 * There is no need to stash the image twice
 	 */
-	public function stashSession() {
+	public function stashSession( $key = null ) {
 		if ( !empty( $this->mSessionKey ) )
 			return $this->mSessionKey;
 		return parent::stashSession();

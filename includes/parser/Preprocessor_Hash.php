@@ -1,4 +1,10 @@
 <?php
+/**
+ * Preprocessor using PHP arrays
+ *
+ * @file
+ * @ingroup Parser
+ */
 
 /**
  * Differences from DOM schema:
@@ -7,8 +13,11 @@
  * @ingroup Parser
  */
 class Preprocessor_Hash implements Preprocessor {
+	/**
+	 * @var Parser
+	 */
 	var $parser;
-	
+
 	const CACHE_VERSION = 1;
 
 	function __construct( $parser ) {
@@ -23,12 +32,39 @@ class Preprocessor_Hash implements Preprocessor {
 		return new PPCustomFrame_Hash( $this, $args );
 	}
 
+	function newPartNodeArray( $values ) {
+		$list = array();
+
+		foreach ( $values as $k => $val ) {
+			$partNode = new PPNode_Hash_Tree( 'part' );
+			$nameNode = new PPNode_Hash_Tree( 'name' );
+
+			if ( is_int( $k ) ) {
+				$nameNode->addChild( new PPNode_Hash_Attr( 'index', $k ) );
+				$partNode->addChild( $nameNode );
+			} else {
+				$nameNode->addChild( new PPNode_Hash_Text( $k ) );
+				$partNode->addChild( $nameNode );
+				$partNode->addChild( new PPNode_Hash_Text( '=' ) );
+			}
+
+			$valueNode = new PPNode_Hash_Tree( 'value' );
+			$valueNode->addChild( new PPNode_Hash_Text( $val ) );
+			$partNode->addChild( $valueNode );
+
+			$list[] = $partNode;
+		}
+
+		$node = new PPNode_Hash_Array( $list );
+		return $node;
+	}
+
 	/**
 	 * Preprocess some wikitext and return the document tree.
 	 * This is the ghost of Parser::replace_variables().
 	 *
-	 * @param string $text The text to parse
-	 * @param integer flags Bitwise combination of:
+	 * @param $text String: the text to parse
+	 * @param $flags Integer: bitwise combination of:
 	 *          Parser::PTD_FOR_INCLUSION    Handle <noinclude>/<includeonly> as if the text is being
 	 *                                     included. Default is to assume a direct page view.
 	 *
@@ -47,12 +83,11 @@ class Preprocessor_Hash implements Preprocessor {
 	 */
 	function preprocessToObj( $text, $flags = 0 ) {
 		wfProfileIn( __METHOD__ );
-	
-	
+
 		// Check cache.
 		global $wgMemc, $wgPreprocessorCacheThreshold;
-		
-		$cacheable = strlen( $text ) > $wgPreprocessorCacheThreshold;
+
+		$cacheable = $wgPreprocessorCacheThreshold !== false && strlen( $text ) > $wgPreprocessorCacheThreshold;
 		if ( $cacheable ) {
 			wfProfileIn( __METHOD__.'-cacheable' );
 
@@ -239,7 +274,7 @@ class Preprocessor_Hash implements Preprocessor {
 						// Search backwards for leading whitespace
 						$wsStart = $i ? ( $i - strspn( $revText, ' ', strlen( $text ) - $i ) ) : 0;
 						// Search forwards for trailing whitespace
-						// $wsEnd will be the position of the last space
+						// $wsEnd will be the position of the last space (or the '>' if there's none)
 						$wsEnd = $endPos + 2 + strspn( $text, ' ', $endPos + 3 );
 						// Eat the line if possible
 						// TODO: This could theoretically be done if $wsStart == 0, i.e. for comments at
@@ -315,8 +350,8 @@ class Preprocessor_Hash implements Preprocessor {
 				} else {
 					$attrEnd = $tagEndPos;
 					// Find closing tag
-					if ( preg_match( "/<\/" . preg_quote( $name, '/' ) . "\s*>/i", 
-							$text, $matches, PREG_OFFSET_CAPTURE, $tagEndPos + 1 ) ) 
+					if ( preg_match( "/<\/" . preg_quote( $name, '/' ) . "\s*>/i",
+							$text, $matches, PREG_OFFSET_CAPTURE, $tagEndPos + 1 ) )
 					{
 						$inner = substr( $text, $tagEndPos + 1, $matches[0][1] - $tagEndPos - 1 );
 						$i = $matches[0][1] + strlen( $matches[0][0] );
@@ -401,7 +436,7 @@ class Preprocessor_Hash implements Preprocessor {
 				$count = $piece->count;
 				$equalsLength = strspn( $revText, '=', strlen( $text ) - $searchStart );
 				if ( $equalsLength > 0 ) {
-					if ( $i - $equalsLength == $piece->startPos ) {
+					if ( $searchStart - $equalsLength == $piece->startPos ) {
 						// This is just a single string of equals signs on its own line
 						// Replicate the doHeadings behaviour /={count}(.+)={count}/
 						// First find out how many equals signs there really are (don't stop at 6)
@@ -479,7 +514,6 @@ class Preprocessor_Hash implements Preprocessor {
 
 				# check for maximum matching characters (if there are 5 closing
 				# characters, we will probably need only 3 - depending on the rules)
-				$matchingCount = 0;
 				$rule = $rules[$piece->open];
 				if ( $count > $rule['max'] ) {
 					# The specified maximum exists in the callback array, unless the caller
@@ -526,7 +560,7 @@ class Preprocessor_Hash implements Preprocessor {
 					$titleNode->lastChild = $titleAccum->lastNode;
 					$element->addChild( $titleNode );
 					$argIndex = 1;
-					foreach ( $parts as $partIndex => $part ) {
+					foreach ( $parts as $part ) {
 						if ( isset( $part->eqpos ) ) {
 							// Find equals
 							$lastNode = false;
@@ -644,16 +678,16 @@ class Preprocessor_Hash implements Preprocessor {
 		$rootNode = new PPNode_Hash_Tree( 'root' );
 		$rootNode->firstChild = $stack->rootAccum->firstNode;
 		$rootNode->lastChild = $stack->rootAccum->lastNode;
-		
+
 		// Cache
 		if ($cacheable) {
-			$cacheValue = sprintf( "%08d", self::CACHE_VERSION ) . serialize( $rootNode );;
+			$cacheValue = sprintf( "%08d", self::CACHE_VERSION ) . serialize( $rootNode );
 			$wgMemc->set( $cacheKey, $cacheValue, 86400 );
 			wfProfileOut( __METHOD__.'-cache-miss' );
 			wfProfileOut( __METHOD__.'-cacheable' );
 			wfDebugLog( "Preprocessor", "Saved preprocessor Hash to memcached (key $cacheKey)" );
 		}
-		
+
 		wfProfileOut( __METHOD__ );
 		return $rootNode;
 	}
@@ -786,7 +820,21 @@ class PPDAccum_Hash {
  * @ingroup Parser
  */
 class PPFrame_Hash implements PPFrame {
-	var $preprocessor, $parser, $title;
+
+	/**
+	 * @var Parser
+	 */
+	var $parser;
+
+	/**
+	 * @var Preprocessor
+	 */
+	var $preprocessor;
+
+	/**
+	 * @var Title
+	 */
+	var $title;
 	var $titleCache;
 
 	/**
@@ -804,7 +852,7 @@ class PPFrame_Hash implements PPFrame {
 
 	/**
 	 * Construct a new preprocessor frame.
-	 * @param Preprocessor $preprocessor The parent preprocessor
+	 * @param $preprocessor Preprocessor: the parent preprocessor
 	 */
 	function __construct( $preprocessor ) {
 		$this->preprocessor = $preprocessor;
@@ -826,7 +874,6 @@ class PPFrame_Hash implements PPFrame {
 			$title = $this->title;
 		}
 		if ( $args !== false ) {
-			$xpath = false;
 			if ( $args instanceof PPNode_Hash_Array ) {
 				$args = $args->value;
 			} elseif ( !is_array( $args ) ) {
@@ -889,11 +936,10 @@ class PPFrame_Hash implements PPFrame {
 			return $root;
 		}
 
-		if ( ++$this->parser->mPPNodeCount > $this->parser->mOptions->mMaxPPNodeCount )
-		{
+		if ( ++$this->parser->mPPNodeCount > $this->parser->mOptions->getMaxPPNodeCount() ) {
 			return '<span class="error">Node-count limit exceeded</span>';
 		}
-		if ( $expansionDepth > $this->parser->mOptions->mMaxPPExpandDepth ) {
+		if ( $expansionDepth > $this->parser->mOptions->getMaxPPExpandDepth() ) {
 			return '<span class="error">Expansion depth limit exceeded</span>';
 		}
 		++$expansionDepth;
@@ -949,7 +995,7 @@ class PPFrame_Hash implements PPFrame {
 				if ( $contextNode->name == 'template' ) {
 					# Double-brace expansion
 					$bits = $contextNode->splitTemplate();
-					if ( $flags & self::NO_TEMPLATES ) {
+					if ( $flags & PPFrame::NO_TEMPLATES ) {
 						$newIterator = $this->virtualBracketedImplode( '{{', '|', '}}', $bits['title'], $bits['parts'] );
 					} else {
 						$ret = $this->parser->braceSubstitution( $bits, $this );
@@ -962,7 +1008,7 @@ class PPFrame_Hash implements PPFrame {
 				} elseif ( $contextNode->name == 'tplarg' ) {
 					# Triple-brace expansion
 					$bits = $contextNode->splitTemplate();
-					if ( $flags & self::NO_ARGS ) {
+					if ( $flags & PPFrame::NO_ARGS ) {
 						$newIterator = $this->virtualBracketedImplode( '{{{', '|', '}}}', $bits['title'], $bits['parts'] );
 					} else {
 						$ret = $this->parser->argSubstitution( $bits, $this );
@@ -977,13 +1023,13 @@ class PPFrame_Hash implements PPFrame {
 					# Remove it in HTML, pre+remove and STRIP_COMMENTS modes
 					if ( $this->parser->ot['html']
 						|| ( $this->parser->ot['pre'] && $this->parser->mOptions->getRemoveComments() )
-						|| ( $flags & self::STRIP_COMMENTS ) )
+						|| ( $flags & PPFrame::STRIP_COMMENTS ) )
 					{
 						$out .= '';
 					}
 					# Add a strip marker in PST mode so that pstPass2() can run some old-fashioned regexes on the result
 					# Not in RECOVER_COMMENTS mode (extractSections) though
-					elseif ( $this->parser->ot['wiki'] && ! ( $flags & self::RECOVER_COMMENTS ) ) {
+					elseif ( $this->parser->ot['wiki'] && ! ( $flags & PPFrame::RECOVER_COMMENTS ) ) {
 						$out .= $this->parser->insertStripItem( $contextNode->firstChild->value );
 					}
 					# Recover the literal comment in RECOVER_COMMENTS and pre+no-remove
@@ -995,7 +1041,7 @@ class PPFrame_Hash implements PPFrame {
 					# OT_WIKI will only respect <ignore> in substed templates.
 					# The other output types respect it unless NO_IGNORE is set.
 					# extractSections() sets NO_IGNORE and so never respects it.
-					if ( ( !isset( $this->parent ) && $this->parser->ot['wiki'] ) || ( $flags & self::NO_IGNORE ) ) {
+					if ( ( !isset( $this->parent ) && $this->parser->ot['wiki'] ) || ( $flags & PPFrame::NO_IGNORE ) ) {
 						$out .= $contextNode->firstChild->value;
 					} else {
 						//$out .= '';
@@ -1019,7 +1065,7 @@ class PPFrame_Hash implements PPFrame {
 						$serial = count( $this->parser->mHeadings ) - 1;
 						$marker = "{$this->parser->mUniqPrefix}-h-$serial-" . Parser::MARKER_SUFFIX;
 						$s = substr( $s, 0, $bits['level'] ) . $marker . substr( $s, $bits['level'] );
-						$this->parser->mStripState->general->setPair( $marker, '' );
+						$this->parser->mStripState->addGeneral( $marker, '' );
 						$out .= $s;
 					} else {
 						# Expand in virtual stack
@@ -1198,6 +1244,8 @@ class PPFrame_Hash implements PPFrame {
 
 	/**
 	 * Returns true if the infinite loop check is OK, false if a loop is detected
+	 *
+	 * @param $title Title
 	 */
 	function loopCheck( $title ) {
 		return !isset( $this->loopCheckHash[$title->getPrefixedDBkey()] );
@@ -1220,7 +1268,8 @@ class PPTemplateFrame_Hash extends PPFrame_Hash {
 	var $numberedExpansionCache, $namedExpansionCache;
 
 	function __construct( $preprocessor, $parent = false, $numberedArgs = array(), $namedArgs = array(), $title = false ) {
-		PPFrame_Hash::__construct( $preprocessor );
+		parent::__construct( $preprocessor );
+
 		$this->parent = $parent;
 		$this->numberedArgs = $numberedArgs;
 		$this->namedArgs = $namedArgs;
@@ -1268,7 +1317,7 @@ class PPTemplateFrame_Hash extends PPFrame_Hash {
 		}
 		return $arguments;
 	}
-	
+
 	function getNumberedArguments() {
 		$arguments = array();
 		foreach ( array_keys($this->numberedArgs) as $key ) {
@@ -1276,7 +1325,7 @@ class PPTemplateFrame_Hash extends PPFrame_Hash {
 		}
 		return $arguments;
 	}
-	
+
 	function getNamedArguments() {
 		$arguments = array();
 		foreach ( array_keys($this->namedArgs) as $key ) {
@@ -1291,7 +1340,7 @@ class PPTemplateFrame_Hash extends PPFrame_Hash {
 		}
 		if ( !isset( $this->numberedExpansionCache[$index] ) ) {
 			# No trimming for unnamed arguments
-			$this->numberedExpansionCache[$index] = $this->parent->expand( $this->numberedArgs[$index], self::STRIP_COMMENTS );
+			$this->numberedExpansionCache[$index] = $this->parent->expand( $this->numberedArgs[$index], PPFrame::STRIP_COMMENTS );
 		}
 		return $this->numberedExpansionCache[$index];
 	}
@@ -1303,7 +1352,7 @@ class PPTemplateFrame_Hash extends PPFrame_Hash {
 		if ( !isset( $this->namedExpansionCache[$name] ) ) {
 			# Trim named arguments post-expand, for backwards compatibility
 			$this->namedExpansionCache[$name] = trim(
-				$this->parent->expand( $this->namedArgs[$name], self::STRIP_COMMENTS ) );
+				$this->parent->expand( $this->namedArgs[$name], PPFrame::STRIP_COMMENTS ) );
 		}
 		return $this->namedExpansionCache[$name];
 	}
@@ -1332,7 +1381,7 @@ class PPCustomFrame_Hash extends PPFrame_Hash {
 	var $args;
 
 	function __construct( $preprocessor, $args ) {
-		PPFrame_Hash::__construct( $preprocessor );
+		parent::__construct( $preprocessor );
 		$this->args = $args;
 	}
 

@@ -285,7 +285,7 @@ No labay mon ekalen may bolong diad listaan na babantayan, tapik mo labat so \"e
 'deletedtext'    => 'Abural lay "<nowiki>$1</nowiki>".
 Pinengneng so $2 para ed listaan na saray abural ran balo.',
 'deletedarticle' => 'binural so "[[$1]]"',
-'deletecomment'  => 'Aken buralen',
+'deletecomment'  => 'Katonongan',
 
 # Protect
 'prot_1movedto2'      => 'say [[$1]] enyales paula ed [[$2]]',
@@ -364,9 +364,6 @@ Pinengneng so $2 para ed listaan na saray abural ran balo.',
 
 # Attribution
 'lastmodifiedatby' => 'Sampot ya binalo yan bolong nen agew ya $2, $1 nen $3.',
-
-# Math errors
-'math_unknown_error' => 'aga-antan error',
 
 # Special:NewFiles
 'ilsubmit' => 'Anapen',

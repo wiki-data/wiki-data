@@ -1,11 +1,10 @@
 <?php
-
-/*
+/**
+ *
+ *
  * Created on Feb 4, 2009
  *
- * API for MediaWiki 1.8+
- *
- * Copyright (C) 2009 Roan Kattouw <Firstname>.<Lastname>@home.nl
+ * Copyright © 2009 Roan Kattouw <Firstname>.<Lastname>@gmail.com
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,13 +18,15 @@
  *
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
- * 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  * http://www.gnu.org/copyleft/gpl.html
+ *
+ * @file
  */
 
-if (!defined('MEDIAWIKI')) {
+if ( !defined( 'MEDIAWIKI' ) ) {
 	// Eclipse helper - will be ignored in production
-	require_once ('ApiBase.php');
+	require_once( 'ApiBase.php' );
 }
 
 /**
@@ -35,70 +36,65 @@ if (!defined('MEDIAWIKI')) {
  */
 class ApiImport extends ApiBase {
 
-	public function __construct($main, $action) {
-		parent :: __construct($main, $action);
+	public function __construct( $main, $action ) {
+		parent::__construct( $main, $action );
 	}
 
 	public function execute() {
 		global $wgUser;
-		if(!$wgUser->isAllowed('import'))
-			$this->dieUsageMsg(array('cantimport'));
+
 		$params = $this->extractRequestParams();
-		if(!isset($params['token']))
-			$this->dieUsageMsg(array('missingparam', 'token'));
-		if(!$wgUser->matchEditToken($params['token']))
-			$this->dieUsageMsg(array('sessionfailure'));
 
-		$source = null;
 		$isUpload = false;
-		if(isset($params['interwikisource']))
-		{
-			if(!isset($params['interwikipage']))
-				$this->dieUsageMsg(array('missingparam', 'interwikipage'));
+		if ( isset( $params['interwikisource'] ) ) {
+			if ( !$wgUser->isAllowed( 'import' ) ) {
+				$this->dieUsageMsg( array( 'cantimport' ) );
+			}
+			if ( !isset( $params['interwikipage'] ) ) {
+				$this->dieUsageMsg( array( 'missingparam', 'interwikipage' ) );
+			}
 			$source = ImportStreamSource::newFromInterwiki(
-					$params['interwikisource'],
-					$params['interwikipage'],
-					$params['fullhistory'],
-					$params['templates']);
-		}
-		else
-		{
+				$params['interwikisource'],
+				$params['interwikipage'],
+				$params['fullhistory'],
+				$params['templates']
+			);
+		} else {
 			$isUpload = true;
-			if(!$wgUser->isAllowed('importupload'))
-				$this->dieUsageMsg(array('cantimport-upload'));
-			$source = ImportStreamSource::newFromUpload('xml');
+			if ( !$wgUser->isAllowed( 'importupload' ) ) {
+				$this->dieUsageMsg( array( 'cantimport-upload' ) );
+			}
+			$source = ImportStreamSource::newFromUpload( 'xml' );
 		}
-		if($source instanceof WikiErrorMsg)
-			$this->dieUsageMsg(array_merge(
-				array($source->getMessageKey()),
-				$source->getMessageArgs()));
-		else if(WikiError::isError($source))
-			// This shouldn't happen
-			$this->dieUsageMsg(array('import-unknownerror', $source->getMessage()));
+		if ( !$source->isOK() ) {
+			$this->dieUsageMsg( $source->getErrorsArray() );
+		}
 
-		$importer = new WikiImporter($source);
-		if(isset($params['namespace']))
-			$importer->setTargetNamespace($params['namespace']);
-		$reporter = new ApiImportReporter($importer, $isUpload,
-					$params['interwikisource'],
-					$params['summary']);
+		$importer = new WikiImporter( $source->value );
+		if ( isset( $params['namespace'] ) ) {
+			$importer->setTargetNamespace( $params['namespace'] );
+		}
+		$reporter = new ApiImportReporter(
+			$importer,
+			$isUpload,
+			$params['interwikisource'],
+			$params['summary']
+		);
 
-		$result = $importer->doImport();
-		if($result instanceof WikiXmlError)
-			$this->dieUsageMsg(array('import-xml-error',
-				$result->mLine,
-				$result->mColumn,
-				$result->mByte . $result->mContext,
-				xml_error_string($result->mXmlError)));
-		else if(WikiError::isError($result))
-			// This shouldn't happen
-			$this->dieUsageMsg(array('import-unknownerror', $result->getMessage()));
+		try {
+			$importer->doImport();
+		} catch ( MWException $e ) {
+			$this->dieUsageMsg( array( 'import-unknownerror', $e->getMessage() ) );
+		}
+
 		$resultData = $reporter->getData();
-		$this->getResult()->setIndexedTagName($resultData, 'page');
-		$this->getResult()->addValue(null, $this->getModuleName(), $resultData);
+		$this->getResult()->setIndexedTagName( $resultData, 'page' );
+		$this->getResult()->addValue( null, $this->getModuleName(), $resultData );
 	}
 
-	public function mustBePosted() { return true; }
+	public function mustBePosted() {
+		return true;
+	}
 
 	public function isWriteMode() {
 		return true;
@@ -106,24 +102,24 @@ class ApiImport extends ApiBase {
 
 	public function getAllowedParams() {
 		global $wgImportSources;
-		return array (
+		return array(
 			'token' => null,
 			'summary' => null,
 			'xml' => null,
 			'interwikisource' => array(
-				ApiBase :: PARAM_TYPE => $wgImportSources
+				ApiBase::PARAM_TYPE => $wgImportSources
 			),
 			'interwikipage' => null,
 			'fullhistory' => false,
 			'templates' => false,
 			'namespace' => array(
-				ApiBase :: PARAM_TYPE => 'namespace'
+				ApiBase::PARAM_TYPE => 'namespace'
 			)
 		);
 	}
 
 	public function getParamDescription() {
-		return array (
+		return array(
 			'token' => 'Import token obtained through prop=info',
 			'summary' => 'Import summary',
 			'xml' => 'Uploaded XML file',
@@ -136,20 +132,40 @@ class ApiImport extends ApiBase {
 	}
 
 	public function getDescription() {
-		return array (
-			'Import a page from another wiki, or an XML file'
+		return array(
+			'Import a page from another wiki, or an XML file.' ,
+			'Note that the HTTP POST must be done as a file upload (i.e. using multipart/form-data) when',
+			'sending a file for the "xml" parameter.'
 		);
+	}
+
+	public function getPossibleErrors() {
+		return array_merge( parent::getPossibleErrors(), array(
+			array( 'cantimport' ),
+			array( 'missingparam', 'interwikipage' ),
+			array( 'cantimport-upload' ),
+			array( 'import-unknownerror', 'source' ),
+			array( 'import-unknownerror', 'result' ),
+		) );
+	}
+
+	public function needsToken() {
+		return true;
+	}
+
+	public function getTokenSalt() {
+		return '';
 	}
 
 	protected function getExamples() {
 		return array(
 			'Import [[meta:Help:Parserfunctions]] to namespace 100 with full history:',
-			'  api.php?action=import&interwikisource=meta&interwikipage=Help:ParserFunctions&namespace=100&fullhistory&token=123ABC',
+			'  api.php?action=import&interwikisource=meta&interwikipage=Help:ParserFunctions&namespace=100&fullhistory=&token=123ABC',
 		);
 	}
 
 	public function getVersion() {
-		return __CLASS__ . ': $Id: ApiImport.php 48091 2009-03-06 13:49:44Z catrope $';
+		return __CLASS__ . ': $Id: ApiImport.php 85585 2011-04-06 22:16:38Z brion $';
 	}
 }
 
@@ -160,20 +176,18 @@ class ApiImport extends ApiBase {
 class ApiImportReporter extends ImportReporter {
 	private $mResultArr = array();
 
-	function reportPage($title, $origTitle, $revisionCount, $successCount)
-	{
+	function reportPage( $title, $origTitle, $revisionCount, $successCount, $pageInfo ) {
 		// Add a result entry
 		$r = array();
-		ApiQueryBase::addTitleInfo($r, $title);
-		$r['revisions'] = intval($successCount);
+		ApiQueryBase::addTitleInfo( $r, $title );
+		$r['revisions'] = intval( $successCount );
 		$this->mResultArr[] = $r;
 
 		// Piggyback on the parent to do the logging
-		parent::reportPage($title, $origTitle, $revisionCount, $successCount);
+		parent::reportPage( $title, $origTitle, $revisionCount, $successCount, $pageInfo );
 	}
 
-	function getData()
-	{
+	function getData() {
 		return $this->mResultArr;
 	}
 }

@@ -33,7 +33,7 @@ class LinkCache {
 	/**
 	 * General accessor to get/set whether SELECT FOR UPDATE should be used
 	 */
-	public function forUpdate( $update = NULL ) {
+	public function forUpdate( $update = null ) {
 		return wfSetVar( $this->mForUpdate, $update );
 	}
 
@@ -48,8 +48,8 @@ class LinkCache {
 	/**
 	 * Get a field of a title object from cache.
 	 * If this link is not good, it will return NULL.
-	 * @param Title $title
-	 * @param string $field ('length','redirect')
+	 * @param $title Title
+	 * @param $field String: ('length','redirect','revision')
 	 * @return mixed
 	 */
 	public function getGoodLinkFieldObj( $title, $field ) {
@@ -57,7 +57,7 @@ class LinkCache {
 		if ( array_key_exists( $dbkey, $this->mGoodLinkFields ) ) {
 			return $this->mGoodLinkFields[$dbkey][$field];
 		} else {
-			return NULL;
+			return null;
 		}
 	}
 
@@ -67,17 +67,20 @@ class LinkCache {
 
 	/**
 	 * Add a link for the title to the link cache
-	 * @param int $id
-	 * @param Title $title
-	 * @param int $len
-	 * @param int $redir
+	 *
+	 * @param $id Integer: page's ID
+	 * @param $title Title object
+	 * @param $len Integer: text's length
+	 * @param $redir Integer: whether the page is a redirect
+	 * @param $revision Integer: latest revision's ID
 	 */
-	public function addGoodLinkObj( $id, $title, $len = -1, $redir = NULL ) {
+	public function addGoodLinkObj( $id, $title, $len = -1, $redir = null, $revision = false ) {
 		$dbkey = $title->getPrefixedDbKey();
 		$this->mGoodLinks[$dbkey] = intval( $id );
 		$this->mGoodLinkFields[$dbkey] = array(
 			'length' => intval( $len ),
-			'redirect' => intval( $redir ) );
+			'redirect' => intval( $redir ),
+			'revision' => intval( $revision ) );
 	}
 
 	public function addBadLinkObj( $title ) {
@@ -109,15 +112,14 @@ class LinkCache {
 
 	/**
 	 * Add a title to the link cache, return the page_id or zero if non-existent
+	 *
 	 * @param $title String: title to add
-	 * @param $len int, page size
-	 * @param $redir bool, is redirect?
-	 * @return integer
+	 * @return Integer
 	 */
-	public function addLink( $title, $len = -1, $redir = NULL ) {
+	public function addLink( $title ) {
 		$nt = Title::newFromDBkey( $title );
 		if( $nt ) {
-			return $this->addLinkObj( $nt, $len, $redir );
+			return $this->addLinkObj( $nt );
 		} else {
 			return 0;
 		}
@@ -125,17 +127,16 @@ class LinkCache {
 
 	/**
 	 * Add a title to the link cache, return the page_id or zero if non-existent
-	 * @param $nt Title to add.
-	 * @param $len int, page size
-	 * @param $redir bool, is redirect?
-	 * @return integer
+	 *
+	 * @param $nt Title object to add
+	 * @return Integer
 	 */
-	public function addLinkObj( &$nt, $len = -1, $redirect = NULL ) {
-		global $wgAntiLockFlags, $wgProfiler;
+	public function addLinkObj( $nt ) {
+		global $wgAntiLockFlags;
 		wfProfileIn( __METHOD__ );
 
 		$key = $nt->getPrefixedDBkey();
-		if ( $this->isBadLink( $key ) ) {
+		if ( $this->isBadLink( $key ) || $nt->isExternal() ) {
 			wfProfileOut( __METHOD__ );
 			return 0;
 		}
@@ -149,7 +150,7 @@ class LinkCache {
 			wfProfileOut( __METHOD__ );
 			return 0;
 		}
-		
+
 		# Some fields heavily used for linking...
 		if ( $this->mForUpdate ) {
 			$db = wfGetDB( DB_MASTER );
@@ -163,8 +164,8 @@ class LinkCache {
 			$options = array();
 		}
 
-		$s = $db->selectRow( 'page', 
-			array( 'page_id', 'page_len', 'page_is_redirect' ),
+		$s = $db->selectRow( 'page',
+			array( 'page_id', 'page_len', 'page_is_redirect', 'page_latest' ),
 			array( 'page_namespace' => $nt->getNamespace(), 'page_title' => $nt->getDBkey() ),
 			__METHOD__, $options );
 		# Set fields...
@@ -172,15 +173,18 @@ class LinkCache {
 			$id = intval( $s->page_id );
 			$len = intval( $s->page_len );
 			$redirect = intval( $s->page_is_redirect );
+			$revision = intval( $s->page_latest );
 		} else {
+			$id = 0;
 			$len = -1;
 			$redirect = 0;
+			$revision = 0;
 		}
 
 		if ( $id == 0 ) {
 			$this->addBadLinkObj( $nt );
 		} else {
-			$this->addGoodLinkObj( $id, $nt, $len, $redirect );
+			$this->addGoodLinkObj( $id, $nt, $len, $redirect, $revision );
 		}
 		wfProfileOut( __METHOD__ );
 		return $id;

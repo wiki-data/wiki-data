@@ -66,8 +66,7 @@ $messages = array(
 'tog-editsection'             => "Permette 'e cagnà 'e sezzione cu a jonta [cagna]",
 'tog-editsectiononrightclick' => "Permette 'e cangne 'e sezzione cliccanno p''o tasto destro ncopp 'e titule 'e sezzione (JavaScript)",
 'tog-showtoc'                 => "Mosta ll'innece pe 'e paggene cu cchiù 'e 3 sezzione",
-'tog-rememberpassword'        => "Ricurda 'a registrazzione pe' cchiu sessione",
-'tog-editwidth'               => "Larghezza massima d''a casella pe scrivere",
+'tog-rememberpassword'        => "Ricurda 'a registrazzione pe' cchiu sessione (for a maximum of $1 {{PLURAL:$1|day|days}})",
 
 'underline-always' => 'Sèmpe',
 'underline-never'  => 'Màje',
@@ -144,9 +143,6 @@ $messages = array(
 'qbmyoptions'    => "'E ppaggene mie",
 'qbspecialpages' => 'Pàggene speciàle',
 
-# Metadata in edit box
-'metadata_help' => 'Metadate:',
-
 'errorpagetitle'    => 'Sbaglio',
 'returnto'          => 'Torna a $1.',
 'help'              => 'Ajùto',
@@ -220,12 +216,13 @@ $messages = array(
 'badtitle'        => "'O nnomme nun è jùsto",
 
 # Login and logout pages
-'logouttext'                 => "'''Site asciùte.'''<br />
+'logouttext'                 => "'''Site asciùte.'''
+
 Putite cuntinuà a ausà {{SITENAME}} comme n'utente senza nomme, o si nò putite trasì n'ata vota, cu 'o stesso nomme o cu n'ato nomme.",
 'welcomecreation'            => "== Bemmenuto, $1! ==
 
 'O cunto è stato criato currettamente.  Nun scurdà 'e perzonalizzà 'e ppreferenze 'e {{SITENAME}}.",
-'remembermypassword'         => 'Allicuordate d"a password',
+'remembermypassword'         => 'Allicuordate d"a password (for a maximum of $1 {{PLURAL:$1|day|days}})',
 'yourdomainname'             => "Spiecà 'o dumminio",
 'login'                      => 'Tràse',
 'userlogin'                  => "Tràse o cria n'acciesso nuovo",
@@ -276,9 +273,8 @@ Putite cuntinuà a ausà {{SITENAME}} comme n'utente senza nomme, o si nò putit
 'rev-delundel' => 'faje vedé/annascunne',
 
 # Search results
-'searchresults'    => 'Risultato d&#39;&#39;a recerca',
+'searchresults'    => "Risultato d''a recerca",
 'searchresulttext' => "Pe sapé de cchiù ncopp'â comme ascia 'a {{SITENAME}}, vere [[{{MediaWiki:Helppage}}|Ricerca in {{SITENAME}}]].",
-'noexactmatch'     => "''''A paggena \"\$1\" nun asiste.''' Se pô [[:\$1|criala mmo]].",
 'notitlematches'   => "Voce addemannata nun truvata dint' 'e titule 'e articulo",
 'notextmatches'    => "Voce addemannata nun truvata dint' 'e teste 'e articulo",
 'searchhelp-url'   => 'Help:Ajùto',
@@ -352,11 +348,13 @@ Putite cuntinuà a ausà {{SITENAME}} comme n'utente senza nomme, o si nò putit
 # Special:AllPages
 'allpages'       => "Tutte 'e ppaggene",
 'allarticles'    => "Tutt' 'e vvoce",
-'allinnamespace' => "Tutt' 'e ppaggene d&#39;&#39;o namespace $1",
+'allinnamespace' => "Tutt' 'e ppaggene d''o namespace $1",
 
 # Special:Categories
 'categories'         => 'Categurìe',
-'categoriespagetext' => "Lista cumpleta d\"e categurie presente ncopp' 'o sito.",
+'categoriespagetext' => "Lista cumpleta d\"e categurie presente ncopp' 'o sito.
+[[Special:UnusedCategories|Unused categories]] are not shown here.
+Also see [[Special:WantedCategories|wanted categories]].",
 
 # Special:LinkSearch
 'linksearch-ok' => 'Truova',
@@ -380,7 +378,7 @@ Putite cuntinuà a ausà {{SITENAME}} comme n'utente senza nomme, o si nò putit
 'deletedarticle'  => 'ha scancellato "[[$1]]"',
 'dellogpage'      => 'Scancellazione',
 'deletionlog'     => 'Log d"e scancellazione',
-'deletecomment'   => 'Mutivo d"a scancellazione',
+'deletecomment'   => 'Raggióne',
 
 # Rollback
 'rollback'   => "Ausa na revizione 'e primma",
@@ -412,11 +410,10 @@ Putite cuntinuà a ausà {{SITENAME}} comme n'utente senza nomme, o si nò putit
 'ipadressorusername' => 'Nnerizzo IP o nomme utente',
 'ipboptions'         => '2 ore:2 hours,1 juorno:1 day,3 juorne:3 days,1 semmana:1 week,2 semmane:2 weeks,1 mise:1 month,3 mese:3 months,6 mese:6 months,1 anno:1 year,infinito:infinite',
 'blockipsuccesssub'  => 'Blocco aseguito',
-'blocklistline'      => '$1, $2 ha fermato $3 ($4)',
 'blocklink'          => 'ferma',
 'blocklogpage'       => 'Blocche',
 'blocklogentry'      => 'ha fermato "[[$1]]" pe\' nu mumento \'e $2 $3',
-'blocklogtext'       => "Chesta è 'a lista d&#39;&#39;e azzione 'e blocco e sblocco utente.  'E nnerizze IP bloccate automaticamente nun nce so'. Addumannà 'a [[Special:IPBlockList|lista IP bloccate]] pp' 'a lista d&#39;&#39;e nnerizze e nomme utente 'o ca blocco nce sta.",
+'blocklogtext'       => "Chesta è 'a lista d''e azzione 'e blocco e sblocco utente.  'E nnerizze IP bloccate automaticamente nun nce so'. Addumannà 'a [[Special:IPBlockList|lista IP bloccate]] pp' 'a lista d''e nnerizze e nomme utente 'o ca blocco nce sta.",
 
 # Move page
 'movearticle'             => "Spusta 'a paggena",

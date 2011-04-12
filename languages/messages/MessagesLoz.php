@@ -22,8 +22,7 @@ $messages = array(
 'tog-showtoolbar'          => "Kamukile hloli ye ng'i toolbar (bulukezi JavaScript)",
 'tog-editondblclick'       => "Hloli ye ng'i petulo di 'klik' dubo (JavaScript)",
 'tog-editsection'          => "Nyembulisize [hloli ye ng'i] di akes di lyangutukezi ling'ki",
-'tog-rememberpassword'     => 'Askevusize zwa menuhile kwa bye kompyuta.',
-'tog-editwidth'            => "Boksi di hloli ye ng'i sa omipeti",
+'tog-rememberpassword'     => 'Askevusize zwa menuhile kwa bye kompyuta (for a maximum of $1 {{PLURAL:$1|day|days}})',
 'tog-watchcreations'       => 'Pusize petulo a hloli di zwa mukoloko di kentezi',
 'tog-watchdefault'         => "Pusize petulo a hloli ye ng'i di zwa mukoloko di kentezi",
 'tog-watchmoves'           => 'Pusize petulo a nyanganyisoze di zwa mukoloko di kentezi',
@@ -131,9 +130,6 @@ $messages = array(
 'qbspecialpages' => 'Petulo zwenti',
 'faq'            => 'Alabile',
 'faqpage'        => 'Project:Alabile',
-
-# Metadata in edit box
-'metadata_help' => 'Meta ngesi:',
 
 'errorpagetitle'    => 'Bufosi',
 'returnto'          => 'Kutezi $1.',
@@ -281,7 +277,7 @@ Query: $2",
 'yourname'                => 'Sebelu:',
 'yourpassword'            => 'Sebu dafi:',
 'yourpasswordagain'       => 'Ritapi sebu dafi:',
-'remembermypassword'      => 'Askevusize zwa menuhile kwa bye kompyuta.',
+'remembermypassword'      => 'Askevusize zwa menuhile kwa bye kompyuta (for a maximum of $1 {{PLURAL:$1|day|days}})',
 'yourdomainname'          => 'Zwa domeni:',
 'login'                   => 'Menuhile',
 'nav-login-createaccount' => 'Menuhile / ipupezi sebelu',
@@ -343,8 +339,6 @@ Sa ku bye fatukile zwa sebu dafi e a ni petuho, ni petuho e mulumiwasibukirisize
 'extlink_tip'     => "Ling'ko bulili out (¡con http://!)",
 'headline_sample' => 'Selt di pagafi',
 'headline_tip'    => 'Pagafi (2)',
-'math_sample'     => 'Sebu di fomula',
-'math_tip'        => 'Fomula di mat (LaTeX)',
 'nowiki_sample'   => "Sebu di 'ni-Wikicode' apukisize",
 'nowiki_tip'      => "'Ni Wiki-code' apukisize",
 'image_sample'    => 'Kamukile.jpg',
@@ -368,7 +362,7 @@ Sa ku bye fatukile zwa sebu dafi e a ni petuho, ni petuho e mulumiwasibukirisize
 Zwa adresi di IP sa bulukezi kwa kenki bundau di petulo.",
 'summary-preview'            => 'Lyangutukezi pendiBe:',
 'blockedtitle'               => 'Sebelu sa bolok',
-'blockedtext'                => "<big>'''Zwa sebelu/IP sa bolok.'''</big>
+'blockedtext'                => "'''Zwa sebelu/IP sa bolok.'''
 
 $1 bolok a. Lyangutukezireason sa ''$2''.
 
@@ -402,8 +396,6 @@ A sa nca di bufosi, tampi '''back'''.",
 'copyrightwarning'           => "Xete kenki di {{SITENAME}} sa rilisi kwa $2 (fatukile $1 di pagu). A ni tokwezi zwa selt sa kenki a ridistributi kwa tokwi, ni bulukezi.<br />
 A sumekezi zwa selt sa dya, a kopisize di publiki domeni, a ike risorsi.
 '''NI BULUKEZI SELT KOPINITUMELELO E NI TUMELELO!'''",
-'longpagewarning'            => "'''AGTU: Bye petulo sa $1 kilobytes; browser sa di bufosikaku hloli ye ng'i petulo plusu di 32 kilobytes.
-Konsidisize takubikinalisize.'''",
 'templatesused'              => 'Yegani sebelize di bye petulo:',
 'templatesusedpreview'       => 'Yegani sebelize kwa bye PendiBe:',
 'template-protected'         => '(sa bukelezi)',
@@ -463,7 +455,6 @@ Informasi: (bye) = petuho a nca selt,
 'searchresults'         => 'Fatukile kamukile',
 'searchsubtitle'        => "A fatukile di '''[[:$1]]'''",
 'searchsubtitleinvalid' => "A fatukile di '''$1'''",
-'noexactmatch'          => "'''Petulo di sebu \"\$1\" ni sa.''' A sa [[:\$1|hloli petulo]].",
 'titlematches'          => 'Sebu di petulo ekali',
 'notitlematches'        => 'Ni sebu di petulo ekali',
 'textmatches'           => 'Selt di petulo ekali',
@@ -487,7 +478,6 @@ Informasi: (bye) = petuho a nca selt,
 'prefsnologin'              => 'Ni menuhile',
 'prefs-skin'                => 'PendiBe',
 'skin-preview'              => 'PendiBe',
-'prefs-math'                => 'Mat',
 'datedefault'               => 'Ni di petohoni di sebelu',
 'prefs-datetime'            => 'Data',
 'prefs-rc'                  => 'Petuho nca',
@@ -733,7 +723,6 @@ dicon sa sosize ni sa meli di kupo sebelu.',
 # Watchlist
 'watchlist'         => 'Zwa mukoloko di kentezi',
 'mywatchlist'       => 'Zwa mukoloko di kentezi',
-'watchlistfor'      => "(di '''$1''')",
 'watchnologin'      => 'A ni sa menuhile',
 'watchnologintext'  => "A sa [[Special:UserLogin|menuhile]] di hloli ye ng'i zwa mukoloko di kentezi.",
 'addedwatch'        => 'Tumbelize a mukoloko di kentezi',
@@ -793,7 +782,6 @@ A sa afi kulobala di zwa mukoloko di kentezi, tampi \"ngambu kentezi\".",
 'protectexpiry'               => 'Simpekile:',
 'protect_expiry_invalid'      => 'Bufosi di simpekile.',
 'protect_expiry_old'          => 'Simpekile sa kwa bundau.',
-'protect-unchain'             => 'Petuho nyanganyisize tumelelo',
 'protect-text'                => "A sa kamukile e hloli bukelezi di petulo '''<nowiki>$1</nowiki>'''.",
 'protect-locked-access'       => "Zwa sebelu ni sa hloli bukelezi.
 Petohoni di petulo '''$1''' sa:",
@@ -866,7 +854,6 @@ Petohoni di petulo '''$1''' sa:",
 
 # Block/unblock
 'blockip'            => 'Bolok sebelu',
-'ipaddress'          => 'IP:',
 'ipadressorusername' => 'IP/sebelu:',
 'ipboptions'         => '2 ora:2 hours,1 dia:1 day,3 dia:3 days,1 wiki:1 week,2 wiki:2 weeks,1 muna:1 month,3 muna:3 months,6 muna:6 months,1 anu:1 year,di simuluzi:infinite',
 'badipaddress'       => 'IP ni sa',
@@ -892,7 +879,7 @@ Petulo sa '''no''' nyanganyisize di nca nom e nca nom sa xete, xete a sa petulo 
 Petulo populari sa drastiki bufosi e nyanganyisize;
 a sa gukilize di nyanganyisize.",
 'movepagetalktext' => "Bulelezi sa nyanganyisize '''teri:'''
-*Bulelezi e selt sa kwa nca nom, 
+*Bulelezi e selt sa kwa nca nom,
 *Okižekilize sisebelisoni.
 
 Teri yaki, a nyanganyisize.",
@@ -1015,12 +1002,11 @@ $1',
 'nextdiff'     => 'Lila petuho →',
 
 # Media information
-'widthheightpage'      => '$1×$2, $3 petulo',
-'file-info-size'       => '($1 × $2 pixel, imegi: $3, MIME type: $4)',
-'file-nohires'         => '<small>A sa risolusi aku balise.</small>',
-'svg-long-desc'        => '(SVG imegi, nominali $1 × $2 pixel, imega: $3)',
-'show-big-image'       => 'Risolusi bakisize',
-'show-big-image-thumb' => '<small>PendiBe: $1 × $2 pixel</small>',
+'widthheightpage' => '$1×$2, $3 petulo',
+'file-info-size'  => '$1 × $2 pixel, imegi: $3, MIME type: $4',
+'file-nohires'    => '<small>A sa risolusi aku balise.</small>',
+'svg-long-desc'   => 'SVG imegi, nominali $1 × $2 pixel, imega: $3',
+'show-big-image'  => 'Risolusi bakisize',
 
 # Special:NewFiles
 'newimages'             => 'Imegina nca',
