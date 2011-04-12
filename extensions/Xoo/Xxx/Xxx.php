@@ -9,6 +9,6 @@ define ('XXX_LOADED', true);
 #require_once('SpecialMyAccount/SpecialMyAccount.php');
 require_once('XxxExtension.php');
 #require_once ('DomCache.php');
-#require_once ('CustomSkin.php');
+require_once ('CustomSkin.php');
 #require_once ('EditForms.php');
 

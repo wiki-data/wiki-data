@@ -7,7 +7,6 @@ if (defined('XVV_LOADED')) return;
 define ('XVV_LOADED', true);
 
 XxxInstaller::Install('Xvv');
-require_once (dirname(__FILE__).'/Expression.php');
 require_once (dirname(__FILE__).'/CGI.php');
 #
 #  Xvv - Xoo Various Variables
@@ -172,7 +171,7 @@ class Xvv extends Xxx
     
     var $wgBlockAdserver = true;
   
- 	function fl_adserver(&$parser, &$f, $a)
+ 	function fl_adserver(&$parser, $f, $a)
 	{   
 	    #return(array('0'=>'R E K L A M A'));
 	
@@ -197,7 +196,7 @@ class Xvv extends Xxx
 	{
 		$args=new XxxArgs(&$f,&$a);
 		$currentId = 'vars';
-		$varPathParts = split('#',$args->command);
+		$varPathParts = explode('#',$args->command);
 		$lastKey=array_pop($varPathParts);
 	
 		$found = true;
@@ -229,12 +228,12 @@ class Xvv extends Xxx
 		}
 	}
 
- 	function fl_var(&$parser, &$f, &$a)
+ 	function fl_var(&$parser, $f, $a)
 	{
 		$args=new XxxArgs($f, $a);
 
 
-		$varPathParts = split('#',$args->trimExpand(1));
+		$varPathParts = explode('#',$args->trimExpand(1));
 		
 
 		switch ($args->command)
@@ -249,7 +248,7 @@ class Xvv extends Xxx
 					if (!$args->isNamed($i)) return $this->notFound();
 					
 					$currentId = 'vars';
-					$varPathParts = split('#',$args->getName($i));
+					$varPathParts = explode('#',$args->getName($i));
 					$lastKey=array_pop($varPathParts);
 			
 					foreach($varPathParts as $v)
@@ -272,7 +271,7 @@ class Xvv extends Xxx
 			 else
 			 {
 				$currentId = 'vars';
-				$varPathParts = split('#',$args->trimExpand(1));
+				$varPathParts = explode('#',$args->trimExpand(1));
 				$lastKey=array_pop($varPathParts);
 				
 				$found = true;
@@ -534,19 +533,80 @@ class Xvv extends Xxx
 		}
 	}
 
+function fl_prop (&$P, $F, $A)
+	{
+		$args=new XxxArgs($F, $A);
+		switch ($args->command)	
+		{
+		case 'set':
+			if ($args->count != 2 ) return $this->notFound();
+			$prop = $args->trimExpand(1);
+			$value = $args->trimExpand(2);
+			$P->mOutput->setProperty($prop,$value);
+			$P->mOutput->setProperty("{$prop}__StripState__",serialize($P->mStripState));
+			return "";
+		case 'get':	
+			if ($args->count < 2 || $args->count > 3) return $this->notFound();
+			$t = $args->trimExpand(1);
+			$title=Title::newFromText($t);
+			if(!$title) return $this->notFound();
+			$article=new Article($title);
+			$pid=$article->getId();
+			if($pid==0) return $this->notFound();
+			if($title->isRedirect()) {
+				$title = $article->followRedirect();
+				$article=new Article($title);
+				$pid=$article->getId();
+				if($pid==0) return $this->notFound();						
+			}
+			$prop = $args->trimExpand(2);
+			
+			$dbr = wfGetDB( DB_SLAVE );
+			$res = $dbr->select( array('page_props' ),
+				array( 'pp_value' ),
+				array( 'pp_propname' => $prop, 'pp_page' => $pid),
+				__METHOD__ );
+			if( $res === false ) return $args->count>2 ? $args->cropExpand(3) : $this->notFound();
+			foreach( $res as $row ) {
+				$val=$row->pp_value;
+			}
+			
+			$dbr = wfGetDB( DB_SLAVE );
+			$res = $dbr->select( array('page_props' ),
+				array( 'pp_value' ),
+				array( 'pp_propname' => "{$prop}__StripState__", 'pp_page' => $pid),
+				__METHOD__ );
+			if( $res === false ) return $args->count>2 ? $args->cropExpand(3) : $this->notFound();
+			foreach( $res as $row ) {
+				$stripState=unserialize($row->pp_value);
+			}
+			if (is_array($stripState->nowiki->data)) {
+				foreach($stripState->nowiki->data as $k=>$v) {
+					$P->mStripState->nowiki->setPair($k,$v);
+				}
+			}
+			if (is_array($stripState->general->data)) {
+				foreach($stripState->general->data as $k=>$v) {
+					$P->mStripState->general->setPair($k,$v);
+				}
+			}
+			return $val;
+		}
+		return $this->notFound();
+	}
 ############################
 #
 #	{{#arr:...}}
 #
 ############################
 
- 	function fl_array(&$parser, &$f, $a)
+ 	function fl_array(&$parser, $f, $a)
  	{
  		return $this->fl_arr($parser,$f,$a);
  	}
 	
 
- 	function fl_arr(&$parser, &$f, $a)
+ 	function fl_arr(&$parser, $f, $a)
 	{
 		$args=new XxxArgs($f, $a);
 		
@@ -567,7 +627,7 @@ class Xvv extends Xxx
 			return array('0'=>$id);
 			
 		case 'count':
-			if ($args->count!=1 ) return array('found'=>false);
+			//if ($args->count!=1 ) return array('found'=>false);
 
 			$id  = $args->trimExpand(1);
 			if (!$this->arrExists($id)) return 0;
@@ -1182,7 +1242,7 @@ class Xvv extends Xxx
 		}
 	}
 	
-	function fl_parent(&$parser, &$frame, &$a)
+	function fl_parent(&$parser, $frame, $a)
 	{
 		if (count($a)<2) return $this->notFound();
 		$parentCount = $a[0];
@@ -1190,10 +1250,10 @@ class Xvv extends Xxx
 		if ($parentCount<0) return $this->notFound();
 		array_shift($a);array_shift($a);
 		array_unshift($a,$command);
-		return $this->fl_this(&$parser, &$frame, &$a, $parentCount);
+		return $this->fl_this(&$parser, $frame, $a, $parentCount);
 	}
 	
-	function fl_this(&$parser, &$frame, &$a, $parentCount=0)
+	function fl_this(&$parser, $frame, $a, $parentCount=0)
 	{
 		$args=new XxxArgs($frame, $a);
 		$f =& $frame;
@@ -1279,7 +1339,7 @@ class Xvv extends Xxx
 			$id = $this->arrMake($p);
 			return array('0'=>$id);
 		
-		# {{#this:args}}				
+		# {{#this:numberedargs}}				
 		case 'numberedargs':
 			if ($args->count != $base+0) return array('found'=>false);
 			if (!$f->parent) return array('found'=>false);

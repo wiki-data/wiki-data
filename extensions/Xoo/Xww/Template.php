@@ -21,7 +21,7 @@ class XwwTemplate extends Xxx
 		"evalhtmlanywhere"	=> false, 		# will be added to the wikibase name, if no dbname is provided
 	);
 
-	function fl_eval(&$parser,&$frame,&$fnArgs)
+	function fl_eval(&$parser,$frame,$fnArgs)
 	{
 /*echo "<pre>frame template: ";
 print_r($frame->getArguments());
@@ -111,18 +111,19 @@ echo "</pre>";
 			$customFrame = $this->newExtendedFrame($frame,$frameArgs,$title);
 		    return $customFrame->expand($dom);
 		case 'html':
-			if (!$this->S('evalhtml')) return $this->notFound();
-			if (!$this->S('evalhtmlanywhere') && $frame->title->getNamespace()!=NS_MEDIAWIKI) return $this->notFound();
+			#if (!$this->S('evalhtml')) return $this->notFound();
+			global $wgAllowEvalHtmlIn;
+			if (!isset($wgAllowEvalHtmlIn[$frame->title->getNamespace()])) return $this->notFound();
 			$ret=array();
 			for ($i=1;$i<=$args->count;$i++)
 			{
 				$ret[] = $args->expand($i);
 			}
-			$ret = join('|',$ret);
-#			$ret =str_replace('&','<',$ret);
-#			$ret = htmlspecialchars_decode($ret);
+			$ret = join('',$ret);
+			$ret = htmlspecialchars_decode($ret);
+			$ret =str_replace('&amp;','&',$ret);
 #			$ret = $args->cropExpand(1);
-			return array($ret,'isHTML'=>true,'noparse'=>true);
+			return array($ret,'isHTML'=>true,'noparse'=>false);
 
 		case 'expand':
 			#$lastArg=array_pop($args);
@@ -199,13 +200,13 @@ echo "</pre>";
 		}
 	}
 
-	function fl_template(&$parser,&$frame,&$inArgs)
+	function fl_template(&$parser,$frame,$inArgs)
 	{
 		$args=new XxxArgs($frame,$inArgs);
 		return $this->frameFunctions($args->command,$frame,$args->trimExpand(1,false));
 	}
 	
-	function fl_caller(&$parser,&$frame,&$inArgs)
+	function fl_caller(&$parser,$frame,$inArgs)
 	{
 		$args=new XxxArgs($frame,$inArgs);
 		$which = $args->trimExpand(1,1);
@@ -217,7 +218,33 @@ echo "</pre>";
 		}
 		if ($i<$which) return $this->notFound();
 		return $this->frameFunctions($args->command,$callerFrame,$args->trimExpand(2,false));
-	}		
+	}	
+	
+	function hook_ShowMissingArticle ($a) {
+		global $wgOut,$wgNamespacesWithSubpages;
+		$t = Title::newFromText($a->mTitle->getPrefixedText());
+		$ns = $t->getNamespace();
+		if (!$t->isSubpage()) return true;
+		$parts = explode( '/', $t->getText());
+		$args = array();
+		$suffix = '';
+		while (count ($parts)>1) {
+		   array_unshift($args,array_pop($parts));
+		   $suffix .= "";
+		   $title = Title::newFromText(implode('/',$parts).$suffix,$ns);
+		   if(!$title->exists()) continue;
+		   
+		   $text = '{{:' . $title->getPrefixedText();
+		   foreach ($args as $k=>$v) {
+		      $text.= '|'.($k+1) . "=" . preg_replace('/{/','&#123;',$v);
+		      $text.= '|sub'.($k+1) . "=" . preg_replace('/{/','&#123;',$v);
+		   }
+		   $text.="}}";
+			$wgOut->addWikiText($text);
+			return false;
+		}	
+		return true;
+	}	
 }	
 
 //####### Used Hooks ######################
@@ -247,7 +274,7 @@ function efXwwShow(&$editPage)
 	return true;
 }
 
-function efXwwSave(&$editPage) 
+function efXwwSave($editPage) 
 {
 	global $wgRequest, $wgOut;
 	if ($editPage->mTitle->mArticleID==0) return true;

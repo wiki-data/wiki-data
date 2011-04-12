@@ -15,7 +15,7 @@ XxxInstaller::Install('XwwImage');
 
 class XwwImage extends Xxx
 {	
-	function fl_image(&$parser,&$f,&$a)
+	function fl_image(&$parser,$f,$a)
 	{
 		return $this->fl_img($parser,$f,$a);
 	}
@@ -117,7 +117,7 @@ class XwwImage extends Xxx
 		}		
 	}
 	
-	function fl_img(&$parser,&$f,&$a)
+	function fl_img(&$parser,$f,$a)
 	{
 		global $wgSharpenParameter;
 	    $args=new XxxArgs($f,$a);
@@ -411,7 +411,7 @@ class XwwImage extends Xxx
 	}
 
 
-	function fl_svg(&$parser,&$f,&$a)
+	function fl_svg(&$parser,$f,$a)
 	{
 		global $wgUploadPath, $wgUploadDirectory, $wgImageMagickConvertCommand;
 	    $args=new XxxArgs($f,$a);

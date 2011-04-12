@@ -198,7 +198,7 @@ print("ee".$zone_id."<br>");
 		$args=new XxxArgs($f, $a);
 
 
-		$varPathParts = split('#',$args->trimExpand(1));
+		$varPathParts = explode('#',$args->trimExpand(1));
 		
 
 		switch ($args->command)
@@ -957,7 +957,7 @@ function fl_arg(&$parser,&$f,&$a)
 	{
 		$args=new XxxArgs($f,$a);
 		return 'a';
-		$parts = split('=',$args->command,2);
+		$parts = explode('=',$args->command,2);
 		if (count($parts)==2)
 		{
 			$f->xvvLocalVariables[trim($parts[0])]=$parts[1];

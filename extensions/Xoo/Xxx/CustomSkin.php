@@ -100,7 +100,7 @@ class XxxCustomSkin extends Xxx
 	var $skinParsing=false;
 	var $skinArgs=array();
 	
-	function fl_skin(&$parser,&$frame,&$args)
+	function fl_skin(&$parser,$frame,$args)
 	{
 		$command = strtoupper($args[0]);
 		if(!$this->skinParsing) return $this->notFound();
@@ -115,7 +115,7 @@ class XxxCustomSkin extends Xxx
 #		die (htmlspecialchars($this->extraHeadText));
 	}
 
-	function hook_UnknownAction($action,&$article)
+	function hook_UnknownAction($action,$article)
 	{
 		global $wgOut;
 		if ($action=='src')
@@ -196,14 +196,16 @@ class XxxCustomSkin extends Xxx
 					case '/title':
 						$out .="</span>";
 						break;
-					case 'name/':
-						if ($tagStack[count($tagStack)-2]=='tplarg') $out.="|<span class=\"wiki-$tag\"></span>";
-						else $out .="\n" . str_repeat ("\t",$depth) . "|\t<span class=\"wiki-$tag\"></span>";
+					case 'part':
+						if ($tagStack[count($tagStack)-2]=='tplarg') $out.="|";
+						else $out .="\n" . str_repeat ("\t",$depth) . "|";
 						break;
+					case 'name/':
+					   break;
 					case 'name':
-						if ($tagStack[count($tagStack)-2]=='tplarg') $out.="|<span class=\"wiki-$tag\">";
-						elseif (strlen($value)>32 or preg_match('/&lt;/',$value)) $out.="\t<span class=\"wiki-value\">";
-						else $out .="\n" . str_repeat ("\t",$depth) . "|\t<span class=\"wiki-$tag\">";
+						if ($tagStack[count($tagStack)-2]=='tplarg') $out.="<span class=\"wiki-$tag\">";
+						elseif (strlen($value)>32 or preg_match('/&lt;/',$value)) $out.="<span class=\"wiki-value\">";
+						else $out .="<span class=\"wiki-$tag\">";
 						break;
 					case '/name':
 						$out .="</span>";
@@ -215,9 +217,11 @@ class XxxCustomSkin extends Xxx
 						$out .="</span>";
 						break;
 					case 'value/':
+					   break;
 						$out .="<span class=\"wiki-value\"></span>";
 						break;
 					}
+					
 					break;
 				case 'prettycode':
 				default:
@@ -263,7 +267,12 @@ class XxxCustomSkin extends Xxx
 				}
 			};
 			$out.=trim($text);
+         $out = preg_replace('/\|\t/','| ',$out);
+         $out = preg_replace('/\t/','  ',$out);
+
 			$wgOut->addHTML("$out");
+ 			
+			
 			return false;
 		}
 		return true;
@@ -274,105 +283,9 @@ class XxxCustomSkin extends Xxx
 	{
 		global $wgXxxCustomSkin;
 		global $wgMessageCache;
-		$wgMessageCache->addMessage($this->S('default'),'
-{{#eval:html|<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" lang="{{{LANG}}}" dir="{{{DIR}}}">
-	<head>
-		<meta http-equiv="Content-Type" content="{{{MIMETYPE}}}; charset={{{CHARSET}}}"/>
-		{{{EXTRAHEAD|<!-- -->}}}
-		{{{HEADLINKS|<!-- -->}}}
-		<meta http-equiv="imagetoolbar" content="no" />
-		{{{VARSCRIPT|<!-- -->}}}
-		<script type="{{{JSMIMETYPE}}}" src="{{{STYLEPATH}}}/common/wikibits.js"><!-- wikibits js --></script>
-		<link rel="stylesheet" type="text/css" href="{{{STYLEPATH}}}/monobook/main.css">
-		{{#if:{{{JSVARURL|}}}
-		| <script type="{{{JSMIMETYPE}}}" src="{{{JSVARURL}}}"></script>
-		|<!-- -->}}
-		{{#if:{{{PAGECSS|}}}
-		| <style type="text/css">{{{PAGECSS}}}</style>
-		|<!-- -->}}
-		{{#if:{{{USERCSS|}}}
-		| <style type="text/css">{{{USERCSS}}}</style>
-		|<!-- -->}}
-		{{#if:{{{USERJS|}}}
-		| <script type="{{{JSMIMETYPE}}}" src="{{{USERJS}}}"><!-- user js --></script>
-		|<!-- -->}}
-		{{#if:{{{USERJSPREV|}}}
-		| <script type="{{{JSMIMETYPE}}}" src="{{{USERJSPREV}}}"><!-- user js prev --></script>
-		|<!-- -->}}
-		{{{TRACKBACKHTML|}}}
-		{{#if:{{{USERJSPREV|}}}
-		| <script type="{{{JSMIMETYPE}}}" src="{{{USERJSPREV}}}"><!-- user js prev --></script>
-		|<!-- -->}}
-		{{{HEADSCRIPTS|<!-- -->}}}
-		<title>
-			{{{TITLE}}}<!-- {{FULLPAGENAME}} -->
-		</title>
-	</head>
-	<body
-	{{#if:{{{ONDBLCLICK|}}}
-	| ondblclick="{{{ONDBLCLICK}}}"
-	|<!-- -->}}
-	{{#if:{{{ONLOAD|}}}
-	| onload="{{{ONLOAD}}}"
-	|<!-- -->}}
-	class="{{{NSCLASS|}}} {{{DIR|}}} {{{PAGECLASS|}}}"
-	>
-		<a name="top" id="top"></a>
-		<div id="globalWrapper">
-			<div id="column-content">
-				<div id="content">
-					{{#if:{{{SITENOTICE|}}}
-					|<div id="siteNotice">{{{SITENOTICE}}}</div>
-					|<!- -->}}
-					<h1 class="firstHeading">{{{TITLE}}}</h1>
-						<div id="bodyContent">
-					<h3 id="siteSub">{{{TAGLINE}}}</h3>
-					<div id="contentSub">{{{SUBTITLE}}}</div>
-					{{{INFO}}}
-					}}{{{CONTENT}}}{{#eval:html|
-					{{#if:{{{CATLINKS|}}}
-					|<div id="catlinks">{{{CATLINKS}}}</div>
-					|<!- -->}}
-					<div class="visualClear"></div>
-				</div>
-			</div>
-		</div>
-		<div id="column-one">
-			{{{SITELOGO}}}
-			<div id="p-cactions" class="portlet">
-				<h5>Views</h5>
-				<ul>{{{ACTIONS}}}</ul>
-			</div>
-			<div class="portlet" id="p-personal">
-				<h5>Personal tools</h5>
-				<div class="pBody">
-					<ul>{{{PERSONAL}}}</ul>
-				</div>
-			</div>
-			{{{SIDEBAR}}}
-			<div class="portlet" id="p-tb">
-				<h5>{{int:toolbox}}</h5>
-				<div class="pBody">
-					<ul>{{{TOOLBOX}}}</ul>
-				</div>
-			</div>
-			{{{SEARCH}}}
-			{{#if:{{{LANGLINKS|}}}
-			|<div class="portlet" id="p-lang">
-				<h5>{{int:otherlanguages}}</h5>
-				<div class="pBody">
-					<ul>{{{LANGLINKS}}}</ul>
-				</div>
-			</div>
-			|<!-- -->}}
-		</div>
-		<div class="visualClear"></div>
-		<script type="text/javascript"> if (window.runOnloadHook) runOnloadHook();</script>
-		{{{REPORTTIME}}}
-	</body>
-</html>}}
-');
+		global $wgExtensionMessagesFiles; 
+		$wgExtensionMessagesFiles['CustomSkin'] = dirname(__FILE__) . '/CustomSkinMessages.php';
+
 		$wgXxxCustomSkin = $this;
 		wfXxxCustomSkinDeclare();
 		$this->applyCustomSkin();
@@ -395,146 +308,7 @@ function wfXxxCustomSkinDeclare()
 			$this->stylename = $wgXxxCustomSkin->getStyleName();
 			$this->template  = 'CustomSkinTemplate';
 		}
-/*
-	var $brokenLinkObjDOM = null;
-	function _makeBrokenLinkObj( $nt, $text = '', $query = '', $trail = '', $prefix = '' ) 
-	{
-		# Fail gracefully
-		if ( ! isset($nt) ) {
-			# throw new MWException();
-			return "<!-- ERROR -->{$prefix}{$text}{$trail}";
-		}
-
-		$fname = 'CustomSkin::makeBrokenLinkObj';
-		wfProfileIn( $fname );
-
-		global $wgOut, $wgParser,$wgMessageCache;
-
-		if (!$wgMessageCache->getMsgFromNamespace('Custom-link-broken') || !is_object($wgParser->mStripState))
-		{
-			$linkHTML = Skin::makeBrokenLinkObj($nt,$text,$query,$trail,$prefix);
-		}
-		else
-		{
-
-			if ( '' == $text ) {
-				$text = $nt->getPrefixedText();
-			}
-			$style = $this->getInternalLinkAttributesObj( $nt, $text, "yes" );
-			list( $inside, $trail ) = Linker::splitTrail( $trail );
-		   $t=$nt->getPrefixedText();
-
-
-			if (!$this->brokenLinkObjDOM)
-			{
-				$messageText = wfMsgGetKey( 'custom-link-broken', true, true, false );
-				$this->brokenLinkObjDOM = $wgParser->getPreprocessor()->preprocessToObj($messageText);
-			}
-		
-			$contextFrame=Xxx::MakeFrame
-			(
-				$wgParser->getPreprocessor()->newFrame(),
-				array
-				(
-					1=>$t,
-					2=>$prefix.$text.$inside,
-					'query'=>$query,
-					'style'=>$style
-				),
-				Title::newFromText('mediawiki:custom-link-broken')
-			);
-		   $linkHTML = $contextFrame->expand($this->brokenLinkObjDOM,1);
-			$linkHTML = $wgParser->mStripState->unstripBoth($linkHTML);
-		}
-		wfProfileOut( $fname );
-		return $linkHTML;
 	}
-	
-	var $knownLinkObjDOM = null;
-	function _makeKnownLinkObj( $nt, $text = '', $query = '', $trail = '', $prefix = '' , $aprops = '', $style = '' ) {
-	
-		global $wgUser;
-		$fname = 'CustomSkin::makeKnownLinkObj';
-		wfProfileIn( $fname );
-
-		if ( !is_object( $nt ) ) {
-			wfProfileOut( $fname );
-			return $text;
-		}
-
-		global $wgOut, $wgParser, $wgMessageCache;
-
-		if (!$wgMessageCache->getMsgFromNamespace('Custom-link-known',$wgLang->code))
-		{
-			$linkHTML = Skin::makeKnownLinkObj($nt,$text,$query,$trail,$prefix);
-		}
-		else
-		{
-			if ( $text == '' ) {
-				$text = htmlspecialchars( $nt->getPrefixedText() );
-			}
-			if ( $style == '' ) {
-				$style = $this->getInternalLinkAttributesObj( $nt, $text );
-			}
-
-			if ( $aprops !== '' ) $aprops = ' ' . $aprops;
-
-			list( $inside, $trail ) = Linker::splitTrail( $trail );
-		   $t=$nt->getPrefixedText();
-		   
-			if (!$this->knownLinkObjDOM)
-			{
-				$messageText = wfMsgGetKey( 'custom-link-known', true, true, false );
-				$this->knownLinkObjDOM = $wgParser->getPreprocessor()->preprocessToObj($messageText,1);
-			}
-		
-			$contextFrame=Xxx::MakeFrame
-			(
-				$wgParser->getPreprocessor()->newFrame(),
-				array
-				(
-					1=>$t,
-					2=>$prefix.$text.$inside,
-					'query'=>$query,
-					'aprops'=>$aprops,
-					'style'=>$style
-				),
-				Title::newFromText('mediawiki:custom-link-known')
-			);
-		   $linkHTML = $contextFrame->expand($this->knownLinkObjDOM) . $trail;
-			$linkHTML = $wgParser->mStripState->unstripBoth($linkHTML);
-		}
-		wfProfileOut( $fname );
-		return $linkHTML;
-	}
-	
-	function _makeSelfLinkObj( $nt, $text = '', $query = '', $trail = '', $prefix = '' ) 
-	{
-		$fname = 'CustomSkin::makeSelfLinkObj';
-		wfProfileIn( $fname );
-
-		global $wgOut, $wgParser, $wgMessageCache;
-
-		$l = wfMsgGetKey( 'custom-link-self', true,true, false );
-
-		if (!$wgMessageCache->getMsgFromNamespace('Custom-link-self') || !is_object($wgParser->mStripState))
-		{
-			$l = Skin::makeSelfLinkObj($nt,$text,$query,$trail,$prefix);
-		}
-		else
-		{
-			if ( '' == $text ) {
-				$text = htmlspecialchars( $nt->getPrefixedText() );
-			}
-			list( $inside, $trail ) = Linker::splitTrail( $trail );
-		   $t=$nt->getPrefixedText();
-			$l = $wgParser->mStripState->unstripBoth($wgParser->replaceVariables("{{mediawiki:custom-link-self|1=$t|2={$prefix}{$text}{$inside}|query=$query}}$trail"));
-		}
-		wfProfileOut( $fname );
-		return $l;
-	}		
-	*/	
-}
 
 	class CustomSkinTemplate extends QuickTemplate 
 	{
@@ -552,7 +326,7 @@ function wfXxxCustomSkinDeclare()
 		{
 
 			wfSuppressWarnings();
-			global $wgUser,$wgTitle,$wgParser, $wgXxxCustomSkin;
+			global $wgUser,$wgTitle,$wgParser, $wgXxxCustomSkin,$wgRequest;
 			$skin = $wgUser->getSkin();
 
 			wfSuppressWarnings();
@@ -561,6 +335,7 @@ function wfXxxCustomSkinDeclare()
 		
 
 			$skinArgs['LANG'] 			= $this->data['lang']; 
+			$skinArgs['ACTION'] 			= $wgRequest->getText('action',''); 
 			$skinArgs['DIR']			   = $this->data['dir'];
 			$skinArgs['MIMETYPE']		= $this->data['mimetype'];
 			$skinArgs['CHARSET']		   = $this->data['charset'];
@@ -743,12 +518,12 @@ function wfXxxCustomSkinDeclare()
 
 			$wgXxxCustomSkin->skinArgs = $skinArgs;
 		
-			$skinTemplate=wfMsgNoTrans($wgXxxCustomSkin->getMsgName());
 			global $wgOut;
 			$wgOut->disable();
 #			return $skinArgs['CONTENT'];
 			global $wgParser;
 /*
+			$skinTemplate=wfMsgNoTrans($wgXxxCustomSkin->getMsgName());
 			$wgXxxCustomSkin->skinParsing=true;
 			global $wgParser;
 			foreach($skinArgs as $k=>$v)
@@ -762,6 +537,7 @@ function wfXxxCustomSkinDeclare()
 			$output = $wgParser->mStripState->unstripBoth($parsedText);
 			$wgXxxCustomSkin->skinParsing=false;
 */
+			#die("hello there:" . $skinTemplate);
 
 			$wgXxxCustomSkin->skinParsing=true;
 			$parser=$wgParser;

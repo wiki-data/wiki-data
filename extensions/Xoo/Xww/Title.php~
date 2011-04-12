@@ -428,7 +428,7 @@ class XwwTitle extends Xxx
 
 	   $prefix = "";
 		$prefix.= $t->getNsText() ? $t->getNsText() . ":" : "";
-		$pages=split('/',$t->getText());
+		$pages = explode('/',$t->getText());
 		$path.=array_shift($pages);
 		$ret= $template ? '{{'.$template.'|'.$prefix.$path.'|'.$path.'}}' : "[[$prefix$path]]";
 		foreach ($pages as $p)

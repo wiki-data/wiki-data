@@ -440,7 +440,7 @@ class XxxInstaller
 		
 		foreach($methods as $m)
 		{
-			$parts=split("_",$m,2);
+			$parts = explode("_",$m,2);
 			{
 				if (count($parts)==2)
 				{
@@ -722,7 +722,7 @@ class XxxArgs
 	}	
 
 	
-	function split($index)
+	function explode($index)
 	{
 		if (!isset($mBits[$index]))
 		{

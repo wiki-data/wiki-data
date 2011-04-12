@@ -191,7 +191,7 @@ class XxxEditForms extends Xxx
 		{
 			$rootPage= $title->getText();
 		}
-		$parts=split('-',$user->getName(),2);
+		$parts = explode('-',$user->getName(),2);
 		if (count($parts)==1)
 		{
 		    return $parts[0]==$user->getName();
@@ -199,7 +199,7 @@ class XxxEditForms extends Xxx
 		else
 		{
 			$group = $parts[0];
-			$parts=split('-',$rootPage,2);
+			$parts = explode('-',$rootPage,2);
 			return (count($parts)==2 and $parts[0]==$group);
 		}
 	}
@@ -218,7 +218,7 @@ class XxxEditForms extends Xxx
 		$text = $this->article->getContent(true);
 		$parts=preg_split('/(<editform.*?>\s*)(.*?)(\s*<\/editform>)/msi',$text,-1,PREG_SPLIT_DELIM_CAPTURE);
 		$content = $parts[$this->editform*4-2];
-		$params = split('\|',$content,2);
+		$params = explode('\|',$content,2);
 		if (count($params)<1) return false;
 		
 		$this->template=trim($params[0]);
@@ -228,7 +228,7 @@ class XxxEditForms extends Xxx
 		$parts=explode("|",$params[1]);
 		foreach($parts as $part)
 		{
-			$p=split("=",$part,2);
+			$p = explode("=",$part,2);
 			if(count($p)==2)
 			{
 				$this->nowiki.="\n|".trim($p[0]).'=<nowiki>'.trim($p[1]).'</nowiki>';
@@ -249,7 +249,7 @@ class XxxEditForms extends Xxx
 		$text = $this->article->getContent(true);
 		$parts=preg_split('/(<editform.*?>\s*)(.*?)(\s*<\/editform>)/msi',$text,-1,PREG_SPLIT_DELIM_CAPTURE);
 		$content = $parts[$this->editform*4-2];
-		$params = split('\|',$content,2);
+		$params = explode('\|',$content,2);
 		if (count($params)<1) return false;
 		
 		$this->template=trim($params[0]);
@@ -260,7 +260,7 @@ class XxxEditForms extends Xxx
 
 		foreach($parts as $part)
 		{
-			$p=split("=",$part,2);
+			$p = explode("=",$part,2);
 			if(count($p)==2)
 			{
 				if (isset($cgiparams[$p[0]]))
@@ -698,7 +698,7 @@ class XxxEditForms extends Xxx
 			$value=$parser->mStripState->unstripBoth(array_shift($args));
 			$s="<select name=\"editform_data[$name]\">";
 			$options=join("|",$args);
-			$parts=split("\|",$options);
+			$parts = explode("\|",$options);
 			$redlinks='';
 			global $wgUser;
 			global $wgLang;
@@ -708,7 +708,7 @@ class XxxEditForms extends Xxx
 			$sk=$wgUser->getSkin();
 			foreach($parts as $part)
 			{
-				$p=split("=",$part,2);
+				$p = explode("=",$part,2);
 				if($p[0]!=='')
 				{
 					$v=$p[0];

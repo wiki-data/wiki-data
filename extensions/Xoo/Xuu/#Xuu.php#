@@ -1,16 +1,9 @@
-<?php
-#
-#	Preliminaries, look lower for interesting stuff
-#
-if ( !defined( 'MEDIAWIKI' ) ) { die( 'This file is a MediaWiki extension, it is not a valid entry point' );}
-if (defined('XUU_LOADED')) return; 
-define ('XUU_LOADED', true);
-XxxInstaller::Install('Xuu');
-#
-#  Xuu - Xoo Useful Utilities
-#
-#  Part of Xoo (c) 1997-2008 [[w:en:User:Zocky]], GPL3 applies
-#
+<?phpxx;5S;5S;5S;5S;5Sq # Preliminaries, look lower for interesting
+stuff # if ( !defined( 'MEDIAWIKI' ) ) { die( 'This file is a
+MediaWiki extension, it is not a valid entry point' );} if
+(defined('XUU_LOADED')) return; define ('XUU_LOADED', true);
+XxxInstaller::Install('Xuu'); # # Xuu - Xoo Useful Utilities # # Part
+of Xoo (c) 1997-2008 [[w:en:User:Zocky]], GPL3 applies #
 #########################################################################
 
 
@@ -31,7 +24,7 @@ class Xuu extends Xxx
     }
 	
 	function tag_ref() { return ""; }
- 	function fl_str($parser, $f, $a)
+ 	function fl_str(&$parser, &$f, $a)
 	{
 		$args=new XxxArgs($f, $a);
 
@@ -172,9 +165,8 @@ class Xuu extends Xxx
 				$replaceParts[] = $args->cropExpand($i);
 			}
 			$replacePattern=join('|',$replaceParts);
-			#$replacePattern=str_replace('/','\x2f',$replacePattern);
+			$replacePattern=str_replace('/','\x2f',$replacePattern);
 			try {
-//echo "replacePattern: $replacePattern";
 				return preg_replace("/$replacePattern/",$replaceWith,$str);
 			} catch(Exception $e) {
 				return $this->notFound();

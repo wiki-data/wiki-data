@@ -163,7 +163,7 @@ END;
 ##
 ###################################################
 	
- 	function fl_data(&$parser, &$frame, &$a)
+ 	function fl_data(&$parser, $frame, $a)
 	{
 		static $rowCounter=0;
 		$args=new xxxArgs($frame, $a);
@@ -445,7 +445,7 @@ END;
 			# we need at least 3 arguments for get
 			if ($args->count>3) $this->notFound();			
 			$fieldName = $args->trimExpand(3,''); 
-			if (!$this->normalizeName($fieldName)) return $this->notFound();
+			if (!$this->normalizeName($fieldName) && $fieldName{0}!='#') return $this->notFound();
 		case 'getrow':
 			# TODO: make it possible to add extra values to the array, as in wraprow and eval row
 			# TODO: make this gracefully fail if the array extension is not installed
@@ -484,7 +484,7 @@ END;
 				#put into cache
 				$this->dataRowCache[$tableName][$rowName]=$row;
 			}
-						
+			
 			if ($args->command=='get')
 			{
 				if(!$row) return "";
@@ -510,12 +510,11 @@ END;
 				$ns=NS_TEMPLATE;
 				$title = Title::newFromText( $template, $ns);
 				if (!$title) return $this->notFound();
-			    list( $dom, $title ) = $parser->getTemplateDom( $title );
+			   list( $dom, $title ) = $parser->getTemplateDom( $title );
 				if (!$dom) return "[[".$title->getPrefixedText()."]]";
 
-#				print_r($row);
-				$customFrame = $this->newChildFrame($f,$row,$title);
-			    return $customFrame->expand($dom);			
+				$customFrame = $this->newChildFrame($frame,$row,$parser->mTitle);
+				return $customFrame->expand($dom);			
 			}
 			elseif ($args->command=='evalrow')
 			{
@@ -530,7 +529,7 @@ END;
 				
 				$code=$args->get($args->count);
 
-				$customFrame = $this->newExtendedFrame($f,$row);
+				$customFrame = $this->newExtendedFrame($frame,$row);
 			    return $customFrame->expand($code);			
 			}
 			else return $this->notFound();
@@ -619,7 +618,6 @@ ORDER BY ta, fi;
 
 			extract ($this->getQueryArgs('SELECT',$args));
 			#we now have $fields and $options
-			
 			$xssQuery = XssQuery::Make($this,$fields,$options);
 
 			if ($errorMessage=$xssQuery->getError()) $returnText =  $this->formatError($errorMessage);
@@ -634,7 +632,6 @@ ORDER BY ta, fi;
 			case 'query':
 				$returnText = "<pre>".$sql."</pre>";
 			case 'grid':
-			
 				try
 				{
 					$now = time() + microtime();
@@ -706,7 +703,7 @@ ORDER BY ta, fi;
 					}
 					else
 					{
-				       $returnText = $this->makeResultRow($resultArray);
+				       $returnText = $wgXooExtensions['Xvv']->arrMake($resultArray);
 				    }
 				}
 				catch(DBError $e){ $returnText.="<pre>".$e->error."</pre>";}
@@ -752,7 +749,7 @@ ORDER BY ta, fi;
 	function getDbr()
 	{
 		global $wgDBserver;
-		global $wgDname;
+		global $wgDBname;
 		global $wgDBuser;
 		
 		$S=$this->mSettings;
@@ -815,7 +812,7 @@ ORDER BY ta, fi;
 
 	function escapeName($s)
 	{
-		return '`'.trim(preg_replace('/`/','\`',$s)).'`';
+		return '`'.trim(preg_replace('/`/','`',$s)).'`';
 	}
 	function escapeDataTableName($s)
 	{
@@ -1139,10 +1136,12 @@ ORDER BY ta, fi;
 									}					
 								}
 							} elseif ($guess && Xtt::guessValue($fieldType,$argValue)) {
-								if ($argValue!=='')	$fieldValues[$fieldName]=$argValue;
+								//mi.tko - add empty field values! if ($argValue!=='')	
+								$fieldValues[$fieldName]=$argValue;
 								$fieldDisplay[$fieldName] = $argValue;
 							} elseif (Xtt::castValue($fieldType,$argValue)) {
-								if ($argValue!=='')	$fieldValues[$fieldName]=$argValue;
+								//mi.tko if ($argValue!=='')	
+								$fieldValues[$fieldName]=$argValue;
 								$fieldDisplay[$fieldName] = $argValue;
 							} else {
 								$error .=  $this->formatError("Bad value '$argValue' for field  $fieldName ($fieldType)");
@@ -1324,12 +1323,9 @@ ORDER BY ta, fi;
 			$res= $dbr->query('SELECT * FROM ' . $this->escapeDataTableName($tableName) ." $ORDERBY LIMIT $limit OFFSET $offset");
 			
 			$headerRow=array();
-			
-			# find missing fields
-			$headerRow=array_keys($tableDef['fieldNames']);
+			$headerRow=$tableDef['fieldNames'];
 			array_unshift($headerRow,'_row_ref');
 			array_unshift($headerRow,'_page');
-			
 			$missingFields=array();
 			foreach ($headerRow as $k=>$fName)
 			{
@@ -1341,7 +1337,7 @@ ORDER BY ta, fi;
 			{
 				$fName=$dbr->fieldName($res,$i);
 				
-				if (!$fieldNames[$fName]) 
+				if (!$tableDef['fieldsByName'][$fName]) 
 				{
 					$missingFields[]=$fName;
 					$headerRow[]="<s>$fName</s>";
@@ -1351,7 +1347,7 @@ ORDER BY ta, fi;
 			$tableBody='';
 			while ($row=$dbr->fetchRow($res))
 			{	
-				$rowTitle=Title::makeTitle($row['_page_ns'],$row['_page_title']);
+				$rowTitle=Title::newFromText($row['_page_title']);
 				$rowName=preg_replace('/_/',' ',$row['_row_name']);
 				$rowRef=$row['_row_ref'];
 				$cellRow=array
@@ -1365,7 +1361,7 @@ ORDER BY ta, fi;
 					$fValue=$fieldDef['field_default'];
 					$value=$row[$fName];
 					$fixValue=$value;
-					$fType=$fieldTypes[$fName];
+					$fType=$tableDef['fieldsByName'][$fName]['field_type'];
 					$cast = Xtt::castValue($fType,$fixValue);
 					$displayValue=substr(htmlspecialchars($value),0,255);
 #						$displayValue=$fixValue;
@@ -1478,7 +1474,7 @@ ORDER BY ta, fi;
 	function makeOutputRow($pageTitle, $tableName,$rowName,$rowData)
 	{
 		$rowData['_page_ns']=$pageTitle->getNamespace();
-		$rowData['_page_title']=$pageTitle->getDBkey();
+		$rowData['_page_title']=$pageTitle->getPrefixedDBkey();
 		$rowData['_row_name']=$rowName;
 
 		if($rowName{0}=='#')
@@ -1493,6 +1489,10 @@ ORDER BY ta, fi;
 		{
 			$rowData['_row_ref'] = $rowName;
 		}
+
+//echo "<pre>";
+//print_r($rowData);
+//echo "</pre>";
 		return $rowData;
 	}
 	
@@ -1712,14 +1712,21 @@ ORDER BY ta, fi;
 				$tableCount++;
 
 				# add _page_id
+				$insertRows = array();
 				foreach($tableRows as &$tableRow)
 				{
 					$tableRow['_page_id']=$pageId;
 					$rowCount++;
+					$insertRow = array();
+					foreach($tableRow as $k => $v)
+					{
+						$insertRow[$this->escapeName($k)]=$v;
+					}
+					$insertRows[] = $insertRow;
 				}
 				#insert data rows for each table
 				try {
-					$dbr->insert($this->getDataTableName($tableName),$tableRows);
+					$dbr->insert($this->getDataTableName($tableName),$insertRows);
 				} catch (Exception $e) { print $e.message; }
 				#insert links from this page for each table
 				$linkTableRows[]=array
@@ -1890,8 +1897,8 @@ ORDER BY ta, fi;
 			{
 				$sql = "UPDATE ". $this->getDataTableName($row['ln_title']) . " SET "
 					 . '_page_ns =' . $newTitle->getNamespace() .','
-					 . '_page_title =' . $this->escapeValue($newTitle->getDbKey()) . ','
-					 . '_row_ref = CONCAT(' . $this->escapeValue($newTitle->getDbKey() . '#' ) . ', _row_name'
+					 . '_page_title =' . $this->escapeValue($newTitle->getPrefixedDbKey()) . ','
+					 . '_row_ref = CONCAT(' . $this->escapeValue($newTitle->getPrefixedDbKey() . '#' ) . ', _row_name'
 					 . ') WHERE _page_id='.$pageId.' AND _row_ref LIKE ' . $this->escapeValue($oldTitle->getDbKey() . '#%');
 				$dbr->query($sql);
 				$tableCounter++;		

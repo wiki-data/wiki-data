@@ -41,7 +41,7 @@ class TemplateProfiler
 #
 ################################
 
-	function hook_UnknownAction($action, &$article)
+	function hook_UnknownAction($action, $article)
 	{
 #		die ($action);
 		if ($action!='profile') return true;
@@ -63,6 +63,9 @@ class TemplateProfiler
 
 		#collect profiling data for this article
 		$this->collectData($article);
+
+			$wgOut->addHTML("<style>".file_get_contents(dirname(__FILE__).'/TemplateProfiler.css').'</style>');
+
 
 		# if we're just dumping, return print_r 
 		if ($this->show=='dump')
@@ -227,7 +230,7 @@ class TemplateProfiler
 	function isFunction($titleText)
 	{
 		global $wgParser;
-		$parts = split(':',$titleText,2);
+		$parts = explode(':',$titleText,2);
 		return	(
 			count($parts) == 2 
 			&&	(
@@ -251,7 +254,7 @@ class TemplateProfiler
 
 		if ($this->isFunction($titleText))
 		{
-			return split(':',$titleText,2);
+			return explode(':',$titleText,2);
 		}
 		
 		$title = Title::newFromText($titleText,NS_TEMPLATE);

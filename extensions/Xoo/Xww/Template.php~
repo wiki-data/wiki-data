@@ -439,7 +439,7 @@ class XxxTemplateProfiler extends Xxx
 	function isFunction($titleText)
 	{
 		global $wgParser;
-		$parts = split(':',$titleText,2);
+		$parts = explode(':',$titleText,2);
 		return	(
 			count($parts) == 2 
 			&&	(
@@ -463,7 +463,7 @@ class XxxTemplateProfiler extends Xxx
 
 		if ($this->isFunction($titleText))
 		{
-			return split(':',$titleText,2);
+			return explode(':',$titleText,2);
 		}
 		
 		$title = Title::newFromText($titleText,NS_TEMPLATE);

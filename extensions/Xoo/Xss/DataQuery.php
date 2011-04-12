@@ -34,7 +34,6 @@ class XssQuery
 			$this->mError="no database connection";
 			die;
 		}
-		
 		$this->mFields 		= $fields;
 		$this->mWhere 		= $options['where'] ? trim($options['where']) : '';
 		$this->mGroupBy 	= $options['groupby'] ? trim($options['groupby']) : '';
@@ -112,6 +111,7 @@ class XssQuery
 					);
 					foreach ($fieldNames as $f)
 					{
+					   if ($fieldDefs['fieldsByName'][$f]['field_type']=='multi') continue;
 						$fields[]="($tableAlias." . $this->escapeName($f) . ") AS " . $this->escapeName("$fieldPrefix$f");
 					}
 				}
@@ -232,7 +232,7 @@ class XssQuery
 		$last=array_pop ($cParts);
 		if(!$this->extractTableName($ident,$tableName,$tableAlias,$fieldName)) {
 			$fieldSuggestion=$this->mXss->suggestField($tableName,$fieldName);
-			$this->mError="__LINE__ No such reference or multi field <tt>$fieldName</tt> in <tt>$tableName</tt>."
+			$this->mError="__LINE__ No such reference or multi field <tt>$fieldName</tt> in <tt>[[Data:$tableName]]</tt>."
 						. " Did you mean <tt>$fieldSuggestion</tt>?";
 			return false;
 		};
@@ -430,7 +430,7 @@ class XssQuery
 
 	function splitTableName($text,&$tableName,&$tableAlias)
 	{
-		$p=split('#',$text);
+		$p=explode('#',$text);
 		$aliasSuffix='';
 		switch(count($p))
 		{
@@ -535,25 +535,21 @@ class XssQuery
 		return $row['field_reference'];
 	}
 	
-	function checkForField($tableName,$fieldName)
-	{
+	function checkForField($tableName,$fieldName) {
 		if ($fieldName=='*') return true;
-		if (!$res=$this->mDbr->select
-		(
+		if (!$res=$this->mDbr->select	(
 			$this->mXss->getInternalTableName('fields'),
 			'*',
 			"field_table=" . $this->mXss->escapeValue($tableName) 
 			. " AND field_name=" . $this->mXss->escapeValue($fieldName)
-			. " AND field_type<>'multi'"
-		))
-		{
+			. " AND field_type <> 'multi'"
+		)) {
 			$this->mError='SQL Error';
 			return false;
 		}
-		if(!$this->mDbr->numRows($res))
-		{
+		if(!$this->mDbr->numRows($res)) {
 			$fieldSuggestion=$this->mXss->suggestField($tableName,$fieldName);
-			$this->mError="No such field <tt>$fieldName</tt> in <tt>$tableName</tt>. Did you mean <tt>$fieldSuggestion</tt>?";
+			$this->mError="No such field <tt>$fieldName</tt> in <tt>[[Data:$tableName]]</tt>. Did you mean <tt>$fieldSuggestion</tt>?";
 			return false;
 		}
 		return true;		

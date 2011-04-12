@@ -51,95 +51,101 @@ class XwwTitle extends Xxx
 	
 	function var_ROOTPAGENAME(&$parser)
 	{
-		return $this->fl_title($parser, 'rootpagename',$parser->mTitle->getPrefixedText());
+		return $this->titleFunctions($parser, 'rootpagename',$parser->mTitle);
 	}
 	
 	function var_ROOTPAGENAMEE(&$parser)
 	{
-		return $this->fl_title($parser, 'rootpagenamee',$parser->mTitle->getPrefixedText());
+		return $this->titleFunctions($parser, 'rootpagenamee',$parser->mTitle);
 	}
 
 	function var_FULLROOTPAGENAME(&$parser)
 	{
-		return $this->fl_title($parser, 'fullrootpagename',$parser->mTitle->getPrefixedText());
+		return $this->titleFunctions($parser, 'fullrootpagename',$parser->mTitle);
 	}
 	
 	function var_FULLROOTPAGENAMEE(&$parser)
 	{
-		return $this->fl_title($parser, 'fullrootpagenamee',$parser->mTitle->getPrefixedText());
+		return $this->titleFunctions($parser, 'fullrootpagenamee',$parser->mTitle);
 	}
 
 	function var_FULLBASEPAGENAME(&$parser)
 	{
-		return $this->fl_title($parser, 'fullbasepagename',$parser->mTitle->getPrefixedText());
+		return $this->titleFunctions($parser, 'fullbasepagename',$parser->mTitle->getPrefixedText());
 	}
 
 	function var_FULLBASEPAGENAMEE(&$parser)
 	{
-		return $this->fl_title($parser, 'fullbasepagenamee',$parser->mTitle->getPrefixedText());
+		return $this->titleFunctions($parser, 'fullbasepagenamee',$parser->mTitle);
+	}
+	
+	function var_ISEDIT()
+	{
+		global $action;
+		return strstr("edit,submit,delete",$action) ?'ISEDIT':'';
 	}
 
 	function var_NAMESPACE(&$parser)
 	{
-		return $this->fl_title($parser, 'nslocal',$parser->mTitle->getPrefixedText());
+		return $this->titleFunctions($parser, 'nslocal',$parser->mTitle);
 	}
 	function var_NAMESPACEE(&$parser)
 	{
-		return $this->fl_title($parser, 'nslocal',$parser->mTitle->getPrefixedText());
+		return $this->titleFunctions($parser, 'nslocal',$parser->mTitle);
 	}
 	function var_NSLOCAL(&$parser)
 	{
-		return $this->fl_title($parser, 'nslocal',$parser->mTitle->getPrefixedText());
+		return $this->titleFunctions($parser, 'nslocal',$parser->mTitle);
 	}
 	function var_NSLOCALE(&$parser)
 	{
-		return $this->fl_title($parser, 'nslocale',$parser->mTitle->getPrefixedText());
+		return $this->titleFunctions($parser, 'nslocale',$parser->mTitle);
 	}
 
 	function var_NS(&$parser)
 	{
-		return $this->fl_title($parser, 'nscanonical',$parser->mTitle->getPrefixedText());
+		return $this->titleFunctions($parser, 'nscanonical',$parser->mTitle);
 	}
 	function var_NSE(&$parser)
 	{
-		return $this->fl_title($parser, 'nscanonicale',$parser->mTitle->getPrefixedText());
+		return $this->titleFunctions($parser, 'nscanonicale',$parser->mTitle);
 	}
 	function var_NSCANONICAL(&$parser)
 	{
-		return $this->fl_title($parser, 'nscanonical',$parser->mTitle->getPrefixedText());
+		return $this->titleFunctions($parser, 'nscanonical',$parser->mTitle);
 	}
 	function var_NSCANONICALE(&$parser)
 	{
-		return $this->fl_title($parser, 'nscanonicale',$parser->mTitle->getPrefixedText());
+		return $this->titleFunctions($parser, 'nscanonicale',$parser->mTitle);
 	}
 
 	function var_NSNUMBER(&$parser)
 	{
-		return $this->fl_title($parser, 'nsnumber',$parser->mTitle->getPrefixedText());
+		return $this->titleFunctions($parser, 'nsnumber',$parser->mTitle);
 	}
 
 	function var_ISSUBPAGE(&$parser)
 	{
-		return $this->fl_title($parser, 'issubpage',$parser->mTitle->getPrefixedText());
+		return $this->titleFunctions($parser, 'issubpage',$parser->mTitle);
 	}
 
 	function var_SUBPAGELEVEL(&$parser)
 	{
-		return $this->fl_title($parser, 'subpagelevel',$parser->mTitle->getPrefixedText());
+		return $this->titleFunctions($parser, 'subpagelevel',$parser->mTitle);
 	}
 
 	function var_PATH(&$parser)
 	{
-		return $this->fl_title($parser, 'path',$parser->mTitle->getPrefixedText());
+		return $this->titleFunctions($parser, 'path',$parser->mTitle);
 	}
 	function var_EDITED(&$parser)
 	{
-		return $this->fl_title($parser, 'edited',$parser->mTitle->getPrefixedText());
+		return $this->titleFunctions($parser, 'edited',$parser->mTitle);
 	}
 
 	function var_EDITOR(&$parser)
 	{
-		return $this->fl_title($parser, 'editor',$parser->mTitle->getPrefixedText());
+		return $this->titleFunctions($parser, 'editor',$parser->mTitle);
 	}
 
 	function var_CREATED(&$parser)
@@ -151,7 +157,7 @@ class XwwTitle extends Xxx
 
 	function var_CREATOR(&$parser)
 	{
-		return $this->fl_title($parser, 'creator',$parser->mTitle->getPrefixedText());
+		return $this->titleFunctions($parser, 'creator',$parser->mTitle);
 	}
 
 
@@ -167,158 +173,146 @@ class XwwTitle extends Xxx
 			'XwwTitle::getEarliestRevID' );
 	}
 
-	function fl_title(&$parser, &$f, &$a, $titleText=null)
-	{
+	function titleFunctions(&$parser, $cmd,$t) {
 		global $wgContLang,$wgNamespacesWithSubpages;
-		$args = new xxxArgs($f,$a);
+		if(!$t) return $this->notFound();
+		switch($cmd) {
+		case 'edited':
+			$lastrev = $t->getLatestRevID();
+			$rev = Revision::newFromId($lastrev);
+			return $rev->getTimestamp();
+		case 'editor':
+			$lastrev = $t->getLatestRevID();
+			$rev = Revision::newFromId($lastrev);
+			return $rev->getUserText();
+		case 'created':
+			$firstrev = $this->getEarliestRevID($t);
+			$rev = Revision::newFromId($firstrev);
+			return $rev ? $rev->getTimestamp() : 0;
+		case 'creator':
+			$firstrev = $this->getEarliestRevID($t);
+			$rev = Revision::newFromId($firstrev);
+			return $rev->getUserText();
+		case 'pagename':
+			return $t->getText();
+		case 'pagenamee':
+			return wfUrlEncode($t->getDBKey());
+		case 'fullpagename':
+			return $t->getPrefixedText();
+		case 'fullpagenamee':
+			return $t->getPrefixedURL();
+		case 'subpagename':
+			return $t->getSubpageText();
+		case 'subpagenamee':
+			return $t->getSubpageUrlForm();
+		case 'basepagename':
+			return $t->getBaseText();
+		case 'basepagenamee':
+			return wfUrlEncode( str_replace( ' ', '_', $t->getBaseText() ) );
+		case 'fullbasepagename':
+			if ($t->getNameSpace() == NS_MAIN) {
+				return $t->getBaseText();
+			} else {
+				return str_replace('_',' ',$wgContLang->getNsText( $t->getNamespace() ) ) 
+				. ':'
+				. $t->getBaseText();
+			}
+
+		case 'fullbasepagenamee':
+			if ($t->getNameSpace() == NS_MAIN) {
+				return wfUrlEncode( str_replace( ' ', '_', $t->getBaseText() ) );
+			} else {
+				return wfUrlencode( $wgContLang->getNsText( $t->getNamespace() ) ) 
+							. ':'
+							. wfUrlEncode( str_replace( ' ', '_', $t->getBaseText() ) );
+			}
+		case 'rootpagename':
+			if( isset( $wgNamespacesWithSubpages[ $t->getNamespace() ] ) && $wgNamespacesWithSubpages[ $t->getNamespace() ] ) {
+				$parts = explode( '/', $t->getText(),2 );
+				return $parts[0];
+			} else {
+				return $t->getText();
+			}
+		case 'rootpagenamee':
+			if( isset( $wgNamespacesWithSubpages[ $t->getNamespace() ] ) && $wgNamespacesWithSubpages[ $t->getNamespace() ] ) {
+				$parts = explode( '/', $t->getPartialURL(),2 );
+				return $parts[0];
+			} else {
+				return $t->getPartialURL();
+			}
+		case 'fullrootpagename':
+			if( isset( $wgNamespacesWithSubpages[ $t->getNamespace() ] ) && $wgNamespacesWithSubpages[ $t->getNamespace() ] ) {
+				$parts = explode( '/', $t->getPrefixedText(),2 );
+				return $parts[0];
+			} else {
+				return $t->getPrefixedText();
+			}
+		case 'fullrootpagenamee':
+			if( isset( $wgNamespacesWithSubpages[ $t->getNamespace() ] ) && $wgNamespacesWithSubpages[ $t->getNamespace() ] ) {
+				$parts = explode( '/', $t->getPrefixedURL(),2 );
+				return $parts[0];
+			} else {
+				return $t->getPrefixedURL();
+			}
+		case 'talkpagename':
+			if( $t->canTalk() ) {
+				$talkPage = $t->getTalkPage();
+				return $talkPage->getPrefixedText();
+			} else {
+				return '';
+			}
+		case 'talkpagenamee':
+			if( $t->canTalk() ) {
+				$talkPage = $t->getTalkPage();
+				return $talkPage->getPrefixedUrl();
+			} else {
+				return '';
+			}
+		case 'subjectpagename':
+			$subjPage = $t->getSubjectPage();
+			return $subjPage->getPrefixedText();
+		case 'subjectpagenamee':
+			$subjPage = $t->getSubjectPage();
+			return $subjPage->getPrefixedUrl();
+		case 'nslocal':
+		case 'namespace':
+			return str_replace('_',' ',$wgContLang->getNsText( $t->getNamespace() ) );
+		case 'nslocale':
+		case 'namespacee':
+			return wfUrlencode( $wgContLang->getNsText( $t->getNamespace() ) );
+		case 'ns':
+		case 'nscanonical':
+			return str_replace('_',' ', /*Namespace::getCanonicalName*/ $wgContLang->getNsText($t->getNamespace()) );
+		case 'nse':
+		case 'nscanonicale':
+			return wfUrlencode( /*Namespace::getCanonicalName*/ $wgContLang->getNsText($t->getNamespace()) );
+		case 'nsnumber':
+			return $t->getNamespace();
+		case 'talkspace':
+			return $t->canTalk() ? str_replace('_',' ',$t->getTalkNsText()) : '';
+		case 'talkspacee':
+			return $t->canTalk() ? wfUrlencode( $t->getTalkNsText() ) : '';
+		case 'subjectspace':
+			return $t->getSubjectNsText();
+		case 'subjectspacee':
+			return( wfUrlencode( $t->getSubjectNsText() ) );			
+		case 'issubpage':
+			return strpos($t->getText(),'/') > -1 ? 'ISSUBPAGE' : ''; 
+		case 'subpagelevel':
+			return strpos($t->getText(),'/') > -1 ? (count(explode('/',$t->getText()))-1)-'': '0'; 			
+		default: return $this->notFound();
+		}
+	}
+
+	function fl_title(&$parser, $f, $a, $titleText=null) {
+		global $wgContLang,$wgNamespacesWithSubpages;
+		$args = new xxxArgs(&$f,$a);
 		$title = $args->trimExpand(1);
 		if(!$title)	return array('found'=>false);
 		$t=Title::newFromText($title);
-		if ($t)
-		{
+		if ($t) {
 			switch($args->command)
 			{
-			case 'edited':
-				$lastrev = $t->getLatestRevID();
-				$rev = Revision::newFromId($lastrev);
-				return $rev->getTimestamp();
-			case 'editor':
-				$lastrev = $t->getLatestRevID();
-				$rev = Revision::newFromId($lastrev);
-				return $rev->getUserText();
-			case 'created':
-				$firstrev = $this->getEarliestRevID($t);
-				$rev = Revision::newFromId($firstrev);
-				return $rev ? $rev->getTimestamp() : 0;
-			case 'creator':
-				$firstrev = $this->getEarliestRevID($t);
-				$rev = Revision::newFromId($firstrev);
-				return $rev->getUserText();
-			case 'pagename':
-				return $t->getText();
-			case 'pagenamee':
-				return wfUrlEncode($t->getDBKey());
-			case 'fullpagename':
-				return $t->getPrefixedText();
-			case 'fullpagenamee':
-				return $t->getPrefixedURL();
-			case 'subpagename':
-				return $t->getSubpageText();
-			case 'subpagenamee':
-				return $t->getSubpageUrlForm();
-			case 'basepagename':
-				return $t->getBaseText();
-			case 'basepagenamee':
-				return wfUrlEncode( str_replace( ' ', '_', $t->getBaseText() ) );
-			case 'fullbasepagename':
-				if ($t->getNameSpace() == NS_MAIN)
-				{
-					return $t->getBaseText();
-				}
-				else
-				{
-					return str_replace('_',' ',$wgContLang->getNsText( $t->getNamespace() ) ) 
-							. ':'
-							. $t->getBaseText();
-				}
-
-			case 'fullbasepagenamee':
-				if ($t->getNameSpace() == NS_MAIN)
-				{
-					return wfUrlEncode( str_replace( ' ', '_', $t->getBaseText() ) );
-				}
-				else
-				{
-					return wfUrlencode( $wgContLang->getNsText( $t->getNamespace() ) ) 
-								. ':'
-								. wfUrlEncode( str_replace( ' ', '_', $t->getBaseText() ) );
-				}
-			case 'rootpagename':
-				if( isset( $wgNamespacesWithSubpages[ $t->getNamespace() ] ) && $wgNamespacesWithSubpages[ $t->getNamespace() ] ) 
-				{
-					$parts = explode( '/', $t->getText(),2 );
-					return $parts[0];
-				}
-				else
-				{
-					return $t->getText();
-				}
-			case 'rootpagenamee':
-				if( isset( $wgNamespacesWithSubpages[ $t->getNamespace() ] ) && $wgNamespacesWithSubpages[ $t->getNamespace() ] ) 
-				{
-					$parts = explode( '/', $t->getPartialURL(),2 );
-					return $parts[0];
-				}
-				else
-				{
-					return $t->getPartialURL();
-				}
-			case 'fullrootpagename':
-				if( isset( $wgNamespacesWithSubpages[ $t->getNamespace() ] ) && $wgNamespacesWithSubpages[ $t->getNamespace() ] ) 
-				{
-					$parts = explode( '/', $t->getPrefixedText(),2 );
-					return $parts[0];
-				}
-				else
-				{
-					return $t->getPrefixedText();
-				}
-			case 'fullrootpagenamee':
-				if( isset( $wgNamespacesWithSubpages[ $t->getNamespace() ] ) && $wgNamespacesWithSubpages[ $t->getNamespace() ] ) 
-				{
-					$parts = explode( '/', $t->getPrefixedURL(),2 );
-					return $parts[0];
-				}
-				else
-				{
-					return $t->getPrefixedURL();
-				}
-			case 'talkpagename':
-				if( $t->canTalk() ) {
-					$talkPage = $t->getTalkPage();
-					return $talkPage->getPrefixedText();
-				} else {
-					return '';
-				}
-			case 'talkpagenamee':
-				if( $t->canTalk() ) {
-					$talkPage = $t->getTalkPage();
-					return $talkPage->getPrefixedUrl();
-				} else {
-					return '';
-				}
-			case 'subjectpagename':
-				$subjPage = $t->getSubjectPage();
-				return $subjPage->getPrefixedText();
-			case 'subjectpagenamee':
-				$subjPage = $t->getSubjectPage();
-				return $subjPage->getPrefixedUrl();
-			case 'nslocal':
-			case 'namespace':
-				return str_replace('_',' ',$wgContLang->getNsText( $t->getNamespace() ) );
-			case 'nslocale':
-			case 'namespacee':
-				return wfUrlencode( $wgContLang->getNsText( $t->getNamespace() ) );
-			case 'ns':
-			case 'nscanonical':
-				return str_replace('_',' ', Namespace::getCanonicalName($t->getNamespace()) );
-			case 'nse':
-			case 'nscanonicale':
-				return wfUrlencode( Namespace::getCanonicalName($t->getNamespace()) );
-			case 'nsnumber':
-				return $t->getNamespace();
-			case 'talkspace':
-				return $t->canTalk() ? str_replace('_',' ',$t->getTalkNsText()) : '';
-			case 'talkspacee':
-				return $t->canTalk() ? wfUrlencode( $t->getTalkNsText() ) : '';
-			case 'subjectspace':
-				return $t->getSubjectNsText();
-			case 'subjectspacee':
-				return( wfUrlencode( $t->getSubjectNsText() ) );			
-			case 'issubpage':
-				return strpos($t->getText(),'/') > -1 ? 'ISSUBPAGE' : ''; 
-			case 'subpagelevel':
-				return strpos($t->getText(),'/') > -1 ? (count(explode('/',$t->getText()))-1)-'': '0'; 			
 			case 'fullurl':
 				return $t->getFullUrl($this->makeUrlQuery($args));
 			case 'fullurle':
@@ -341,7 +335,7 @@ class XwwTitle extends Xxx
 
 				if ($t->getFullText()==$parser->mTitle->getFullText()) {
 				  $class = 'link-self';				  
-				} elseif (stripos($t->getFullText(),$parser->mTitle->getFullText()."/")===0) {
+				} elseif (stripos($parser->mTitle->getFullText()."/",$t->getFullText())===0) {
 				  $class = 'link-active';
 				} 
 
@@ -352,7 +346,9 @@ class XwwTitle extends Xxx
 						.'><span class="link-inner">' 
 						. $display 
 						.'</span></a>';
-				return array($html, 'isHTML'=>true); 
+				return array($html, 'isHTML'=>true);
+			default: 
+				return $this->titleFunctions($parser,$args->command,$t);
 			}
 		}
 		return array('found'=>false);
@@ -398,7 +394,7 @@ class XwwTitle extends Xxx
 
 	   $prefix = "";
 		$prefix.= $t->getNsText() ? $t->getNsText() . ":" : "";
-		$pages=split('/',$t->getText());
+		$pages = explode('/',$t->getText());
 		$path.=array_shift($pages);
 		$ret= $template ? '{{'.$template.'|'.$prefix.$path.'|'.$path.'}}' : "[[$prefix$path]]";
 		foreach ($pages as $p)
@@ -407,5 +403,16 @@ class XwwTitle extends Xxx
 			$ret .= $template ? '{{'.$template.'|'.$prefix.$path.'|'.$p.'}}' : "/[[$prefix$path|$p]]";
 		}
 		return $ret;
+	}
+	
+	function shook_ShowMissingArticle ($a) {
+		global $wgOut,$wgNamespacesWithSubpages;
+		$t = $a->mTitle;
+		if( isset( $wgNamespacesWithSubpages[ $t->getNamespace() ] ) && $wgNamespacesWithSubpages[ $t->getNamespace() ] ) {
+			$parts = explode( '/', $t->getText(),2 );
+			$wgOut->addWikiText('parts: ' . implode('|',$parts));
+			$wgOut->disable();
+		}	
+		return false;
 	}
 }

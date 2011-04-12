@@ -7,7 +7,7 @@ XxxInstaller::Install('XvvCGI');
 class XvvCGI extends Xxx
 {
 
- 	function fl_cgi(&$parser, &$f, $a)
+ 	function fl_cgi(&$parser, $f, $a)
 	{
 		$parser->disableCache();
 		$args=new XxxArgs($f, $a);

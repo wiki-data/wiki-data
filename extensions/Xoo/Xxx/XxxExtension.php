@@ -115,151 +115,6 @@ class Xxx
 		return $f->newCustomChild($a,$f->title);
 	}
 
-/*
-	static function makeChildFrame(&$frame,$argsArray,$title=false)
-	{
-		$newFrame = $frame->newChild(array(),array(),$title ? $title : $frame->title);
-		self::addFrameArgs($newFrame,$argsArray);
-		return $newFrame;
-	}
-	
-	static function makeExtendedFrame(&$frame,$argsArray)
-	{
-		
-		if ($frame instanceof PPTemplateFrame_DOM && $frame->parent)
-		{
-			$newFrame = clone $frame;
-			self::addFrameArgs($newFrame,$argsArray);
-		}
-		else
-		{
-			$newFrame = self::makeChildFrame($frame,$argsArray,false);
-			$newFrame->parent = $frame;
-		}
-		return $newFrame;
-	}
-
-	static function makeInheritedFrame(&$frame,$argsArray,$title=false)
-	{
-		$newFrame = $frame->newChild(self::getFrameArgs($frame),$title ? $title : $frame->title);
-		self::addFrameArgs($newFrame,$argsArray);
-		return $newFrame;
-	}
-
-##################################################################################
-
-	
-	static function getFrameArgs(&$frame)
-	{
-		return (array)$frame->namedArgs + (array) $frame->numberedArgs;
-	}
-	
-	static function addFrameArgs(&$frame, $argsArray)
-	{
-		foreach($argsArray as $argName => $argValue)
-		{
-			self::addFrameArg($frame, $argName, $argValue);
-		}
-		return $args;
-	}	
-
-	static function addFrameArg(&$frame, $argName,$argValue)
-	{
-		$document = self::getFrameDocument($frame);
-		if ((int)$argName == $argName)
-		{
-			$frame->numberedArgs[$argName]=self::makeFrameArg($argName, $argValue,$document);
-		}
-		else
-		{
-			$frame->namedArgs[$argName]=self::makeFrameArg($argName, $argValue,$document);
-		}
-	}
-	
-	static function removeFrameArg(&$frame, $argName)
-	{
-		if ((int)$argName == $argName)
-		{
-			unset($frame->numberedArgs[$argName]);
-		}
-		else
-		{
-			unset($frame->namedArgs[$argName]);
-		}
-	}
-
-################################################################
-
-	static function makeFrameArg($argName,$argValue,$document=null)
-	{
-		if (is_object($argValue)) return $argValue; #already a dom node?
-		if (!$document) $document = new DOMDocument;
-		$valueElement=$document->createElement('value');
-		$valueElement->appendChild($document->createTextNode($argValue));
-		return $valueElement;
-	}
-
-	static function getFrameDocument(&$frame)
-	{
-		if ($frame->ownerDocument)
-		{
-			return $frame->ownerDocument;
-		}
-		if ($frame->isEmpty())
-		{
-			return new DOMDocument;
-		}
-		else
-		{
-			$args=self::getFrameArgs($frame);
-			sort ($args);
-			if ($arg[0]->ownerDocument) return $arg[0]->document;
-			return new DOMDocument;
-		}
-	}
-
-#
-############################################################################33
-#
-#	stupid backward compatibility. TODO: fix
-
-	static function MakeFrame($parentFrame,$argsArray,$title=null, $document = null)
-	{
-		$document = new DOMDocument;
-		$args=self::makeArgs($argsArray,$document);
-		$newFrame = $parentFrame->newChild($args,$title);
-		return $newFrame;
-	}
-	
-	static function makeArgs($argsArray,$document=null)
-	{
-		if (!$document) $document = new DOMDocument;
-		$args=array();
-		foreach($argsArray as $argName => $argValue)
-		{
-			$el=self::makeArg($argName,$argValue,$document);
-			$args[$argName]=$el;
-		}
-		return $args;
-	}	
-	
-	static function makeArg($argName,$argValue,$document=null)
-	{
-		if (!$document) $document = new DOMDocument;
-		$el=$document->createElement('part');
-		$nameElement=$document->createElement('name');
-		$nameElement->appendChild($document->createTextNode($argName));
-		$valueElement=$document->createElement('value');
-		$valueElement->appendChild($document->createTextNode($argValue));
-		$el->appendChild($nameElement);
-		$el->appendChild($document->createTextNode('='));
-		$el->appendChild($valueElement);
-		return $el;
-	}
-
-#############################################################################################
-*/
-
 	static function coallesce()
 	{
 		$args=func_get_args();
@@ -488,7 +343,7 @@ class XxxInstaller
 		
 		foreach($methods as $m)
 		{
-			$parts=split("_",$m,2);
+			$parts = explode("_",$m,2);
 			{
 				if (count($parts)==2)
 				{
@@ -631,6 +486,18 @@ class XxxInstaller
 	}
 }
 
+class XxxParserFunction extends Xxx {
+	function dispatch($func,&$P,&$F,&$A) {
+		$args=new XxxArgs($F,$A);
+		$method="{$func}_{$args->cmd}";
+		$default = "{$func}__def";
+		if(method_exists($this,$method)) {
+			$this->method(&$P,&$F,&$args);
+		} elseif(method_exists($this,$default)) {
+			$this->$default(&$P,&$F,&$args);
+		} 
+	}
+}
 #################################################################
 #
 #	XxxArgs
@@ -676,7 +543,7 @@ class XxxArgs
 	function expand($index,$default='')
 	{
 		if (!$this->exists($index)) return $default;
-		return $this->mFrame->expand($this->mArgs[$index]);
+		return ($this->mFrame ? $this->mFrame->expand($this->mArgs[$index]) : 'error');
 	}	
 
 	function cropExpand($index,$default='')
@@ -688,6 +555,10 @@ class XxxArgs
 	function trimExpand($index,$default='')
 	{
 		if (!$this->exists($index)) return $default;
+		if(!is_object($this->mFrame)) {
+			print wfBacktrace();
+			die('hello');
+		}
 		return trim($this->mFrame->expand($this->mArgs[$index]));
 	}	
 	

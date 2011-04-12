@@ -145,7 +145,7 @@ static function guessValue($type,&$value)
 			return true;
 		case 'reference':
 			if ( preg_match('/\[\[(.*?)(#.*?)?(\|.*?)?\]\]/',$value,$m)) $value=$m[1].$m[2];			
-			$ref_parts=split('#',$value); 
+			$ref_parts = explode('#',$value); 
 			if (count($ref_parts)==2)
 			{
 				$ref_page=$ref_parts[0]; $ref_name=$ref_parts[1];
@@ -209,7 +209,7 @@ static function guessValue($type,&$value)
 				else	return false;
 			
 			case 'reference':
-				$ref_parts=split('#',$value); 
+				$ref_parts = explode('#',$value); 
 				if (count($ref_parts)==2)
 				{
 					$ref_page=$ref_parts[0]; $ref_name=$ref_parts[1];
@@ -264,7 +264,7 @@ static function guessValue($type,&$value)
 				else	return $value;
 			
 			case 'reference':
-				$ref_parts=split('#',$value); 
+				$ref_parts = explode('#',$value); 
 				if (count($ref_parts)==2)
 				{
 					$ref_page=$ref_parts[0]; $ref_name=$ref_parts[1];
