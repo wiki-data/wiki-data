@@ -29,7 +29,15 @@ header( "Content-type: text/html; charset=utf-8" );
 
 # In case of errors, let output be clean.
 $wgRequestTime = microtime( true );
+/***** START HACK
+# Attempt to set up the include path, to fix problems with relative includes
+$IP = dirname( dirname( __FILE__ ) );
+define( 'MW_INSTALL_PATH', $IP );
 
+# Define an entry point and include some files
+define( "MEDIAWIKI", true );
+define( "MEDIAWIKI_INSTALL", true );
+END HACK *****/
 // Run version checks before including other files
 // so people don't see a scary parse error.
 require_once( "$IP/maintenance/install-utils.inc" );
@@ -244,7 +252,10 @@ $mainListOpened = false; # Is the main list (environement checking) opend ? Used
 
 /* Check for existing configurations and bug out! */
 
-if( file_exists( "../LocalSettings.php" ) ) {
+####
+# START HACK
+####
+if( file_exists( $_SERVER['DOCUMENT_ROOT'] . "/LocalSettings.php" ) ) {
 	$script = defined('MW_INSTALL_PHP5_EXT') ? 'index.php5' : 'index.php';
 	dieout( "<p><strong>Setup has completed, <a href='../$script'>your wiki</a> is configured.</strong></p>
 	<p>Please delete the /config directory for extra security.</p>" );
@@ -255,7 +266,11 @@ if( file_exists( "./LocalSettings.php" ) ) {
 	dieout( '' );
 }
 
-if( !is_writable( "." ) ) {
+if( !is_writable( $_SERVER['DOCUMENT_ROOT'] . '/config') ) {
+####
+# END HACK
+####
+
 	dieout( "<h2>Can't write config file, aborting</h2>
 
 	<p>In order to configure the wiki you have to make the <tt>config</tt> subdirectory
@@ -266,8 +281,15 @@ if( !is_writable( "." ) ) {
 	<p>To make the directory writable on a Unix/Linux system:</p>
 
 	<pre>
-	cd <i>" . htmlspecialchars( dirname( dirname( __FILE__ ) ) ) . "</i>
-	chmod a+w config
+####
+# START HACK
+####
+cd {$_SERVER['DOCUMENT_ROOT']}
+mkdir config
+chmod a+w config
+####
+# END HACK
+####
 	</pre>
 	
 	<p>Afterwards retry to start the <a href=\"\">setup</a>.</p>" );
@@ -1350,7 +1372,7 @@ if( $conf->posted && ( 0 == count( $errs ) ) ) {
 		$localSettings = "<" . "?php$endl$local";
 		// Fix up a common line-ending problem (due to CVS on Windows)
 		$localSettings = str_replace( "\r\n", "\n", $localSettings );
-		$f = fopen( "LocalSettings.php", 'xt' );
+		$f = fopen( "{$_SERVER['DOCUMENT_ROOT']}/config/LocalSettings.php", 'xt' );
 
 		if( $f == false ) {
 			print( "</li>\n" );
@@ -1696,7 +1718,6 @@ if( count( $errs ) ) {
 		<p>Avoid exotic characters; something like <tt>mw_</tt> is good.</p>
 	</div>
 	</fieldset>
-	
 	<?php database_switcher('ibm_db2'); ?>
 	<div class="config-input"><?php
 		aField( $conf, "DBport_db2", "Database port:" );
@@ -1728,6 +1749,50 @@ if( count( $errs ) ) {
 	<div class="config-input"><?php aField( $conf, "DBdefTS_ora", "Default tablespace:" ); ?></div>
 	<div class="config-input"><?php aField( $conf, "DBtempTS_ora", "Temporary tablespace:" ); ?></div>
 	</fieldset>
+<!--
+#####################################
+#                                   #
+#   S T A R T   O F   C H A N G E   #
+#                                   #
+#####################################
+-->
+
+	<h2>Customized settings</h2>
+	<fieldset><legend>DefaultSettings.php - for reference</legend>
+
+	<div style="margin-right:2em">
+	<textarea style="width:100%;height:25em;overflow:auto;border:inset 1px;padding:8px;line-height:150%;color:navy;letter-spacing:1px" name="DefaultSettings" onchange="return false";>
+<?php
+ 	print htmlspecialchars(`cat ../includes/DefaultSettings.php`);
+?>
+	</textarea>
+	</div>
+	</fieldset>
+
+	<fieldset><legend>Will be added to your LocalSettings.php</legend>
+
+	<div style="margin-right:2em">
+	<textarea style="width:100%;height:25em;overflow:auto;border:inset 1px;padding:8px;line-height:150%;color:navy;letter-spacing:1px" name="CustomSettings">
+<?php
+   if ($conf && $conf->posted)
+   {
+   	print htmlspecialchars(importRequest('CustomSettings',''));
+   }
+   else
+   {
+		print htmlspecialchars(`cat LocalSettingsTemplate.php`);
+	}
+?>
+	</textarea>
+	</div>
+	</fieldset>
+<!--
+#################################
+#                               #
+#   E N D   O F   C H A N G E   #
+#                               #
+#################################
+-->
 
 	<div class="config-input" style="padding:2em 0 3em">
 		<label class='column'>&nbsp;</label>
@@ -1753,12 +1818,12 @@ function writeSuccessMessage() {
 <div class="success-box">
 <p>Installation successful!</p>
 <p>To complete the installation, please do the following:
-<ol>
-	<li>Download config/LocalSettings.php with your FTP client or file manager</li>
-	<li>Upload it to the parent directory</li>
-	<li>Delete config/LocalSettings.php</li>
-	<li>Start using <a href='../$script'>your wiki</a>!
-</ol>
+<pre>
+cd {$_SERVER['DOCUMENT_ROOT']}
+mv config/LocalSettings.php .
+rm -r config
+</pre>
+And start using <a href='../$script'>your wiki</a>!
 <p>If you are in a shared hosting environment, do <strong>not</strong> just move LocalSettings.php
 remotely. LocalSettings.php is currently owned by the user your webserver is running under,
 which means that anyone on the same server can read your database password! Downloading
@@ -2042,6 +2107,31 @@ if ( \$wgCommandLineMode ) {
 # sure that cached pages are cleared.
 \$wgCacheEpoch = max( \$wgCacheEpoch, gmdate( 'YmdHis', @filemtime( __FILE__ ) ) );
 "; ## End of setting the $localsettings string
+
+#####################################
+#                                   #
+#   S T A R T   O F   C H A N G E   #
+#                                   #
+#####################################
+
+   $localsettings.= "
+
+#################################################################
+#################################################################
+####                                                         ####
+####    S T A R T   C U S T O M I Z E D   S E T T I N G S    ####
+####                                                         ####
+#################################################################
+#################################################################
+
+" . importRequest('CustomSettings','php');
+   
+
+#####################################
+#                                   #
+#   E N D   O F   C H A N G E   #
+#                                   #
+#####################################
 
 	// Keep things in Unix line endings internally;
 	// the system will write out as local text type.
