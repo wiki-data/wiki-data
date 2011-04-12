@@ -78,7 +78,7 @@ function wgUploadSetup() {
 	// fillDestFile setup
 	for ( var i = 0; i < wgUploadSourceIds.length; i++ )
 		document.getElementById( wgUploadSourceIds[i] ).onchange = function (e) {
-			fillDestFilename( this.id );
+			//fillDestFilename( this.id );
 		};
 }
 
