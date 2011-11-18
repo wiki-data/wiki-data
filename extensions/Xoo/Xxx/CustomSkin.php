@@ -354,7 +354,6 @@ function wfXxxCustomSkinDeclare()
 
 		function execute() 
 		{
-
 			wfSuppressWarnings();
 			global $wgUser,$wgTitle,$wgParser, $wgXxxCustomSkin,$wgRequest;
 			$skin = $wgUser->getSkin();

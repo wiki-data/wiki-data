@@ -465,7 +465,7 @@ abstract class Installer {
 		global $IP;
 
 		wfSuppressWarnings();
-		$_lsExists = file_exists( "$IP/LocalSettings.php" );
+		$_lsExists = file_exists( "$IP/../LocalSettings.php" );
 		wfRestoreWarnings();
 
 		if( !$_lsExists ) {

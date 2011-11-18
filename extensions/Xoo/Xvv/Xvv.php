@@ -627,6 +627,8 @@ function fl_prop (&$P, $F, $A)
 			return array('0'=>$id);
 			
 		case 'count':
+		case 'len': 
+		case 'length':
 			//if ($args->count!=1 ) return array('found'=>false);
 
 			$id  = $args->trimExpand(1);
