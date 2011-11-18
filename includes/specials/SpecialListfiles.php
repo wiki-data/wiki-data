@@ -28,21 +28,28 @@ class SpecialListFiles extends IncludableSpecialPage {
 	}
 
 	public function execute( $par ){
-		global $wgOut;
 		$this->setHeaders();
 		$this->outputHeader();
 
-		$pager = new ImageListPager( $par, $this->including() );
+		if ( $this->including() ) {
+			$userName = $par;
+			$search = '';
+		} else {
+			$userName = $this->getRequest()->getText( 'user', $par );
+			$search = $this->getRequest()->getText( 'ilsearch', '' );
+		}
+
+		$pager = new ImageListPager( $this->getContext(), $userName, $search, $this->including() );
 
 		if ( $this->including() ) {
 			$html = $pager->getBody();
 		} else {
-			$limit = $pager->getForm();
+			$form = $pager->getForm();
 			$body = $pager->getBody();
 			$nav = $pager->getNavigationBar();
-			$html = "$limit<br />\n$body<br />\n$nav";
+			$html = "$form<br />\n$body<br />\n$nav";
 		}
-		$wgOut->addHTML( $html );
+		$this->getOutput()->addHTML( $html );
 	}
 }
 
@@ -53,15 +60,14 @@ class ImageListPager extends TablePager {
 	var $mFieldNames = null;
 	var $mQueryConds = array();
 	var $mUserName = null;
+	var $mSearch = '';
 	var $mIncluding = false;
 
-	function __construct( $par = null, $including = false ) {
-		global $wgRequest, $wgMiserMode;
+	function __construct( IContextSource $context, $userName = null, $search = '', $including = false ) {
+		global $wgMiserMode;
 
 		$this->mIncluding = $including;
 
-		
-		$userName = $including ? $par : $wgRequest->getText( 'user', $par );
 		if ( $userName ) {
 			$nt = Title::newFromText( $userName, NS_USER );
 			if ( !is_null( $nt ) ) {
@@ -70,27 +76,28 @@ class ImageListPager extends TablePager {
 			}
 		}
 
+		if ( $search != '' && !$wgMiserMode ) {
+			$this->mSearch = $search;
+			$nt = Title::newFromURL( $this->mSearch );
+			if ( $nt ) {
+				$dbr = wfGetDB( DB_SLAVE );
+				$this->mQueryConds[] = 'LOWER(img_name)' .
+					$dbr->buildLike( $dbr->anyString(),
+						strtolower( $nt->getDBkey() ), $dbr->anyString() );
+			}
+		}
+
 		if ( !$including ) {
-			if ( $wgRequest->getText( 'sort', 'img_date' ) == 'img_date' ) {
+			if ( $context->getRequest()->getText( 'sort', 'img_date' ) == 'img_date' ) {
 				$this->mDefaultDirection = true;
 			} else {
 				$this->mDefaultDirection = false;
-			}
-
-			$search = $wgRequest->getText( 'ilsearch' );
-			if ( $search != '' && !$wgMiserMode ) {
-				$nt = Title::newFromURL( $search );
-				if ( $nt ) {
-					$dbr = wfGetDB( DB_SLAVE );
-					$this->mQueryConds[] = 'LOWER(img_name)' . $dbr->buildLike( $dbr->anyString(),
-						strtolower( $nt->getDBkey() ), $dbr->anyString() );
-				}
 			}
 		} else {
 			$this->mDefaultDirection = true;
 		}
 
-		parent::__construct();
+		parent::__construct( $context );
 	}
 
 	/**
@@ -149,7 +156,8 @@ class ImageListPager extends TablePager {
 			if( $dbr->implicitGroupby() ) {
 				$options = array( 'GROUP BY' => 'img_name' );
 			} else {
-				$columnlist = implode( ',', preg_grep( '/^img/', array_keys( $this->getFieldNames() ) ) );
+				$columnlist = implode( ',',
+					preg_grep( '/^img/', array_keys( $this->getFieldNames() ) ) );
 				$options = array( 'GROUP BY' => "img_user, $columnlist" );
 			}
 			$join_conds = array( 'oldimage' => array( 'LEFT JOIN', 'oi_name = img_name' ) );
@@ -184,27 +192,32 @@ class ImageListPager extends TablePager {
 	}
 
 	function formatValue( $field, $value ) {
-		global $wgLang;
 		switch ( $field ) {
 			case 'thumb':
 				$file = wfLocalFile( $value );
-				$thumb = $file->transform( array( 'width' => 180 ) );
+				$thumb = $file->transform( array( 'width' => 180, 'height' => 360 ) );
 				return $thumb->toHtml( array( 'desc-link' => true ) );
 			case 'img_timestamp':
-				return htmlspecialchars( $wgLang->timeanddate( $value, true ) );
+				return htmlspecialchars( $this->getLang()->timeanddate( $value, true ) );
 			case 'img_name':
 				static $imgfile = null;
 				if ( $imgfile === null ) $imgfile = wfMsg( 'imgfile' );
 
-				$filePage = Title::makeTitle( NS_FILE, $value );
-				$link = $this->getSkin()->linkKnown( $filePage, htmlspecialchars( $filePage->getText() ) );
-				$image = wfLocalFile( $value );
-				$url = $image->getURL();
-				$download = Xml::element('a', array( 'href' => $url ), $imgfile );
-				return "$link ($download)";
+				// Weird files can maybe exist? Bug 22227
+				$filePage = Title::makeTitleSafe( NS_FILE, $value );
+				if( $filePage ) {
+					$link = Linker::linkKnown( $filePage, htmlspecialchars( $filePage->getText() ) );
+					$download = Xml::element( 'a',
+						array( 'href' => wfLocalFile( $filePage )->getURL() ),
+						$imgfile
+					);
+					return "$link ($download)";
+				} else {
+					return htmlspecialchars( $value );
+				}
 			case 'img_user_text':
 				if ( $this->mCurrentRow->img_user ) {
-					$link = $this->getSkin()->link(
+					$link = Linker::link(
 						Title::makeTitle( NS_USER, $value ),
 						htmlspecialchars( $value )
 					);
@@ -213,38 +226,38 @@ class ImageListPager extends TablePager {
 				}
 				return $link;
 			case 'img_size':
-				return $this->getSkin()->formatSize( $value );
+				return htmlspecialchars( $this->getLang()->formatSize( $value ) );
 			case 'img_description':
-				return $this->getSkin()->commentBlock( $value );
+				return Linker::commentBlock( $value );
 			case 'count':
-				return intval($value)+1;
+				return intval( $value ) + 1;
 		}
 	}
 
 	function getForm() {
-		global $wgRequest, $wgScript, $wgMiserMode;
-		$search = $wgRequest->getText( 'ilsearch' );
+		global $wgScript, $wgMiserMode;
 		$inputForm = array();
 		$inputForm['table_pager_limit_label'] = $this->getLimitSelect();
 		if ( !$wgMiserMode ) {
-			$inputForm['listfiles_search_for'] = Html::input( 'ilsearch', $search, 'text', array(
-								'size' => '40',
-								'maxlength' => '255',
-								'id' => 'mw-ilsearch',
+			$inputForm['listfiles_search_for'] = Html::input( 'ilsearch', $this->mSearch, 'text',
+				array(
+					'size' 		=> '40',
+					'maxlength' => '255',
+					'id' 		=> 'mw-ilsearch',
 			) );
 		}
 		$inputForm['username'] = Html::input( 'user', $this->mUserName, 'text', array(
-						'size' => '40',
-						'maxlength' => '255',
-						'id' => 'mw-listfiles-user',
+			'size' 		=> '40',
+			'maxlength' => '255',
+			'id' 		=> 'mw-listfiles-user',
 		) );
-		$s = Html::openElement( 'form', array( 'method' => 'get', 'action' => $wgScript, 'id' => 'mw-listfiles-form' ) ) .
+		return Html::openElement( 'form',
+				array( 'method' => 'get', 'action' => $wgScript, 'id' => 'mw-listfiles-form' ) ) .
 			Xml::fieldset( wfMsg( 'listfiles' ) ) .
 			Xml::buildForm( $inputForm, 'table_pager_limit_submit' ) .
 			$this->getHiddenFields( array( 'limit', 'ilsearch', 'user' ) ) .
 			Html::closeElement( 'fieldset' ) .
 			Html::closeElement( 'form' ) . "\n";
-		return $s;
 	}
 
 	function getTableClass() {
@@ -272,9 +285,7 @@ class ImageListPager extends TablePager {
 
 	function getDefaultQuery() {
 		$queries = parent::getDefaultQuery();
-		if ( !isset( $queries['user'] )
-			&& !is_null( $this->mUserName ) )
-		{
+		if ( !isset( $queries['user'] ) && !is_null( $this->mUserName ) ) {
 			$queries['user'] = $this->mUserName;
 		}
 		return $queries;

@@ -35,15 +35,15 @@ class LinkHolderArray {
 	 * Compact the titles, only serialize the text form.
 	 */
 	function __sleep() {
-		foreach ( $this->internals as $ns => &$nsLinks ) {
-			foreach ( $nsLinks as $key => &$entry ) {
+		foreach ( $this->internals as &$nsLinks ) {
+			foreach ( $nsLinks as &$entry ) {
 				unset( $entry['title'] );
 			}
 		}
 		unset( $nsLinks );
 		unset( $entry );
 
-		foreach ( $this->interwikis as $key => &$entry ) {
+		foreach ( $this->interwikis as &$entry ) {
 			unset( $entry['title'] );
 		}
 		unset( $entry );
@@ -55,15 +55,15 @@ class LinkHolderArray {
 	 * Recreate the Title objects
 	 */
 	function __wakeup() {
-		foreach ( $this->internals as $ns => &$nsLinks ) {
-			foreach ( $nsLinks as $key => &$entry ) {
+		foreach ( $this->internals as &$nsLinks ) {
+			foreach ( $nsLinks as &$entry ) {
 				$entry['title'] = Title::newFromText( $entry['pdbk'] );
 			}
 		}
 		unset( $nsLinks );
 		unset( $entry );
 
-		foreach ( $this->interwikis as $key => &$entry ) {
+		foreach ( $this->interwikis as &$entry ) {
 			$entry['title'] = Title::newFromText( $entry['pdbk'] );
 		}
 		unset( $entry );
@@ -94,7 +94,7 @@ class LinkHolderArray {
 	 * strings will be returned.
 	 *
 	 * @param $other LinkHolderArray
-	 * @param $text Array of strings
+	 * @param $texts Array of strings
 	 * @return Array
 	 */
 	function mergeForeign( $other, $texts ) {
@@ -227,7 +227,7 @@ class LinkHolderArray {
 	}
 
 	/**
-	 * FIXME: update documentation. makeLinkObj() is deprecated.
+	 * @todo FIXME: Update documentation. makeLinkObj() is deprecated.
 	 * Replace <!--LINK--> link placeholders with actual links, in the buffer
 	 * Placeholders created in Skin::makeLinkObj()
 	 * Returns an array of link CSS classes, indexed by PDBK.
@@ -259,7 +259,6 @@ class LinkHolderArray {
 
 		wfProfileIn( __METHOD__.'-check' );
 		$dbr = wfGetDB( DB_SLAVE );
-		$page = $dbr->tableName( 'page' );
 		$threshold = $this->parent->getOptions()->getStubThreshold();
 
 		# Sort by namespace
@@ -268,8 +267,7 @@ class LinkHolderArray {
 		$linkcolour_ids = array();
 
 		# Generate query
-		$query = false;
-		$current = null;
+		$queries = array();
 		foreach ( $this->internals as $ns => $entries ) {
 			foreach ( $entries as $entry ) {
 				$title = $entry['title'];
@@ -294,34 +292,37 @@ class LinkHolderArray {
 					$colours[$pdbk] = 'new';
 				} else {
 					# Not in the link cache, add it to the query
-					if ( !isset( $current ) ) {
-						$current = $ns;
-						$query =  "SELECT page_id, page_namespace, page_title, page_is_redirect, page_len, page_latest";
-						$query .= " FROM $page WHERE (page_namespace=$ns AND page_title IN(";
-					} elseif ( $current != $ns ) {
-						$current = $ns;
-						$query .= ")) OR (page_namespace=$ns AND page_title IN(";
-					} else {
-						$query .= ', ';
-					}
-
-					$query .= $dbr->addQuotes( $title->getDBkey() );
+					$queries[$ns][] = $title->getDBkey();
 				}
 			}
 		}
-		if ( $query ) {
-			$query .= '))';
+		if ( $queries ) {
+			$where = array();
+			foreach( $queries as $ns => $pages ){
+				$where[] = $dbr->makeList(
+					array(
+						'page_namespace' => $ns,
+						'page_title' => $pages,
+					),
+					LIST_AND
+				);
+			}
 
-			$res = $dbr->query( $query, __METHOD__ );
+			$res = $dbr->select(
+				'page',
+				array( 'page_id', 'page_namespace', 'page_title', 'page_is_redirect', 'page_len', 'page_latest' ),
+				$dbr->makeList( $where, LIST_OR ),
+				__METHOD__
+			);
 
 			# Fetch data and form into an associative array
 			# non-existent = broken
 			foreach ( $res as $s ) {
 				$title = Title::makeTitle( $s->page_namespace, $s->page_title );
 				$pdbk = $title->getPrefixedDBkey();
-				$linkCache->addGoodLinkObj( $s->page_id, $title, $s->page_len, $s->page_is_redirect, $s->page_latest );
+				$linkCache->addGoodLinkObjFromRow( $title, $s );
 				$output->addLink( $title, $s->page_id );
-				# FIXME: convoluted data flow
+				# @todo FIXME: Convoluted data flow
 				# The redirect status and length is passed to getLinkColour via the LinkCache
 				# Use formal parameters instead
 				$colours[$pdbk] = Linker::getLinkColour( $title, $threshold );
@@ -489,7 +490,7 @@ class LinkHolderArray {
 			// construct query
 			$dbr = wfGetDB( DB_SLAVE );
 			$varRes = $dbr->select( 'page',
-				array( 'page_id', 'page_namespace', 'page_title', 'page_is_redirect', 'page_len' ),
+				array( 'page_id', 'page_namespace', 'page_title', 'page_is_redirect', 'page_len', 'page_latest' ),
 				$linkBatch->constructSet( 'page', $dbr ),
 				__METHOD__
 			);
@@ -506,7 +507,7 @@ class LinkHolderArray {
 				$holderKeys = array();
 				if( isset( $variantMap[$varPdbk] ) ) {
 					$holderKeys = $variantMap[$varPdbk];
-					$linkCache->addGoodLinkObj( $s->page_id, $variantTitle, $s->page_len, $s->page_is_redirect );
+					$linkCache->addGoodLinkObjFromRow( $variantTitle, $s );
 					$output->addLink( $variantTitle, $s->page_id );
 				}
 
@@ -522,7 +523,7 @@ class LinkHolderArray {
 						$entry['pdbk'] = $varPdbk;
 
 						// set pdbk and colour
-						# FIXME: convoluted data flow
+						# @todo FIXME: Convoluted data flow
 						# The redirect status and length is passed to getLinkColour via the LinkCache
 						# Use formal parameters instead
 						$colours[$varPdbk] = Linker::getLinkColour( $variantTitle, $threshold );

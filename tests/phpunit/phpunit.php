@@ -19,14 +19,21 @@ require_once( "$IP/maintenance/Maintenance.php" );
 
 class PHPUnitMaintClass extends Maintenance {
 	public function finalSetup() {
-		$settings = parent::finalSetup();
+		parent::finalSetup();
 
 		global $wgMainCacheType, $wgMessageCacheType, $wgParserCacheType, $wgUseDatabaseMessages;
+		global $wgLocaltimezone, $wgLocalisationCacheConf;
 
 		$wgMainCacheType = CACHE_NONE;
 		$wgMessageCacheType = CACHE_NONE;
 		$wgParserCacheType = CACHE_NONE;
+
 		$wgUseDatabaseMessages = false; # Set for future resets
+
+		// Assume UTC for testing purposes
+		$wgLocaltimezone = 'UTC';
+
+		$wgLocalisationCacheConf['storeClass'] =  'LCStore_Null';
 	}
 	public function execute() { }
 	public function getDbType() {
@@ -37,11 +44,6 @@ class PHPUnitMaintClass extends Maintenance {
 $maintClass = 'PHPUnitMaintClass';
 require( RUN_MAINTENANCE_IF_MAIN );
 
-// Assume UTC for testing purposes
-$wgLocaltimezone = 'UTC';
-
-$wgLocalisationCacheConf['storeClass'] =  'LCStore_Null';
-
 if( !in_array( '--configuration', $_SERVER['argv'] ) ) {
 	//Hack to eliminate the need to use the Makefile (which sucks ATM)
 	$_SERVER['argv'][] = '--configuration';
@@ -49,13 +51,10 @@ if( !in_array( '--configuration', $_SERVER['argv'] ) ) {
 }
 
 require_once( 'PHPUnit/Runner/Version.php' );
-if( version_compare( PHPUnit_Runner_Version::id(), '3.5.0', '>=' ) ) {
-	# PHPUnit 3.5.0 introduced a nice autoloader based on class name
-	require_once( 'PHPUnit/Autoload.php' );
-} else {
-	# Keep the old pre PHPUnit 3.5.0 behaviour for compatibility
-	require_once( 'PHPUnit/TextUI/Command.php' );
+if( version_compare( PHPUnit_Runner_Version::id(), '3.5.0', '<' ) ) {
+	die( 'PHPUnit 3.5 or later required, you have ' . PHPUnit_Runner_Version::id() . ".\n" );
 }
+require_once( 'PHPUnit/Autoload.php' );
 
 require_once( "$IP/tests/TestsAutoLoader.php" );
 MediaWikiPHPUnitCommand::main();

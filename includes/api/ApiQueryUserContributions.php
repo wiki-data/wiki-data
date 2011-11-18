@@ -24,11 +24,6 @@
  * @file
  */
 
-if ( !defined( 'MEDIAWIKI' ) ) {
-	// Eclipse helper - will be ignored in production
-	require_once( 'ApiQueryBase.php' );
-}
-
 /**
  * This query action adds a list of a specified user's contributions to the output.
  *
@@ -121,6 +116,8 @@ class ApiQueryContributions extends ApiQueryBase {
 	/**
 	 * Validate the 'user' parameter and set the value to compare
 	 * against `revision`.`rev_user_text`
+	 *
+	 * @param $user string
 	 */
 	private function prepareUsername( $user ) {
 		if ( !is_null( $user ) && $user !== '' ) {
@@ -144,7 +141,7 @@ class ApiQueryContributions extends ApiQueryBase {
 		// We're after the revision table, and the corresponding page
 		// row for anything we retrieve. We may also need the
 		// recentchanges row and/or tag summary row.
-		global $wgUser;
+		$user = $this->getUser();
 		$tables = array( 'page', 'revision' ); // Order may change
 		$this->addWhere( 'page_id=rev_page' );
 
@@ -165,7 +162,7 @@ class ApiQueryContributions extends ApiQueryBase {
 			);
 		}
 
-		if ( !$wgUser->isAllowed( 'hideuser' ) ) {
+		if ( !$user->isAllowed( 'hideuser' ) ) {
 			$this->addWhere( $this->getDB()->bitAnd( 'rev_deleted', Revision::DELETED_USER ) . ' = 0' );
 		}
 		// We only want pages by the specified users.
@@ -180,7 +177,7 @@ class ApiQueryContributions extends ApiQueryBase {
 		if ( $this->multiUserMode ) {
 			$this->addWhereRange( 'rev_user_text', $this->params['dir'], null, null );
 		}
-		$this->addWhereRange( 'rev_timestamp',
+		$this->addTimestampWhereRange( 'rev_timestamp',
 			$this->params['dir'], $this->params['start'], $this->params['end'] );
 		$this->addWhereFld( 'page_namespace', $this->params['namespace'] );
 
@@ -189,7 +186,7 @@ class ApiQueryContributions extends ApiQueryBase {
 			$show = array_flip( $show );
 			if ( ( isset( $show['minor'] ) && isset( $show['!minor'] ) )
 			   		|| ( isset( $show['patrolled'] ) && isset( $show['!patrolled'] ) ) ) {
-				$this->dieUsageMsg( array( 'show' ) );
+				$this->dieUsageMsg( 'show' );
 			}
 
 			$this->addWhereIf( 'rev_minor_edit = 0', isset( $show['!minor'] ) );
@@ -214,7 +211,7 @@ class ApiQueryContributions extends ApiQueryBase {
 
 		if ( isset( $show['patrolled'] ) || isset( $show['!patrolled'] ) ||
 				 $this->fld_patrolled ) {
-			if ( !$wgUser->useRCPatrol() && !$wgUser->useNPPatrol() ) {
+			if ( !$user->useRCPatrol() && !$user->useNPPatrol() ) {
 				$this->dieUsage( 'You need the patrol right to request the patrolled flag', 'permissiondenied' );
 			}
 
@@ -247,8 +244,7 @@ class ApiQueryContributions extends ApiQueryBase {
 		// $this->addFieldsIf( 'rev_text_id', $this->fld_ids ); // Should this field be exposed?
 		$this->addFieldsIf( 'rev_comment', $this->fld_comment || $this->fld_parsedcomment );
 		$this->addFieldsIf( 'rev_len', $this->fld_size );
-		$this->addFieldsIf( 'rev_minor_edit', $this->fld_flags );
-		$this->addFieldsIf( 'rev_parent_id', $this->fld_flags );
+		$this->addFieldsIf( array( 'rev_minor_edit', 'rev_parent_id' ), $this->fld_flags );
 		$this->addFieldsIf( 'rc_patrolled', $this->fld_patrolled );
 
 		if ( $this->fld_tags ) {
@@ -274,6 +270,9 @@ class ApiQueryContributions extends ApiQueryBase {
 
 	/**
 	 * Extract fields from the database row and append them to a result array
+	 *
+	 * @param $row
+	 * @return array
 	 */
 	private function extractRowInfo( $row ) {
 		$vals = array();
@@ -320,8 +319,7 @@ class ApiQueryContributions extends ApiQueryBase {
 				}
 
 				if ( $this->fld_parsedcomment ) {
-					global $wgUser;
-					$vals['parsedcomment'] = $wgUser->getSkin()->formatComment( $row->rev_comment, $title );
+					$vals['parsedcomment'] = Linker::formatComment( $row->rev_comment, $title );
 				}
 			}
 		}
@@ -462,14 +460,18 @@ class ApiQueryContributions extends ApiQueryBase {
 		) );
 	}
 
-	protected function getExamples() {
+	public function getExamples() {
 		return array(
 			'api.php?action=query&list=usercontribs&ucuser=YurikBot',
 			'api.php?action=query&list=usercontribs&ucuserprefix=217.121.114.',
 		);
 	}
 
+	public function getHelpUrls() {
+		return 'http://www.mediawiki.org/wiki/API:Usercontribs';
+	}
+
 	public function getVersion() {
-		return __CLASS__ . ': $Id: ApiQueryUserContributions.php 85772 2011-04-10 21:52:34Z reedy $';
+		return __CLASS__ . ': $Id: ApiQueryUserContributions.php 103273 2011-11-16 00:17:26Z johnduhart $';
 	}
 }

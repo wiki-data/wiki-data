@@ -24,10 +24,6 @@
  * @file
  */
 
-if ( !defined( 'MEDIAWIKI' ) ) {
-	require_once ( 'ApiBase.php' );
-}
-
 /**
  * Allows user to patrol pages
  * @ingroup API
@@ -48,7 +44,7 @@ class ApiPatrol extends ApiBase {
 		if ( !$rc instanceof RecentChange ) {
 			$this->dieUsageMsg( array( 'nosuchrcid', $params['rcid'] ) );
 		}
-		$retval = RecentChange::markPatrolled( $params['rcid'] );
+		$retval = $rc->doMarkPatrolled( $this->getUser() );
 
 		if ( $retval ) {
 			$this->dieUsageMsg( reset( $retval ) );
@@ -102,13 +98,17 @@ class ApiPatrol extends ApiBase {
 		return 'patrol';
 	}
 
-	protected function getExamples() {
+	public function getExamples() {
 		return array(
 			'api.php?action=patrol&token=123abc&rcid=230672766'
 		);
 	}
 
+	public function getHelpUrls() {
+		return 'http://www.mediawiki.org/wiki/API:Patrol';
+	}
+
 	public function getVersion() {
-		return __CLASS__ . ': $Id: ApiPatrol.php 79969 2011-01-10 22:36:26Z reedy $';
+		return __CLASS__ . ': $Id: ApiPatrol.php 103273 2011-11-16 00:17:26Z johnduhart $';
 	}
 }

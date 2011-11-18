@@ -24,11 +24,6 @@
  * @file
  */
 
-if ( !defined( 'MEDIAWIKI' ) ) {
-	// Eclipse helper - will be ignored in production
-	require_once( 'ApiBase.php' );
-}
-
 /**
  * This class represents the result of the API operations.
  * It simply wraps a nested array() structure, adding some functions to simplify array's modifications.
@@ -246,13 +241,21 @@ class ApiResult extends ApiBase {
 
 	/**
 	 * Add value to the output data at the given path.
-	 * Path is an indexed array, each element specifying the branch at which to add the new value
-	 * Setting $path to array('a','b','c') is equivalent to data['a']['b']['c'] = $value
-	 * If $name is empty, the $value is added as a next list element data[] = $value
+	 * Path can be an indexed array, each element specifying the branch at which to add the new
+	 * value. Setting $path to array('a','b','c') is equivalent to data['a']['b']['c'] = $value.
+	 * If $path is null, the value will be inserted at the data root.
+	 * If $name is empty, the $value is added as a next list element data[] = $value.
+	 *
+	 * @param $path array|string|null
+	 * @param $name string
+	 * @param $value mixed
+	 * @param $overwrite bool
+	 *
 	 * @return bool True if $value fits in the result, false if not
 	 */
 	public function addValue( $path, $name, $value, $overwrite = false ) {
 		global $wgAPIMaxResultSize;
+
 		$data = &$this->mData;
 		if ( $this->mCheckingSize ) {
 			$newsize = $this->mSize + self::size( $value );
@@ -330,6 +333,8 @@ class ApiResult extends ApiBase {
 
 	/**
 	 * Callback function for cleanUpUTF8()
+	 *
+	 * @param $s string
 	 */
 	private static function cleanUp_helper( &$s ) {
 		if ( !is_string( $s ) ) {
@@ -338,7 +343,6 @@ class ApiResult extends ApiBase {
 		global $wgContLang;
 		$s = $wgContLang->normalize( $s );
 	}
-	
 
 	/**
 	 * Converts a Status object to an array suitable for addValue
@@ -350,7 +354,7 @@ class ApiResult extends ApiBase {
 		if ( $status->isGood() ) {
 			return array();
 		}
-		
+
 		$result = array();
 		foreach ( $status->getErrorsByType( $errorType ) as $error ) {
 			$this->setIndexedTagName( $error['params'], 'param' );
@@ -365,6 +369,6 @@ class ApiResult extends ApiBase {
 	}
 
 	public function getVersion() {
-		return __CLASS__ . ': $Id: ApiResult.php 83302 2011-03-05 17:23:35Z btongminh $';
+		return __CLASS__ . ': $Id: ApiResult.php 103273 2011-11-16 00:17:26Z johnduhart $';
 	}
 }

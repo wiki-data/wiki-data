@@ -14,11 +14,15 @@
  * @see Database
  */
 class DatabaseMysql extends DatabaseBase {
+
+	/**
+	 * @return string
+	 */
 	function getType() {
 		return 'mysql';
 	}
 
-	/*private*/ function doQuery( $sql ) {
+	protected function doQuery( $sql ) {
 		if( $this->bufferResults() ) {
 			$ret = mysql_query( $sql, $this->mConn );
 		} else {
@@ -95,7 +99,9 @@ class DatabaseMysql extends DatabaseBase {
 		wfProfileOut("dbconnect-$server");
 
 		if ( $dbName != '' && $this->mConn !== false ) {
-			$success = @/**/mysql_select_db( $dbName, $this->mConn );
+			wfSuppressWarnings();
+			$success = mysql_select_db( $dbName, $this->mConn );
+			wfRestoreWarnings();
 			if ( !$success ) {
 				$error = "Error selecting database $dbName on server {$this->mServer} " .
 					"from client host " . wfHostname() . "\n";
@@ -136,6 +142,9 @@ class DatabaseMysql extends DatabaseBase {
 		return $success;
 	}
 
+	/**
+	 * @return bool
+	 */
 	function close() {
 		$this->mOpened = false;
 		if ( $this->mConn ) {
@@ -152,7 +161,10 @@ class DatabaseMysql extends DatabaseBase {
 		if ( $res instanceof ResultWrapper ) {
 			$res = $res->result;
 		}
-		if ( !@/**/mysql_free_result( $res ) ) {
+		wfSuppressWarnings();
+		$ok = mysql_free_result( $res );
+		wfRestoreWarnings();
+		if ( !$ok ) {
 			throw new DBUnexpectedError( $this, "Unable to free MySQL result" );
 		}
 	}
@@ -161,35 +173,50 @@ class DatabaseMysql extends DatabaseBase {
 		if ( $res instanceof ResultWrapper ) {
 			$res = $res->result;
 		}
-		@/**/$row = mysql_fetch_object( $res );
+		wfSuppressWarnings();
+		$row = mysql_fetch_object( $res );
+		wfRestoreWarnings();
 		if( $this->lastErrno() ) {
 			throw new DBUnexpectedError( $this, 'Error in fetchObject(): ' . htmlspecialchars( $this->lastError() ) );
 		}
 		return $row;
 	}
 
- 	function fetchRow( $res ) {
+	function fetchRow( $res ) {
 		if ( $res instanceof ResultWrapper ) {
 			$res = $res->result;
 		}
-		@/**/$row = mysql_fetch_array( $res );
+		wfSuppressWarnings();
+		$row = mysql_fetch_array( $res );
+		wfRestoreWarnings();
 		if ( $this->lastErrno() ) {
 			throw new DBUnexpectedError( $this, 'Error in fetchRow(): ' . htmlspecialchars( $this->lastError() ) );
 		}
 		return $row;
 	}
 
+	/**
+	 * @throws DBUnexpectedError
+	 * @param $res
+	 * @return int
+	 */
 	function numRows( $res ) {
 		if ( $res instanceof ResultWrapper ) {
 			$res = $res->result;
 		}
-		@/**/$n = mysql_num_rows( $res );
+		wfSuppressWarnings();
+		$n = mysql_num_rows( $res );
+		wfRestoreWarnings();
 		if( $this->lastErrno() ) {
 			throw new DBUnexpectedError( $this, 'Error in numRows(): ' . htmlspecialchars( $this->lastError() ) );
 		}
 		return $n;
 	}
 
+	/**
+	 * @param $res
+	 * @return int
+	 */
 	function numFields( $res ) {
 		if ( $res instanceof ResultWrapper ) {
 			$res = $res->result;
@@ -197,6 +224,11 @@ class DatabaseMysql extends DatabaseBase {
 		return mysql_num_fields( $res );
 	}
 
+	/**
+	 * @param $res
+	 * @param $n
+	 * @return string
+	 */
 	function fieldName( $res, $n ) {
 		if ( $res instanceof ResultWrapper ) {
 			$res = $res->result;
@@ -204,7 +236,12 @@ class DatabaseMysql extends DatabaseBase {
 		return mysql_field_name( $res, $n );
 	}
 
-	function insertId() { return mysql_insert_id( $this->mConn ); }
+	/**
+	 * @return int
+	 */
+	function insertId() {
+		return mysql_insert_id( $this->mConn );
+	}
 
 	function dataSeek( $res, $row ) {
 		if ( $res instanceof ResultWrapper ) {
@@ -239,12 +276,23 @@ class DatabaseMysql extends DatabaseBase {
 		return $error;
 	}
 
-	function affectedRows() { return mysql_affected_rows( $this->mConn ); }
+	/**
+	 * @return int
+	 */
+	function affectedRows() {
+		return mysql_affected_rows( $this->mConn );
+	}
+
+	function replace( $table, $uniqueIndexes, $rows, $fname = 'DatabaseMysql::replace' ) {
+		return $this->nativeReplace( $table, $rows, $fname );
+	}
 
 	/**
 	 * Estimate rows in dataset
 	 * Returns estimated count, based on EXPLAIN output
 	 * Takes same arguments as Database::select()
+	 *
+	 * @return int
 	 */
 	public function estimateRowCount( $table, $vars='*', $conds='', $fname = 'DatabaseMysql::estimateRowCount', $options = array() ) {
 		$options['EXPLAIN'] = true;
@@ -263,6 +311,11 @@ class DatabaseMysql extends DatabaseBase {
 		return $rows;
 	}
 
+	/**
+	 * @param $table string
+	 * @param $field string
+	 * @return bool|MySQLField
+	 */
 	function fieldInfo( $table, $field ) {
 		$table = $this->tableName( $table );
 		$res = $this->query( "SELECT * FROM $table LIMIT 1", __METHOD__, true );
@@ -282,6 +335,8 @@ class DatabaseMysql extends DatabaseBase {
 	/**
 	 * Get information about an index into an object
 	 * Returns false if the index does not exist
+	 *
+	 * @return false|array
 	 */
 	function indexInfo( $table, $index, $fname = 'DatabaseMysql::indexInfo' ) {
 		# SHOW INDEX works in MySQL 3.23.58, but SHOW INDEXES does not.
@@ -307,11 +362,20 @@ class DatabaseMysql extends DatabaseBase {
 		return empty( $result ) ? false : $result;
 	}
 
+	/**
+	 * @param $db
+	 * @return bool
+	 */
 	function selectDB( $db ) {
 		$this->mDBname = $db;
 		return mysql_select_db( $db, $this->mConn );
 	}
 
+	/**
+	 * @param $s string
+	 *
+	 * @return string
+	 */
 	function strencode( $s ) {
 		$sQuoted = mysql_real_escape_string( $s, $this->mConn );
 
@@ -324,11 +388,26 @@ class DatabaseMysql extends DatabaseBase {
 
 	/**
 	 * MySQL uses `backticks` for identifier quoting instead of the sql standard "double quotes".
+	 *
+	 * @param $s string
+	 *
+	 * @return string
 	 */
 	public function addIdentifierQuotes( $s ) {
 		return "`" . $this->strencode( $s ) . "`";
 	}
 
+	/**
+	 * @param $name string
+	 * @return bool
+	 */
+	public function isQuotedIdentifier( $name ) {
+		return strlen( $name ) && $name[0] == '`' && substr( $name, -1, 1 ) == '`';
+	}
+
+	/**
+	 * @return bool
+	 */
 	function ping() {
 		$ping = mysql_ping( $this->mConn );
 		if ( $ping ) {
@@ -344,14 +423,49 @@ class DatabaseMysql extends DatabaseBase {
 
 	/**
 	 * Returns slave lag.
-	 * At the moment, this will only work if the DB user has the PROCESS privilege
-	 * @result int
+	 *
+	 * On MySQL 4.1.9 and later, this will do a SHOW SLAVE STATUS. On earlier
+	 * versions of MySQL, it uses SHOW PROCESSLIST, which requires the PROCESS
+	 * privilege.
+	 *
+	 * @return int
 	 */
 	function getLag() {
 		if ( !is_null( $this->mFakeSlaveLag ) ) {
 			wfDebug( "getLag: fake slave lagged {$this->mFakeSlaveLag} seconds\n" );
 			return $this->mFakeSlaveLag;
 		}
+
+		if ( version_compare( $this->getServerVersion(), '4.1.9', '>=' ) ) {
+			return $this->getLagFromSlaveStatus();
+		} else {
+			return $this->getLagFromProcesslist();
+		}
+	}
+
+	/**
+	 * @return bool|int
+	 */
+	function getLagFromSlaveStatus() {
+		$res = $this->query( 'SHOW SLAVE STATUS', __METHOD__ );
+		if ( !$res ) {
+			return false;
+		}
+		$row = $res->fetchObject();
+		if ( !$row ) {
+			return false;
+		}
+		if ( strval( $row->Seconds_Behind_Master ) === '' ) {
+			return false;
+		} else {
+			return intval( $row->Seconds_Behind_Master );
+		}
+	}
+
+	/**
+	 * @return bool|int
+	 */
+	function getLagFromProcesslist() {
 		$res = $this->query( 'SHOW PROCESSLIST', __METHOD__ );
 		if( !$res ) {
 			return false;
@@ -385,18 +499,108 @@ class DatabaseMysql extends DatabaseBase {
 		return false;
 	}
 
+	/**
+	 * Wait for the slave to catch up to a given master position.
+	 *
+	 * @param $pos DBMasterPos object
+	 * @param $timeout Integer: the maximum number of seconds to wait for synchronisation
+	 */
+	function masterPosWait( DBMasterPos $pos, $timeout ) {
+		$fname = 'DatabaseBase::masterPosWait';
+		wfProfileIn( $fname );
+
+		# Commit any open transactions
+		if ( $this->mTrxLevel ) {
+			$this->commit();
+		}
+
+		if ( !is_null( $this->mFakeSlaveLag ) ) {
+			$status = parent::masterPosWait( $pos, $timeout );
+			wfProfileOut( $fname );
+			return $status;
+		}
+
+		# Call doQuery() directly, to avoid opening a transaction if DBO_TRX is set
+		$encFile = $this->addQuotes( $pos->file );
+		$encPos = intval( $pos->pos );
+		$sql = "SELECT MASTER_POS_WAIT($encFile, $encPos, $timeout)";
+		$res = $this->doQuery( $sql );
+
+		if ( $res && $row = $this->fetchRow( $res ) ) {
+			wfProfileOut( $fname );
+			return $row[0];
+		} else {
+			wfProfileOut( $fname );
+			return false;
+		}
+	}
+
+	/**
+	 * Get the position of the master from SHOW SLAVE STATUS
+	 *
+	 * @return MySQLMasterPos|false
+	 */
+	function getSlavePos() {
+		if ( !is_null( $this->mFakeSlaveLag ) ) {
+			return parent::getSlavePos();
+		}
+
+		$res = $this->query( 'SHOW SLAVE STATUS', 'DatabaseBase::getSlavePos' );
+		$row = $this->fetchObject( $res );
+
+		if ( $row ) {
+			$pos = isset( $row->Exec_master_log_pos ) ? $row->Exec_master_log_pos : $row->Exec_Master_Log_Pos;
+			return new MySQLMasterPos( $row->Relay_Master_Log_File, $pos );
+		} else {
+			return false;
+		}
+	}
+
+	/**
+	 * Get the position of the master from SHOW MASTER STATUS
+	 *
+	 * @return MySQLMasterPos|false
+	 */
+	function getMasterPos() {
+		if ( $this->mFakeMaster ) {
+			return parent::getMasterPos();
+		}
+
+		$res = $this->query( 'SHOW MASTER STATUS', 'DatabaseBase::getMasterPos' );
+		$row = $this->fetchObject( $res );
+
+		if ( $row ) {
+			return new MySQLMasterPos( $row->File, $row->Position );
+		} else {
+			return false;
+		}
+	}
+
+	/**
+	 * @return string
+	 */
 	function getServerVersion() {
 		return mysql_get_server_info( $this->mConn );
 	}
 
+	/**
+	 * @param $index
+	 * @return string
+	 */
 	function useIndexClause( $index ) {
 		return "FORCE INDEX (" . $this->indexName( $index ) . ")";
 	}
 
+	/**
+	 * @return string
+	 */
 	function lowPriorityOption() {
 		return 'LOW_PRIORITY';
 	}
 
+	/**
+	 * @return string
+	 */
 	public static function getSoftwareLink() {
 		return '[http://www.mysql.com/ MySQL]';
 	}
@@ -479,7 +683,28 @@ class DatabaseMysql extends DatabaseBase {
 	}
 
 	/**
+	 * DELETE where the condition is a join. MySql uses multi-table deletes.
+	 */
+	function deleteJoin( $delTable, $joinTable, $delVar, $joinVar, $conds, $fname = 'DatabaseBase::deleteJoin' ) {
+		if ( !$conds ) {
+			throw new DBUnexpectedError( $this, 'DatabaseBase::deleteJoin() called with empty $conds' );
+		}
+
+		$delTable = $this->tableName( $delTable );
+		$joinTable = $this->tableName( $joinTable );
+		$sql = "DELETE $delTable FROM $delTable, $joinTable WHERE $delVar=$joinVar ";
+
+		if ( $conds != '*' ) {
+			$sql .= ' AND ' . $this->makeList( $conds, LIST_AND );
+		}
+
+		return $this->query( $sql, $fname );
+	}
+
+	/**
 	 * Determines if the last failure was due to a deadlock
+	 *
+	 * @return bool
 	 */
 	function wasDeadlock() {
 		return $this->lastErrno() == 1213;
@@ -488,6 +713,8 @@ class DatabaseMysql extends DatabaseBase {
 	/**
 	 * Determines if the last query error was something that should be dealt
 	 * with by pinging the connection and reissuing the query
+	 *
+	 * @return bool
 	 */
 	function wasErrorReissuable() {
 		return $this->lastErrno() == 2013 || $this->lastErrno() == 2006;
@@ -495,6 +722,8 @@ class DatabaseMysql extends DatabaseBase {
 
 	/**
 	 * Determines if the last failure was due to the database being read-only.
+	 *
+	 * @return bool
 	 */
 	function wasReadOnlyError() {
 		return $this->lastErrno() == 1223 ||
@@ -512,21 +741,23 @@ class DatabaseMysql extends DatabaseBase {
 			# Note that we don't bother changing around the prefixes here be-
 			# cause we know we're using MySQL anyway.
 
-			$res = $this->query( "SHOW CREATE TABLE $oldName" );
+			$res = $this->query( 'SHOW CREATE TABLE ' . $this->addIdentifierQuotes( $oldName ) );
 			$row = $this->fetchRow( $res );
 			$oldQuery = $row[1];
 			$query = preg_replace( '/CREATE TABLE `(.*?)`/',
-				"CREATE $tmp TABLE `$newName`", $oldQuery );
+				"CREATE $tmp TABLE " . $this->addIdentifierQuotes( $newName ), $oldQuery );
 			if ($oldQuery === $query) {
 				# Couldn't do replacement
 				throw new MWException( "could not create temporary table $newName" );
 			}
 		} else {
+			$newName = $this->addIdentifierQuotes( $newName );
+			$oldName = $this->addIdentifierQuotes( $oldName );
 			$query = "CREATE $tmp TABLE $newName (LIKE $oldName)";
 		}
 		$this->query( $query, $fname );
 	}
-	
+
 	/**
 	 * List all tables on the database
 	 *
@@ -535,37 +766,65 @@ class DatabaseMysql extends DatabaseBase {
 	 */
 	function listTables( $prefix = null, $fname = 'DatabaseMysql::listTables' ) {
 		$result = $this->query( "SHOW TABLES", $fname);
-		
+
 		$endArray = array();
-		
-		foreach( $result as $table ) {	
+
+		foreach( $result as $table ) {
 			$vars = get_object_vars($table);
 			$table = array_pop( $vars );
-			
+
 			if( !$prefix || strpos( $table, $prefix ) === 0 ) {
 				$endArray[] = $table;
 			}
 		}
-		
+
 		return $endArray;
 	}
 
+	/**
+	 * @param $tableName
+	 * @param $fName string
+	 * @return bool|ResultWrapper
+	 */
 	public function dropTable( $tableName, $fName = 'DatabaseMysql::dropTable' ) {
-		if( !$this->tableExists( $tableName ) ) {
+		if( !$this->tableExists( $tableName, $fName ) ) {
 			return false;
 		}
 		return $this->query( "DROP TABLE IF EXISTS " . $this->tableName( $tableName ), $fName );
 	}
 
+	/**
+	 * @return array
+	 */
 	protected function getDefaultSchemaVars() {
 		$vars = parent::getDefaultSchemaVars();
-		$vars['wgDBTableOptions'] = $GLOBALS['wgDBTableOptions'];
+		$vars['wgDBTableOptions'] = str_replace( 'TYPE', 'ENGINE', $GLOBALS['wgDBTableOptions'] );
+		$vars['wgDBTableOptions'] = str_replace( 'CHARSET=mysql4', 'CHARSET=binary', $GLOBALS['wgDBTableOptions'] );
 		return $vars;
 	}
+
+	/**
+	 * Get status information from SHOW STATUS in an associative array
+	 *
+	 * @return array
+	 */
+	function getMysqlStatus( $which = "%" ) {
+		$res = $this->query( "SHOW STATUS LIKE '{$which}'" );
+		$status = array();
+
+		foreach ( $res as $row ) {
+			$status[$row->Variable_name] = $row->Value;
+		}
+
+		return $status;
+	}
+
 }
 
 /**
  * Legacy support: Database == DatabaseMysql
+ *
+ * @deprecated in 1.16
  */
 class Database extends DatabaseMysql {}
 
@@ -590,10 +849,16 @@ class MySQLField implements Field {
 		$this->type = $info->type;
 	}
 
+	/**
+	 * @return string
+	 */
 	function name() {
 		return $this->name;
 	}
 
+	/**
+	 * @return string
+	 */
 	function tableName() {
 		return $this->tableName;
 	}
@@ -602,6 +867,9 @@ class MySQLField implements Field {
 		return $this->type;
 	}
 
+	/**
+	 * @return bool
+	 */
 	function isNullable() {
 		return $this->nullable;
 	}
@@ -610,16 +878,22 @@ class MySQLField implements Field {
 		return $this->default;
 	}
 
+	/**
+	 * @return bool
+	 */
 	function isKey() {
 		return $this->is_key;
 	}
 
+	/**
+	 * @return bool
+	 */
 	function isMultipleKey() {
 		return $this->is_multiple;
 	}
 }
 
-class MySQLMasterPos {
+class MySQLMasterPos implements DBMasterPos {
 	var $file, $pos;
 
 	function __construct( $file, $pos ) {

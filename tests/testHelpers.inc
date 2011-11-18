@@ -75,7 +75,7 @@ class TestRecorder {
 		if ( $this->total > 0 ) {
 			$this->reportPercentage( $this->success, $this->total );
 		} else {
-			wfDie( "No tests found.\n" );
+			throw new MWException( "No tests found.\n" );
 		}
 	}
 
@@ -121,8 +121,8 @@ class DbTestPreviewer extends TestRecorder  {
 	function start() {
 		parent::start();
 
-		if ( ! $this->db->tableExists( 'testrun' )
-			or ! $this->db->tableExists( 'testitem' ) )
+		if ( ! $this->db->tableExists( 'testrun', __METHOD__ )
+			|| ! $this->db->tableExists( 'testitem', __METHOD__ ) )
 		{
 			print "WARNING> `testrun` table not found in database.\n";
 			$this->prevRun = false;
@@ -305,7 +305,7 @@ class DbTestRecorder extends DbTestPreviewer  {
 		$this->db->begin();
 
 		if ( ! $this->db->tableExists( 'testrun' )
-			or ! $this->db->tableExists( 'testitem' ) )
+			|| ! $this->db->tableExists( 'testitem' ) )
 		{
 			print "WARNING> `testrun` table not found in database. Trying to create table.\n";
 			$this->db->sourceFile( $this->db->patchPath( 'patch-testrun.sql' ) );
@@ -349,99 +349,6 @@ class DbTestRecorder extends DbTestPreviewer  {
 	}
 }
 
-class RemoteTestRecorder extends TestRecorder {
-	function start() {
-		parent::start();
-
-		$this->results = array();
-		$this->ping( 'running' );
-	}
-
-	function record( $test, $result ) {
-		parent::record( $test, $result );
-		$this->results[$test] = (bool)$result;
-	}
-
-	function end() {
-		$this->ping( 'complete', $this->results );
-		parent::end();
-	}
-
-	/**
-	 * Inform a CodeReview instance that we've started or completed a test run...
-	 *
-	 * @param $status string: "running" - tell it we've started
-	 *                        "complete" - provide test results array
-	 *                        "abort" - something went horribly awry
-	 * @param $results array of test name => true/false
-	 */
-	function ping( $status, $results = false ) {
-		global $wgParserTestRemote, $IP;
-
-		$remote = $wgParserTestRemote;
-		$revId = SpecialVersion::getSvnRevision( $IP );
-		$jsonResults = FormatJson::encode( $results );
-
-		if ( !$remote ) {
-			print "Can't do remote upload without configuring \$wgParserTestRemote!\n";
-			exit( 1 );
-		}
-
-		// Generate a hash MAC to validate our credentials
-		$message = array(
-			$remote['repo'],
-			$remote['suite'],
-			$revId,
-			$status,
-		);
-
-		if ( $status == "complete" ) {
-			$message[] = $jsonResults;
-		}
-		$hmac = hash_hmac( "sha1", implode( "|", $message ), $remote['secret'] );
-
-		$postData = array(
-			'action' => 'codetestupload',
-			'format' => 'json',
-			'repo'   => $remote['repo'],
-			'suite'  => $remote['suite'],
-			'rev'    => $revId,
-			'status' => $status,
-			'hmac'   => $hmac,
-		);
-
-		if ( $status == "complete" ) {
-			$postData['results'] = $jsonResults;
-		}
-
-		$response = $this->post( $remote['api-url'], $postData );
-
-		if ( $response === false ) {
-			print "CodeReview info upload failed to reach server.\n";
-			exit( 1 );
-		}
-
-		$responseData = FormatJson::decode( $response, true );
-
-		if ( !is_array( $responseData ) ) {
-			print "CodeReview API response not recognized...\n";
-			wfDebug( "Unrecognized CodeReview API response: $response\n" );
-			exit( 1 );
-		}
-
-		if ( isset( $responseData['error'] ) ) {
-			$code = $responseData['error']['code'];
-			$info = $responseData['error']['info'];
-			print "CodeReview info upload failed: $code $info\n";
-			exit( 1 );
-		}
-	}
-
-	function post( $url, $data ) {
-		return Http::post( $url, array( 'postData' => $data ) );
-	}
-}
-
 class TestFileIterator implements Iterator {
 	private $file;
 	private $fh;
@@ -458,7 +365,7 @@ class TestFileIterator implements Iterator {
 		$this->fh = fopen( $this->file, "rt" );
 
 		if ( !$this->fh ) {
-			wfDie( "Couldn't open file '$file'\n" );
+			throw new MWException( "Couldn't open file '$file'\n" );
 		}
 
 		$this->parserTest = $parserTest;
@@ -469,7 +376,7 @@ class TestFileIterator implements Iterator {
 
 	function rewind() {
 		if ( fseek( $this->fh, 0 ) ) {
-			wfDie( "Couldn't fseek to the start of '$this->file'\n" );
+			throw new MWException( "Couldn't fseek to the start of '$this->file'\n" );
 		}
 
 		$this->index = -1;
@@ -514,11 +421,11 @@ class TestFileIterator implements Iterator {
 
 				if ( $section == 'endarticle' ) {
 					if ( !isset( $data['text'] ) ) {
-						wfDie( "'endarticle' without 'text' at line {$this->lineNum} of $this->file\n" );
+						throw new MWException( "'endarticle' without 'text' at line {$this->lineNum} of $this->file\n" );
 					}
 
 					if ( !isset( $data['article'] ) ) {
-						wfDie( "'endarticle' without 'article' at line {$this->lineNum} of $this->file\n" );
+						throw new MWException( "'endarticle' without 'article' at line {$this->lineNum} of $this->file\n" );
 					}
 
 					$this->parserTest->addArticle( ParserTest::chomp( $data['article'] ), $data['text'], $this->lineNum );
@@ -531,7 +438,7 @@ class TestFileIterator implements Iterator {
 
 				if ( $section == 'endhooks' ) {
 					if ( !isset( $data['hooks'] ) ) {
-						wfDie( "'endhooks' without 'hooks' at line {$this->lineNum} of $this->file\n" );
+						throw new MWException( "'endhooks' without 'hooks' at line {$this->lineNum} of $this->file\n" );
 					}
 
 					foreach ( explode( "\n", $data['hooks'] ) as $line ) {
@@ -552,7 +459,7 @@ class TestFileIterator implements Iterator {
 
 				if ( $section == 'endfunctionhooks' ) {
 					if ( !isset( $data['functionhooks'] ) ) {
-						wfDie( "'endfunctionhooks' without 'functionhooks' at line {$this->lineNum} of $this->file\n" );
+						throw new MWException( "'endfunctionhooks' without 'functionhooks' at line {$this->lineNum} of $this->file\n" );
 					}
 
 					foreach ( explode( "\n", $data['functionhooks'] ) as $line ) {
@@ -573,15 +480,15 @@ class TestFileIterator implements Iterator {
 
 				if ( $section == 'end' ) {
 					if ( !isset( $data['test'] ) ) {
-						wfDie( "'end' without 'test' at line {$this->lineNum} of $this->file\n" );
+						throw new MWException( "'end' without 'test' at line {$this->lineNum} of $this->file\n" );
 					}
 
 					if ( !isset( $data['input'] ) ) {
-						wfDie( "'end' without 'input' at line {$this->lineNum} of $this->file\n" );
+						throw new MWException( "'end' without 'input' at line {$this->lineNum} of $this->file\n" );
 					}
 
 					if ( !isset( $data['result'] ) ) {
-						wfDie( "'end' without 'result' at line {$this->lineNum} of $this->file\n" );
+						throw new MWException( "'end' without 'result' at line {$this->lineNum} of $this->file\n" );
 					}
 
 					if ( !isset( $data['options'] ) ) {
@@ -611,7 +518,7 @@ class TestFileIterator implements Iterator {
 				}
 
 				if ( isset ( $data[$section] ) ) {
-					wfDie( "duplicate section '$section' at line {$this->lineNum} of $this->file\n" );
+					throw new MWException( "duplicate section '$section' at line {$this->lineNum} of $this->file\n" );
 				}
 
 				$data[$section] = '';

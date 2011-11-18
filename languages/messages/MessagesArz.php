@@ -209,95 +209,95 @@ $magicWords = array(
 );
 
 $specialPageAliases = array(
-	'DoubleRedirects'           => array( 'تحويلات_دوبل' ),
+	'Activeusers'               => array( 'يوزرات_نشطا' ),
+	'Allmessages'               => array( 'كل_الرسايل' ),
+	'Allpages'                  => array( 'كل_الصفح' ),
+	'Ancientpages'              => array( 'صفح_قديمه' ),
+	'Blankpage'                 => array( 'صفحه_فارضيه' ),
+	'Block'                     => array( 'بلوك', 'بلوك_IP', 'بلوك_يوزر' ),
+	'Blockme'                   => array( 'بلوك_لنفسى' ),
+	'Booksources'               => array( 'مصادر_كتاب' ),
 	'BrokenRedirects'           => array( 'تحويلات_مكسوره' ),
-	'Disambiguations'           => array( 'توضيحات' ),
-	'Userlogin'                 => array( 'دخول_اليوزر' ),
-	'Userlogout'                => array( 'خروج_اليوزر' ),
+	'Categories'                => array( 'تصانيف' ),
+	'ChangePassword'            => array( 'تغيير_الپاسوورد', 'ظبط_الپاسوورد' ),
+	'Confirmemail'              => array( 'تأكيد_الايميل' ),
+	'Contributions'             => array( 'مساهمات' ),
 	'CreateAccount'             => array( 'ابتدى_حساب' ),
-	'Preferences'               => array( 'تفضيلات' ),
-	'Watchlist'                 => array( 'ليستة_المراقبه' ),
-	'Recentchanges'             => array( 'اخر_تعديلات' ),
-	'Upload'                    => array( 'رفع' ),
+	'Deadendpages'              => array( 'صفح_نهايه_مسدوده' ),
+	'DeletedContributions'      => array( 'مساهمات_ممسوحه' ),
+	'Disambiguations'           => array( 'توضيحات' ),
+	'DoubleRedirects'           => array( 'تحويلات_دوبل' ),
+	'Emailuser'                 => array( 'ابعت_ايميل_لليوزر' ),
+	'Export'                    => array( 'تصدير' ),
+	'Fewestrevisions'           => array( 'اقل_مراجعات' ),
+	'FileDuplicateSearch'       => array( 'تدوير_فايل_متكرر' ),
+	'Filepath'                  => array( 'مسار_ملف' ),
+	'Import'                    => array( 'استوراد' ),
+	'Invalidateemail'           => array( 'تعطيل_الايميل' ),
+	'BlockList'                 => array( 'ليستة_البلوك', 'بيّن_البلوك', 'ليستة_بلوك_IP' ),
+	'LinkSearch'                => array( 'تدوير_اللينكات' ),
+	'Listadmins'                => array( 'عرض_الاداريين' ),
+	'Listbots'                  => array( 'عرض_البوتات' ),
 	'Listfiles'                 => array( 'عرض_الفايلات', 'ليستة_الفايلات', 'ليستة_الصور' ),
-	'Newimages'                 => array( 'فايلات_جديده', 'صور_جديده' ),
-	'Listusers'                 => array( 'عرض_اليوزرات', 'ليستة_اليوزرات' ),
 	'Listgrouprights'           => array( 'عرض_حقوق_الجروپات' ),
-	'Statistics'                => array( 'احصائيات' ),
-	'Randompage'                => array( 'عشوائى', 'صفحه_عشوائيه' ),
+	'Listredirects'             => array( 'عرض_التحويلات' ),
+	'Listusers'                 => array( 'عرض_اليوزرات', 'ليستة_اليوزرات' ),
+	'Lockdb'                    => array( 'قفل_قب' ),
+	'Log'                       => array( 'سجل', 'سجلات' ),
 	'Lonelypages'               => array( 'صفح_وحدانيه', 'صفح_يتيمه' ),
-	'Uncategorizedpages'        => array( 'صفح_مش_متصنفه' ),
-	'Uncategorizedcategories'   => array( 'تصانيف_مش_متصنفه' ),
-	'Uncategorizedimages'       => array( 'فايلات_مش_متصنفه', 'صور_مش_متصنفه' ),
-	'Uncategorizedtemplates'    => array( 'قوالب_مش_متصنفه' ),
-	'Unusedcategories'          => array( 'تصانيف_مش_مستعمله' ),
-	'Unusedimages'              => array( 'فايلات_مش_مستعمله', 'صور_مش_مستعمله' ),
-	'Wantedpages'               => array( 'صفح_مطلوبه', 'لينكات_مكسوره' ),
-	'Wantedcategories'          => array( 'تصانيف_مطلوبه' ),
-	'Wantedfiles'               => array( 'فايلات_مطلوبه' ),
-	'Wantedtemplates'           => array( 'قوالب_مطلوبه' ),
+	'Longpages'                 => array( 'صفح_طويله' ),
+	'MergeHistory'              => array( 'دمج_التاريخ' ),
+	'MIMEsearch'                => array( 'تدوير_MIME' ),
+	'Mostcategories'            => array( 'اكتر_تصانيف' ),
+	'Mostimages'                => array( 'اكتر_فايلات_معمول_ليها_لينك', 'اكتر_فايلات', 'اكتر_صور' ),
 	'Mostlinked'                => array( 'اكتر_صفح_معمول_ليها_لينك' ),
 	'Mostlinkedcategories'      => array( 'اكتر_تصانيف_معمول_ليها_لينك', 'اكتر_تصانيف_مستعمله' ),
 	'Mostlinkedtemplates'       => array( 'اكتر_قوالب_معمول_ليها_لينك', 'اكتر_قوالب_مستعمله' ),
-	'Mostimages'                => array( 'اكتر_فايلات_معمول_ليها_لينك', 'اكتر_فايلات', 'اكتر_صور' ),
-	'Mostcategories'            => array( 'اكتر_تصانيف' ),
 	'Mostrevisions'             => array( 'اكتر_مراجعات' ),
-	'Fewestrevisions'           => array( 'اقل_مراجعات' ),
-	'Shortpages'                => array( 'صفح_قصيره' ),
-	'Longpages'                 => array( 'صفح_طويله' ),
-	'Newpages'                  => array( 'صفح_جديده' ),
-	'Ancientpages'              => array( 'صفح_قديمه' ),
-	'Deadendpages'              => array( 'صفح_نهايه_مسدوده' ),
-	'Protectedpages'            => array( 'صفح_محميه' ),
-	'Protectedtitles'           => array( 'عناوين_محميه' ),
-	'Allpages'                  => array( 'كل_الصفح' ),
-	'Prefixindex'               => array( 'فهرس_بدايه' ),
-	'BlockList'                 => array( 'ليستة_البلوك', 'بيّن_البلوك', 'ليستة_بلوك_IP' ),
-	'Unblock'                   => array( 'رفع_منع' ),
-	'Specialpages'              => array( 'صفح_مخصوصه' ),
-	'Contributions'             => array( 'مساهمات' ),
-	'Emailuser'                 => array( 'ابعت_ايميل_لليوزر' ),
-	'Confirmemail'              => array( 'تأكيد_الايميل' ),
-	'Whatlinkshere'             => array( 'ايه_بيوصل_هنا' ),
-	'Recentchangeslinked'       => array( 'اجدد_التغييرات_اللى_معمول_ليها_لينك', 'تغييرات_مرتبطه' ),
 	'Movepage'                  => array( 'نقل_صفحه' ),
-	'Blockme'                   => array( 'بلوك_لنفسى' ),
-	'Booksources'               => array( 'مصادر_كتاب' ),
-	'Categories'                => array( 'تصانيف' ),
-	'Export'                    => array( 'تصدير' ),
-	'Version'                   => array( 'نسخه' ),
-	'Allmessages'               => array( 'كل_الرسايل' ),
-	'Log'                       => array( 'سجل', 'سجلات' ),
-	'Block'                     => array( 'بلوك', 'بلوك_IP', 'بلوك_يوزر' ),
-	'Undelete'                  => array( 'استرجاع' ),
-	'Import'                    => array( 'استوراد' ),
-	'Lockdb'                    => array( 'قفل_قب' ),
-	'Unlockdb'                  => array( 'فتح_قب' ),
-	'Userrights'                => array( 'حقوق_اليوزر', 'ترقية_سيسوپ', 'ترقية_بوت' ),
-	'MIMEsearch'                => array( 'تدوير_MIME' ),
-	'FileDuplicateSearch'       => array( 'تدوير_فايل_متكرر' ),
-	'Unwatchedpages'            => array( 'صفح_مش_متراقبه' ),
-	'Listredirects'             => array( 'عرض_التحويلات' ),
-	'Revisiondelete'            => array( 'مسح_نسخه' ),
-	'Unusedtemplates'           => array( 'قوالب_مش_مستعمله' ),
-	'Randomredirect'            => array( 'تحويله_عشوائيه' ),
+	'Mycontributions'           => array( 'مساهماتى' ),
 	'Mypage'                    => array( 'صفحتى' ),
 	'Mytalk'                    => array( 'مناقشتى' ),
-	'Mycontributions'           => array( 'مساهماتى' ),
-	'Listadmins'                => array( 'عرض_الاداريين' ),
-	'Listbots'                  => array( 'عرض_البوتات' ),
+	'Newimages'                 => array( 'فايلات_جديده', 'صور_جديده' ),
+	'Newpages'                  => array( 'صفح_جديده' ),
 	'Popularpages'              => array( 'صفح_مشهوره' ),
+	'Preferences'               => array( 'تفضيلات' ),
+	'Prefixindex'               => array( 'فهرس_بدايه' ),
+	'Protectedpages'            => array( 'صفح_محميه' ),
+	'Protectedtitles'           => array( 'عناوين_محميه' ),
+	'Randompage'                => array( 'عشوائى', 'صفحه_عشوائيه' ),
+	'Randomredirect'            => array( 'تحويله_عشوائيه' ),
+	'Recentchanges'             => array( 'اخر_تعديلات' ),
+	'Recentchangeslinked'       => array( 'اجدد_التغييرات_اللى_معمول_ليها_لينك', 'تغييرات_مرتبطه' ),
+	'Revisiondelete'            => array( 'مسح_نسخه' ),
 	'Search'                    => array( 'تدوير' ),
-	'Resetpass'                 => array( 'تغيير_الپاسوورد', 'ظبط_الپاسوورد' ),
-	'Withoutinterwiki'          => array( 'من-غير_interwiki' ),
-	'MergeHistory'              => array( 'دمج_التاريخ' ),
-	'Filepath'                  => array( 'مسار_ملف' ),
-	'Invalidateemail'           => array( 'تعطيل_الايميل' ),
-	'Blankpage'                 => array( 'صفحه_فارضيه' ),
-	'LinkSearch'                => array( 'تدوير_اللينكات' ),
-	'DeletedContributions'      => array( 'مساهمات_ممسوحه' ),
+	'Shortpages'                => array( 'صفح_قصيره' ),
+	'Specialpages'              => array( 'صفح_مخصوصه' ),
+	'Statistics'                => array( 'احصائيات' ),
 	'Tags'                      => array( 'وسوم' ),
-	'Activeusers'               => array( 'يوزرات_نشطا' ),
+	'Unblock'                   => array( 'رفع_منع' ),
+	'Uncategorizedcategories'   => array( 'تصانيف_مش_متصنفه' ),
+	'Uncategorizedimages'       => array( 'فايلات_مش_متصنفه', 'صور_مش_متصنفه' ),
+	'Uncategorizedpages'        => array( 'صفح_مش_متصنفه' ),
+	'Uncategorizedtemplates'    => array( 'قوالب_مش_متصنفه' ),
+	'Undelete'                  => array( 'استرجاع' ),
+	'Unlockdb'                  => array( 'فتح_قب' ),
+	'Unusedcategories'          => array( 'تصانيف_مش_مستعمله' ),
+	'Unusedimages'              => array( 'فايلات_مش_مستعمله', 'صور_مش_مستعمله' ),
+	'Unusedtemplates'           => array( 'قوالب_مش_مستعمله' ),
+	'Unwatchedpages'            => array( 'صفح_مش_متراقبه' ),
+	'Upload'                    => array( 'رفع' ),
+	'Userlogin'                 => array( 'دخول_اليوزر' ),
+	'Userlogout'                => array( 'خروج_اليوزر' ),
+	'Userrights'                => array( 'حقوق_اليوزر', 'ترقية_سيسوپ', 'ترقية_بوت' ),
+	'Version'                   => array( 'نسخه' ),
+	'Wantedcategories'          => array( 'تصانيف_مطلوبه' ),
+	'Wantedfiles'               => array( 'فايلات_مطلوبه' ),
+	'Wantedpages'               => array( 'صفح_مطلوبه', 'لينكات_مكسوره' ),
+	'Wantedtemplates'           => array( 'قوالب_مطلوبه' ),
+	'Watchlist'                 => array( 'ليستة_المراقبه' ),
+	'Whatlinkshere'             => array( 'ايه_بيوصل_هنا' ),
+	'Withoutinterwiki'          => array( 'من-غير_interwiki' ),
 );
 
 $messages = array(
@@ -431,15 +431,6 @@ $messages = array(
 'index-category'                 => 'صفحات متفهرسه',
 'noindex-category'               => 'صفحات مش متفهرسه',
 
-'mainpagetext'      => "''' ميدياويكى اتنزلت بنجاح.'''",
-'mainpagedocfooter' => 'اسال [http://meta.wikimedia.org/wiki/Help:Contents دليل اليوزر] للمعلومات حوالين استخدام برنامج الويكى.
-
-== البداية ==
-
-* [http://www.mediawiki.org/wiki/Manual:Configuration_settings لستة اعدادات الضبط]
-* [http://www.mediawiki.org/wiki/Manual:FAQ أسئلة بتكرر حوالين الميدياويكى]
-* [https://lists.wikimedia.org/mailman/listinfo/mediawiki-announce لستة الايميلات بتاعة اعلانات الميدياويكى]',
-
 'about'         => 'عن',
 'article'       => 'صفحة محتوى',
 'newwindow'     => '(بتفتح ويندو جديده)',
@@ -489,7 +480,6 @@ $messages = array(
 'history'           => 'تاريخ الصفحه',
 'history_short'     => 'تاريخ',
 'updatedmarker'     => 'اتحدثت بعد زيارتى الأخيرة',
-'info_short'        => 'معلومات',
 'printableversion'  => 'نسخه للطبع',
 'permalink'         => 'لينك دايم',
 'print'             => 'اطبع',
@@ -670,18 +660,16 @@ $1',
 الخاصّيه: $1<br />
 الاستعلام: $2',
 'viewsource'           => 'عرض المصدر',
-'viewsourcefor'        => 'لـ $1',
 'actionthrottled'      => 'العمليه دى اتزنقت',
 'actionthrottledtext'  => 'علشان نمنع ال سبام ،أنت ممنوع تعمل  الفعل دا عدد كبير من المرات فى فترة زمنية قصيرة، و انت ا تجاوزت  الحد دا . لو سمحت تحاول مرة ثانية بعد دقائق.',
 'protectedpagetext'    => 'الصفحة دى اتقفلت فى وش التعديل.',
 'viewsourcetext'       => 'ممكن تشوف وتنسخ مصدر  الصفحه دى:',
 'protectedinterface'   => 'الصفحة دى هى اللى بتوفر نص الواجهة بتاعة البرنامج،وهى مقفولة لمنع التخريب.',
-'editinginterface'     => "'''تحذير''': أنت بتعدل صفحة بتستخدم فى الواجهة النصية  بتاعة البرنامج. التغييرات فى الصفحة دى ها تأثر على مظهر واجهة اليوزر لليوزرز التانيين. للترجمات، لو سمحت استخدم [http://translatewiki.net/wiki/Main_Page?setlang=ar بيتاويكى]، مشروع ترجمة الميدياويكى.",
+'editinginterface'     => "'''تحذير''': أنت بتعدل صفحة بتستخدم فى الواجهة النصية  بتاعة البرنامج. التغييرات فى الصفحة دى ها تأثر على مظهر واجهة اليوزر لليوزرز التانيين. للترجمات، لو سمحت استخدم [//translatewiki.net/wiki/Main_Page?setlang=ar بيتاويكى]، مشروع ترجمة الميدياويكى.",
 'sqlhidden'            => '(استعلام إس‌كيو‌إل متخبي)',
 'cascadeprotected'     => 'الصفحة دى محمية من التعديل، بسبب انها مدمجة فى {{PLURAL:$1|الصفحة|الصفحات}} دي، اللى مستعمل فيها خاصية "حماية الصفحات المدمجة" :
 $2',
 'namespaceprotected'   => "ما عندكش صلاحية تعديل الصفحات  اللى فى نطاق '''$1'''.",
-'customcssjsprotected' => 'ماعندكش صلاحية تعديل  الصفحة دي، علشان فيها الإعدادات الشخصية بتاعة يوزر تاني.',
 'ns-specialprotected'  => 'الصفحات المخصوصة مش ممكن تعديلها.',
 'titleprotected'       => "العنوان دا محمى من الإنشاء بـ[[User:$1|$1]]. السبب هو ''$2''.",
 
@@ -737,7 +725,7 @@ $2',
 'nosuchuser'                 => 'مافيش يوزر اسمه "$1".
 اسامى اليوزر بتبقى حساسه لحالة الحرف.
 اتأكد من التهجيه, او [[Special:UserLogin/signup|افتح حساب جديد]].',
-'nosuchusershort'            => 'مافيش يوزر باسم <nowiki>$1</nowiki>".
+'nosuchusershort'            => 'مافيش يوزر باسم $1".
 اتاكد من تهجية الاسم.',
 'nouserspecified'            => 'لازم تحدد اسم يوزر.',
 'login-userblocked'          => 'اليوزر دا ممنوع من الدخول.',
@@ -785,13 +773,7 @@ $2',
 من فضلك استنى قبل المحاولة مرة تانيه.',
 'loginlanguagelabel'         => 'اللغة: $1',
 
-# JavaScript password checks
-'password-strength-acceptable' => 'مقبول',
-'password-strength-good'       => 'جيدة',
-'password-retype'              => 'اكتب الباسورد تاني',
-'password-retype-mismatch'     => 'كلمات السر لا تتطابق',
-
-# Password reset dialog
+# Change password dialog
 'resetpass'                 => 'غيّر الباسورد',
 'resetpass_announce'        => 'اتسجل دخولك دلوقتى بالكود اللى اتبعتلك فى الايميل. علشان تخلص عملية الدخول ،لازم تعملك باسورد جديدة هنا:',
 'resetpass_text'            => '<!-- أضف نصا هنا -->',
@@ -808,6 +790,10 @@ $2',
 'resetpass-wrong-oldpass'   => 'الباسورد الحالية او المؤقته مش صحيحة.
 انتا ممكن تكون بالفعل غيرت الباسورد بتاعتك بنجاح يا إما تكون طلبت باسورد مؤقته جديدة..',
 'resetpass-temp-password'   => 'باسورد مؤقته:',
+
+# Special:PasswordReset
+'passwordreset'          => 'تمت إعادة ضبط كلمة السر',
+'passwordreset-username' => 'اسم اليوزر:',
 
 # Edit page toolbar
 'bold_sample'     => 'حروف عريضه',
@@ -874,9 +860,6 @@ $2',
 
 عنوان الأيبى الحالى الخاص بك هو $3، رقم المنع هو $5. لو سمحت تذكر الرقم دا فى اى استفسار.',
 'blockednoreason'                  => 'ما فيش سبب',
-'blockedoriginalsource'            => "المصدر بتاع '''$1''' معروض تحت:",
-'blockededitsource'                => "نص '''تعديلاتك''' فى '''$1''' معروض هنا:",
-'whitelistedittitle'               => 'لازم تسجل دخولك علشان تقدر تعدل',
 'whitelistedittext'                => 'لازم $1 علشان تقدر تعدل الصفحات.',
 'confirmedittext'                  => 'قبل ما تبتدى تعدل لازم نتأكد من الايميل بتاعك. لو سمحت تكتب وتأكد الايميل بتاعك  في[[Special:Preferences|تفضيلاتك]]',
 'nosuchsectiontitle'               => 'مافيش قسم بالاسم ده',
@@ -905,7 +888,7 @@ $2',
 'noarticletext-nopermission'       => 'مفيش اى نص دلوقتى فى الصفحه دى.
 ممكن [[Special:Search/{{PAGENAME}}|تدور على عنوان الصفحه دى]] فى الصفحات التانيه,
 او <span class="plainlinks">[{{fullurl:{{#Special:Log}}|page={{FULLPAGENAMEE}}}} تدور فى السجلات بتاعتها]</span>.',
-'userpage-userdoesnotexist'        => 'حساب اليوزر "$1" مش متسجل. لو سمحت تشوف لو عايز تبتدي/تعدل الصفحة دي.',
+'userpage-userdoesnotexist'        => 'حساب اليوزر "<nowiki>$1</nowiki>" مش متسجل. لو سمحت تشوف لو عايز تبتدي/تعدل الصفحة دي.',
 'userpage-userdoesnotexist-view'   => 'حساب اليوزر "$1" مش متسجل',
 'blocked-notice-logextract'        => 'اليوزر ده معمول له بلوك دلوقتى.
 اخر بلوك فى السجل موجود تحت للمراجعه:',
@@ -1120,8 +1103,6 @@ $2',
 'revdelete-unsuppress'        => 'إزالة الضوابط من المراجعات المسترجعة',
 'revdelete-log'               => 'السبب:',
 'revdelete-submit'            => 'طبق على {{PLURAL:$1|المراجعه|المراجعه}} المختارة',
-'revdelete-logentry'          => 'غير رؤية المراجعة ل[[$1]]',
-'logdelete-logentry'          => 'غير رؤية الحدث ل[[$1]]',
 'revdelete-success'           => "''' رؤية المراجعه اتظبطت بنجاح.'''",
 'revdelete-failure'           => "'''عرض المراجعه ما نفعش يتعاد ظبطه:'''
 $1",
@@ -1131,15 +1112,6 @@ $1",
 'revdel-restore'              => 'تغيير الشوف',
 'pagehist'                    => 'تاريخ الصفحة',
 'deletedhist'                 => 'التاريخ الممسوح',
-'revdelete-content'           => 'محتويات',
-'revdelete-summary'           => 'ملخص التعديل',
-'revdelete-uname'             => 'اسم اليوزر',
-'revdelete-restricted'        => 'طبق التعليمات على السيسوبات',
-'revdelete-unrestricted'      => 'شيل الضوابط من على السيسوبات',
-'revdelete-hid'               => 'أخفى $1',
-'revdelete-unhid'             => 'أظهر $1',
-'revdelete-log-message'       => '$1 ل$2 {{PLURAL:$2|مراجعة|مراجعة}}',
-'logdelete-log-message'       => '$1 ل$2 {{PLURAL:$2|حدث|حدث}}',
 'revdelete-hide-current'      => 'حصل غلط فى تخبية البند اللى بتاريخ $2, الساعه$1: دى هى النسخه بتاعة دلوقتى.
 ماينفعش يتخبى.',
 'revdelete-show-no-access'    => 'حصل غلط فى عرض البند اللى بتاريخ $2, الساعه $1: البند دا متعلم عليه انه"محظور".
@@ -1164,12 +1136,6 @@ $1",
 'suppressionlog'     => 'سجل الإخفاء',
 'suppressionlogtext' => 'تحت فى لستة بعمليات المسح والمنع اللى فيها محتوى مستخبى على الإداريين.
 شوف [[Special:IPBlockList|للستة المنع]] علشان تشوف عمليات المنع الشغالة دلوقتى .',
-
-# Revision move
-'revisionmove'              => ' انقل المراجعات من "$1"',
-'revmove-reasonfield'       => 'السبب:',
-'revmove-norevisions-title' => 'مراجعة هدف مش صح',
-'revmove-nullmove-title'    => 'عنوان غلط',
 
 # History merging
 'mergehistory'                     => 'دمج تواريخ الصفحة',
@@ -1295,7 +1261,9 @@ $1",
 'prefs-skin'                    => 'الوش',
 'skin-preview'                  => 'بروفه',
 'datedefault'                   => 'مافبش تفضيل',
+'prefs-beta'                    => 'خصايص Beta',
 'prefs-datetime'                => 'وقت وتاريخ',
+'prefs-labs'                    => 'خصايص Labs',
 'prefs-personal'                => 'الپروفيل بتاع اليوزر',
 'prefs-rc'                      => 'اخر التغييرات',
 'prefs-watchlist'               => 'ليستة المراقبه',
@@ -1317,8 +1285,6 @@ $1",
 'columns'                       => 'عمدان:',
 'searchresultshead'             => 'تدوير',
 'resultsperpage'                => 'عدد النتايج فى الصفحة:',
-'contextlines'                  => 'عدد  السطور فى كل نتيجة:',
-'contextchars'                  => 'عدد  الحروف فى كل سطر',
 'stub-threshold'                => 'الحد لتنسيق <a href="#" class="stub">لينك البذرة</a>:',
 'stub-threshold-disabled'       => 'معطل',
 'recentchangesdays'             => 'عدد الأيام المعروضة فى اخرالتغييرات:',
@@ -1501,9 +1467,9 @@ $1",
 'right-userrights'            => 'تعديل كل الحقوق بتاعة اليوزر',
 'right-userrights-interwiki'  => 'تعديل صلاحيات اليوزر لليوزرز فى مواقع الويكى التانيه',
 'right-siteadmin'             => 'قفل وفتح قاعدة البيانات',
-'right-reset-passwords'       => 'تغيير الباوسورد بتاعة اليوزرات التانيين',
 'right-override-export-depth' => 'تصدير الصفحات مع الصفحات الموصوله لحد عمق 5',
 'right-sendemail'             => 'يبعت إيميل لليوزرز التانيين',
+'right-passwordreset'         => 'إعادة ضبط كلمة سر مستخدم([[Special:PasswordReset|صفحة خاصة]])',
 
 # User rights log
 'rightslog'      => 'سجل صلاحيات اليوزرز',
@@ -1685,10 +1651,6 @@ $1",
 'watchthisupload'             => 'حط الملف دا تحت المراقبه',
 'filewasdeleted'              => 'فيه فايل بنفس الاسم دا اتأپلود قبل كدا و بعدين اتمسح.
 لازم تشيّك على $1 قبل ما تأپلود الفايل كمان مره.',
-'upload-wasdeleted'           => "'''تحذير: انت بتحمل ملف اتمسح قبل كدا.'''
-
-لازم تتاكد من انك عايز تستمر فى تحميل الملف دا.
-سجل المسح بتاع الملف دا معروض هنا علشان تبص عليه:",
 'filename-bad-prefix'         => "اسم الملف اللى بتحمله بيبتدى بـ'''\"\$1\"'''، واللى هو اسم مش وصفى بيتحط غالبا من الكاميرات الديجيتال اوتوماتيكي.
 لو سمحت تختار اسم يكون بيوصف الملف بتاعك احسن من كدا.",
 'filename-prefix-blacklist'   => ' #<!-- سيب السطر ده زى ما هوه --> <pre>
@@ -1803,7 +1765,6 @@ PICT # misc.
 [[Special:WhatLinksHere/$2|قائمة كاملة]] متوفرة.',
 'nolinkstoimage'                    => 'مافيش صفحات بتوصل للفايل ده.',
 'morelinkstoimage'                  => 'عرض [[Special:WhatLinksHere/$1|لينكات اكتر]] للملف دا.',
-'redirectstofile'                   => '{{PLURAL:$1| الملف|ال$1 ملف}} اللى جاى  بيحول للملف دا:',
 'duplicatesoffile'                  => '{{PLURAL:$1| الملف|ال$1 ملف اللى بعده}} متكررين من الملف ده:
 ([[Special:FileDuplicateSearch/$2| تفاصيل اكتر]]):',
 'sharedupload'                      => 'الملف دا من  $1 و ممكن تستعمله مشاريع تانيه.',
@@ -2057,12 +2018,8 @@ PICT # misc.
 'activeusers-noresult'   => 'مالقيناش اى يوزر',
 
 # Special:Log/newusers
-'newuserlogpage'              => 'سجل اليوزرز الجداد',
-'newuserlogpagetext'          => 'دا سجل لليوزرز الجداد',
-'newuserlog-byemail'          => 'الباسورد اتبعتت بالايميل',
-'newuserlog-create-entry'     => 'يوزر جديد',
-'newuserlog-create2-entry'    => 'الحساب الجديد المعمول $1',
-'newuserlog-autocreate-entry' => 'الحساب اتفتح اوتوماتيكي',
+'newuserlogpage'     => 'سجل اليوزرز الجداد',
+'newuserlogpagetext' => 'دا سجل لليوزرز الجداد',
 
 # Special:ListGroupRights
 'listgrouprights'                      => 'حقوق مجموعات اليوزرز',
@@ -2115,10 +2072,8 @@ PICT # misc.
 'watchlistanontext'    => 'لو سمحت $1 لعرض أو تعديل الصفحات فى لستة مراقبتك.',
 'watchnologin'         => 'مش متسجل',
 'watchnologintext'     => 'لازم تكون [[Special:UserLogin|مسجل الدخول]] علشان تعدل لستة المراقبة بتاعتك.',
-'addedwatch'           => 'تمت الاضافه للستة الصفحات اللى بتراقبها',
 'addedwatchtext'       => 'تمت إضافة الصفحه  "$1"  [[Special:Watchlist|للستة الصفحات اللى بتراقبها]].
 التعديلات اللى بعد كده ها تتحط على الصفحه دى، وصفحة المناقش الخاصه بها ها تتحط هناك. واسم الصفحة هايظهر  بخط <b>عريض</b> فى صفحة [[Special:RecentChanges|أحدث التعديلات]] لتسهيل تحديدها واكتشافها.',
-'removedwatch'         => 'اتشالت  من لستة الصفحات اللى بتراقبها',
 'removedwatchtext'     => 'الصفحه دى اتشالت "[[:$1]]" من [[Special:Watchlist|لستة الصفحات اللى بتراقبها]].',
 'watch'                => 'راقب',
 'watchthispage'        => 'راقب الصفحه دى',
@@ -2173,13 +2128,13 @@ $NEWPAGE
 
 --
 علشان تغيّر ليستة المراقبه بتاعتك, زور
-{{fullurl:{{#special:Watchlist}}/edit}}
+{{canonicalurl:{{#special:EditWatchlist}}}}
 
 علشان تمسح الصفحه من على ليستة مراقبتك, زور
 $UNWATCHURL
 
 الfeedback و مساعده اكتر:
-{{fullurl:{{MediaWiki:Helppage}}}}',
+{{canonicalurl:{{MediaWiki:Helppage}}}}',
 
 # Delete
 'deletepage'             => 'امسح الصفحه',
@@ -2195,10 +2150,8 @@ $UNWATCHURL
 من فضلك  اتأكد انك عايز المسح وبأنك فاهم نتايج  العمليه  دى. عمليات الحذف لازم تتم بناء على [[{{MediaWiki:Policy-url}}|القواعد المتفق عليها]].',
 'actioncomplete'         => 'العمليه خلصت',
 'actionfailed'           => 'الفعل فشل',
-'deletedtext'            => '"<nowiki>$1</nowiki>" اتمسحت.
+'deletedtext'            => '"$1" اتمسحت.
 بص على $2 علشان تشوف سجل آخر عمليات المسح.',
-'deletedarticle'         => 'اتمسحت "[[$1]]"',
-'suppressedarticle'      => 'خببى "[[$1]]"',
 'dellogpage'             => 'سجل المسح',
 'dellogpagetext'         => 'لسته بأحدث عمليات المسح.',
 'deletionlog'            => 'سجل المسح',
@@ -2254,7 +2207,7 @@ $UNWATCHURL
 'protect_expiry_invalid'      => 'وقت الانتهاء مش صحيح.',
 'protect_expiry_old'          => 'وقت انتهاء المنع قديم.',
 'protect-unchain-permissions' => 'شيل حماية أوبشنات الحمايه التانيه',
-'protect-text'                => "ممكن هنا تعرض و تغير مستوى الحمايه للصفحه '''<nowiki>$1</nowiki>'''.",
+'protect-text'                => "ممكن هنا تعرض و تغير مستوى الحمايه للصفحه '''$1'''.",
 'protect-locked-blocked'      => "انت مش ممكن تغير مستويات الحماية وأنت ممنوع.
 الإعدادات بتاعة الصفحة '''$1''' دلوقتى هي:",
 'protect-locked-dblock'       => "ما ينفعش تغير مستويات الحماية بسبب قفل قاعدة البيانات دلوقتي.
@@ -2332,7 +2285,6 @@ $UNWATCHURL
 'undeletereset'                => 'ابتدى من الأول',
 'undeleteinvert'               => 'اعكس الاختيار',
 'undeletecomment'              => 'السبب:',
-'undeletedarticle'             => 'رجع  "[[$1]]" تاني',
 'undeletedrevisions'           => 'رجع تانى {{PLURAL:$1|تعديل واحد|تعديلين|$1 تعديلات|$1 تعديل|$1 تعديل}}',
 'undeletedrevisions-files'     => '{{PLURAL:$1|1 نسخة|$1 نسخة}} و {{PLURAL:$2|1 ملف|$2 ملف}} رجعو تاني',
 'undeletedfiles'               => '{{PLURAL:$1|ملف|ملفات}} $1 رجعو تاني',
@@ -2479,7 +2431,7 @@ $1',
 'reblock-logentry'                => 'غير إعدادات المنع ل[[$1]] بتاريخ انتهاء $2 $3',
 'blocklogtext'                    => 'دا سجل بعمليات المنع ورفع المنع.
 عناوين الأيبى اللى اتمنعت اوتوماتيكى مش معروضة.
-شوف [[Special:IPBlockList|عناوين الأيبى الممنوعة]] علشان تشوف عمليات المنع الشغالة دلوقتي.',
+شوف [[Special:BlockList|عناوين الأيبى الممنوعة]] علشان تشوف عمليات المنع الشغالة دلوقتي.',
 'unblocklogentry'                 => 'رفع منع $1',
 'block-log-flags-anononly'        => 'اليوزرز المجهولين  بس',
 'block-log-flags-nocreate'        => ' فتح الحسابات ممنوع',
@@ -2540,7 +2492,7 @@ $1',
 'move-page-legend'             => 'انقل الصفحة',
 'movepagetext'                 => "لو استعملت النموذج ده ممكن تغير اسم الصفحه، و تنقل تاريخها للاسم الجديد.
 هاتبتدى تحويله من العنوان القديم للصفحه بالعنوان الجديد.
-لكن،  الوصلات فى الصفحات اللى بتتوصل بالصفحه دى مش ها تتغير؛ اتأكد من ان مافيش  [[Special:BrokenRedirects|وصلات مقطوعه]] ، أو [[Special:DoubleRedirects|وصلات متتاليه]] ، للتأكد من أن المقالات تتصل مع بعضها بشكل مناسب.
+لكن،  الوصلات فى الصفحات اللى بتتوصل بالصفحه دى مش ها تتغيير؛  اتأكد من ان مافيش  [[Special:BrokenRedirects|وصلات مقطوعه]] ، أو [[Special:DoubleRedirects|وصلات متتاليه]] ، للتأكد من أن المقالات تتصل مع بعضها بشكل مناسب.
 
 لاحظ ان الصفحه مش هاتتنقل لو كان فيه صفحه بالاسم الجديد، إلا إذا كانت صفحة فاضيه، أو صفحة تحويل، ومالهاش تاريخ. و ده معناه أنك مش ها تقدر تحط صفحه مكان صفحه، كمان ممكن ارجاع الصفحه لمكانها فى حال تم النقل بشكل غلط.
 
@@ -2580,9 +2532,6 @@ $1',
 'movepage-page-moved'          => 'الصفحة $1 اتنقلت لـ $2.',
 'movepage-page-unmoved'        => 'ماقدرناش ننقل الصفحة $1 لـ $2.',
 'movepage-max-pages'           => 'الحد الأقصى $1 {{PLURAL:$1|صفحة|صفحة}} اتنقل. و مافيش حاجة تانى ح تتنقل اوتوماتيكي.',
-'1movedto2'                    => '[[$1]] اتنقلت ل [[$2]]',
-'1movedto2_redir'              => '[[$1]] اتنقلت لـ[[$2]] فوق التحويله',
-'move-redirect-suppressed'     => ' التحويل ممنوع.',
 'movelogpage'                  => 'سجل النقل',
 'movelogpagetext'              => 'تحت فى لستة الصفحات اللى اتنقلت.',
 'movesubpage'                  => '{{PLURAL:$1|صفحه فرعيه|صفحات فرعيه}}',
@@ -2642,7 +2591,7 @@ $1',
 'allmessagesdefault'            => 'النص الاوتوماتيكي',
 'allmessagescurrent'            => 'النص دلوقتى',
 'allmessagestext'               => 'دى لستة برسايل النظام المتوفرة فى نطاق ميدياويكي.
-لو سمحت تزور[http://www.mediawiki.org/wiki/Localisation ترجمة ميدياويكي] و [http://translatewiki.net بيتاويكي] لو كنت عايز تساهم فى ترجمة ميدياويكى الاصلية.',
+لو سمحت تزور[//www.mediawiki.org/wiki/Localisation ترجمة ميدياويكي] و [//translatewiki.net بيتاويكي] لو كنت عايز تساهم فى ترجمة ميدياويكى الاصلية.',
 'allmessagesnotsupportedDB'     => "الصفحة دى مش يمكن حد يستعملها علشان'''\$wgUseDatabaseMessages''' متعطل.",
 'allmessages-filter-legend'     => 'فيلتر',
 'allmessages-filter'            => 'فلتره بحالة التهيئه:',
@@ -2808,9 +2757,7 @@ $1',
 'vector.js'      => '/* اى جافاسكريبت هنا حتتحمل لكل يوزر بيستخدم واجهة فكتور */',
 
 # Metadata
-'nodublincore'      => 'Dublin Core RDF metadata متعطلة للسيرفر دا.',
-'nocreativecommons' => 'Creative Commons RDF metadata متعطلة  للسيرفر دا.',
-'notacceptable'     => 'السيرفر بتاع الويكى مش ممكن يديلك بيانات بصيغة ممكن عميلك يقراها.',
+'notacceptable' => 'السيرفر بتاع الويكى مش ممكن يديلك بيانات بصيغة ممكن عميلك يقراها.',
 
 # Attribution
 'anonymous'        => '{{PLURAL:$1|يوزر مجهول|يوزرز مجهولين}} ل {{SITENAME}}',
@@ -2832,14 +2779,6 @@ $1',
 'spambot_username'    => 'تنظيف سبام ميدياويكى',
 'spam_reverting'      => 'ترجيع آخر نسخة مافيهاش لينكات لـ $1',
 'spam_blanking'       => 'كل النسخ فيها لينكات ل $1، فضيها',
-
-# Info page
-'infosubtitle'   => 'معلومات للصفحه',
-'numedits'       => 'عدد التعديلات (صفحة): $1',
-'numtalkedits'   => 'عدد التعديلات (صفحة نقاش): $1',
-'numwatchers'    => 'عدد المراقبين: $1',
-'numauthors'     => 'عدد المؤلفين المميزين (صفحة): $1',
-'numtalkauthors' => 'عدد المؤلفين المميزين (صحفة نقاش): $1',
 
 # Skin names
 'skinname-standard'    => 'كلاسيك',
@@ -2865,9 +2804,6 @@ $1',
 # Patrol log
 'patrol-log-page'      => 'سجل المراجعة',
 'patrol-log-header'    => 'دا سجل بالنسخ المتراجعة',
-'patrol-log-line'      => 'علم على $1 من $2 كأنها متراجعة $3',
-'patrol-log-auto'      => '(اوتوماتيكي)',
-'patrol-log-diff'      => 'ن$1',
 'log-show-hide-patrol' => '$1 سجل المراجعة',
 
 # Image deletion
@@ -2893,7 +2829,7 @@ $1',
 'widthheightpage'      => '$1×$2، $3 {{PLURAL:$3|صفحة|صفحة}}',
 'file-info'            => 'حجم الملف: $1، نوع MIME: $2',
 'file-info-size'       => '$1 × $2 بكسل حجم الفايل: $3، نوع MIME: $4',
-'file-nohires'         => '<small>مافيش  ريزوليوشن اعلى متوفر.</small>',
+'file-nohires'         => 'مافيش  ريزوليوشن اعلى متوفر.',
 'svg-long-desc'        => 'ملف SVG، اساسا $1 × $2 بكسل، حجم الملف: $3',
 'show-big-image'       => 'الصورة بدقه كامله',
 'file-info-gif-looped' => 'ملفوف',
@@ -2913,9 +2849,9 @@ $1',
 
 # Video information, used by Language::formatTimePeriod() to format lengths in the above messages
 'video-dims'     => '$1، $2×$3',
-'seconds-abbrev' => 'ث',
-'minutes-abbrev' => 'ق',
-'hours-abbrev'   => 'س',
+'seconds-abbrev' => '$1ث',
+'minutes-abbrev' => '$1ق',
+'hours-abbrev'   => '$1س',
 
 # Bad image list
 'bad_image_list' => 'التصميم (الـ format) بالشكل ده:
@@ -2937,7 +2873,13 @@ $1',
 * exposuretime
 * fnumber
 * isospeedratings
-* focallength',
+* focallength
+* artist
+* copyright
+* imagedescription
+* gpslatitude
+* gpslongitude
+* gpsaltitude',
 
 # EXIF tags
 'exif-imagewidth'                  => 'العرض',
@@ -2952,13 +2894,11 @@ $1',
 'exif-ycbcrpositioning'            => 'وضع Y و C',
 'exif-xresolution'                 => 'الدقة الأفقية',
 'exif-yresolution'                 => 'الدقة الرأسية',
-'exif-resolutionunit'              => 'وحدة تحليل X و Y',
 'exif-stripoffsets'                => 'موقع بيانات الصورة',
 'exif-rowsperstrip'                => 'عدد الصفوف لكل ستريب',
 'exif-stripbytecounts'             => 'بايت لكل ستريب مضغوط',
 'exif-jpeginterchangeformat'       => 'الحد ل JPEG SOI',
 'exif-jpeginterchangeformatlength' => 'بايت من بيانات JPEG',
-'exif-transferfunction'            => 'وظيفة النقل',
 'exif-whitepoint'                  => 'ألوان النقطة البيضا',
 'exif-primarychromaticities'       => 'ألوان الأساسيات',
 'exif-ycbcrcoefficients'           => 'معاملات مصفوفة تحويل فراغ اللون',
@@ -2977,7 +2917,6 @@ $1',
 'exif-compressedbitsperpixel'      => 'طور ضغط الصورة',
 'exif-pixelydimension'             => 'عرض صورة صحيح',
 'exif-pixelxdimension'             => 'ارتفاع صورة صحيح',
-'exif-makernote'                   => 'ملاحظات الصانع',
 'exif-usercomment'                 => 'تعليقات اليوزر',
 'exif-relatedsoundfile'            => 'ملف صوت مرتبط',
 'exif-datetimeoriginal'            => 'تاريخ و وقت الإنتاج',
@@ -2992,7 +2931,6 @@ $1',
 'exif-exposureprogram'             => 'برنامج التعرض',
 'exif-spectralsensitivity'         => 'الحساسية الطيفية',
 'exif-isospeedratings'             => 'تقييم سرعة أيزو',
-'exif-oecf'                        => 'عامل التحويل الكهروضوئى',
 'exif-shutterspeedvalue'           => 'سرعة القافل',
 'exif-aperturevalue'               => 'فتحة القافل',
 'exif-brightnessvalue'             => 'الضي',
@@ -3006,7 +2944,6 @@ $1',
 'exif-focallength-format'          => '$1 ملم',
 'exif-subjectarea'                 => 'منطقة الجسم',
 'exif-flashenergy'                 => 'طاقة الفلاش',
-'exif-spatialfrequencyresponse'    => 'استجابة التردد الفراغي',
 'exif-focalplanexresolution'       => 'تحليل المستوى البؤرى X',
 'exif-focalplaneyresolution'       => 'تحليل المستوى البؤرى Y',
 'exif-focalplaneresolutionunit'    => 'وحدة تحليل المستوى البؤرى',
@@ -3015,7 +2952,6 @@ $1',
 'exif-sensingmethod'               => 'وسيلة الاستشعار',
 'exif-filesource'                  => 'مصدر الملف',
 'exif-scenetype'                   => 'نوع المشهد',
-'exif-cfapattern'                  => 'نمط سى إف إيه',
 'exif-customrendered'              => 'تظبيط الصورة حسب الطلب',
 'exif-exposuremode'                => 'طريقة التعرض',
 'exif-whitebalance'                => 'توازن الأبيض',
@@ -3216,15 +3152,13 @@ $1',
 
 # External editor support
 'edit-externally'      => 'استعمل تطبيق من بره علشان تعدل الملف دا',
-'edit-externally-help' => '(بص على [http://www.mediawiki.org/wiki/Manual:External_editors  تعليمات الاعداد] علشان معلومات اكتر.)',
+'edit-externally-help' => '(بص على [//www.mediawiki.org/wiki/Manual:External_editors  تعليمات الاعداد] علشان معلومات اكتر.)',
 
 # 'all' in various places, this might be different for inflected languages
-'recentchangesall' => 'الكل',
-'imagelistall'     => 'الكل',
-'watchlistall2'    => 'الكل',
-'namespacesall'    => 'الكل',
-'monthsall'        => 'الكل',
-'limitall'         => 'الكل',
+'watchlistall2' => 'الكل',
+'namespacesall' => 'الكل',
+'monthsall'     => 'الكل',
+'limitall'      => 'الكل',
 
 # E-mail address confirmation
 'confirmemail'             => 'اعمل تأكيد للأيميل بتاعك',
@@ -3432,33 +3366,31 @@ $1',
 'duplicate-defaultsort' => 'تحزير: زرار الترتيب الاوتوماتيكي"$2" بيوقف زرار الترتيب الاوتوماتيكي"$1" القديم.',
 
 # Special:Version
-'version'                          => 'نسخه',
-'version-extensions'               => 'الامتدادات المتثبتة',
-'version-specialpages'             => 'صفحات مخصوصة',
-'version-parserhooks'              => 'خطاطيف البريزر',
-'version-variables'                => 'المتغيرات',
-'version-other'                    => 'تانية',
-'version-mediahandlers'            => 'متحكمات الميديا',
-'version-hooks'                    => 'الخطاطيف',
-'version-extension-functions'      => 'وظايف الامتداد',
-'version-parser-extensiontags'     => 'التاجز بتوع امتداد البريزر',
-'version-parser-function-hooks'    => 'خطاطيف دالة المحلل',
-'version-skin-extension-functions' => 'الوظايف بتاعة امتداد الواجهة',
-'version-hook-name'                => 'اسم الخطاف',
-'version-hook-subscribedby'        => 'اشتراك باسم',
-'version-version'                  => '(نسخه $1)',
-'version-license'                  => 'الترخيص',
-'version-software'                 => 'السوفتوير المتستاب',
-'version-software-product'         => 'المنتج',
-'version-software-version'         => 'النسخه',
+'version'                       => 'نسخه',
+'version-extensions'            => 'الامتدادات المتثبتة',
+'version-specialpages'          => 'صفحات مخصوصة',
+'version-parserhooks'           => 'خطاطيف البريزر',
+'version-variables'             => 'المتغيرات',
+'version-other'                 => 'تانية',
+'version-mediahandlers'         => 'متحكمات الميديا',
+'version-hooks'                 => 'الخطاطيف',
+'version-extension-functions'   => 'وظايف الامتداد',
+'version-parser-extensiontags'  => 'التاجز بتوع امتداد البريزر',
+'version-parser-function-hooks' => 'خطاطيف دالة المحلل',
+'version-hook-name'             => 'اسم الخطاف',
+'version-hook-subscribedby'     => 'اشتراك باسم',
+'version-version'               => '(نسخه $1)',
+'version-license'               => 'الترخيص',
+'version-software'              => 'السوفتوير المتستاب',
+'version-software-product'      => 'المنتج',
+'version-software-version'      => 'النسخه',
 
 # Special:FilePath
 'filepath'         => 'مسار ملف',
 'filepath-page'    => 'الملف:',
 'filepath-submit'  => 'المسار',
 'filepath-summary' => 'الصفحة المخصوصة دى بتعرض المسار الكامل  بتاع ملف.
-الصور بتتعرض  بدقة كاملة، أنواع الملفات التانية ح تشتغل فى البرنامج بتاعهم مباشرة.
-دخل اسم الملف  من غير البريفيكس "{{ns:file}}:"',
+الصور بتتعرض  بدقة كاملة، أنواع الملفات التانية ح تشتغل فى البرنامج بتاعهم مباشرة.',
 
 # Special:FileDuplicateSearch
 'fileduplicatesearch'          => 'دور على الملفات المتكررة',
@@ -3539,5 +3471,10 @@ $1',
 'htmlform-submit'              => 'تقديم',
 'htmlform-reset'               => 'الرجوع فى التغييرات',
 'htmlform-selectorother-other' => 'تانيين',
+
+# New logging system
+'revdelete-restricted'   => 'طبق التعليمات على السيسوبات',
+'revdelete-unrestricted' => 'شيل الضوابط من على السيسوبات',
+'newuserlog-byemail'     => 'الباسورد اتبعتت بالايميل',
 
 );

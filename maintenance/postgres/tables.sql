@@ -54,6 +54,12 @@ CREATE TABLE user_groups (
 );
 CREATE UNIQUE INDEX user_groups_unique ON user_groups (ug_user, ug_group);
 
+CREATE TABLE user_former_groups (
+  ufg_user   INTEGER      NULL  REFERENCES mwuser(user_id) ON DELETE CASCADE DEFERRABLE INITIALLY DEFERRED,
+  ufg_group  TEXT     NOT NULL
+);
+CREATE UNIQUE INDEX ufg_user_group ON user_former_groups (ufg_user, ufg_group);
+
 CREATE TABLE user_newtalk (
   user_id              INTEGER      NOT NULL  REFERENCES mwuser(user_id) ON DELETE CASCADE DEFERRABLE INITIALLY DEFERRED,
   user_ip              TEXT             NULL,
@@ -110,7 +116,8 @@ CREATE TABLE revision (
   rev_minor_edit  SMALLINT     NOT NULL  DEFAULT 0,
   rev_deleted     SMALLINT     NOT NULL  DEFAULT 0,
   rev_len         INTEGER          NULL,
-  rev_parent_id   INTEGER          NULL
+  rev_parent_id   INTEGER          NULL,
+  rev_sha1        TEXT         NOT NULL DEFAULT ''
 );
 CREATE UNIQUE INDEX revision_unique ON revision (rev_page, rev_id);
 CREATE INDEX rev_text_id_idx        ON revision (rev_text_id);
@@ -153,6 +160,7 @@ CREATE TABLE archive (
   ar_text        TEXT, -- technically should be bytea, but not used anymore
   ar_page_id     INTEGER          NULL,
   ar_parent_id   INTEGER          NULL,
+  ar_sha1        TEXT         NOT NULL DEFAULT '',
   ar_comment     TEXT,
   ar_user        INTEGER          NULL  REFERENCES mwuser(user_id) ON DELETE SET NULL DEFERRABLE INITIALLY DEFERRED,
   ar_user_text   TEXT         NOT NULL,
@@ -352,6 +360,31 @@ CREATE INDEX fa_dupe      ON filearchive (fa_storage_group, fa_storage_key);
 CREATE INDEX fa_notime    ON filearchive (fa_deleted_timestamp);
 CREATE INDEX fa_nouser    ON filearchive (fa_deleted_user);
 
+CREATE SEQUENCE uploadstash_us_id_seq;
+CREATE TYPE media_type AS ENUM ('UNKNOWN','BITMAP','DRAWING','AUDIO','VIDEO','MULTIMEDIA','OFFICE','TEXT','EXECUTABLE','ARCHIVE');
+
+CREATE TABLE uploadstash (
+  us_id           INTEGER PRIMARY KEY NOT NULL DEFAULT nextval('uploadstash_us_id_seq'),
+  us_user         INTEGER,
+  us_key          TEXT,
+  us_orig_path    TEXT,
+  us_path         TEXT,
+  us_source_type  TEXT,
+  us_timestamp    TIMESTAMPTZ,
+  us_status       TEXT,
+  us_size         INTEGER,
+  us_sha1         TEXT,
+  us_mime         TEXT,
+  us_media_type   media_type DEFAULT NULL,
+  us_image_width  INTEGER,
+  us_image_height INTEGER,
+  us_image_bits   INTEGER
+);
+
+CREATE INDEX us_user_idx ON uploadstash (us_user);
+CREATE UNIQUE INDEX us_key_idx ON uploadstash (us_key);
+CREATE INDEX us_timestamp_idx ON uploadstash (us_timestamp);
+
 
 CREATE SEQUENCE recentchanges_rc_id_seq;
 CREATE TABLE recentchanges (
@@ -398,14 +431,6 @@ CREATE TABLE watchlist (
 );
 CREATE UNIQUE INDEX wl_user_namespace_title ON watchlist (wl_namespace, wl_title, wl_user);
 CREATE INDEX wl_user ON watchlist (wl_user);
-
-CREATE TABLE math (
-  math_inputhash              BYTEA     NOT NULL  UNIQUE,
-  math_outputhash             BYTEA     NOT NULL,
-  math_html_conservativeness  SMALLINT  NOT NULL,
-  math_html                   TEXT,
-  math_mathml                 TEXT
-);
 
 
 CREATE TABLE interwiki (

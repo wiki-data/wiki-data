@@ -21,7 +21,7 @@
  */
 
 /**
- * Object passed around to modules which contains information about the state 
+ * Object passed around to modules which contains information about the state
  * of a specific loader request
  */
 class ResourceLoaderContext {
@@ -42,7 +42,11 @@ class ResourceLoaderContext {
 
 	/* Methods */
 
-	public function __construct( ResourceLoader $resourceLoader, WebRequest $request ) {
+	/**
+	 * @param $resourceLoader ResourceLoader
+	 * @param $request WebRequest
+	 */
+	public function __construct( $resourceLoader, WebRequest $request ) {
 		global $wgDefaultSkin, $wgResourceLoaderDebug;
 
 		$this->resourceLoader = $resourceLoader;
@@ -51,7 +55,7 @@ class ResourceLoaderContext {
 		// Interpret request
 		// List of modules
 		$modules = $request->getVal( 'modules' );
-		$this->modules   = $modules ? explode( '|', $modules ) : array();
+		$this->modules   = $modules ? self::expandModuleNames( $modules ) : array();
 		// Various parameters
 		$this->skin      = $request->getVal( 'skin' );
 		$this->user      = $request->getVal( 'user' );
@@ -64,18 +68,74 @@ class ResourceLoaderContext {
 		}
 	}
 
+	/**
+	 * Expand a string of the form jquery.foo,bar|jquery.ui.baz,quux to
+	 * an array of module names like array( 'jquery.foo', 'jquery.bar',
+	 * 'jquery.ui.baz', 'jquery.ui.quux' )
+	 * @param $modules String Packed module name list
+	 * @return array of module names
+	 */
+	public static function expandModuleNames( $modules ) {
+		$retval = array();
+		// For backwards compatibility with an earlier hack, replace ! with .
+		$modules = str_replace( '!', '.', $modules );
+		$exploded = explode( '|', $modules );
+		foreach ( $exploded as $group ) {
+			if ( strpos( $group, ',' ) === false ) {
+				// This is not a set of modules in foo.bar,baz notation
+				// but a single module
+				$retval[] = $group;
+			} else {
+				// This is a set of modules in foo.bar,baz notation
+				$pos = strrpos( $group, '.' );
+				if ( $pos === false ) {
+					// Prefixless modules, i.e. without dots
+					$retval = explode( ',', $group );
+				} else {
+					// We have a prefix and a bunch of suffixes
+					$prefix = substr( $group, 0, $pos ); // 'foo'
+					$suffixes = explode( ',', substr( $group, $pos + 1 ) ); // array( 'bar', 'baz' )
+					foreach ( $suffixes as $suffix ) {
+						$retval[] = "$prefix.$suffix";
+					}
+				}
+			}
+		}
+		return $retval;
+	}
+
+	/**
+	 * Return a dummy ResourceLoaderContext object suitable for passing into things that don't "really" need a context
+	 * @return ResourceLoaderContext
+	 */
+	public static function newDummyContext() {
+		return new self( null, new FauxRequest( array() ) );
+	}
+
+	/**
+	 * @return ResourceLoader
+	 */
 	public function getResourceLoader() {
 		return $this->resourceLoader;
 	}
-	
+
+	/**
+	 * @return WebRequest
+	 */
 	public function getRequest() {
 		return $this->request;
 	}
 
+	/**
+	 * @return array
+	 */
 	public function getModules() {
 		return $this->modules;
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getLanguage() {
 		if ( $this->language === null ) {
 			global $wgLang;
@@ -87,53 +147,83 @@ class ResourceLoaderContext {
 		return $this->language;
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getDirection() {
 		if ( $this->direction === null ) {
 			$this->direction = $this->request->getVal( 'dir' );
 			if ( !$this->direction ) {
-				global $wgContLang;
-				$this->direction = $wgContLang->getDir();
+				# directionality based on user language (see bug 6100)
+				$this->direction = Language::factory( $this->language )->getDir();
 			}
 		}
 		return $this->direction;
 	}
 
+	/**
+	 * @return string|null
+	 */
 	public function getSkin() {
 		return $this->skin;
 	}
 
+	/**
+	 * @return string|null
+	 */
 	public function getUser() {
 		return $this->user;
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function getDebug() {
 		return $this->debug;
 	}
 
+	/**
+	 * @return String|null
+	 */
 	public function getOnly() {
 		return $this->only;
 	}
 
+	/**
+	 * @return String|null
+	 */
 	public function getVersion() {
 		return $this->version;
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function shouldIncludeScripts() {
 		return is_null( $this->only ) || $this->only === 'scripts';
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function shouldIncludeStyles() {
 		return is_null( $this->only ) || $this->only === 'styles';
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function shouldIncludeMessages() {
 		return is_null( $this->only ) || $this->only === 'messages';
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getHash() {
 		if ( !isset( $this->hash ) ) {
 			$this->hash = implode( '|', array(
-				$this->getLanguage(), $this->getDirection(), $this->skin, $this->user, 
+				$this->getLanguage(), $this->getDirection(), $this->skin, $this->user,
 				$this->debug, $this->only, $this->version
 			) );
 		}

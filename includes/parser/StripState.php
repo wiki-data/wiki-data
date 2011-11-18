@@ -22,15 +22,27 @@ class StripState {
 
 	/**
 	 * Add a nowiki strip item
+	 * @param $marker
+	 * @param $value
 	 */
 	function addNoWiki( $marker, $value ) {
 		$this->addItem( 'nowiki', $marker, $value );
 	}
 
+	/**
+	 * @param $marker
+	 * @param $value
+	 */
 	function addGeneral( $marker, $value ) {
 		$this->addItem( 'general', $marker, $value );
 	}
 
+	/**
+	 * @throws MWException
+	 * @param $type
+	 * @param $marker
+	 * @param $value
+	 */
 	protected function addItem( $type, $marker, $value ) {
 		if ( !preg_match( $this->regex, $marker, $m ) ) {
 			throw new MWException( "Invalid marker: $marker" );
@@ -39,20 +51,37 @@ class StripState {
 		$this->data[$type][$m[1]] = $value;
 	}
 
+	/**
+	 * @param $text
+	 * @return mixed
+	 */
 	function unstripGeneral( $text ) {
 		return $this->unstripType( 'general', $text );
 	}
 
+	/**
+	 * @param $text
+	 * @return mixed
+	 */
 	function unstripNoWiki( $text ) {
 		return $this->unstripType( 'nowiki', $text );
 	}
 
+	/**
+	 * @param  $text
+	 * @return mixed
+	 */
 	function unstripBoth( $text ) {
 		$text = $this->unstripType( 'general', $text );
 		$text = $this->unstripType( 'nowiki', $text );
 		return $text;
 	}
 
+	/**
+	 * @param $type
+	 * @param $text
+	 * @return mixed
+	 */
 	protected function unstripType( $type, $text ) {
 		// Shortcut 
 		if ( !count( $this->data[$type] ) ) {
@@ -61,12 +90,19 @@ class StripState {
 
 		wfProfileIn( __METHOD__ );
 		$this->tempType = $type;
-		$out = preg_replace_callback( $this->regex, array( $this, 'unstripCallback' ), $text );
+		do {
+			$oldText = $text;
+			$text = preg_replace_callback( $this->regex, array( $this, 'unstripCallback' ), $text );
+		} while ( $text !== $oldText );
 		$this->tempType = null;
 		wfProfileOut( __METHOD__ );
-		return $out;
+		return $text;
 	}
 
+	/**
+	 * @param $m array
+	 * @return array
+	 */
 	protected function unstripCallback( $m ) {
 		if ( isset( $this->data[$this->tempType][$m[1]] ) ) {
 			return $this->data[$this->tempType][$m[1]];
@@ -78,6 +114,10 @@ class StripState {
 	/**
 	 * Get a StripState object which is sufficient to unstrip the given text. 
 	 * It will contain the minimum subset of strip items necessary.
+	 *
+	 * @param $text string
+	 *
+	 * @return StripState
 	 */
 	function getSubState( $text ) {
 		$subState = new StripState( $this->prefix );

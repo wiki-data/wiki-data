@@ -58,14 +58,21 @@ class SvgHandler extends ImageHandler {
 		if ( !parent::normaliseParams( $image, $params ) ) {
 			return false;
 		}
-		# Don't make an image bigger than wgMaxSVGSize
-		$params['physicalWidth'] = $params['width'];
-		$params['physicalHeight'] = $params['height'];
-		if ( $params['physicalWidth'] > $wgSVGMaxSize ) {
-			$srcWidth = $image->getWidth( $params['page'] );
-			$srcHeight = $image->getHeight( $params['page'] );
-			$params['physicalWidth'] = $wgSVGMaxSize;
-			$params['physicalHeight'] = File::scaleHeight( $srcWidth, $srcHeight, $wgSVGMaxSize );
+		# Don't make an image bigger than wgMaxSVGSize on the smaller side
+		if ( $params['physicalWidth'] <= $params['physicalHeight'] ) {
+			if ( $params['physicalWidth'] > $wgSVGMaxSize ) {
+				$srcWidth = $image->getWidth( $params['page'] );
+				$srcHeight = $image->getHeight( $params['page'] );
+				$params['physicalWidth'] = $wgSVGMaxSize;
+				$params['physicalHeight'] = File::scaleHeight( $srcWidth, $srcHeight, $wgSVGMaxSize );
+			}
+		} else {
+			if ( $params['physicalHeight'] > $wgSVGMaxSize ) {
+				$srcWidth = $image->getWidth( $params['page'] );
+				$srcHeight = $image->getHeight( $params['page'] );
+				$params['physicalWidth'] = File::scaleHeight( $srcHeight, $srcWidth, $wgSVGMaxSize );
+				$params['physicalHeight'] = $wgSVGMaxSize;
+			}
 		}
 		return true;
 	}
@@ -92,7 +99,7 @@ class SvgHandler extends ImageHandler {
 			return new ThumbnailImage( $image, $dstUrl, $clientWidth, $clientHeight, $dstPath );
 		}
 
-		if ( !wfMkdirParents( dirname( $dstPath ) ) ) {
+		if ( !wfMkdirParents( dirname( $dstPath ), null, __METHOD__ ) ) {
 			return new MediaTransformError( 'thumbnail_error', $clientWidth, $clientHeight,
 				wfMsg( 'thumbnail_dest_directory' ) );
 		}
@@ -105,14 +112,14 @@ class SvgHandler extends ImageHandler {
 		}
 	}
 
-	/*
+	/**
 	* Transform an SVG file to PNG
 	* This function can be called outside of thumbnail contexts
 	* @param string $srcPath
 	* @param string $dstPath
 	* @param string $width
 	* @param string $height
-	* @returns TRUE/MediaTransformError
+	* @return true|MediaTransformError
 	*/
 	public function rasterize( $srcPath, $dstPath, $width, $height ) {
 		global $wgSVGConverters, $wgSVGConverter, $wgSVGConverterPath;
@@ -122,7 +129,7 @@ class SvgHandler extends ImageHandler {
 			if ( is_array( $wgSVGConverters[$wgSVGConverter] ) ) {
 				// This is a PHP callable
 				$func = $wgSVGConverters[$wgSVGConverter][0];
-				$args = array_merge( array( $srcPath, $dstPath, $width, $height ), 
+				$args = array_merge( array( $srcPath, $dstPath, $width, $height ),
 					array_slice( $wgSVGConverters[$wgSVGConverter], 1 ) );
 				if ( !is_callable( $func ) ) {
 					throw new MWException( "$func is not callable" );
@@ -154,13 +161,13 @@ class SvgHandler extends ImageHandler {
 		}
 		return true;
 	}
-	
+
 	public static function rasterizeImagickExt( $srcPath, $dstPath, $width, $height ) {
 		$im = new Imagick( $srcPath );
 		$im->setImageFormat( 'png' );
 		$im->setBackgroundColor( 'transparent' );
 		$im->setImageDepth( 8 );
-		
+
 		if ( !$im->thumbnailImage( intval( $width ), intval( $height ), /* fit */ false ) ) {
 			return 'Could not resize image';
 		}
@@ -216,7 +223,9 @@ class SvgHandler extends ImageHandler {
 	}
 
 	function unpackMetadata( $metadata ) {
-		$unser = @unserialize( $metadata );
+		wfSuppressWarnings();
+		$unser = unserialize( $metadata );
+		wfRestoreWarnings();
 		if ( isset( $unser['version'] ) && $unser['version'] == self::SVG_METADATA_VERSION ) {
 			return $unser;
 		} else {

@@ -5,7 +5,11 @@
  * @ingroup SpecialPage
  */
 
-require_once( './includes/WebStart.php' );
+if ( isset( $_SERVER['MW_COMPILED'] ) ) {
+	require ( 'phase3/includes/WebStart.php' );
+} else {
+	require ( dirname( __FILE__ ) . '/includes/WebStart.php' );
+}
 
 class TrackBack {
 
@@ -22,6 +26,9 @@ XML;
 		exit;
 	}
 
+	/**
+	 * @param $err string
+	 */
 	private function XMLerror( $err = "Invalid request." ) {
 		header( "HTTP/1.0 400 Bad Request" );
 		header( "Content-Type: application/xml; charset=utf-8" );

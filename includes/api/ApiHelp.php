@@ -24,11 +24,6 @@
  * @file
  */
 
-if ( !defined( 'MEDIAWIKI' ) ) {
-	// Eclipse helper - will be ignored in production
-	require_once( 'ApiBase.php' );
-}
-
 /**
  * This is a simple class to handle action=help
  *
@@ -139,7 +134,7 @@ class ApiHelp extends ApiBase {
 		return 'Display this help screen. Or the help screen for the specified module';
 	}
 
-	protected function getExamples() {
+	public function getExamples() {
 		return array(
 			'Whole help page:',
 			'  api.php?action=help',
@@ -154,7 +149,15 @@ class ApiHelp extends ApiBase {
 		);
 	}
 
+	public function getHelpUrls() {
+		return array(
+			'http://www.mediawiki.org/wiki/API:Main_page',
+			'http://www.mediawiki.org/wiki/API:FAQ',
+			'http://www.mediawiki.org/wiki/API:Quick_start_guide',
+		);
+	}
+
 	public function getVersion() {
-		return __CLASS__ . ': $Id: ApiHelp.php 78913 2010-12-23 19:24:38Z reedy $';
+		return __CLASS__ . ': $Id: ApiHelp.php 103273 2011-11-16 00:17:26Z johnduhart $';
 	}
 }

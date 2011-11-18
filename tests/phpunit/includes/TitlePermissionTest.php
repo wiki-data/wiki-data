@@ -3,17 +3,22 @@
 /**
  * @group Database
  */
-class TitlePermissionTest extends MediaWikiTestCase {
+class TitlePermissionTest extends MediaWikiLangTestCase {
 	protected $title;
-	protected $user;
-	protected $anonUser;
-	protected $userUser;
-	protected $altUser;
-	protected $userName;
-	protected $altUserName;
+
+	/**
+	 * @var User
+	 */
+	protected $user, $anonUser, $userUser, $altUser;
+
+	/**
+	 * @var string
+	 */
+	protected $userName, $altUserName;
 
 	function setUp() {
 		global $wgLocaltimezone, $wgLocalTZoffset, $wgMemc, $wgContLang, $wgLang;
+		parent::setUp();
 
 		if(!$wgMemc) {
 			$wgMemc = new EmptyBagOStuff;
@@ -28,14 +33,14 @@ class TitlePermissionTest extends MediaWikiTestCase {
 		$this->title = Title::makeTitle( NS_MAIN, "Main Page" );
 		if ( !isset( $this->userUser ) || !( $this->userUser instanceOf User ) ) {
 			$this->userUser = User::newFromName( $this->userName );
-			
+
 			if ( !$this->userUser->getID() ) {
 				$this->userUser = User::createNew( $this->userName, array(
 					"email" => "test@example.com",
 					"real_name" => "Test User" ) );
 				$this->userUser->load();
 			}
-			
+
 			$this->altUser = User::newFromName( $this->altUserName );
 			if ( !$this->altUser->getID() ) {
 				$this->altUser = User::createNew( $this->altUserName, array(
@@ -50,12 +55,22 @@ class TitlePermissionTest extends MediaWikiTestCase {
 		}
 	}
 
+	function tearDown() {
+		parent::tearDown();
+	}
+
 	function setUserPerm( $perm ) {
-		if ( is_array( $perm ) ) {
-			$this->user->mRights = $perm;
-		} else {
-			$this->user->mRights = array( $perm );
+		// Setting member variables is evil!!!
+
+		if ( !is_array( $perm ) ) {
+			$perm = array( $perm );
 		}
+		for ($i = 0; $i < 100; $i++) {
+			$this->user->mRights[$i] = $perm;
+		}
+
+		// Hack, hack hack ...
+		$this->user->mRights['*'] = $perm;
 	}
 
 	function setTitle( $ns, $title = "Main_Page" ) {
@@ -65,7 +80,7 @@ class TitlePermissionTest extends MediaWikiTestCase {
 	function setUser( $userName = null ) {
 		if ( $userName === 'anon' ) {
 			$this->user = $this->anonUser;
-		} else if ( $userName === null || $userName === $this->userName ) {
+		} elseif ( $userName === null || $userName === $this->userName ) {
 			$this->user = $this->userUser;
 		} else {
 			$this->user = $this->altUser;
@@ -294,7 +309,7 @@ class TitlePermissionTest extends MediaWikiTestCase {
 			$this->assertEquals( $check[$action][3],
 				$this->title->userCan( $action, true ) );
 			$this->assertEquals( $check[$action][3],
-				$this->title->quickUserCan( $action, false ) );
+				$this->title->quickUserCan( $action ) );
 
 			# count( User::getGroupsWithPermissions( $action ) ) < 1
 		}
@@ -326,15 +341,13 @@ class TitlePermissionTest extends MediaWikiTestCase {
 		$this->assertEquals( $result2, $res );
 	}
 
-	function testPermissionHooks() { }
 	function testSpecialsAndNSPermissions() {
 		$this->setUser( $this->userName );
-		global $wgUser, $wgContLang;
+		global $wgUser;
 		$wgUser = $this->user;
-		$prefix = $wgContLang->getFormattedNsText( NS_PROJECT );
 
 		$this->setTitle( NS_SPECIAL );
-		
+
 		$this->assertEquals( array( array( 'badaccess-group0' ), array( 'ns-specialprotected' ) ),
 							 $this->title->getUserPermissionsErrors( 'bogus', $this->user ) );
 		$this->assertEquals( array( array( 'badaccess-group0' ) ),
@@ -381,22 +394,22 @@ class TitlePermissionTest extends MediaWikiTestCase {
 							 $this->title->userCan( 'bogus' ) );
 	}
 
-	function testCSSandJSPermissions() {
+	function testCssAndJavascriptPermissions() {
 		$this->setUser( $this->userName );
 		global $wgUser;
 		$wgUser = $this->user;
 
 		$this->setTitle( NS_USER, $this->altUserName . '/test.js' );
 		$this->runCSSandJSPermissions(
-			array( array( 'badaccess-group0' ), array( 'customcssjsprotected' ) ),
-			array( array( 'badaccess-group0' ), array( 'customcssjsprotected'  ) ),
+			array( array( 'badaccess-group0' ), array( 'customjsprotected' ) ),
+			array( array( 'badaccess-group0' ), array( 'customjsprotected' ) ),
 			array( array( 'badaccess-group0' ) ) );
 
 		$this->setTitle( NS_USER, $this->altUserName . '/test.css' );
 		$this->runCSSandJSPermissions(
-			array( array( 'badaccess-group0' ), array( 'customcssjsprotected' ) ),
+			array( array( 'badaccess-group0' ), array( 'customcssprotected' ) ),
 			array( array( 'badaccess-group0' ) ),
-			array( array( 'badaccess-group0' ),  array( 'customcssjsprotected' ) ) );
+			array( array( 'badaccess-group0' ),  array( 'customcssprotected' ) ) );
 
 		$this->setTitle( NS_USER, $this->altUserName . '/tempo' );
 		$this->runCSSandJSPermissions(
@@ -448,7 +461,7 @@ class TitlePermissionTest extends MediaWikiTestCase {
 																	 $this->user ) );
 
 		$this->assertEquals( true,
-							 $this->title->quickUserCan( 'edit', false ) );
+							 $this->title->quickUserCan( 'edit' ) );
 		$this->title->mRestrictions = array( "edit" => array( 'bogus', "sysop", "protect", "" ),
 										   "bogus" => array( 'bogus', "sysop", "protect", "" ) );
 
@@ -488,9 +501,9 @@ class TitlePermissionTest extends MediaWikiTestCase {
 																	 $this->user ) );
 		$this->title->mCascadeRestriction = true;
 		$this->assertEquals( false,
-							 $this->title->quickUserCan( 'bogus', false ) );
+							 $this->title->quickUserCan( 'bogus' ) );
 		$this->assertEquals( false,
-							 $this->title->quickUserCan( 'edit', false ) );
+							 $this->title->quickUserCan( 'edit' ) );
 		$this->assertEquals( array( array( 'badaccess-group0' ),
 									array( 'protectedpagetext', 'bogus' ),
 									array( 'protectedpagetext', 'protect' ),
@@ -534,7 +547,7 @@ class TitlePermissionTest extends MediaWikiTestCase {
 		$this->setTitle( NS_MAIN, "test page" );
 		$this->title->mTitleProtection['pt_create_perm'] = '';
 		$this->title->mTitleProtection['pt_user'] = $this->user->getID();
-		$this->title->mTitleProtection['pt_expiry'] = Block::infinity();
+		$this->title->mTitleProtection['pt_expiry'] = wfGetDB( DB_SLAVE )->getInfinity();
 		$this->title->mTitleProtection['pt_reason'] = 'test';
 		$this->title->mCascadeRestriction = false;
 
@@ -571,7 +584,7 @@ class TitlePermissionTest extends MediaWikiTestCase {
 							 $this->title->userCan( 'move' ) );
 
 		$this->title->mInterwiki = "no";
-		$this->assertEquals( array( array( 'immobile-page' ) ),
+		$this->assertEquals( array( array( 'immobile-source-page' ) ),
 							 $this->title->getUserPermissionsErrors( 'move', $this->user ) );
 		$this->assertEquals( false,
 							 $this->title->userCan( 'move' ) );
@@ -630,8 +643,9 @@ class TitlePermissionTest extends MediaWikiTestCase {
 			$this->title->getUserPermissionsErrors( 'move-target',
 			$this->user ) );
 
-		$this->assertEquals( false,
-							 $this->title->userCan( 'move-target', $this->user ) );
+		$this->assertEquals( false, $this->title->userCan( 'move-target' ) );
+		// quickUserCan should ignore user blocks
+		$this->assertEquals( true, $this->title->quickUserCan( 'move-target' ) );
 
 		global $wgLocalTZoffset;
 		$wgLocalTZoffset = -60;

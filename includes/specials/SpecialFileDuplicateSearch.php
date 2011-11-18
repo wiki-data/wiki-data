@@ -59,22 +59,19 @@ class FileDuplicateSearchPage extends QueryPage {
 
 	/**
 	 *
-	 * @param Array of File objects $dupes
+	 * @param $dupes Array of File objects
 	 */
 	function showList( $dupes ) {
-		global $wgUser, $wgOut;
-		$skin = $wgUser->getSkin();
-
 		$html = array();
 		$html[] = $this->openList( 0 );
 
 		foreach ( $dupes as $dupe ) {
-			$line = $this->formatResult( $skin, $dupe );
+			$line = $this->formatResult( null, $dupe );
 			$html[] = "<li>" . $line . "</li>";
 		}
 		$html[] = $this->closeList();
 
-		$wgOut->addHtml( implode( "\n", $html ) );
+		$this->getOutput()->addHtml( implode( "\n", $html ) );
 	}
 
 	function getQueryInfo() {
@@ -91,12 +88,12 @@ class FileDuplicateSearchPage extends QueryPage {
 	}
 
 	function execute( $par ) {
-		global $wgRequest, $wgOut, $wgLang, $wgContLang, $wgScript;
+		global $wgScript;
 
 		$this->setHeaders();
 		$this->outputHeader();
 
-		$this->filename =  isset( $par ) ?  $par : $wgRequest->getText( 'filename' );
+		$this->filename =  isset( $par ) ?  $par : $this->getRequest()->getText( 'filename' );
 		$this->file = null;
 		$this->hash = '';
 		$title = Title::newFromText( $this->filename, NS_FILE );
@@ -104,8 +101,10 @@ class FileDuplicateSearchPage extends QueryPage {
 			$this->file = wfFindFile( $title );
 		}
 
+		$out = $this->getOutput();
+
 		# Create the input form
-		$wgOut->addHTML(
+		$out->addHTML(
 			Xml::openElement( 'form', array( 'id' => 'fileduplicatesearch', 'method' => 'get', 'action' => $wgScript ) ) .
 			Html::hidden( 'title', $this->getTitle()->getPrefixedDbKey() ) .
 			Xml::openElement( 'fieldset' ) .
@@ -118,27 +117,25 @@ class FileDuplicateSearchPage extends QueryPage {
 
 		if( $this->file ) {
 			$this->hash = $this->file->getSha1();
-		} else {
-			$wgOut->wrapWikiMsg(
+		} elseif( $this->filename !== '' ) {
+			$out->wrapWikiMsg(
 				"<p class='mw-fileduplicatesearch-noresults'>\n$1\n</p>",
 				array( 'fileduplicatesearch-noresults', wfEscapeWikiText( $this->filename ) )
 			);
 		}
 
 		if( $this->hash != '' ) {
-			$align = $wgContLang->alignEnd();
-
 			# Show a thumbnail of the file
 			$img = $this->file;
 			if ( $img ) {
 				$thumb = $img->transform( array( 'width' => 120, 'height' => 120 ) );
 				if( $thumb ) {
-					$wgOut->addHTML( '<div style="float:' . $align . '" id="mw-fileduplicatesearch-icon">' .
+					$out->addHTML( '<div id="mw-fileduplicatesearch-icon">' .
 						$thumb->toHtml( array( 'desc-link' => false ) ) . '<br />' .
 						wfMsgExt( 'fileduplicatesearch-info', array( 'parse' ),
-							$wgLang->formatNum( $img->getWidth() ),
-							$wgLang->formatNum( $img->getHeight() ),
-							$wgLang->formatSize( $img->getSize() ),
+							$this->getLang()->formatNum( $img->getWidth() ),
+							$this->getLang()->formatNum( $img->getHeight() ),
+							$this->getLang()->formatSize( $img->getSize() ),
 							$img->getMimeType()
 						) .
 						'</div>' );
@@ -150,15 +147,15 @@ class FileDuplicateSearchPage extends QueryPage {
 
 			# Show a short summary
 			if( $numRows == 1 ) {
-				$wgOut->wrapWikiMsg(
+				$out->wrapWikiMsg(
 					"<p class='mw-fileduplicatesearch-result-1'>\n$1\n</p>",
 					array( 'fileduplicatesearch-result-1', wfEscapeWikiText( $this->filename ) )
 				);
 			} elseif ( $numRows ) {
-				$wgOut->wrapWikiMsg(
+				$out->wrapWikiMsg(
 					"<p class='mw-fileduplicatesearch-result-n'>\n$1\n</p>",
 					array( 'fileduplicatesearch-result-n', wfEscapeWikiText( $this->filename ),
-						$wgLang->formatNum( $numRows - 1 ) )
+						$this->getLang()->formatNum( $numRows - 1 ) )
 				);
 			}
 
@@ -173,18 +170,18 @@ class FileDuplicateSearchPage extends QueryPage {
 	 * @return string
 	 */
 	function formatResult( $skin, $result ) {
-		global $wgContLang, $wgLang;
+		global $wgContLang;
 
 		$nt = $result->getTitle();
 		$text = $wgContLang->convert( $nt->getText() );
-		$plink = $skin->link(
+		$plink = Linker::link(
 			Title::newFromText( $nt->getPrefixedText() ),
 			$text
 		);
 
 		$userText = $result->getUser( 'text' );
-		$user = $skin->link( Title::makeTitle( NS_USER, $userText ), $userText );
-		$time = $wgLang->timeanddate( $result->getTimestamp() );
+		$user = Linker::link( Title::makeTitle( NS_USER, $userText ), $userText );
+		$time = $this->getLang()->timeanddate( $result->getTimestamp() );
 
 		return "$plink . . $user . . $time";
 	}

@@ -49,14 +49,13 @@ class SpecialVersion extends SpecialPage {
 	 * main()
 	 */
 	public function execute( $par ) {
-		global $wgOut, $wgSpecialVersionShowHooks, $wgContLang, $wgRequest;
+		global $wgSpecialVersionShowHooks;
 
 		$this->setHeaders();
 		$this->outputHeader();
-		$wgOut->allowClickjacking();
+		$out = $this->getOutput();
+		$out->allowClickjacking();
 
-		$wgOut->addHTML( Xml::openElement( 'div',
-			array( 'dir' => $wgContLang->getDir() ) ) );
 		$text =
 			$this->getMediaWikiCredits() .
 			$this->softwareInformation() .
@@ -65,11 +64,10 @@ class SpecialVersion extends SpecialPage {
 			$text .= $this->getWgHooks();
 		}
 
-		$wgOut->addWikiText( $text );
-		$wgOut->addHTML( $this->IPInfo() );
-		$wgOut->addHTML( '</div>' );
+		$out->addWikiText( $text );
+		$out->addHTML( $this->IPInfo() );
 
-		if ( $wgRequest->getVal( 'easteregg' ) ) {
+		if ( $this->getRequest()->getVal( 'easteregg' ) ) {
 			if ( $this->showEasterEgg() ) {
 				// TODO: put something interesting here
 			}
@@ -109,6 +107,7 @@ class SpecialVersion extends SpecialPage {
 			'Aryeh Gregor', 'Aaron Schulz', 'Andrew Garrett', 'Raimond Spekking',
 			'Alexandre Emsenhuber', 'Siebrand Mazeland', 'Chad Horohoe',
 			'Roan Kattouw', 'Trevor Parscal', 'Bryan Tong Minh', 'Sam Reed',
+			'Victor Vasiliev', 'Rotem Liss', 'Platonides', 'Antoine Musso',
 			wfMsg( 'version-poweredby-others' )
 		);
 
@@ -145,7 +144,7 @@ class SpecialVersion extends SpecialPage {
 		foreach( $software as $name => $version ) {
 			$out .= "<tr>
 					<td>" . $name . "</td>
-					<td>" . $version . "</td>
+					<td class=\"ltr\">" . $version . "</td>
 				</tr>\n";
 		}
 
@@ -155,6 +154,7 @@ class SpecialVersion extends SpecialPage {
 	/**
 	 * Return a string of the MediaWiki version with SVN revision if available.
 	 *
+	 * @param $flags String
 	 * @return mixed
 	 */
 	public static function getVersion( $flags = '' ) {
@@ -232,6 +232,7 @@ class SpecialVersion extends SpecialPage {
 				'media' => wfMsg( 'version-mediahandlers' ),
 				'antispam' => wfMsg( 'version-antispam' ),
 				'skin' => wfMsg( 'version-skins' ),
+				'api' => wfMsg( 'version-api' ),
 				'other' => wfMsg( 'version-other' ),
 			);
 
@@ -261,9 +262,9 @@ class SpecialVersion extends SpecialPage {
 	 * @return String: Wikitext
 	 */
 	function getExtensionCredits() {
-		global $wgExtensionCredits, $wgExtensionFunctions, $wgParser, $wgSkinExtensionFunctions;
+		global $wgExtensionCredits, $wgExtensionFunctions, $wgParser;
 
-		if ( !count( $wgExtensionCredits ) && !count( $wgExtensionFunctions ) && !count( $wgSkinExtensionFunctions ) ) {
+		if ( !count( $wgExtensionCredits ) && !count( $wgExtensionFunctions ) ) {
 			return '';
 		}
 
@@ -321,11 +322,6 @@ class SpecialVersion extends SpecialPage {
 			$out .= '<tr><td colspan="4">' . $this->listToText( $fhooks ) . "</td></tr>\n";
 		}
 
-		if ( count( $wgSkinExtensionFunctions ) ) {
-			$out .= $this->openExtType( wfMsg( 'version-skin-extension-functions' ), 'skin-extension-functions' );
-			$out .= '<tr><td colspan="4">' . $this->listToText( $wgSkinExtensionFunctions ) . "</td></tr>\n";
-		}
-
 		$out .= Xml::closeElement( 'table' );
 
 		return $out;
@@ -363,11 +359,10 @@ class SpecialVersion extends SpecialPage {
 	 * Callback to sort extensions by type.
 	 */
 	function compare( $a, $b ) {
-		global $wgLang;
 		if( $a['name'] === $b['name'] ) {
 			return 0;
 		} else {
-			return $wgLang->lc( $a['name'] ) > $wgLang->lc( $b['name'] )
+			return $this->getLang()->lc( $a['name'] ) > $this->getLang()->lc( $b['name'] )
 				? 1
 				: -1;
 		}
@@ -470,11 +465,12 @@ class SpecialVersion extends SpecialPage {
 					<th>" . wfMsg( 'version-hook-subscribedby' ) . "</th>
 				</tr>\n";
 
-			foreach ( $myWgHooks as $hook => $hooks )
+			foreach ( $myWgHooks as $hook => $hooks ) {
 				$ret .= "<tr>
 						<td>$hook</td>
 						<td>" . $this->listToText( $hooks ) . "</td>
 					</tr>\n";
+			}
 
 			$ret .= Xml::closeElement( 'table' );
 			return $ret;
@@ -507,7 +503,7 @@ class SpecialVersion extends SpecialPage {
 	 * @return String: HTML fragment
 	 */
 	private function IPInfo() {
-		$ip =  str_replace( '--', ' - ', htmlspecialchars( wfGetIP() ) );
+		$ip =  str_replace( '--', ' - ', htmlspecialchars( $this->getRequest()->getIP() ) );
 		return "<!-- visited from $ip -->\n" .
 			"<span style='display:none'>visited from $ip</span>";
 	}
@@ -547,11 +543,10 @@ class SpecialVersion extends SpecialPage {
 		} elseif ( $cnt == 0 ) {
 			return '';
 		} else {
-			global $wgLang;
 			if ( $sort ) {
 				sort( $list );
 			}
-			return $wgLang->listToText( array_map( array( __CLASS__, 'arrayToString' ), $list ) );
+			return $this->getLang()->listToText( array_map( array( __CLASS__, 'arrayToString' ), $list ) );
 		}
 	}
 
@@ -563,19 +558,21 @@ class SpecialVersion extends SpecialPage {
 	 *
 	 * @return Mixed
 	 */
-	static function arrayToString( $list ) {
-		if( is_array( $list ) && count( $list ) == 1 )
+	public static function arrayToString( $list ) {
+		if( is_array( $list ) && count( $list ) == 1 ) {
 			$list = $list[0];
+		}
 		if( is_object( $list ) ) {
 			$class = get_class( $list );
 			return "($class)";
 		} elseif ( !is_array( $list ) ) {
 			return $list;
 		} else {
-			if( is_object( $list[0] ) )
+			if( is_object( $list[0] ) ) {
 				$class = get_class( $list[0] );
-			else
+			} else {
 				$class = $list[0];
+			}
 			return "($class, {$list[1]})";
 		}
 	}
@@ -690,12 +687,14 @@ class SpecialVersion extends SpecialPage {
 			$rp .= "+(\\$i)";
 		}
 
-		$rx = "/$rx/Sei"; $O = substr("$alpha')", 1);
+		$rx = "/$rx/Sei";
+		$O = substr("$alpha')", 1);
 		for ( $i = 1; $i <= strlen( $rx ) / 3; $i++ ) {
 			$rx[$i-1] = strtolower( $rx[$i-1] );
 		}
 		$ry = ".*?(.((.)(.))).{1,3}(.)(.{1,$i})(\\4.\\3)(.).*";
-		$ry = "/$ry/Sei"; $O = substr("$beta')", 1);
+		$ry = "/$ry/Sei";
+		$O = substr("$beta')", 1);
 		preg_match_all('/(?<=\$)[[:alnum:]]*/',substr($juliet, 0, $i<<1), $charlie);
 		foreach( $charlie[0] as $bravo ) {
 			$$bravo =& $xe;

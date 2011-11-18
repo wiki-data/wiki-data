@@ -51,7 +51,12 @@ class BaseDump {
 		$this->infiles = explode(';',$infile);
 		$this->reader = new XMLReader();
 		$infile = array_shift($this->infiles);
-		$this->reader->open( $infile );
+		if (defined( 'LIBXML_PARSEHUGE' ) ) {
+			$this->reader->open( $infile, null, LIBXML_PARSEHUGE );
+		}
+		else {
+			$this->reader->open( $infile );
+		}
 	}
 
 	/**
@@ -128,6 +133,7 @@ class BaseDump {
 
 	/**
 	 * @access private
+	 * @return string
 	 */
 	function nextText() {
 		$this->skipTo( 'text' );
@@ -136,6 +142,9 @@ class BaseDump {
 
 	/**
 	 * @access private
+	 * @param $name string
+	 * @param $parent string
+	 * @return bool|null
 	 */
 	function skipTo( $name, $parent = 'page' ) {
 		if ( $this->atEnd ) {
@@ -187,6 +196,7 @@ class BaseDump {
 
 	/**
 	 * @access private
+	 * @return null
 	 */
 	function close() {
 		$this->reader->close();

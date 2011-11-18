@@ -35,6 +35,7 @@ class SVGMetadataExtractor {
 class SVGReader {
 	const DEFAULT_WIDTH = 512;
 	const DEFAULT_HEIGHT = 512;
+	const NS_SVG = 'http://www.w3.org/2000/svg';
 
 	private $reader = null;
 	private $mDebug = false;
@@ -54,7 +55,7 @@ class SVGReader {
 		$size = filesize( $source );
 		if ( $size === false ) {
 			throw new MWException( "Error getting filesize of SVG." );
-		} 
+		}
 
 		if ( $size > $wgSVGMetadataCutoff ) {
 			$this->debug( "SVG is $size bytes, which is bigger than $wgSVGMetadataCutoff. Truncating." );
@@ -83,14 +84,14 @@ class SVGReader {
 		wfRestoreWarnings();
 	}
 
-	/*
+	/**
 	 * @return Array with the known metadata
 	 */
 	public function getMetadata() {
 		return $this->metadata;
 	}
 
-	/*
+	/**
 	 * Read the SVG
 	 */
 	public function read() {
@@ -101,9 +102,9 @@ class SVGReader {
 			$keepReading = $this->reader->read();
 		}
 
-		if ( !$this->qualifiedNameEquals( $this->reader->name, 'svg', 'svg' ) ) {
+		if ( $this->reader->localName != 'svg' || $this->reader->namespaceURI != self::NS_SVG ) {
 			throw new MWException( "Expected <svg> tag, got ".
-				$this->reader->name );
+				$this->reader->localName . " in NS " . $this->reader->namespaceURI );
 		}
 		$this->debug( "<svg> tag is correct." );
 		$this->handleSVGAttribs();
@@ -111,18 +112,19 @@ class SVGReader {
 		$exitDepth =  $this->reader->depth;
 		$keepReading = $this->reader->read();
 		while ( $keepReading ) {
-			$tag = $this->reader->name;
+			$tag = $this->reader->localName;
 			$type = $this->reader->nodeType;
+			$isSVG = ($this->reader->namespaceURI == self::NS_SVG);
 
 			$this->debug( "$tag" );
 
-			if ( $this->qualifiedNameEquals( $tag, 'svg', 'svg' ) && $type == XmlReader::END_ELEMENT && $this->reader->depth <= $exitDepth ) {
+			if ( $isSVG && $tag == 'svg' && $type == XmlReader::END_ELEMENT && $this->reader->depth <= $exitDepth ) {
 				break;
-			} elseif ( $this->qualifiedNameEquals( $tag, 'svg', 'title' ) ) {
+			} elseif ( $isSVG && $tag == 'title' ) {
 				$this->readField( $tag, 'title' );
-			} elseif ( $this->qualifiedNameEquals( $tag, 'svg', 'desc' )  ) {
+			} elseif ( $isSVG && $tag == 'desc' ) {
 				$this->readField( $tag, 'description' );
-			} elseif ( $this->qualifiedNameEquals( $tag, 'svg', 'metadata' ) && $type == XmlReader::ELEMENT ) {
+			} elseif ( $isSVG && $tag == 'metadata' && $type == XmlReader::ELEMENT ) {
 				$this->readXml( $tag, 'metadata' );
 			} elseif ( $tag !== '#text' ) {
 				$this->debug( "Unhandled top-level XML tag $tag" );
@@ -142,7 +144,7 @@ class SVGReader {
 		return true;
 	}
 
-	/*
+	/**
 	 * Read a textelement from an element
 	 *
 	 * @param String $name of the element that we are reading from
@@ -155,7 +157,7 @@ class SVGReader {
 		}
 		$keepReading = $this->reader->read();
 		while( $keepReading ) {
-			if( $this->reader->name == $name && $this->reader->nodeType == XmlReader::END_ELEMENT ) {
+			if( $this->reader->localName == $name && $this->reader->namespaceURI == self::NS_SVG && $this->reader->nodeType == XmlReader::END_ELEMENT ) {
 				break;
 			} elseif( $this->reader->nodeType == XmlReader::TEXT ){
 				$this->metadata[$metafield] = trim( $this->reader->value );
@@ -164,7 +166,7 @@ class SVGReader {
 		}
 	}
 
-	/*
+	/**
 	 * Read an XML snippet from an element
 	 *
 	 * @param String $metafield that we will fill with the result
@@ -175,11 +177,15 @@ class SVGReader {
 			return;
 		}
 		// TODO: find and store type of xml snippet. metadata['metadataType'] = "rdf"
-		$this->metadata[$metafield] = $this->reader->readInnerXML();
+		if( method_exists( $this->reader, 'readInnerXML' ) ) {
+			$this->metadata[$metafield] = trim( $this->reader->readInnerXML() );
+		} else {
+			throw new MWException( "The PHP XMLReader extension does not come with readInnerXML() method. Your libxml is probably out of date (need 2.6.20 or later)." );
+		}
 		$this->reader->next();
 	}
 
-	/*
+	/**
 	 * Filter all children, looking for animate elements
 	 *
 	 * @param String $name of the element that we are reading from
@@ -195,21 +201,16 @@ class SVGReader {
 		$exitDepth =  $this->reader->depth;
 		$keepReading = $this->reader->read();
 		while( $keepReading ) {
-			if( $this->reader->name == $name && $this->reader->depth <= $exitDepth
+			if( $this->reader->localName == $name && $this->reader->depth <= $exitDepth
 				&& $this->reader->nodeType == XmlReader::END_ELEMENT ) {
 				break;
-			} elseif ( $this->reader->nodeType == XmlReader::ELEMENT ) {
-				switch( $this->reader->name ) {
+			} elseif ( $this->reader->namespaceURI == self::NS_SVG && $this->reader->nodeType == XmlReader::ELEMENT ) {
+				switch( $this->reader->localName ) {
 					case 'animate':
-					case 'svg:animate':
 					case 'set':
-					case 'svg:set':
 					case 'animateMotion':
-					case 'svg:animateMotion':
 					case 'animateColor':
-					case 'svg:animateColor':
 					case 'animateTransform':
-					case 'svg:animateTransform':
 						$this->debug( "HOUSTON WE HAVE ANIMATION" );
 						$this->metadata['animated'] = true;
 						break;
@@ -238,7 +239,7 @@ class SVGReader {
 		wfDebug( "SVGReader WARN: $data\n" );
 	}
 
-	/*
+	/**
 	 * Parse the attributes of an SVG element
 	 *
 	 * The parser has to be in the start element of <svg>
@@ -317,23 +318,5 @@ class SVGReader {
 			// Assume pixels
 			return floatval( $length );
 		}
-	}
-
-	/**
-	 * XML namespace check
-	 *
-	 * Check if a read node name matches the expected nodeName
-	 * @param $qualifiedName as read by XMLReader
-	 * @param $prefix the namespace prefix that you expect for this element, defaults to svg namespace
-	 * @param $localName the localName part of the element that you want to match
-	 *
-	 * @return boolean
-	 */
-	private function qualifiedNameEquals( $qualifiedName, $prefix="svg", $localName ) {
-		if( ($qualifiedName == $localName && $prefix == "svg" ) ||
-		     $qualifiedName == ($prefix . ":" . $localName) ) {
-			return true;
-		}
-		return false;
 	}
 }

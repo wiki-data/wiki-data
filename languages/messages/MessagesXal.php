@@ -84,8 +84,8 @@ $messages = array(
 'tog-shownumberswatching'     => 'Тер халх шинҗлдг демнчнрин то үзүлх',
 'tog-oldsig'                  => 'Бәәдг тәвсн һарна хәләвр:',
 'tog-fancysig'                => 'Эврән тәвсн һарна бики темдлһн (авто заалһта уга)',
-'tog-externaleditor'          => 'Һаза чикллгч олзлх (һанцхн эрдмчнрт, тана тоолцврт шишлң көг кергтә. [http://www.mediawiki.org/wiki/Manual:External_editors Дәкәд өггцн.])',
-'tog-externaldiff'            => 'Һаза йилһән үзүлдг програм олзлх (һанцхн эрдмчнрт, тана тоолцврт шишлң көг кергтә [http://www.mediawiki.org/wiki/Manual:External_editors Дәкәд өггцн.])',
+'tog-externaleditor'          => 'Һаза чикллгч олзлх (һанцхн эрдмчнрт, тана тоолцврт шишлң көг кергтә. [//www.mediawiki.org/wiki/Manual:External_editors Дәкәд өггцн.])',
+'tog-externaldiff'            => 'Һаза йилһән үзүлдг програм олзлх (һанцхн эрдмчнрт, тана тоолцврт шишлң көг кергтә [//www.mediawiki.org/wiki/Manual:External_editors Дәкәд өггцн.])',
 'tog-showjumplinks'           => 'Туслмҗ заалһуд «-д/-т һарх» йовулх',
 'tog-uselivepreview'          => 'Шамдһа хәләвр олзлх (JavaScript кергтә, амслһн)',
 'tog-forceeditsummary'        => 'Учр-утх хоосн бәәхлә медүлх',
@@ -181,14 +181,6 @@ $messages = array(
 'index-category'                 => 'Индекссн халхс',
 'noindex-category'               => 'Индекссн биш халхс',
 
-'mainpagetext'      => "Йовудта Mediawiki гүүлһүдә тәвллһн.'''",
-'mainpagedocfooter' => 'Тер бики закллһна теткүл ю кеһәд олзлх туск [http://meta.wikimedia.org/wiki/Help:Contents көтлвр] дастн.
-
-== Туста заавр ==
-* [http://www.mediawiki.org/wiki/Manual:Configuration_settings Көгүдә бүрткл]
-* [http://www.mediawiki.org/wiki/Manual:FAQ MediaWiki туск ЮмБи]
-* [https://lists.wikimedia.org/mailman/listinfo/mediawiki-announce MediaWiki шинҗллһнә бүрткл]',
-
 'about'         => 'Тодлҗ бичлһн',
 'article'       => 'Зүүл',
 'newwindow'     => '(шин терзд)',
@@ -238,7 +230,6 @@ $messages = array(
 'history'           => 'тууҗ',
 'history_short'     => 'Тууҗ',
 'updatedmarker'     => 'мини шидрә орлһна хөөн шинрүлсн',
-'info_short'        => 'Өггцн',
 'printableversion'  => 'Барин бәәдл',
 'permalink'         => 'Даңгин заалһ',
 'print'             => 'Барлх',
@@ -394,7 +385,6 @@ $1',
 'badtitle'            => 'Буру нернь',
 'badtitletext'        => 'Сурсн нерн буру, хоосн, аль му бичсн келн хоорнд нертә. Тиим чигн биз, нерн зөв уга үзгтә.',
 'viewsource'          => 'Ишиг хәләх',
-'viewsourcefor'       => '$1 халх',
 'actionthrottled'     => 'Хурдна заг',
 'sqlhidden'           => '(SQL сурвр бултулсн)',
 'ns-specialprotected' => 'Шишлң халх чиклсн бәәх болшго.',
@@ -440,7 +430,7 @@ $1',
 Демнчна нерт баһ болн ик үзгүд әдл биш болна.
 «<nowiki>$1</nowiki>» гидг нерәдлһтә демнч бәәшго.
 Бичлһиг шүүтн аль [[Special:UserLogin/signup|бигчдлһиг бүтәтн]].',
-'nosuchusershort'         => '«<nowiki>$1</nowiki>» гидг нерәдлһтә демнч бәәшго.
+'nosuchusershort'         => '«$1» гидг нерәдлһтә демнч бәәшго.
 Бичлһиг шүүтн.',
 'nouserspecified'         => 'Та демнчна нернь бичх йостав.',
 'login-userblocked'       => 'Тер демнч бүслсн, харһад орҗ болшго бәәнә.',
@@ -455,7 +445,7 @@ $1',
 'accountcreated'          => 'Бичгдллһн бүтәв.',
 'loginlanguagelabel'      => 'Келн: $1',
 
-# Password reset dialog
+# Change password dialog
 'resetpass'                 => 'Нууц үгиг сольх',
 'resetpass_header'          => 'Бичгдллһнә нууц үгиг сольх',
 'oldpassword'               => 'Көгшн нууц үг:',
@@ -869,8 +859,7 @@ $1',
 'linksearch' => 'Һаза заалһуд',
 
 # Special:Log/newusers
-'newuserlogpage'          => 'Бичгдлһнә сеткүл',
-'newuserlog-create-entry' => 'Шин демнч',
+'newuserlogpage' => 'Бичгдлһнә сеткүл',
 
 # Special:ListGroupRights
 'listgrouprights-members' => '(мөчүдин сеткүл)',
@@ -881,10 +870,8 @@ $1',
 # Watchlist
 'watchlist'         => 'Шинҗллһнә сеткүл',
 'mywatchlist'       => 'Шинҗллһнә сеткүл',
-'addedwatch'        => 'Шинҗллһнә сеткүлд немв.',
 'addedwatchtext'    => "«[[:$1]]» гидг нерәдлһтә халх тана [[Special:Watchlist|шинҗллһнә сеткүлд]] немв.
 Тегәд тер халхна болн терүнә ухалврин сольлһн энд шиҗлсн болх. Эн халх '''тарһн'' үзгәр [[Special:RecentChanges|шидрә сольлһна]] халхд бичсн (амр умшхар) болх.",
-'removedwatch'      => 'Шинҗллһнә сеткүләс һарһв.',
 'removedwatchtext'  => '«[[:$1]]» халх тана [[Special:Watchlist|шинҗллһнә сеткүләс]] һарһв.',
 'watch'             => 'Шинҗлх',
 'watchthispage'     => 'Эн халхиг шинҗлх',
@@ -917,10 +904,10 @@ e-mail\'ар $PAGEEDITOR_EMAIL
 
 --
 Тана шинҗллһнә сеткүлин көгүдиг сольҗ седхлә, эниг дахтн:
-{{fullurl:{{#special:Watchlist}}/edit}}
+{{canonicalurl:{{#special:EditWatchlist}}}}
 
 Хәрү холва болн тус:
-{{fullurl:{{MediaWiki:Helppage}}}}',
+{{canonicalurl:{{MediaWiki:Helppage}}}}',
 
 # Delete
 'deletepage'            => 'Эн халхиг һарһҗ',
@@ -934,9 +921,8 @@ e-mail\'ар $PAGEEDITOR_EMAIL
 'confirmdeletetext'     => 'Та цуг халхиг аль зургиг һарһҗ орхар бәәнәт.
 Буйн болтха, та үнәр тана үүлдин ашуд болн [[{{MediaWiki:Policy-url}}]] әңгин зокал медәд, эн батлҗ кетн.',
 'actioncomplete'        => 'Үүлд кев',
-'deletedtext'           => '«<nowiki>$1</nowiki>» һарһҗ болв.
+'deletedtext'           => '«$1» һарһҗ болв.
 $2 шидрә һарһлһна төлә хәләтн.',
-'deletedarticle'        => '«[[$1]]» халхиг һарһв',
 'dellogpage'            => 'Һарһллһна сеткүл',
 'deletecomment'         => 'Учр:',
 'deleteotherreason'     => 'Талдан аль дәкәд учр:',
@@ -954,7 +940,7 @@ $2 шидрә һарһлһна төлә хәләтн.',
 'protectexpiry'               => 'Өңгрнә:',
 'protect_expiry_invalid'      => 'Буру өңгрллһнә цаг',
 'protect_expiry_old'          => 'Өңгрллһнә цаг бәәв.',
-'protect-text'                => "Энд та '''<nowiki>$1</nowiki>''' халхин харсллһна кемҗән хәләҗ,  хүврлҗ чаднат.",
+'protect-text'                => "Энд та '''$1''' халхин харсллһна кемҗән хәләҗ,  хүврлҗ чаднат.",
 'protect-locked-access'       => "Эн халхна харсллһна кемҗән сольҗ, тана бичгдлһна зөв тату.
 Ода болсн '''$1''' халхна көгүд:",
 'protect-cascadeon'           => 'Эн халх харссн. Юнгад гихлә, тер халх {{PLURAL:$1|эн халхд|тенд халхсд}} каскад харсллһта. Тадн эн халхна харсллһна кемҗән сольх чаднат, болв тер үүл каскад харлсһиг цокҗ чадшго.',
@@ -974,9 +960,8 @@ $2 шидрә һарһлһна төлә хәләтн.',
 'restriction-move' => 'Көндлһн',
 
 # Undelete
-'undeletelink'     => 'гүүһәд хәләх/босхҗ тохрах',
-'undeleteinvert'   => 'Зөрү суңһлт',
-'undeletedarticle' => '«[[$1]]» хәрү кехв',
+'undeletelink'   => 'гүүһәд хәләх/босхҗ тохрах',
+'undeleteinvert' => 'Зөрү суңһлт',
 
 # Namespace form on various pages
 'namespace'      => 'Нернә у:',
@@ -1062,8 +1047,6 @@ $2 шидрә һарһлһна төлә хәләтн.',
 'talkexists'       => "'''Халхин йовудта көндллһн. Болв, ухалвр халх көндәх болшго. Юнгад гихлә, эн нерәдлһтә халх бәәнә. Буйн болтха, териг һарар неҗәлтн.'''",
 'movedto'          => 'көндсн:',
 'movetalk'         => 'Өөр ухалвр халхиг көндәх.',
-'1movedto2'        => '«[[$1]]» халхас «[[$2]]» халхд көндв',
-'1movedto2_redir'  => '«[[$1]]» халхас «[[$2]]» халхд көндв (авч одлһта уга).',
 'movelogpage'      => 'Нернә сольлһна сеткүл',
 'movereason'       => 'Учр:',
 'revertmove'       => 'хәрүлһн',
@@ -1147,7 +1130,7 @@ $2 шидрә һарһлһна төлә хәләтн.',
 # Media information
 'file-info'            => 'боомгин кемҗә: $1, MIME төрл: $2',
 'file-info-size'       => '$1 × $2 цегтә, боомгин кемҗән: $3, MIME янз: $4',
-'file-nohires'         => '<small>Икәр чинртә янз уга.</small>',
+'file-nohires'         => 'Икәр чинртә янз уга.',
 'svg-long-desc'        => 'SVG боомг, $1 × $2 мет цегтә, боомгин кемҗән: $3',
 'show-big-image'       => 'Күцц чинр',
 'file-info-gif-looped' => 'билцгсн',
@@ -1171,7 +1154,13 @@ $2 шидрә һарһлһна төлә хәләтн.',
 * exposuretime
 * fnumber
 * isospeedratings
-* focallength',
+* focallength
+* artist
+* copyright
+* imagedescription
+* gpslatitude
+* gpslongitude
+* gpsaltitude',
 
 # EXIF tags
 'exif-imagewidth'               => 'Өргн',
@@ -1204,15 +1193,13 @@ $2 шидрә һарһлһна төлә хәләтн.',
 
 # External editor support
 'edit-externally'      => 'Эн боомгиг һаза заклһар чиклх',
-'edit-externally-help' => '([http://www.mediawiki.org/wiki/Manual:External_editors Тәвллһнә заалт]  икәр өггцнә төлә хәләтн)',
+'edit-externally-help' => '([//www.mediawiki.org/wiki/Manual:External_editors Тәвллһнә заалт]  икәр өггцнә төлә хәләтн)',
 
 # 'all' in various places, this might be different for inflected languages
-'recentchangesall' => 'цуг',
-'imagelistall'     => 'цуг',
-'watchlistall2'    => 'цуг',
-'namespacesall'    => 'цуг',
-'monthsall'        => 'цуг',
-'limitall'         => 'цуг',
+'watchlistall2' => 'цуг',
+'namespacesall' => 'цуг',
+'monthsall'     => 'цуг',
+'limitall'      => 'цуг',
 
 # action=purge
 'confirm_purge_button' => 'Тиим',

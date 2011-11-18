@@ -24,11 +24,6 @@
  * @file
  */
 
-if ( !defined( 'MEDIAWIKI' ) ) {
-	// Eclipse helper - will be ignored in production
-	require_once( "ApiBase.php" );
-}
-
 /**
  * @ingroup API
  */
@@ -60,7 +55,7 @@ class ApiOpenSearch extends ApiBase {
 
 			$searches = PrefixSearch::titleSearch( $search, $limit,
 				$namespaces );
-			
+
 			// if the content language has variants, try to retrieve fallback results
 			$fallbackLimit = $limit - count( $searches );
 			if ( $fallbackLimit > 0 ) {
@@ -116,16 +111,20 @@ class ApiOpenSearch extends ApiBase {
 	}
 
 	public function getDescription() {
-		return 'This module implements OpenSearch protocol';
+		return 'Search the wiki using the OpenSearch protocol';
 	}
 
-	protected function getExamples() {
+	public function getExamples() {
 		return array(
 			'api.php?action=opensearch&search=Te'
 		);
 	}
 
+	public function getHelpUrls() {
+		return 'http://www.mediawiki.org/wiki/API:Opensearch';
+	}
+
 	public function getVersion() {
-		return __CLASS__ . ': $Id: ApiOpenSearch.php 79694 2011-01-06 00:31:23Z reedy $';
+		return __CLASS__ . ': $Id: ApiOpenSearch.php 103273 2011-11-16 00:17:26Z johnduhart $';
 	}
 }

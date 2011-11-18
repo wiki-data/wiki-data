@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * Tests for IP validity functions. Ported from /t/inc/IP.t by avar.
  */
 
@@ -43,20 +43,20 @@ class IPTest extends MediaWikiTestCase {
 		$this->assertFalse( IP::isIPv6( 'fc:100:::' ), 'IPv6 ending with a ":::"' );
 		$this->assertFalse( IP::isIPv6( 'fc:300' ), 'IPv6 with only 2 words' );
 		$this->assertFalse( IP::isIPv6( 'fc:100:300' ), 'IPv6 with only 3 words' );
-		
+
 		$this->assertTrue( IP::isIPv6( 'fc:100::' ) );
 		$this->assertTrue( IP::isIPv6( 'fc:100:a::' ) );
 		$this->assertTrue( IP::isIPv6( 'fc:100:a:d::' ) );
 		$this->assertTrue( IP::isIPv6( 'fc:100:a:d:1::' ) );
 		$this->assertTrue( IP::isIPv6( 'fc:100:a:d:1:e::' ) );
 		$this->assertTrue( IP::isIPv6( 'fc:100:a:d:1:e:ac::' ) );
-		
+
 		$this->assertFalse( IP::isIPv6( 'fc:100:a:d:1:e:ac:0::' ), 'IPv6 with 8 words ending with "::"' );
 		$this->assertFalse( IP::isIPv6( 'fc:100:a:d:1:e:ac:0:1::' ), 'IPv6 with 9 words ending with "::"' );
 
 		$this->assertFalse( IP::isIPv6( ':::' ) );
 		$this->assertFalse( IP::isIPv6( '::0:' ), 'IPv6 ending in a lone ":"' );
-		
+
 		$this->assertTrue( IP::isIPv6( '::' ), 'IPv6 zero address' );
 		$this->assertTrue( IP::isIPv6( '::0' ) );
 		$this->assertTrue( IP::isIPv6( '::fc' ) );
@@ -66,14 +66,14 @@ class IPTest extends MediaWikiTestCase {
 		$this->assertTrue( IP::isIPv6( '::fc:100:a:d:1' ) );
 		$this->assertTrue( IP::isIPv6( '::fc:100:a:d:1:e' ) );
 		$this->assertTrue( IP::isIPv6( '::fc:100:a:d:1:e:ac' ) );
-		
+
 		$this->assertFalse( IP::isIPv6( '::fc:100:a:d:1:e:ac:0' ), 'IPv6 with "::" and 8 words' );
 		$this->assertFalse( IP::isIPv6( '::fc:100:a:d:1:e:ac:0:1' ), 'IPv6 with 9 words' );
 
 		$this->assertFalse( IP::isIPv6( ':fc::100' ), 'IPv6 starting with lone ":"' );
 		$this->assertFalse( IP::isIPv6( 'fc::100:' ), 'IPv6 ending with lone ":"' );
 		$this->assertFalse( IP::isIPv6( 'fc:::100' ), 'IPv6 with ":::" in the middle' );
-		
+
 		$this->assertTrue( IP::isIPv6( 'fc::100' ), 'IPv6 with "::" and 2 words' );
 		$this->assertTrue( IP::isIPv6( 'fc::100:a' ), 'IPv6 with "::" and 3 words' );
 		$this->assertTrue( IP::isIPv6( 'fc::100:a:d', 'IPv6 with "::" and 4 words' ) );
@@ -83,7 +83,7 @@ class IPTest extends MediaWikiTestCase {
 		$this->assertTrue( IP::isIPv6( '2001::df'), 'IPv6 with "::" and 2 words' );
 		$this->assertTrue( IP::isIPv6( '2001:5c0:1400:a::df'), 'IPv6 with "::" and 5 words' );
 		$this->assertTrue( IP::isIPv6( '2001:5c0:1400:a::df:2'), 'IPv6 with "::" and 6 words' );
-		
+
 		$this->assertFalse( IP::isIPv6( 'fc::100:a:d:1:e:ac:0' ), 'IPv6 with "::" and 8 words' );
 		$this->assertFalse( IP::isIPv6( 'fc::100:a:d:1:e:ac:0:1' ), 'IPv6 with 9 words' );
 
@@ -135,11 +135,11 @@ class IPTest extends MediaWikiTestCase {
 		$this->assertFalse( IP::isValid( 'fc:100:::' ), 'IPv6 ending with a ":::"' );
 		$this->assertFalse( IP::isValid( 'fc:300' ), 'IPv6 with only 2 words' );
 		$this->assertFalse( IP::isValid( 'fc:100:300' ), 'IPv6 with only 3 words' );
-		
+
 		$this->assertTrue( IP::isValid( 'fc:100::' ) );
 		$this->assertTrue( IP::isValid( 'fc:100:a:d:1:e::' ) );
 		$this->assertTrue( IP::isValid( 'fc:100:a:d:1:e:ac::' ) );
-		
+
 		$this->assertTrue( IP::isValid( 'fc::100' ), 'IPv6 with "::" and 2 words' );
 		$this->assertTrue( IP::isValid( 'fc::100:a' ), 'IPv6 with "::" and 3 words' );
 		$this->assertTrue( IP::isValid( '2001::df'), 'IPv6 with "::" and 2 words' );
@@ -147,7 +147,7 @@ class IPTest extends MediaWikiTestCase {
 		$this->assertTrue( IP::isValid( '2001:5c0:1400:a::df:2'), 'IPv6 with "::" and 6 words' );
 		$this->assertTrue( IP::isValid( 'fc::100:a:d:1' ), 'IPv6 with "::" and 5 words' );
 		$this->assertTrue( IP::isValid( 'fc::100:a:d:1:e:ac' ), 'IPv6 with "::" and 7 words' );
-		
+
 		$this->assertFalse( IP::isValid( 'fc:100:a:d:1:e:ac:0::' ), 'IPv6 with 8 words ending with "::"' );
 		$this->assertFalse( IP::isValid( 'fc:100:a:d:1:e:ac:0:1::' ), 'IPv6 with 9 words ending with "::"' );
 	}
@@ -262,7 +262,7 @@ class IPTest extends MediaWikiTestCase {
 	 * @covers IP::toUnsigned
 	 */
 	public function testip2longWrapper() {
-		// fixme : add more tests ?
+		// @todo FIXME: Add more tests ?
 		$this->assertEquals( pow(2,32) - 1, IP::toUnsigned( '255.255.255.255' ));
 		$i = 'IN.VA.LI.D';
 		$this->assertFalse( IP::toUnSigned( $i ) );
@@ -272,9 +272,13 @@ class IPTest extends MediaWikiTestCase {
 	 * @covers IP::isPublic
 	 */
 	public function testPrivateIPs() {
-		$private = array( 'fc::3', 'fc::ff', '::1', '10.0.0.1', '172.16.0.1', '192.168.0.1' );
+		$private = array( 'fc00::3', 'fc00::ff', '::1', '10.0.0.1', '172.16.0.1', '192.168.0.1' );
 		foreach ( $private as $p ) {
 			$this->assertFalse( IP::isPublic( $p ), "$p is not a public IP address" );
+		}
+		$public = array( '2001:5c0:1000:a::133', 'fc::3', '00FC::' );
+		foreach ( $public as $p ) {
+			$this->assertTrue( IP::isPublic( $p ), "$p is a public IP address" );
 		}
 	}
 
@@ -328,7 +332,7 @@ class IPTest extends MediaWikiTestCase {
 		$this->assertEquals( '0:0:0:0:0:0:FCCF:FAFF', IP::hexToOctet( 'FCCFFAFF' ) );
 	}
 
-	/*
+	/**
 	 * IP::parseCIDR() returns an array containing a signed IP address
 	 * representing the network mask and the bit mask.
 	 * @covers IP::parseCIDR
@@ -349,7 +353,7 @@ class IPTest extends MediaWikiTestCase {
 		$this->assertEquals( array( 0, 0 ), IP::parseCIDR('0.0.0.0/0') );
 		$this->assertEquals( array( 0, 0 ), IP::parseCIDR('255.255.255.255/0') );
 
-		// FIXME : add more tests.
+		// @todo FIXME: Add more tests.
 
 		# This part test network shifting
 		$this->assertNet( '192.0.0.0'  , '192.0.0.2/24'   );
@@ -387,7 +391,7 @@ class IPTest extends MediaWikiTestCase {
 	}
 
 	/**
-	 * Issues there are most probably from IP::toHex() or IP::parseRange()		
+	 * Issues there are most probably from IP::toHex() or IP::parseRange()
 	 * @covers IP::isInRange
 	 * @dataProvider provideIPsAndRanges
 	 */
@@ -424,6 +428,81 @@ class IPTest extends MediaWikiTestCase {
 				'2001:DB8::/32' ),
 
 			array( false, '2001:0DB8:F::', '2001:DB8::/96' ),
+		);
+	}
+
+	/**
+	 * Test for IP::splitHostAndPort().
+	 * @dataProvider provideSplitHostAndPort
+	 */
+	function testSplitHostAndPort( $expected, $input, $description ) {
+		$this->assertEquals( $expected, IP::splitHostAndPort( $input ), $description );
+	}
+
+	/**
+	 * Provider for IP::splitHostAndPort()
+	 */
+	function provideSplitHostAndPort() {
+		return array(
+			array( false, '[', 'Unclosed square bracket' ),
+			array( false, '[::', 'Unclosed square bracket 2' ),
+			array( array( '::', false ), '::', 'Bare IPv6 0' ),
+			array( array( '::1', false ), '::1', 'Bare IPv6 1' ),
+			array( array( '::', false ), '[::]', 'Bracketed IPv6 0' ),
+			array( array( '::1', false ), '[::1]', 'Bracketed IPv6 1' ),
+			array( array( '::1', 80 ), '[::1]:80', 'Bracketed IPv6 with port' ),
+			array( false, '::x', 'Double colon but no IPv6' ),
+			array( array( 'x', 80 ), 'x:80', 'Hostname and port' ),
+			array( false, 'x:x', 'Hostname and invalid port' ),
+			array( array( 'x', false ), 'x', 'Plain hostname' )
+		);
+	}
+
+	/**
+	 * Test for IP::combineHostAndPort()
+	 * @dataProvider provideCombineHostAndPort
+	 */
+	function testCombineHostAndPort( $expected, $input, $description ) {
+		list( $host, $port, $defaultPort ) = $input;
+		$this->assertEquals(
+			$expected,
+			IP::combineHostAndPort( $host, $port, $defaultPort ),
+			$description );
+	}
+
+	/**
+	 * Provider for IP::combineHostAndPort()
+	 */
+	function provideCombineHostAndPort() {
+		return array(
+			array( '[::1]', array( '::1', 2, 2 ), 'IPv6 default port' ),
+			array( '[::1]:2', array( '::1', 2, 3 ), 'IPv6 non-default port' ),
+			array( 'x', array( 'x', 2, 2 ), 'Normal default port' ),
+			array( 'x:2', array( 'x', 2, 3 ), 'Normal non-default port' ),
+		);
+	}
+
+	/**
+	 * Test for IP::sanitizeRange()
+	 * @dataProvider provideIPCIDRs
+	 */
+	function testSanitizeRange( $input, $expected, $description ) {
+		$this->assertEquals( $expected, IP::sanitizeRange( $input ), $description );
+	}
+
+	/**
+	 * Provider for IP::testSanitizeRange()
+	 */
+	function provideIPCIDRs() {
+		return array(
+			array( '35.56.31.252/16', '35.56.0.0/16', 'IPv4 range' ),
+			array( '135.16.21.252/24', '135.16.21.0/24', 'IPv4 range' ),
+			array( '5.36.71.252/32', '5.36.71.252/32', 'IPv4 silly range' ),
+			array( '5.36.71.252', '5.36.71.252', 'IPv4 non-range' ),
+			array( '0:1:2:3:4:c5:f6:7/96', '0:1:2:3:4:C5:0:0/96', 'IPv6 range' ),
+			array( '0:1:2:3:4:5:6:7/120', '0:1:2:3:4:5:6:0/120', 'IPv6 range' ),
+			array( '0:e1:2:3:4:5:e6:7/128', '0:E1:2:3:4:5:E6:7/128', 'IPv6 silly range' ),
+			array( '0:c1:A2:3:4:5:c6:7', '0:C1:A2:3:4:5:C6:7', 'IPv6 non range' ),
 		);
 	}
 }

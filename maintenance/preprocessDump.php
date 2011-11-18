@@ -24,13 +24,10 @@
  * @file
  * @ingroup Maintenance
  */
- 
-require_once( dirname( __FILE__ ) . '/Maintenance.php' );
 
-class PreprocessDump extends Maintenance {
+require_once( dirname( __FILE__ ) . '/dumpIterator.php' );
 
-	private $count = 0;
-	private $startTime;
+class PreprocessDump extends DumpIterator {
 
 	/* Variables for dressing up as a parser */
 	public $mTitle = 'PreprocessDump';
@@ -40,14 +37,9 @@ class PreprocessDump extends Maintenance {
 		global $wgParser;
 		return $wgParser->getStripList();
 	}
-		
+
 	public function __construct() {
 		parent::__construct();
-		$this->saveFailed = false;
-		$this->mDescription = "Run a file or dump with a preprocessor";
-		$this->addOption( 'file',  'File with text to run.', false, true );
-		$this->addOption( 'dump',  'XML dump to execute all revisions.', false, true );
-		$this->addOption( 'from',  'Article from XML dump to start from.', false, true );
 		$this->addOption( 'cache', 'Use and populate the preprocessor cache.', false, false );
 		$this->addOption( 'preprocessor', 'Preprocessor to use.', false, false );
 	}
@@ -56,34 +48,13 @@ class PreprocessDump extends Maintenance {
 		return Maintenance::DB_NONE;
 	}
 
-	public function finalSetup() {
-		parent::finalSetup();
-
-		global $wgUseDatabaseMessages, $wgLocalisationCacheConf, $wgHooks;
-		$wgUseDatabaseMessages = false;
-		$wgLocalisationCacheConf['storeClass'] =  'LCStore_Null';
-		$wgHooks['InterwikiLoadPrefix'][] = 'PreprocessDump::disableInterwikis';
-	}
-
-	static function disableInterwikis( $prefix, &$data ) {
-		# Title::newFromText will check on each namespaced article if it's an interwiki.
-		# We always answer that it is not.
-
-		return false;
-	}
-
-	public function execute() {
+	public function checkOptions() {
 		global $wgParser, $wgParserConf, $wgPreprocessorCacheThreshold;
-		
-		if (! ( $this->hasOption( 'file' ) ^ $this->hasOption( 'dump' ) ) ) {
-			$this->error("You must provide a file or dump", true);
-		}
 
 		if ( !$this->hasOption( 'cache' ) ) {
 			$wgPreprocessorCacheThreshold = false;
-			$this->saveFailed = $this->getOption('save-failed');
 		}
-		
+
 		if ( $this->hasOption( 'preprocessor' ) ) {
 			$name = $this->getOption( 'preprocessor' );
 		} elseif ( isset( $wgParserConf['preprocessorClass'] ) ) {
@@ -94,67 +65,18 @@ class PreprocessDump extends Maintenance {
 
 		$wgParser->firstCallInit();
 		$this->mPreprocessor = new $name( $this );
-		
-		if ( $this->hasOption( 'file' ) ) {
-			$revision = new WikiRevision;
-			
-			$revision->setText( file_get_contents( $this->getOption( 'file' ) ) );
-			$revision->setTitle( Title::newFromText( rawurldecode( basename( $this->getOption('file'), '.txt' ) ) ) );
-			$this->handleRevision( $revision );
-			return;
-		}
-		
-		$this->startTime = wfTime();
-
-		if ( $this->getOption('dump') == '-' ) {
-			$source = new ImportStreamSource( $this->getStdin() );
-		} else {
-			$this->error("Sorry, I don't support dump filenames yet. Use - and provide it on stdin on the meantime.", true);
-		}
-		$importer = new WikiImporter( $source );
-
-		$importer->setRevisionCallback(
-			array( &$this, 'handleRevision' ) );
-		
-		$this->from = $this->getOption( 'from', null );
-		$this->count = 0;
-		$importer->doImport();
-			
-		$delta = wfTime() - $this->startTime;
-		$this->error( "{$this->count} revisions preprocessed in " . round($delta, 2) . " seconds " );
-		if ($delta > 0)
-			$this->error( round($this->count / $delta, 2) . " pages/sec" );
-		
-		# Perform the memory_get_peak_usage() when all the other data has been output so there's no damage if it dies.
-		# It is only available since 5.2.0 (since 5.2.1 if you haven't compiled with --enable-memory-limit)
-		$this->error( "Memory peak usage of " . memory_get_peak_usage() . " bytes\n" );
 	}
-	
+
 	/**
 	 * Callback function for each revision, preprocessToObj()
 	 * @param $rev Revision
 	 */
-	public function handleRevision( $rev ) {
-		$title = $rev->getTitle();
-		if ( !$title ) {
-			$this->error( "Got bogus revision with null title!" );
-			return;
-		}
-		
-		$this->count++;
-		if ( isset( $this->from ) ) {
-			if ( $this->from != $title )
-				return;
-			$this->output( "Skipped " . ($this->count - 1) . " pages\n" );
-			
-			$this->count = 1;
-			$this->from = null;
-		}
+	public function processRevision( $rev ) {
 		try {
 			$this->mPreprocessor->preprocessToObj( $rev->getText(), 0 );
 		}
 		catch(Exception $e) {
-			$this->error("Caught exception " . $e->getMessage() . " in " . $title->	getPrefixedText() );
+			$this->error("Caught exception " . $e->getMessage() . " in " . $rev->getTitle()->getPrefixedText() );
 		}
 	}
 }

@@ -24,11 +24,6 @@
  * @file
  */
 
-if ( !defined( 'MEDIAWIKI' ) ) {
-	// Eclipse helper - will be ignored in production
-	require_once( "ApiQueryBase.php" );
-}
-
 /**
  * A query module to list all langlinks (links to correspanding foreign language pages).
  *
@@ -74,20 +69,27 @@ class ApiQueryLangLinks extends ApiQueryBase {
 			);
 		}
 
+	    $dir = ( $params['dir'] == 'descending' ? ' DESC' : '' );
 	    if ( isset( $params['lang'] ) ) {
 			$this->addWhereFld( 'll_lang', $params['lang'] );
 			if ( isset( $params['title'] ) ) {
 				$this->addWhereFld( 'll_title', $params['title'] );
-				$this->addOption( 'ORDER BY', 'll_from' );
+				$this->addOption( 'ORDER BY', 'll_from' . $dir );
 			} else {
-				$this->addOption( 'ORDER BY', 'll_title, ll_from' );
+				$this->addOption( 'ORDER BY', array(
+							'll_title' . $dir,
+							'll_from' . $dir
+				));
 			}
 		} else {
 			// Don't order by ll_from if it's constant in the WHERE clause
 			if ( count( $this->getPageSet()->getGoodTitles() ) == 1 ) {
-				$this->addOption( 'ORDER BY', 'll_lang' );
+				$this->addOption( 'ORDER BY', 'll_lang' . $dir );
 			} else {
-				$this->addOption( 'ORDER BY', 'll_from, ll_lang' );
+				$this->addOption( 'ORDER BY', array(
+							'll_from' . $dir,
+							'll_lang' . $dir
+				));
 			}
 		}
 
@@ -106,7 +108,7 @@ class ApiQueryLangLinks extends ApiQueryBase {
 			if ( $params['url'] ) {
 				$title = Title::newFromText( "{$row->ll_lang}:{$row->ll_title}" );
 				if ( $title ) {
-					$entry['url'] = $title->getFullURL();
+					$entry['url'] = wfExpandUrl( $title->getFullURL(), PROTO_CURRENT );
 				}
 			}
 			ApiResult::setContent( $entry, $row->ll_title );
@@ -135,6 +137,13 @@ class ApiQueryLangLinks extends ApiQueryBase {
 			'url' => false,
 			'lang' => null,
 			'title' => null,
+			'dir' => array(
+				ApiBase::PARAM_DFLT => 'ascending',
+				ApiBase::PARAM_TYPE => array(
+					'ascending',
+					'descending'
+				)
+			),
 		);
 	}
 
@@ -145,6 +154,7 @@ class ApiQueryLangLinks extends ApiQueryBase {
 			'url' => 'Whether to get the full URL',
 			'lang' => 'Language code',
 			'title' => "Link to search for. Must be used with {$this->getModulePrefix()}lang",
+			'dir' => 'The direction in which to list',
 		);
 	}
 
@@ -159,14 +169,18 @@ class ApiQueryLangLinks extends ApiQueryBase {
 		) );
 	}
 
-	protected function getExamples() {
+	public function getExamples() {
 		return array(
 			'Get interlanguage links from the [[Main Page]]:',
 			'  api.php?action=query&prop=langlinks&titles=Main%20Page&redirects=',
 		);
 	}
 
+	public function getHelpUrls() {
+		return 'http://www.mediawiki.org/wiki/API:Properties#langlinks_.2F_ll';
+	}
+
 	public function getVersion() {
-		return __CLASS__ . ': $Id: ApiQueryLangLinks.php 79672 2011-01-05 21:51:12Z reedy $';
+		return __CLASS__ . ': $Id: ApiQueryLangLinks.php 103273 2011-11-16 00:17:26Z johnduhart $';
 	}
 }

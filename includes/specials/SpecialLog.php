@@ -35,8 +35,8 @@ class SpecialLog extends SpecialPage {
 	}
 
 	public function execute( $par ) {
-		global $wgRequest;
-
+		global $wgLogRestrictions;
+		
 		$this->setHeaders();
 		$this->outputHeader();
 
@@ -53,7 +53,7 @@ class SpecialLog extends SpecialPage {
 		$opts->add( 'offender', '' );
 
 		// Set values
-		$opts->fetchValuesFromRequest( $wgRequest );
+		$opts->fetchValuesFromRequest( $this->getRequest() );
 		if ( $par ) {
 			$this->parseParams( $opts, (string)$par );
 		}
@@ -62,6 +62,16 @@ class SpecialLog extends SpecialPage {
 		if ( $opts->getValue( 'offset' ) || $opts->getValue( 'dir' ) == 'prev' ) {
 			$opts->setValue( 'year', '' );
 			$opts->setValue( 'month', '' );
+		}
+
+		// Reset the log type to default (nothing) if it's invalid or if the
+		// user does not possess the right to view it
+		$type = $opts->getValue( 'type' );
+		if ( !LogPage::isLogType( $type )
+			|| ( isset( $wgLogRestrictions[$type] )
+				&& !$this->getUser()->isAllowed( $wgLogRestrictions[$type] ) )
+		) {
+			$opts->setValue( 'type', '' );
 		}
 
 		# Handle type-specific inputs
@@ -95,30 +105,27 @@ class SpecialLog extends SpecialPage {
 	}
 
 	private function show( FormOptions $opts, array $extraConds ) {
-		global $wgOut, $wgUser;
-
 		# Create a LogPager item to get the results and a LogEventsList item to format them...
-		$loglist = new LogEventsList( $wgUser->getSkin(), $wgOut, 0 );
+		$loglist = new LogEventsList( $this->getSkin(), $this->getOutput(), 0 );
 		$pager = new LogPager( $loglist, $opts->getValue( 'type' ), $opts->getValue( 'user' ),
 			$opts->getValue( 'page' ), $opts->getValue( 'pattern' ), $extraConds, $opts->getValue( 'year' ),
 			$opts->getValue( 'month' ), $opts->getValue( 'tagfilter' ) );
 
-		# Set title and add header
-		$loglist->showHeader( $pager->getType() );
+		$this->addHeader( $opts->getValue( 'type' ) );
 
 		# Set relevant user
-		if ( $pager->getUser() ) {
-			$wgUser->getSkin()->setRelevantUser( User::newFromName( $pager->getUser() ) );
+		if ( $pager->getPerformer() ) {
+			$this->getSkin()->setRelevantUser( User::newFromName( $pager->getPerformer() ) );
 		}
 
 		# Show form options
-		$loglist->showOptions( $pager->getType(), $pager->getUser(), $pager->getPage(), $pager->getPattern(),
+		$loglist->showOptions( $pager->getType(), $pager->getPerformer(), $pager->getPage(), $pager->getPattern(),
 			$pager->getYear(), $pager->getMonth(), $pager->getFilterParams(), $opts->getValue( 'tagfilter' ) );
 
 		# Insert list
 		$logBody = $pager->getBody();
 		if ( $logBody ) {
-			$wgOut->addHTML(
+			$this->getOutput()->addHTML(
 				$pager->getNavigationBar() .
 				$loglist->beginLogEventsList() .
 				$logBody .
@@ -126,7 +133,19 @@ class SpecialLog extends SpecialPage {
 				$pager->getNavigationBar()
 			);
 		} else {
-			$wgOut->addWikiMsg( 'logempty' );
+			$this->getOutput()->addWikiMsg( 'logempty' );
 		}
 	}
+
+	/**
+	 * Set page title and show header for this log type
+	 * @param $type string
+	 * @since 1.19
+	 */
+	protected function addHeader( $type ) {
+		$page = new LogPage( $type );
+		$this->getOutput()->setPageTitle( $page->getName()->text() );
+		$this->getOutput()->addHTML( $page->getDescription()->parseAsBlock() );
+	}
+
 }

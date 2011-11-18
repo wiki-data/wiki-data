@@ -19,6 +19,7 @@ jQuery( function( $ ) {
 	 * Also excludes files over 10M to avoid going insane on memory usage.
 	 *
 	 * @todo is there a way we can ask the browser what's supported in <img>s?
+	 * @todo put SVG back after working around Firefox 7 bug <https://bugzilla.wikimedia.org/show_bug.cgi?id=31643>
 	 *
 	 * @param {File} file
 	 * @return boolean
@@ -45,27 +46,22 @@ jQuery( function( $ ) {
 		var	previewSize = 180,
 			thumb = $( '<div id="mw-upload-thumbnail" class="thumb tright">' +
 						'<div class="thumbinner">' +
-							'<canvas width="' + previewSize + '" height="' + previewSize + '" ></canvas>' +
+							'<div class="mw-small-spinner" style="width: 180px; height: 180px"></div>' +
 							'<div class="thumbcaption"><div class="filename"></div><div class="fileinfo"></div></div>' +
 						'</div>' +
 					'</div>' );
 		thumb.find( '.filename' ).text( file.name ).end()
 			.find( '.fileinfo' ).text( prettySize( file.size ) ).end();
-		
-		var	ctx = thumb.find( 'canvas' )[0].getContext( '2d' ),
-			spinner = new Image();
-		spinner.onload = function() { 
-			ctx.drawImage( spinner, (previewSize - spinner.width) / 2, 
-					(previewSize - spinner.height) / 2 ); 
-		};
-		spinner.src = mw.config.get( 'wgScriptPath' ) + '/skins/common/images/spinner.gif';
+
+		var	$canvas = $('<canvas width="' + previewSize + '" height="' + previewSize + '" ></canvas>'),
+			ctx = $canvas[0].getContext( '2d' );
 		$( '#mw-htmlform-source' ).parent().prepend( thumb );
 
 		var meta;
 		fetchPreview( file, function( dataURL ) {
 			var	img = new Image(),
 				rotation = 0;
-			
+
 			if ( meta && meta.tiff && meta.tiff.Orientation ) {
 				rotation = (360 - function () {
 					// See includes/media/Bitmap.php
@@ -81,8 +77,9 @@ jQuery( function( $ ) {
 					}
 				}() ) % 360;
 			}
-			
+
 			img.onload = function() {
+				var width, height, x, y, dx, dy, logicalWidth, logicalHeight;
 				// Fit the image within the previewSizexpreviewSize box
 				if ( img.width > img.height ) {
 					width = previewSize;
@@ -96,41 +93,50 @@ jQuery( function( $ ) {
 				dy = (180 - height) / 2;
 				switch ( rotation ) {
 					// If a rotation is applied, the direction of the axis
-					// changes as well. You can derive the values below by 
+					// changes as well. You can derive the values below by
 					// drawing on paper an axis system, rotate it and see
 					// where the positive axis direction is
 					case 0:
 						x = dx;
 						y = dy;
+						logicalWidth = img.width;
+						logicalHeight = img.height;
 						break;
 					case 90:
-						
+
 						x = dx;
 						y = dy - previewSize;
+						logicalWidth = img.height;
+						logicalHeight = img.width;
 						break;
 					case 180:
 						x = dx - previewSize;
 						y = dy - previewSize;
+						logicalWidth = img.width;
+						logicalHeight = img.height;
 						break;
 					case 270:
 						x = dx - previewSize;
 						y = dy;
+						logicalWidth = img.height;
+						logicalHeight = img.width;
 						break;
 				}
-				
+
 				ctx.clearRect( 0, 0, 180, 180 );
 				ctx.rotate( rotation / 180 * Math.PI );
 				ctx.drawImage( img, x, y, width, height );
-				
+				thumb.find('.mw-small-spinner').replaceWith($canvas);
+
 				// Image size
-				var info = mw.msg( 'widthheight', img.width, img.height ) +
+				var info = mw.msg( 'widthheight', logicalWidth, logicalHeight ) +
 					', ' + prettySize( file.size );
 				$( '#mw-upload-thumbnail .fileinfo' ).text( info );
 			};
 			img.src = dataURL;
 		}, mw.config.get( 'wgFileCanRotate' ) ? function ( data ) {
 			try {
-				meta = mw.util.jpegmeta( data, file.fileName );
+				meta = mw.libs.jpegmeta( data, file.fileName );
 				meta._binary_data = null;
 			} catch ( e ) {
 				meta = null;
@@ -150,20 +156,33 @@ jQuery( function( $ ) {
 	 */
 	function fetchPreview( file, callback, callbackBinary ) {
 		var reader = new FileReader();
-		reader.onload = function() {
-			if ( callbackBinary ) {
-				callbackBinary( reader.result );
-				reader.onload = function() {
-					callback( reader.result );
-				};
-				reader.readAsDataURL( file );
-			} else {
-				callback( reader.result );
-			}
-		};
 		if ( callbackBinary ) {
+			// To fetch JPEG metadata we need a binary string; start there.
+			// todo: 
+			reader.onload = function() {
+				callbackBinary( reader.result );
+
+				// Now run back through the regular code path.
+				fetchPreview(file, callback );
+			};
 			reader.readAsBinaryString( file );
+		} else if ('URL' in window && 'createObjectURL' in window.URL) {
+			// Supported in Firefox 4.0 and above <https://developer.mozilla.org/en/DOM/window.URL.createObjectURL>
+			// WebKit has it in a namespace for now but that's ok. ;)
+			//
+			// Lifetime of this URL is until document close, which is fine
+			// for Special:Upload -- if this code gets used on longer-running
+			// pages, add a revokeObjectURL() when it's no longer needed.
+			//
+			// Prefer this over readAsDataURL for Firefox 7 due to bug reading
+			// some SVG files from data URIs <https://bugzilla.mozilla.org/show_bug.cgi?id=694165>
+			callback(window.URL.createObjectURL(file));
 		} else {
+			// This ends up decoding the file to base-64 and back again, which
+			// feels horribly inefficient.
+			reader.onload = function() {
+				callback( reader.result );
+			};
 			reader.readAsDataURL( file );
 		}
 	}
@@ -190,7 +209,7 @@ jQuery( function( $ ) {
 	function clearPreview() {
 		$( '#mw-upload-thumbnail' ).remove();
 	}
-	
+
 	/**
 	 * Check if the file does not exceed the maximum size
 	 */
@@ -203,18 +222,18 @@ jQuery( function( $ ) {
 			return sizes['*'];
 		}
 		$( '.mw-upload-source-error' ).remove();
-		
-		var maxSize = getMaxUploadSize( 'file' ); 
+
+		var maxSize = getMaxUploadSize( 'file' );
 		if ( file.size > maxSize ) {
-			var error = $( '<p class="error mw-upload-source-error" id="wpSourceTypeFile-error">' + 
+			var error = $( '<p class="error mw-upload-source-error" id="wpSourceTypeFile-error">' +
 					mw.message( 'largefileserver', file.size, maxSize ).escaped() + '</p>' );
 			$( '#wpUploadFile' ).after( error );
 			return false;
 		}
 		return true;
 	}
-	
-	
+
+
 	/**
 	 * Initialization
 	 */
@@ -225,11 +244,11 @@ jQuery( function( $ ) {
 			if ( this.files && this.files.length ) {
 				// Note: would need to be updated to handle multiple files.
 				var file = this.files[0];
-				
+
 				if ( !checkMaxUploadSize( file ) ) {
 					return;
 				}
-				
+
 				if ( fileIsPreviewable( file ) ) {
 					showPreview( file );
 				}
@@ -251,9 +270,9 @@ jQuery( function ( $ ) {
 				$( '.mw-upload-source-error' ).remove();
 				if ( this.checked ) {
 					// Disable all inputs
-					$( 'input[name!="wpSourceType"]', rows ).attr( 'disabled', true );
+					$( 'input[name!="wpSourceType"]', rows ).prop( 'disabled', 'disabled' );
 					// Re-enable the current one
-					$( 'input', currentRow ).attr( 'disabled', false );
+					$( 'input', currentRow ).prop( 'disabled', false );
 				}
 			};
 		}() );

@@ -62,9 +62,10 @@ class CloneDatabase {
 	 * @param $tablesToClone Array An array of tables to clone, unprefixed
 	 * @param $newTablePrefix String Prefix to assign to the tables
 	 * @param $oldTablePrefix String Prefix on current tables, if not $wgDBprefix
+	 * @param $dropCurrentTables bool
 	 */
 	public function __construct( DatabaseBase $db, array $tablesToClone,
-		$newTablePrefix = 'parsertest', $oldTablePrefix = '', $dropCurrentTables = true )
+		$newTablePrefix, $oldTablePrefix = '', $dropCurrentTables = true )
 	{
 		$this->db = $db;
 		$this->tablesToClone = $tablesToClone;
@@ -92,14 +93,14 @@ class CloneDatabase {
 			# fix back and forth so tableName() works right.
 			
 			self::changePrefix( $this->oldTablePrefix );
-			$oldTableName = $this->db->tableName( $tbl );
+			$oldTableName = $this->db->tableName( $tbl, 'raw' );
 			
 			self::changePrefix( $this->newTablePrefix );
-			$newTableName = $this->db->tableName( $tbl );
+			$newTableName = $this->db->tableName( $tbl, 'raw' );
 			
-			if( $this->dropCurrentTables && !in_array( $this->db->getType(), array( 'postgres' ) ) ) {
+			if( $this->dropCurrentTables && !in_array( $this->db->getType(), array( 'postgres', 'oracle' ) ) ) {
 				$this->db->dropTable( $tbl, __METHOD__ );
-				wfDebug( __METHOD__." dropping {$this->newTablePrefix}{$oldTableName}\n", true);
+				wfDebug( __METHOD__." dropping {$newTableName}\n", true);
 				//Dropping the oldTable because the prefix was changed
 			}
 

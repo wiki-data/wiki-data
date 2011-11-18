@@ -11,7 +11,7 @@
  *    $button = Xml::button( wfMessage( 'submit' )->text() );
  * </pre>
  * Messages can have parameters:
- *    wfMessage( 'welcome-to' )->params( $wgSitename )->text(); 
+ *    wfMessage( 'welcome-to' )->params( $wgSitename )->text();
  *        {{GRAMMAR}} and friends work correctly
  *    wfMessage( 'are-friends', $user, $friend );
  *    wfMessage( 'bad-message' )->rawParams( '<script>...</script>' )->escaped();
@@ -48,9 +48,8 @@
  * $escaped = wfMessage( 'key' )->rawParams( 'apple' )->escaped();
  * </pre>
  *
- * TODO:
+ * @todo
  * - test, can we have tests?
- * - sort out the details marked with fixme
  *
  * @since 1.17
  * @author Niklas Laxström
@@ -61,13 +60,15 @@ class Message {
 	 * means the current interface language, false content language.
 	 */
 	protected $interface = true;
-	
+
 	/**
 	 * In which language to get this message. Overrides the $interface
 	 * variable.
+	 *
+	 * @var Language
 	 */
 	protected $language = null;
-	
+
 	/**
 	 * The message key.
 	 */
@@ -98,6 +99,11 @@ class Message {
 	 * Title object to use as context
 	 */
 	protected $title = null;
+
+	/**
+	 * @var string
+	 */
+	protected $message;
 
 	/**
 	 * Constructor.
@@ -180,7 +186,7 @@ class Message {
 		}
 		return $this;
 	}
-	
+
 	/**
 	 * Add parameters that are numeric and will be passed through
 	 * Language::formatNum before substitution
@@ -197,7 +203,20 @@ class Message {
 		}
 		return $this;
 	}
-	
+
+	/**
+	 * Set the language and the title from a context object
+	 *
+	 * @param $context IContextSource
+	 * @return Message: $this
+	 */
+	public function setContext( IContextSource $context ) {
+		$this->inLanguage( $context->getLang() );
+		$this->title( $context->getTitle() );
+
+		return $this;
+	}
+
 	/**
 	 * Request the message in any language that is supported.
 	 * As a side effect interface message status is unconditionally
@@ -206,7 +225,7 @@ class Message {
 	 * @return Message: $this
 	 */
 	public function inLanguage( $lang ) {
-		if ( $lang instanceof Language || $lang instanceof StubContLang || $lang instanceof StubUserLang ) {
+		if ( $lang instanceof Language || $lang instanceof StubUserLang ) {
 			$this->language = $lang;
 		} elseif ( is_string( $lang ) ) {
 			if( $this->language->getCode() != $lang ) {
@@ -215,7 +234,7 @@ class Message {
 		} else {
 			$type = gettype( $lang );
 			throw new MWException( __METHOD__ . " must be "
-				. "passed a String or Language object; $type given" 
+				. "passed a String or Language object; $type given"
 			);
 		}
 		$this->interface = false;
@@ -223,10 +242,17 @@ class Message {
 	}
 
 	/**
-	 * Request the message in the wiki's content language.
+	 * Request the message in the wiki's content language,
+	 * unless it is disabled for this message.
+	 * @see $wgForceUIMsgAsContentMsg
 	 * @return Message: $this
 	 */
 	public function inContentLanguage() {
+		global $wgForceUIMsgAsContentMsg;
+		if ( in_array( $this->key, (array)$wgForceUIMsgAsContentMsg ) ) {
+			return $this;
+		}
+
 		global $wgContLang;
 		$this->interface = false;
 		$this->language = $wgContLang;
@@ -260,10 +286,10 @@ class Message {
 	 */
 	public function toString() {
 		$string = $this->getMessageText();
-		
+
 		# Replace parameters before text parsing
 		$string = $this->replaceParameters( $string, 'before' );
-		
+
 		# Maybe transform using the full parser
 		if( $this->format === 'parse' ) {
 			$string = $this->parseText( $string );
@@ -276,14 +302,13 @@ class Message {
 		} elseif( $this->format === 'text' ){
 			$string = $this->transformText( $string );
 		} elseif( $this->format === 'escaped' ){
-			# FIXME: Sanitizer method here?
 			$string = $this->transformText( $string );
-			$string = htmlspecialchars( $string );
+			$string = htmlspecialchars( $string, ENT_QUOTES, 'UTF-8', false );
 		}
-		
+
 		# Raw parameter replacement
 		$string = $this->replaceParameters( $string, 'after' );
-		
+
 		return $string;
 	}
 
@@ -296,7 +321,7 @@ class Message {
 	public function __toString() {
 		return $this->toString();
 	}
-	
+
 	/**
 	 * Fully parse the text from wikitext to HTML
 	 * @return String parsed HTML
@@ -354,7 +379,7 @@ class Message {
 	/**
 	 * Check whether a message does not exist, or is an empty string
 	 * @return Bool: true if is is and false if not
-	 * @todo Merge with isDisabled()?
+	 * @todo FIXME: Merge with isDisabled()?
 	 */
 	public function isBlank() {
 		$message = $this->fetchMessage();
@@ -370,10 +395,18 @@ class Message {
 		return $message === false || $message === '' || $message === '-';
 	}
 
+	/**
+	 * @param $value
+	 * @return array
+	 */
 	public static function rawParam( $value ) {
 		return array( 'raw' => $value );
 	}
-	
+
+	/**
+	 * @param $value
+	 * @return array
+	 */
 	public static function numParam( $value ) {
 		return array( 'num' => $value );
 	}
@@ -419,17 +452,16 @@ class Message {
 	/**
 	 * Wrapper for what ever method we use to parse wikitext.
 	 * @param $string String: Wikitext message contents
-	 * @return Wikitext parsed into HTML
+	 * @return string Wikitext parsed into HTML
 	 */
 	protected function parseText( $string ) {
-		global $wgOut;
-		return $wgOut->parse( $string, /*linestart*/true, $this->interface, $this->language );
+		return MessageCache::singleton()->parse( $string, $this->title, /*linestart*/true, $this->interface, $this->language )->getText();
 	}
 
 	/**
 	 * Wrapper for what ever method we use to {{-transform wikitext.
 	 * @param $string String: Wikitext message contents
-	 * @return Wikitext with {{-constructs replaced with their values.
+	 * @return string Wikitext with {{-constructs replaced with their values.
 	 */
 	protected function transformText( $string ) {
 		return MessageCache::singleton()->transform( $string, $this->interface, $this->language, $this->title );
@@ -450,6 +482,8 @@ class Message {
 
 	/**
 	 * Wrapper for what ever method we use to get message contents
+	 *
+	 * @return string
 	 */
 	protected function fetchMessage() {
 		if ( !isset( $this->message ) ) {

@@ -24,11 +24,6 @@
  * @file
  */
 
-if ( !defined( 'MEDIAWIKI' ) ) {
-	// Eclipse helper - will be ignored in production
-	require_once( 'ApiQueryBase.php' );
-}
-
 /**
  * This query action allows clients to retrieve a list of pages
  * on the logged-in user's watchlist.
@@ -63,7 +58,7 @@ class ApiQueryWatchlistRaw extends ApiQueryGeneratorBase {
 		$prop = array_flip( (array)$params['prop'] );
 		$show = array_flip( (array)$params['show'] );
 		if ( isset( $show['changed'] ) && isset( $show['!changed'] ) ) {
-			$this->dieUsageMsg( array( 'show' ) );
+			$this->dieUsageMsg( 'show' );
 		}
 
 		$this->addTables( 'watchlist' );
@@ -197,7 +192,7 @@ class ApiQueryWatchlistRaw extends ApiQueryGeneratorBase {
 		) );
 	}
 
-	protected function getExamples() {
+	public function getExamples() {
 		return array(
 			'api.php?action=query&list=watchlistraw',
 			'api.php?action=query&generator=watchlistraw&gwrshow=changed&prop=revisions',
@@ -205,6 +200,6 @@ class ApiQueryWatchlistRaw extends ApiQueryGeneratorBase {
 	}
 
 	public function getVersion() {
-		return __CLASS__ . ': $Id: ApiQueryWatchlistRaw.php 82429 2011-02-19 00:30:18Z reedy $';
+		return __CLASS__ . ': $Id: ApiQueryWatchlistRaw.php 103273 2011-11-16 00:17:26Z johnduhart $';
 	}
 }

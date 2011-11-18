@@ -24,11 +24,6 @@
  * @file
  */
 
-if ( !defined( 'MEDIAWIKI' ) ) {
-	// Eclipse helper - will be ignored in production
-	require_once( 'ApiQueryBase.php' );
-}
-
 /**
  * Query action to List the log events, with optional filtering by various parameters.
  *
@@ -86,13 +81,10 @@ class ApiQueryLogEvents extends ApiQueryBase {
 			'log_deleted',
 		) );
 
-		$this->addFieldsIf( 'log_id', $this->fld_ids );
-		$this->addFieldsIf( 'page_id', $this->fld_ids );
-		$this->addFieldsIf( 'log_user', $this->fld_user );
-		$this->addFieldsIf( 'user_name', $this->fld_user );
+		$this->addFieldsIf( array( 'log_id', 'page_id' ), $this->fld_ids );
+		$this->addFieldsIf( array( 'log_user', 'user_name' ), $this->fld_user );
 		$this->addFieldsIf( 'user_id', $this->fld_userid );
-		$this->addFieldsIf( 'log_namespace', $this->fld_title || $this->fld_parsedcomment );
-		$this->addFieldsIf( 'log_title', $this->fld_title || $this->fld_parsedcomment );
+		$this->addFieldsIf( array( 'log_namespace', 'log_title' ), $this->fld_title || $this->fld_parsedcomment );
 		$this->addFieldsIf( 'log_comment', $this->fld_comment || $this->fld_parsedcomment );
 		$this->addFieldsIf( 'log_params', $this->fld_details );
 
@@ -114,13 +106,12 @@ class ApiQueryLogEvents extends ApiQueryBase {
 			list( $type, $action ) = explode( '/', $params['action'] );
 			$this->addWhereFld( 'log_type', $type );
 			$this->addWhereFld( 'log_action', $action );
-		}
-		else if ( !is_null( $params['type'] ) ) {
+		} elseif ( !is_null( $params['type'] ) ) {
 			$this->addWhereFld( 'log_type', $params['type'] );
 			$index['logging'] = 'type_time';
 		}
 
-		$this->addWhereRange( 'log_timestamp', $params['dir'], $params['start'], $params['end'] );
+		$this->addTimestampWhereRange( 'log_timestamp', $params['dir'], $params['start'], $params['end'] );
 
 		$limit = $params['limit'];
 		$this->addOption( 'LIMIT', $limit + 1 );
@@ -176,6 +167,7 @@ class ApiQueryLogEvents extends ApiQueryBase {
 
 		$count = 0;
 		$res = $this->select( __METHOD__ );
+		$result = $this->getResult();
 		foreach ( $res as $row ) {
 			if ( ++ $count > $limit ) {
 				// We've reached the one extra which shows that there are additional pages to be had. Stop here...
@@ -187,25 +179,25 @@ class ApiQueryLogEvents extends ApiQueryBase {
 			if ( !$vals ) {
 				continue;
 			}
-			$fit = $this->getResult()->addValue( array( 'query', $this->getModuleName() ), null, $vals );
+			$fit = $result->addValue( array( 'query', $this->getModuleName() ), null, $vals );
 			if ( !$fit ) {
 				$this->setContinueEnumParameter( 'start', wfTimestamp( TS_ISO_8601, $row->log_timestamp ) );
 				break;
 			}
 		}
-		$this->getResult()->setIndexedTagName_internal( array( 'query', $this->getModuleName() ), 'item' );
+		$result->setIndexedTagName_internal( array( 'query', $this->getModuleName() ), 'item' );
 	}
 
 	/**
-	 * @static
 	 * @param $result ApiResult
-	 * @param $vals
-	 * @param $params
-	 * @param $type
+	 * @param $vals array
+	 * @param $params string
+	 * @param $type string
+	 * @param $action string
 	 * @param $ts
 	 * @return array
 	 */
-	public static function addLogParams( $result, &$vals, $params, $type, $ts ) {
+	public static function addLogParams( $result, &$vals, $params, $type, $action, $ts ) {
 		$params = explode( "\n", $params );
 		switch ( $type ) {
 			case 'move':
@@ -235,6 +227,9 @@ class ApiQueryLogEvents extends ApiQueryBase {
 				$params = null;
 				break;
 			case 'block':
+				if ( $action == 'unblock' ) {
+					break;
+				}
 				$vals2 = array();
 				list( $vals2['duration'], $vals2['flags'] ) = $params;
 
@@ -284,8 +279,11 @@ class ApiQueryLogEvents extends ApiQueryBase {
 				$vals['actionhidden'] = '';
 			} else {
 				self::addLogParams(
-					$this->getResult(), $vals,
-					$row->log_params, $row->log_type,
+					$this->getResult(),
+					$vals,
+					$row->log_params,
+					$row->log_type,
+					$row->log_action,
 					$row->log_timestamp
 				);
 			}
@@ -320,8 +318,7 @@ class ApiQueryLogEvents extends ApiQueryBase {
 				}
 
 				if ( $this->fld_parsedcomment ) {
-					global $wgUser;
-					$vals['parsedcomment'] = $wgUser->getSkin()->formatComment( $row->log_comment, $title );
+					$vals['parsedcomment'] = Linker::formatComment( $row->log_comment, $title );
 				}
 			}
 		}
@@ -416,14 +413,14 @@ class ApiQueryLogEvents extends ApiQueryBase {
 				' details        - Lists addtional details about the event',
 				' tags           - Lists tags for the event',
 			),
-			'type' => 'Filter log entries to only this type(s)',
+			'type' => 'Filter log entries to only this type',
 			'action' => "Filter log actions to only this type. Overrides {$p}type",
 			'start' => 'The timestamp to start enumerating from',
 			'end' => 'The timestamp to end enumerating',
 			'dir' => $this->getDirectionDescription( $p ),
 			'user' => 'Filter entries to those made by the given user',
 			'title' => 'Filter entries to those related to a page',
-			'prefix' => 'Filter entries that start with this prefix. Disabled in MiserMode',
+			'prefix' => 'Filter entries that start with this prefix. Disabled in Miser Mode',
 			'limit' => 'How many total event entries to return',
 			'tag' => 'Only list event entries tagged with this tag',
 		);
@@ -442,13 +439,17 @@ class ApiQueryLogEvents extends ApiQueryBase {
 		) );
 	}
 
-	protected function getExamples() {
+	public function getExamples() {
 		return array(
 			'api.php?action=query&list=logevents'
 		);
 	}
 
+	public function getHelpUrls() {
+		return 'http://www.mediawiki.org/wiki/API:Logevents';
+	}
+
 	public function getVersion() {
-		return __CLASS__ . ': $Id: ApiQueryLogEvents.php 84287 2011-03-18 23:29:17Z happy-melon $';
+		return __CLASS__ . ': $Id: ApiQueryLogEvents.php 103273 2011-11-16 00:17:26Z johnduhart $';
 	}
 }

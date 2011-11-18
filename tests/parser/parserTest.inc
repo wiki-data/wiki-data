@@ -78,7 +78,7 @@ class ParserTest {
 	 */
 	public function __construct( $options = array() ) {
 		# Only colorize output if stdout is a terminal.
-		$this->color = !wfIsWindows() && posix_isatty( 1 );
+		$this->color = !wfIsWindows() && Maintenance::posix_isatty( 1 );
 
 		if ( isset( $options['color'] ) ) {
 			switch( $options['color'] ) {
@@ -132,17 +132,19 @@ class ParserTest {
 	}
 
 	static function setUp() {
-		global $wgParser, $wgParserConf, $IP, $messageMemc, $wgMemc, $wgDeferredUpdateList,
+		global $wgParser, $wgParserConf, $IP, $messageMemc, $wgMemc,
 			$wgUser, $wgLang, $wgOut, $wgRequest, $wgStyleDirectory, $wgEnableParserCache,
 			$wgNamespaceAliases, $wgNamespaceProtection, $wgLocalFileRepo,
 			$parserMemc, $wgThumbnailScriptPath, $wgScriptPath,
-			$wgArticlePath, $wgStyleSheetPath, $wgScript, $wgStylePath;
+			$wgArticlePath, $wgStyleSheetPath, $wgScript, $wgStylePath, $wgExtensionAssetsPath,
+			$wgMainCacheType, $wgMessageCacheType, $wgParserCacheType;
 
 		$wgScript = '/index.php';
 		$wgScriptPath = '/';
 		$wgArticlePath = '/wiki/$1';
 		$wgStyleSheetPath = '/skins';
 		$wgStylePath = '/skins';
+		$wgExtensionAssetsPath = '/extensions';
 		$wgThumbnailScriptPath = false;
 		$wgLocalFileRepo = array(
 			'class' => 'LocalRepo',
@@ -157,19 +159,30 @@ class ParserTest {
 		$wgNamespaceAliases['Image'] = NS_FILE;
 		$wgNamespaceAliases['Image_talk'] = NS_FILE_TALK;
 
+		// XXX: tests won't run without this (for CACHE_DB)
+		if ( $wgMainCacheType === CACHE_DB ) {
+			$wgMainCacheType = CACHE_NONE;
+		}
+		if ( $wgMessageCacheType === CACHE_DB ) {
+			$wgMessageCacheType = CACHE_NONE;
+		}
+		if ( $wgParserCacheType === CACHE_DB ) {
+			$wgParserCacheType = CACHE_NONE;
+		}
 
 		$wgEnableParserCache = false;
-		$wgDeferredUpdateList = array();
-		$wgMemc = wfGetMainCache();
+		DeferredUpdates::clearPendingUpdates();
+		$wgMemc = wfGetMainCache(); // checks $wgMainCacheType
 		$messageMemc = wfGetMessageCacheStorage();
 		$parserMemc = wfGetParserCacheStorage();
 
 		// $wgContLang = new StubContLang;
 		$wgUser = new User;
-		$wgLang = new StubUserLang;
-		$wgOut = new StubObject( 'wgOut', 'OutputPage' );
+		$context = new RequestContext;
+		$wgLang = $context->getLang();
+		$wgOut = $context->getOutput();
 		$wgParser = new StubObject( 'wgParser', $wgParserConf['class'], array( $wgParserConf ) );
-		$wgRequest = new WebRequest;
+		$wgRequest = $context->getRequest();
 
 		if ( $wgStyleDirectory === false ) {
 			$wgStyleDirectory   = "$IP/skins";
@@ -184,8 +197,6 @@ class ParserTest {
 					$options['setversion'] : SpecialVersion::getVersion();
 		} elseif ( isset( $options['compare'] ) ) {
 			$this->recorder = new DbTestPreviewer( $this );
-		} elseif ( isset( $options['upload'] ) ) {
-			$this->recorder = new RemoteTestRecorder( $this );
 		} else {
 			$this->recorder = new TestRecorder( $this );
 		}
@@ -424,10 +435,10 @@ class ParserTest {
 		}
 
 		$opts = $this->parseOptions( $opts );
-		$this->setupGlobals( $opts, $config );
+		$context = $this->setupGlobals( $opts, $config );
 
-		$user = new User();
-		$options = ParserOptions::newFromUser( $user );
+		$user = $context->getUser();
+		$options = ParserOptions::newFromContext( $context );
 
 		if ( isset( $opts['title'] ) ) {
 			$titleText = $opts['title'];
@@ -444,7 +455,7 @@ class ParserTest {
 		if ( isset( $opts['pst'] ) ) {
 			$out = $parser->preSaveTransform( $input, $title, $user, $options );
 		} elseif ( isset( $opts['msg'] ) ) {
-			$out = $parser->transformMsg( $input, $options );
+			$out = $parser->transformMsg( $input, $options, $title );
 		} elseif ( isset( $opts['section'] ) ) {
 			$section = $opts['section'];
 			$out = $parser->getSection( $input, $section );
@@ -453,8 +464,7 @@ class ParserTest {
 			$replace = $opts['replace'][1];
 			$out = $parser->replaceSection( $input, $section, $replace );
 		} elseif ( isset( $opts['comment'] ) ) {
-			$linker = $user->getSkin();
-			$out = $linker->formatComment( $input, $title, $local );
+			$out = Linker::formatComment( $input, $title, $local );
 		} elseif ( isset( $opts['preload'] ) ) {
 			$out = $parser->getpreloadText( $input, $title, $options );
 		} else {
@@ -472,10 +482,9 @@ class ParserTest {
 			if ( isset( $opts['ill'] ) ) {
 				$out = $this->tidy( implode( ' ', $output->getLanguageLinks() ) );
 			} elseif ( isset( $opts['cat'] ) ) {
-				global $wgOut;
-
-				$wgOut->addCategoryLinks( $output->getCategories() );
-				$cats = $wgOut->getCategoryLinks();
+				$outputPage = $context->getOutput();
+				$outputPage->addCategoryLinks( $output->getCategories() );
+				$cats = $outputPage->getCategoryLinks();
 
 				if ( isset( $cats['normal'] ) ) {
 					$out = $this->tidy( implode( ' ', $cats['normal'] ) );
@@ -651,6 +660,7 @@ class ParserTest {
 			'wgExternalLinkTarget' => false,
 			'wgAlwaysUseTidy' => false,
 			'wgHtml5' => true,
+			'wgCleanupPresentationalAttributes' => true,
 			'wgWellFormedXml' => true,
 			'wgAllowMicrodataAttributes' => true,
 			'wgAdaptiveMessageCache' => true,
@@ -678,24 +688,23 @@ class ParserTest {
 			$GLOBALS[$var] = $val;
 		}
 
-		$langObj = Language::factory( $lang );
-		$GLOBALS['wgContLang'] = $langObj;
+		$GLOBALS['wgContLang'] = Language::factory( $lang );
+		$GLOBALS['wgMemc'] = new EmptyBagOStuff;
+
 		$context = new RequestContext();
 		$GLOBALS['wgLang'] = $context->getLang();
+		$GLOBALS['wgOut'] = $context->getOutput();
 
-		$GLOBALS['wgMemc'] = new EmptyBagOStuff;
-		$GLOBALS['wgOut'] = new $context->output;
+		$GLOBALS['wgUser'] = new User();
 
 		global $wgHooks;
 
 		$wgHooks['ParserTestParser'][] = 'ParserTestParserHook::setup';
-		$wgHooks['ParserTestParser'][] = 'ParserTestStaticParserHook::setup';
 		$wgHooks['ParserGetVariableValueTs'][] = 'ParserTest::getFakeTimestamp';
 
 		MagicWord::clearCache();
 
-		global $wgUser;
-		$wgUser = new User();
+		return $context;
 	}
 
 	/**
@@ -707,13 +716,14 @@ class ParserTest {
 			'protected_titles', 'revision', 'text', 'pagelinks', 'imagelinks',
 			'categorylinks', 'templatelinks', 'externallinks', 'langlinks', 'iwlinks',
 			'site_stats', 'hitcounter',	'ipblocks', 'image', 'oldimage',
-			'recentchanges', 'watchlist', 'math', 'interwiki', 'logging',
+			'recentchanges', 'watchlist', 'interwiki', 'logging',
 			'querycache', 'objectcache', 'job', 'l10n_cache', 'redirect', 'querycachetwo',
 			'archive', 'user_groups', 'page_props', 'category', 'msg_resource', 'msg_resource_links'
 		);
 
-		if ( in_array( $this->db->getType(), array( 'mysql', 'sqlite', 'oracle' ) ) )
+		if ( in_array( $this->db->getType(), array( 'mysql', 'sqlite', 'oracle' ) ) ) {
 			array_push( $tables, 'searchindex' );
+		}
 
 		// Allow extensions to add to the list of tables to duplicate;
 		// may be necessary if they hook into page save or other code
@@ -756,17 +766,14 @@ class ParserTest {
 		}
 
 		$temporary = $this->useTemporaryTables || $dbType == 'postgres';
-		$tables = $this->listTables();
 		$prefix = $dbType != 'oracle' ? 'parsertest_' : 'pt_';
 
 		$this->dbClone = new CloneDatabase( $this->db, $this->listTables(), $prefix );
 		$this->dbClone->useTemporaryTables( $temporary );
 		$this->dbClone->cloneTableStructure();
 
-		if ( $dbType == 'oracle' )
-			$this->db->query( 'BEGIN FILL_WIKI_INFO; END;' );
-
 		if ( $dbType == 'oracle' ) {
+			$this->db->query( 'BEGIN FILL_WIKI_INFO; END;' );
 			# Insert 0 user to prevent FK violations
 
 			# Anonymous user
@@ -861,6 +868,13 @@ class ParserTest {
 		$this->databaseSetupDone = false;
 
 		if ( $this->useTemporaryTables ) {
+			if( $this->db->getType() == 'sqlite' ) {
+				# Under SQLite the searchindex table is virtual and need
+				# to be explicitly destroyed. See bug 29912
+				# See also MediaWikiTestCase::destroyDB()
+				wfDebug( __METHOD__ . " explicitly destroying sqlite virtual table parsertest_searchindex\n" );
+				$this->db->query( "DROP TABLE `parsertest_searchindex`" );
+			}
 			# Don't need to do anything
 			$this->teardownGlobals();
 			return;
@@ -904,9 +918,9 @@ class ParserTest {
 			return $dir;
 		}
 
-		wfMkdirParents( $dir . '/3/3a' );
+		wfMkdirParents( $dir . '/3/3a', null, __METHOD__ );
 		copy( "$IP/skins/monobook/headbg.jpg", "$dir/3/3a/Foobar.jpg" );
-		wfMkdirParents( $dir . '/0/09' );
+		wfMkdirParents( $dir . '/0/09', null, __METHOD__ );
 		copy( "$IP/skins/monobook/headbg.jpg", "$dir/0/09/Bad.jpg" );
 
 		return $dir;
@@ -1073,7 +1087,9 @@ class ParserTest {
 		$shellInfile = wfEscapeShellArg($infile);
 		$shellOutfile = wfEscapeShellArg($outfile);
 
-		$diff = wfIsWindows()
+		global $wgDiff3;
+		// we assume that people with diff3 also have usual diff
+		$diff = ( wfIsWindows() && !$wgDiff3 )
 			? `fc $shellInfile $shellOutfile`
 			: `diff -au $shellInfile $shellOutfile`;
 		unlink( $infile );
@@ -1139,14 +1155,13 @@ class ParserTest {
 		$title = Title::newFromText( $name );
 
 		if ( is_null( $title ) ) {
-			wfDie( "invalid title ('$name' => '$title') at line $line\n" );
+			throw new MWException( "invalid title ('$name' => '$title') at line $line\n" );
 		}
 
 		$aid = $title->getArticleID( Title::GAID_FOR_UPDATE );
 
 		if ( $aid != 0 ) {
-			debug_print_backtrace();
-			wfDie( "duplicate article '$name' at line $line\n" );
+			throw new MWException( "duplicate article '$name' at line $line\n" );
 		}
 
 		$art = new Article( $title );
@@ -1201,13 +1216,12 @@ class ParserTest {
 		return true;
 	}
 
-	/*
+	/**
 	 * Run the "tidy" command on text if the $wgUseTidy
 	 * global is true
 	 *
 	 * @param $text String: the text to tidy
 	 * @return String
-	 * @static
 	 */
 	private function tidy( $text ) {
 		global $wgUseTidy;

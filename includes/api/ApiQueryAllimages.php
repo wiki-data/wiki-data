@@ -26,11 +26,6 @@
  * @file
  */
 
-if ( !defined( 'MEDIAWIKI' ) ) {
-	// Eclipse helper - will be ignored in production
-	require_once( 'ApiQueryBase.php' );
-}
-
 /**
  * Query module to enumerate all available pages.
  *
@@ -109,18 +104,24 @@ class ApiQueryAllimages extends ApiQueryGeneratorBase {
 
 		$sha1 = false;
 		if ( isset( $params['sha1'] ) ) {
+			if ( !$this->validateSha1Hash( $params['sha1'] ) ) {
+				$this->dieUsage( 'The SHA1 hash provided is not valid', 'invalidsha1hash' );
+			}
 			$sha1 = wfBaseConvert( $params['sha1'], 16, 36, 31 );
 		} elseif ( isset( $params['sha1base36'] ) ) {
 			$sha1 = $params['sha1base36'];
+			if ( !$this->validateSha1Base36Hash( $sha1 ) ) {
+				$this->dieUsage( 'The SHA1Base36 hash provided is not valid', 'invalidsha1base36hash' );
+			}
 		}
 		if ( $sha1 ) {
-			$this->addWhere( 'img_sha1=' . $db->addQuotes( $sha1 ) );
+			$this->addWhereFld( 'img_sha1', $sha1 );
 		}
 
 		if ( !is_null( $params['mime'] ) ) {
 			global $wgMiserMode;
 			if ( $wgMiserMode  ) {
-				$this->dieUsage( 'MIME search disabled in Miser Mode', 'mimeearchdisabled' );
+				$this->dieUsage( 'MIME search disabled in Miser Mode', 'mimesearchdisabled' );
 			}
 
 			list( $major, $minor ) = File::splitMime( $params['mime'] );
@@ -156,8 +157,8 @@ class ApiQueryAllimages extends ApiQueryGeneratorBase {
 				$file = $repo->newFileFromRow( $row );
 				$info = array_merge( array( 'name' => $row->img_name ),
 					ApiQueryImageInfo::getInfo( $file, $prop, $result ) );
-				self::addTitleInfo( $info, $file->getTitle() ); 
-					
+				self::addTitleInfo( $info, $file->getTitle() );
+
 				$fit = $result->addValue( array( 'query', $this->getModuleName() ), null, $info );
 				if ( !$fit ) {
 					$this->setContinueEnumParameter( 'from', $this->keyToTitle( $row->img_name ) );
@@ -237,11 +238,13 @@ class ApiQueryAllimages extends ApiQueryGeneratorBase {
 		return array_merge( parent::getPossibleErrors(), array(
 			array( 'code' => 'params', 'info' => 'Use "gaifilterredir=nonredirects" option instead of "redirects" when using allimages as a generator' ),
 			array( 'code' => 'unsupportedrepo', 'info' => 'Local file repository does not support querying all images' ),
-			array( 'code' => 'mimeearchdisabled', 'info' => 'MIME search disabled in Miser Mode' ),
+			array( 'code' => 'mimesearchdisabled', 'info' => 'MIME search disabled in Miser Mode' ),
+			array( 'code' => 'invalidsha1hash', 'info' => 'The SHA1 hash provided is not valid' ),
+			array( 'code' => 'invalidsha1base36hash', 'info' => 'The SHA1Base36 hash provided is not valid' ),
 		) );
 	}
 
-	protected function getExamples() {
+	public function getExamples() {
 		return array(
 			'Simple Use',
 			' Show a list of images starting at the letter "B"',
@@ -252,7 +255,11 @@ class ApiQueryAllimages extends ApiQueryGeneratorBase {
 		);
 	}
 
+	public function getHelpUrls() {
+		return 'http://www.mediawiki.org/wiki/API:Allimages';
+	}
+
 	public function getVersion() {
-		return __CLASS__ . ': $Id: ApiQueryAllimages.php 84502 2011-03-21 23:51:26Z reedy $';
+		return __CLASS__ . ': $Id: ApiQueryAllimages.php 103273 2011-11-16 00:17:26Z johnduhart $';
 	}
 }

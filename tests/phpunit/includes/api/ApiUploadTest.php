@@ -2,7 +2,6 @@
 
 /**
  * @group Database
- * @group Destructive
  */
 
 /**
@@ -20,7 +19,6 @@ require_once( 'ApiTestCaseUpload.php' );
 
 /**
  * @group Database
- * @group Destructive
  *
  * This is pretty sucky... needs to be prettified.
  */
@@ -56,6 +54,7 @@ class ApiUploadTest extends ApiTestCaseUpload {
 		$this->assertEquals( "Success", $result['login']['result'] );
 		$this->assertArrayHasKey( 'lgtoken', $result['login'] );
 
+		$this->assertNotEmpty( $session, 'API Login must return a session' );
 		return $session;
 
 	}
@@ -80,17 +79,14 @@ class ApiUploadTest extends ApiTestCaseUpload {
 	 * @depends testLogin
 	 */
 	public function testUploadMissingParams( $session ) {
-		global $wgUser;
-		$wgUser = self::$users['uploader']->user;
-
 		$exception = false;
 		try {
 			$this->doApiRequestWithToken( array(
 				'action' => 'upload',
-			), $session );
+			), $session, self::$users['uploader']->user );
 		} catch ( UsageException $e ) {
 			$exception = true;
-			$this->assertEquals( "One of the parameters sessionkey, file, url, statuskey is required",
+			$this->assertEquals( "One of the parameters filekey, file, url, statuskey is required",
 				$e->getMessage() );
 		}
 		$this->assertTrue( $exception, "Got exception" );
@@ -101,20 +97,17 @@ class ApiUploadTest extends ApiTestCaseUpload {
 	 * @depends testLogin
 	 */
 	public function testUpload( $session ) {
-		global $wgUser;
-		$wgUser = self::$users['uploader']->user;
-
 		$extension = 'png';
 		$mimeType = 'image/png';
 
 		try {
 			$randomImageGenerator = new RandomImageGenerator();
+			$filePaths = $randomImageGenerator->writeImages( 1, $extension, wfTempDir() );
 		}
 		catch ( Exception $e ) {
 			$this->markTestIncomplete( $e->getMessage() );
 		}
 
-		$filePaths = $randomImageGenerator->writeImages( 1, $extension, wfTempDir() );
 		$filePath = $filePaths[0];
 		$fileSize = filesize( $filePath );
 		$fileName = basename( $filePath );
@@ -137,7 +130,8 @@ class ApiUploadTest extends ApiTestCaseUpload {
 
 		$exception = false;
 		try {
-			list( $result, , ) = $this->doApiRequestWithToken( $params, $session );
+			list( $result, , ) = $this->doApiRequestWithToken( $params, $session,
+				self::$users['uploader']->user );
 		} catch ( UsageException $e ) {
 			$exception = true;
 		}
@@ -157,9 +151,6 @@ class ApiUploadTest extends ApiTestCaseUpload {
 	 * @depends testLogin
 	 */
 	public function testUploadZeroLength( $session ) {
-		global $wgUser;
-		$wgUser = self::$users['uploader']->user;
-
 		$mimeType = 'image/png';
 
 		$filePath = tempnam( wfTempDir(), "" );
@@ -181,7 +172,7 @@ class ApiUploadTest extends ApiTestCaseUpload {
 
 		$exception = false;
 		try {
-			$this->doApiRequestWithToken( $params, $session );
+			$this->doApiRequestWithToken( $params, $session, self::$users['uploader']->user );
 		} catch ( UsageException $e ) {
 			$this->assertContains( 'The file you submitted was empty', $e->getMessage() );
 			$exception = true;
@@ -198,20 +189,17 @@ class ApiUploadTest extends ApiTestCaseUpload {
 	 * @depends testLogin
 	 */
 	public function testUploadSameFileName( $session ) {
-		global $wgUser;
-		$wgUser = self::$users['uploader']->user;
-
 		$extension = 'png';
 		$mimeType = 'image/png';
 
 		try {
 			$randomImageGenerator = new RandomImageGenerator();
+			$filePaths = $randomImageGenerator->writeImages( 2, $extension, wfTempDir() );
 		}
 		catch ( Exception $e ) {
 			$this->markTestIncomplete( $e->getMessage() );
 		}
 
-		$filePaths = $randomImageGenerator->writeImages( 2, $extension, wfTempDir() );
 		// we'll reuse this filename
 		$fileName = basename( $filePaths[0] );
 
@@ -235,7 +223,8 @@ class ApiUploadTest extends ApiTestCaseUpload {
 
 		$exception = false;
 		try {
-			list( $result, , $session ) = $this->doApiRequestWithToken( $params, $session );
+			list( $result, , $session ) = $this->doApiRequestWithToken( $params, $session,
+				self::$users['uploader']->user );
 		} catch ( UsageException $e ) {
 			$exception = true;
 		}
@@ -251,7 +240,8 @@ class ApiUploadTest extends ApiTestCaseUpload {
 
 		$exception = false;
 		try {
-			list( $result, , ) = $this->doApiRequestWithToken( $params, $session );
+			list( $result, , ) = $this->doApiRequestWithToken( $params, $session,
+				self::$users['uploader']->user ); // FIXME: leaks a temporary file
 		} catch ( UsageException $e ) {
 			$exception = true;
 		}
@@ -272,19 +262,17 @@ class ApiUploadTest extends ApiTestCaseUpload {
 	 * @depends testLogin
 	 */
 	public function testUploadSameContent( $session ) {
-		global $wgUser;
-		$wgUser = self::$users['uploader']->user;
-
 		$extension = 'png';
 		$mimeType = 'image/png';
 
 		try {
 			$randomImageGenerator = new RandomImageGenerator();
+			$filePaths = $randomImageGenerator->writeImages( 1, $extension, wfTempDir() );
 		}
 		catch ( Exception $e ) {
 			$this->markTestIncomplete( $e->getMessage() );
 		}
-		$filePaths = $randomImageGenerator->writeImages( 1, $extension, wfTempDir() );
+
 		$fileNames[0] = basename( $filePaths[0] );
 		$fileNames[1] = "SameContentAs" . $fileNames[0];
 
@@ -309,7 +297,8 @@ class ApiUploadTest extends ApiTestCaseUpload {
 
 		$exception = false;
 		try {
-			list( $result, $request, $session ) = $this->doApiRequestWithToken( $params, $session );
+			list( $result, $request, $session ) = $this->doApiRequestWithToken( $params, $session,
+				self::$users['uploader']->user );
 		} catch ( UsageException $e ) {
 			$exception = true;
 		}
@@ -334,7 +323,8 @@ class ApiUploadTest extends ApiTestCaseUpload {
 
 		$exception = false;
 		try {
-			list( $result, $request, $session ) = $this->doApiRequestWithToken( $params, $session );
+			list( $result, $request, $session ) = $this->doApiRequestWithToken( $params, $session,
+				self::$users['uploader']->user ); // FIXME: leaks a temporary file
 		} catch ( UsageException $e ) {
 			$exception = true;
 		}
@@ -356,19 +346,19 @@ class ApiUploadTest extends ApiTestCaseUpload {
 	 */
 	public function testUploadStash( $session ) {
 		global $wgUser;
-		$wgUser = self::$users['uploader']->user;
+		$wgUser = self::$users['uploader']->user; // @todo FIXME: still used somewhere
 
 		$extension = 'png';
 		$mimeType = 'image/png';
 
 		try {
 			$randomImageGenerator = new RandomImageGenerator();
+			$filePaths = $randomImageGenerator->writeImages( 1, $extension, wfTempDir() );
 		}
 		catch ( Exception $e ) {
 			$this->markTestIncomplete( $e->getMessage() );
 		}
 
-		$filePaths = $randomImageGenerator->writeImages( 1, $extension, wfTempDir() );
 		$filePath = $filePaths[0];
 		$fileSize = filesize( $filePath );
 		$fileName = basename( $filePath );
@@ -391,7 +381,8 @@ class ApiUploadTest extends ApiTestCaseUpload {
 
 		$exception = false;
 		try {
-			list( $result, $request, $session ) = $this->doApiRequestWithToken( $params, $session );
+			list( $result, $request, $session ) = $this->doApiRequestWithToken( $params, $session,
+				self::$users['uploader']->user ); // FIXME: leaks a temporary file
 		} catch ( UsageException $e ) {
 			$exception = true;
 		}
@@ -400,8 +391,9 @@ class ApiUploadTest extends ApiTestCaseUpload {
 		$this->assertEquals( 'Success', $result['upload']['result'] );
 		$this->assertEquals( $fileSize, ( int )$result['upload']['imageinfo']['size'] );
 		$this->assertEquals( $mimeType, $result['upload']['imageinfo']['mime'] );
-		$this->assertTrue( isset( $result['upload']['sessionkey'] ) );
-		$sessionkey = $result['upload']['sessionkey'];
+		$this->assertTrue( isset( $result['upload']['filekey'] ) );
+		$this->assertEquals( $result['upload']['sessionkey'], $result['upload']['filekey'] );
+		$filekey = $result['upload']['filekey'];
 
 		// it should be visible from Special:UploadStash
 		// XXX ...but how to test this, with a fake WebRequest with the session?
@@ -409,7 +401,7 @@ class ApiUploadTest extends ApiTestCaseUpload {
 		// now we should try to release the file from stash
 		$params = array(
 			'action' => 'upload',
-			'sessionkey' => $sessionkey,
+			'filekey' => $filekey,
 			'filename' => $fileName,
 			'comment' => 'dummy comment',
 			'text'	=> "This is the page text for $fileName, altered",
@@ -418,7 +410,8 @@ class ApiUploadTest extends ApiTestCaseUpload {
 		$this->clearFakeUploads();
 		$exception = false;
 		try {
-			list( $result, $request, $session ) = $this->doApiRequestWithToken( $params, $session );
+			list( $result, $request, $session ) = $this->doApiRequestWithToken( $params, $session,
+				self::$users['uploader']->user );
 		} catch ( UsageException $e ) {
 			$exception = true;
 		}

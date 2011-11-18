@@ -79,9 +79,9 @@ class XmlSelectTest extends MediaWikiTestCase {
 		$this->select->addOption( 'bar1' );
 		$this->select->addOption( 'foo2' );
 		$this->assertEquals(
-'<select><option value="foo1">foo1</option>
-<option value="bar1" selected="selected">bar1</option>
-<option value="foo2">foo2</option></select>', $this->select->getHTML() );
+'<select><option value="foo1">foo1</option>' . "\n" .
+'<option value="bar1" selected="">bar1</option>' . "\n" .
+'<option value="foo2">foo2</option></select>', $this->select->getHTML() );
 	}
 
 	/**
@@ -90,16 +90,50 @@ class XmlSelectTest extends MediaWikiTestCase {
 	 * To handle this, we need to render the options in getHtml()
 	 */
 	public function testSetDefaultAfterAddingOptions() {
-		$this->markTestSkipped( 'XmlSelect::setDefault() need to apply to previously added options');
-
 		$this->select->addOption( 'foo1' );
 		$this->select->addOption( 'bar1' );
 		$this->select->addOption( 'foo2' );
 		$this->select->setDefault( 'bar1' ); # setting default after adding options
 		$this->assertEquals(
-'<select><option value="foo1">foo1</option>
-<option value="bar1" selected="selected">bar1</option>
-<option value="foo2">foo2</option></select>', $this->select->getHTML() );
+'<select><option value="foo1">foo1</option>' . "\n" .
+'<option value="bar1" selected="">bar1</option>' . "\n" .
+'<option value="foo2">foo2</option></select>', $this->select->getHTML() );
 	}
 
+	public function testGetAttributes() {
+		# create some attributes
+		$this->select->setAttribute( 'dummy', 0x777 );
+		$this->select->setAttribute( 'string', 'euro €' );
+		$this->select->setAttribute( 1911, 'razor' );
+
+		# verify we can retrieve them
+		$this->assertEquals(
+			$this->select->getAttribute( 'dummy' ),
+			0x777
+		);
+		$this->assertEquals(
+			$this->select->getAttribute( 'string' ),
+			'euro €'
+		);
+		$this->assertEquals(
+			$this->select->getAttribute( 1911 ),
+			'razor'
+		);
+
+		# inexistant keys should give us 'null'
+		$this->assertEquals(
+			$this->select->getAttribute( 'I DO NOT EXIT' ),
+			null
+		);
+
+		# verify string / integer
+		$this->assertEquals(
+			$this->select->getAttribute( '1911' ),
+			'razor'	
+		);
+		$this->assertEquals(
+			$this->select->getAttribute( 'dummy' ),
+			0x777
+		);
+	}
 }

@@ -24,13 +24,8 @@
  * @file
  */
 
-if ( !defined( 'MEDIAWIKI' ) ) {
-	// Eclipse helper - will be ignored in production
-	require_once( 'ApiQueryBase.php' );
-}
-
 /**
- * Query module to enumerate all available pages.
+ * Query module to enumerate all user blocks
  *
  * @ingroup API
  */
@@ -46,12 +41,10 @@ class ApiQueryBlocks extends ApiQueryBase {
 	}
 
 	public function execute() {
-		global $wgUser, $wgContLang;
+		global $wgContLang;
 
 		$params = $this->extractRequestParams();
-		if ( isset( $params['users'] ) && isset( $params['ip'] ) ) {
-			$this->dieUsage( 'bkusers and bkip cannot be used together', 'usersandip' );
-		}
+		$this->requireMaxOneParameter( $params, 'users', 'ip' );
 
 		$prop = array_flip( $params['prop'] );
 		$fld_id = isset( $prop['id'] );
@@ -70,36 +63,20 @@ class ApiQueryBlocks extends ApiQueryBase {
 		$this->addTables( 'ipblocks' );
 		$this->addFields( 'ipb_auto' );
 
-		if ( $fld_id ) {
-			$this->addFields( 'ipb_id' );
-		}
-		if ( $fld_user || $fld_userid ) {
-			$this->addFields( array( 'ipb_address', 'ipb_user' ) );
-		}
-		if ( $fld_by ) {
-			$this->addFields( 'ipb_by_text' );
-		}
-		if ( $fld_byid ) {
-			$this->addFields( 'ipb_by' );
-		}
-		if ( $fld_timestamp ) {
-			$this->addFields( 'ipb_timestamp' );
-		}
-		if ( $fld_expiry ) {
-			$this->addFields( 'ipb_expiry' );
-		}
-		if ( $fld_reason ) {
-			$this->addFields( 'ipb_reason' );
-		}
-		if ( $fld_range ) {
-			$this->addFields( array( 'ipb_range_start', 'ipb_range_end' ) );
-		}
-		if ( $fld_flags ) {
-			$this->addFields( array( 'ipb_anon_only', 'ipb_create_account', 'ipb_enable_autoblock', 'ipb_block_email', 'ipb_deleted', 'ipb_allow_usertalk' ) );
-		}
+		$this->addFieldsIf ( 'ipb_id', $fld_id );
+		$this->addFieldsIf( array( 'ipb_address', 'ipb_user' ), $fld_user || $fld_userid );
+		$this->addFieldsIf( 'ipb_by_text', $fld_by );
+		$this->addFieldsIf( 'ipb_by', $fld_byid );
+		$this->addFieldsIf( 'ipb_timestamp', $fld_timestamp );
+		$this->addFieldsIf( 'ipb_expiry', $fld_expiry );
+		$this->addFieldsIf( 'ipb_reason', $fld_reason );
+		$this->addFieldsIf( array( 'ipb_range_start', 'ipb_range_end' ), $fld_range );
+		$this->addFieldsIf( array( 'ipb_anon_only', 'ipb_create_account', 'ipb_enable_autoblock',
+									'ipb_block_email', 'ipb_deleted', 'ipb_allow_usertalk' ),
+							$fld_flags );
 
 		$this->addOption( 'LIMIT', $params['limit'] + 1 );
-		$this->addWhereRange( 'ipb_timestamp', $params['dir'], $params['start'], $params['end'] );
+		$this->addTimestampWhereRange( 'ipb_timestamp', $params['dir'], $params['start'], $params['end'] );
 		if ( isset( $params['ids'] ) ) {
 			$this->addWhereFld( 'ipb_id', $params['ids'] );
 		}
@@ -132,7 +109,29 @@ class ApiQueryBlocks extends ApiQueryBase {
 			) );
 		}
 
-		if ( !$wgUser->isAllowed( 'hideuser' ) ) {
+		if ( !is_null( $params['show'] ) ) {
+			$show = array_flip( $params['show'] );
+
+			/* Check for conflicting parameters. */
+			if ( ( isset ( $show['account'] ) && isset ( $show['!account'] ) )
+					|| ( isset ( $show['ip'] ) && isset ( $show['!ip'] ) )
+					|| ( isset ( $show['range'] ) && isset ( $show['!range'] ) )
+					|| ( isset ( $show['temp'] ) && isset ( $show['!temp'] ) )
+			) {
+				$this->dieUsageMsg( 'show' );
+			}
+
+			$this->addWhereIf( 'ipb_user = 0', isset( $show['!account'] ) );
+			$this->addWhereIf( 'ipb_user != 0', isset( $show['account'] ) );
+			$this->addWhereIf( 'ipb_user != 0 OR ipb_range_end > ipb_range_start', isset( $show['!ip'] ) );
+			$this->addWhereIf( 'ipb_user = 0 AND ipb_range_end = ipb_range_start', isset( $show['ip'] ) );
+			$this->addWhereIf( 'ipb_expiry =  '.$db->addQuotes($db->getInfinity()), isset( $show['!temp'] ) );
+			$this->addWhereIf( 'ipb_expiry != '.$db->addQuotes($db->getInfinity()), isset( $show['temp'] ) );
+			$this->addWhereIf( "ipb_range_end = ipb_range_start", isset( $show['!range'] ) );
+			$this->addWhereIf( "ipb_range_end > ipb_range_start", isset( $show['range'] ) );
+		}
+
+		if ( !$this->getUser()->isAllowed( 'hideuser' ) ) {
 			$this->addWhereFld( 'ipb_deleted', 0 );
 		}
 
@@ -270,15 +269,29 @@ class ApiQueryBlocks extends ApiQueryBase {
 					'flags'
 				),
 				ApiBase::PARAM_ISMULTI => true
-			)
+			),
+			'show' => array(
+				ApiBase::PARAM_TYPE => array(
+					'account',
+					'!account',
+					'temp',
+					'!temp',
+					'ip',
+					'!ip',
+					'range',
+					'!range',
+				),
+				ApiBase::PARAM_ISMULTI => true
+			),
 		);
 	}
 
 	public function getParamDescription() {
+		$p = $this->getModulePrefix();
 		return array(
 			'start' => 'The timestamp to start enumerating from',
 			'end' => 'The timestamp to stop enumerating at',
-			'dir' => $this->getDirectionDescription( $this->getModulePrefix() ),
+			'dir' => $this->getDirectionDescription( $p ),
 			'ids' => 'Pipe-separated list of block IDs to list (optional)',
 			'users' => 'Pipe-separated list of users to search for (optional)',
 			'ip' => array(	'Get all blocks applying to this IP or CIDR range, including range blocks.',
@@ -297,6 +310,10 @@ class ApiQueryBlocks extends ApiQueryBase {
 				' range      - Adds the range of IPs affected by the block',
 				' flags      - Tags the ban with (autoblock, anononly, etc)',
 			),
+			'show' => array(
+				'Show only items that meet this criteria.',
+				"For example, to see only indefinite blocks on IPs, set {$p}show=ip|!temp"
+			),
 		);
 	}
 
@@ -306,21 +323,26 @@ class ApiQueryBlocks extends ApiQueryBase {
 
 	public function getPossibleErrors() {
 		return array_merge( parent::getPossibleErrors(), array(
-			array( 'code' => 'usersandip', 'info' => 'bkusers and bkip cannot be used together' ),
+			$this->getRequireOnlyOneParameterErrorMessages( array( 'users', 'ip' ) ),
 			array( 'code' => 'cidrtoobroad', 'info' => 'CIDR ranges broader than /16 are not accepted' ),
 			array( 'code' => 'param_user', 'info' => 'User parameter may not be empty' ),
 			array( 'code' => 'param_user', 'info' => 'User name user is not valid' ),
+			array( 'show' ),
 		) );
 	}
 
-	protected function getExamples() {
+	public function getExamples() {
 		return array(
 			'api.php?action=query&list=blocks',
 			'api.php?action=query&list=blocks&bkusers=Alice|Bob'
 		);
 	}
 
+	public function getHelpUrls() {
+		return 'http://www.mediawiki.org/wiki/API:Blocks';
+	}
+
 	public function getVersion() {
-		return __CLASS__ . ': $Id: ApiQueryBlocks.php 84258 2011-03-18 19:15:56Z happy-melon $';
+		return __CLASS__ . ': $Id: ApiQueryBlocks.php 103273 2011-11-16 00:17:26Z johnduhart $';
 	}
 }

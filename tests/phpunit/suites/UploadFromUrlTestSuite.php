@@ -1,6 +1,6 @@
 <?php
 
-require_once( dirname( dirname( __FILE__ ) ) . '/includes/UploadFromUrlTest.php' );
+require_once( dirname( dirname( __FILE__ ) ) . '/includes/upload/UploadFromUrlTest.php' );
 
 class UploadFromUrlTestSuite extends PHPUnit_Framework_TestSuite {
 	public static function addTables( &$tables ) {
@@ -14,7 +14,7 @@ class UploadFromUrlTestSuite extends PHPUnit_Framework_TestSuite {
 	}
 
 	function setUp() {
-		global $wgParser, $wgParserConf, $IP, $messageMemc, $wgMemc, $wgDeferredUpdateList,
+		global $wgParser, $wgParserConf, $IP, $messageMemc, $wgMemc,
 				  $wgUser, $wgLang, $wgOut, $wgRequest, $wgStyleDirectory, $wgEnableParserCache,
 				  $wgNamespaceAliases, $wgNamespaceProtection, $wgLocalFileRepo,
 				  $parserMemc, $wgThumbnailScriptPath, $wgScriptPath,
@@ -41,17 +41,18 @@ class UploadFromUrlTestSuite extends PHPUnit_Framework_TestSuite {
 
 
 		$wgEnableParserCache = false;
-		$wgDeferredUpdateList = array();
+		DeferredUpdates::clearPendingUpdates();
 		$wgMemc = wfGetMainCache();
 		$messageMemc = wfGetMessageCacheStorage();
 		$parserMemc = wfGetParserCacheStorage();
 
 		// $wgContLang = new StubContLang;
 		$wgUser = new User;
-		$wgLang = new StubUserLang;
-		$wgOut = new StubObject( 'wgOut', 'OutputPage' );
+		$context = new RequestContext;
+		$wgLang = $context->getLang();
+		$wgOut = $context->getOutput();
 		$wgParser = new StubObject( 'wgParser', $wgParserConf['class'], array( $wgParserConf ) );
-		$wgRequest = new WebRequest;
+		$wgRequest = $context->getRequest();
 
 		if ( $wgStyleDirectory === false ) {
 			$wgStyleDirectory   = "$IP/skins";
@@ -158,10 +159,10 @@ class UploadFromUrlTestSuite extends PHPUnit_Framework_TestSuite {
 			return $dir;
 		}
 
-		wfMkdirParents( $dir . '/3/3a' );
+		wfMkdirParents( $dir . '/3/3a', null, __METHOD__ );
 		copy( "$IP/skins/monobook/headbg.jpg", "$dir/3/3a/Foobar.jpg" );
 
-		wfMkdirParents( $dir . '/0/09' );
+		wfMkdirParents( $dir . '/0/09', null, __METHOD__ );
 		copy( "$IP/skins/monobook/headbg.jpg", "$dir/0/09/Bad.jpg" );
 
 		return $dir;
@@ -169,7 +170,7 @@ class UploadFromUrlTestSuite extends PHPUnit_Framework_TestSuite {
 
 	public static function suite() {
 		// Hack to invoke the autoloader required to get phpunit to recognize
-		// the UploadFromUrlTest class 
+		// the UploadFromUrlTest class
 		class_exists( 'UploadFromUrlTest' );
 		$suite = new UploadFromUrlTestSuite( 'UploadFromUrlTest' );
 		return $suite;

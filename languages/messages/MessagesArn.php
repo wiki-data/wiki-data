@@ -221,8 +221,6 @@ $messages = array(
 'revdelete-show-file-submit' => 'May',
 'pagehist'                   => 'pünon pakina',
 'deletedhist'                => 'Ñamümüngelu pünon',
-'revdelete-uname'            => 'Üy kellufe',
-'revdelete-hid'              => 'Ellkan $1',
 'revdelete-edit-reasonlist'  => 'Wirin dungu ñamümgün mew',
 
 # History merging
@@ -402,7 +400,6 @@ $messages = array(
 'exblank'               => 'pakina wellingey',
 'delete-confirm'        => 'Ñamümüngelu "$1"',
 'delete-legend'         => 'Ñamümün',
-'deletedarticle'        => '«[[$1]]» Ñamümün',
 'deletereasonotherlist' => 'Kake dungu',
 
 # Protect
@@ -460,7 +457,6 @@ $messages = array(
 'move-watch'              => 'Llaytun tüfachi pakina',
 'movepagebtn'             => 'Nengümün pakina',
 'movedto'                 => 'Nengümün',
-'1movedto2'               => '[[$1]] wiñamngey [[$2]] püle',
 'delete_and_move'         => 'Ñamümün ka nengümün',
 'delete_and_move_confirm' => 'May, ñamümün pakina',
 
@@ -489,13 +485,6 @@ $messages = array(
 'others'    => 'fill',
 'siteusers' => '{{PLURAL:$2|Kellufe|Kellufe}} $1 {{SITENAME}}',
 
-# Info page
-'numedits'     => 'Rakin wirin (pakina): $1',
-'numtalkedits' => 'Rakin wirin (pakina nütramkawe): $1',
-
-# Patrol log
-'patrol-log-diff' => 'ng$1',
-
 # Browsing diffs
 'previousdiff' => '← Füta wirin',
 'nextdiff'     => 'We wirin →',
@@ -504,7 +493,7 @@ $messages = array(
 'ilsubmit' => 'Kintu',
 
 # Video information, used by Language::formatTimePeriod() to format lengths in the above messages
-'hours-abbrev' => 'o',
+'hours-abbrev' => '$1o',
 
 # EXIF tags
 'exif-artist'              => 'Che llitun mew',
@@ -526,12 +515,10 @@ $messages = array(
 'exif-subjectdistancerange-0' => 'Kimnoelchi',
 
 # 'all' in various places, this might be different for inflected languages
-'recentchangesall' => 'kom',
-'imagelistall'     => 'kom',
-'watchlistall2'    => 'kom',
-'namespacesall'    => 'kom',
-'monthsall'        => '(kom)',
-'limitall'         => 'Kom',
+'watchlistall2' => 'kom',
+'namespacesall' => 'kom',
+'monthsall'     => '(kom)',
+'limitall'      => 'Kom',
 
 # Trackbacks
 'trackbackremove' => '([$1 Ñamümün])',

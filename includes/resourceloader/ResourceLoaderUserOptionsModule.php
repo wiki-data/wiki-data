@@ -33,6 +33,10 @@ class ResourceLoaderUserOptionsModule extends ResourceLoaderModule {
 
 	/* Methods */
 
+	/**
+	 * @param $context ResourceLoaderContext
+	 * @return array|int|Mixed
+	 */
 	public function getModifiedTime( ResourceLoaderContext $context ) {
 		$hash = $context->getHash();
 		if ( isset( $this->modifiedTime[$hash] ) ) {
@@ -51,7 +55,7 @@ class ResourceLoaderUserOptionsModule extends ResourceLoaderModule {
 	/**
 	 * Fetch the context's user options, or if it doesn't match current user,
 	 * the default options.
-	 * 
+	 *
 	 * @param $context ResourceLoaderContext: Context object
 	 * @return Array: List of user options keyed by option name
 	 */
@@ -66,12 +70,22 @@ class ResourceLoaderUserOptionsModule extends ResourceLoaderModule {
 		}
 	}
 
+	/**
+	 * @param $context ResourceLoaderContext
+	 * @return string
+	 */
 	public function getScript( ResourceLoaderContext $context ) {
-		return Xml::encodeJsCall( 'mw.user.options.set', 
+		return Xml::encodeJsCall( 'mw.user.options.set',
 			array( $this->contextUserOptions( $context ) ) );
 	}
 
+	/**
+	 * @param $context ResourceLoaderContext
+	 * @return array
+	 */
 	public function getStyles( ResourceLoaderContext $context ) {
+		// FIXME: This stuff should really be in its own module, because it gets double-loaded otherwise
+		// (once through a <link>, once when embedded as JS)
 		global $wgAllowUserCssPrefs;
 
 		if ( $wgAllowUserCssPrefs ) {
@@ -79,9 +93,15 @@ class ResourceLoaderUserOptionsModule extends ResourceLoaderModule {
 
 			// Build CSS rules
 			$rules = array();
+
+			// Underline: 2 = browser default, 1 = always, 0 = never
 			if ( $options['underline'] < 2 ) {
-				$rules[] = "a { text-decoration: " . 
+				$rules[] = "a { text-decoration: " .
 					( $options['underline'] ? 'underline' : 'none' ) . "; }";
+			} else {
+				# The scripts of these languages are very hard to read with underlines
+				$rules[] = 'a:lang(ar), a:lang(ckb), a:lang(fa),a:lang(kk-arab), ' .
+				'a:lang(mzn), a:lang(ps), a:lang(ur) { text-decoration: none; }';
 			}
 			if ( $options['highlightbroken'] ) {
 				$rules[] = "a.new, #quickbar a.new { color: #ba0000; }\n";
@@ -111,7 +131,17 @@ class ResourceLoaderUserOptionsModule extends ResourceLoaderModule {
 		return array();
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getGroup() {
 		return 'private';
+	}
+
+	/**
+	 * @return array
+	 */
+	public function getDependencies() {
+		return array( 'mediawiki.user' );
 	}
 }

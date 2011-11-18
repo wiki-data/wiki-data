@@ -31,7 +31,7 @@
  */
 class MailAddress {
 	/**
-	 * @param $address Mixed: string with an email address, or a User object
+	 * @param $address string|User string with an email address, or a User object
 	 * @param $name String: human-readable name if a string address is given
 	 * @param $realName String: human-readable real name if a string address is given
 	 */
@@ -55,16 +55,20 @@ class MailAddress {
 		# PHP's mail() implementation under Windows is somewhat shite, and
 		# can't handle "Joe Bloggs <joe@bloggs.com>" format email addresses,
 		# so don't bother generating them
-		if ( $this->name != '' && !wfIsWindows() ) {
-			global $wgEnotifUseRealName;
-			$name = ( $wgEnotifUseRealName && $this->realName ) ? $this->realName : $this->name;
-			$quoted = UserMailer::quotedPrintable( $name );
-			if ( strpos( $quoted, '.' ) !== false || strpos( $quoted, ',' ) !== false ) {
-				$quoted = '"' . $quoted . '"';
+		if ( $this->address ) {
+			if ( $this->name != '' && !wfIsWindows() ) {
+				global $wgEnotifUseRealName;
+				$name = ( $wgEnotifUseRealName && $this->realName ) ? $this->realName : $this->name;
+				$quoted = UserMailer::quotedPrintable( $name );
+				if ( strpos( $quoted, '.' ) !== false || strpos( $quoted, ',' ) !== false ) {
+					$quoted = '"' . $quoted . '"';
+				}
+				return "$quoted <{$this->address}>";
+			} else {
+				return $this->address;
 			}
-			return "$quoted <{$this->address}>";
 		} else {
-			return $this->address;
+			return "";
 		}
 	}
 
@@ -82,6 +86,13 @@ class UserMailer {
 
 	/**
 	 * Send mail using a PEAR mailer
+	 *
+	 * @param $mailer
+	 * @param $dest
+	 * @param $headers
+	 * @param $body
+	 *
+	 * @return Status
 	 */
 	protected static function sendWithPear( $mailer, $dest, $headers, $body ) {
 		$mailResult = $mailer->send( $dest, $headers, $body );
@@ -96,6 +107,39 @@ class UserMailer {
 	}
 
 	/**
+	 * Creates a single string from an associative array
+	 *
+	 * @param $header Associative Array: keys are header field names,
+	 *                values are ... values.
+	 * @param $endl String: The end of line character.  Defaults to "\n"
+	 * @return String
+	 */
+	static function arrayToHeaderString( $headers, $endl = "\n" ) {
+		foreach( $headers as $name => $value ) {
+			$string[] = "$name: $value";
+		}
+		return implode( $endl, $string );
+	}
+
+	/**
+	 * Create a value suitable for the MessageId Header
+	 *
+	 * @return String
+	 */
+	static function makeMsgId() {
+		global $wgSMTP, $wgServer;
+
+		$msgid = uniqid( wfWikiID() . ".", true ); /* true required for cygwin */
+		if ( is_array($wgSMTP) && isset($wgSMTP['IDHost']) && $wgSMTP['IDHost'] ) {
+			$domain = $wgSMTP['IDHost'];
+		} else {
+			$url = wfParseUrl($wgServer);
+			$domain = $url['host'];
+		}
+		return "<$msgid@$domain>";
+	}
+
+	/**
 	 * This function will perform a direct (authenticated) login to
 	 * a SMTP Server to use for mail relaying if 'wgSMTP' specifies an
 	 * array of parameters. It requires PEAR:Mail to do that.
@@ -106,28 +150,58 @@ class UserMailer {
 	 * @param $subject String: email's subject.
 	 * @param $body String: email's text.
 	 * @param $replyto MailAddress: optional reply-to email (default: null).
-	 * @param $contentType String: optional custom Content-Type
+	 * @param $contentType String: optional custom Content-Type (default: text/plain; charset=UTF-8)
 	 * @return Status object
 	 */
-	public static function send( $to, $from, $subject, $body, $replyto = null, $contentType = null ) {
-		global $wgSMTP, $wgOutputEncoding, $wgEnotifImpersonal;
-		global $wgEnotifMaxRecips, $wgAdditionalMailParams;
+	public static function send( $to, $from, $subject, $body, $replyto = null, $contentType = 'text/plain; charset=UTF-8' ) {
+		global $wgSMTP, $wgEnotifMaxRecips, $wgAdditionalMailParams;
 
-		if ( is_array( $to ) ) {
-			$emails = '';
-			// This wouldn't be necessary if implode() worked on arrays of
-			// objects using __toString(). http://bugs.php.net/bug.php?id=36612
-			foreach ( $to as $t ) {
-				$emails .= $t->toString() . ",";
+		if ( !is_array( $to ) ) {
+			$to = array( $to );
+		}
+
+		wfDebug( __METHOD__ . ': sending mail to ' . implode( ', ', $to ) . "\n" );
+
+		$dest = array();
+		foreach ( $to as $u ) {
+			if ( $u->address ) {
+				$dest[] = $u->address;
 			}
-			$emails = rtrim( $emails, ',' );
-			wfDebug( __METHOD__ . ': sending mail to ' . $emails . "\n" );
+		}
+		if ( count( $dest ) == 0 ) {
+			return Status::newFatal( 'user-mail-no-addy' );
+		}
+
+		$headers['From'] = $from->toString();
+		$headers['Return-Path'] = $from->address;
+		if ( count( $to ) == 1 ) {
+			$headers['To'] = $to[0]->toString();
 		} else {
-			wfDebug( __METHOD__ . ': sending mail to ' . implode( ',', array( $to->toString() ) ) . "\n" );
+			$headers['To'] = 'undisclosed-recipients:;';
+		}
+
+		if ( $replyto ) {
+			$headers['Reply-To'] = $replyto->toString();
+		}
+
+		$headers['Subject'] = self::quotedPrintable( $subject );
+		$headers['Date'] = date( 'r' );
+		$headers['MIME-Version'] = '1.0';
+		$headers['Content-type'] = ( is_null( $contentType ) ?
+			'text/plain; charset=UTF-8' : $contentType );
+		$headers['Content-transfer-encoding'] = '8bit';
+
+		$headers['Message-ID'] = self::makeMsgId();
+		$headers['X-Mailer'] = 'MediaWiki mailer';
+
+		$ret = wfRunHooks( 'AlternateUserMailer', array( $headers, $to, $from, $subject, $body ) );
+		if ( $ret === false ) {
+			return Status::newGood();
+		} else if ( $ret !== true ) {
+			return Status::newFatal( 'php-mail-error', $ret );
 		}
 
 		if ( is_array( $wgSMTP ) ) {
-			$found = false;
 			if ( function_exists( 'stream_resolve_include_path' ) ) {
 				$found = stream_resolve_include_path( 'Mail.php' );
 			} else {
@@ -137,38 +211,6 @@ class UserMailer {
 				throw new MWException( 'PEAR mail package is not installed' );
 			}
 			require_once( 'Mail.php' );
-
-			$msgid = str_replace( " ", "_", microtime() );
-			if ( function_exists( 'posix_getpid' ) )
-				$msgid .= '.' . posix_getpid();
-
-			if ( is_array( $to ) ) {
-				$dest = array();
-				foreach ( $to as $u )
-					$dest[] = $u->address;
-			} else
-				$dest = $to->address;
-
-			$headers['From'] = $from->toString();
-
-			if ( $wgEnotifImpersonal ) {
-				$headers['To'] = 'undisclosed-recipients:;';
-			}
-			else {
-				$headers['To'] = implode( ", ", (array )$dest );
-			}
-
-			if ( $replyto ) {
-				$headers['Reply-To'] = $replyto->toString();
-			}
-			$headers['Subject'] = self::quotedPrintable( $subject );
-			$headers['Date'] = date( 'r' );
-			$headers['MIME-Version'] = '1.0';
-			$headers['Content-type'] = ( is_null( $contentType ) ?
-					'text/plain; charset=' . $wgOutputEncoding : $contentType );
-			$headers['Content-transfer-encoding'] = '8bit';
-			$headers['Message-ID'] = "<$msgid@" . $wgSMTP['IDHost'] . '>'; // FIXME
-			$headers['X-Mailer'] = 'MediaWiki mailer';
 
 			wfSuppressWarnings();
 
@@ -180,8 +222,8 @@ class UserMailer {
 				return Status::newFatal( 'pear-mail-error', $mail_object->getMessage() );
 			}
 
-			wfDebug( "Sending mail via PEAR::Mail to $dest\n" );
-			$chunks = array_chunk( (array)$dest, $wgEnotifMaxRecips );
+			wfDebug( "Sending mail via PEAR::Mail\n" );
+			$chunks = array_chunk( $dest, $wgEnotifMaxRecips );
 			foreach ( $chunks as $chunk ) {
 				$status = self::sendWithPear( $mail_object, $chunk, $headers, $body );
 				if ( !$status->isOK() ) {
@@ -192,9 +234,6 @@ class UserMailer {
 			wfRestoreWarnings();
 			return Status::newGood();
 		} else	{
-			# In the following $headers = expression we removed "Reply-To: {$from}\r\n" , because it is treated differently
-			# (fifth parameter of the PHP mail function, see some lines below)
-
 			# Line endings need to be different on Unix and Windows due to
 			# the bug described at http://trac.wordpress.org/ticket/2603
 			if ( wfIsWindows() ) {
@@ -203,37 +242,22 @@ class UserMailer {
 			} else {
 				$endl = "\n";
 			}
-			$ctype = ( is_null( $contentType ) ?
-					'text/plain; charset=' . $wgOutputEncoding : $contentType );
-			$headers =
-				"MIME-Version: 1.0$endl" .
-				"Content-type: $ctype$endl" .
-				"Content-Transfer-Encoding: 8bit$endl" .
-				"X-Mailer: MediaWiki mailer$endl" .
-				'From: ' . $from->toString();
-			if ( $replyto ) {
-				$headers .= "{$endl}Reply-To: " . $replyto->toString();
-			}
+
+			$headers = self::arrayToHeaderString( $headers, $endl );
 
 			wfDebug( "Sending mail via internal mail() function\n" );
 
 			self::$mErrorString = '';
 			$html_errors = ini_get( 'html_errors' );
 			ini_set( 'html_errors', '0' );
-			set_error_handler( array( 'UserMailer', 'errorHandler' ) );
+			set_error_handler( 'UserMailer::errorHandler' );
 
-			// We need to check for safe_mode, because mail() throws an E_NOTICE
-			// on the 5th parameter when it's turned on
-			$sm = wfIniGetBool( 'safe_mode' );
-
-			if ( !is_array( $to ) ) {
-				$to = array( $to );
-			}
-			foreach ( $to as $recip ) {
-				if( $sm ) {
-					$sent = mail( $recip->toString(), self::quotedPrintable( $subject ), $body, $headers );
+			$safeMode = wfIniGetBool( 'safe_mode' );
+			foreach ( $dest as $recip ) {
+				if ( $safeMode ) {
+					$sent = mail( $recip, self::quotedPrintable( $subject ), $body, $headers );
 				} else {
-					$sent = mail( $recip->toString(), self::quotedPrintable( $subject ), $body, $headers, $wgAdditionalMailParams );
+					$sent = mail( $recip, self::quotedPrintable( $subject ), $body, $headers, $wgAdditionalMailParams );
 				}
 			}
 
@@ -245,7 +269,7 @@ class UserMailer {
 				return Status::newFatal( 'php-mail-error', self::$mErrorString );
 			} elseif ( ! $sent ) {
 				// mail function only tells if there's an error
-				wfDebug( "Error sending mail\n" );
+				wfDebug( "Unknown error sending mail\n" );
 				return Status::newFatal( 'php-mail-error-unknown' );
 			} else {
 				return Status::newGood();
@@ -265,6 +289,8 @@ class UserMailer {
 
 	/**
 	 * Converts a string into a valid RFC 822 "phrase", such as is used for the sender name
+	 * @param $phrase string
+	 * @return string
 	 */
 	public static function rfc822Phrase( $phrase ) {
 		$phrase = strtr( $phrase, array( "\r" => '', "\n" => '', '"' => '' ) );
@@ -278,8 +304,7 @@ class UserMailer {
 	public static function quotedPrintable( $string, $charset = '' ) {
 		# Probably incomplete; see RFC 2045
 		if( empty( $charset ) ) {
-			global $wgInputEncoding;
-			$charset = $wgInputEncoding;
+			$charset = 'UTF-8';
 		}
 		$charset = strtoupper( $charset );
 		$charset = str_replace( 'ISO-8859', 'ISO8859', $charset ); // ?
@@ -290,7 +315,7 @@ class UserMailer {
 			return $string;
 		}
 		$out = "=?$charset?Q?";
-		$out .= preg_replace_callback( "/([$replace])/", 
+		$out .= preg_replace_callback( "/([$replace])/",
 			array( __CLASS__, 'quotedPrintableCallback' ), $string );
 		$out .= '?=';
 		return $out;
@@ -323,8 +348,18 @@ class UserMailer {
  */
 class EmailNotification {
 	protected $to, $subject, $body, $replyto, $from;
-	protected $user, $title, $timestamp, $summary, $minorEdit, $oldid, $composed_common, $editor;
+	protected $timestamp, $summary, $minorEdit, $oldid, $composed_common;
 	protected $mailTargets = array();
+
+	/**
+	 * @var Title
+	 */
+	protected $title;
+
+	/**
+	 * @var User
+	 */
+	protected $user, $editor;
 
 	/**
 	 * Send emails corresponding to the user $editor editing the page $title.
@@ -340,10 +375,12 @@ class EmailNotification {
 	 * @param $oldid (default: false)
 	 */
 	public function notifyOnPageChange( $editor, $title, $timestamp, $summary, $minorEdit, $oldid = false ) {
-		global $wgEnotifUseJobQ, $wgEnotifWatchlist, $wgShowUpdatedMarker;
+		global $wgEnotifUseJobQ, $wgEnotifWatchlist, $wgShowUpdatedMarker, $wgEnotifMinorEdits,
+			$wgUsersNotifiedOnAllChanges, $wgEnotifUserTalk;
 
-		if ( $title->getNamespace() < 0 )
+		if ( $title->getNamespace() < 0 ) {
 			return;
+		}
 
 		// Build a list of users to notfiy
 		$watchers = array();
@@ -378,24 +415,42 @@ class EmailNotification {
 			}
 		}
 
+		$sendEmail = true;
+		// If nobody is watching the page, and there are no users notified on all changes
+		// don't bother creating a job/trying to send emails
+		// $watchers deals with $wgEnotifWatchlist
+		if ( !count( $watchers ) && !count( $wgUsersNotifiedOnAllChanges ) ) {
+			$sendEmail = false;
+			// Only send notification for non minor edits, unless $wgEnotifMinorEdits
+			if ( !$minorEdit || ( $wgEnotifMinorEdits && !$editor->isAllowed( 'nominornewtalk' ) ) ) {
+				$isUserTalkPage = ( $title->getNamespace() == NS_USER_TALK );
+				if ( $wgEnotifUserTalk && $isUserTalkPage && $this->canSendUserTalkEmail( $editor, $title, $minorEdit ) ) {
+					$sendEmail = true;
+				}
+			}
+		}
+
+		if ( !$sendEmail ) {
+			return;
+		}
 		if ( $wgEnotifUseJobQ ) {
 			$params = array(
-				"editor" => $editor->getName(),
-				"editorID" => $editor->getID(),
-				"timestamp" => $timestamp,
-				"summary" => $summary,
-				"minorEdit" => $minorEdit,
-				"oldid" => $oldid,
-				"watchers" => $watchers );
+				'editor' => $editor->getName(),
+				'editorID' => $editor->getID(),
+				'timestamp' => $timestamp,
+				'summary' => $summary,
+				'minorEdit' => $minorEdit,
+				'oldid' => $oldid,
+				'watchers' => $watchers
+			);
 			$job = new EnotifNotifyJob( $title, $params );
 			$job->insert();
 		} else {
 			$this->actuallyNotifyOnPageChange( $editor, $title, $timestamp, $summary, $minorEdit, $oldid, $watchers );
 		}
-
 	}
 
-	/*
+	/**
 	 * Immediate version of notifyOnPageChange().
 	 *
 	 * Send emails corresponding to the user $editor editing the page $title.
@@ -433,23 +488,11 @@ class EmailNotification {
 		$userTalkId = false;
 
 		if ( !$minorEdit || ( $wgEnotifMinorEdits && !$editor->isAllowed( 'nominornewtalk' ) ) ) {
-			if ( $wgEnotifUserTalk && $isUserTalkPage ) {
+
+			if ( $wgEnotifUserTalk && $isUserTalkPage && $this->canSendUserTalkEmail( $editor, $title, $minorEdit ) ) {
 				$targetUser = User::newFromName( $title->getText() );
-				if ( !$targetUser || $targetUser->isAnon() ) {
-					wfDebug( __METHOD__ . ": user talk page edited, but user does not exist\n" );
-				} elseif ( $targetUser->getId() == $editor->getId() ) {
-					wfDebug( __METHOD__ . ": user edited their own talk page, no notification sent\n" );
-				} elseif ( $targetUser->getOption( 'enotifusertalkpages' ) ) {
-					if ( $targetUser->isEmailConfirmed() ) {
-						wfDebug( __METHOD__ . ": sending talk page update notification\n" );
-						$this->compose( $targetUser );
-						$userTalkId = $targetUser->getId();
-					} else {
-						wfDebug( __METHOD__ . ": talk page owner doesn't have validated email\n" );
-					}
-				} else {
-					wfDebug( __METHOD__ . ": talk page owner doesn't want notifications\n" );
-				}
+				$this->compose( $targetUser );
+				$userTalkId = $targetUser->getId();
 			}
 
 			if ( $wgEnotifWatchlist ) {
@@ -478,6 +521,39 @@ class EmailNotification {
 	}
 
 	/**
+	 * @param $editor User
+	 * @param $title Title bool
+	 * @param $minorEdit
+	 * @return bool
+	 */
+	private function canSendUserTalkEmail( $editor, $title, $minorEdit ) {
+		global $wgEnotifUserTalk;
+		$isUserTalkPage = ( $title->getNamespace() == NS_USER_TALK );
+
+		if ( $wgEnotifUserTalk && $isUserTalkPage ) {
+			$targetUser = User::newFromName( $title->getText() );
+
+			if ( !$targetUser || $targetUser->isAnon() ) {
+				wfDebug( __METHOD__ . ": user talk page edited, but user does not exist\n" );
+			} elseif ( $targetUser->getId() == $editor->getId() ) {
+				wfDebug( __METHOD__ . ": user edited their own talk page, no notification sent\n" );
+			} elseif ( $targetUser->getOption( 'enotifusertalkpages' ) &&
+				( !$minorEdit || $targetUser->getOption( 'enotifminoredits' ) ) )
+			{
+				if ( $targetUser->isEmailConfirmed() ) {
+					wfDebug( __METHOD__ . ": sending talk page update notification\n" );
+					return true;
+				} else {
+					wfDebug( __METHOD__ . ": talk page owner doesn't have validated email\n" );
+				}
+			} else {
+				wfDebug( __METHOD__ . ": talk page owner doesn't want notifications\n" );
+			}
+		}
+	    return false;
+	}
+
+	/**
 	 * Generate the generic "this page has been changed" e-mail text.
 	 */
 	private function composeCommonMailtext() {
@@ -487,22 +563,21 @@ class EmailNotification {
 
 		$this->composed_common = true;
 
-		$summary = ( $this->summary == '' ) ? ' - ' : $this->summary;
-		$medit   = ( $this->minorEdit ) ? wfMsgForContent( 'minoredit' ) : '';
-
 		# You as the WikiAdmin and Sysops can make use of plenty of
 		# named variables when composing your notification emails while
 		# simply editing the Meta pages
 
-		$subject = wfMsgForContent( 'enotif_subject' );
-		$body    = wfMsgForContent( 'enotif_body' );
-		$from    = ''; /* fail safe */
-		$replyto = ''; /* fail safe */
-		$keys    = array();
+		$keys = array();
 
 		if ( $this->oldid ) {
-			$difflink = $this->title->getFullUrl( 'diff=0&oldid=' . $this->oldid );
-			$keys['$NEWPAGE'] = wfMsgForContent( 'enotif_lastvisited', $difflink );
+			if ( $wgEnotifImpersonal ) {
+				// For impersonal mail, show a diff link to the last revision.
+				$keys['$NEWPAGE'] = wfMsgForContent( 'enotif_lastdiff',
+					$this->title->getCanonicalUrl( 'diff=next&oldid=' . $this->oldid ) );
+			} else {
+				$keys['$NEWPAGE'] = wfMsgForContent( 'enotif_lastvisited',
+					$this->title->getCanonicalUrl( 'diff=0&oldid=' . $this->oldid ) );
+			}
 			$keys['$OLDID']   = $this->oldid;
 			$keys['$CHANGEDORCREATED'] = wfMsgForContent( 'changed' );
 		} else {
@@ -512,69 +587,54 @@ class EmailNotification {
 			$keys['$CHANGEDORCREATED'] = wfMsgForContent( 'created' );
 		}
 
-		if ( $wgEnotifImpersonal && $this->oldid ) {
-			/*
-			 * For impersonal mail, show a diff link to the last
-			 * revision.
-			 */
-			$keys['$NEWPAGE'] = wfMsgForContent( 'enotif_lastdiff',
-					$this->title->getFullURL( "oldid={$this->oldid}&diff=next" ) );
-        }
+		$keys['$PAGETITLE'] = $this->title->getPrefixedText();
+		$keys['$PAGETITLE_URL'] = $this->title->getCanonicalUrl();
+		$keys['$PAGEMINOREDIT'] = $this->minorEdit ? wfMsgForContent( 'minoredit' ) : '';
+		$keys['$PAGESUMMARY'] = $this->summary == '' ? ' - ' : $this->summary;
+		$keys['$UNWATCHURL'] = $this->title->getCanonicalUrl( 'action=unwatch' );
 
-		$body = strtr( $body, $keys );
-		$pagetitle = $this->title->getPrefixedText();
-		$keys['$PAGETITLE']          = $pagetitle;
-		$keys['$PAGETITLE_URL']      = $this->title->getFullUrl();
+		if ( $this->editor->isAnon() ) {
+			# real anon (user:xxx.xxx.xxx.xxx)
+			$keys['$PAGEEDITOR'] = wfMsgForContent( 'enotif_anon_editor', $this->editor->getName() );
+			$keys['$PAGEEDITOR_EMAIL'] = wfMsgForContent( 'noemailtitle' );
+		} else {
+			$keys['$PAGEEDITOR'] = $wgEnotifUseRealName ? $this->editor->getRealName() : $this->editor->getName();
+			$emailPage = SpecialPage::getSafeTitleFor( 'Emailuser', $this->editor->getName() );
+			$keys['$PAGEEDITOR_EMAIL'] = $emailPage->getCanonicalUrl();
+		}
 
-		$keys['$PAGEMINOREDIT']      = $medit;
-		$keys['$PAGESUMMARY']        = $summary;
-		$keys['$UNWATCHURL']         = $this->title->getFullUrl( 'action=unwatch' );
+		$keys['$PAGEEDITOR_WIKI'] = $this->editor->getUserPage()->getCanonicalUrl();
 
+		# Now build message's subject and body
+
+		$subject = wfMsgExt( 'enotif_subject', 'content' );
 		$subject = strtr( $subject, $keys );
+		$this->subject = MessageCache::singleton()->transform( $subject, false, null, $this->title );
+
+		$body = wfMsgExt( 'enotif_body', 'content' );
+		$body = strtr( $body, $keys );
+		$body = MessageCache::singleton()->transform( $body, false, null, $this->title );
+		$this->body = wordwrap( $body, 72 );
 
 		# Reveal the page editor's address as REPLY-TO address only if
 		# the user has not opted-out and the option is enabled at the
 		# global configuration level.
-		$editor = $this->editor;
-		$name    = $wgEnotifUseRealName ? $editor->getRealName() : $editor->getName();
 		$adminAddress = new MailAddress( $wgPasswordSender, $wgPasswordSenderName );
-		$editorAddress = new MailAddress( $editor );
 		if ( $wgEnotifRevealEditorAddress
-		    && ( $editor->getEmail() != '' )
-		    && $editor->getOption( 'enotifrevealaddr' ) ) {
+			&& ( $this->editor->getEmail() != '' )
+			&& $this->editor->getOption( 'enotifrevealaddr' ) )
+		{
+			$editorAddress = new MailAddress( $this->editor );
 			if ( $wgEnotifFromEditor ) {
-				$from    = $editorAddress;
+				$this->from    = $editorAddress;
 			} else {
-				$from    = $adminAddress;
-				$replyto = $editorAddress;
+				$this->from    = $adminAddress;
+				$this->replyto = $editorAddress;
 			}
 		} else {
-			$from    = $adminAddress;
-			$replyto = new MailAddress( $wgNoReplyAddress );
+			$this->from    = $adminAddress;
+			$this->replyto = new MailAddress( $wgNoReplyAddress );
 		}
-
-		if ( $editor->isIP( $name ) ) {
-			# real anon (user:xxx.xxx.xxx.xxx)
-			$utext = wfMsgForContent( 'enotif_anon_editor', $name );
-			$subject = str_replace( '$PAGEEDITOR', $utext, $subject );
-			$keys['$PAGEEDITOR']       = $utext;
-			$keys['$PAGEEDITOR_EMAIL'] = wfMsgForContent( 'noemailtitle' );
-		} else {
-			$subject = str_replace( '$PAGEEDITOR', $name, $subject );
-			$keys['$PAGEEDITOR']          = $name;
-			$emailPage = SpecialPage::getSafeTitleFor( 'Emailuser', $name );
-			$keys['$PAGEEDITOR_EMAIL'] = $emailPage->getFullUrl();
-		}
-		$userPage = $editor->getUserPage();
-		$keys['$PAGEEDITOR_WIKI'] = $userPage->getFullUrl();
-		$body = strtr( $body, $keys );
-		$body = wordwrap( $body, 72 );
-
-		# now save this as the constant user-independent part of the message
-		$this->from    = $from;
-		$this->replyto = $replyto;
-		$this->subject = $subject;
-		$this->body    = $body;
 	}
 
 	/**
@@ -582,6 +642,7 @@ class EmailNotification {
 	 * depending on settings.
 	 *
 	 * Call sendMails() to send any mails that were queued.
+	 * @param $user User
 	 */
 	function compose( $user ) {
 		global $wgEnotifImpersonal;
@@ -621,22 +682,18 @@ class EmailNotification {
 		//     Note:  The to parameter cannot be an address in the form of "Something <someone@example.com>".
 		//     The mail command will not parse this properly while talking with the MTA.
 		$to = new MailAddress( $watchingUser );
-		$name = $wgEnotifUseRealName ? $watchingUser->getRealName() : $watchingUser->getName();
-		$body = str_replace( '$WATCHINGUSERNAME', $name, $this->body );
-
-		$timecorrection = $watchingUser->getOption( 'timecorrection' );
 
 		# $PAGEEDITDATE is the time and date of the page change
 		# expressed in terms of individual local time of the notification
 		# recipient, i.e. watching user
 		$body = str_replace(
-			array( '$PAGEEDITDATEANDTIME',
+			array( '$WATCHINGUSERNAME',
 				'$PAGEEDITDATE',
 				'$PAGEEDITTIME' ),
-			array( $wgContLang->timeanddate( $this->timestamp, true, false, $timecorrection ),
-				$wgContLang->date( $this->timestamp, true, false, $timecorrection ),
-				$wgContLang->time( $this->timestamp, true, false, $timecorrection ) ),
-			$body );
+			array( $wgEnotifUseRealName ? $watchingUser->getRealName() : $watchingUser->getName(),
+				$wgContLang->userDate( $this->timestamp, $watchingUser ),
+				$wgContLang->userTime( $this->timestamp, $watchingUser ) ),
+			$this->body );
 
 		return UserMailer::send( $to, $this->from, $this->subject, $body, $this->replyto );
 	}
@@ -653,32 +710,14 @@ class EmailNotification {
 
 		$body = str_replace(
 				array( '$WATCHINGUSERNAME',
-					'$PAGEEDITDATE' ),
+					'$PAGEEDITDATE',
+					'$PAGEEDITTIME' ),
 				array( wfMsgForContent( 'enotif_impersonal_salutation' ),
-					$wgContLang->timeanddate( $this->timestamp, true, false, false ) ),
+					$wgContLang->date( $this->timestamp, false, false ),
+					$wgContLang->time( $this->timestamp, false, false ) ),
 				$this->body );
 
 		return UserMailer::send( $addresses, $this->from, $this->subject, $body, $this->replyto );
 	}
 
 } # end of class EmailNotification
-
-/**@{
- * Backwards compatibility functions
- *
- * @deprecated Use UserMailer method deprecated in 1.18, remove in 1.19.
- */
-function wfRFC822Phrase( $s ) {
-	wfDeprecated( __FUNCTION__ );
-	return UserMailer::rfc822Phrase( $s );
-}
-
-/**
- * @deprecated Use UserMailer method deprecated in 1.18, remove in 1.19.
- */
-function userMailer( $to, $from, $subject, $body, $replyto = null ) {
-	wfDeprecated( __FUNCTION__ );
-	return UserMailer::send( $to, $from, $subject, $body, $replyto );
-}
-
-/**@}*/

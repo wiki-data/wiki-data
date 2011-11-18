@@ -109,15 +109,7 @@ $messages = array(
 'category-article-count' => '{{PLURAL:$2|Ushbu turkumda faqat bitta sahifa mavjud.|Ushbu turkumda quyidagi {{PLURAL:$1|sahifa|$1 sahifalar}}, hammasi boʻlib $2 ta sahifa mavjud.}}',
 'listingcontinuesabbrev' => 'davomi',
 
-'linkprefix'        => '/^(.*?)([a-zA-Z\\x80-\\xffʻʼ«„]+)$/sDu',
-'mainpagetext'      => "'''MediaWiki muvaffaqiyatli o'rnatildi.'''",
-'mainpagedocfooter' => "Wiki dasturini ishlatish haqida ma'lumot olish uchun  [http://meta.wikimedia.org/wiki/Help:Contents Foydalanuvchi qo'llanmasi] sahifasiga murojaat qiling.
-
-== Dastlabki qadamlar ==
-
-* [http://www.mediawiki.org/wiki/Manual:Configuration_settings Moslamalar ro'yxati]
-* [http://www.mediawiki.org/wiki/Manual:FAQ MediaWiki haqida ko'p so'raladigan savollar]
-* [https://lists.wikimedia.org/mailman/listinfo/mediawiki-announce MediaWiki yangi versiyasi chiqqanda xabar berish ro'yxati]",
+'linkprefix' => '/^(.*?)([a-zA-Z\\x80-\\xffʻʼ«„]+)$/sDu',
 
 'about'      => 'Haqida',
 'newwindow'  => '(yangi oynada ochiladi)',
@@ -228,7 +220,6 @@ $messages = array(
 'error'             => 'Xato',
 'badtitle'          => 'Notoʻgʻri sarlavha',
 'viewsource'        => "Ko'rib chiqish",
-'viewsourcefor'     => '$1 uchun',
 'protectedpagetext' => 'Bu sahifa tahrirlashdan saqlanish maqsadida qulflangan.',
 'viewsourcetext'    => "Siz bu sahifaning manbasini ko'rishingiz va uni nusxasini olishingiz mumkin:",
 
@@ -256,7 +247,7 @@ Shuni e'tiborga olingki, ayrim sahifalar siz brauzeringiz keshini tozalamaguning
 'loginsuccess'            => "'''{{SITENAME}}ga \"\$1\" foydalanuvchi nomi bilan kirdingiz.'''",
 'wrongpassword'           => 'Kiritgan mahfiy soʻzingiz notoʻgʻri. Iltimos, qaytadan kiritib koʻring.',
 
-# Password reset dialog
+# Change password dialog
 'retypenew' => 'Yangi mahfiy soʻzni qayta tering:',
 
 # Edit page toolbar
@@ -491,9 +482,6 @@ Bu yerda: (joriy) = hozirgi koʻrinish bilan farq,
 [[Special:UnusedCategories|Unused categories]] are not shown here.
 Also see [[Special:WantedCategories|wanted categories]].',
 
-# Special:Log/newusers
-'newuserlog-create-entry' => 'Yangi foydalanuvchi',
-
 # E-mail user
 'emailuser' => 'Bu foydalanuvchiga e-maktub joʻnat',
 
@@ -501,11 +489,9 @@ Also see [[Special:WantedCategories|wanted categories]].',
 'watchlist'        => 'Kuzatuv roʻyxatim',
 'mywatchlist'      => 'Kuzatuv roʻyxatim',
 'nowatchlist'      => "Kuzatuv ro'yxatingizda hech narsa yo'q.",
-'addedwatch'       => "Kuzatuv ro'yxatiga qo'shildi",
 'addedwatchtext'   => "\"[[:\$1]]\" sahifasi sizning [[Special:Watchlist|kuzatuv ro'yxatingizga]] qo'shildi. Bu sahifada va unga mos munozara sahifasida bo'ladigan kelajakdagi o'zgarishlar bu yerda ro'yxatga olinadi, hamda bu sahifa topish qulay bo'lishi uchun [[Special:RecentChanges|yangi o'zgarishlar ro'yxati]]da '''qalin''' harflar bilan ko'rsatiladi.
 
 Agar siz bu sahifani kuzatuv ro'yxatingizdan o'chirmoqchi bo'lsangiz \"Kuzatmaslik\" yozuvini bosing.",
-'removedwatch'     => "Kuzatuv ro'yxatidan o'chirildi",
 'removedwatchtext' => '"[[:$1]]" sahifasi kuzatuv ro\'yxatingizdan o\'chirildi.',
 'watch'            => 'kuzatish',
 'watchthispage'    => 'Sahifani kuzatish',
@@ -515,9 +501,8 @@ Agar siz bu sahifani kuzatuv ro'yxatingizdan o'chirmoqchi bo'lsangiz \"Kuzatmasl
 
 # Delete
 'actioncomplete'        => 'Bajarildi',
-'deletedtext'           => '"<nowiki>$1</nowiki>" yoʻqotildi.
+'deletedtext'           => '"$1" yoʻqotildi.
 Yaqinda sodir etilgan yoʻqotishlar uchun $2ni koʻring.',
-'deletedarticle'        => '"[[$1]]" yoʻqotildi',
 'dellogpage'            => 'Yoʻqotish qaydlari',
 'deletecomment'         => 'Sabab:',
 'deleteotherreason'     => 'Boshqa/qoʻshimcha sabab:',
@@ -576,7 +561,6 @@ Yaqinda sodir etilgan yoʻqotishlar uchun $2ni koʻring.',
 'movepagebtn'    => 'Sahifani koʻchir',
 'pagemovedsub'   => 'Koʻchirildi',
 'movepage-moved' => '\'\'\'"$1" nomli sahifa "$2" nomli sahifaga koʻchirildi\'\'\'',
-'1movedto2'      => "[[$1]] [[$2]]ga ko'chirildi",
 'movelogpage'    => 'Koʻchirish qaydlari',
 'movereason'     => 'Sabab:',
 'revertmove'     => 'qaytar',
@@ -652,7 +636,7 @@ Yaqinda sodir etilgan yoʻqotishlar uchun $2ni koʻring.',
 'imagemaxsize'   => "Tasvir ta'rifi sahifasidagi tasvirning kattaligi:",
 'thumbsize'      => 'Tasvirning kichiklashtirilgan versiyasining kattaligi:',
 'file-info-size' => '$1 × $2 piksel, fayl hajmi: $3, MIME tipi: $4',
-'file-nohires'   => '<small>Bundan kattaroq tasvir yoʻq.</small>',
+'file-nohires'   => 'Bundan kattaroq tasvir yoʻq.',
 'svg-long-desc'  => 'SVG fayl, asl oʻlchamlari $1 × $2 piksel, fayl hajmi: $3',
 'show-big-image' => 'Asl hajmdagi tasvir',
 
@@ -665,13 +649,11 @@ Yaqinda sodir etilgan yoʻqotishlar uchun $2ni koʻring.',
 
 # External editor support
 'edit-externally'      => 'Bu faylni tashqi dasturiy ilovalar yordamida tahrirla',
-'edit-externally-help' => "(Batafsil ma'lumotlar uchun [http://www.mediawiki.org/wiki/Manual:External_editors bu yerga] qarang)",
+'edit-externally-help' => "(Batafsil ma'lumotlar uchun [//www.mediawiki.org/wiki/Manual:External_editors bu yerga] qarang)",
 
 # 'all' in various places, this might be different for inflected languages
-'recentchangesall' => 'Barchasi',
-'imagelistall'     => 'Barchasi',
-'watchlistall2'    => 'Barcha',
-'namespacesall'    => 'Barchasi',
+'watchlistall2' => 'Barcha',
+'namespacesall' => 'Barchasi',
 
 'unit-pixel' => 'piksel',
 

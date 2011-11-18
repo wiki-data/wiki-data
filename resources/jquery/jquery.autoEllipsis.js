@@ -3,9 +3,9 @@
  */
 ( function( $ ) {
 
-// Cache ellipsed substrings for every string-width combination
+// Cache ellipsed substrings for every string-width-position combination
 var cache = { };
-// Use a seperate cache when match highlighting is enabled
+// Use a separate cache when match highlighting is enabled
 var matchTextCache = { };
 
 $.fn.autoEllipsis = function( options ) {
@@ -25,7 +25,7 @@ $.fn.autoEllipsis = function( options ) {
 				$el.text( $el.data( 'autoEllipsis.originalText' ) );
 			}
 		}
-		
+
 		// container element - used for measuring against
 		var $container = $el;
 		// trimmable text element - only the text within this element will be trimmed
@@ -43,35 +43,45 @@ $.fn.autoEllipsis = function( options ) {
 				.empty()
 				.append( $trimmableText );
 		}
-		
+
 		var text = $container.text();
 		var trimmableText = $trimmableText.text();
 		var w = $container.width();
 		var pw = $protectedText ? $protectedText.width() : 0;
 		// Try cache
-		if ( !( text in cache ) ) {
-			cache[text] = {};
-		}
-		if ( options.matchText && !( text in matchTextCache ) ) {
-			matchTextCache[text] = {};
-		}
-		if ( options.matchText && !( options.matchText in matchTextCache[text] ) ) {
-			matchTextCache[text][options.matchText] = {};
-		}
-		if ( !options.matchText && w in cache[text] ) {
-			$container.html( cache[text][w] );
-			if ( options.tooltip ) {
-				$container.attr( 'title', text );
+		if ( options.matchText ) {
+			if ( !( text in matchTextCache ) ) {
+				matchTextCache[text] = {};
 			}
-			return;
-		}
-		if( options.matchText && options.matchText in matchTextCache[text] && w in matchTextCache[text][options.matchText] ) {
-			$container.html( matchTextCache[text][options.matchText][w] );
-			if ( options.tooltip ) {
-				$container.attr( 'title', text );
+			if ( !( options.matchText in matchTextCache[text] ) ) {
+				matchTextCache[text][options.matchText] = {};
 			}
-			return;
+			if ( !( w in matchTextCache[text][options.matchText] ) ) {
+				matchTextCache[text][options.matchText][w] = {};
+			}
+			if ( options.position in matchTextCache[text][options.matchText][w] ) {
+				$container.html( matchTextCache[text][options.matchText][w][options.position] );
+				if ( options.tooltip ) {
+					$container.attr( 'title', text );
+				}
+				return;
+			}
+		} else {
+			if ( !( text in cache ) ) {
+				cache[text] = {};
+			}
+			if ( !( w in cache[text] ) ) {
+				cache[text][w] = {};
+			}
+			if ( options.position in cache[text][w] ) {
+				$container.html( cache[text][w][options.position] );
+				if ( options.tooltip ) {
+					$container.attr( 'title', text );
+				}
+				return;
+			}
 		}
+
 		if ( $trimmableText.width() + pw > w ) {
 			switch ( options.position ) {
 				case 'right':
@@ -122,11 +132,11 @@ $.fn.autoEllipsis = function( options ) {
 		}
 		if ( options.matchText ) {
 			$container.highlightText( options.matchText );
-			matchTextCache[text][options.matchText][w] = $container.html();
+			matchTextCache[text][options.matchText][w][options.position] = $container.html();
 		} else {
-			cache[text][w] = $container.html();
+			cache[text][w][options.position] = $container.html();
 		}
-		
+
 	} );
 };
 

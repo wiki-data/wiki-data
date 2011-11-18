@@ -24,11 +24,6 @@
  * @file
  */
 
-if ( !defined( 'MEDIAWIKI' ) ) {
-	// Eclipse helper - will be ignored in production
-	require_once( 'ApiFormatBase.php' );
-}
-
 /**
  * API XML output formatter
  * @ingroup API
@@ -36,7 +31,9 @@ if ( !defined( 'MEDIAWIKI' ) ) {
 class ApiFormatXml extends ApiFormatBase {
 
 	private $mRootElemName = 'api';
+	public static $namespace = 'http://www.mediawiki.org/xml/api/';
 	private $mDoubleQuote = false;
+	private $mIncludeNamespace = false;
 	private $mXslt = null;
 
 	public function __construct( $main, $format ) {
@@ -58,15 +55,26 @@ class ApiFormatXml extends ApiFormatBase {
 	public function execute() {
 		$params = $this->extractRequestParams();
 		$this->mDoubleQuote = $params['xmldoublequote'];
+		$this->mIncludeNamespace = $params['includexmlnamespace'];
 		$this->mXslt = $params['xslt'];
 
 		$this->printText( '<?xml version="1.0"?>' );
 		if ( !is_null( $this->mXslt ) ) {
 			$this->addXslt();
 		}
+		if ( $this->mIncludeNamespace ) {
+			// If the result data already contains an 'xmlns' namespace added
+			// for custom XML output types, it will override the one for the
+			// generic API results.
+			// This allows API output of other XML types like Atom, RSS, RSD.
+			$data = $this->getResultData() + array( 'xmlns' => self::$namespace );
+		} else {
+			$data = $this->getResultData();
+		}
+
 		$this->printText(
 			self::recXmlPrint( $this->mRootElemName,
-				$this->getResultData(),
+				$data,
 				$this->getIsHtml() ? - 2 : null,
 				$this->mDoubleQuote
 			)
@@ -85,6 +93,13 @@ class ApiFormatXml extends ApiFormatBase {
 	 *
 	 * If neither key is found, all keys become element names, and values become element content.
 	 * The method is recursive, so the same rules apply to any sub-arrays.
+	 *
+	 * @param $elemName
+	 * @param $elemValue
+	 * @param $indent
+	 * @param $doublequote bool
+	 *
+	 * @return string
 	 */
 	public static function recXmlPrint( $elemName, $elemValue, $indent, $doublequote = false ) {
 		$retval = '';
@@ -193,6 +208,7 @@ class ApiFormatXml extends ApiFormatBase {
 		return array(
 			'xmldoublequote' => false,
 			'xslt' => null,
+			'includexmlnamespace' => false,
 		);
 	}
 
@@ -200,6 +216,7 @@ class ApiFormatXml extends ApiFormatBase {
 		return array(
 			'xmldoublequote' => 'If specified, double quotes all attributes and content',
 			'xslt' => 'If specified, adds <xslt> as stylesheet',
+			'includexmlnamespace' => 'If specified, adds an XML namespace'
 		);
 	}
 
@@ -208,6 +225,6 @@ class ApiFormatXml extends ApiFormatBase {
 	}
 
 	public function getVersion() {
-		return __CLASS__ . ': $Id: ApiFormatXml.php 78829 2010-12-22 20:52:06Z reedy $';
+		return __CLASS__ . ': $Id: ApiFormatXml.php 103273 2011-11-16 00:17:26Z johnduhart $';
 	}
 }

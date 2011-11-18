@@ -25,10 +25,6 @@
  * @file
  */
 
-if ( !defined( 'MEDIAWIKI' ) ) {
-	require_once( 'ApiBase.php' );
-}
-
 /**
  * API interface for page purging
  * @ingroup API
@@ -43,10 +39,10 @@ class ApiPurge extends ApiBase {
 	 * Purges the cache of a page
 	 */
 	public function execute() {
-		global $wgUser;
+		$user = $this->getUser();
 		$params = $this->extractRequestParams();
-		if ( !$wgUser->isAllowed( 'purge' ) && !$this->getMain()->isInternalMode() &&
-				!$this->getMain()->getRequest()->wasPosted() ) {
+		if ( !$user->isAllowed( 'purge' ) && !$this->getMain()->isInternalMode() &&
+				!$this->getRequest()->wasPosted() ) {
 			$this->dieUsageMsg( array( 'mustbeposted', $this->getModuleName() ) );
 		}
 
@@ -68,15 +64,17 @@ class ApiPurge extends ApiBase {
 				$result[] = $r;
 				continue;
 			}
-			$article = MediaWiki::articleFromTitle( $title );
-			$article->doPurge(); // Directly purge and skip the UI part of purge().
+
+			$page = WikiPage::factory( $title );
+			$page->doPurge(); // Directly purge and skip the UI part of purge().
 			$r['purged'] = '';
-			
+
 			if( $forceLinkUpdate ) {
-				if ( !$wgUser->pingLimiter() ) {
+				if ( !$user->pingLimiter() ) {
 					global $wgParser, $wgEnableParserCache;
-					$popts = new ParserOptions();
-					$p_result = $wgParser->parse( $article->getContent(), $title, $popts );
+
+					$popts = ParserOptions::newFromContext( $this->getContext() );
+					$p_result = $wgParser->parse( $page->getRawText(), $title, $popts );
 
 					# Update the links tables
 					$u = new LinksUpdate( $title, $p_result );
@@ -86,18 +84,19 @@ class ApiPurge extends ApiBase {
 
 					if ( $wgEnableParserCache ) {
 						$pcache = ParserCache::singleton();
-						$pcache->save( $p_result, $article, $popts );
+						$pcache->save( $p_result, $page, $popts );
 					}
 				} else {
 					$this->setWarning( $this->parseMsg( array( 'actionthrottledtext' ) ) );
 					$forceLinkUpdate = false;
 				}
 			}
-			
+
 			$result[] = $r;
 		}
-		$this->getResult()->setIndexedTagName( $result, 'page' );
-		$this->getResult()->addValue( null, $this->getModuleName(), $result );
+		$apiResult = $this->getResult();
+		$apiResult->setIndexedTagName( $result, 'page' );
+		$apiResult->addValue( null, $this->getModuleName(), $result );
 	}
 
 	public function isWriteMode() {
@@ -123,7 +122,7 @@ class ApiPurge extends ApiBase {
 
 	public function getDescription() {
 		return array( 'Purge the cache for the given titles.',
-			'This module requires a POST request if the user is not logged in.'
+			'Requires a POST request if the user is not logged in.'
 		);
 	}
 
@@ -133,13 +132,17 @@ class ApiPurge extends ApiBase {
 		) );
 	}
 
-	protected function getExamples() {
+	public function getExamples() {
 		return array(
 			'api.php?action=purge&titles=Main_Page|API'
 		);
 	}
 
+	public function getHelpUrls() {
+		return 'http://www.mediawiki.org/wiki/API:Purge';
+	}
+
 	public function getVersion() {
-		return __CLASS__ . ': $Id: ApiPurge.php 79969 2011-01-10 22:36:26Z reedy $';
+		return __CLASS__ . ': $Id: ApiPurge.php 103273 2011-11-16 00:17:26Z johnduhart $';
 	}
 }

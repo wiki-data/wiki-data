@@ -7,12 +7,37 @@
  * @ingroup Language
  * @file
  *
+ * @author Slamet Serayu (on map-bms.wikipedia.org)
+ * @author StefanusRA
  * @author לערי ריינהארט
  */
 
-$fallback = 'jv';
+$fallback = 'jv, id';
 
 $messages = array(
+# Dates
+'sunday'    => 'Minggu',
+'monday'    => 'Senen',
+'tuesday'   => 'Selasa',
+'wednesday' => 'Rebo',
+'thursday'  => 'Kemis',
+'friday'    => 'Jemuwah',
+'saturday'  => 'Setu',
+'sun'       => 'Min',
+'mon'       => 'Sen',
+'tue'       => 'Sel',
+'wed'       => 'Reb',
+'thu'       => 'Kem',
+'fri'       => 'Jem',
+'sat'       => 'Set',
+'january'   => 'Januari',
+'february'  => 'Februari',
+'march'     => 'Maret',
+'april'     => 'April',
+'may_long'  => 'Mei',
+'june'      => 'Juni',
+'july'      => 'Juli',
+
 'article'    => 'Isi tulisan',
 'cancel'     => 'Ora Sida',
 'mypage'     => 'Kaca inyong',

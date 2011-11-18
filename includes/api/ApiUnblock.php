@@ -24,11 +24,6 @@
  * @file
  */
 
-if ( !defined( 'MEDIAWIKI' ) ) {
-	// Eclipse helper - will be ignored in production
-	require_once( "ApiBase.php" );
-}
-
 /**
  * API module that facilitates the unblocking of users. Requires API write mode
  * to be enabled.
@@ -45,30 +40,30 @@ class ApiUnblock extends ApiBase {
 	 * Unblocks the specified user or provides the reason the unblock failed.
 	 */
 	public function execute() {
-		global $wgUser;
+		$user = $this->getUser();
 		$params = $this->extractRequestParams();
 
 		if ( $params['gettoken'] ) {
-			$res['unblocktoken'] = $wgUser->editToken( '', $this->getMain()->getRequest() );
+			$res['unblocktoken'] = $user->getEditToken( '', $this->getMain()->getRequest() );
 			$this->getResult()->addValue( null, $this->getModuleName(), $res );
 			return;
 		}
 
 		if ( is_null( $params['id'] ) && is_null( $params['user'] ) ) {
-			$this->dieUsageMsg( array( 'unblock-notarget' ) );
+			$this->dieUsageMsg( 'unblock-notarget' );
 		}
 		if ( !is_null( $params['id'] ) && !is_null( $params['user'] ) ) {
-			$this->dieUsageMsg( array( 'unblock-idanduser' ) );
+			$this->dieUsageMsg( 'unblock-idanduser' );
 		}
 
-		if ( !$wgUser->isAllowed( 'block' ) ) {
-			$this->dieUsageMsg( array( 'cantunblock' ) );
+		if ( !$user->isAllowed( 'block' ) ) {
+			$this->dieUsageMsg( 'cantunblock' );
 		}
 		# bug 15810: blocked admins should have limited access here
-		if ( $wgUser->isBlocked() ) {
-			$status = SpecialBlock::checkUnblockSelf( $params['user'] );
+		if ( $user->isBlocked() ) {
+			$status = SpecialBlock::checkUnblockSelf( $params['user'], $user );
 			if ( $status !== true ) {
-				$this->dieUsageMsg( array( $status ) );
+				$this->dieUsageMsg( $status );
 			}
 		}
 
@@ -77,7 +72,7 @@ class ApiUnblock extends ApiBase {
 			'Reason' => is_null( $params['reason'] ) ? '' : $params['reason']
 		);
 		$block = Block::newFromTarget( $data['Target'] );
-		$retval = SpecialUnblock::processUnblock( $data );
+		$retval = SpecialUnblock::processUnblock( $data, $this->getContext() );
 		if ( $retval !== true ) {
 			$this->dieUsageMsg( $retval[0] );
 		}
@@ -141,14 +136,18 @@ class ApiUnblock extends ApiBase {
 		return '';
 	}
 
-	protected function getExamples() {
+	public function getExamples() {
 		return array(
 			'api.php?action=unblock&id=105',
 			'api.php?action=unblock&user=Bob&reason=Sorry%20Bob'
 		);
 	}
 
+	public function getHelpUrls() {
+		return 'http://www.mediawiki.org/wiki/API:Block';
+	}
+
 	public function getVersion() {
-		return __CLASS__ . ': $Id: ApiUnblock.php 85376 2011-04-04 20:51:41Z krinkle $';
+		return __CLASS__ . ': $Id: ApiUnblock.php 103273 2011-11-16 00:17:26Z johnduhart $';
 	}
 }

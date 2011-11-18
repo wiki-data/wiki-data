@@ -38,6 +38,8 @@ class PreprocessorTest extends MediaWikiTestCase {
 			array( "<noinclude>\n{{Foo}}\n</noinclude>", "<root><ignore>&lt;noinclude&gt;</ignore>\n<template lineStart=\"1\"><title>Foo</title></template>\n<ignore>&lt;/noinclude&gt;</ignore></root>" ),
 			array( "<noinclude>\n{{Foo}}\n</noinclude>\n", "<root><ignore>&lt;noinclude&gt;</ignore>\n<template lineStart=\"1\"><title>Foo</title></template>\n<ignore>&lt;/noinclude&gt;</ignore>\n</root>" ),
 			array( "<gallery>foo bar", "<root><ext><name>gallery</name><attr></attr><inner>foo bar</inner></ext></root>" ),
+			array( "<{{foo}}>", "<root>&lt;<template><title>foo</title></template>&gt;</root>" ),
+			array( "<{{{foo}}}>", "<root>&lt;<tplarg><title>foo</title></tplarg>&gt;</root>" ),
 			array( "<gallery></gallery</gallery>", "<root><ext><name>gallery</name><attr></attr><inner>&lt;/gallery</inner><close>&lt;/gallery&gt;</close></ext></root>" ),
 			array( "=== Foo === ", "<root><h level=\"3\" i=\"1\">=== Foo === </h></root>" ),
 			array( "==<!-- -->= Foo === ", "<root><h level=\"2\" i=\"1\">==<comment>&lt;!-- --&gt;</comment>= Foo === </h></root>" ),
@@ -46,7 +48,7 @@ class PreprocessorTest extends MediaWikiTestCase {
 			array( "=== Foo ===<!-- --> <!-- -->\n", "<root><h level=\"3\" i=\"1\">=== Foo ===<comment>&lt;!-- --&gt;</comment> <comment>&lt;!-- --&gt;</comment></h>\n</root>" ),
 			array( "== Foo ==\n== Bar == \n", "<root><h level=\"2\" i=\"1\">== Foo ==</h>\n<h level=\"2\" i=\"2\">== Bar == </h>\n</root>" ),
 			array( "===========", "<root><h level=\"5\" i=\"1\">===========</h></root>" ),
-			array( "Foo\n=\n==\n=\n", "<root>Foo\n=\n==\n=\n</root>" ), 
+			array( "Foo\n=\n==\n=\n", "<root>Foo\n=\n==\n=\n</root>" ),
 			array( "{{Foo}}", "<root><template><title>Foo</title></template></root>" ),
 			array( "\n{{Foo}}", "<root>\n<template lineStart=\"1\"><title>Foo</title></template></root>" ),
 			array( "{{Foo|bar}}", "<root><template><title>Foo</title><part><name index=\"1\" /><value>bar</value></part></template></root>" ),  
@@ -55,7 +57,9 @@ class PreprocessorTest extends MediaWikiTestCase {
 			array( "{{Foo|1=bar}}", "<root><template><title>Foo</title><part><name>1</name>=<value>bar</value></part></template></root>" ),
 			array( "{{Foo|=bar}}", "<root><template><title>Foo</title><part><name></name>=<value>bar</value></part></template></root>" ),
 			array( "{{Foo|bar=baz}}", "<root><template><title>Foo</title><part><name>bar</name>=<value>baz</value></part></template></root>" ), 
+			array( "{{Foo|{{bar}}=baz}}", "<root><template><title>Foo</title><part><name><template><title>bar</title></template></name>=<value>baz</value></part></template></root>" ),
 			array( "{{Foo|1=bar|baz}}", "<root><template><title>Foo</title><part><name>1</name>=<value>bar</value></part><part><name index=\"1\" /><value>baz</value></part></template></root>" ), 
+			array( "{{Foo|1=bar|2=baz}}", "<root><template><title>Foo</title><part><name>1</name>=<value>bar</value></part><part><name>2</name>=<value>baz</value></part></template></root>" ),
 			array( "{{Foo|bar|foo=baz}}", "<root><template><title>Foo</title><part><name index=\"1\" /><value>bar</value></part><part><name>foo</name>=<value>baz</value></part></template></root>" ), 
 			array( "{{{1}}}", "<root><tplarg><title>1</title></tplarg></root>" ),
 			array( "{{{1|}}}", "<root><tplarg><title>1</title><part><name index=\"1\" /><value></value></part></tplarg></root>" ),
@@ -63,7 +67,7 @@ class PreprocessorTest extends MediaWikiTestCase {
 			array( "{{{Foo|}}}", "<root><tplarg><title>Foo</title><part><name index=\"1\" /><value></value></part></tplarg></root>" ),
 			array( "{{{Foo|bar|baz}}}", "<root><tplarg><title>Foo</title><part><name index=\"1\" /><value>bar</value></part><part><name index=\"2\" /><value>baz</value></part></tplarg></root>" ),
 			array( "{<!-- -->{Foo}}", "<root>{<comment>&lt;!-- --&gt;</comment>{Foo}}</root>" ),
-			array( "{{{{Foobar}}}}", "<root>{<tplarg><title>Foobar</title></tplarg>}</root>" ),  
+			array( "{{{{Foobar}}}}", "<root>{<tplarg><title>Foobar</title></tplarg>}</root>" ),
 			array( "{{{ {{Foo}} }}}", "<root><tplarg><title> <template><title>Foo</title></template> </title></tplarg></root>" ),
 			array( "{{ {{{Foo}}} }}", "<root><template><title> <tplarg><title>Foo</title></tplarg> </title></template></root>" ),
 			array( "{{{{{Foo}}}}}", "<root><template><title><tplarg><title>Foo</title></tplarg></title></template></root>" ),
@@ -77,6 +81,7 @@ class PreprocessorTest extends MediaWikiTestCase {
 			array( "Foo <display map>Bar</display map             >Baz", "<root>Foo <ext><name>display map</name><attr></attr><inner>Bar</inner><close>&lt;/display map             &gt;</close></ext>Baz</root>" ),
 			array( "Foo <display map foo>Bar</display map             >Baz", "<root>Foo <ext><name>display map</name><attr> foo</attr><inner>Bar</inner><close>&lt;/display map             &gt;</close></ext>Baz</root>" ),
 			array( "Foo <gallery bar=\"baz\" />", "<root>Foo <ext><name>gallery</name><attr> bar=&quot;baz&quot; </attr></ext></root>" ),
+			array( "Foo <gallery bar=\"1\" baz=2 />", "<root>Foo <ext><name>gallery</name><attr> bar=&quot;1&quot; baz=2 </attr></ext></root>" ),
 			array( "</foo>Foo<//foo>", "<root><ext><name>/foo</name><attr></attr><inner>Foo</inner><close>&lt;//foo&gt;</close></ext></root>" ), # Worth blacklisting IMHO
 			array( "{{#ifexpr: ({{{1|1}}} = 2) | Foo | Bar }}", "<root><template><title>#ifexpr: (<tplarg><title>1</title><part><name index=\"1\" /><value>1</value></part></tplarg> = 2) </title><part><name index=\"1\" /><value> Foo </value></part><part><name index=\"2\" /><value> Bar </value></part></template></root>"),
 			array( "{{#if: {{{1|}}} | Foo | {{Bar}} }}", "<root><template><title>#if: <tplarg><title>1</title><part><name index=\"1\" /><value></value></part></tplarg> </title><part><name index=\"1\" /><value> Foo </value></part><part><name index=\"2\" /><value> <template><title>Bar</title></template> </value></part></template></root>"),
@@ -96,15 +101,52 @@ class PreprocessorTest extends MediaWikiTestCase {
 			array( "{{foo|}", "<root>{{foo|}</root>"),
 			array( "{{foo|} }}", "<root><template><title>foo</title><part><name index=\"1\" /><value>} </value></part></template></root>"),
 			array( "{{foo|bar=|}", "<root>{{foo|bar=|}</root>"),
+			array( "{{Foo|} Bar=", "<root>{{Foo|} Bar=</root>"),
+			array( "{{Foo|} Bar=}}", "<root><template><title>Foo</title><part><name>} Bar</name>=<value></value></part></template></root>"),
 			/* array( file_get_contents( dirname( __FILE__ ) . '/QuoteQuran.txt' ), file_get_contents( dirname( __FILE__ ) . '/QuoteQuranExpanded.txt' ) ), */
 		);
+	}
+
+	/**
+	 * Get XML preprocessor tree from the preprocessor (which may not be the
+	 * native XML-based one).
+	 *
+	 * @param string $wikiText
+	 * @return string
+	 */
+	function preprocessToXml( $wikiText ) {
+		if ( method_exists( $this->mPreprocessor, 'preprocessToXml' ) ) {
+			return $this->normalizeXml( $this->mPreprocessor->preprocessToXml( $wikiText ) );
+		}
+		
+		$dom = $this->mPreprocessor->preprocessToObj( $wikiText );
+		if ( is_callable( array( $dom, 'saveXML' ) ) ) {
+			return $dom->saveXML();
+		} else {
+			return $this->normalizeXml( $dom->__toString() );
+		}
+	}
+
+	/**
+	 * Normalize XML string to the form that a DOMDocument saves out.
+	 *
+	 * @param string $xml
+	 * @return string
+	 */
+	function normalizeXml( $xml ) {
+		return preg_replace( '!<([a-z]+)/>!', '<$1></$1>', str_replace( ' />', '/>', $xml ) );
+		
+		$dom = new DOMDocument();
+		// 1 << 19 == XML_PARSE_HUGE, needed so newer versions of libxml2 don't barf when the XML is >256 levels deep
+		$dom->loadXML( $xml, 1 << 19 );
+		return $dom->saveXML();
 	}
 
 	/**
 	 * @dataProvider provideCases
 	 */
 	function testPreprocessorOutput( $wikiText, $expectedXml ) {
-		$this->assertEquals( $expectedXml, $this->mPreprocessor->preprocessToXml( $wikiText ) );
+		$this->assertEquals( $this->normalizeXml( $expectedXml ), $this->preprocessToXml( $wikiText ) );
 	}
 
 	/**
@@ -125,18 +167,67 @@ class PreprocessorTest extends MediaWikiTestCase {
 	function testPreprocessorOutputFiles( $filename ) {
 		$folder = dirname( __FILE__ ) . "/../../../parser/preprocess";
 		$wikiText = file_get_contents( "$folder/$filename.txt" );
-		$output = $this->mPreprocessor->preprocessToXml( $wikiText );
+		$output = $this->preprocessToXml( $wikiText );
 
 		$expectedFilename = "$folder/$filename.expected";
 		if ( file_exists( $expectedFilename ) ) {
-			$expectedXml = file_get_contents( $expectedFilename );
-
+			$expectedXml = $this->normalizeXml( file_get_contents( $expectedFilename ) );
 			$this->assertEquals( $expectedXml, $output );
 		} else {
-				$tempFilename = tempnam( $folder, "$filename." );
-				file_put_contents( $tempFilename, $output );
-        $this->markTestIncomplete( "File $expectedFilename missing. Output stored as $tempFilename" );
+			$tempFilename = tempnam( $folder, "$filename." );
+			file_put_contents( $tempFilename, $output );
+			$this->markTestIncomplete( "File $expectedFilename missing. Output stored as $tempFilename" );
 		}
+	}
+
+	/**
+	 * Tests from Bug 28642 · https://bugzilla.wikimedia.org/28642
+	 */
+	function provideHeadings() {
+		return array(	/* These should become headings: */
+			array( "== h ==<!--c1-->", "<root><h level=\"2\" i=\"1\">== h ==<comment>&lt;!--c1--&gt;</comment></h></root>" ),
+			array( "== h == 	<!--c1-->", "<root><h level=\"2\" i=\"1\">== h == 	<comment>&lt;!--c1--&gt;</comment></h></root>" ),
+			array( "== h ==<!--c1--> 	", "<root><h level=\"2\" i=\"1\">== h ==<comment>&lt;!--c1--&gt;</comment> 	</h></root>" ),
+			array( "== h == 	<!--c1--> 	", "<root><h level=\"2\" i=\"1\">== h == 	<comment>&lt;!--c1--&gt;</comment> 	</h></root>" ),
+			array( "== h ==<!--c1--><!--c2-->", "<root><h level=\"2\" i=\"1\">== h ==<comment>&lt;!--c1--&gt;</comment><comment>&lt;!--c2--&gt;</comment></h></root>" ),
+			array( "== h == 	<!--c1--><!--c2-->", "<root><h level=\"2\" i=\"1\">== h == 	<comment>&lt;!--c1--&gt;</comment><comment>&lt;!--c2--&gt;</comment></h></root>" ),
+			array( "== h ==<!--c1--><!--c2--> 	", "<root><h level=\"2\" i=\"1\">== h ==<comment>&lt;!--c1--&gt;</comment><comment>&lt;!--c2--&gt;</comment> 	</h></root>" ),
+			array( "== h == 	<!--c1--><!--c2--> 	", "<root><h level=\"2\" i=\"1\">== h == 	<comment>&lt;!--c1--&gt;</comment><comment>&lt;!--c2--&gt;</comment> 	</h></root>" ),
+			array( "== h == 	<!--c1-->  <!--c2-->", "<root><h level=\"2\" i=\"1\">== h == 	<comment>&lt;!--c1--&gt;</comment>  <comment>&lt;!--c2--&gt;</comment></h></root>" ),
+			array( "== h ==<!--c1-->  <!--c2--> 	", "<root><h level=\"2\" i=\"1\">== h ==<comment>&lt;!--c1--&gt;</comment>  <comment>&lt;!--c2--&gt;</comment> 	</h></root>" ),
+			array( "== h == 	<!--c1-->  <!--c2--> 	", "<root><h level=\"2\" i=\"1\">== h == 	<comment>&lt;!--c1--&gt;</comment>  <comment>&lt;!--c2--&gt;</comment> 	</h></root>" ),
+			array( "== h ==<!--c1--><!--c2--><!--c3-->", "<root><h level=\"2\" i=\"1\">== h ==<comment>&lt;!--c1--&gt;</comment><comment>&lt;!--c2--&gt;</comment><comment>&lt;!--c3--&gt;</comment></h></root>" ),
+			array( "== h ==<!--c1-->  <!--c2--><!--c3-->", "<root><h level=\"2\" i=\"1\">== h ==<comment>&lt;!--c1--&gt;</comment>  <comment>&lt;!--c2--&gt;</comment><comment>&lt;!--c3--&gt;</comment></h></root>" ),
+			array( "== h ==<!--c1--><!--c2-->  <!--c3-->", "<root><h level=\"2\" i=\"1\">== h ==<comment>&lt;!--c1--&gt;</comment><comment>&lt;!--c2--&gt;</comment>  <comment>&lt;!--c3--&gt;</comment></h></root>" ),
+			array( "== h ==<!--c1-->  <!--c2-->  <!--c3-->", "<root><h level=\"2\" i=\"1\">== h ==<comment>&lt;!--c1--&gt;</comment>  <comment>&lt;!--c2--&gt;</comment>  <comment>&lt;!--c3--&gt;</comment></h></root>" ),
+			array( "== h ==  <!--c1--><!--c2--><!--c3-->", "<root><h level=\"2\" i=\"1\">== h ==  <comment>&lt;!--c1--&gt;</comment><comment>&lt;!--c2--&gt;</comment><comment>&lt;!--c3--&gt;</comment></h></root>" ),
+			array( "== h ==  <!--c1-->  <!--c2--><!--c3-->", "<root><h level=\"2\" i=\"1\">== h ==  <comment>&lt;!--c1--&gt;</comment>  <comment>&lt;!--c2--&gt;</comment><comment>&lt;!--c3--&gt;</comment></h></root>" ),
+			array( "== h ==  <!--c1--><!--c2-->  <!--c3-->", "<root><h level=\"2\" i=\"1\">== h ==  <comment>&lt;!--c1--&gt;</comment><comment>&lt;!--c2--&gt;</comment>  <comment>&lt;!--c3--&gt;</comment></h></root>" ),
+			array( "== h ==  <!--c1-->  <!--c2-->  <!--c3-->", "<root><h level=\"2\" i=\"1\">== h ==  <comment>&lt;!--c1--&gt;</comment>  <comment>&lt;!--c2--&gt;</comment>  <comment>&lt;!--c3--&gt;</comment></h></root>" ),
+			array( "== h ==<!--c1--><!--c2--><!--c3-->  ", "<root><h level=\"2\" i=\"1\">== h ==<comment>&lt;!--c1--&gt;</comment><comment>&lt;!--c2--&gt;</comment><comment>&lt;!--c3--&gt;</comment>  </h></root>" ),
+			array( "== h ==<!--c1-->  <!--c2--><!--c3-->  ", "<root><h level=\"2\" i=\"1\">== h ==<comment>&lt;!--c1--&gt;</comment>  <comment>&lt;!--c2--&gt;</comment><comment>&lt;!--c3--&gt;</comment>  </h></root>" ),
+			array( "== h ==<!--c1--><!--c2-->  <!--c3-->  ", "<root><h level=\"2\" i=\"1\">== h ==<comment>&lt;!--c1--&gt;</comment><comment>&lt;!--c2--&gt;</comment>  <comment>&lt;!--c3--&gt;</comment>  </h></root>" ),
+			array( "== h ==<!--c1-->  <!--c2-->  <!--c3-->  ", "<root><h level=\"2\" i=\"1\">== h ==<comment>&lt;!--c1--&gt;</comment>  <comment>&lt;!--c2--&gt;</comment>  <comment>&lt;!--c3--&gt;</comment>  </h></root>" ),
+			array( "== h ==  <!--c1--><!--c2--><!--c3-->  ", "<root><h level=\"2\" i=\"1\">== h ==  <comment>&lt;!--c1--&gt;</comment><comment>&lt;!--c2--&gt;</comment><comment>&lt;!--c3--&gt;</comment>  </h></root>" ),
+			array( "== h ==  <!--c1-->  <!--c2--><!--c3-->  ", "<root><h level=\"2\" i=\"1\">== h ==  <comment>&lt;!--c1--&gt;</comment>  <comment>&lt;!--c2--&gt;</comment><comment>&lt;!--c3--&gt;</comment>  </h></root>" ),
+			array( "== h ==  <!--c1--><!--c2-->  <!--c3-->  ", "<root><h level=\"2\" i=\"1\">== h ==  <comment>&lt;!--c1--&gt;</comment><comment>&lt;!--c2--&gt;</comment>  <comment>&lt;!--c3--&gt;</comment>  </h></root>" ),
+			array( "== h ==  <!--c1-->  <!--c2-->  <!--c3-->  ", "<root><h level=\"2\" i=\"1\">== h ==  <comment>&lt;!--c1--&gt;</comment>  <comment>&lt;!--c2--&gt;</comment>  <comment>&lt;!--c3--&gt;</comment>  </h></root>" ),
+
+			/* These are not working: */
+			array( "== h ==<!--c1--> 	<!--c2-->", "<root>== h ==<comment>&lt;!--c1--&gt;</comment> 	<comment>&lt;!--c2--&gt;</comment></root>" ),
+			array( "== h == 	<!--c1--> 	<!--c2-->", "<root>== h == 	<comment>&lt;!--c1--&gt;</comment> 	<comment>&lt;!--c2--&gt;</comment></root>" ),
+			array( "== h ==<!--c1--> 	<!--c2--> 	", "<root>== h ==<comment>&lt;!--c1--&gt;</comment> 	<comment>&lt;!--c2--&gt;</comment> 	</root>" ),
+			array( "== h == x <!--c1--><!--c2--><!--c3-->  ", "<root>== h == x <comment>&lt;!--c1--&gt;</comment><comment>&lt;!--c2--&gt;</comment><comment>&lt;!--c3--&gt;</comment>  </root>" ),
+			array( "== h ==<!--c1--> x <!--c2--><!--c3-->  ", "<root>== h ==<comment>&lt;!--c1--&gt;</comment> x <comment>&lt;!--c2--&gt;</comment><comment>&lt;!--c3--&gt;</comment>  </root>" ),
+			array( "== h ==<!--c1--><!--c2--><!--c3--> x ", "<root>== h ==<comment>&lt;!--c1--&gt;</comment><comment>&lt;!--c2--&gt;</comment><comment>&lt;!--c3--&gt;</comment> x </root>" ),
+		);
+	}
+
+	/**
+	 * @dataProvider provideHeadings
+	 */
+	function testHeadings( $wikiText, $expectedXml ) {
+		$this->assertEquals( $this->normalizeXml( $expectedXml ), $this->preprocessToXml( $wikiText ) );
 	}
 }
 

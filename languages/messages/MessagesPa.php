@@ -48,6 +48,8 @@ $digitTransformTable = array(
 );
 $linkTrail = '/^([ਁਂਃਅਆਇਈਉਊਏਐਓਔਕਖਗਘਙਚਛਜਝਞਟਠਡਢਣਤਥਦਧਨਪਫਬਭਮਯਰਲਲ਼ਵਸ਼ਸਹ਼ਾਿੀੁੂੇੈੋੌ੍ਖ਼ਗ਼ਜ਼ੜਫ਼ੰੱੲੳa-z]+)(.*)$/sDu';
 
+$digitGroupingPattern = "##,##,###";
+
 $messages = array(
 # User preference toggles
 'tog-underline'            => 'ਅੰਡਰ-ਲਾਈਨ ਲਿੰਕ:',
@@ -130,8 +132,6 @@ $messages = array(
 'category-media-header' => 'ਕੈਟਾਗਰੀ "$1" ਵਿੱਚ ਮੀਡਿਆ',
 'category-empty'        => "''ਇਹ ਕੈਟਾਗਰੀ ਵਿੱਚ ਇਸ ਵੇਲੇ ਕੋਈ ਲੇਖ (ਆਰਟੀਕਲ) ਜਾਂ ਮੀਡਿਆ ਨਹੀਂ ਹੈ।''",
 
-'mainpagetext' => "'''ਮੀਡਿਆਵਿਕਿ ਠੀਕ ਤਰ੍ਹਾਂ ਇੰਸਟਾਲ ਹੋ ਗਿਆ ਹੈ।'''",
-
 'about'         => 'ਇਸ ਬਾਰੇ',
 'article'       => 'ਸਮੱਗਰੀ ਪੇਜ',
 'newwindow'     => '(ਨਵੀਂ ਵਿੰਡੋ ਵਿੱਚ ਖੋਲ੍ਹੋ)',
@@ -179,7 +179,6 @@ $messages = array(
 'history'           => 'ਸਫ਼ਾ ਅਤੀਤ',
 'history_short'     => 'ਅਤੀਤ',
 'updatedmarker'     => 'ਮੇਰੇ ਆਖਰੀ ਖੋਲ੍ਹਣ ਬਾਦ ਅੱਪਡੇਟ',
-'info_short'        => 'ਜਾਣਕਾਰੀ',
 'printableversion'  => 'ਪਰਿੰਟਯੋਗ ਵਰਜਨ',
 'permalink'         => 'ਪੱਕਾ ਲਿੰਕ',
 'print'             => 'ਪਰਿੰਟ ਕਰੋ',
@@ -295,7 +294,6 @@ A list of valid special pages can be found at [[Special:SpecialPages]].',
 'internalerror_info' => 'ਅੰਦਰੂਨੀ ਗਲਤੀ: $1',
 'badtitle'           => 'ਗਲਤ ਟਾਇਟਲ',
 'viewsource'         => 'ਸਰੋਤ ਵੇਖੋ',
-'viewsourcefor'      => '$1 ਲਈ',
 
 # Login and logout pages
 'logouttext'                 => "'''ਹੁਣ ਤੁਸੀਂ ਲਾਗਆਉਟ ਹੋ ਗਏ ਹੋ।'''
@@ -336,7 +334,7 @@ Note that some pages may continue to be displayed as if you were still logged in
 'loginsuccesstitle'          => 'ਲਾਗਇਨ ਸਫ਼ਲ ਰਿਹਾ',
 'loginsuccess'               => "'''ਤੁਸੀਂ {{SITENAME}} ਉੱਤੇ \"\$1\" ਵਾਂਗ ਲਾਗਇਨ ਕਰ ਚੁੱਕੇ ਹੋ।'''",
 'nosuchuser'                 => '"$1" ਨਾਂ ਨਾਲ ਕੋਈ ਯੂਜ਼ਰ ਨਹੀਂ ਹੈ। ਆਪਣੇ ਸ਼ਬਦ ਧਿਆਨ ਨਾਲ ਚੈੱਕ ਕਰੋ ਜਾਂ ਨਵਾਂ ਅਕਾਊਂਟ ਬਣਾਓ।',
-'nosuchusershort'            => '"<nowiki>$1</nowiki>" ਨਾਂ ਨਾਲ ਕੋਈ ਵੀ ਯੂਜ਼ਰ ਨਹੀਂ ਹੈ। ਆਪਣੇ ਸ਼ਬਦ ਧਿਆਨ ਨਾਲ ਚੈੱਕ ਕਰੋ।',
+'nosuchusershort'            => '"$1" ਨਾਂ ਨਾਲ ਕੋਈ ਵੀ ਯੂਜ਼ਰ ਨਹੀਂ ਹੈ। ਆਪਣੇ ਸ਼ਬਦ ਧਿਆਨ ਨਾਲ ਚੈੱਕ ਕਰੋ।',
 'nouserspecified'            => 'ਤੁਹਾਨੂੰ ਇੱਕ ਯੂਜ਼ਰ-ਨਾਂ ਦੇਣਾ ਪਵੇਗਾ।',
 'wrongpassword'              => 'ਗਲਤ ਪਾਸਵਰਡ ਦਿੱਤਾ ਹੈ। ਮੁੜ-ਟਰਾਈ ਕਰੋ ਜੀ।',
 'wrongpasswordempty'         => 'ਖਾਲੀ ਪਾਸਵਰਡ ਦਿੱਤਾ ਹੈ। ਮੁੜ-ਟਰਾਈ ਕਰੋ ਜੀ।',
@@ -370,15 +368,7 @@ $1 ਘੰਟੇ ਵਿੱਚ। ਨੁਕਸਾਨ ਤੋਂ ਬਚਣ ਲਈ, $
 'createaccount-title'        => '{{SITENAME}} ਲਈ ਅਕਾਊਂਟ ਬਣਾਉਣਾ',
 'loginlanguagelabel'         => 'ਭਾਸ਼ਾ: $1',
 
-# JavaScript password checks
-'password-strength-bad'        => 'ਖ਼ਰਾਬ',
-'password-strength-mediocre'   => 'ਠੀਕ-ਠਾਕ',
-'password-strength-acceptable' => 'ਮੰਨਣਯੋਗ',
-'password-strength-good'       => 'ਚੰਗਾ',
-'password-retype'              => 'ਇੱਥੇ ਪਾਸਵਰਡ ਮੁੜ-ਲਿਖੋ',
-'password-retype-mismatch'     => 'ਪਾਸਵਰਡ ਮਿਲਦਾ ਨਹੀਂ ਹੈ',
-
-# Password reset dialog
+# Change password dialog
 'resetpass'                 => 'ਪਾਸਵਰਡ ਬਦਲੋ',
 'resetpass_announce'        => 'ਤੁਸੀਂ ਇੱਕ ਆਰਜ਼ੀ ਈ-ਮੇਲ ਕੀਤੇ ਕੋਡ ਨਾਲ ਲਾਗਇਨ ਕੀਤਾ ਹੈ। ਲਾਗਇਨ ਪੂਰਾ ਕਰਨ ਲਈ, ਤੁਹਾਨੂੰ ਇੱਥੇ ਨਵਾਂ ਪਾਸਵਰਡ ਦੇਣਾ ਪਵੇਗਾ:',
 'resetpass_header'          => 'ਅਕਾਊਂਟ ਪਾਸਵਰਡ ਬਦਲੋ',
@@ -421,7 +411,6 @@ $1 ਘੰਟੇ ਵਿੱਚ। ਨੁਕਸਾਨ ਤੋਂ ਬਚਣ ਲਈ, $
 'summary-preview'        => 'ਸੰਖੇਪ ਝਲਕ:',
 'subject-preview'        => 'ਵਿਸ਼ਾ/ਹੈੱਡਲਾਈਨ ਝਲਕ:',
 'blockedtitle'           => 'ਯੂਜ਼ਰ ਬਲਾਕ ਕੀਤਾ ਗਿਆ',
-'whitelistedittitle'     => 'ਸੋਧਣ ਲਈ ਲਾਗਇਨ ਕਰਨਾ ਪਵੇਗਾ',
 'whitelistedittext'      => 'ਪੇਜ ਸੋਧਣ ਲਈ ਤੁਹਾਨੂੰ $1 ਕਰਨਾ ਪਵੇਗਾ।',
 'nosuchsectiontitle'     => 'ਇੰਝ ਦਾ ਕੋਈ ਸ਼ੈਕਸ਼ਨ ਨਹੀਂ ਹੈ।',
 'loginreqtitle'          => 'ਲਾਗਇਨ ਚਾਹੀਦਾ ਹੈ',
@@ -487,8 +476,6 @@ $1 ਘੰਟੇ ਵਿੱਚ। ਨੁਕਸਾਨ ਤੋਂ ਬਚਣ ਲਈ, $
 'revdel-restore'          => 'ਦਿੱਖ ਬਦਲੋ',
 'pagehist'                => 'ਪੇਜ ਦਾ ਅਤੀਤ',
 'deletedhist'             => 'ਹਟਾਇਆ ਗਿਆ ਅਤੀਤ',
-'revdelete-content'       => 'ਸਮਗੱਰੀ',
-'revdelete-summary'       => 'ਸੰਖੇਪ ਸੋਧ',
 
 # Merge log
 'revertmerge' => 'ਬਿਨ-ਮਿਲਾਨ',
@@ -781,9 +768,6 @@ to upload files.',
 'listusers-submit'   => 'ਵੇਖੋ',
 'listusers-noresult' => 'ਕੋਈ ਯੂਜ਼ਰ ਨਹੀਂ ਲੱਭਿਆ।',
 
-# Special:Log/newusers
-'newuserlog-create-entry' => 'ਨਵਾਂ ਯੂਜ਼ਰ ਅਕਾਊਂਟ',
-
 # Special:ListGroupRights
 'listgrouprights-group'   => 'ਗਰੁੱਪ',
 'listgrouprights-members' => '(ਮੈਂਬਰਾਂ ਦੀ ਲਿਸਟ)',
@@ -807,7 +791,6 @@ to upload files.',
 'watchlist'     => 'ਮੇਰੀ ਵਾਚ-ਲਿਸਟ',
 'mywatchlist'   => 'ਮੇਰੀ ਵਾਚ-ਲਿਸਟ',
 'watchnologin'  => 'ਲਾਗਇਨ ਨਹੀਂ',
-'addedwatch'    => 'ਵਾਚ-ਲਿਸਟ ਵਿੱਚ ਸ਼ਾਮਲ',
 'watch'         => 'ਵਾਚ',
 'watchthispage' => 'ਇਹ ਪੇਜ ਵਾਚ ਕਰੋ',
 'unwatch'       => 'ਅਣ-ਵਾਚ',
@@ -831,7 +814,6 @@ to upload files.',
 'delete-confirm'        => '"$1" ਹਟਾਓ',
 'delete-legend'         => 'ਹਟਾਓ',
 'actioncomplete'        => 'ਐਕਸ਼ਨ ਪੂਰਾ ਹੋਇਆ',
-'deletedarticle'        => '"[[$1]]" ਹਟਾਇਆ',
 'dellogpage'            => 'ਹਟਾਉਣ ਲਾਗ',
 'deletecomment'         => 'ਕਾਰਨ:',
 'deleteotherreason'     => 'ਹੋਰ/ਵਾਧੂ ਕਾਰਨ:',
@@ -1030,18 +1012,12 @@ to upload files.',
 # Spam protection
 'spamprotectiontitle' => 'Spam ਸੁਰੱਖਿਆ ਫਿਲਟਰ',
 
-# Info page
-'infosubtitle' => 'ਸਫ਼ੇ ਦੀ ਜਾਣਕਾਰੀ',
-
 # Skin names
 'skinname-standard' => 'ਕਲਾਸਿਕ',
 'skinname-monobook' => 'ਮੋਨੋਬੁੱਕ',
 'skinname-myskin'   => 'ਮੇਰੀਸਕਿਨ',
 'skinname-chick'    => 'ਚੀਚਕ',
 'skinname-simple'   => 'ਸੈਂਪਲ',
-
-# Patrol log
-'patrol-log-auto' => '(ਆਟੋਮੈਟਿਕ)',
 
 # Browsing diffs
 'previousdiff' => '← ਪੁਰਾਣੀ ਸੋਧ',
@@ -1065,7 +1041,6 @@ to upload files.',
 'exif-imagewidth'       => 'ਚੌੜਾਈ',
 'exif-imagelength'      => 'ਉਚਾਈ',
 'exif-samplesperpixel'  => 'ਭਾਗਾਂ ਦੀ ਗਿਣਤੀ',
-'exif-transferfunction' => 'ਟਰਾਂਸਫਰ ਫੰਕਸ਼ਨ',
 'exif-imagedescription' => 'ਚਿੱਤਰ ਟਾਇਟਲ',
 'exif-make'             => 'ਕੈਮਰਾ ਨਿਰਮਾਤਾ',
 'exif-model'            => 'ਕੈਮਰਾ ਮਾਡਲ',
@@ -1103,11 +1078,9 @@ to upload files.',
 'exif-gpsspeed-m' => 'ਮੀਲ ਪ੍ਰਤੀ ਘੰਟਾ',
 
 # 'all' in various places, this might be different for inflected languages
-'recentchangesall' => 'ਸਭ',
-'imagelistall'     => 'ਸਭ',
-'watchlistall2'    => 'ਸਭ',
-'namespacesall'    => 'ਸਭ',
-'monthsall'        => 'ਸਭ',
+'watchlistall2' => 'ਸਭ',
+'namespacesall' => 'ਸਭ',
+'monthsall'     => 'ਸਭ',
 
 # E-mail address confirmation
 'confirmemail'          => 'ਈਮੇਲ ਐਡਰੈੱਸ ਪੁਸ਼ਟੀ',

@@ -16,8 +16,6 @@
  * http://www.gnu.org/copyleft/gpl.html
  *
  * @file
- * @author Trevor Parscal
- * @author Roan Kattouw
  */
 
 /**
@@ -28,27 +26,33 @@ class ResourceLoaderUserGroupsModule extends ResourceLoaderWikiModule {
 	/* Protected Methods */
 	protected $origin = self::ORIGIN_USER_SITEWIDE;
 
+	/**
+	 * @param $context ResourceLoaderContext
+	 * @return array
+	 */
 	protected function getPages( ResourceLoaderContext $context ) {
 		if ( $context->getUser() ) {
 			$user = User::newFromName( $context->getUser() );
-			if( $user instanceof User ){
+			if ( $user instanceof User ) {
 				$pages = array();
-				foreach( $user->getEffectiveGroups() as $group ){
-					if( in_array( $group, array( '*', 'user' ) ) ){
+				foreach( $user->getEffectiveGroups() as $group ) {
+					if ( in_array( $group, array( '*', 'user' ) ) ) {
 						continue;
 					}
-					$g = ucfirst( $group );
-					$pages["MediaWiki:$g.js"] = array( 'type' => 'script' );
-					$pages["MediaWiki:$g.css"] = array( 'type' => 'style' );
+					$pages["MediaWiki:Group-$group.js"] = array( 'type' => 'script' );
+					$pages["MediaWiki:Group-$group.css"] = array( 'type' => 'style' );
 				}
 				return $pages;
 			}
 		}
 		return array();
 	}
-	
+
 	/* Methods */
-	
+
+	/**
+	 * @return string
+	 */
 	public function getGroup() {
 		return 'user';
 	}

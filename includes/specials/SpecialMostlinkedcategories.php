@@ -54,6 +54,7 @@ class MostlinkedCategoriesPage extends QueryPage {
 	 * Fetch user page links and cache their existence
 	 *
 	 * @param $db DatabaseBase
+	 * @param $res DatabaseResult
 	 */
 	function preprocessResults( $db, $res ) {
 		$batch = new LinkBatch;
@@ -75,15 +76,14 @@ class MostlinkedCategoriesPage extends QueryPage {
 	 * @return string
 	 */
 	function formatResult( $skin, $result ) {
-		global $wgLang, $wgContLang;
+		global $wgContLang;
 
 		$nt = Title::makeTitle( NS_CATEGORY, $result->title );
 		$text = $wgContLang->convert( $nt->getText() );
 
-		$plink = $skin->link( $nt, htmlspecialchars( $text ) );
+		$plink = Linker::link( $nt, htmlspecialchars( $text ) );
 
-		$nlinks = wfMsgExt( 'nmembers', array( 'parsemag', 'escape' ),
-			$wgLang->formatNum( $result->value ) );
-		return wfSpecialList( $plink, $nlinks );
+		$nlinks = $this->msg( 'nmembers' )->numParams( $result->value )->escaped();
+		return $this->getLang()->specialList( $plink, $nlinks );
 	}
 }

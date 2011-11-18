@@ -1,5 +1,5 @@
 <?php
-/** Megleno-Romanian (Latin) (Vlăheşte (Latin))
+/** Megleno-Romanian (Latin script) (Vlăheşte)
  *
  * See MessagesQqq.php for message documentation incl. usage of parameters
  * To improve a translation please visit http://translatewiki.net
@@ -134,8 +134,7 @@ $messages = array(
 'nstab-category' => 'kategoria',
 
 # General errors
-'viewsource'    => 'Baganaere',
-'viewsourcefor' => 'pentru $1',
+'viewsource' => 'Baganaere',
 
 # Login and logout pages
 'yourname'                => "Nom d'utilizatoru:",
@@ -262,9 +261,6 @@ $3',
 'watching'   => 'O klăaere...',
 'unwatching' => 'O deklăaere...',
 
-# Delete
-'deletedarticle' => 'delǎraj "[[$1]]"',
-
 # Rollback
 'rollbacklink' => 'revenire',
 
@@ -333,7 +329,7 @@ $3',
 'tooltip-diff'              => 'Rată ce modifikări ai făcut tekstului.',
 
 # Media information
-'file-nohires'   => "<small>Ce-n-est n'resolucion mai mari.</small>",
+'file-nohires'   => "Ce-n-est n'resolucion mai mari.",
 'show-big-image' => 'Mareşte resolucion',
 
 # Bad image list

@@ -1,12 +1,14 @@
 <?php
 
-class TestSample extends MediaWikiTestCase {
+class TestSample extends MediaWikiLangTestCase {
 
 	/**
 	 * Anything that needs to happen before your tests should go here.
 	 */
 	function setUp() {
 		global $wgContLang;
+		parent::setUp();
+
 		/* For example, we need to set $wgContLang for creating a new Title */
 		$wgContLang = Language::factory( 'en' );
 	}
@@ -15,6 +17,7 @@ class TestSample extends MediaWikiTestCase {
 	 * Anything cleanup you need to do should go here.
 	 */
 	function tearDown() {
+		parent::tearDown();
 	}
 
 	/**
@@ -88,7 +91,7 @@ class TestSample extends MediaWikiTestCase {
 	 * See http://www.phpunit.de/manual/3.4/en/appendixes.annotations.html#appendixes.annotations.expectedException
 	 */
 	function testTitleObjectFromObject() {
-		$title = Title::newFromText( new Title( "test" ) );
+		$title = Title::newFromText( Title::newFromText( "test" ) );
 		$this->assertEquals( "Test", $title->isLocal() );
 	}
 }

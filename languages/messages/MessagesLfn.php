@@ -136,15 +136,6 @@ $messages = array(
 'hidden-category-category' => 'Categorias ascondeda',
 'listingcontinuesabbrev'   => 'cont.',
 
-'mainpagetext'      => "'''MediaWiki es aora instalada.'''",
-'mainpagedocfooter' => 'Atenda la [http://meta.wikimedia.org/wiki/Help:Contents Gida per Usores] per informa supra la usa de la programa de vici.
-
-== Comensa ==
-
-* [http://www.mediawiki.org/wiki/Manual:Configuration_settings Lista de ajustas de la desinia]
-* [http://www.mediawiki.org/wiki/Manual:FAQ Demandas comun de MediaWiki]
-* [https://lists.wikimedia.org/mailman/listinfo/mediawiki-announce Lista per receta anunsias de novas supra MediaWiki]',
-
 'about'         => 'Supra',
 'article'       => 'Paje de contenis',
 'newwindow'     => '(va abri en fenetra nova)',
@@ -176,7 +167,6 @@ $messages = array(
 'history'           => 'Istoria de paje',
 'history_short'     => 'Istoria',
 'updatedmarker'     => 'renovida de me visita presedente',
-'info_short'        => 'Informa',
 'printableversion'  => 'Varia primable',
 'permalink'         => 'Lia permanente',
 'print'             => 'Primi',
@@ -281,7 +271,6 @@ $messages = array(
 'badtitle'            => 'Titulo es mal',
 'badtitletext'        => 'La titulo de la paje tu ia desira ia es nonlegal, es vacua, o es un titulo intervici o interlingual no liada coreta. Es posable ce es un o plu simboles ce no pote es usada en titulos.',
 'viewsource'          => 'Vide la orijin',
-'viewsourcefor'       => 'per $1',
 'viewsourcetext'      => 'Tu pote vide e copia la orijin de esta paje:',
 
 # Login and logout pages
@@ -306,7 +295,7 @@ $messages = array(
 'loginsuccess'            => "'''Tu ia entrada aora a {{SITENAME}} como \"\$1\".'''",
 'nosuchuser'              => 'Es no usor con la nom "$1".
 Esamina la spele, o [[Special:UserLogin/signup|crea un conta nova]].',
-'nosuchusershort'         => 'Es no usor con esta nom "<nowiki>$1</nowiki>". Esamina la spele.',
+'nosuchusershort'         => 'Es no usor con esta nom "$1". Esamina la spele.',
 'nouserspecified'         => 'Tu debe indica un nom de usor.',
 'wrongpassword'           => 'La sinia de entra no es coreta. Per favore, atenta ancora.',
 'wrongpasswordempty'      => 'La sinia de entra es vacua. Per favore, atenta ancora.',
@@ -328,7 +317,7 @@ Ante alga otra eposta es enviada a la conta, tu va nesesa segue la instruis en l
 'emailconfirmlink'        => 'Aproba tu adirije de eposta',
 'loginlanguagelabel'      => 'Lingua: $1',
 
-# Password reset dialog
+# Change password dialog
 'oldpassword'               => 'Sinia secreta vea:',
 'newpassword'               => 'Sinia secreta nova:',
 'retypenew'                 => 'Re-entra tu sinia secreta nova:',
@@ -686,12 +675,10 @@ Also see [[Special:WantedCategories|wanted categories]].',
 'watchlist'         => 'Pajes oservada',
 'mywatchlist'       => 'Me lista de pajes oservada',
 'nowatchlist'       => 'Tu ave no cosas en tu lista oservada',
-'addedwatch'        => 'Juntada a la lista de pajes oservada',
 'addedwatchtext'    => "La paje \"[[:\$1]]\" ia es juntada a tu [[Special:Watchlist|lista de pajes oservada]].
 Cambias future a esta paje e se paje de discutes va es listada ala, e la paje va apera en leteras '''forte''' en la [[Special:RecentChanges|lista de cambias resente]] per es plu fasil oservada.
 
 Si tu vole sutrae la paje de tu lista de pajes oservada en la futur, clica a \"no oserva\" en la bara a la lado.",
-'removedwatch'      => 'Sutraeda de la lista de pajes oservada',
 'removedwatchtext'  => 'La paje "[[:$1]]" ia es sutraeda de [[Special:Watchlist|tu lista de pajes oservada]].',
 'watch'             => 'Oserva',
 'watchthispage'     => 'Oserva esta paje',
@@ -713,9 +700,8 @@ Si tu vole sutrae la paje de tu lista de pajes oservada en la futur, clica a \"n
 'historywarning'        => 'Avisa! La paje ce tu intende sutrae, el ave un istoria:',
 'confirmdeletetext'     => 'Tu va pronto sutrae un paje con tota se istoria. Per favore, afirma ce tu intende esta, ce tu comprende la resultas, e ce tu fa esta en acorda con [[{{MediaWiki:Policy-url}}|la prometes]].',
 'actioncomplete'        => 'Ata completada',
-'deletedtext'           => '"<nowiki>$1</nowiki>" ia es sutraeda.
+'deletedtext'           => '"$1" ia es sutraeda.
 Vide $2 per un catalogo de sutraes resente.',
-'deletedarticle'        => 'sutraeda "[[$1]]"',
 'dellogpage'            => 'catalogo de sutraes',
 'deletecomment'         => 'Razona:',
 'deleteotherreason'     => 'Otra/plu razona:',
@@ -735,7 +721,7 @@ Vide $2 per un catalogo de sutraes resente.',
 'protectexpiry'               => 'Fini:',
 'protect_expiry_invalid'      => 'Ora de fini no es legal.',
 'protect_expiry_old'          => 'Ora de fini es en la pasada.',
-'protect-text'                => "Tu pote vide e cambia la nivel de proteje asi per la paje '''<nowiki>$1</nowiki>'''.",
+'protect-text'                => "Tu pote vide e cambia la nivel de proteje asi per la paje '''$1'''.",
 'protect-locked-access'       => "Tu conta no ave permite per cambia niveles de proteje.
 Asi es la ajustas presente per la paje '''$1''':",
 'protect-cascadeon'           => 'Esta paje es aora protejeda per ce el es incluida en esta {{PLURAL:$1|paje|pajes}} ce ave proteje cascadente ativa. Tu pote cambia la nivel de proteje per esta paje, ma esta no va influense la proteje cascadente.',
@@ -838,8 +824,6 @@ En esta casos, tu va nesesa move o fusa la paje per mano, si desirada.",
 'talkexists'       => "'''La paje se mesma ia es moveda, ma la paje de discutes no pote es moveda, per ce un esiste ja a la titulo nova. Per favore, fusa los per mano'''",
 'movedto'          => 'moveda a',
 'movetalk'         => 'Move la paje de discutes ance',
-'1movedto2'        => '[[$1]] es moveda a [[$2]]',
-'1movedto2_redir'  => '[[$1]] es moveda a [[$2]] tra redirije',
 'movelogpage'      => 'Move arcive',
 'movelogpagetext'  => 'A su es un lista de pajes moveda',
 'movereason'       => 'Razona:',
@@ -915,7 +899,7 @@ En esta casos, tu va nesesa move o fusa la paje per mano, si desirada.",
 # Media information
 'widthheightpage' => '$1×$2, $3 {{PLURAL:$3|paje|pajes}}',
 'file-info-size'  => '$1 × $2 pixel, grandia de fix: $3, MIME tipo: $4',
-'file-nohires'    => '<small>No plu densia posable.</small>',
+'file-nohires'    => 'No plu densia posable.',
 'svg-long-desc'   => 'SVG fix, per nom $1 × $2 pixeles, grandia de fix: $3',
 'show-big-image'  => 'Densia masima',
 
@@ -943,14 +927,20 @@ Si la fix ia es cambiada de se stato orijinal, alga detalias pote no es clara en
 * exposuretime
 * fnumber
 * isospeedratings
-* focallength',
+* focallength
+* artist
+* copyright
+* imagedescription
+* gpslatitude
+* gpslongitude
+* gpsaltitude',
 
 # EXIF tags
 'exif-exposuretime-format' => '$1 sec. ($2)',
 
 # External editor support
 'edit-externally'      => 'Edita esta fix con un programa esterna',
-'edit-externally-help' => '(Vide la [http://www.mediawiki.org/wiki/Manual:External_editors instruis per comensa] per plu instruis)',
+'edit-externally-help' => '(Vide la [//www.mediawiki.org/wiki/Manual:External_editors instruis per comensa] per plu instruis)',
 
 # 'all' in various places, this might be different for inflected languages
 'watchlistall2' => 'tota',

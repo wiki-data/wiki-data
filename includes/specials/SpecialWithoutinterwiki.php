@@ -35,8 +35,8 @@ class WithoutInterwikiPage extends PageQueryPage {
 	}
 
 	function execute( $par ) {
-		global $wgRequest;
-		$this->prefix = Title::capitalize( $wgRequest->getVal( 'prefix', $par ), NS_MAIN );
+		$this->prefix = Title::capitalize(
+			$this->getRequest()->getVal( 'prefix', $par ), NS_MAIN );
 		parent::execute( $par );
 	}
 
@@ -49,9 +49,9 @@ class WithoutInterwikiPage extends PageQueryPage {
 		}
 
 		$prefix = $this->prefix;
-		$t = SpecialPage::getTitleFor( $this->getName() );
+		$t = $this->getTitle();
 
-		return 	Xml::openElement( 'form', array( 'method' => 'get', 'action' => $wgScript ) ) .
+		return Xml::openElement( 'form', array( 'method' => 'get', 'action' => $wgScript ) ) .
 			Xml::openElement( 'fieldset' ) .
 			Xml::element( 'legend', null, wfMsg( 'withoutinterwiki-legend' ) ) .
 			Html::hidden( 'title', $t->getPrefixedText() ) .
@@ -84,13 +84,13 @@ class WithoutInterwikiPage extends PageQueryPage {
 					'page_title AS title',
 					'page_title AS value' ),
 			'conds' => array ( 'll_title IS NULL',
-					'page_namespace' => NS_MAIN,
+					'page_namespace' => MWNamespace::getContentNamespaces(),
 					'page_is_redirect' => 0 ),
 			'join_conds' => array ( 'langlinks' => array (
 					'LEFT JOIN', 'll_from = page_id' ) )
 		);
 		if ( $this->prefix ) {
-			$dbr = wfGetDb( DB_SLAVE );
+			$dbr = wfGetDB( DB_SLAVE );
 			$query['conds'][] = 'page_title ' . $dbr->buildLike( $this->prefix, $dbr->anyString() );
 		}
 		return $query;

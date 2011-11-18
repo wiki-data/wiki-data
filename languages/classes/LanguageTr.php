@@ -12,32 +12,28 @@
  */
 class LanguageTr extends Language {
 
+	/**
+	 * @param $string string
+	 * @return string
+	 */
 	function ucfirst ( $string ) {
-		if ( !empty( $string ) && $string[0] == 'i' ) {
+		if ( strlen( $string ) && $string[0] == 'i' ) {
 			return 'İ' . substr( $string, 1 );
 		} else {
 			return parent::ucfirst( $string );
 		}
 	}
 
+	/**
+	 * @param $string string
+	 * @return mixed|string
+	 */
 	function lcfirst ( $string ) {
-		if ( !empty( $string ) && $string[0] == 'I' ) {
+		if ( strlen( $string ) && $string[0] == 'I' ) {
 			return 'ı' . substr( $string, 1 );
 		} else {
 			return parent::lcfirst( $string );
 		}
-	}
-
-	/** @see bug 28040 */
-	function uc( $string, $first = false ) {
-		$string = preg_replace( '/i/', 'İ', $string );
-		return parent::uc( $string, $first );
-	}
-
-	/** @see bug 28040 */
-	function lc( $string, $first = false ) {
-		$string = preg_replace( '/I/', 'ı', $string );
-		return parent::lc( $string, $first );
 	}
 
 }

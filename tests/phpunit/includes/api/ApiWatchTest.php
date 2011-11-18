@@ -1,12 +1,10 @@
 <?php
 
-require_once dirname( __FILE__ ) . '/ApiSetup.php';
-
 /**
  * @group Database
- * @group Destructive
+ * @todo This test suite is severly broken and need a full review 
  */
-class ApiWatchTest extends ApiTestSetup {
+class ApiWatchTest extends ApiTestCase {
 
 	function setUp() {
 		parent::setUp();
@@ -14,14 +12,16 @@ class ApiWatchTest extends ApiTestSetup {
 	}
 	
 	function getTokens() {
-		return $this->getTokenList( $this->sysopUser );
+		return $this->getTokenList( self::$users['sysop'] );
 	}
 
+	/**
+	 * @group Broken
+	 */
 	function testWatchEdit() {
 		
 		$data = $this->getTokens();
 		
-		$this->markTestIncomplete( "Broken" );
 		$keys = array_keys( $data[0]['query']['pages'] );
 		$key = array_pop( $keys );
 		$pageinfo = $data[0]['query']['pages'][$key];
@@ -41,6 +41,7 @@ class ApiWatchTest extends ApiTestSetup {
 
 	/**
 	 * @depends testWatchEdit
+	 * @group Broken
 	 */
 	function testWatchClear() {
 	
@@ -68,12 +69,13 @@ class ApiWatchTest extends ApiTestSetup {
 		return $data;
 	}
 
-	
+	/**
+	 * @group Broken
+	 */	 
 	function testWatchProtect() {
 		
 		$data = $this->getTokens();
 		
-		$this->markTestIncomplete( "Broken" );
 		$keys = array_keys( $data[0]['query']['pages'] );
 		$key = array_pop( $keys );
 		$pageinfo = $data[0]['query']['pages'][$key];
@@ -91,7 +93,9 @@ class ApiWatchTest extends ApiTestSetup {
 		$this->assertArrayHasKey( 'edit', $data[0]['protect']['protections'][0] );
 	}
 
-	
+	/**
+	 * @group Broken
+	 */
 	function testGetRollbackToken() {
 		
 		$data = $this->getTokens();
@@ -125,6 +129,7 @@ class ApiWatchTest extends ApiTestSetup {
 
 	/**
 	 * @depends testGetRollbackToken
+	 * @group Broken
 	 */
 	function testWatchRollback( $data ) {
 		$keys = array_keys( $data[0]['query']['pages'] );
@@ -142,7 +147,7 @@ class ApiWatchTest extends ApiTestSetup {
 			if( $ue->getCodeString() == 'onlyauthor' ) {
 				$this->markTestIncomplete( "Only one author to 'UTPage', cannot test rollback" );
 			} else {
-				$this->fail( "Received error " . $ue->getCodeString() );
+				$this->fail( "Received error '" . $ue->getCodeString() . "'" );
 			}
 		}
 
@@ -150,12 +155,13 @@ class ApiWatchTest extends ApiTestSetup {
 		$this->assertArrayHasKey( 'title', $data[0]['rollback'] );
 	}
 
-	
+	/**
+	 * @group Broken
+	 */
 	function testWatchDelete() {
 		
 		$data = $this->getTokens();
 		
-		$this->markTestIncomplete( "Broken" );
 		$keys = array_keys( $data[0]['query']['pages'] );
 		$key = array_pop( $keys );
 		$pageinfo = $data[0]['query']['pages'][$key];

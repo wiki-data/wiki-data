@@ -131,14 +131,6 @@ Pabusten ing pamanaliling dake kapamilatan [alilan] ning suglung',
 'category-file-count-limited'    => '{{PLURAL:$1|Ing makatuking simpan kayabe ya|Deng makatuking $1 simpan kayabe la}} king salukuyang kategoriya.',
 'listingcontinuesabbrev'         => 'katuglung.',
 
-'mainpagetext'      => "'''Melaus ing pamipalyari ning MediaWiki.'''",
-'mainpagedocfooter' => "Basan me ing [http://meta.wikimedia.org/wiki/Help:Contents User's Guide] para king impormasiun keng pamangamit ning wiki software.
-
-== Pamagumpisa ==
-* [http://www.mediawiki.org/wiki/Manual:Configuration_settings Configuration settings list]
-* [http://www.mediawiki.org/wiki/Manual:FAQ MediaWiki FAQ]
-* [https://lists.wikimedia.org/mailman/listinfo/mediawiki-announce MediaWiki release mailing list]",
-
 'about'         => 'Tungkul',
 'article'       => 'Kalamnan ning bulung',
 'newwindow'     => '(mibusni ya king bayung awang)',
@@ -178,7 +170,6 @@ Pabusten ing pamanaliling dake kapamilatan [alilan] ning suglung',
 'history'           => 'Amlat ning bulung',
 'history_short'     => 'Amlat',
 'updatedmarker'     => 'mibayuan manibat inyang tauli kung migbisita',
-'info_short'        => 'Impormasiun',
 'printableversion'  => 'Kopiang malyaring i-print',
 'permalink'         => 'Suglung a permanenti',
 'print'             => 'I-print',
@@ -347,20 +338,17 @@ Kasalungsungan yang makapatda ing pamagbayu (update) king bulung a ini. E la miy
 Function: $1<br />
 Query: $2',
 'viewsource'           => 'Lon ya ing pikuanan',
-'viewsourcefor'        => 'para $1',
 'actionthrottled'      => 'Mepigil ing pamangimut',
 'actionthrottledtext'  => 'Metung ya kareng paralan ba yang sabatan ing spam ing pamaglimita king pamanulit king kimut (action) a iti kilub ning makuyad a panaun, at alagpusan mu ne itang angganan.
 Pakisubukan mung pasibayu kaibat ning mapilang minutu.',
 'protectedpagetext'    => 'Ining bulung a iti misusi ya para eya ma-edit',
 'viewsourcetext'       => 'Malyari meng lon at kopian ing pikuanan (source) ning bulung a ini:',
 'protectedinterface'   => 'Maki interface text ya para king software ing bulung a iti. Makasara ya ba yang e mayabusu.',
-'editinginterface'     => "'''Babala:''' Babie yang interface text para king software ing bulung a i-edit mu. Makayapektu la king itsura ning user interface para kareng aliwang gagamit deng pamagbayu keti. Malyari lang munta king [http://translatewiki.net/wiki/Main_Page?setlang=en translatewiki.net] deng bisang sumaup king pamaglikas.",
+'editinginterface'     => "'''Babala:''' Babie yang interface text para king software ing bulung a i-edit mu. Makayapektu la king itsura ning user interface para kareng aliwang gagamit deng pamagbayu keti. Malyari lang munta king [//translatewiki.net/wiki/Main_Page?setlang=en translatewiki.net] deng bisang sumaup king pamaglikas.",
 'sqlhidden'            => '(makasalikut ya ing SQL query)',
 'cascadeprotected'     => 'Makaprotekta ya king pamag-edit ing bulung a ini uling kayabe ya king makatuking {{PLURAL:$1|bulung, a|bulung, a}} a maki proteksiun uling makasalangi ya ing  "tuki-tuki" o "cascading" option:
 $2',
 'namespaceprotected'   => "Ala kang paintulut a mag-edit bulung king pirinan lagyung (namespace a) '''$1'''.",
-'customcssjsprotected' => "You do not have permission to edit this page, because it contains another user's personal settings.
-Ala kang paintulut a i-edit ya ing bulung a ini, uling atin yang personal setting ning aliwang talagamit.",
 'ns-specialprotected'  => 'E la malyaring i-edit deng bulung a makabukud.',
 'titleprotected'       => "Pinrotekta ne king pamaglalang [[User:$1|$1]] ining pamagat.
 Iti ing binie nang sangkan: ''$2''.",
@@ -407,7 +395,7 @@ Pakisalangi mu la, at subukan mung pasibayu.',
 'loginsuccesstitle'          => 'Melaus ya ing pamag login',
 'loginsuccess'               => "'''Maka login na ka king {{SITENAME}} lalam ning lagyung \"\$1\".'''",
 'nosuchuser'                 => 'Alang talagamit a maku lagyung "$1". Pakalon me pangasulat o maglalang kang bayung account.',
-'nosuchusershort'            => 'Alang talagamit a maki lagyung "<nowiki>$1</nowiki>". Lon mu nung ustu ya pangasulat.',
+'nosuchusershort'            => 'Alang talagamit a maki lagyung "$1". Lon mu nung ustu ya pangasulat.',
 'nouserspecified'            => 'Kailangan mung mamieng lagyung talagamit (username).',
 'wrongpassword'              => 'E ustu ing binie mung password. Pakisulat meng pasibayu.',
 'wrongpasswordempty'         => 'Blangku ya ing binie mung password. Pakisulat meng pasibayu.',
@@ -449,7 +437,7 @@ Kailangan mung mag-login ngeni ba meng ayalilan ing kekang password.
 Malyari meng e pansinan ining mensahi, nung pamagkamali ing pamaglalang na niting account.',
 'loginlanguagelabel'         => 'Amanu: $1',
 
-# Password reset dialog
+# Change password dialog
 'resetpass'           => 'Alilan ya ing account password',
 'resetpass_announce'  => 'Gagamit kang pansamantalang code a me e-mail keka aniang mig-login ka.
 Bang mayari ing kekang pamag-login, kailangan mung mangibiling bayung password keni:',
@@ -524,9 +512,6 @@ Tandanan mung e me maliaring gamitan ing serbisiung "i e-mail me ining talagamit
 Ini ing kekang block ID: $5
 Pakibanggit me iting ID neng atin kang pamangutang.',
 'blockednoreason'                  => 'alang mibieng sangkan',
-'blockedoriginalsource'            => "Makabili king lalam ing penibatan ning '''$1''':",
-'blockededitsource'                => "Atyu king lalam ing makasulat ketang '''ding kekang in-edit''' king '''$1''' ('''your edits''' to '''$1'''):",
-'whitelistedittitle'               => 'Kailangang mag-login bang makapag-edit',
 'whitelistedittext'                => 'Kailangan mung $1 bayu ka makapag-edit bulung.',
 'confirmedittext'                  => "Kailangan meng kumpirman ing kekang e-mail address bayo mo a-edit deting bulung.
 Pakisulat me at patutuan ing kekang e-mail address kapamilata'ning [[Special:Preferences|pinili ning talagamit]] (user preferences).",
@@ -546,7 +531,7 @@ Nung migkamali kang minta keni, i-click me mu ing '''back''' (mibalik) button ni
 Maliari meng [[Special:Search/{{PAGENAME}}|paintunan ining bansag ning bulung]] kareng aliwang bulung,
 <span class="plainlinks">[{{fullurl:{{#Special:Log}}|page={{FULLPAGENAMEE}}}} search the related logs],
 o [{{fullurl:{{FULLPAGENAME}}|action=edit}} i-edit ing bulung a ini]</span>.',
-'userpage-userdoesnotexist'        => 'E makarehistru ing account ning talagamit (user account) a "$1". Pakilawe mu nung buri meng lalangan o i-edit ing bulung a ini.',
+'userpage-userdoesnotexist'        => 'E makarehistru ing account ning talagamit (user account) a "<nowiki>$1</nowiki>". Pakilawe mu nung buri meng lalangan o i-edit ing bulung a ini.',
 'clearyourcache'                   => "'''Kapabaluan:''' Kaibat mung mig-save, maliari meng lakton ing simpan (cache) ning kekang browser ba mong akit deng miyalilan. '''Mozilla / Firefox / Safari:''' timid me ing ''Shift'' kabang ki-click me ing ''Reload'', o timid me ing ''Ctrl-Shift-R'' (''Cmd-Shift-R'' king Apple Mac); '''IE:''' timid me ing ''Ctrl'' kabang ki-click me ing ''Refresh'', o timid me ing ''Ctrl-F5''; '''Konqueror:''': i-click me mu ing ''Reload'' button, o timid me ing ''F5''; deng talagamit ning '''Opera''', mapaliaring kailangan deng laganas a linisan (i-clear) ing karelang simpan (cache) king ''Tools→Preferences''.",
 'usercssyoucanpreview'             => "'''Tip:''' Gamitan me ing button a 'Pakit ya ing preview' ('Show preview') ba yang subukan ing kekang bayung CSS bayu ka mag-save.",
 'userjsyoucanpreview'              => "'''Tip:''' Gamitan me ing button a 'Pakit ya ing preview' ('Show preview') ba yang subukan ing kekang bayung JS bayu ka mag-save.",
@@ -701,22 +686,11 @@ Abusni da pa murin deng aliwang talapanibala (admin) king {{SITENAME}} itang lam
 'revdelete-unsuppress'        => 'Ilako ing pamagbawal kareng pamanaliling misubli',
 'revdelete-log'               => 'Sangkan:',
 'revdelete-submit'            => 'Ipairal ya kareng mepiling pamanalili (selected revision)',
-'revdelete-logentry'          => 'miyalilan ing lino da reng mengayalili (revision visibility) king [[$1]]',
-'logdelete-logentry'          => 'miyalilan ing lino da reng miliari (event visibility) king [[$1]]',
 'revdelete-success'           => "'''Mituldu na ing pamagbayu ning sala/kalinawan.'''",
 'logdelete-success'           => "'''Mituldu na ing sala/lino (visibility) ning tala (log).'''",
 'revdel-restore'              => 'Alilan ya ing mayaykit',
 'pagehist'                    => 'Amlat ning bulung',
 'deletedhist'                 => 'Meburang amlat',
-'revdelete-content'           => 'laman',
-'revdelete-summary'           => 'sampulung da reng mibayu (edit summary)',
-'revdelete-uname'             => 'lagyungtalagamit',
-'revdelete-restricted'        => 'ipairal la reng limitasiun kareng sysop',
-'revdelete-unrestricted'      => 'ilako la reng makabawal kareng sysops',
-'revdelete-hid'               => 'salikot $1',
-'revdelete-unhid'             => 'ipakit $1',
-'revdelete-log-message'       => '$1 para $2 {{PLURAL:$2|pamanalili|pamanalili}}',
-'logdelete-log-message'       => '$1 para $2 {{PLURAL:$2|miliari|miliari}}',
 'revdelete-edit-reasonlist'   => 'I-edit la reng sangkan king pamamura',
 
 # Suppression log
@@ -834,8 +808,6 @@ Pakitandanan mung maliaring e no makapanaun deng karelang index king kalamnan ni
 'columns'                   => 'Ding asias:',
 'searchresultshead'         => 'Maintun',
 'resultsperpage'            => 'Tinud (hits) balang bulung:',
-'contextlines'              => 'Gulis balang tinud:',
-'contextchars'              => 'Kontekstu (patulug) balang gulis:',
 'stub-threshold'            => 'Angganan ning <a href="#" class="stub">stub link</a> formatting (byte):',
 'recentchangesdays'         => 'Deng aldong ipalto king bayung mengayalili:',
 'recentchangescount'        => 'Bilang da reng me-edit a ipalto king bayung mengayalili:',
@@ -1083,10 +1055,6 @@ mibalik ka at ilulan (upload) me king lalam ning bayung lagyu. [[File:$1|thumb|c
 'watchthisupload'             => 'Banten ya ing bulung a ini',
 'filewasdeleted'              => 'Ating simpan (file) a makanian lagyu a sadiang milulan, at mebura kaibat na nita.
 Pakilawe me ing $1 bayu mu isundu ing pamaglulan kaniti.',
-'upload-wasdeleted'           => "'''Babala: Sadia neng mebura ing simpan (file) a kekang lululan.'''
-
-Pakaisipan mu sa nung ustu ing isundu mu ing pamaglulan kaniti.
-Makabili ya keni ing tala da reng mengabura ba meng asuri:",
 'filename-bad-prefix'         => "Magumpisa ya king '''\"\$1\"''' ing lagyu ning simpan (file) a kekang lululan. Iti metung yang lagyung tambing dang bibie deng digital camera, at ala yang kaugnayan ketang letratu.
 Mamili ka sanang lagyung mas maglarawan keng kekang simpan.",
 'upload-success-subj'         => 'Melaus ing pamaglulan',
@@ -1335,8 +1303,7 @@ Also see [[Special:WantedCategories|wanted categories]].',
 'listusers-noresult' => 'Alang meyakit a talagamit.',
 
 # Special:Log/newusers
-'newuserlogpage'          => "Tala ning pamaglalang talagamit (''User creation log'')",
-'newuserlog-create-entry' => 'Bayung account a pang-talagamit',
+'newuserlogpage' => "Tala ning pamaglalang talagamit (''User creation log'')",
 
 # Special:ListGroupRights
 'listgrouprights'          => 'Katuliran da reng grupung talagamit (user group rights)',
@@ -1373,14 +1340,12 @@ Also see [[Special:WantedCategories|wanted categories]].',
 'watchlistanontext'    => 'Paki $1 ba mong akit o a-edit deng laman ning kekang tala ring babanten (watchlist).',
 'watchnologin'         => 'E maka-login',
 'watchnologintext'     => 'Kailangan kang [[Special:UserLogin|maka-login]] ba meng abayu ing kekang tala ding babanten (watchlist).',
-'addedwatch'           => 'Midagdag king babanten a tala.',
 'addedwatchtext'       => "Miragdag ya ing bulung a \"[[:\$1]]\" king kekang [[Special:Watchlist|watchlist]].
 Mitala la karin deng miyalilan king bulung a iti ampo ing kayang Talk page. Lunto ya
 muring '''pepakapal''' ing bulung ketang [[Special:RecentChanges|tala da reng bayung miyalilan]] ba kang e magkasakit maintun kaniti.
 
 Nung buri meng idayu potang kayi itang bulung ketang tala da reng babanten mu, paki
 click me ing \"Tuknangan ing pamagbante\" (Unwatch) king gilid na ning bulung.",
-'removedwatch'         => 'Milako ya king tala da reng babanten',
 'removedwatchtext'     => "Ing bulung a \"[[:\$1]]\" milako ya king [[Special:Watchlist|kekang listaan da reng babanten (''watchlist'')]].",
 'watch'                => 'Banten',
 'watchthispage'        => 'Banten ya ining bulung',
@@ -1433,10 +1398,10 @@ Maliari mo muring isubli king sadia (reset) deng markang pamipabalu (notificatio
              Ing talabie kapabaluan ning {{SITENAME}} a magmalasakit keka
 --
 Ba mong ayalilan deng pakatuldu king kekang tala ring babanten (watchlist settings), munta ka king
-{{fullurl:{{#special:Watchlist}}/edit}}
+{{canonicalurl:{{#special:EditWatchlist}}}}
 
 Keni ka magparalang puna/komentu at maniad karagdagang saup:
-{{fullurl:{{MediaWiki:Helppage}}}}',
+{{canonicalurl:{{MediaWiki:Helppage}}}}',
 
 # Delete
 'deletepage'             => 'Buran ya ing bulung',
@@ -1451,10 +1416,8 @@ Keni ka magparalang puna/komentu at maniad karagdagang saup:
 'confirmdeletetext'      => 'Buburan mu ne ing metung a bulung, kayabe na ing mabilug nang amlat/kasalesayan.
 Pakikumpirma nung ini pin ing buri mung gawan, nung aintindian mu ing eganaganang kabaldugan na niti, at nung daraptan mu iti agpang king [[{{MediaWiki:Policy-url}}|patakaran]].',
 'actioncomplete'         => 'Ing dapat mebuu ne.',
-'deletedtext'            => 'Mebura ya ing "<nowiki>$1</nowiki>".
+'deletedtext'            => 'Mebura ya ing "$1".
 Makasulat la king $2 deng pekabayung mebura.',
-'deletedarticle'         => 'mebura ne ing "[[$1]]"',
-'suppressedarticle'      => 'mesabat ya ing "[[$1]]"',
 'dellogpage'             => 'Tala da reng mebura',
 'dellogpagetext'         => 'Makabili la king lalam deng pekabayung mebura.',
 'deletionlog'            => 'tala da ring mebura',
@@ -1508,7 +1471,7 @@ Lon me ing [[Special:ProtectedPages|tala ring bulung a protektadu/makakambil]] p
 'protectexpiry'               => 'Mayari ya keng:',
 'protect_expiry_invalid'      => 'E matatanggap ing panaun nung kapilan ya mayari.',
 'protect_expiry_old'          => 'Keta ya pang milabas ing panaun a miyari ya.',
-'protect-text'                => "Malyari meng lon at alilan ing sikan ning proteksiun (protection level) para king bulung keti '''<nowiki>$1</nowiki>'''.",
+'protect-text'                => "Malyari meng lon at alilan ing sikan ning proteksiun (protection level) para king bulung keti '''$1'''.",
 'protect-locked-blocked'      => "E mo maliaring alilan deng sikan/lebel ning proteksiun kabang makasabat ka.
 Deni reng kasalungsungan a makatuldu (settings) para king bulung '''$1''':",
 'protect-locked-dblock'       => "E la maliaring alilan deng sikan/lebel ning proteksiun uling kasalungsungan yang makasara ing database. Deni reng pakatuldu (settings) para king bulung '''$1''':",
@@ -1565,7 +1528,6 @@ Mapaliaring putut ya ing kekang suglung, o misubli (restored) ya o milako king s
 'undeletelink'                 => 'lon/ibalik',
 'undeletereset'                => 'Isubli king sadia (reset)',
 'undeletecomment'              => 'Komentu:',
-'undeletedarticle'             => 'misubli ya ing "[[$1]]"',
 'undeletedrevisions'           => '{{PLURAL:$1|1 pamagbayung|$1 pamagbayung}} misubli',
 'undeletedrevisions-files'     => '{{PLURAL:$1|1 pamagbayung|$1 pamagbayung}} ampong {{PLURAL:$2|1 simpan|$2 simpan}} a misubli',
 'undeletedfiles'               => '{{PLURAL:$1|1 simpan|$1 simpan}} a misubli',
@@ -1695,7 +1657,7 @@ mu nung sanu retang bulung a sinira da).',
 'blocklogentry'               => 'Mesabat ya ing "[[$1]]" a mapupus kilub ning $2 $3',
 'blocklogtext'                => 'Ini tala (log) de reng pamaniabat ampong pamaglako pangasabat kareng talagamit.
 E la makabili deng IP address a tambing nang makasabat.
-Lon me ing [[Special:IPBlockList|IP block list]] para king tala da reng kasalungsungan a makabawal o makasabat.',
+Lon me ing [[Special:BlockList|IP block list]] para king tala da reng kasalungsungan a makabawal o makasabat.',
 'unblocklogentry'             => 'milako pangasabat $1',
 'block-log-flags-anononly'    => 'den mung gagamit a e pepakilala',
 'block-log-flags-nocreate'    => 'pamilalang account e malyari',
@@ -1774,8 +1736,6 @@ Gumamit na kang aliwang lagyu.',
 Nung malyari, tunggal-tunggal mu lang piyabe/piyanib.'''",
 'movedto'                 => 'miyalis ya king',
 'movetalk'                => 'Iyalis me ing kayabe nang bulung-pisasabian (talk page)',
-'1movedto2'               => 'Ing [[$1]] miyalis ya king [[$2]]',
-'1movedto2_redir'         => 'Ing [[$1]] milipat ya king [[$2]] menaliwa dalan',
 'movelogpage'             => 'Iyalis ya ing tala/log',
 'movelogpagetext'         => 'Makabili ya king lalam ing tala (list) da reng bulung a miyalis.',
 'movereason'              => 'Sangkan:',
@@ -1936,9 +1896,7 @@ Paintulutan na ing pamandagdag king sangkan king sampulung (''summary'').",
 'common.js' => '/* Agiang nanung JavaScript a atiu keni misampa la kareng eganaganang gagamit balang misampang bulung. */',
 
 # Metadata
-'nodublincore'      => 'Makapatda ya ing Dublin Core RDF metadata para king server a ini.',
-'nocreativecommons' => 'Makapatda ya ing Creative Commons RDF metadata para king server a ini.',
-'notacceptable'     => 'E makapamieng data king ayus (format) a abasa ning kekang client ing wiki server.',
+'notacceptable' => 'E makapamieng data king ayus (format) a abasa ning kekang client ing wiki server.',
 
 # Attribution
 'anonymous'        => 'Ing/Deng gagamit king {{SITENAME}} a e pepakilala.',
@@ -1960,14 +1918,6 @@ Mapaliaring ing sangkan metung yang suglung king karinan king kilual (link to an
 'spam_reverting'      => 'Misusubli ya king tauling bersion a yalang suglung king $1',
 'spam_blanking'       => 'Deng anggang pamagbayung maki suglung king $1, magblangku',
 
-# Info page
-'infosubtitle'   => 'Impormasiun king bulung',
-'numedits'       => 'Bilang da reng me-edit (bulung): $1',
-'numtalkedits'   => 'Bilang da reng me-edit (bulung pamisabi-sabi): $1',
-'numwatchers'    => 'Bilang da reng talabante: $1',
-'numauthors'     => 'Taganang bilang da reng talasulat (bulung): $1',
-'numtalkauthors' => 'Taganang bilang da reng talasulat (bulung pamisabi-sabi): $1',
-
 # Patrolling
 'markaspatrolleddiff'                 => 'Tatakan yang babanten (patrolled)',
 'markaspatrolledtext'                 => 'Tatakan yang babanten da (patrolled) ing bulung a ini',
@@ -1981,7 +1931,6 @@ Mapaliaring ing sangkan metung yang suglung king karinan king kilual (link to an
 
 # Patrol log
 'patrol-log-page' => 'Tala ning pamagbante (patrol long)',
-'patrol-log-line' => 'mitatakan $1 kareng $2 babanten $3',
 
 # Image deletion
 'deletedrevision'                 => 'Meburang matuang pamagbayu $1',
@@ -2005,7 +1954,7 @@ $1',
 'widthheightpage' => '$1×$2, $3 bulung',
 'file-info'       => 'dagul ning simpan [file]: $1, MIME type: $2',
 'file-info-size'  => '$1 × $2 pixel, sukad ning simpan: $3, MIME type: $4',
-'file-nohires'    => '<small>Ala nang mas malino pa.</small>',
+'file-nohires'    => 'Ala nang mas malino pa.',
 'svg-long-desc'   => 'SVG file, masasabing $1 × $2 pixels, dagul ning simpan: $3',
 'show-big-image'  => 'Pekamalino',
 
@@ -2040,7 +1989,13 @@ Detang aliwa tambing (by default) lang makasalikut.
 * exposuretime
 * fnumber
 * isospeedratings
-* focallength',
+* focallength
+* artist
+* copyright
+* imagedescription
+* gpslatitude
+* gpslongitude
+* gpsaltitude',
 
 # EXIF tags
 'exif-imagewidth'                  => 'Lapad',
@@ -2055,7 +2010,6 @@ Detang aliwa tambing (by default) lang makasalikut.
 'exif-yresolution'                 => 'Linong patikdo (vertical resolution)',
 'exif-stripoffsets'                => 'Pangabili ning data tungkul king larawan (image data location)',
 'exif-jpeginterchangeformatlength' => 'Byte ning JPEG data',
-'exif-transferfunction'            => 'Gamit a pamanalis (transfer function)',
 'exif-primarychromaticities'       => 'Chromaticities da reng primarities',
 'exif-referenceblackwhite'         => 'Paris da reng maputi ampong matuling a reference value',
 'exif-datetime'                    => 'Petsa ampong oras ning pamanaliling simpan (file change)',
@@ -2072,7 +2026,6 @@ Detang aliwa tambing (by default) lang makasalikut.
 'exif-compressedbitsperpixel'      => 'Paralan/ayus pamamitpit larawan (image compression mode)',
 'exif-pixelydimension'             => 'Ustung lapad ning larawan',
 'exif-pixelxdimension'             => 'Ustung katas ning larawan',
-'exif-makernote'                   => 'Kapabaluan ibat king ginawa (manufacturer notes)',
 'exif-usercomment'                 => 'Komentu da ring talagamit',
 'exif-relatedsoundfile'            => 'Makaugneng simpan a katni (audio file)',
 'exif-datetimeoriginal'            => 'Petsa ampong oras ning pamaglalang king data (data generation)',
@@ -2231,14 +2184,12 @@ Detang aliwa tambing (by default) lang makasalikut.
 
 # External editor support
 'edit-externally'      => 'I-edit me ing simpan a ini kapamilatan ning aplikasiun o program a ibat king kilual.',
-'edit-externally-help' => '(Lon me ing [http://www.mediawiki.org/wiki/Manual:External_editors setup instructions] para king karagdagang informacion)',
+'edit-externally-help' => '(Lon me ing [//www.mediawiki.org/wiki/Manual:External_editors setup instructions] para king karagdagang informacion)',
 
 # 'all' in various places, this might be different for inflected languages
-'recentchangesall' => 'eganagana',
-'imagelistall'     => 'eganagana',
-'watchlistall2'    => 'eganagana',
-'namespacesall'    => 'ila ngan',
-'monthsall'        => 'eganagana',
+'watchlistall2' => 'eganagana',
+'namespacesall' => 'ila ngan',
+'monthsall'     => 'eganagana',
 
 # E-mail address confirmation
 'confirmemail'             => 'Patutwan mung keka ya itang e-mail address',
@@ -2367,5 +2318,9 @@ Mayari/mapasu ya ining confirmation code keng $4.',
 'specialpages-group-media'   => 'Ulat king media ampong pamaglulan (uploads)',
 'specialpages-group-users'   => 'Talagamit ampong katuliran',
 'specialpages-group-highuse' => 'Deng bulung a magamitan',
+
+# New logging system
+'revdelete-restricted'   => 'ipairal la reng limitasiun kareng sysop',
+'revdelete-unrestricted' => 'ilako la reng makabawal kareng sysops',
 
 );

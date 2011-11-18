@@ -24,11 +24,6 @@
  * @file
  */
 
-if ( !defined( 'MEDIAWIKI' ) ) {
-	// Eclipse helper - will be ignored in production
-	require_once( 'ApiQueryBase.php' );
-}
-
 /**
  * Query module to perform full text search within wiki titles and content
  *
@@ -69,6 +64,9 @@ class ApiQuerySearch extends ApiQueryGeneratorBase {
 		$search->setNamespaces( $params['namespace'] );
 		$search->showRedirects = $params['redirects'];
 
+		$query = $search->transformSearchTerm( $query );
+		$query = $search->replacePrefixes( $query );
+
 		// Perform the actual search
 		if ( $what == 'text' ) {
 			$matches = $search->searchText( $query );
@@ -97,16 +95,17 @@ class ApiQuerySearch extends ApiQueryGeneratorBase {
 			$this->dieUsage( "{$what} search is disabled", "search-{$what}-disabled" );
 		}
 
+		$apiResult = $this->getResult();
 		// Add search meta data to result
 		if ( isset( $searchInfo['totalhits'] ) ) {
 			$totalhits = $matches->getTotalHits();
 			if ( $totalhits !== null ) {
-				$this->getResult()->addValue( array( 'query', 'searchinfo' ),
+				$apiResult->addValue( array( 'query', 'searchinfo' ),
 						'totalhits', $totalhits );
 			}
 		}
 		if ( isset( $searchInfo['suggestion'] ) && $matches->hasSuggestion() ) {
-			$this->getResult()->addValue( array( 'query', 'searchinfo' ),
+			$apiResult->addValue( array( 'query', 'searchinfo' ),
 						'suggestion', $matches->getSuggestionQuery() );
 		}
 
@@ -115,6 +114,7 @@ class ApiQuerySearch extends ApiQueryGeneratorBase {
 		$titles = array();
 		$count = 0;
 		$result = $matches->next();
+
 		while ( $result ) {
 			if ( ++ $count > $limit ) {
 				// We've reached the one extra which shows that there are additional items to be had. Stop here...
@@ -124,6 +124,7 @@ class ApiQuerySearch extends ApiQueryGeneratorBase {
 
 			// Silently skip broken and missing titles
 			if ( $result->isBrokenTitle() || $result->isMissingRevision() ) {
+				$result = $matches->next();
 				continue;
 			}
 
@@ -160,7 +161,7 @@ class ApiQuerySearch extends ApiQueryGeneratorBase {
 				}
 				if ( !is_null( $result->getSectionTitle() ) ) {
 					if ( isset( $prop['sectiontitle'] ) ) {
-						$vals['sectiontitle'] = $result->getSectionTitle();
+						$vals['sectiontitle'] = $result->getSectionTitle()->getFragment();
 					}
 					if ( isset( $prop['sectionsnippet'] ) ) {
 						$vals['sectionsnippet'] = $result->getSectionSnippet();
@@ -171,7 +172,7 @@ class ApiQuerySearch extends ApiQueryGeneratorBase {
 				}
 
 				// Add item to results and see whether it fits
-				$fit = $this->getResult()->addValue( array( 'query', $this->getModuleName() ),
+				$fit = $apiResult->addValue( array( 'query', $this->getModuleName() ),
 						null, $vals );
 				if ( !$fit ) {
 					$this->setContinueEnumParameter( 'offset', $params['offset'] + $count - 1 );
@@ -185,7 +186,7 @@ class ApiQuerySearch extends ApiQueryGeneratorBase {
 		}
 
 		if ( is_null( $resultPageSet ) ) {
-			$this->getResult()->setIndexedTagName_internal( array(
+			$apiResult->setIndexedTagName_internal( array(
 						'query', $this->getModuleName()
 					), 'p' );
 		} else {
@@ -267,10 +268,10 @@ class ApiQuerySearch extends ApiQueryGeneratorBase {
 				' score            - Adds the score (if any) from the search engine',
 				' snippet          - Adds a parsed snippet of the page',
 				' titlesnippet     - Adds a parsed snippet of the page title',
-				' redirectsnippet  - Adds a parsed snippet of the redirect',
-				' redirecttitle    - Adds a parsed snippet of the redirect title',
-				' sectionsnippet   - Adds a parsed snippet of the matching section',
-				' sectiontitle     - Adds a parsed snippet of the matching section title',
+				' redirectsnippet  - Adds a parsed snippet of the redirect title',
+				' redirecttitle    - Adds the title of the matching redirect',
+				' sectionsnippet   - Adds a parsed snippet of the matching section title',
+				' sectiontitle     - Adds the title of the matching section',
 				' hasrelated       - Indicates whether a related search is available',
 			),
 			'redirects' => 'Include redirect pages in the search',
@@ -290,7 +291,7 @@ class ApiQuerySearch extends ApiQueryGeneratorBase {
 		) );
 	}
 
-	protected function getExamples() {
+	public function getExamples() {
 		return array(
 			'api.php?action=query&list=search&srsearch=meaning',
 			'api.php?action=query&list=search&srwhat=text&srsearch=meaning',
@@ -298,7 +299,11 @@ class ApiQuerySearch extends ApiQueryGeneratorBase {
 		);
 	}
 
+	public function getHelpUrls() {
+		return 'http://www.mediawiki.org/wiki/API:Search';
+	}
+
 	public function getVersion() {
-		return __CLASS__ . ': $Id: ApiQuerySearch.php 84735 2011-03-25 10:36:07Z reedy $';
+		return __CLASS__ . ': $Id: ApiQuerySearch.php 103273 2011-11-16 00:17:26Z johnduhart $';
 	}
 }

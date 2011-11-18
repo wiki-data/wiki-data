@@ -33,6 +33,7 @@ class PostgresUpdater extends DatabaseUpdater {
 			array( 'renameSequence', 'rc_rc_id_seq',        'recentchanges_rc_id_seq'     ),
 			array( 'renameSequence', 'log_log_id_seq',      'logging_log_id_seq'          ),
 			array( 'renameSequence', 'pr_id_val',           'page_restrictions_pr_id_seq' ),
+			array( 'renameSequence', 'us_id_seq',           'uploadstash_us_id_seq' ),
 
 			# new tables
 			array( 'addTable', 'category',          'patch-category.sql' ),
@@ -54,6 +55,8 @@ class PostgresUpdater extends DatabaseUpdater {
 			array( 'addTable', 'msg_resource',      'patch-msg_resource.sql' ),
 			array( 'addTable', 'msg_resource_links','patch-msg_resource_links.sql' ),
 			array( 'addTable', 'module_deps',       'patch-module_deps.sql' ),
+			array( 'addTable', 'uploadstash',       'patch-uploadstash.sql' ),
+			array( 'addTable', 'user_former_groups','patch-user_former_groups.sql' ),
 
 			# Needed before new field
 			array( 'convertArchive2' ),
@@ -79,7 +82,6 @@ class PostgresUpdater extends DatabaseUpdater {
 			array( 'addPgField', 'logging',       'log_id',               "INTEGER NOT NULL PRIMARY KEY DEFAULT nextval('logging_log_id_seq')" ),
 			array( 'addPgField', 'logging',       'log_params',           'TEXT' ),
 			array( 'addPgField', 'mwuser',        'user_editcount',       'INTEGER' ),
-			array( 'addPgField', 'mwuser',        'user_hidden',          'SMALLINT NOT NULL DEFAULT 0' ),
 			array( 'addPgField', 'mwuser',        'user_newpass_time',    'TIMESTAMPTZ' ),
 			array( 'addPgField', 'oldimage',      'oi_deleted',           'SMALLINT NOT NULL DEFAULT 0' ),
 			array( 'addPgField', 'oldimage',      'oi_major_mime',        "TEXT NOT NULL DEFAULT 'unknown'" ),
@@ -107,6 +109,8 @@ class PostgresUpdater extends DatabaseUpdater {
 			array( 'addPgField', 'logging',       'log_page',             'INTEGER' ),
 			array( 'addPgField', 'interwiki',     'iw_api',               "TEXT NOT NULL DEFAULT ''"),
 			array( 'addPgField', 'interwiki',     'iw_wikiid',            "TEXT NOT NULL DEFAULT ''"),
+			array( 'addPgField', 'revision',      'rev_sha1',             "TEXT NOT NULL DEFAULT ''" ),
+			array( 'addPgField', 'archive',       'ar_sha1',              "TEXT NOT NULL DEFAULT ''" ),
 
 			# type changes
 			array( 'changeField', 'archive',       'ar_deleted',      'smallint', '' ),
@@ -131,8 +135,6 @@ class PostgresUpdater extends DatabaseUpdater {
 			array( 'changeField', 'ipblocks',      'ipb_block_email', 'smallint', "CASE WHEN ipb_block_email=' ' THEN 0 ELSE ipb_block_email::smallint END DEFAULT 0" ),
 			array( 'changeField', 'ipblocks',      'ipb_address',     'text',     'ipb_address::text' ),
 			array( 'changeField', 'ipblocks',      'ipb_deleted',     'smallint', 'ipb_deleted::smallint DEFAULT 0' ),
-			array( 'changeField', 'math',          'math_inputhash',  'bytea',    "decode(math_inputhash,'escape')" ),
-			array( 'changeField', 'math',          'math_outputhash', 'bytea',    "decode(math_outputhash,'escape')" ),
 			array( 'changeField', 'mwuser',        'user_token',      'text',     '' ),
 			array( 'changeField', 'mwuser',        'user_email_token', 'text',     '' ),
 			array( 'changeField', 'objectcache',   'keyname',         'text',     '' ),
@@ -434,8 +436,9 @@ END;
 				}
 				$sql .= " USING $default";
 			}
-			$sql .= ";\nCOMMIT;\n";
+			$this->db->begin( __METHOD__ );
 			$this->db->query( $sql );
+			$this->db->commit( __METHOD__ );
 		}
 	}
 

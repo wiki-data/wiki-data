@@ -41,6 +41,18 @@ if ( $wgArticlePath === false ) {
 	}
 }
 
+if ( !empty($wgActionPaths) && !isset($wgActionPaths['view']) ) {
+	# 'view' is assumed the default action path everywhere in the code
+	# but is rarely filled in $wgActionPaths
+	$wgActionPaths['view'] = $wgArticlePath;
+}
+
+if ( !empty($wgActionPaths) && !isset($wgActionPaths['view']) ) {
+	# 'view' is assumed the default action path everywhere in the code
+	# but is rarely filled in $wgActionPaths 
+	$wgActionPaths['view'] = $wgArticlePath ;
+}
+
 if ( $wgStylePath === false ) $wgStylePath = "$wgScriptPath/skins";
 if ( $wgLocalStylePath === false ) $wgLocalStylePath = "$wgScriptPath/skins";
 if ( $wgStyleDirectory === false ) $wgStyleDirectory   = "$IP/skins";
@@ -175,6 +187,11 @@ if ( $wgUseInstantCommons ) {
 	);
 }
 
+if ( is_null( $wgEnableAutoRotation ) ) {
+	// Only enable auto-rotation when the bitmap handler can rotate
+	$wgEnableAutoRotation = BitmapHandler::canRotate();
+}
+
 if ( $wgRCFilterByAge ) {
 	# # Trim down $wgRCLinkDays so that it only lists links which are valid
 	# # as determined by $wgRCMaxAge.
@@ -261,13 +278,17 @@ if ( !$wgAllowRealName ) {
 	$wgHiddenPrefs[] = 'realname';
 }
 
-if ( !$wgAllowUserSkin ) {
-	$wgHiddenPrefs[] = 'skin';
-}
-
 # Doesn't make sense to have if disabled.
 if ( !$wgEnotifMinorEdits ) {
 	$wgHiddenPrefs[] = 'enotifminoredits';
+}
+
+# $wgDisabledActions is deprecated as of 1.18
+foreach( $wgDisabledActions as $action ){
+	$wgActions[$action] = false;
+}
+if( !$wgAllowPageInfo ){
+	$wgActions['info'] = false;
 }
 
 if ( !$wgHtml5Version && $wgHtml5 && $wgAllowRdfaAttributes ) {
@@ -282,6 +303,10 @@ if ( !$wgHtml5Version && $wgHtml5 && $wgAllowRdfaAttributes ) {
 # Blacklisted file extensions shouldn't appear on the "allowed" list
 $wgFileExtensions = array_diff ( $wgFileExtensions, $wgFileBlacklist );
 
+if ( $wgArticleCountMethod === null ) {
+	$wgArticleCountMethod = $wgUseCommaCount ? 'comma' : 'link';
+}
+
 if ( $wgInvalidateCacheOnLocalSettingsChange ) {
 	$wgCacheEpoch = max( $wgCacheEpoch, gmdate( 'YmdHis', @filemtime( "$IP/LocalSettings.php" ) ) );
 }
@@ -295,10 +320,12 @@ if ( $wgNewUserLog ) {
 	$wgLogTypes[]                        = 'newusers';
 	$wgLogNames['newusers']              = 'newuserlogpage';
 	$wgLogHeaders['newusers']            = 'newuserlogpagetext';
-	$wgLogActions['newusers/newusers']   = 'newuserlogentry'; // For compatibility with older log entries
-	$wgLogActions['newusers/create']     = 'newuserlog-create-entry';
-	$wgLogActions['newusers/create2']    = 'newuserlog-create2-entry';
-	$wgLogActions['newusers/autocreate'] = 'newuserlog-autocreate-entry';
+	# newusers, create, create2, autocreate
+	$wgLogActionsHandlers['newusers/*']  = 'NewUsersLogFormatter';
+}
+
+if ( $wgCookieSecure === 'detect' ) {
+	$wgCookieSecure = ( substr( $wgServer, 0, 6 ) === 'https:' );
 }
 
 if ( !defined( 'MW_COMPILED' ) ) {
@@ -307,17 +334,23 @@ if ( !defined( 'MW_COMPILED' ) ) {
 	}
 
 	wfProfileIn( $fname . '-exception' );
-	require_once( "$IP/includes/Exception.php" );
-	wfInstallExceptionHandler();
+	MWExceptionHandler::installHandler();
 	wfProfileOut( $fname . '-exception' );
 
 	wfProfileIn( $fname . '-includes' );
+	require_once( "$IP/includes/normal/UtfNormalUtil.php" );
 	require_once( "$IP/includes/GlobalFunctions.php" );
-	require_once( "$IP/includes/Hooks.php" );
 	require_once( "$IP/includes/ProxyTools.php" );
 	require_once( "$IP/includes/ImageFunctions.php" );
+	require_once( "$IP/includes/normal/UtfNormalDefines.php" );
 	wfProfileOut( $fname . '-includes' );
 }
+
+# Now that GlobalFunctions is loaded, set the default for $wgCanonicalServer
+if ( $wgCanonicalServer === false ) {
+	$wgCanonicalServer = wfExpandUrl( $wgServer, PROTO_HTTP );
+}
+
 wfProfileIn( $fname . '-misc1' );
 
 # Raise the memory limit if it's too low
@@ -328,18 +361,27 @@ wfMemoryLimit();
  * that happens whenever you use a date function without the timezone being
  * explicitly set. Inspired by phpMyAdmin's treatment of the problem.
  */
-wfSuppressWarnings();
-date_default_timezone_set( date_default_timezone_get() );
-wfRestoreWarnings();
+if ( is_null( $wgLocaltimezone) ) {
+	wfSuppressWarnings();
+	$wgLocaltimezone = date_default_timezone_get();
+	wfRestoreWarnings();
+}
 
-# Can't stub this one, it sets up $_GET and $_REQUEST in its constructor
-$wgRequest = new WebRequest;
+date_default_timezone_set( $wgLocaltimezone );
+if( is_null( $wgLocalTZoffset ) ) {
+	$wgLocalTZoffset = date( 'Z' ) / 60;
+}
 
 # Useful debug output
 global $wgCommandLineMode;
 if ( $wgCommandLineMode ) {
+	$wgRequest = new FauxRequest( array() );
+
 	wfDebug( "\n\nStart command line script $self\n" );
 } else {
+	# Can't stub this one, it sets up $_GET and $_REQUEST in its constructor
+	$wgRequest = new WebRequest;
+
 	$debug = "Start request\n\n{$_SERVER['REQUEST_METHOD']} {$wgRequest->getRequestURL()}";
 
 	if ( $wgDebugPrintHttpHeaders ) {
@@ -389,11 +431,13 @@ if ( !defined( 'MW_NO_SESSION' ) && !$wgCommandLineMode ) {
 wfProfileOut( $fname . '-session' );
 wfProfileIn( $fname . '-globals' );
 
-$wgContLang = new StubContLang;
+$wgContLang = Language::factory( $wgLanguageCode );
+$wgContLang->initEncoding();
+$wgContLang->initContLang();
 
 // Now that variant lists may be available...
 $wgRequest->interpolateTitle();
-$wgUser = RequestContext::getMain()->user; # BackCompat
+$wgUser = RequestContext::getMain()->getUser(); # BackCompat
 
 /**
  * @var Language
@@ -403,7 +447,7 @@ $wgLang = new StubUserLang;
 /**
  * @var OutputPage
  */
-$wgOut = RequestContext::getMain()->output; # BackCompat
+$wgOut = RequestContext::getMain()->getOutput(); # BackCompat
 
 /**
  * @var Parser
@@ -417,19 +461,17 @@ if ( !is_object( $wgAuth ) ) {
 
 # Placeholders in case of DB error
 $wgTitle = null;
-$wgArticle = null;
 
 $wgDeferredUpdateList = array();
 
+// We need to check for safe_mode, because mail() will throw an E_NOTICE
+// on additional parameters
+if( !is_null($wgAdditionalMailParams) && wfIniGetBool('safe_mode') ) {
+	$wgAdditionalMailParams = null;
+}
+
 wfProfileOut( $fname . '-globals' );
 wfProfileIn( $fname . '-extensions' );
-
-# Skin setup functions
-# Entries can be added to this variable during the inclusion
-# of the extension file. Skins can then perform any necessary initialisation.
-foreach ( $wgSkinExtensionFunctions as $func ) {
-	call_user_func( $func );
-}
 
 # Extension setup functions for extensions other than skins
 # Entries should be added to this variable during the inclusion
@@ -453,13 +495,8 @@ foreach ( $wgExtensionFunctions as $func ) {
 	wfProfileOut( $profName );
 }
 
-// For compatibility
-wfRunHooks( 'LogPageValidTypes', array( &$wgLogTypes ) );
-wfRunHooks( 'LogPageLogName', array( &$wgLogNames ) );
-wfRunHooks( 'LogPageLogHeader', array( &$wgLogHeaders ) );
-wfRunHooks( 'LogPageActionText', array( &$wgLogActions ) );
-
 wfDebug( "Fully initialised\n" );
 $wgFullyInitialised = true;
+
 wfProfileOut( $fname . '-extensions' );
 wfProfileOut( $fname );

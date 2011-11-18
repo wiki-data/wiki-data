@@ -24,11 +24,6 @@
  * @file
  */
 
-if ( !defined( 'MEDIAWIKI' ) ) {
-	// Eclipse helper - will be ignored in production
-	require_once( 'ApiBase.php' );
-}
-
 /**
  * API module to allow users to log out of the wiki. API equivalent of
  * Special:Userlogout.
@@ -42,13 +37,13 @@ class ApiLogout extends ApiBase {
 	}
 
 	public function execute() {
-		global $wgUser;
-		$oldName = $wgUser->getName();
-		$wgUser->logout();
+		$user = $this->getUser();
+		$oldName = $user->getName();
+		$user->logout();
 
 		// Give extensions to do something after user logout
 		$injected_html = '';
-		wfRunHooks( 'UserLogoutComplete', array( &$wgUser, &$injected_html, $oldName ) );
+		wfRunHooks( 'UserLogoutComplete', array( &$user, &$injected_html, $oldName ) );
 	}
 
 	public function isReadMode() {
@@ -64,16 +59,20 @@ class ApiLogout extends ApiBase {
 	}
 
 	public function getDescription() {
-		return 'This module is used to logout and clear session data';
+		return 'Log out and clear session data';
 	}
 
-	protected function getExamples() {
+	public function getExamples() {
 		return array(
 			'api.php?action=logout'
 		);
 	}
 
+	public function getHelpUrls() {
+		return 'http://www.mediawiki.org/wiki/API:Logout';
+	}
+
 	public function getVersion() {
-		return __CLASS__ . ': $Id: ApiLogout.php 78829 2010-12-22 20:52:06Z reedy $';
+		return __CLASS__ . ': $Id: ApiLogout.php 103273 2011-11-16 00:17:26Z johnduhart $';
 	}
 }

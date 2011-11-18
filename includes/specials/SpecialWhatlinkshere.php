@@ -28,8 +28,17 @@
  */
 class SpecialWhatLinksHere extends SpecialPage {
 
-	// Stored objects
-	protected $opts, $target, $selfTitle;
+	/**
+	 * @var FormOptions
+	 */
+	protected $opts;
+
+	protected $selfTitle;
+
+	/**
+	 * @var Title
+	 */
+	protected $target;
 
 	protected $limits = array( 20, 50, 100, 250, 500 );
 
@@ -38,15 +47,16 @@ class SpecialWhatLinksHere extends SpecialPage {
 	}
 
 	function execute( $par ) {
+		global $wgQueryPageDefaultLimit;
 		$out = $this->getOutput();
-		
+
 		$this->setHeaders();
 
 		$opts = new FormOptions();
 
 		$opts->add( 'target', '' );
 		$opts->add( 'namespace', '', FormOptions::INTNULL );
-		$opts->add( 'limit', 50 );
+		$opts->add( 'limit', $wgQueryPageDefaultLimit );
 		$opts->add( 'from', 0 );
 		$opts->add( 'back', 0 );
 		$opts->add( 'hideredirs', false );
@@ -73,23 +83,21 @@ class SpecialWhatLinksHere extends SpecialPage {
 
 		$this->getSkin()->setRelevantTitle( $this->target );
 
-
 		$this->selfTitle = $this->getTitle( $this->target->getPrefixedDBkey() );
 
-		$out->setPageTitle( wfMsg( 'whatlinkshere-title', $this->target->getPrefixedText() ) );
-		$out->setSubtitle( wfMsg( 'whatlinkshere-backlink', Linker::link( $this->target, $this->target->getPrefixedText(), array(), array( 'redirect' => 'no'  ) ) ) );
+		$out->setPageTitle( $this->msg( 'whatlinkshere-title', $this->target->getPrefixedText() ) );
+		$out->addBacklinkSubtitle( $this->target );
 
 		$this->showIndirectLinks( 0, $this->target, $opts->getValue( 'limit' ),
 			$opts->getValue( 'from' ), $opts->getValue( 'back' ) );
 	}
 
 	/**
-	 * @param $level  int     Recursion level
+	 * @param $level int     Recursion level
 	 * @param $target Title   Target title
-	 * @param $limit  int     Number of entries to display
-	 * @param $from   Title   Display from this article ID
-	 * @param $back   Title   Display from this article ID at backwards scrolling
-	 * @private
+	 * @param $limit int     Number of entries to display
+	 * @param $from Title   Display from this article ID
+	 * @param $back Title   Display from this article ID at backwards scrolling
 	 */
 	function showIndirectLinks( $level, $target, $limit, $from = 0, $back = 0 ) {
 		global $wgMaxRedirectLinksRetrieved;
@@ -260,6 +268,8 @@ class SpecialWhatLinksHere extends SpecialPage {
 	}
 
 	protected function listItem( $row, $nt, $notClose = false ) {
+		$dirmark = $this->getLang()->getDirMark();
+
 		# local message cache
 		static $msgcache = null;
 		if ( $msgcache === null ) {
@@ -303,8 +313,8 @@ class SpecialWhatLinksHere extends SpecialPage {
 		$wlh = Xml::wrapClass( "($wlhLink)", 'mw-whatlinkshere-tools' );
 
 		return $notClose ?
-			Xml::openElement( 'li' ) . "$link $propsText $wlh\n" :
-			Xml::tags( 'li', null, "$link $propsText $wlh" ) . "\n";
+			Xml::openElement( 'li' ) . "$link $propsText $dirmark $wlh\n" :
+			Xml::tags( 'li', null, "$link $propsText $dirmark $wlh" ) . "\n";
 	}
 
 	protected function listEnd() {
@@ -334,11 +344,9 @@ class SpecialWhatLinksHere extends SpecialPage {
 	}
 
 	function getPrevNext( $prevId, $nextId ) {
-		global $wgLang;
 		$currentLimit = $this->opts->getValue( 'limit' );
-		$fmtLimit = $wgLang->formatNum( $currentLimit );
-		$prev = wfMsgExt( 'whatlinkshere-prev', array( 'parsemag', 'escape' ), $fmtLimit );
-		$next = wfMsgExt( 'whatlinkshere-next', array( 'parsemag', 'escape' ), $fmtLimit );
+		$prev = wfMessage( 'whatlinkshere-prev' )->numParams( $currentLimit )->escaped();
+		$next = wfMessage( 'whatlinkshere-next' )->numParams( $currentLimit )->escaped();
 
 		$changed = $this->opts->getChangedValues();
 		unset($changed['target']); // Already in the request title
@@ -353,13 +361,14 @@ class SpecialWhatLinksHere extends SpecialPage {
 		}
 
 		$limitLinks = array();
+		$lang = $this->getLang();
 		foreach ( $this->limits as $limit ) {
-			$prettyLimit = $wgLang->formatNum( $limit );
+			$prettyLimit = htmlspecialchars( $lang->formatNum( $limit ) );
 			$overrides = array( 'limit' => $limit );
 			$limitLinks[] = $this->makeSelfLink( $prettyLimit, array_merge( $changed, $overrides ) );
 		}
 
-		$nums = $wgLang->pipeList( $limitLinks );
+		$nums = $lang->pipeList( $limitLinks );
 
 		return wfMsgHtml( 'viewprevnext', $prev, $next, $nums );
 	}
@@ -413,7 +422,6 @@ class SpecialWhatLinksHere extends SpecialPage {
 	 * @return string HTML fieldset and filter panel with the show/hide links
 	 */
 	function getFilterPanel() {
-		global $wgLang;
 		$show = wfMsgHtml( 'show' );
 		$hide = wfMsgHtml( 'hide' );
 
@@ -433,6 +441,6 @@ class SpecialWhatLinksHere extends SpecialPage {
 			$overrides = array( $type => !$chosen );
 			$links[] =  wfMsgHtml( "whatlinkshere-{$type}", $this->makeSelfLink( $msg, array_merge( $changed, $overrides ) ) );
 		}
-		return Xml::fieldset( wfMsg( 'whatlinkshere-filters' ), $wgLang->pipeList( $links ) );
+		return Xml::fieldset( wfMsg( 'whatlinkshere-filters' ), $this->getLang()->pipeList( $links ) );
 	}
 }

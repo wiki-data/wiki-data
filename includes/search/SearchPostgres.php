@@ -29,6 +29,11 @@
  * @ingroup Search
  */
 class SearchPostgres extends SearchEngine {
+
+	/**
+	 * @var DatabasePostgres
+	 */
+	protected $db;
 	/**
 	 * Creates an instance of this class
 	 * @param $db DatabaseSqlite: database object
@@ -56,6 +61,7 @@ class SearchPostgres extends SearchEngine {
 		}
 		return new PostgresSearchResultSet( $resultSet, $this->searchTerms );
 	}
+
 	function searchText( $term ) {
 		$q = $this->searchQuery( $term, 'textvector', 'old_text' );
 		$olderror = error_reporting(E_ERROR);
@@ -67,11 +73,14 @@ class SearchPostgres extends SearchEngine {
 		return new PostgresSearchResultSet( $resultSet, $this->searchTerms );
 	}
 
-
-	/*
+	/**
 	 * Transform the user's search string into a better form for tsearch2
 	 * Returns an SQL fragment consisting of quoted text to search for.
-	*/
+	 *
+	 * @param $term string
+	 *
+	 * @return string
+	 */
 	function parseQuery( $term ) {
 
 		wfDebug( "parseQuery received: $term \n" );
@@ -96,10 +105,10 @@ class SearchPostgres extends SearchEngine {
 				if (strtolower($terms[2]) === 'and') {
 					$searchstring .= ' & ';
 				}
-				else if (strtolower($terms[2]) === 'or' or $terms[2] === '|') {
+				elseif (strtolower($terms[2]) === 'or' or $terms[2] === '|') {
 					$searchstring .= ' | ';
 				}
-				else if (strtolower($terms[2]) === 'not') {
+				elseif (strtolower($terms[2]) === 'not') {
 					$searchstring .= ' & !';
 				}
 				else {

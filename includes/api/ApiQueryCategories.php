@@ -24,11 +24,6 @@
  * @file
  */
 
-if ( !defined( 'MEDIAWIKI' ) ) {
-	// Eclipse helper - will be ignored in production
-	require_once( "ApiQueryBase.php" );
-}
-
 /**
  * A query module to enumerate categories the set of pages belong to.
  *
@@ -70,7 +65,7 @@ class ApiQueryCategories extends ApiQueryGeneratorBase {
 			'cl_to'
 		) );
 
-		$this->addFieldsIf( 'cl_sortkey', isset( $prop['sortkey'] ) );
+		$this->addFieldsIf( array( 'cl_sortkey', 'cl_sortkey_prefix' ), isset( $prop['sortkey'] ) );
 		$this->addFieldsIf( 'cl_timestamp', isset( $prop['timestamp'] ) );
 
 		$this->addTables( 'categorylinks' );
@@ -104,7 +99,7 @@ class ApiQueryCategories extends ApiQueryGeneratorBase {
 		}
 
 		if ( isset( $show['hidden'] ) && isset( $show['!hidden'] ) ) {
-			$this->dieUsageMsg( array( 'show' ) );
+			$this->dieUsageMsg( 'show' );
 		}
 		if ( isset( $show['hidden'] ) || isset( $show['!hidden'] ) || isset( $prop['hidden'] ) )
 		{
@@ -127,11 +122,16 @@ class ApiQueryCategories extends ApiQueryGeneratorBase {
 		}
 
 		$this->addOption( 'USE INDEX', array( 'categorylinks' => 'cl_from' ) );
+
+		$dir = ( $params['dir'] == 'descending' ? ' DESC' : '' );
 		// Don't order by cl_from if it's constant in the WHERE clause
 		if ( count( $this->getPageSet()->getGoodTitles() ) == 1 ) {
-			$this->addOption( 'ORDER BY', 'cl_to' );
+			$this->addOption( 'ORDER BY', 'cl_to' . $dir );
 		} else {
-			$this->addOption( 'ORDER BY', "cl_from, cl_to" );
+			$this->addOption( 'ORDER BY', array(
+						'cl_from' . $dir,
+						'cl_to' . $dir
+			));
 		}
 
 		$res = $this->select( __METHOD__ );
@@ -151,7 +151,8 @@ class ApiQueryCategories extends ApiQueryGeneratorBase {
 				$vals = array();
 				ApiQueryBase::addTitleInfo( $vals, $title );
 				if ( isset( $prop['sortkey'] ) ) {
-					$vals['sortkey'] = $row->cl_sortkey;
+					$vals['sortkey'] = bin2hex( $row->cl_sortkey );
+					$vals['sortkeyprefix'] = $row->cl_sortkey_prefix;
 				}
 				if ( isset( $prop['timestamp'] ) ) {
 					$vals['timestamp'] = wfTimestamp( TS_ISO_8601, $row->cl_timestamp );
@@ -212,6 +213,13 @@ class ApiQueryCategories extends ApiQueryGeneratorBase {
 			'categories' => array(
 				ApiBase::PARAM_ISMULTI => true,
 			),
+			'dir' => array(
+				ApiBase::PARAM_DFLT => 'ascending',
+				ApiBase::PARAM_TYPE => array(
+					'ascending',
+					'descending'
+				)
+			),
 		);
 	}
 
@@ -219,7 +227,7 @@ class ApiQueryCategories extends ApiQueryGeneratorBase {
 		return array(
 			'prop' => array(
 				'Which additional properties to get for each category',
-				' sortkey    - Adds the sortkey for the category',
+				' sortkey    - Adds the sortkey (hexadecimal string) and sortkey prefix (human-readable part) for the category',
 				' timestamp  - Adds timestamp of when the category was added',
 				' hidden     - Tags categories that are hidden with __HIDDENCAT__',
 			),
@@ -227,6 +235,7 @@ class ApiQueryCategories extends ApiQueryGeneratorBase {
 			'show' => 'Which kind of categories to show',
 			'continue' => 'When more results are available, use this to continue',
 			'categories' => 'Only list these categories. Useful for checking whether a certain page is in a certain category',
+			'dir' => 'The direction in which to list',
 		);
 	}
 
@@ -240,7 +249,7 @@ class ApiQueryCategories extends ApiQueryGeneratorBase {
 		) );
 	}
 
-	protected function getExamples() {
+	public function getExamples() {
 		return array(
 			'Get a list of categories [[Albert Einstein]] belongs to:',
 			'  api.php?action=query&prop=categories&titles=Albert%20Einstein',
@@ -249,7 +258,11 @@ class ApiQueryCategories extends ApiQueryGeneratorBase {
 		);
 	}
 
+	public function getHelpUrls() {
+		return 'http://www.mediawiki.org/wiki/API:Properties#categories_.2F_cl';
+	}
+
 	public function getVersion() {
-		return __CLASS__ . ': $Id: ApiQueryCategories.php 82753 2011-02-24 23:03:00Z reedy $';
+		return __CLASS__ . ': $Id: ApiQueryCategories.php 103273 2011-11-16 00:17:26Z johnduhart $';
 	}
 }

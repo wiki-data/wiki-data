@@ -52,11 +52,11 @@ abstract class ResourceLoaderModule {
 	# limit the types of scripts and styles we allow to load on, say, sensitive special
 	# pages like Special:UserLogin and Special:Preferences
 	protected $origin = self::ORIGIN_CORE_SITEWIDE;
-	
+
 	/* Protected Members */
 
 	protected $name = null;
-	
+
 	// In-object cache for file dependencies
 	protected $fileDeps = array();
 	// In-object cache for message blob mtime
@@ -99,7 +99,7 @@ abstract class ResourceLoaderModule {
 	 * Set this module's origin. This is called by ResourceLodaer::register()
 	 * when registering the module. Other code should not call this.
 	 *
-	 * @param $name Int origin
+	 * @param $origin Int origin
 	 */
 	public function setOrigin( $origin ) {
 		$this->origin = $origin;
@@ -128,6 +128,45 @@ abstract class ResourceLoaderModule {
 	}
 
 	/**
+	 * Get the URL or URLs to load for this module's JS in debug mode.
+	 * The default behavior is to return a load.php?only=scripts URL for
+	 * the module, but file-based modules will want to override this to
+	 * load the files directly.
+	 *
+	 * This function is called only when 1) we're in debug mode, 2) there
+	 * is no only= parameter and 3) supportsURLLoading() returns true.
+	 * #2 is important to prevent an infinite loop, therefore this function
+	 * MUST return either an only= URL or a non-load.php URL.
+	 *
+	 * @param $context ResourceLoaderContext: Context object
+	 * @return Array of URLs
+	 */
+	public function getScriptURLsForDebug( ResourceLoaderContext $context ) {
+		$url = ResourceLoader::makeLoaderURL(
+			array( $this->getName() ),
+			$context->getLanguage(),
+			$context->getSkin(),
+			$context->getUser(),
+			$context->getVersion(),
+			true, // debug
+			'scripts', // only
+			$context->getRequest()->getBool( 'printable' ),
+			$context->getRequest()->getBool( 'handheld' )
+		);
+		return array( $url );
+	}
+
+	/**
+	 * Whether this module supports URL loading. If this function returns false,
+	 * getScript() will be used even in cases (debug mode, no only param) where
+	 * getScriptURLsForDebug() would normally be used instead.
+	 * @return bool
+	 */
+	public function supportsURLLoading() {
+		return true;
+	}
+
+	/**
 	 * Get all CSS for this module for a given skin.
 	 *
 	 * @param $context ResourceLoaderContext: Context object
@@ -136,6 +175,30 @@ abstract class ResourceLoaderModule {
 	public function getStyles( ResourceLoaderContext $context ) {
 		// Stub, override expected
 		return array();
+	}
+
+	/**
+	 * Get the URL or URLs to load for this module's CSS in debug mode.
+	 * The default behavior is to return a load.php?only=styles URL for
+	 * the module, but file-based modules will want to override this to
+	 * load the files directly. See also getScriptURLsForDebug()
+	 *
+	 * @param $context ResourceLoaderContext: Context object
+	 * @return Array: array( mediaType => array( URL1, URL2, ... ), ... )
+	 */
+	public function getStyleURLsForDebug( ResourceLoaderContext $context ) {
+		$url = ResourceLoader::makeLoaderURL(
+			array( $this->getName() ),
+			$context->getLanguage(),
+			$context->getSkin(),
+			$context->getUser(),
+			$context->getVersion(),
+			true, // debug
+			'styles', // only
+			$context->getRequest()->getBool( 'printable' ),
+			$context->getRequest()->getBool( 'handheld' )
+		);
+		return array( 'all' => array( $url ) );
 	}
 
 	/**
@@ -149,21 +212,33 @@ abstract class ResourceLoaderModule {
 		// Stub, override expected
 		return array();
 	}
-	
+
 	/**
 	 * Get the group this module is in.
-	 * 
+	 *
 	 * @return String: Group name
 	 */
 	public function getGroup() {
 		// Stub, override expected
 		return null;
 	}
-	
+
+	/**
+	 * Get the origin of this module. Should only be overridden for foreign modules.
+	 *
+	 * @return String: Origin name, 'local' for local modules
+	 */
+	public function getSource() {
+		// Stub, override expected
+		return 'local';
+	}
+
 	/**
 	 * Where on the HTML page should this module's JS be loaded?
 	 * 'top': in the <head>
 	 * 'bottom': at the bottom of the <body>
+	 *
+	 * @return string
 	 */
 	public function getPosition() {
 		return 'bottom';
@@ -198,7 +273,7 @@ abstract class ResourceLoaderModule {
 		// Stub, override expected
 		return array();
 	}
-	
+
 	/**
 	 * Get the files this module depends on indirectly for a given skin.
 	 * Currently these are only image files referenced by the module's CSS.
@@ -225,7 +300,7 @@ abstract class ResourceLoaderModule {
 		}
 		return $this->fileDeps[$skin];
 	}
-	
+
 	/**
 	 * Set preloaded file dependency information. Used so we can load this
 	 * information for all modules at once.
@@ -235,7 +310,7 @@ abstract class ResourceLoaderModule {
 	public function setFileDependencies( $skin, $deps ) {
 		$this->fileDeps[$skin] = $deps;
 	}
-	
+
 	/**
 	 * Get the last modification timestamp of the message blob for this
 	 * module in a given language.
@@ -246,7 +321,7 @@ abstract class ResourceLoaderModule {
 		if ( !isset( $this->msgBlobMtime[$lang] ) ) {
 			if ( !count( $this->getMessages() ) )
 				return 0;
-			
+
 			$dbr = wfGetDB( DB_SLAVE );
 			$msgBlobMtime = $dbr->selectField( 'msg_resource', 'mr_timestamp', array(
 					'mr_resource' => $this->getName(),
@@ -262,7 +337,7 @@ abstract class ResourceLoaderModule {
 		}
 		return $this->msgBlobMtime[$lang];
 	}
-	
+
 	/**
 	 * Set a preloaded message blob last modification timestamp. Used so we
 	 * can load this information for all modules at once.
@@ -272,9 +347,9 @@ abstract class ResourceLoaderModule {
 	public function setMsgBlobMtime( $lang, $mtime ) {
 		$this->msgBlobMtime[$lang] = $mtime;
 	}
-	
+
 	/* Abstract Methods */
-	
+
 	/**
 	 * Get this module's last modification timestamp for a given
 	 * combination of language, skin and debug mode flag. This is typically
@@ -289,7 +364,7 @@ abstract class ResourceLoaderModule {
 		// 0 would mean now
 		return 1;
 	}
-	
+
 	/**
 	 * Check whether this module is known to be empty. If a child class
 	 * has an easy and cheap way to determine that this module is
@@ -302,4 +377,57 @@ abstract class ResourceLoaderModule {
 	public function isKnownEmpty( ResourceLoaderContext $context ) {
 		return false;
 	}
+
+
+	/** @var JSParser lazy-initialized; use self::javaScriptParser() */
+	private static $jsParser;
+	private static $parseCacheVersion = 1;
+
+	/**
+	 * Validate a given script file; if valid returns the original source.
+	 * If invalid, returns replacement JS source that throws an exception.
+	 *
+	 * @param string $fileName
+	 * @param string $contents
+	 * @return string JS with the original, or a replacement error
+	 */
+	protected function validateScriptFile( $fileName, $contents ) {
+		global $wgResourceLoaderValidateJS;
+		if ( $wgResourceLoaderValidateJS ) {
+			// Try for cache hit
+			// Use CACHE_ANYTHING since filtering is very slow compared to DB queries
+			$key = wfMemcKey( 'resourceloader', 'jsparse', self::$parseCacheVersion, md5( $contents ) );
+			$cache = wfGetCache( CACHE_ANYTHING );
+			$cacheEntry = $cache->get( $key );
+			if ( is_string( $cacheEntry ) ) {
+				return $cacheEntry;
+			}
+
+			$parser = self::javaScriptParser();
+			try {
+				$parser->parse( $contents, $fileName, 1 );
+				$result = $contents;
+			} catch (Exception $e) {
+				// We'll save this to cache to avoid having to validate broken JS over and over...
+				$err = $e->getMessage();
+				$result = "throw new Error(" . Xml::encodeJsVar("JavaScript parse error: $err") . ");";
+			}
+
+			$cache->set( $key, $result );
+			return $result;
+		} else {
+			return $contents;
+		}
+	}
+
+	/**
+	 * @return JSParser
+	 */
+	protected static function javaScriptParser() {
+		if ( !self::$jsParser ) {
+			self::$jsParser = new JSParser();
+		}
+		return self::$jsParser;
+	}
+
 }

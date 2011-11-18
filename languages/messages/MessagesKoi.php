@@ -227,16 +227,7 @@ $messages = array(
 'mailmypassword'          => 'Ыстыны виль пароль',
 'loginlanguagelabel'      => 'Кыв: $1',
 
-# JavaScript password checks
-'password-strength'            => 'Парольытлöн вын: $1',
-'password-strength-bad'        => 'ТУЙТÖМ',
-'password-strength-mediocre'   => 'абужык умöль',
-'password-strength-acceptable' => 'туяна',
-'password-strength-good'       => 'туяна',
-'password-retype'              => 'Гиж парольтö мöдпöв',
-'password-retype-mismatch'     => 'Пароллет озö лöсялö',
-
-# Password reset dialog
+# Change password dialog
 'resetpass'                 => 'Вежны пароль',
 'oldpassword'               => 'Важ пароль',
 'newpassword'               => 'Виль пароль',
@@ -502,8 +493,7 @@ $messages = array(
 'linksearch' => 'Вики сайöдз ыстöттэз',
 
 # Special:Log/newusers
-'newuserlogpage'          => 'Уджкерисьö гижöтчан журнал',
-'newuserlog-create-entry' => 'Виль уджкерись',
+'newuserlogpage' => 'Уджкерисьö гижöтчан журнал',
 
 # Special:ListGroupRights
 'listgrouprights-members' => '(уджкериссезлöн нимлёдз)',
@@ -516,10 +506,8 @@ $messages = array(
 # Watchlist
 'watchlist'         => 'Синмаланнэз',
 'mywatchlist'       => 'Синмаланнэзö',
-'addedwatch'        => 'Синмалан нимлёдзö содтöм',
 'addedwatchtext'    => '«[[:$1]]» листбок вöлi содтöм [[Special:Watchlist|синмалан нимлёдзат]].
 Быдöс, мый пондас вежсьыны листбок вылас да сыкöт йитчöм сёрнитанын, позяс адзыны этiя нимлёдзись; сiя лоас сiдзжо кызжыка тöдчöтöм [[Special:RecentChanges|виль вежсьöммез сьöртi нимлёдзын]], медбы позис кокнитжыка казявны.',
-'removedwatch'      => 'Синмалан нимлёдзись вештöм',
 'removedwatchtext'  => 'Листбок «[[:$1]]» вöлi вештöм [[Special:Watchlist|синмалан нимлёдзсит]].',
 'watch'             => 'Синмав',
 'watchthispage'     => 'Синмавны этiйö листбок',
@@ -539,8 +527,7 @@ $messages = array(
 'delete-legend'         => 'Чышкыны',
 'confirmdeletetext'     => 'Тэ мöдан быдсöн чышкыны листбок (нето серпас) да  сылiсь история. Былись я тэ мöдан сiйö керны,  вежöртан я бура, мыйö этö вермас вайöтны,  и керан я этiйö [[{{MediaWiki:Policy-url}}]] туйдöттэз сьöртi',
 'actioncomplete'        => 'Керсьöм',
-'deletedtext'           => '«<nowiki>$1</nowiki>» чышкöм. Видзöт $2-ись медбöрья чышкöммесö.',
-'deletedarticle'        => 'чышкис "[[$1]]"',
+'deletedtext'           => '«$1» чышкöм. Видзöт $2-ись медбöрья чышкöммесö.',
 'dellogpage'            => 'Шупкан чукöр',
 'deletecomment'         => 'Мыля:',
 'deleteotherreason'     => 'Эшö мыля чышкöм:',
@@ -557,7 +544,7 @@ $messages = array(
 'protectexpiry'               => 'Помасьö:',
 'protect_expiry_invalid'      => 'Памасян кадыс соралöм',
 'protect_expiry_old'          => 'Помасян кад — чулалöмын.',
-'protect-text'                => "Татöн тэ верман видзöтны да вежны '''<nowiki>$1</nowiki>''' листбок понда дорьян тшупöт.",
+'protect-text'                => "Татöн тэ верман видзöтны да вежны '''$1''' листбок понда дорьян тшупöт.",
 'protect-locked-access'       => "Уджкерисьлöн нимыт оз тырмы, мед вежны листбокыслiсь дорьян тшупöт.
 Öння лöсьöтаннэз '''$1''' листбок понда:",
 'protect-cascadeon'           => 'Этiя листбокыс дорйöм, мыля сiя пыртöм улынжык висьталöм {{PLURAL:$1|листбокö|листбокö}}, кытчö лöсьöтöм каскад нёж дорьян.
@@ -578,9 +565,8 @@ $messages = array(
 'maximum-size'                => 'Медгырись ыжда:',
 
 # Undelete
-'undeletelink'     => 'видзöтны/керны важмоз',
-'undeletecomment'  => 'Мыля:',
-'undeletedarticle' => "бöр керис ''[[$1]]''",
+'undeletelink'    => 'видзöтны/керны важмоз',
+'undeletecomment' => 'Мыля:',
 
 # Namespace form on various pages
 'namespace'      => 'Ниммез чукöр:',
@@ -650,8 +636,6 @@ $messages = array(
 'talkexists'       => "'''Листбоклiсь ним вежöм ни, а сы йылiсь сёрнитанлiсь абу, мыля сэтшöм жö нима листбок эм ни. Öтлаöт жö нiйö кипонiсь.'''",
 'movedto'          => 'нымыс вежöм … вылö',
 'movetalk'         => 'Вежны ним и сёрнитан листбокыслiсь',
-'1movedto2'        => 'вежис  «[[$1]]»-лiсь нимсö «[[$2]]» вылö',
-'1movedto2_redir'  => '«[[$1]]»-лö сетiсö виль ним «[[$2]]» мöдлаö иньдöтöм весьтын',
 'movelogpage'      => 'Юрниммез вежöм йылiсь',
 'movereason'       => 'Мыля:',
 'revertmove'       => 'керны важмоз',
@@ -729,7 +713,7 @@ $messages = array(
 
 # Media information
 'file-info-size' => '$1 × $2 пиксел, файллöн ыжда: $3, MIME-тип: $4',
-'file-nohires'   => '<small>Буржыка тыдалан версия абу.</small>',
+'file-nohires'   => 'Буржыка тыдалан версия абу.',
 'svg-long-desc'  => 'SVG-файл, гижöм сьöртi $1 × $2 пиксел,  файллöн ыжда: $3',
 'show-big-image' => 'Буржыка тыдалан серпас',
 
@@ -748,7 +732,13 @@ $messages = array(
 * exposuretime
 * fnumber
 * isospeedratings
-* focallength',
+* focallength
+* artist
+* copyright
+* imagedescription
+* gpslatitude
+* gpslongitude
+* gpsaltitude',
 
 # EXIF tags
 'exif-imagewidth'  => 'Пасьта',
@@ -756,15 +746,13 @@ $messages = array(
 
 # External editor support
 'edit-externally'      => 'Редактируйтны этiйö файлсö мöд программа пыр',
-'edit-externally-help' => '(унажык видзöт: [http://www.mediawiki.org/wiki/Manual:External_editors удж кежö лöсьöтны туйдöтан])',
+'edit-externally-help' => '(унажык видзöт: [//www.mediawiki.org/wiki/Manual:External_editors удж кежö лöсьöтны туйдöтан])',
 
 # 'all' in various places, this might be different for inflected languages
-'recentchangesall' => 'быдöс',
-'imagelistall'     => 'быдöс',
-'watchlistall2'    => 'быдöс',
-'namespacesall'    => 'быдöс',
-'monthsall'        => 'быдöс',
-'limitall'         => 'быдöс',
+'watchlistall2' => 'быдöс',
+'namespacesall' => 'быдöс',
+'monthsall'     => 'быдöс',
+'limitall'      => 'быдöс',
 
 # Watchlist editing tools
 'watchlisttools-view' => 'Видзöт лöсялана вильмöтöммез',

@@ -1,15 +1,6 @@
 <?php
 
-class MessageTest extends MediaWikiTestCase {
-
-	function setUp() {
-		global $wgLanguageCode, $wgLang, $wgContLang;
-
-		$wgLanguageCode = 'en'; # For mainpage to be 'Main Page'
-		//Note that a Stub Object is not enough for this test
-		$wgContLang = $wgLang = Language::factory( $wgLanguageCode );
-		MessageCache::singleton()->disable();
-	}
+class MessageTest extends MediaWikiLangTestCase {
 
 	function testExists() {
 		$this->assertTrue( wfMessage( 'mainpage' )->exists() );
@@ -46,7 +37,20 @@ class MessageTest extends MediaWikiTestCase {
 		$this->assertEquals( '(Заглавная страница $1)', wfMessage( 'parentheses', 'Заглавная страница $1' )->plain() );
 		$this->assertEquals( '(Заглавная страница)', wfMessage( 'parentheses' )->rawParams( 'Заглавная страница' )->plain() );
 		$this->assertEquals( '(Заглавная страница $1)', wfMessage( 'parentheses' )->rawParams( 'Заглавная страница $1' )->plain() );
+	}
 
+	function testInContentLanguage() {
+		global $wgLang, $wgForceUIMsgAsContentMsg;
+		$oldLang = $wgLang;
+		$wgLang = Language::factory( 'fr' );
+
+		$this->assertEquals( 'Main Page', wfMessage( 'mainpage' )->inContentLanguage()->plain(), 'ForceUIMsg disabled' );
+		$wgForceUIMsgAsContentMsg['testInContentLanguage'] = 'mainpage';
+		$this->assertEquals( 'Accueil', wfMessage( 'mainpage' )->inContentLanguage()->plain(), 'ForceUIMsg enabled' );
+
+		/* Restore globals */
+		$wgLang = $oldLang;
+		unset( $wgForceUIMsgAsContentMsg['testInContentLanguage'] );
 	}
 
 	/**

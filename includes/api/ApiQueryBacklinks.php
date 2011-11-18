@@ -24,11 +24,6 @@
  * @file
  */
 
-if ( !defined( 'MEDIAWIKI' ) ) {
-	// Eclipse helper - will be ignored in production
-	require_once( "ApiQueryBase.php" );
-}
-
 /**
  * This is a three-in-one module to query:
  *   * backlinks  - links pointing to the given page,
@@ -63,17 +58,20 @@ class ApiQueryBacklinks extends ApiQueryGeneratorBase {
 		'backlinks' => array(
 			'code' => 'bl',
 			'prefix' => 'pl',
-			'linktbl' => 'pagelinks'
+			'linktbl' => 'pagelinks',
+			'helpurl' => 'http://www.mediawiki.org/wiki/API:Backlinks',
 		),
 		'embeddedin' => array(
 			'code' => 'ei',
 			'prefix' => 'tl',
-			'linktbl' => 'templatelinks'
+			'linktbl' => 'templatelinks',
+			'helpurl' => 'http://www.mediawiki.org/wiki/API:Embeddedin',
 		),
 		'imageusage' => array(
 			'code' => 'iu',
 			'prefix' => 'il',
-			'linktbl' => 'imagelinks'
+			'linktbl' => 'imagelinks',
+			'helpurl' => 'http://www.mediawiki.org/wiki/API:Imageusage',
 		)
 	);
 
@@ -88,6 +86,7 @@ class ApiQueryBacklinks extends ApiQueryGeneratorBase {
 		$this->bl_from = $prefix . '_from';
 		$this->bl_table = $settings['linktbl'];
 		$this->bl_code = $code;
+		$this->helpUrl = $settings['helpurl'];
 
 		$this->hasNS = $moduleName !== 'imageusage';
 		if ( $this->hasNS ) {
@@ -231,9 +230,12 @@ class ApiQueryBacklinks extends ApiQueryGeneratorBase {
 		$this->redirect = isset( $this->params['redirect'] ) && $this->params['redirect'];
 		$userMax = ( $this->redirect ? ApiBase::LIMIT_BIG1 / 2 : ApiBase::LIMIT_BIG1 );
 		$botMax  = ( $this->redirect ? ApiBase::LIMIT_BIG2 / 2 : ApiBase::LIMIT_BIG2 );
+
+		$result = $this->getResult();
+
 		if ( $this->params['limit'] == 'max' ) {
 			$this->params['limit'] = $this->getMain()->canApiHighLimits() ? $botMax : $userMax;
-			$this->getResult()->setParsedLimit( $this->getModuleName(), $this->params['limit'] );
+			$result->setParsedLimit( $this->getModuleName(), $this->params['limit'] );
 		}
 
 		$this->processContinue();
@@ -290,13 +292,13 @@ class ApiQueryBacklinks extends ApiQueryGeneratorBase {
 		}
 		if ( is_null( $resultPageSet ) ) {
 			// Try to add the result data in one go and pray that it fits
-			$fit = $this->getResult()->addValue( 'query', $this->getModuleName(), array_values( $this->resultArr ) );
+			$fit = $result->addValue( 'query', $this->getModuleName(), array_values( $this->resultArr ) );
 			if ( !$fit ) {
 				// It didn't fit. Add elements one by one until the
 				// result is full.
 				foreach ( $this->resultArr as $pageID => $arr ) {
 					// Add the basic entry without redirlinks first
-					$fit = $this->getResult()->addValue(
+					$fit = $result->addValue(
 						array( 'query', $this->getModuleName() ),
 						null, array_diff_key( $arr, array( 'redirlinks' => '' ) ) );
 					if ( !$fit ) {
@@ -305,8 +307,9 @@ class ApiQueryBacklinks extends ApiQueryGeneratorBase {
 					}
 
 					$hasRedirs = false;
-					foreach ( (array)@$arr['redirlinks'] as $key => $redir ) {
-						$fit = $this->getResult()->addValue(
+					$redirLinks = isset( $arr['redirlinks'] ) ? $arr['redirlinks'] : array();
+					foreach ( (array)$redirLinks as $key => $redir ) {
+						$fit = $result->addValue(
 							array( 'query', $this->getModuleName(), $pageID, 'redirlinks' ),
 							$key, $redir );
 						if ( !$fit ) {
@@ -316,7 +319,7 @@ class ApiQueryBacklinks extends ApiQueryGeneratorBase {
 						$hasRedirs = true;
 					}
 					if ( $hasRedirs ) {
-						$this->getResult()->setIndexedTagName_internal(
+						$result->setIndexedTagName_internal(
 							array( 'query', $this->getModuleName(), $pageID, 'redirlinks' ),
 							$this->bl_code );
 					}
@@ -326,7 +329,7 @@ class ApiQueryBacklinks extends ApiQueryGeneratorBase {
 				}
 			}
 
-			$this->getResult()->setIndexedTagName_internal(
+			$result->setIndexedTagName_internal(
 				array( 'query', $this->getModuleName() ),
 				$this->bl_code
 			);
@@ -408,9 +411,10 @@ class ApiQueryBacklinks extends ApiQueryGeneratorBase {
 			$this->dieUsage( 'Invalid continue param. You should pass the original value returned by the previous query', '_badcontinue' );
 		}
 		$this->contID = $contID;
-		$redirID = intval( @$continueList[3] );
+		$id2 = isset( $continueList[3] ) ? $continueList[3] : null;
+		$redirID = intval( $id2 );
 
-		if ( $redirID === 0 && @$continueList[3] !== '0' ) {
+		if ( $redirID === 0 && $id2 !== '0' ) {
 			// This one isn't required
 			return;
 		}
@@ -502,7 +506,7 @@ class ApiQueryBacklinks extends ApiQueryGeneratorBase {
 		) );
 	}
 
-	protected function getExamples() {
+	public function getExamples() {
 		static $examples = array(
 			'backlinks' => array(
 				'api.php?action=query&list=backlinks&bltitle=Main%20Page',
@@ -521,7 +525,11 @@ class ApiQueryBacklinks extends ApiQueryGeneratorBase {
 		return $examples[$this->getModuleName()];
 	}
 
+	public function getHelpUrls() {
+		return $this->helpUrl;
+	}
+
 	public function getVersion() {
-		return __CLASS__ . ': $Id: ApiQueryBacklinks.php 82913 2011-02-27 21:10:11Z reedy $';
+		return __CLASS__ . ': $Id: ApiQueryBacklinks.php 103273 2011-11-16 00:17:26Z johnduhart $';
 	}
 }

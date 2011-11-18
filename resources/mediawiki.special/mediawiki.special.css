@@ -25,7 +25,6 @@ td.mw-allpages-alphaindexline {
 }
 .mw-allpages-nav {
 	text-align: right;
-	font-size: smaller;
 	margin-bottom: 1em;
 }
 table.mw-allpages-table-form tr {
@@ -72,10 +71,11 @@ table#mw-prefixindex-nav-table {
 	width: 98%;
 }
 td#mw-prefixindex-nav-form {
-	font-size: smaller;
 	margin-bottom: 1em;
-	text-align: right;
 	vertical-align: top;
+}
+.mw-prefixindex-nav {
+	text-align: right;
 }
 
 
@@ -249,10 +249,19 @@ form#powersearch {
 .mw-specialpagecached {
 	font-style:italic;
 }
+
 .mw-specialpagerestricted {
-	font-weight:bold;
+	font-weight: bold;
 }
 
+.mw-specialpages-table {
+	margin-top: -1em;
+	margin-bottom: 1em;
+}
+
+.mw-specialpages-table td {
+	vertical-align: top;
+}
 
 /**** Special:Statistics ****/
 td.mw-statistics-numbers {

@@ -157,11 +157,11 @@ class MimeMagic {
 	private static $extensionLoaded = false;
 
 	/** Initializes the MimeMagic object. This is called by MimeMagic::singleton().
-	*
-	* This constructor parses the mime.types and mime.info files and build internal mappings.
-	*/
+	 *
+	 * This constructor parses the mime.types and mime.info files and build internal mappings.
+	 */
 	function __construct() {
-		/*
+		/**
 		*   --- load mime.types ---
 		*/
 
@@ -244,9 +244,9 @@ class MimeMagic {
 			}
 		}
 
-		/*
-		*   --- load mime.info ---
-		*/
+		/**
+		 *   --- load mime.info ---
+		 */
 
 		global $wgMimeInfoFile;
 		if ( $wgMimeInfoFile == 'includes/mime.info' ) {
@@ -424,6 +424,10 @@ class MimeMagic {
 	/** 
 	 * Returns true if the mime type is known to represent an image format 
 	 * supported by the PHP GD library.
+	 *
+	 * @param $mime string
+	 * 
+	 * @return bool
 	 */
 	public function isPHPImageType( $mime ) {
 		// As defined by imagegetsize and image_type_to_mime
@@ -564,7 +568,8 @@ class MimeMagic {
 	private function doGuessMimeType( $file, $ext ) { // TODO: remove $ext param
 		// Read a chunk of the file
 		wfSuppressWarnings();
-		$f = fopen( $file, 'rt' ); // FIXME: Shouldn't this be rb?
+		// @todo FIXME: Shouldn't this be rb?
+		$f = fopen( $file, 'rt' );
 		wfRestoreWarnings();
 		
 		if( !$f ) {
@@ -627,12 +632,12 @@ class MimeMagic {
 			return "image/webp";
 		}
 
-		/*
+		/**
 		 * Look for PHP.  Check for this before HTML/XML...  Warning: this is a
 		 * heuristic, and won't match a file with a lot of non-PHP before.  It
 		 * will also match text files which could be PHP. :)
 		 *
-		 * FIXME: For this reason, the check is probably useless -- an attacker
+		 * @todo FIXME: For this reason, the check is probably useless -- an attacker
 		 * could almost certainly just pad the file with a lot of nonsense to
 		 * circumvent the check in any case where it would be a security
 		 * problem.  On the other hand, it causes harmful false positives (bug
@@ -651,7 +656,7 @@ class MimeMagic {
 			return 'application/x-php';
 		}
 
-		/*
+		/**
 		 * look for XML formats (XHTML and SVG)
 		 */
 		$xml = new XmlTypeCheck( $file );
@@ -664,7 +669,7 @@ class MimeMagic {
 			}
 		}
 
-		/*
+		/**
 		 * look for shell scripts
 		 */
 		$script_type = null;
@@ -856,7 +861,7 @@ class MimeMagic {
 
 		$m = null;
 		if ( $wgMimeDetectorCommand ) {
-			// FIXME: Use wfShellExec
+			// @todo FIXME: Use wfShellExec
 			$fn = wfEscapeShellArg( $file );
 			$m = `$wgMimeDetectorCommand $fn`;
 		} elseif ( function_exists( "finfo_open" ) && function_exists( "finfo_file" ) ) {

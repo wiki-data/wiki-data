@@ -16,6 +16,7 @@ class LocalSettingsGenerator {
 
 	private $extensions = array();
 	private $values = array();
+	private $groupPermissions = array();
 	private $dbSettings = '';
 	private $safeMode = false;
 
@@ -38,15 +39,15 @@ class LocalSettingsGenerator {
 
 		$confItems = array_merge(
 			array(
-				'wgScriptPath', 'wgScriptExtension',
+				'wgServer', 'wgScriptPath', 'wgScriptExtension',
 				'wgPasswordSender', 'wgImageMagickConvertCommand', 'wgShellLocale',
 				'wgLanguageCode', 'wgEnableEmail', 'wgEnableUserEmail', 'wgDiff3',
 				'wgEnotifUserTalk', 'wgEnotifWatchlist', 'wgEmailAuthentication',
 				'wgDBtype', 'wgSecretKey', 'wgRightsUrl', 'wgSitename', 'wgRightsIcon',
-				'wgRightsText', 'wgRightsCode', 'wgMainCacheType', 'wgEnableUploads',
+				'wgRightsText', 'wgMainCacheType', 'wgEnableUploads',
 				'wgMainCacheType', '_MemCachedServers', 'wgDBserver', 'wgDBuser',
 				'wgDBpassword', 'wgUseInstantCommons', 'wgUpgradeKey', 'wgDefaultSkin',
-				'wgMetaNamespace'
+				'wgMetaNamespace', 'wgResourceLoaderMaxQueryLength'
 			),
 			$db->getGlobalNames()
 		);
@@ -74,6 +75,16 @@ class LocalSettingsGenerator {
 		$this->dbSettings = $db->getLocalSettings();
 		$this->safeMode = $installer->getVar( '_SafeMode' );
 		$this->values['wgEmergencyContact'] = $this->values['wgPasswordSender'];
+	}
+
+	/**
+	 * For $wgGroupPermissions, set a given ['group']['permission'] value.
+	 * @param $group String Group name
+	 * @param $rightsArr Array An array of permissions, in the form of:
+	 *   array( 'right' => true, 'right2' => false )
+	 */
+	public function setGroupRights( $group, $rightsArr ) {
+		$this->groupPermissions[$group] = $rightsArr;
 	}
 
 	/**
@@ -118,7 +129,7 @@ class LocalSettingsGenerator {
 
 			foreach( $this->extensions as $extName ) {
 				$encExtName = self::escapePhpString( $extName );
-				$localSettings .= "require( \"extensions/$encExtName/$encExtName.php\" );\n";
+				$localSettings .= "require_once( \"\$IP/extensions/$encExtName/$encExtName.php\" );\n";
 			}
 		}
 
@@ -176,11 +187,24 @@ class LocalSettingsGenerator {
 			$locale = '';
 		}
 
-		$rights = $this->values['wgRightsUrl'] ? '' : '#';
+		//$rightsUrl = $this->values['wgRightsUrl'] ? '' : '#'; // TODO: Fixme, I'm unused!
 		$hashedUploads = $this->safeMode ? '' : '#';
 		$metaNamespace = '';
 		if( $this->values['wgMetaNamespace'] !== $this->values['wgSitename'] ) {
 			$metaNamespace = "\$wgMetaNamespace = \"{$this->values['wgMetaNamespace']}\";\n";
+		}
+
+		$groupRights = '';
+		if( $this->groupPermissions ) {
+			$groupRights .= "# The following permissions were set based on your choice in the installer\n";
+			foreach( $this->groupPermissions as $group => $rightArr ) {
+				$group = self::escapePhpString( $group );
+				foreach( $rightArr as $right => $perm ) {
+					$right = self::escapePhpString( $right );
+					$groupRights .= "\$wgGroupPermissions['$group']['$right'] = " .
+						wfBoolToStr( $perm ) . ";\n";
+				}
+			}
 		}
 
 		switch( $this->values['wgMainCacheType'] ) {
@@ -224,6 +248,9 @@ if ( !defined( 'MEDIAWIKI' ) ) {
 ## http://www.mediawiki.org/wiki/Manual:Short_URL
 \$wgScriptPath       = \"{$this->values['wgScriptPath']}\";
 \$wgScriptExtension  = \"{$this->values['wgScriptExtension']}\";
+
+## The protocol and server name to use in fully-qualified URLs
+\$wgServer           = \"{$this->values['wgServer']}\";
 
 ## The relative URL path to the skins directory
 \$wgStylePath        = \"\$wgScriptPath/skins\";
@@ -282,7 +309,7 @@ if ( !defined( 'MEDIAWIKI' ) ) {
 ## be publically accessible from the web.
 #\$wgCacheDirectory = \"\$IP/cache\";
 
-# Site language code, should be one of ./languages/Language(.*).php
+# Site language code, should be one of the list in ./languages/Names.php
 \$wgLanguageCode = \"{$this->values['wgLanguageCode']}\";
 
 \$wgSecretKey = \"{$this->values['wgSecretKey']}\";
@@ -298,16 +325,21 @@ if ( !defined( 'MEDIAWIKI' ) ) {
 ## For attaching licensing metadata to pages, and displaying an
 ## appropriate copyright notice / icon. GNU Free Documentation
 ## License and Creative Commons licenses are supported so far.
-{$rights}\$wgEnableCreativeCommonsRdf = true;
 \$wgRightsPage = \"\"; # Set to the title of a wiki page that describes your license/copyright
 \$wgRightsUrl  = \"{$this->values['wgRightsUrl']}\";
 \$wgRightsText = \"{$this->values['wgRightsText']}\";
 \$wgRightsIcon = \"{$this->values['wgRightsIcon']}\";
-# \$wgRightsCode = \"{$this->values['wgRightsCode']}\"; # Not yet used
 
 # Path to the GNU diff3 utility. Used for conflict resolution.
 \$wgDiff3 = \"{$this->values['wgDiff3']}\";
-";
+
+# Query string length limit for ResourceLoader. You should only set this if
+# your web server has a query string length limit (then set it to that limit),
+# or if you have suhosin.get.max_value_length set in php.ini (then set it to
+# that value)
+\$wgResourceLoaderMaxQueryLength = {$this->values['wgResourceLoaderMaxQueryLength']};
+
+{$groupRights}";
 	}
 
 }

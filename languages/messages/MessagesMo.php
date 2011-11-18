@@ -367,8 +367,7 @@ $messages = array(
 'linksearch' => 'Легэтурь екстерне',
 
 # Special:Log/newusers
-'newuserlogpage'          => 'Журнал утилизаторь ной',
-'newuserlog-create-entry' => 'Конт ноу де утилизатор',
+'newuserlogpage' => 'Журнал утилизаторь ной',
 
 # Special:ListGroupRights
 'listgrouprights-members' => '(листэ де мембрь)',
@@ -392,9 +391,8 @@ $messages = array(
 # Delete
 'deletepage'            => 'Штерӂе паӂина',
 'actioncomplete'        => 'Акциуне комплетэ',
-'deletedtext'           => 'Паӂина «<nowiki>$1</nowiki>» а фост штярсэ.
+'deletedtext'           => 'Паӂина «$1» а фост штярсэ.
 Везь $2 пентру о листэ а елементелор штерсе речент.',
-'deletedarticle'        => 'а штерс «[[$1]]»',
 'dellogpage'            => 'Журнал штерӂерь',
 'deletecomment'         => 'Мотив:',
 'deleteotherreason'     => 'Мотив диферит/суплиментар:',
@@ -411,7 +409,7 @@ $messages = array(
 'protectexpiry'               => 'Експирэ:',
 'protect_expiry_invalid'      => 'Тимпул де експираре ну есте валид.',
 'protect_expiry_old'          => 'Тимпул де експираре есте ын трекут.',
-'protect-text'                => "Поць визуализа сау модифика нивелул де протекцие пентру паӂина '''<nowiki>$1</nowiki>'''.",
+'protect-text'                => "Поць визуализа сау модифика нивелул де протекцие пентру паӂина '''$1'''.",
 'protect-locked-access'       => "Контул тэу ну аре пермисиуня де а скимба нивелуриле де протежаре а паӂиний.
 Аичь сынт сетэриле куренте пентру паӂина '''$1''':",
 'protect-cascadeon'           => 'Ачастэ паӂинэ есте протежатэ деоарече есте инклусэ ын {{PLURAL:$1|урмэтоаря паӂинэ, че аре|урмэтоареле паӂинь, че ау}} активитатэ протежаря ла модификаре ын каскадэ.
@@ -426,8 +424,7 @@ $messages = array(
 'restriction-level'           => 'Нивел де рестрикцие:',
 
 # Undelete
-'undeletelink'     => 'визуализязэ/рестаурязэ',
-'undeletedarticle' => 'а рекуперат «[[$1]]»',
+'undeletelink' => 'визуализязэ/рестаурязэ',
 
 # Namespace form on various pages
 'namespace'      => 'Спациу де нуме:',
@@ -480,7 +477,6 @@ $messages = array(
 'movearticle' => 'Депласязэ паӂина:',
 'newtitle'    => 'Титлул ноу:',
 'movepagebtn' => 'Депласязэ паӂина',
-'1movedto2'   => 'а депласат [[$1]] ын [[$2]]',
 'movelogpage' => 'Журнал депласэрь',
 'movereason'  => 'Мотив:',
 'revertmove'  => 'ревино',
@@ -547,7 +543,7 @@ $messages = array(
 
 # Media information
 'file-info-size' => '$1 × $2 пиксель, мэриме фишиер: $3, тип MIME: $4',
-'file-nohires'   => '<small>Резолуций май марь ну сынт диспонибиле.</small>',
+'file-nohires'   => 'Резолуций май марь ну сынт диспонибиле.',
 'svg-long-desc'  => 'фишиер SVG, ку дименсиуня номиналэ де $1 × $2 пиксель, мэриме фишиер: $3',
 'show-big-image' => 'Мэреште резолуция имаӂиний',
 
@@ -566,7 +562,7 @@ $messages = array(
 
 # External editor support
 'edit-externally'      => 'Едитязэ ачест фишиер фолосинд о апликацие екстернэ',
-'edit-externally-help' => '(Везь [http://www.mediawiki.org/wiki/Manual:External_editors инструкциунь де инсталаре] пентру май мулте информаций)',
+'edit-externally-help' => '(Везь [//www.mediawiki.org/wiki/Manual:External_editors инструкциунь де инсталаре] пентру май мулте информаций)',
 
 # 'all' in various places, this might be different for inflected languages
 'watchlistall2' => 'тоате',

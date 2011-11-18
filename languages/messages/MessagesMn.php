@@ -168,14 +168,6 @@ $messages = array(
 'index-category'                 => 'Индекслэгдсэн хуудсууд',
 'noindex-category'               => 'Индекслэгдээгүй хуудсууд',
 
-'mainpagetext'      => "'''МедиаВики амжилттай суулаа.'''",
-'mainpagedocfooter' => 'Вики программыг хэрэглэх талаар заавар авахын тулд [http://meta.wikimedia.org/wiki/Help:Contents хэрэглэгчийн гарын авлага]-г үзнэ үү.
-
-== Эхлэх ==
-* [http://www.mediawiki.org/wiki/Manual:Configuration_settings Тохиргоо]
-* [http://www.mediawiki.org/wiki/Manual:FAQ МедиаВикигийн тогтмол тавигддаг асуултууд]
-* [https://lists.wikimedia.org/mailman/listinfo/mediawiki-announce МедиаВикигийн мэдээний мэйл явуулах жагсаалт]',
-
 'about'         => 'Тухай',
 'article'       => 'Өгүүлэл',
 'newwindow'     => '（шинэ цонх нээгдэнэ）',
@@ -226,7 +218,6 @@ $messages = array(
 'history'           => 'Хуудасны түүх',
 'history_short'     => 'Түүх',
 'updatedmarker'     => 'сүүлд зочилсноос хойш шинэчлэгдсэн',
-'info_short'        => 'Мэдээлэл',
 'printableversion'  => 'Хэвлэх хувилбар',
 'permalink'         => 'Байнгын холбоос',
 'print'             => 'Хэвлэх',
@@ -407,7 +398,6 @@ $1',
 Функц: $1<br />
 Асуудал: $2',
 'viewsource'           => 'Кодыг харах',
-'viewsourcefor'        => '$1',
 'actionthrottled'      => 'Үйлдэл хязгаарлагдлаа',
 'actionthrottledtext'  => 'Бид спамаас хамгаалахын тулд энэ үйлдлийг богино хугацаанд хэт олон удаа давтахыг хязгаарладаг. Та энэхүү хязгаарт хүрсэн тул түр хүлээгээд дахин оролдоно уу.',
 'protectedpagetext'    => 'Засварлах явдлыг саатуулахын тулд энэ хуудас түгжигдсэн байна.',
@@ -415,12 +405,11 @@ $1',
 'protectedinterface'   => 'Энэ хуудас программын харагдах байдалд ашиглагддаг текстийг агуулдаг тул түгжигдсэн байна.',
 'editinginterface'     => "'''Анхаар''': Та программын харагдах байдалд ашиглагддаг текстийг агуулсан хуудсыг засварлах гэж байна.
 Энэ хуудсанд өөрчлөлт оруулснаар бусад хэрэглэгчдийн программын харагдах байдалд нөлөөлөх болно.
-Орчуулга хийх гэж байгаа бол МедиаВикигийн орчуулгын төсөл болох, [http://translatewiki.net/wiki/Main_Page?setlang=mn Бетавики]-г хэрэглэхийг санал болгож байна.",
+Орчуулга хийх гэж байгаа бол МедиаВикигийн орчуулгын төсөл болох, [//translatewiki.net/wiki/Main_Page?setlang=mn Бетавики]-г хэрэглэхийг санал болгож байна.",
 'sqlhidden'            => '（SQL илэрц харагдахгүй байна）',
 'cascadeprotected'     => 'Энэ хуудас нь давхар хамгаалалттай дараах {{PLURAL:$1|хуудсанд|хуудсуудад}} орсон тул засварлагдахаас хамгаалагдсан байна:
 $2',
 'namespaceprotected'   => "Таньд '''$1''' нэрний зай дахь хуудсуудыг засварлах зөвшөөрөл байхгүй байна.",
-'customcssjsprotected' => 'Энэ хуудас өөр хэрэглэгчийн хувийн тохиргоог агуулдаг тул та засварлах эрхгүй.',
 'ns-specialprotected'  => 'Тусгай хуудсуудыг засварлах боломжгүй.',
 'titleprotected'       => "[[User:$1|$1]] нь энэ хуудсыг үүсгэх явдыг хорьжээ.
 Шалтгаан нь: ''$2''.",
@@ -477,7 +466,7 @@ $2',
 'nosuchuser'                 => '"$1" нэртэй хэрэглэгч олдсонгүй.
 Хэрэглэгчийн нэрийн үсгүүд том жижгээр бичсэн байдлаар өөр байна.
 Та зөв бичсэн эсэхээ шалгах, эсвэл [[Special:UserLogin/signup| шинээр бүртгүүлнэ үү]].',
-'nosuchusershort'            => '"<nowiki>$1</nowiki>" гэсэн нэртэй хэрэглэгч байхгүй байна.
+'nosuchusershort'            => '"$1" гэсэн нэртэй хэрэглэгч байхгүй байна.
 Үсгийн алдаагаа шалгана уу.',
 'nouserspecified'            => 'Та хэрэглэгчийн нэрээ зааж өгөх хэрэгтэй.',
 'login-userblocked'          => 'Энэхүү хэрэглэгчийг түгжсэн байна. Нэвтрэх боломжгүй.',
@@ -525,16 +514,7 @@ $2',
 'loginlanguagelabel'         => 'Хэл: $1',
 'suspicious-userlogout'      => 'Таны гарах хүсэлт нь эвдэрхий хөтөч буюу кэшлэгч проксигоор явуулсан мэт харагдаж байгаа тул зөвшөөрсөнгүй.',
 
-# JavaScript password checks
-'password-strength'            => 'Нууц үгний барагцаалсан чадал: $1',
-'password-strength-bad'        => 'Муу',
-'password-strength-mediocre'   => 'Тааруу',
-'password-strength-acceptable' => 'Зөвшөөрөгдөнө',
-'password-strength-good'       => 'Сайн',
-'password-retype'              => 'Энд нууц үгээ дахин бичнэ үү',
-'password-retype-mismatch'     => 'Нууц үгнүүд ижил биш байна',
-
-# Password reset dialog
+# Change password dialog
 'resetpass'                 => 'Нууц үгээ солих',
 'resetpass_announce'        => 'Та мэйлээр илгээгдсэн түр зуурын нууц үгээр нэвтэрч орсон байна
 Бүрэн нэвтэрэхэд та энд шинэ нууц үгээ оруулах хэрэгтэй:',
@@ -551,6 +531,9 @@ $2',
 'resetpass-wrong-oldpass'   => 'Хүчингүй түр зуурын эсвэл одоогийн нууц үг байна.
 Та аль хэдийнээ нууц үгээ сольсон эсвэл түр зуурын нууц үг хүссэн байна.',
 'resetpass-temp-password'   => 'Түр зуурын нууц үг:',
+
+# Special:PasswordReset
+'passwordreset-username' => 'Хэрэглэгчийн нэр:',
 
 # Edit page toolbar
 'bold_sample'     => 'Тодруулсан бичиг',
@@ -619,9 +602,6 @@ $2',
 Таны одоогийн IP хаяг $3, таны түгжээний дугаар #$5 байна.
 Түгжээний талаарх асуултандаа дээрх бүх зүйлсийг тусгаж өгөөрэй.',
 'blockednoreason'                  => 'шалтгаан өгөгдөөгүй байна',
-'blockedoriginalsource'            => "'''$1'''-н кодыг доор үзүүлэв:",
-'blockededitsource'                => "Таны '''$1'''-д хийж байгаа '''засваруудын''' текстийг доор үзүүлэв:",
-'whitelistedittitle'               => 'Засварлахын тулд нэвтрэх шаардлагатай',
 'whitelistedittext'                => 'Хуудсуудад засвар хийхийн тулд та урьдаар $1 хэрэгтэй.',
 'confirmedittext'                  => 'Та хуудсуудыг засварлахдаа мэйл хаягаа баталгаажуулах хэрэгтэй.
 [[Special:Preferences|Хэрэглэгчийн тохиргоо]] хэсэгт өөрийнхөө мэйл хаягийг оруулж, баталгаажуулна уу.',
@@ -648,7 +628,7 @@ $2',
 эсвэл [{{fullurl:{{FULLPAGENAME}}|action=edit}} энэ хуудсыг засварлаж болно]</span>.',
 'noarticletext-nopermission'       => 'Одоогийн байдлаар энэ хуудсанд текст алга.
 Та энэхүү [[Special:Search/{{PAGENAME}}|гарчигийг бусад хуудсуудаас хайх]],  эсвэл <span class="plainlinks">[{{fullurl:{{#Special:Log}}|page={{FULLPAGENAMEE}}}} холбогдох логуудаас хайж болно]</span>.',
-'userpage-userdoesnotexist'        => '"$1" хэрэглэгчийн бүртгэл бүртгэгдээгүй байна. Та энэ хуудсыг үүсгэх/засварлах тухайгаа дахин тунгааж бодно уу.',
+'userpage-userdoesnotexist'        => '"<nowiki>$1</nowiki>" хэрэглэгчийн бүртгэл бүртгэгдээгүй байна. Та энэ хуудсыг үүсгэх/засварлах тухайгаа дахин тунгааж бодно уу.',
 'userpage-userdoesnotexist-view'   => '"$1" гэсэн хэрэглэгч бүртгэгдээгүй байна.',
 'blocked-notice-logextract'        => 'Энэхүү хэрэглэгч одоогоор түгжигдсэн байна.
 Лавлагааны зориулалтаар түгжээний лог дээрх хамгийн сүүлийн нэмэлтийг доор оруулав:',
@@ -871,8 +851,6 @@ $3-н тодорхойлсон шалтгаан нь ''$2''",
 'revdelete-unsuppress'        => 'Сэргээгдсэн засварууд дахь хязгаарлалтуудыг авч хаях',
 'revdelete-log'               => 'Шалтгаан:',
 'revdelete-submit'            => 'Сонгосон {{PLURAL:$1|засварт|засваруудад}} үйлчлүүлэх',
-'revdelete-logentry'          => '[[$1]]-н засварын харагдах байдлыг өөрчиллөө',
-'logdelete-logentry'          => '[[$1]]-н үйл явдлын харагдах байдлыг өөрчиллөө',
 'revdelete-success'           => "'''Засварын үзэгдэх байдлыг амжилттайгаар шинэчиллээ.'''",
 'revdelete-failure'           => "'''Засварын үзэгдэх байдлыг шинэчилж чадсангүй:'''
 $1",
@@ -884,15 +862,6 @@ $1",
 'revdel-restore-visible'      => 'үзэгдэх засварууд',
 'pagehist'                    => 'Хуудасны түүх',
 'deletedhist'                 => 'Устгагдсан түүх',
-'revdelete-content'           => 'агуулга',
-'revdelete-summary'           => 'засварын товч агуулга',
-'revdelete-uname'             => 'хэрэглэгчийн нэр',
-'revdelete-restricted'        => 'системийн операторуудад тавигдсан хязгаарлалтууд',
-'revdelete-unrestricted'      => 'системийн операторуудаас авч хаясан хязгаарлалтууд',
-'revdelete-hid'               => 'нуугдсан $1',
-'revdelete-unhid'             => 'нууцлахаа болиулсан $1',
-'revdelete-log-message'       => '$2 засварт $1',
-'logdelete-log-message'       => '$2 үйл явдалд $1',
 'revdelete-hide-current'      => '$2, $1 огноотой зүйлийг нуухад алдаа гарав: энэ бол одоогийн засвар.
 Нуух боломжгүй байна.',
 'revdelete-show-no-access'    => '$2, $1 огноотой зүйлийг харуулахад алдаа гарав: энэхүү зүйл "хориглогдсон байна".
@@ -917,26 +886,6 @@ $1",
 'suppressionlog'     => 'Хязгаарлалтын лог',
 'suppressionlogtext' => 'Доорх нь сиестемийн операторуудаас нууцалсан агуулгатай холбоотой устгал ба түгжээнүүдийн жагсаалт юм.
 [[Special:IPBlockList|IP түгжээний жагсаалтыг]] үзэж одоо хэрэгжиж буй хорио ба түгжээг харна уу.',
-
-# Revision move
-'moverevlogentry'              => '$1-с $2 руу {{PLURAL:$3|нэг засварыг|$3 засварыг}} зөөв',
-'revisionmove'                 => '"$1"-с засваруудыг зөөв',
-'revmove-explain'              => 'Дараах засварууд нь $1-с заагдсан хуудас руу зөөгдөх болно. Зорьсон хуудас оршдоггүй бол үүсгэгдэнэ. Өөрөөр байвал эдгээр засварууд нь хуудасны түүх руу нэгтгэгдэнэ.',
-'revmove-legend'               => 'Зорьсон хуудсыг зааж өгч тайлбар оруулах',
-'revmove-submit'               => 'Сонгосон хуудас руу засваруудыг зөөх',
-'revisionmoveselectedversions' => 'Сонгосон засваруудыг зөөх',
-'revmove-reasonfield'          => 'Шалтгаан:',
-'revmove-titlefield'           => 'Зорих хуудас:',
-'revmove-badparam-title'       => 'Буруу параметр',
-'revmove-badparam'             => 'Таны хүсэлтэд хориотой эсвэл дутуу параметр байна.
-Өмнөх хуудас руу буцаад дахин оролдоно уу.',
-'revmove-norevisions-title'    => 'Зорьсон засвар байхгүй байна',
-'revmove-norevisions'          => 'Та энэхүү үйлдлийг гүйцэтгэх нэг эсвэл түүнээс дээш тооны зорьсон засварыг өгөөгүй, эсвэл заагдсан засвар байхгүй байна.',
-'revmove-nullmove-title'       => 'Болохгүй гарчиг',
-'revmove-nullmove'             => 'Зорьсон хуудас нь эх үүсвэр хуудастай ижил байж болохгүй.
-Өмнөх хуудас руу буцаад "$1"-с өөр нэр сонгоно уу.',
-'revmove-success-existing'     => '[[$3]] гэсэн анхнаасаа байсан хуудас руу {{PLURAL:$1|[[$2]]-н нэг засварыг|[[$2]]-н $1 засварыг}} зөөв.',
-'revmove-success-created'      => '[[$3]] гэсэн шинээр үүсгэгдсэн хуудас руу {{PLURAL:$1|[[$2]]-н нэг засварыг|[[$2]]-н $1 засварыг}} зөөв.',
 
 # History merging
 'mergehistory'                     => 'Хуудсуудын түүхийг нэгтгэх',
@@ -1087,8 +1036,6 @@ $1",
 'columns'                       => 'Багана:',
 'searchresultshead'             => 'Хайлт',
 'resultsperpage'                => 'Хуудас тус бүр дээрх илэрцийн тоо:',
-'contextlines'                  => 'Илэрц тус бүр дэх мөрийн тоо:',
-'contextchars'                  => 'Нэг мөр тус бүр дэх үгийн тоо:',
 'stub-threshold'                => '<a href="#" class="stub">Түүхий холбоосийг</a> форматлах босго （байт）:',
 'stub-threshold-disabled'       => 'Идэвхигүйжүүлсэн',
 'recentchangesdays'             => 'Сүүлийн өөрчлөлтүүдэд үзүүлэх өдрийн тоо:',
@@ -1270,10 +1217,8 @@ $1 тэмдэгтээс богино байх ёстой.',
 'right-userrights'            => 'Хэрэглэгчийн эрхүүдийг засварлах',
 'right-userrights-interwiki'  => 'Бусад вики дээрх хэрэглэгчдийн эрхүүдийг засварлах',
 'right-siteadmin'             => 'Мэдээллийн баазыг түгжих буюу нээх',
-'right-reset-passwords'       => 'Бусад хэрэглэгчдийн нууц үгсийг дахин тогтоох',
 'right-override-export-depth' => '5 хүртэлх гүний хуудсуудыг холбогдсон хуудсуудтай хамт гаргах',
 'right-sendemail'             => 'Бусад хэрэглэгчид руу и-мэйл явуулах',
-'right-revisionmove'          => 'Засваруудыг зөөх',
 
 # User rights log
 'rightslog'      => 'Хэрэглэгчдийн эрхийн лог',
@@ -1316,7 +1261,6 @@ $1 тэмдэгтээс богино байх ёстой.',
 'action-userrights'           => 'хэрэглэгчийн бүх эрхүүдийг засварлах',
 'action-userrights-interwiki' => 'бусад викинүүд дээрх хэрэглэгчийн эрхүүдийг засварлах',
 'action-siteadmin'            => 'мэдээллийн баазыг түгжих буюу нээх',
-'action-revisionmove'         => 'завсруудыг зөөх',
 
 # Recent changes
 'nchanges'                          => '$1 өөрчлөлт',
@@ -1474,10 +1418,6 @@ file_uploads тохиргоогоо шалгана уу.',
 'watchthisupload'             => 'Энэ файлыг хянах',
 'filewasdeleted'              => 'Өмнө нь ийм нэртэй файл оруулагдсан бөгөөд дараа нь устгагдсан байна.
 Та үүнийг дахин оруулахын өмнө $1-г шалгаж үзнэ үү.',
-'upload-wasdeleted'           => "'''Анхаар: Та өмнө нь устгагдсан файлыг дахин оруулах гэж байна.'''
-
-Энэ файлыг дахин оруулах нь зүйтэй эсэхийг та бодож үзнэ үү.
-Файлын устгалын лог энд байна:",
 'filename-bad-prefix'         => "Таны оруулж байгаа файлын нэр '''\"\$1\"'''-р эхэлж байна. Энэ нь файлыг тодорхойлойлоогүй, голдуу дижитал аппаратын автоматаар гаргадаг нэр болно.
 Файланд түүнийг илүү сайн тодорхойлсон нэр өгнө үү.",
 'upload-success-subj'         => 'Файлыг амжилттай орууллаа',
@@ -1584,7 +1524,6 @@ URL нь зөв болон сайт ажиллагаатай байгаа эсэ
 [[Special:WhatLinksHere/$2|Бүтэн жагсаалт]] мөн байгаа.',
 'nolinkstoimage'            => 'Энэ файлд холбогдсон хуудас байхгүй байна.',
 'morelinkstoimage'          => 'Энэ файлд руух [[Special:WhatLinksHere/$1|илүү олон холбоос]] үзэх.',
-'redirectstofile'           => 'Дараах {{PLURAL:$1|чиглүүлэгч|$1 чиглүүлэгч}} энэ файлд холбогдоно:',
 'duplicatesoffile'          => 'Дараах {{PLURAL:$1|файл|$1 файл}} нь энэ файлтай яг ижилхэн байна （[[Special:FileDuplicateSearch/$2|дэлгэрэнгүй мэдээлэл]]）:',
 'sharedupload'              => 'Энэ файл нь $1-ийнх бөгөөд бусад төслүүдэд ашиглах боломжтой',
 'sharedupload-desc-there'   => 'Энэ файл нь $1-нх бөгөөд бусад төслүүд үүнийг хэрэглэх боломжтой.
@@ -1832,12 +1771,8 @@ URL нь зөв болон сайт ажиллагаатай байгаа эсэ
 'activeusers-noresult'   => 'Хэрэглэгч олдсонгүй.',
 
 # Special:Log/newusers
-'newuserlogpage'              => 'Хэрэглэгч үүсгэлтийн лог',
-'newuserlogpagetext'          => 'Энэ нь хэрэглэгч үүсгэлтийн лог юм.',
-'newuserlog-byemail'          => 'мэйлээр явуулсан нууц үг',
-'newuserlog-create-entry'     => 'Шинэ хэрэглэгчийн бүртгэл',
-'newuserlog-create2-entry'    => '$1 гэсэн бүртгэлийг үүсгэв',
-'newuserlog-autocreate-entry' => 'Автоматаар үүсгэгдсэн бүртгэл',
+'newuserlogpage'     => 'Хэрэглэгч үүсгэлтийн лог',
+'newuserlogpagetext' => 'Энэ нь хэрэглэгч үүсгэлтийн лог юм.',
 
 # Special:ListGroupRights
 'listgrouprights'                      => 'Хэрэглэгчийн бүлгийн эрхүүд',
@@ -1897,10 +1832,8 @@ URL нь зөв болон сайт ажиллагаатай байгаа эсэ
 'watchlistanontext'    => 'Та өөрийн хянах листийг өөрчлөх буюу үзэхийг хүсвэл $1 хэрэгтэй.',
 'watchnologin'         => 'Нэвтрээгүй байна.',
 'watchnologintext'     => 'Та өөрийн хянаж буй хуудаснуудын жагсаалтыг өөрчлөхийн тулд [[Special:UserLogin|нэвтэрсэн байх]] шаардлагатай.',
-'addedwatch'           => 'Хянах жагсаалтанд нэмэгдлээ',
 'addedwatchtext'       => "\"[[:\$1]]\" гэсэн хуудас таны [[Special:Watchlist|хянах жагсаалтанд]] нэмэгдлээ.
 Энэ хуудас эсвэл түүний хэлэлцүүлгийн хуудас засварлагдахад тэдгээр нь [[Special:RecentChanges|сүүлийн засваруудын жагсаалтад]] '''тодруулалттай''' харагдах болно.",
-'removedwatch'         => 'Хянах жагсаалтнаас хасагдлаа',
 'removedwatchtext'     => '"[[:$1]]" хуудас таны [[Special:Watchlist|хяналтын жагсаалтаас]] хасагдлаа.',
 'watch'                => 'Хянах',
 'watchthispage'        => 'Энэ хуудсыг хяна',
@@ -1953,10 +1886,10 @@ $NEWPAGE
 
 --
 Хянаж буй хуудсуудынхаа тохиргоог өөрчлөхийн тулд дараах хуудаст зочилно уу:
-{{fullurl:{{#special:Watchlist}}/edit}}
+{{canonicalurl:{{#special:EditWatchlist}}}}
 
 Дэлгэрэнгүй мэдээлэл:
-{{fullurl:{{MediaWiki:Helppage}}}}',
+{{canonicalurl:{{MediaWiki:Helppage}}}}',
 
 # Delete
 'deletepage'             => 'Хуудсыг устга',
@@ -1972,10 +1905,8 @@ $NEWPAGE
 Энэхүү үйлдлийг хийснээр ямар үр дүнд хүрэхийг бүрэн гүйцэд ойлгож хийж байгаа гэдгээ, мөн [[{{MediaWiki:Policy-url}}|дүрэм журмынх нь дагуу]] хийж байнаагаа илтгэнэ үү.',
 'actioncomplete'         => 'Үйлдлийг гүйцэтгэлээ.',
 'actionfailed'           => 'Үйлдлийг гүйцэтгэж чадсангүй',
-'deletedtext'            => '"<nowiki>$1</nowiki>" нь устгагдлаа.
+'deletedtext'            => '"$1" нь устгагдлаа.
 Сүүлд устгагдсан зүйлсийг $2-с харна уу.',
-'deletedarticle'         => '"[[$1]]" нь устгагдлаа',
-'suppressedarticle'      => '"[[$1]]"-г далдаллаа',
 'dellogpage'             => 'Устгалын лог',
 'dellogpagetext'         => 'Доорх нь хамгийн сүүлд устгагдсан зүйлсийн жагсаалт.',
 'deletionlog'            => 'устгалын лог',
@@ -2030,7 +1961,7 @@ $NEWPAGE
 'protect_expiry_invalid'      => 'Дуусах хугацаа хүчингүй байна.',
 'protect_expiry_old'          => 'Дуусах хугацаа өнгөрсөн цагт байна.',
 'protect-unchain-permissions' => 'Хамгаалах бусад тохиргоог нээх',
-'protect-text'                => "Та '''<nowiki>$1</nowiki>''' хуудасны хамгаалалтын түвшинг харж, өөрчлөх боломжтой.",
+'protect-text'                => "Та '''$1''' хуудасны хамгаалалтын түвшинг харж, өөрчлөх боломжтой.",
 'protect-locked-blocked'      => "Түгжигдсэн байхад хамгаалалтын түвшинг өөрчилж болохгүй.
 '''$1''' хуудасны одоогийн тохиргоо энд байна:",
 'protect-locked-dblock'       => "Мэдээллийн санг түгжсэн байгаа тул хамгаалалтын түвшинг өөрчилж болохгүй.
@@ -2100,7 +2031,6 @@ $NEWPAGE
 'undeletereset'                => 'Дахин эхлүүлэх',
 'undeleteinvert'               => 'Эсрэгээр нь болгох',
 'undeletecomment'              => 'Шалтгаан:',
-'undeletedarticle'             => '"[[$1]]"-ийг сэргээв',
 'undeletedrevisions'           => '{{PLURAL:$1|1 хувилбар|$1 хувилбар}}  сэргээгдлээ',
 'undeletedrevisions-files'     => '{{PLURAL:$1|1 засвар|$1 засвар}} ба {{PLURAL:$2|1 файл|$2 файл}} сэргээгдлээ',
 'undeletedfiles'               => '{{PLURAL:$1|1 файл|$1 файл}} сэргээгдлээ',
@@ -2248,7 +2178,7 @@ $1',
 'reblock-logentry'                => '[[$1]]-н түгжээний тохиргоог $2 $3 хугацаатай болгож өөрчилсөн',
 'blocklogtext'                    => 'Энэ нь хэрэглэгчийг түгжсэн болон тайлсан үйлдлийн лог юм.
 Автоматаар түгжигдсэн IP хаягууд жагсаагдаагүй.
-[[Special:IPBlockList|IP хаягийн түгжээний жагсаалтыг]] харж одоо түгжигдсэн хаягуудыг харна уу.',
+[[Special:BlockList|IP хаягийн түгжээний жагсаалтыг]] харж одоо түгжигдсэн хаягуудыг харна уу.',
 'unblocklogentry'                 => '$1 идэвхтэй',
 'block-log-flags-anononly'        => 'зөвхөн нэргүй хэрэглэгчид',
 'block-log-flags-nocreate'        => 'Бүртгэл үүсгэх боломжгүй',
@@ -2348,9 +2278,6 @@ $1',
 'movepage-page-moved'          => '$1 гэх хуудас $2 руу зөөгдлөө.',
 'movepage-page-unmoved'        => '$1 гэх хуудас $2 руу зөөгдөх боломжгүй байна.',
 'movepage-max-pages'           => 'Дээд хэмжээ болох $1 хуудас зөөгдсөн бөгөөд дахин автоматаар зөөх боломжгүй байна.',
-'1movedto2'                    => '[[$1]] нь [[$2]] руу зөөгдлөө',
-'1movedto2_redir'              => '[[$1]] нь [[$2]] руу дахин чиглэнэ.',
-'move-redirect-suppressed'     => 'чиглүүлэгчийг хориглов',
 'movelogpage'                  => 'Зөөлтийн лог',
 'movelogpagetext'              => 'Доорх нь зөөвөрлөгдсөн хуудасны лист.',
 'movesubpage'                  => '{{PLURAL:$1|Дэд хуудас|Дэд хуудсууд}}',
@@ -2412,7 +2339,7 @@ $1',
 'allmessagesdefault'            => 'Анхны',
 'allmessagescurrent'            => 'Одоогийн',
 'allmessagestext'               => 'Энэ бол МедиаВики дахь системийн мэдэгдлүүдийн жагсаалт юм.
-МедиаВикиг орчуулах тухай мэдээллийг [http://www.mediawiki.org/wiki/Localisation МедиаВикигийн орчуулга], мөн [http://translatewiki.net translatewiki.net]-с авна уу.',
+МедиаВикиг орчуулах тухай мэдээллийг [//www.mediawiki.org/wiki/Localisation МедиаВикигийн орчуулга], мөн [//translatewiki.net translatewiki.net]-с авна уу.',
 'allmessagesnotsupportedDB'     => "'''\$wgUseDatabaseMessages''' нь унтарсан байгаа тул '''Special:Allmessages'''-г хэрэглэж болохгүй.",
 'allmessages-filter-legend'     => 'Шүүлтүүр',
 'allmessages-filter'            => 'Өөрийн болгосон байдлаар нь шүүх:',
@@ -2557,9 +2484,7 @@ $1',
 'common.js' => '/* Энд байгаа ЖаваСкрипт хэрэглэгч бүрд ямар нэгэн хуудас нээж үзэх болгонд дуудагдах болно. */',
 
 # Metadata
-'nodublincore'      => 'Энэ серверт Dublin Core RDF мэдээллийг идэвхжүүлээгүй байна.',
-'nocreativecommons' => 'Энэ серверт Creative Commons RDF мэдээллийг идэвхжүүлээгүй байна.',
-'notacceptable'     => 'Вики сервер нь мэдээллийг таны клиентийн уншиж чадах хэлбэрт олгох боломжгүй байна.',
+'notacceptable' => 'Вики сервер нь мэдээллийг таны клиентийн уншиж чадах хэлбэрт олгох боломжгүй байна.',
 
 # Attribution
 'anonymous'        => '{{SITENAME}}-н бүртгүүлээгүй {{PLURAL:$1|хэрэглэгч|хэрэглэгчид}}',
@@ -2582,14 +2507,6 @@ $1',
 'spam_reverting'      => '$1 руух холбоосгүй хамгийн сүүлийн хувилбар руу шилжүүлж байна',
 'spam_blanking'       => 'Бүх засварууд $1 руу холбоостой тул хуудсыг хоосолж байна',
 
-# Info page
-'infosubtitle'   => 'Хуудасны мэдээлэл',
-'numedits'       => 'засварласан тоо （Өгүүлэл）: $1',
-'numtalkedits'   => 'засварласан тоо （Хэлэлцүүлэгийн хуудас）: $1',
-'numwatchers'    => 'Хянагчдын тоо: $1',
-'numauthors'     => 'Ялгаатай зохиогчдын тоо （Бичлэг）: $1',
-'numtalkauthors' => 'Ялгаатай зохиогчдын тоо （Хэлэлцүүлэгийн хуудас）: $1',
-
 # Patrolling
 'markaspatrolleddiff'                 => 'Хяналтанд авъя',
 'markaspatrolledtext'                 => 'Үүнийг хяналтанд авъя',
@@ -2604,9 +2521,6 @@ $1',
 # Patrol log
 'patrol-log-page'      => 'Эргүүлийн лог',
 'patrol-log-header'    => 'Энэ нь манагдсан засваруудын лог юм.',
-'patrol-log-line'      => '$2-н $1-г $3 манагдсан гэж тэмдэглэв',
-'patrol-log-auto'      => '（автомат）',
-'patrol-log-diff'      => 'засвар $1',
 'log-show-hide-patrol' => 'мануулын логийг $1',
 
 # Image deletion
@@ -2631,7 +2545,7 @@ $1',
 'widthheightpage'      => '$1×$2, $3 хуудас',
 'file-info'            => 'файлын хэмжээ: $1, MIME төрөл: $2',
 'file-info-size'       => '$1 × $2 пиксел, файлын хэмжээ: $3, MIME төрөл: $4',
-'file-nohires'         => '<small>Илүү чанартай хувилбар байхгүй байна.</small>',
+'file-nohires'         => 'Илүү чанартай хувилбар байхгүй байна.',
 'svg-long-desc'        => 'SVG файл, $1 × $2 пиксэл, файлын хэмжээ: $3',
 'show-big-image'       => 'Хамгийн сайн чанартай хувилбар',
 'file-info-gif-looped' => 'эргэлдсэн',
@@ -2673,7 +2587,13 @@ $1',
 * exposuretime
 * fnumber
 * isospeedratings
-* focallength',
+* focallength
+* artist
+* copyright
+* imagedescription
+* gpslatitude
+* gpslongitude
+* gpsaltitude',
 
 # EXIF tags
 'exif-imagewidth'                  => 'Өргөн',
@@ -2688,13 +2608,11 @@ $1',
 'exif-ycbcrpositioning'            => 'Y and C-н байршил',
 'exif-xresolution'                 => 'Зургийн хөндлөн чанар',
 'exif-yresolution'                 => 'Зургийн босоо чанар',
-'exif-resolutionunit'              => 'X ба Y чанарын нэгж',
 'exif-stripoffsets'                => 'Зургийн мэдээллийн байршил',
 'exif-rowsperstrip'                => 'Зурвас тус бүр дэх мөрийн тоо',
 'exif-stripbytecounts'             => 'Шахагдсан зурвас тус бүр дэх байт',
 'exif-jpeginterchangeformat'       => 'JPEG SOI руу шилжүүлэх',
 'exif-jpeginterchangeformatlength' => 'JPEG өгөгдлийн байт',
-'exif-transferfunction'            => 'Шилжүүлгийн функц',
 'exif-whitepoint'                  => 'Цагаан цэгийн хромат байдал',
 'exif-ycbcrcoefficients'           => 'Өнгөний орон зайн хувиргалтын матрицийн коэффициентүүд',
 'exif-referenceblackwhite'         => 'Хар цагаан лавлагааны хоёр хэмжээс',
@@ -2712,7 +2630,6 @@ $1',
 'exif-compressedbitsperpixel'      => 'Зургийн файлыг шахах арга',
 'exif-pixelydimension'             => 'Зургийн хүчинтэй өргөн',
 'exif-pixelxdimension'             => 'Зургийн хүчинтэй өндөр',
-'exif-makernote'                   => 'Үйлдвэрлэгчийн тэмдэглэлүүд',
 'exif-usercomment'                 => 'Хэрэглэгчдийн тэмдэглэл',
 'exif-relatedsoundfile'            => 'Холбоотой дуун файл',
 'exif-datetimeoriginal'            => 'Мэдээллийг үүсгэсэн огноо ба цаг',
@@ -2726,7 +2643,6 @@ $1',
 'exif-exposureprogram'             => 'Гэрэл өгөх хугацааны программ',
 'exif-spectralsensitivity'         => 'Спектралийн мэдрэмтгий байдал',
 'exif-isospeedratings'             => 'ISO хурдны үнэлгээ',
-'exif-oecf'                        => 'Оптоэлектроник хувилгалтын хүчин зүйл',
 'exif-shutterspeedvalue'           => 'Хөшигний хурд',
 'exif-aperturevalue'               => 'Дурангийн өрц',
 'exif-brightnessvalue'             => 'Гэрэлтэлт',
@@ -2739,7 +2655,6 @@ $1',
 'exif-focallength'                 => 'Линзний фокусын урт',
 'exif-subjectarea'                 => 'Субъектийн талбай',
 'exif-flashenergy'                 => 'Гэрэл цацагчын энерги',
-'exif-spatialfrequencyresponse'    => 'Орон зайн давтамжийн хариу',
 'exif-focalplanexresolution'       => 'X фокусын хавтгайн чанар',
 'exif-focalplaneyresolution'       => 'Y фокусын хавтгайн чанар',
 'exif-focalplaneresolutionunit'    => 'Фокусын хавтгайн чанарын нэгж',
@@ -2748,7 +2663,6 @@ $1',
 'exif-sensingmethod'               => 'Мэдрэх арга',
 'exif-filesource'                  => 'Файлыг эх үүсвэр',
 'exif-scenetype'                   => 'Үзэгдлийн төрөл',
-'exif-cfapattern'                  => 'CFA загвар',
 'exif-customrendered'              => 'Зураг боловсруулах дурын процесс',
 'exif-exposuremode'                => 'Гэрэл өгөх арга',
 'exif-whitebalance'                => 'Цагаан өнгийн тэнцвэр',
@@ -2912,15 +2826,13 @@ $1',
 
 # External editor support
 'edit-externally'      => 'Гадны программыг ашиглан энэ файлыг засварлах',
-'edit-externally-help' => '(Нэмэлт мэдээллийг [http://www.mediawiki.org/wiki/Manual:External_editors тохируулгын зааврын] хуудаснаас харна уу)',
+'edit-externally-help' => '(Нэмэлт мэдээллийг [//www.mediawiki.org/wiki/Manual:External_editors тохируулгын зааврын] хуудаснаас харна уу)',
 
 # 'all' in various places, this might be different for inflected languages
-'recentchangesall' => 'Бүгдийг',
-'imagelistall'     => 'бүгдийг',
-'watchlistall2'    => 'бүгдийг',
-'namespacesall'    => 'бүгдийг',
-'monthsall'        => 'бүгдийг',
-'limitall'         => 'бүгдийг',
+'watchlistall2' => 'бүгдийг',
+'namespacesall' => 'бүгдийг',
+'monthsall'     => 'бүгдийг',
+'limitall'      => 'бүгдийг',
 
 # E-mail address confirmation
 'confirmemail'              => 'Мэйл хаягийг баталгаажуулах',
@@ -3060,36 +2972,33 @@ $1',
 'duplicate-defaultsort' => '\'\'\'Анхаар:\'\'\' "$2" гэсэн default sort key нь "$1" гэсэн өмнөх key-н дээгүүр бичигдэх болж байна.',
 
 # Special:Version
-'version'                          => 'Хувилбар',
-'version-extensions'               => 'Суулгасан өргөтгөлүүд',
-'version-specialpages'             => 'Тусгай хуудсууд',
-'version-parserhooks'              => 'Парсер хүүкүүд',
-'version-variables'                => 'Хувьсагчууд',
-'version-other'                    => 'Бусад',
-'version-mediahandlers'            => 'Медиа боловсруулагч',
-'version-hooks'                    => 'Хүүкүүд',
-'version-extension-functions'      => 'Өргөтгөлүүдийн функцууд',
-'version-parser-extensiontags'     => 'Парсер нэмэлт тагууд',
-'version-parser-function-hooks'    => 'Парсер функцийн тагууд',
-'version-skin-extension-functions' => 'Скины өргөтгөлийн функцууд',
-'version-hook-name'                => 'Хүүкийн нэр',
-'version-hook-subscribedby'        => 'Захиалсан:',
-'version-version'                  => '(Хувилбар $1)',
-'version-license'                  => 'Лиценз',
-'version-poweredby-credits'        => "Энэхүү викиг '''[http://www.mediawiki.org/ MediaWiki]''' програмаар ажиллуулдаг, зохиогчийн эрх © 2001-$1 $2.",
-'version-poweredby-others'         => 'бусад',
-'version-software'                 => 'Суулгасан программ',
-'version-software-product'         => 'Бүтээгдэхүүн',
-'version-software-version'         => 'Хувилбар',
+'version'                       => 'Хувилбар',
+'version-extensions'            => 'Суулгасан өргөтгөлүүд',
+'version-specialpages'          => 'Тусгай хуудсууд',
+'version-parserhooks'           => 'Парсер хүүкүүд',
+'version-variables'             => 'Хувьсагчууд',
+'version-other'                 => 'Бусад',
+'version-mediahandlers'         => 'Медиа боловсруулагч',
+'version-hooks'                 => 'Хүүкүүд',
+'version-extension-functions'   => 'Өргөтгөлүүдийн функцууд',
+'version-parser-extensiontags'  => 'Парсер нэмэлт тагууд',
+'version-parser-function-hooks' => 'Парсер функцийн тагууд',
+'version-hook-name'             => 'Хүүкийн нэр',
+'version-hook-subscribedby'     => 'Захиалсан:',
+'version-version'               => '(Хувилбар $1)',
+'version-license'               => 'Лиценз',
+'version-poweredby-credits'     => "Энэхүү викиг '''[//www.mediawiki.org/ MediaWiki]''' програмаар ажиллуулдаг, зохиогчийн эрх © 2001-$1 $2.",
+'version-poweredby-others'      => 'бусад',
+'version-software'              => 'Суулгасан программ',
+'version-software-product'      => 'Бүтээгдэхүүн',
+'version-software-version'      => 'Хувилбар',
 
 # Special:FilePath
 'filepath'         => 'Файлын зам',
 'filepath-page'    => 'Файл:',
 'filepath-submit'  => 'Явах',
 'filepath-summary' => 'Энэхүү тусгай хуудас нь файлын бүтэн замыг дуудна.
-Зургууд нь бүтэн хэмжээгээрээ гарах ба бусад файлын төрлүүд нь тохирох програмаараа шууд нээгдэнэ.
-
-Файлын нэрийг "{{ns:file}}:" угтваргүйгээр нь оруулна уу.',
+Зургууд нь бүтэн хэмжээгээрээ гарах ба бусад файлын төрлүүд нь тохирох програмаараа шууд нээгдэнэ.',
 
 # Special:FileDuplicateSearch
 'fileduplicatesearch'          => 'Давхардсан файлуудыг хайх',
@@ -3170,5 +3079,10 @@ $1',
 # SQLite database support
 'sqlite-has-fts' => '$1 (бүх текстээрх хайлтыг дэмждэг)',
 'sqlite-no-fts'  => '$1 (бүх текстээрх хайлтыг дэмждэггүй)',
+
+# New logging system
+'revdelete-restricted'   => 'системийн операторуудад тавигдсан хязгаарлалтууд',
+'revdelete-unrestricted' => 'системийн операторуудаас авч хаясан хязгаарлалтууд',
+'newuserlog-byemail'     => 'мэйлээр явуулсан нууц үг',
 
 );

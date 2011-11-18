@@ -52,12 +52,16 @@ class MostcategoriesPage extends QueryPage {
 		);
 	}
 
+	/**
+	 * @param $skin Skin
+	 * @param $result
+	 * @return string
+	 */
 	function formatResult( $skin, $result ) {
-		global $wgLang;
 		$title = Title::makeTitleSafe( $result->namespace, $result->title );
 
-		$count = wfMsgExt( 'ncategories', array( 'parsemag', 'escape' ), $wgLang->formatNum( $result->value ) );
-		$link = $skin->link( $title );
-		return wfSpecialList( $link, $count );
+		$count = $this->msg( 'ncategories' )->numParams( $result->value )->escaped();
+		$link = Linker::link( $title );
+		return $this->getLang()->specialList( $link, $count );
 	}
 }

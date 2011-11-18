@@ -21,7 +21,7 @@
  */
 
 class ResourceLoaderStartUpModule extends ResourceLoaderModule {
-	
+
 	/* Protected Members */
 
 	protected $modifiedTime = array();
@@ -33,11 +33,12 @@ class ResourceLoaderStartUpModule extends ResourceLoaderModule {
 	 * @return array
 	 */
 	protected function getConfig( $context ) {
-		global $wgLoadScript, $wgScript, $wgStylePath, $wgScriptExtension, 
-			$wgArticlePath, $wgScriptPath, $wgServer, $wgContLang, 
-			$wgVariantArticlePath, $wgActionPaths, $wgUseAjax, $wgVersion, 
-			$wgEnableAPI, $wgEnableWriteAPI, $wgDBname, $wgEnableMWSuggest, 
-			$wgSitename, $wgFileExtensions, $wgExtensionAssetsPath, $wgProto;
+		global $wgLoadScript, $wgScript, $wgStylePath, $wgScriptExtension,
+			$wgArticlePath, $wgScriptPath, $wgServer, $wgContLang,
+			$wgVariantArticlePath, $wgActionPaths, $wgUseAjax, $wgVersion,
+			$wgEnableAPI, $wgEnableWriteAPI, $wgDBname, $wgEnableMWSuggest,
+			$wgSitename, $wgFileExtensions, $wgExtensionAssetsPath,
+			$wgCookiePrefix, $wgResourceLoaderMaxQueryLength, $wgLegacyJavaScriptGlobals;
 
 		// Pre-process information
 		$separatorTransTable = $wgContLang->separatorTransformTable();
@@ -53,7 +54,21 @@ class ResourceLoaderStartUpModule extends ResourceLoaderModule {
 			implode( "\t", $digitTransTable ),
 		);
 		$mainPage = Title::newMainPage();
-		
+
+		/**
+		 * Namespace related preparation
+		 * - wgNamespaceIds: Key-value pairs of all localized, canonical and aliases for namespaces.
+		 * - wgCaseSensitiveNamespaces: Array of namespaces that are case-sensitive.
+		 */
+		$namespaceIds = $wgContLang->getNamespaceIds();
+		$caseSensitiveNamespaces = array();
+		foreach( MWNamespace::getCanonicalNamespaces() as $index => $name ) {
+			$namespaceIds[$wgContLang->lc( $name )] = $index;
+			if ( !MWNamespace::isCapitalized( $index ) ) {
+				$caseSensitiveNamespaces[] = $index;
+			}
+		}
+
 		// Build list of variables
 		$vars = array(
 			'wgLoadScript' => $wgLoadScript,
@@ -73,30 +88,37 @@ class ResourceLoaderStartUpModule extends ResourceLoaderModule {
 			'wgVersion' => $wgVersion,
 			'wgEnableAPI' => $wgEnableAPI,
 			'wgEnableWriteAPI' => $wgEnableWriteAPI,
+			'wgDefaultDateFormat' => $wgContLang->getDefaultDateFormat(),
+			'wgMonthNames' => $wgContLang->getMonthNamesArray(),
+			'wgMonthNamesShort' => $wgContLang->getMonthAbbreviationsArray(),
 			'wgSeparatorTransformTable' => $compactSeparatorTransTable,
 			'wgDigitTransformTable' => $compactDigitTransTable,
 			'wgMainPageTitle' => $mainPage ? $mainPage->getPrefixedText() : null,
 			'wgFormattedNamespaces' => $wgContLang->getFormattedNamespaces(),
-			'wgNamespaceIds' => $wgContLang->getNamespaceIds(),
+			'wgNamespaceIds' => $namespaceIds,
 			'wgSiteName' => $wgSitename,
 			'wgFileExtensions' => array_values( $wgFileExtensions ),
 			'wgDBname' => $wgDBname,
-			// This sucks, it is only needed on Special:Upload, but I could 
+			// This sucks, it is only needed on Special:Upload, but I could
 			// not find a way to add vars only for a certain module
 			'wgFileCanRotate' => BitmapHandler::canRotate(),
 			'wgAvailableSkins' => Skin::getSkinNames(),
 			'wgExtensionAssetsPath' => $wgExtensionAssetsPath,
-			'wgProto' => $wgProto,
+			// MediaWiki sets cookies to have this prefix by default
+			'wgCookiePrefix' => $wgCookiePrefix,
+			'wgResourceLoaderMaxQueryLength' => $wgResourceLoaderMaxQueryLength,
+			'wgLegacyJavaScriptGlobals' => $wgLegacyJavaScriptGlobals,
+			'wgCaseSensitiveNamespaces' => $caseSensitiveNamespaces,
 		);
 		if ( $wgUseAjax && $wgEnableMWSuggest ) {
 			$vars['wgMWSuggestTemplate'] = SearchEngine::getMWSuggestTemplate();
 		}
-		
+
 		wfRunHooks( 'ResourceLoaderGetConfigVars', array( &$vars ) );
-		
+
 		return $vars;
 	}
-	
+
 	/**
 	 * Gets registration code for all modules
 	 *
@@ -106,10 +128,15 @@ class ResourceLoaderStartUpModule extends ResourceLoaderModule {
 	public static function getModuleRegistrations( ResourceLoaderContext $context ) {
 		global $wgCacheEpoch;
 		wfProfileIn( __METHOD__ );
-		
+
 		$out = '';
 		$registrations = array();
 		$resourceLoader = $context->getResourceLoader();
+
+		// Register sources
+		$out .= ResourceLoader::makeLoaderSourcesScript( $resourceLoader->getSources() );
+
+		// Register modules
 		foreach ( $resourceLoader->getModuleNames() as $name ) {
 			$module = $resourceLoader->getModule( $name );
 			// Support module loader scripts
@@ -117,9 +144,10 @@ class ResourceLoaderStartUpModule extends ResourceLoaderModule {
 			if ( $loader !== false ) {
 				$deps = $module->getDependencies();
 				$group = $module->getGroup();
-				$version = wfTimestamp( TS_ISO_8601_BASIC, 
+				$source = $module->getSource();
+				$version = wfTimestamp( TS_ISO_8601_BASIC,
 					$module->getModifiedTime( $context ) );
-				$out .= ResourceLoader::makeCustomLoaderScript( $name, $version, $deps, $group, $loader );
+				$out .= ResourceLoader::makeCustomLoaderScript( $name, $version, $deps, $group, $source, $loader );
 			}
 			// Automatically register module
 			else {
@@ -127,35 +155,45 @@ class ResourceLoaderStartUpModule extends ResourceLoaderModule {
 				// seem to do that, and custom implementations might forget. Coerce it to TS_UNIX
 				$moduleMtime = wfTimestamp( TS_UNIX, $module->getModifiedTime( $context ) );
 				$mtime = max( $moduleMtime, wfTimestamp( TS_UNIX, $wgCacheEpoch ) );
-				// Modules without dependencies or a group pass two arguments (name, timestamp) to 
+				// Modules without dependencies, a group or a foreign source pass two arguments (name, timestamp) to
 				// mw.loader.register()
-				if ( !count( $module->getDependencies() && $module->getGroup() === null ) ) {
+				if ( !count( $module->getDependencies() && $module->getGroup() === null && $module->getSource() === 'local' ) ) {
 					$registrations[] = array( $name, $mtime );
 				}
-				// Modules with dependencies but no group pass three arguments 
+				// Modules with dependencies but no group or foreign source pass three arguments
 				// (name, timestamp, dependencies) to mw.loader.register()
-				else if ( $module->getGroup() === null ) {
+				elseif ( $module->getGroup() === null && $module->getSource() === 'local' ) {
 					$registrations[] = array(
 						$name, $mtime,  $module->getDependencies() );
 				}
-				// Modules with dependencies pass four arguments (name, timestamp, dependencies, group) 
+				// Modules with a group but no foreign source pass four arguments (name, timestamp, dependencies, group)
+				// to mw.loader.register()
+				else if ( $module->getSource() === 'local' ) {
+					$registrations[] = array(
+						$name, $mtime,  $module->getDependencies(), $module->getGroup() );
+				}
+				// Modules with a foreign source pass five arguments (name, timestamp, dependencies, group, source)
 				// to mw.loader.register()
 				else {
 					$registrations[] = array(
-						$name, $mtime,  $module->getDependencies(), $module->getGroup() );
+						$name, $mtime, $module->getDependencies(), $module->getGroup(), $module->getSource() );
 				}
 			}
 		}
 		$out .= ResourceLoader::makeLoaderRegisterScript( $registrations );
-		
+
 		wfProfileOut( __METHOD__ );
 		return $out;
 	}
 
 	/* Methods */
 
+	/**
+	 * @param $context ResourceLoaderContext
+	 * @return string
+	 */
 	public function getScript( ResourceLoaderContext $context ) {
-		global $IP, $wgLoadScript;
+		global $IP, $wgLoadScript, $wgLegacyJavaScriptGlobals;
 
 		$out = file_get_contents( "$IP/resources/startup.js" );
 		if ( $context->getOnly() === 'scripts' ) {
@@ -163,17 +201,17 @@ class ResourceLoaderStartUpModule extends ResourceLoaderModule {
 			// The core modules:
 			$modules = array( 'jquery', 'mediawiki' );
 			wfRunHooks( 'ResourceLoaderGetStartupModules', array( &$modules ) );
-			
+
 			// Get the latest version
-			$version = 0;					
+			$version = 0;
 			foreach ( $modules as $moduleName ) {
 				$version = max( $version,
 					$context->getResourceLoader()->getModule( $moduleName )->getModifiedTime( $context )
 				);
 			}
-			// Build load query for StartupModules 
+			// Build load query for StartupModules
 			$query = array(
-				'modules' => implode( '|',  $modules ),
+				'modules' => ResourceLoader::makePackedModulesString( $modules ),
 				'only' => 'scripts',
 				'lang' => $context->getLanguage(),
 				'skin' => $context->getSkin(),
@@ -182,26 +220,38 @@ class ResourceLoaderStartUpModule extends ResourceLoaderModule {
 			);
 			// Ensure uniform query order
 			ksort( $query );
-			
+
 			// Startup function
 			$configuration = $this->getConfig( $context );
 			$registrations = self::getModuleRegistrations( $context );
-			$out .= "var startUp = function() {\n" . 
-				"\t$registrations\n" . 
-				"\t" . Xml::encodeJsCall( 'mediaWiki.config.set', array( $configuration ) ) . 
+			$out .= "var startUp = function() {\n" .
+				"\tmw.config = new " . Xml::encodeJsCall( 'mw.Map', array( $wgLegacyJavaScriptGlobals ) ) . "\n" .
+				"\t$registrations\n" .
+				"\t" . Xml::encodeJsCall( 'mw.config.set', array( $configuration ) ) .
 				"};\n";
-			
+
 			// Conditional script injection
 			$scriptTag = Html::linkedScript( $wgLoadScript . '?' . wfArrayToCGI( $query ) );
-			$out .= "if ( isCompatible() ) {\n" . 
-				"\t" . Xml::encodeJsCall( 'document.write', array( $scriptTag ) ) . 
-				"}\n" . 
+			$out .= "if ( isCompatible() ) {\n" .
+				"\t" . Xml::encodeJsCall( 'document.write', array( $scriptTag ) ) .
+				"}\n" .
 				"delete isCompatible;";
 		}
 
 		return $out;
 	}
 
+	/**
+	 * @return bool
+	 */
+	public function supportsURLLoading() {
+		return false;
+	}
+
+	/**
+	 * @param $context ResourceLoaderContext
+	 * @return array|mixed
+	 */
 	public function getModifiedTime( ResourceLoaderContext $context ) {
 		global $IP, $wgCacheEpoch;
 
@@ -217,7 +267,7 @@ class ResourceLoaderStartUpModule extends ResourceLoaderModule {
 
 		$this->modifiedTime[$hash] = filemtime( "$IP/resources/startup.js" );
 		// ATTENTION!: Because of the line above, this is not going to cause
-		// infinite recursion - think carefully before making changes to this 
+		// infinite recursion - think carefully before making changes to this
 		// code!
 		$time = wfTimestamp( TS_UNIX, $wgCacheEpoch );
 		foreach ( $loader->getModuleNames() as $name ) {
@@ -226,9 +276,12 @@ class ResourceLoaderStartUpModule extends ResourceLoaderModule {
 		}
 		return $this->modifiedTime[$hash] = $time;
 	}
-	
+
 	/* Methods */
-	
+
+	/**
+	 * @return string
+	 */
 	public function getGroup() {
 		return 'startup';
 	}

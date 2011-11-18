@@ -1,8 +1,5 @@
 <?php
 
-if( !defined( 'MEDIAWIKI' ) )
-	die;
-
 class ChangeTags {
 	static function formatSummaryRow( $tags, $page ) {
 		if( !$tags )
@@ -165,7 +162,8 @@ class ChangeTags {
 		if ( !$wgUseTagFilter || !count( self::listDefinedTags() ) )
 			return $fullForm ? '' : array();
 
-		$data = array( wfMsgExt( 'tag-filter', 'parseinline' ), Xml::input( 'tagfilter', 20, $selected ) );
+		$data = array( Html::rawElement( 'label', array( 'for' => 'tagfilter' ), wfMsgExt( 'tag-filter', 'parseinline' ) ),
+			Xml::input( 'tagfilter', 20, $selected ) );
 
 		if ( !$fullForm ) {
 			return $data;
@@ -179,7 +177,11 @@ class ChangeTags {
 		return $html;
 	}
 
-	/** Basically lists defined tags which count even if they aren't applied to anything */
+	/**
+	 *Basically lists defined tags which count even if they aren't applied to anything
+	 *
+	 * @return array
+	 */
 	static function listDefinedTags() {
 		// Caching...
 		global $wgMemc;

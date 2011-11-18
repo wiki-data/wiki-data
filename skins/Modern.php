@@ -21,6 +21,9 @@ class SkinModern extends SkinTemplate {
 	var $skinname = 'modern', $stylename = 'modern',
 		$template = 'ModernTemplate', $useHeadElement = true;
 
+	/**
+	 * @param $out OutputPage
+	 */
 	function setupSkinUserCss( OutputPage $out ){
 		parent::setupSkinUserCss( $out );
 		$out->addModuleStyles ('skins.modern');
@@ -34,10 +37,6 @@ class SkinModern extends SkinTemplate {
 class ModernTemplate extends MonoBookTemplate {
 
 	/**
-	 * @var Skin
-	 */
-	var $skin;
-	/**
 	 * Template filter callback for Modern skin.
 	 * Takes an associative array of data set from a SkinTemplate-based
 	 * class, and a wrapper for MediaWiki's localization database, and
@@ -46,8 +45,6 @@ class ModernTemplate extends MonoBookTemplate {
 	 * @access private
 	 */
 	function execute() {
-		$this->skin = $skin = $this->data['skin'];
-
 		// Suppress warnings to prevent notices about missing indexes in $this->data
 		wfSuppressWarnings();
 
@@ -60,14 +57,14 @@ class ModernTemplate extends MonoBookTemplate {
 	<div id="mw_main">
 	<div id="mw_contentwrapper">
 	<!-- navigation portlet -->
-<?php $this->cactions( $skin ); ?>
+<?php $this->cactions(); ?>
 
 	<!-- content -->
 	<div id="mw_content">
 	<!-- contentholder does nothing by default, but it allows users to style the text inside
 	     the content area without affecting the meaning of 'em' in #mw_content, which is used
 	     for the margins -->
-	<div id="mw_contentholder" <?php $this->html("specialpageattributes") ?>>
+	<div id="mw_contentholder">
 		<div class='mw-topboxes'>
 			<div id="mw-js-message" style="display:none;"<?php $this->html('userlangattributes')?>></div>
 			<div class="mw-topbox" id="siteSub"><?php $this->msg('tagline') ?></div>
@@ -95,24 +92,7 @@ class ModernTemplate extends MonoBookTemplate {
 	<div id="mw_portlets"<?php $this->html("userlangattributes") ?>>
 
 	<!-- portlets -->
-	<?php
-		$sidebar = $this->data['sidebar'];
-		if ( !isset( $sidebar['SEARCH'] ) ) $sidebar['SEARCH'] = true;
-		if ( !isset( $sidebar['TOOLBOX'] ) ) $sidebar['TOOLBOX'] = true;
-		if ( !isset( $sidebar['LANGUAGES'] ) ) $sidebar['LANGUAGES'] = true;
-
-		foreach ($sidebar as $boxName => $cont) {
-			if ( $boxName == 'SEARCH' ) {
-				$this->searchBox();
-			} elseif ( $boxName == 'TOOLBOX' ) {
-				$this->toolbox();
-			} elseif ( $boxName == 'LANGUAGES' ) {
-				$this->languageBox();
-			} else {
-				$this->customBox( $boxName, $cont );
-			}
-		}
-	?>
+	<?php $this->renderPortals( $this->data['sidebar'] ); ?>
 
 	</div><!-- mw_portlets -->
 
@@ -151,7 +131,7 @@ class ModernTemplate extends MonoBookTemplate {
 			<div id="mw_<?php echo htmlspecialchars($blockName); ?>">
 <?php
 			foreach ( $footerIcons as $icon ) { ?>
-				<?php echo $this->skin->makeFooterIcon( $icon, 'withoutImage' ); ?>
+				<?php echo $this->getSkin()->makeFooterIcon( $icon, 'withoutImage' ); ?>
 
 <?php
 			} ?>

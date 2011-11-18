@@ -17,7 +17,7 @@ class ParserOptions {
 	var $mInterwikiMagic;            # Interlanguage links are removed and returned in an array
 	var $mAllowExternalImages;       # Allow external images inline
 	var $mAllowExternalImagesFrom;   # If not, any exception?
-	var $mEnableImageWhitelist;      # If not or it doesn't match, should we check an on-wiki whitelist? 
+	var $mEnableImageWhitelist;      # If not or it doesn't match, should we check an on-wiki whitelist?
 	var $mDateFormat = null;         # Date format index
 	var $mEditSection = true;        # Create "edit section" links
 	var $mAllowSpecialInclusion;     # Allow inclusion of special pages
@@ -41,7 +41,7 @@ class ParserOptions {
 	var $mMath;                      # User math preference (as integer)
 	var $mThumbSize;                 # Thumb size preferred by the user.
 	private $mStubThreshold;         # Maximum article size of an article to be marked as "stub"
-	var $mUserLang;                  # Language code of the User language.
+	var $mUserLang;                  # Language object of the User language.
 
 	/**
 	 * @var User
@@ -61,7 +61,7 @@ class ParserOptions {
 	function getAllowExternalImagesFrom()       { return $this->mAllowExternalImagesFrom; }
 	function getEnableImageWhitelist()          { return $this->mEnableImageWhitelist; }
 	function getEditSection()                   { return $this->mEditSection; }
-	function getNumberHeadings()                { $this->optionUsed('numberheadings');
+	function getNumberHeadings()                { $this->optionUsed( 'numberheadings' );
 												  return $this->mNumberHeadings; }
 	function getAllowSpecialInclusion()         { return $this->mAllowSpecialInclusion; }
 	function getTidy()                          { return $this->mTidy; }
@@ -76,32 +76,32 @@ class ParserOptions {
 	function getEnableLimitReport()             { return $this->mEnableLimitReport; }
 	function getCleanSignatures()               { return $this->mCleanSignatures; }
 	function getExternalLinkTarget()            { return $this->mExternalLinkTarget; }
-	function getMath()                          { $this->optionUsed('math');
+	function getMath()                          { $this->optionUsed( 'math' );
 												  return $this->mMath; }
-	function getThumbSize()                     { $this->optionUsed('thumbsize');
+	function getThumbSize()                     { $this->optionUsed( 'thumbsize' );
 												  return $this->mThumbSize; }
-	function getStubThreshold()                 { $this->optionUsed('stubthreshold');
+	function getStubThreshold()                 { $this->optionUsed( 'stubthreshold' );
 												  return $this->mStubThreshold; }
 
 	function getIsPreview()                     { return $this->mIsPreview; }
 	function getIsSectionPreview()              { return $this->mIsSectionPreview; }
-	function getIsPrintable()                   { $this->optionUsed('printable');
+	function getIsPrintable()                   { $this->optionUsed( 'printable' );
 												  return $this->mIsPrintable; }
 	function getUser()                          { return $this->mUser; }
 	function getPreSaveTransform()              { return $this->mPreSaveTransform; }
 
-	/** 	 
-	 * @param $title Title 	 
-	 * @return Skin 	 
-	 * @deprecated Use Linker::* instead 	 
-	 */ 	 
-	function getSkin( $title = null ) { 	 
+	/**
+	 * @param $title Title
+	 * @return Skin
+	 * @deprecated since 1.18 Use Linker::* instead
+	 */
+	function getSkin( $title = null ) {
 		wfDeprecated( __METHOD__ );
 		return new DummyLinker;
 	}
 
 	function getDateFormat() {
-		$this->optionUsed('dateformat');
+		$this->optionUsed( 'dateformat' );
 		if ( !isset( $this->mDateFormat ) ) {
 			$this->mDateFormat = $this->mUser->getDatePreference();
 		}
@@ -119,10 +119,23 @@ class ParserOptions {
 	 * You shouldn't use this. Really. $parser->getFunctionLang() is all you need.
 	 * Using this fragments the cache and is discouraged. Yes, {{int: }} uses this,
 	 * producing inconsistent tables (Bug 14404).
+	 *
+	 * @return Language object
+	 * @since 1.19
+	 */
+	function getUserLangObj() {
+		$this->optionUsed( 'userlang' );
+		return $this->mUserLang;
+	}
+
+	/**
+	 * Same as getUserLangObj() but returns a string instead.
+	 *
+	 * @return String   Language code
+	 * @since 1.17
 	 */
 	function getUserLang() {
-		$this->optionUsed('userlang');
-		return $this->mUserLang;
+		return $this->getUserLangObj()->getCode();
 	}
 
 	function setUseDynamicDates( $x )           { return wfSetVar( $this->mUseDynamicDates, $x ); }
@@ -134,10 +147,12 @@ class ParserOptions {
 	function setEditSection( $x )               { return wfSetVar( $this->mEditSection, $x ); }
 	function setNumberHeadings( $x )            { return wfSetVar( $this->mNumberHeadings, $x ); }
 	function setAllowSpecialInclusion( $x )     { return wfSetVar( $this->mAllowSpecialInclusion, $x ); }
-	function setTidy( $x )                      { return wfSetVar( $this->mTidy, $x); }
-	function setSkin( $x )                      { $this->mSkin = $x; }
-	function setInterfaceMessage( $x )          { return wfSetVar( $this->mInterfaceMessage, $x); }
-	function setTargetLanguage( $x )            { return wfSetVar( $this->mTargetLanguage, $x); }
+	function setTidy( $x )                      { return wfSetVar( $this->mTidy, $x ); }
+
+	/** @deprecated in 1.19; will be removed in 1.20 */
+	function setSkin( $x )                      { wfDeprecated( __METHOD__, '1.19' ); }
+	function setInterfaceMessage( $x )          { return wfSetVar( $this->mInterfaceMessage, $x ); }
+	function setTargetLanguage( $x )            { return wfSetVar( $this->mTargetLanguage, $x, true ); }
 	function setMaxIncludeSize( $x )            { return wfSetVar( $this->mMaxIncludeSize, $x ); }
 	function setMaxPPNodeCount( $x )            { return wfSetVar( $this->mMaxPPNodeCount, $x ); }
 	function setMaxTemplateDepth( $x )          { return wfSetVar( $this->mMaxTemplateDepth, $x ); }
@@ -148,7 +163,12 @@ class ParserOptions {
 	function setCleanSignatures( $x )           { return wfSetVar( $this->mCleanSignatures, $x ); }
 	function setExternalLinkTarget( $x )        { return wfSetVar( $this->mExternalLinkTarget, $x ); }
 	function setMath( $x )                      { return wfSetVar( $this->mMath, $x ); }
-	function setUserLang( $x )                  { return wfSetVar( $this->mUserLang, $x ); }
+	function setUserLang( $x )                  {
+		if ( is_string( $x ) ) {
+			$x = Language::factory( $x );
+		}
+		return wfSetVar( $this->mUserLang, $x );
+	}
 	function setThumbSize( $x )                 { return wfSetVar( $this->mThumbSize, $x ); }
 	function setStubThreshold( $x )             { return wfSetVar( $this->mStubThreshold, $x ); }
 	function setPreSaveTransform( $x )          { return wfSetVar( $this->mPreSaveTransform, $x ); }
@@ -164,41 +184,65 @@ class ParserOptions {
 		$this->mExtraKey .= '!' . $key;
 	}
 
-	function __construct( $user = null ) {
-		$this->initialiseFromUser( $user );
+	function __construct( $user = null, $lang = null ) {
+		if ( $user === null ) {
+			global $wgUser;
+			if ( $wgUser === null ) {
+				$user = new User;
+			} else {
+				$user = $wgUser;
+			}
+		}
+		if ( $lang === null ) {
+			global $wgLang;
+			if ( !StubObject::isRealObject( $wgLang ) ) {
+				$wgLang->_unstub();
+			}
+			$lang = $wgLang;
+		}
+		$this->initialiseFromUser( $user, $lang );
 	}
 
 	/**
-	 * Get parser options
+	 * Get a ParserOptions object from a given user.
+	 * Language will be taken from $wgLang.
 	 *
 	 * @param $user User object
 	 * @return ParserOptions object
 	 */
-	static function newFromUser( $user ) {
+	public static function newFromUser( $user ) {
 		return new ParserOptions( $user );
 	}
 
+	/**
+	 * Get a ParserOptions object from a given user and language
+	 *
+	 * @param $user User object
+	 * @param $lang Language object
+	 * @return ParserOptions object
+	 */
+	public static function newFromUserAndLang( User $user, Language $lang ) {
+		return new ParserOptions( $user, $lang );
+	}
+
+	/**
+	 * Get a ParserOptions object from a IContextSource object
+	 *
+	 * @param $context IContextSource object
+	 * @return ParserOptions object
+	 */
+	public static function newFromContext( IContextSource $context ) {
+		return new ParserOptions( $context->getUser(), $context->getLang() );
+	}
+
 	/** Get user options */
-	function initialiseFromUser( $userInput ) {
-		global $wgUseDynamicDates, $wgInterwikiMagic, $wgAllowExternalImages;
-		global $wgAllowExternalImagesFrom, $wgEnableImageWhitelist, $wgAllowSpecialInclusion, $wgMaxArticleSize;
-		global $wgMaxPPNodeCount, $wgMaxTemplateDepth, $wgMaxPPExpandDepth, $wgCleanSignatures;
-		global $wgExternalLinkTarget, $wgLang;
+	private function initialiseFromUser( $user, $lang ) {
+		global $wgUseDynamicDates, $wgInterwikiMagic, $wgAllowExternalImages,
+			$wgAllowExternalImagesFrom, $wgEnableImageWhitelist, $wgAllowSpecialInclusion,
+			$wgMaxArticleSize, $wgMaxPPNodeCount, $wgMaxTemplateDepth, $wgMaxPPExpandDepth,
+			$wgCleanSignatures, $wgExternalLinkTarget;
 
 		wfProfileIn( __METHOD__ );
-
-		if ( !$userInput ) {
-			global $wgUser;
-			if ( isset( $wgUser ) ) {
-				$user = $wgUser;
-			} else {
-				$user = new User;
-			}
-		} else {
-			$user =& $userInput;
-		}
-
-		$this->mUser = $user;
 
 		$this->mUseDynamicDates = $wgUseDynamicDates;
 		$this->mInterwikiMagic = $wgInterwikiMagic;
@@ -213,11 +257,12 @@ class ParserOptions {
 		$this->mCleanSignatures = $wgCleanSignatures;
 		$this->mExternalLinkTarget = $wgExternalLinkTarget;
 
+		$this->mUser = $user;
 		$this->mNumberHeadings = $user->getOption( 'numberheadings' );
 		$this->mMath = $user->getOption( 'math' );
 		$this->mThumbSize = $user->getOption( 'thumbsize' );
 		$this->mStubThreshold = $user->getStubThreshold();
-		$this->mUserLang = $wgLang->getCode();
+		$this->mUserLang = $lang;
 
 		wfProfileOut( __METHOD__ );
 	}
@@ -267,48 +312,61 @@ class ParserOptions {
 	 * settings.
 	 *
 	 * @since 1.17
+	 * @param $forOptions Array
+	 * @param $title Title: used to get the content language of the page (since r97636)
 	 * @return \string Page rendering hash
 	 */
-	public function optionsHash( $forOptions ) {
-		global $wgContLang, $wgRenderHashAppend;
+	public function optionsHash( $forOptions, $title = null ) {
+		global $wgRenderHashAppend;
 
 		$confstr = '';
 
-		if ( in_array( 'math', $forOptions ) )
+		if ( in_array( 'math', $forOptions ) ) {
 			$confstr .= $this->mMath;
-		else
+		} else {
 			$confstr .= '*';
+		}
 
 
 		// Space assigned for the stubthreshold but unused
 		// since it disables the parser cache, its value will always
 		// be 0 when this function is called by parsercache.
-		if ( in_array( 'stubthreshold', $forOptions ) )
+		if ( in_array( 'stubthreshold', $forOptions ) ) {
 			$confstr .= '!' . $this->mStubThreshold;
-		else
+		} else {
 			$confstr .= '!*' ;
+		}
 
-		if ( in_array( 'dateformat', $forOptions ) )
+		if ( in_array( 'dateformat', $forOptions ) ) {
 			$confstr .= '!' . $this->getDateFormat();
+		}
 
-		if ( in_array( 'numberheadings', $forOptions ) )
+		if ( in_array( 'numberheadings', $forOptions ) ) {
 			$confstr .= '!' . ( $this->mNumberHeadings ? '1' : '' );
-		else
+		} else {
 			$confstr .= '!*';
+		}
 
-		if ( in_array( 'userlang', $forOptions ) )
-			$confstr .= '!' . $this->mUserLang;
-		else
+		if ( in_array( 'userlang', $forOptions ) ) {
+			$confstr .= '!' . $this->mUserLang->getCode();
+		} else {
 			$confstr .= '!*';
+		}
 
-		if ( in_array( 'thumbsize', $forOptions ) )
+		if ( in_array( 'thumbsize', $forOptions ) ) {
 			$confstr .= '!' . $this->mThumbSize;
-		else
+		} else {
 			$confstr .= '!*';
+		}
 
 		// add in language specific options, if any
-		// FIXME: This is just a way of retrieving the url/user preferred variant
-		$confstr .= $wgContLang->getExtraHashOptions();
+		// @todo FIXME: This is just a way of retrieving the url/user preferred variant
+		if( !is_null( $title ) ) {
+			$confstr .= $title->getPageLanguage()->getExtraHashOptions();
+		} else {
+			global $wgContLang;
+			$confstr .= $wgContLang->getExtraHashOptions();
+		}
 
 		$confstr .= $wgRenderHashAppend;
 
@@ -317,9 +375,10 @@ class ParserOptions {
 		} elseif ( !$this->mEditSection ) {
 			$confstr .= '!edit=0';
 		}
-		
-		if (  $this->mIsPrintable && in_array( 'printable', $forOptions ) )
+
+		if ( $this->mIsPrintable && in_array( 'printable', $forOptions ) ) {
 			$confstr .= '!printable=1';
+		}
 
 		if ( $this->mExtraKey != '' )
 			$confstr .= $this->mExtraKey;

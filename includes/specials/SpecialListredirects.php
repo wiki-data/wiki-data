@@ -63,6 +63,9 @@ class ListredirectsPage extends QueryPage {
 
 	/**
 	 * Cache page existence for performance
+	 *
+	 * @param $db DatabaseBase
+	 * @param $res ResultWrapper
 	 */
 	function preprocessResults( $db, $res ) {
 		$batch = new LinkBatch;
@@ -87,17 +90,15 @@ class ListredirectsPage extends QueryPage {
 			);
 		} else {
 			$title = Title::makeTitle( $row->namespace, $row->title );
-			$article = new Article( $title );
+			$article = WikiPage::factory( $title );
 			return $article->getRedirectTarget();
 		}
 	}
 
 	function formatResult( $skin, $result ) {
-		global $wgContLang;
-
 		# Make a link to the redirect itself
 		$rd_title = Title::makeTitle( $result->namespace, $result->title );
-		$rd_link = $skin->link(
+		$rd_link = Linker::link(
 			$rd_title,
 			null,
 			array(),
@@ -108,8 +109,9 @@ class ListredirectsPage extends QueryPage {
 		$target = $this->getRedirectTarget( $result );
 		if( $target ) {
 			# Make a link to the destination page
-			$arr = $wgContLang->getArrow() . $wgContLang->getDirMark();
-			$targetLink = $skin->link( $target );
+			$lang = $this->getLang();
+			$arr = $lang->getArrow() . $lang->getDirMark();
+			$targetLink = Linker::link( $target );
 			return "$rd_link $arr $targetLink";
 		} else {
 			return "<del>$rd_link</del>";

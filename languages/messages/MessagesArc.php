@@ -10,9 +10,12 @@
  * @author 334a
  * @author A2raya07
  * @author Basharh
+ * @author Man2fly2002
  * @author Michaelovic
  * @author The Thadman
  */
+
+$rtl = true;
 
 $namespaceNames = array(
 	NS_MEDIA            => 'ܡܝܕܝܐ',
@@ -40,29 +43,29 @@ $namespaceAliases = array(
 );
 
 $specialPageAliases = array(
+	'Allmessages'               => array( 'ܟܠ_ܐܓܪ̈ܬܐ' ),
+	'Allpages'                  => array( 'ܟܠ_ܦܐܬܬ̈ܐ' ),
+	'Blankpage'                 => array( 'ܦܐܬܐ_ܣܦܝܩܬܐ' ),
+	'Categories'                => array( 'ܣܕܪ̈ܐ' ),
+	'Contributions'             => array( 'ܫܘܬܦܘܝܬ̈ܐ' ),
 	'CreateAccount'             => array( 'ܒܪܝ_ܚܘܫܒܢܐ' ),
-	'Preferences'               => array( 'ܓܒܝܬ̈ܐ' ),
-	'Watchlist'                 => array( 'ܪ̈ܗܝܬܐ' ),
-	'Recentchanges'             => array( 'ܫܘܚܠܦ̈ܐ_ܚܕ̈ܬܐ' ),
-	'Upload'                    => array( 'ܐܣܩ' ),
-	'Shortpages'                => array( 'ܦܐܬܬ̈ܐ_ܟܪ̈ܝܬܐ' ),
+	'DeletedContributions'      => array( 'ܫܘܬܦܘܝܬ̈ܐ_ܫܝܦܬ̈ܐ' ),
+	'Filepath'                  => array( 'ܫܒܝܠܐ_ܕܦܐܬܐ' ),
+	'Log'                       => array( 'ܣܓܠ̈ܐ' ),
 	'Longpages'                 => array( 'ܦܐܬܬ̈ܐ_ܐܪ̈ܝܟܬܐ' ),
+	'Movepage'                  => array( 'ܫܢܝ_ܦܐܬܐ' ),
+	'Mycontributions'           => array( 'ܫܘܬܦܘܝܬ̈ܝ' ),
 	'Newpages'                  => array( 'ܦܐܬܬ̈ܐ_ܚܕ̈ܬܬܐ' ),
+	'Preferences'               => array( 'ܓܒܝܬ̈ܐ' ),
 	'Protectedpages'            => array( 'ܦܐܬܬ̈ܐ_ܢܛܝܪ̈ܬܐ' ),
 	'Protectedtitles'           => array( 'ܟܘܢܝ̈ܐ_ܢܛܝܪ̈ܐ' ),
-	'Allpages'                  => array( 'ܟܠ_ܦܐܬܬ̈ܐ' ),
-	'Specialpages'              => array( 'ܦܐܬܬ̈ܐ_ܕ̈ܝܠܢܝܬܐ' ),
-	'Contributions'             => array( 'ܫܘܬܦܘܝܬ̈ܐ' ),
-	'Whatlinkshere'             => array( 'ܡܐ_ܐܣܪ_ܠܗܪܟܐ' ),
-	'Movepage'                  => array( 'ܫܢܝ_ܦܐܬܐ' ),
-	'Categories'                => array( 'ܣܕܪ̈ܐ' ),
-	'Allmessages'               => array( 'ܟܠ_ܐܓܪ̈ܬܐ' ),
-	'Log'                       => array( 'ܣܓܠ̈ܐ' ),
-	'Mycontributions'           => array( 'ܫܘܬܦܘܝܬ̈ܝ' ),
+	'Recentchanges'             => array( 'ܫܘܚܠܦ̈ܐ_ܚܕ̈ܬܐ' ),
 	'Search'                    => array( 'ܒܨܝܐ' ),
-	'Filepath'                  => array( 'ܫܒܝܠܐ_ܕܦܐܬܐ' ),
-	'Blankpage'                 => array( 'ܦܐܬܐ_ܣܦܝܩܬܐ' ),
-	'DeletedContributions'      => array( 'ܫܘܬܦܘܝܬ̈ܐ_ܫܝܦܬ̈ܐ' ),
+	'Shortpages'                => array( 'ܦܐܬܬ̈ܐ_ܟܪ̈ܝܬܐ' ),
+	'Specialpages'              => array( 'ܦܐܬܬ̈ܐ_ܕ̈ܝܠܢܝܬܐ' ),
+	'Upload'                    => array( 'ܐܣܩ' ),
+	'Watchlist'                 => array( 'ܪ̈ܗܝܬܐ' ),
+	'Whatlinkshere'             => array( 'ܡܐ_ܐܣܪ_ܠܗܪܟܐ' ),
 );
 
 $magicWords = array(
@@ -90,13 +93,6 @@ $magicWords = array(
 	'special'               => array( '0', 'ܕܝܠܢܝܐ', 'special' ),
 	'url_path'              => array( '0', 'ܫܒܝܠܐ', 'PATH' ),
 	'url_wiki'              => array( '0', 'ܘܝܩܝ', 'WIKI' ),
-);
-
-$rtl = true;
-
-$defaultUserOptionOverrides = array(
-	# Swap sidebar to right side by default
-	'quickbar' => 2,
 );
 
 $messages = array(
@@ -212,7 +208,7 @@ $messages = array(
 'vector-action-move'       => 'ܫܢܝ',
 'vector-action-protect'    => 'ܢܛܘܪ',
 'vector-action-undelete'   => 'ܠܐ ܫܘܦ',
-'vector-action-unprotect'  => 'ܠܐ ܢܛܘܪ',
+'vector-action-unprotect'  => 'ܫܚܠܦ ܢܛܝܪܘܬܐ',
 'vector-view-create'       => 'ܒܪܝ',
 'vector-view-edit'         => 'ܫܚܠܦ',
 'vector-view-history'      => 'ܚܙܝ ܬܫܥܝܬܐ',
@@ -220,6 +216,7 @@ $messages = array(
 'vector-view-viewsource'   => 'ܚܙܝ ܡܒܘܥܐ',
 'actions'                  => 'ܥܒܕ̈ܐ',
 'namespaces'               => 'ܚܩܠܬ̈ܐ',
+'variants'                 => 'ܡܫܬܚܠܦܢܘ̈ܬܐ',
 
 'errorpagetitle'    => 'ܦܘܕܐ',
 'returnto'          => 'ܕܥܘܪ ܠ$1.',
@@ -231,7 +228,7 @@ $messages = array(
 'searcharticle'     => 'ܙܠ',
 'history'           => 'ܬܫܥܝܬܐ ܕܦܐܬܐ',
 'history_short'     => 'ܬܫܥܝܬܐ',
-'info_short'        => 'ܝܕ̈ܥܬܐ',
+'updatedmarker'     => 'ܐܬܚܕܬ ܗܐ ܡܢ ܬܦܩܬܝ ܐܚܪܝܬܐ',
 'printableversion'  => 'ܨܚܚܐ ܡܬܛܒܥܢܐ',
 'permalink'         => 'ܐܣܘܪܐ ܦܝܘܫܐ',
 'print'             => 'ܛܒܘܥ',
@@ -242,11 +239,12 @@ $messages = array(
 'delete'            => 'ܫܘܦ',
 'deletethispage'    => 'ܫܘܦ ܦܐܬܐ ܗܕܐ',
 'undelete_short'    => 'ܠܐ ܫܘܦ {{PLURAL:$1|ܚܕ ܫܘܚܠܦܐ|$1 ܫܘܚܠܦ̈ܐ}}',
+'viewdeleted_short' => 'ܚܙܝ {{PLURAL:$1|ܚܕ ܫܘܚܠܦܐ ܫܝܦܐ|$1 ܫܘܚܠܦ̈ܐ ܫܝܦ̈ܐ}}',
 'protect'           => 'ܢܛܘܪ',
 'protect_change'    => 'ܫܚܠܦ',
 'protectthispage'   => 'ܢܛܘܪ ܗܕܐ ܦܐܬܐ',
-'unprotect'         => 'ܠܐ ܢܛܘܪ',
-'unprotectthispage' => 'ܠܐ ܢܛܘܪ ܗܕܐ ܦܐܬܐ',
+'unprotect'         => 'ܫܚܠܦ ܢܛܝܪܘܬܐ',
+'unprotectthispage' => 'ܫܚܠܦ ܢܛܝܪܘܬܐ ܕܗܕܐ ܦܐܬܐ',
 'newpage'           => 'ܦܐܬܐ ܚܕܬܐ',
 'talkpage'          => 'ܕܪܘܫ ܗܕܐ ܦܐܬܐ',
 'talkpagelinktext'  => 'ܡܡܠܠܐ',
@@ -274,6 +272,11 @@ $messages = array(
 'jumpto'            => 'ܫܘܪ ܠ:',
 'jumptonavigation'  => 'ܐܠܦܪܘܬܐ',
 'jumptosearch'      => 'ܒܨܝܐ',
+'view-pool-error'   => 'ܬܘܝܚܐ، ܚܕܡ̈ܐ ܗܘܐ ܓܗ̈ܝܐ ܗܫܐܝܬ
+ܣܓܝ ܡܦܠܚܢ̈ܐ ܩܫܕܘܪܐ ܠܡܛܐ ܠܗܢܐ ܦܐܬܐ
+ܦܝܣܐ ܡܢܟ ܣܟܝ ܩܠܝܠ ܡܢ ܩܕܡ ܕܓܪܒܬ ܠܡܛܝܐ ܠܐܗܐ ܦܐܬܐ ܬܢܝܢܘܬ.
+
+$1',
 'pool-errorunknown' => 'ܦܘܕܐ ܠܐ ܝܕܝܥܐ',
 
 # All link text and link target definitions of links into project namespace that get used by other message strings, with the exception of user group pages (see grouppage) and the disambiguation template definition (see disambiguations).
@@ -314,6 +317,8 @@ $messages = array(
 'hidetoc'                 => 'ܛܫܝ',
 'viewdeleted'             => 'ܚܙܝ $1؟',
 'restorelink'             => '{{PLURAL:$1|ܚܕ ܫܘܚܠܦܐ ܫܝܦܐ|$1 ܫܘܚܠܦ̈ܐ ܫܝܦ̈ܐ}}',
+'site-atom-feed'          => '$1 ܛܥܝܡܘܬܐ ܕܐܛܘܡ',
+'page-atom-feed'          => '"$1" ܛܥܝܡܘܬܐ ܕܐܛܘܡ',
 'red-link-title'          => '$1 (ܦܐܬܐ ܗܕܐ ܠܝܬ)',
 
 # Short words for each namespace, by default used in the namespace tab in monobook
@@ -341,7 +346,13 @@ $messages = array(
 'internalerror_info'  => 'ܦܘܕܐ ܓܘܝܐ: $1',
 'badtitle'            => 'ܟܘܢܝܐ ܠܐ ܛܒܐ',
 'viewsource'          => 'ܚܙܝ ܡܒܘܥܐ',
-'viewsourcefor'       => 'ܕ $1',
+'actionthrottled'     => 'ܠܐ ܘܪܕ ܠܡܥܒܕ ܝܬܝܪ ܡܢ ܐܗܐ ܥܒܕܐ',
+'viewsourcetext'      => 'ܡܨܐ ܐܢܬ ܠܚܙܝܐ ܘܢܣܚܐ ܠܡܒܘܥ̈ܐ ܕܐܗܐ ܦܐܬܐ:',
+'protectedinterface'  => 'ܐܗܐ ܦܐܬܐ ܡܘܬܪܐ ܟܬܝܒܬܐ ܕܦܐܬܐ ܠܚܘܪܙܐ, ܘܐܝܠܗ ܢܛܪܬܐ ܠܡܘܢܥܐ ܚܪܒܐ.',
+'editinginterface'    => "''ܙܘܗܪܐ:''' ܐܢܬ ܥܒܕܬ ܫܚܠܦܬܐ ܒܦܐܬܐ ܡܬܦܠܚܬ ܠܡܘܬܘܪ̈ܐ ܦܐܬܘܬ̈ܐ ܟܬܝܒ̈ܐ ܠܚܘܪܙܐ.
+ܟܠ ܫܘܚܠܦܐ ܒܐܗܐ ܦܐܬܐ ܒܕ ܥܒܕ ܟܪ ܥܠ ܡܚܙܝܬܐ ܦܐܬܐ ܕܡܦܠܚܢܐ ܠܡܦܠܚܢ̈ܐ ܐܚܪ̈ܝܢܐ.
+ܠܬܘܪ̈ܓܡܐ، ܡܦܠܚ ܬܪܡܝܬܐ ܬܘܪܓܡܐ ܕܡܝܕܝܐܘܝܩܝ [//translatewiki.net/wiki/Main_Page?setlang=ar translatewiki.net].",
+'sqlhidden'           => '(ܒܘܬܬܐ SQL ܛܫܝܐ)',
 'namespaceprotected'  => "ܠܝܬ ܠܟ ܦܣܣܐ ܠܫܚܠܦܬܐ ܕܦܐܬܬ̈ܐ ܒܚܩܠܐ ܕ'''$1'''.",
 
 # Login and logout pages
@@ -370,12 +381,14 @@ $messages = array(
 'createaccount'           => 'ܒܪܝ ܚܘܫܒܢܐ',
 'gotaccount'              => "ܐܝܬ ܠܟ ܚܘܫܒܢܐ؟ '''$1'''.",
 'gotaccountlink'          => 'ܥܘܠ',
+'userlogin-resetlink'     => 'ܐܬܢܫܝܬ ܝܕ̈ܥܬܐ ܕܥܠܠܐ؟',
 'createaccountmail'       => 'ܒܝܕ ܒܝܠܕܪܐ ܐܠܩܛܪܘܢܝܐ',
 'createaccountreason'     => 'ܥܠܬܐ',
 'badretype'               => 'ܡܠܬܐ ܕܥܠܠܐ ܟܬܒܬ ܐܢܬ ܠܐ ܐܘܝܢܬܐ.',
-'userexists'              => 'ܫܡܐ ܕܡܦܠܚܢܐ ܫܩܝܠܐ.
-ܓܒܝ ܫܡܐ ܐܚܪܢܐ.',
+'userexists'              => 'ܫܡܐ ܕܡܦܠܚܢܐ ܕܐܥܠܬ ܫܩܝܠܐ ܐܝܬܘܗܝ.
+ܫܦܝܪܐܝܬ ܓܒܝ ܫܡܐ ܐܚܪܢܐ.',
 'loginerror'              => 'ܦܘܕܐ ܒܥܠܠܐ',
+'createaccounterror'      => 'ܠܐ ܡܫܟܚ ܠܒܪܝܐ ܚܘܫܒܢܐ: $1',
 'noname'                  => 'ܠܐ ܦܪܫ ܐܢܬ ܫܡܐ ܕܡܦܠܚܢܐ ܬܪܝܨܐ',
 'loginsuccesstitle'       => 'ܥܠܠܐ ܓܡܪ',
 'loginsuccess'            => "'''ܗܫܐ ܥܠܝܠܐ ܐܢܬ ܒ{{SITENAME}} ܒܫܡ \"\$1\".'''",
@@ -390,15 +403,7 @@ $messages = array(
 'createaccount-title'     => 'ܒܪܝܐ ܕܚܘܫܒܢܐ ܒ {{SITENAME}}',
 'loginlanguagelabel'      => 'ܠܫܢܐ: $1',
 
-# JavaScript password checks
-'password-strength'            => 'ܚܝܠܐ ܩܘܪܒܢܝܐ ܕܡܠܬܐ ܕܥܠܠܐ: $1',
-'password-strength-bad'        => 'ܠܐ ܛܒܬܐ',
-'password-strength-mediocre'   => 'ܡܨܥܝܬܐ',
-'password-strength-acceptable' => 'ܡܬܩܒܠܢܬܐ',
-'password-strength-good'       => 'ܛܒܬܐ',
-'password-retype'              => 'ܟܬܘܒ ܡܠܬܐ ܕܥܠܠܐ ܙܒܢܬܐ ܐܚܪܬܐ ܗܪܟܐ:',
-
-# Password reset dialog
+# Change password dialog
 'resetpass'                 => 'ܫܚܠܦ ܡܠܬܐ ܕܥܠܠܐ',
 'resetpass_header'          => 'ܫܚܠܦ ܡܠܬܐ ܕܥܠܠܐ ܕܚܘܫܒܢܐ',
 'oldpassword'               => 'ܡܠܬܐ ܕܥܠܠܐ ܥܬܝܩܬܐ:',
@@ -407,6 +412,9 @@ $messages = array(
 'resetpass-submit-loggedin' => 'ܫܚܠܦ ܡܠܬܐ ܕܥܠܠܐ',
 'resetpass-submit-cancel'   => 'ܒܛܘܠ',
 'resetpass-temp-password'   => 'ܡܠܬܐ ܕܥܠܠܐ ܙܒܢܢܝܬܐ:',
+
+# Special:PasswordReset
+'passwordreset-username' => 'ܫܡܐ ܕܡܦܠܚܢܐ:',
 
 # Edit page toolbar
 'bold_sample'     => 'ܟܬܒܬܐ ܥܒܝܬܐ',
@@ -417,6 +425,7 @@ $messages = array(
 'link_tip'        => 'ܐܣܘܪܐ ܓܘܝܐ',
 'extlink_tip'     => 'ܐܣܘܪܐ ܒܪܝܐ (ܕܟܘܪ http:// ܩܕܡܝܬܐ)',
 'headline_sample' => 'ܨܚܚܐ ܕܦܪܫܓܢܐ ܪܫܝܐ',
+'nowiki_sample'   => 'ܣܢܘܦ ܟܬܒܬܐ ܕܠܐ ܣܕܝܪܘܬܐ ܗܪܟܐ',
 'image_tip'       => 'ܠܦܦܐ ܛܡܝܪܐ',
 'media_tip'       => 'ܐܣܘܪܐ ܕܠܦܦܐ',
 'sig_tip'         => 'ܪܡܝ ܐܝܕܟ ܥܡ ܙܒܢܐ ܘܣܝܩܘܡܐ',
@@ -437,14 +446,13 @@ $messages = array(
 'summary-preview'                  => 'ܚܝܪܐ ܩܕܡܝܐ ܕܦܣܝܩܬ̈ܐ :',
 'blockedtitle'                     => 'ܡܦܠܚܢܐ ܗܘ ܡܚܪܡܐ',
 'blockednoreason'                  => 'ܠܝܬ ܥܠܬܐ ܝܗܝܒܬܐ',
-'blockedoriginalsource'            => "ܡܒܘܥܐ ܕ'''$1''' ܓܠܝܚܐ ܠܬܚܬ:",
 'nosuchsectiontitle'               => 'ܠܐ ܡܨܐ ܐܫܟܚ ܡܢܬܐ',
 'loginreqlink'                     => 'ܥܘܠ',
 'accmailtitle'                     => 'ܡܠܬܐ ܕܥܠܠܐ ܫܕܪܬ',
 'newarticle'                       => '(ܚܕܬܐ)',
 'updated'                          => '(ܐܬܚܕܬ)',
 'note'                             => "'''ܡܥܝܪܢܘܬܐ:'''",
-'previewnote'                      => "'''ܕܟܘܪ ܗܢܘ ܚܝܪܐ ܩܕܡܝܐ ܒܠܚܘܕ''' ܫܘܚܠܦ̈ܐ ܕܝܠܟ ܠܐ ܐܬܠܒܟܬ ܥܕܡܐ ܠܗܫܐ",
+'previewnote'                      => "'''ܕܟܪ ܕܗܢܘ ܚܝܪܐ ܩܕܡܝܐ ܒܠܚܘܕ'''. ܫܘܚܠܦ̈ܐ ܕܝܠܟ ܠܐ ܐܬܠܒܟܘ ܥܕܡܐ ܠܗܫܐ!",
 'editing'                          => 'ܫܚܠܦܬܐ ܕ $1',
 'editingsection'                   => 'ܫܚܠܦܬܐ ܕ $1 (ܡܢܬܐ)',
 'editingcomment'                   => 'ܫܚܠܦܬܐ ܕ $1 (ܡܢܬܐ ܚܕܬܐ)',
@@ -463,7 +471,7 @@ $messages = array(
 ܗܕܐ ܦܐܬܐ ܐܝܬ ܡܢ ܟܕܘ.',
 
 # "Undo" feature
-'undo-summary' => 'ܠܐ ܥܒܘܕ $1 ܒܝܕ [[Special:Contributions/$2|$2]] ([[User talk:$2|ܡܡܠܠܐ]])',
+'undo-summary' => 'ܠܐ ܬܥܒܕ $1 ܒܝܕ [[Special:Contributions/$2|$2]] ([[User talk:$2|ܡܡܠܠܐ]])',
 
 # Account creation failure
 'cantcreateaccounttitle' => 'ܒܪܝܐ ܕܚܘܫܒܢܐ ܠܐ ܡܬܡܨܝܢܐ',
@@ -515,20 +523,10 @@ $messages = array(
 'revdel-restore-visible'     => 'ܬܢܝܬ̈ܐ ܡܬܚܙܝܢܝܬ̈ܐ',
 'pagehist'                   => 'ܬܫܥܝܬܐ ܕܦܐܬܐ',
 'deletedhist'                => 'ܬܫܥܝܬܐ ܫܝܦܬܐ',
-'revdelete-content'          => 'ܚܒܝܫܬ̈ܐ',
-'revdelete-summary'          => 'ܫܚܠܦ ܦܣܝܩܬ̈ܐ',
-'revdelete-uname'            => 'ܫܡܐ ܕܡܦܠܚܢܐ',
-'revdelete-log-message'      => '$1 ܠ $2 {{PLURAL:$2|ܬܢܝܬܐ|ܬܢܝܬ̈ܐ}}',
-'logdelete-log-message'      => '$1 ܠ $2 {{PLURAL:$2|ܓܕܫܐ|ܓܕ̈ܫܐ}}',
 'revdelete-otherreason'      => 'ܥܠܬܐ ܐܚܪܬܐ/ܢܩܝܦܬܐ:',
 'revdelete-reasonotherlist'  => 'ܥܠܬܐ ܐܚܪܬܐ',
 'revdelete-edit-reasonlist'  => 'ܫܚܠܦ ܥܠܠܬ̈ܐ ܕܫܝܦܐ',
 'revdelete-offender'         => 'ܣܝܘܡܐ ܕܬܢܝܬܐ:',
-
-# Revision move
-'revmove-reasonfield'    => 'ܥܠܬܐ:',
-'revmove-titlefield'     => 'ܦܐܬܐ ܕܢܘܦܐ:',
-'revmove-nullmove-title' => 'ܟܘܢܝܐ ܠܐ ܛܒܐ',
 
 # History merging
 'mergehistory'             => 'ܚܒܘܛ ܬܫܥܝܬ̈ܐ ܕܦܐܬܐ',
@@ -552,7 +550,7 @@ $messages = array(
 'lineno'                   => 'ܣܪܛܐ $1:',
 'compareselectedversions'  => 'ܦܚܘܡ ܒܝܬ ܬܪܝܢ ܬܢܝܬ̈ܐ ܓܒܝܬ̈ܐ',
 'showhideselectedversions' => 'ܚܘܝ/ܛܫܝ ܬܢܝܬ̈ܐ ܓܒܝܬ̈ܐ',
-'editundo'                 => 'ܠܐ ܥܒܘܕ',
+'editundo'                 => 'ܠܐ ܬܥܒܕ',
 'diff-multi'               => '({{PLURAL:$1|ܚܕܐ ܬܢܝܬܐ ܡܨܥܝܬܐ|$1 ܬܢܝܬ̈ܐ ܡܨܥܝܬ̈ܐ}} ܒܝܕ {{PLURAL:$2|ܚܕ ܡܦܠܚܢܐ ܠܐ ܓܠܝܚܬܐ|$2 ܡܦܠܚܢ̈ܐ ܠܐ ܓܠܝܚܬ̈ܐ}})',
 'diff-multi-manyusers'     => '({{PLURAL:$1|One ܚܕܐ ܬܢܝܬܐ ܡܨܥܝܬܐ|$1 ܬܢܝܬ̈ܐ ܡܨܥܝܬ̈ܐ}} ܒܝܕ ܝܬܝܪ ܡܢ $2 {{PLURAL:$2|ܚܕ ܡܦܠܚܢܐ ܠܐ ܓܠܝܚܬܐ|ܡܦܠܚܢ̈ܐ ܠܐ ܓܠܝܚܬ̈ܐ}})',
 
@@ -581,8 +579,8 @@ $messages = array(
 'searchprofile-images'           => 'ܡܝܕ̈ܝܐ ܣܓܝܐ̈ܐ (Multimedia)',
 'searchprofile-everything'       => 'ܟܠ ܡܕܡ',
 'searchprofile-advanced'         => 'ܡܬܩܕܡܢܐ',
-'searchprofile-articles-tooltip' => 'Search in $1',
-'searchprofile-project-tooltip'  => 'Search in $1',
+'searchprofile-articles-tooltip' => '',
+'searchprofile-project-tooltip'  => '',
 'search-result-size'             => '$1 ({{PLURAL:$2|1 ܡܠܬܐ|$2 ܡܠ̈ܐ}})',
 'search-redirect'                => '(ܨܝܒ $1)',
 'search-section'                 => '(ܡܢܬܐ $1)',
@@ -592,7 +590,9 @@ $messages = array(
 'search-interwiki-more'          => '(ܝܬܝܪ)',
 'search-mwsuggest-enabled'       => 'ܥܡ ܡܚܫܚܬ̈ܐ',
 'search-mwsuggest-disabled'      => 'ܠܐ ܡܚܫܚܬ̈ܐ',
+'search-relatedarticle'          => 'ܐܚܝܢܝ̈ܐ',
 'searcheverything-enable'        => 'ܒܨܝ ܒܟܠ ܚܩܠܬ̈ܐ',
+'searchrelated'                  => 'ܐܚܝܢܝ̈ܐ',
 'searchall'                      => 'ܟܠ',
 'showingresults'                 => "ܚܘܘܝܐ ܠܬܚܬ {{PLURAL:$1|'''1''' ܦܠܛܐ|'''$1''' ܦܠܛ̈ܐ}} ܫܪܐ ܡܢ ܡܢܝܢܐ '''$2'''.",
 'showingresultsheader'           => "{{PLURAL:$5|ܦܠܛܐ '''$1''' ܡܢ '''$3'''|ܦܠܛ̈ܐ '''$1 - $2''' ܡܢ '''$3'''}} ܠ'''$4'''",
@@ -632,6 +632,7 @@ $messages = array(
 'saveprefs'                   => 'ܠܒܘܟ',
 'resetprefs'                  => 'ܡܫܝ ܫܘܚܠܦ̈ܐ ܠܐ ܠܒܝܟ̈ܐ',
 'prefs-editing'               => 'ܫܚܠܦܬܐ',
+'rows'                        => 'ܨ̈ܦܐ',
 'columns'                     => 'ܥܡܘܕ̈ܐ:',
 'searchresultshead'           => 'ܒܨܝ',
 'resultsperpage'              => 'ܡܢܝܢܐ ܕܦܠܛ̈ܐ ܒܕܦܐ:',
@@ -679,6 +680,8 @@ $messages = array(
 'prefs-advancedsearchoptions' => 'ܓܒܝܬ̈ܐ ܡܬܩܕ̈ܡܢܐ',
 'prefs-advancedwatchlist'     => 'ܓܒܝܬ̈ܐ ܡܬܩܕ̈ܡܢܐ',
 'prefs-displayrc'             => 'ܚܘܝ ܓܒܝܬ̈ܐ',
+'prefs-displaysearchoptions'  => 'ܚܘܝ ܓܒܝܬ̈ܐ',
+'prefs-displaywatchlist'      => 'ܚܘܝ ܓܒܝܬ̈ܐ',
 'prefs-diffs'                 => 'ܦܪ̈ܝܫܘܝܬܐ',
 
 # User rights
@@ -732,7 +735,6 @@ $messages = array(
 'right-block'          => 'ܚܪܘܡ ܡܦܠܚܢ̈ܐ ܐܚܪ̈ܢܐ ܡܢ ܫܚܠܦܬܐ',
 'right-mergehistory'   => 'ܚܒܘܛ ܬܫܥܝܬܐ ܕܦܐܬܬ̈ܐ',
 'right-userrights'     => 'ܫܚܠܦ ܟܠ ܙܕ̈ܩܐ ܕܡܦܠܚܢܐ',
-'right-revisionmove'   => 'ܫܢܝ ܬܢܝܬ̈ܐ',
 
 # User rights log
 'rightslog'  => 'ܣܓܠܐ ܕܙܕ̈ܩܐ ܕܡܦܠܚܢܐ',
@@ -758,7 +760,6 @@ $messages = array(
 'action-block'              => 'ܚܪܡܬܐ ܕܡܦܠܚܢܐ ܗܢܐ ܡܢ ܫܚܠܦܬܐ',
 'action-mergehistory'       => 'ܚܒܛܬܐ ܕܬܫܥܝܬܐ ܕܦܐܬܐ ܗܕܐ',
 'action-userrights'         => 'ܫܚܠܦܬܐ ܕܟܠ ܙܕ̈ܩܐ ܕܡܦܠܚܢܐ',
-'action-revisionmove'       => 'ܫܢܝܬܐ ܕܬܢܝܬ̈ܐ',
 
 # Recent changes
 'nchanges'                    => '$1 {{PLURAL:$1|ܫܘܚܠܦܐ|ܫܘܚܠܦ̈ܐ}}',
@@ -774,7 +775,7 @@ $messages = array(
 'rcshowhideliu'               => '$1 ܡܦܠܚܢ̈ܐ ܥܠܝܠ̈ܐ',
 'rcshowhideanons'             => '$1 ܡܦܠܚܢܐ ܠܐ ܝܕܝܥܐ',
 'rcshowhidemine'              => '$1 ܫܘܚܠܦ̈ܝ',
-'rclinks'                     => 'ܚܘܝ $1 ܫܘܚܠܦ̈ܐ ܐܚܪ̈ܝܐ ܒ $2 ܝܘܡܬ̈ܐ ܐܚܪ̈ܝܬܐ<br />$3',
+'rclinks'                     => 'ܚܘܝ $1 ܫܘܚܠܦ̈ܐ ܐܚܪ̈ܝܐ ܒ $2 ܝܘܡܬ̈ܐ ܐܚܪ̈ܝܐ<br />$3',
 'diff'                        => 'ܦܪܝܫܘܬܐ',
 'hist'                        => 'ܬܫܥܝܬܐ',
 'hide'                        => 'ܛܫܝ',
@@ -862,10 +863,10 @@ $1',
 'filehist-user'             => 'ܡܦܠܚܢܐ',
 'filehist-dimensions'       => 'ܩܝܡ̈ܐ',
 'filehist-filesize'         => 'ܥܓܪܐ ܕܠܦܦܐ',
-'imagelinks'                => 'ܐܣܘܪ̈ܐ ܕܠܦܦܐ',
+'filehist-comment'          => 'ܥܘܩܒܐ',
+'imagelinks'                => 'ܚܫܚܬܐ ܕܠܦܦܐ',
 'linkstoimage'              => '{{PLURAL:$1|ܦܐܬܐ ܗܕܐ ܐܣܪ|$1 ܦܐܬܬ̈ܐ ܗܠܝܢ ܐܣܪܝܢ}} ܥܡ ܗܢܐ ܠܦܦܐ:',
 'nolinkstoimage'            => 'ܠܝܬ ܦܐܬܐ ܕܐܣܪ ܠܗܢܐ ܠܦܦܐ.',
-'redirectstofile'           => '{{PLURAL:$1|ܠܦܦܐ|$1 ܠܦܦ̈ܐ}} ܕܐܬܐ ܐܣܪ ܠܗܢܐ ܠܦܦܐ:',
 'uploadnewversion-linktext' => 'ܐܣܩ ܨܚܚܐ ܚܕܬܐ ܡܢ ܗܢܐ ܠܦܦܐ',
 'shared-repo-from'          => 'ܡܢ $1',
 
@@ -910,8 +911,8 @@ $1',
 'statistics-pages'        => 'ܦܐܬܬ̈ܐ',
 'statistics-users-active' => 'ܡܦܠܚܢ̈ܐ ܟܫܝܪ̈ܐ',
 
-'disambiguations'     => 'ܦܐܬܬ̈ܐ ܕܠܐ ܕܠܘܚܝܐ',
-'disambiguationspage' => 'Template:ܠܐ ܕܠܘܚܝܐ',
+'disambiguations'     => 'ܦܐܬܬ̈ܐ ܕܬܘܚܡܐ ܐܚܪܢܐ',
+'disambiguationspage' => 'Template:ܬܘܚܡܐ ܐܚܪܢܐ',
 
 'doubleredirects'            => 'ܨܘܝܒ̈ܐ ܥܦܝܦ̈ܐ',
 'double-redirect-fixed-move' => '[[$1]] ܐܫܬܢܝܬ.
@@ -957,7 +958,7 @@ $1',
 'listusers-editsonly'     => 'ܚܘܝ ܡܦܠܚܢ̈ܐ ܥܡ ܫܘܚܠܦ̈ܐ ܒܠܚܘܕ',
 'listusers-creationsort'  => 'ܛܟܣ ܐܝܟ ܣܝܩܘܡܐ ܕܒܪܝܐ',
 'usereditcount'           => '$1 {{PLURAL:$1|ܫܘܚܠܦܐ|ܫܘܚܠܦ̈ܐ}}',
-'usercreated'             => 'ܒܪܐ ܒܣܝܩܘܡ $1 ܫܥܬܐ $2',
+'usercreated'             => '{{ܓܢܣܐ:$3|ܒܪܐ}} ܒܣܝܩܘܡ $1 ܒܫܥܬܐ $2',
 'newpages'                => 'ܦܐܬܬ̈ܐ ܚܕ̈ܬܬܐ',
 'newpages-username'       => 'ܫܡܐ ܕܡܦܠܚܢܐ:',
 'ancientpages'            => 'ܦܐܬܬ̈ܐ ܥܬܝܩ ܡܢ ܟܠ',
@@ -1009,7 +1010,7 @@ $1',
 'sp-deletedcontributions-contribs' => 'ܫܘܬܦܘܝܬ̈ܐ',
 
 # Special:LinkSearch
-'linksearch'    => 'ܐܣܘܪܐ ܒܪܝܐ',
+'linksearch'    => 'ܐܣܘܪ̈ܐ ܒܪ̈ܝܐ ܒܨܝܐ',
 'linksearch-ns' => 'ܚܩܠܐ:',
 'linksearch-ok' => 'ܒܨܝ',
 
@@ -1021,17 +1022,14 @@ $1',
 
 # Special:ActiveUsers
 'activeusers'            => 'ܡܟܬܒܘܬܐ ܕܗܕ̈ܡܐ ܟܫܝܪ̈ܐ',
-'activeusers-count'      => '$1 {{PLURAL:$1|ܫܘܚܠܦܐ ܚܕܬܐ|ܫܘܚܠܦ̈ܐ ܚܕ̈ܬܐ}} ܒ {{PLURAL:$3|ܝܘܡܐ ܐܚܪܝܐ|$3 ܝܘܡܬ̈ܐ ܐܚܪ̈ܝܬܐ}}',
+'activeusers-count'      => '$1 {{PLURAL:$1|ܫܘܚܠܦܐ ܚܕܬܐ|ܫܘܚܠܦ̈ܐ ܚܕ̈ܬܐ}} ܒ {{PLURAL:$3|ܝܘܡܐ ܐܚܪܝܐ|$3 ܝܘܡܬ̈ܐ ܐܚܪ̈ܝܐ}}',
 'activeusers-from'       => 'ܚܘܝ ܡܦܠܚܢ̈ܐ ܕܫܪܐ ܥܡ:',
 'activeusers-hidebots'   => 'ܛܫܝ ܒܘܬ̈ܐ (bots)',
 'activeusers-hidesysops' => 'ܛܫܝ ܡܕܒܪ̈ܢܐ',
 'activeusers-noresult'   => 'ܠܐ ܡܦܠܚܢܐ ܐܫܬܟܚ.',
 
 # Special:Log/newusers
-'newuserlogpage'           => 'ܣܓܠܐ ܕܒܪܝܬܐ ܕܡܦܠܚܢܐ',
-'newuserlog-byemail'       => 'ܡܠܬܐ ܕܥܠܠܐ ܐܫܬܕܪܬ ܒܝܕ ܒܝܠܕܪܐ ܐܠܩܛܪܘܢܝܐ',
-'newuserlog-create-entry'  => 'ܚܘܫܒܢܐ ܕܡܦܠܚܢܐ ܚܕܬܐ',
-'newuserlog-create2-entry' => 'ܒܪܐ ܚܘܫܒܢܐ ܚܕܬܐ $1',
+'newuserlogpage' => 'ܣܓܠܐ ܕܒܪܝܬܐ ܕܡܦܠܚܢܐ',
 
 # Special:ListGroupRights
 'listgrouprights'                      => 'ܙܕ̈ܩܐ ܕܟܢܘܫܬܐ ܕܡܦܠܚܢ̈ܐ',
@@ -1050,7 +1048,7 @@ $1',
 'mailnologin'     => 'ܠܝܬ ܦܪܫܓܢܐ',
 'emailuser'       => 'ܫܕܪ ܐܓܪܬܐ ܠܗܢܐ ܡܦܠܚܢܐ',
 'emailpage'       => 'ܫܕܪ ܐܓܪܬܐ ܒܒܝܠܕܪܐ ܐܠܩܛܪܘܢܝܐ ܠܡܦܠܚܢܐ',
-'defemailsubject' => 'ܒܝܠܕܪܐ ܐܠܩܛܪܘܢܝܐ  ܡܢ {{SITENAME}}',
+'defemailsubject' => 'ܒܝܠܕܪܐ ܐܠܩܛܪܘܢܝܐ  ܡܢ ܡܦܠܚܢܐ "$1"',
 'noemailtitle'    => 'ܠܝܬ ܒܝܠܕܪܐ ܐܠܩܛܪܘܢܝܐ',
 'email-legend'    => 'ܫܕܪ ܐܓܪܬܐ ܠܡܦܠܚܢܐ ܕ {{SITENAME}} ܐܚܪܢܐ',
 'emailfrom'       => 'ܡܢ:',
@@ -1072,14 +1070,12 @@ $1',
 'watchlistfor2'     => 'ܠ $1 $2',
 'nowatchlist'       => 'ܠܝܬ ܠܟ ܡܕܡ ܒܪ̈ܗܝܬܐ ܕܝܠܟ',
 'watchnologin'      => 'ܠܝܬܝܟ ܥܠܝܠܐ',
-'addedwatch'        => 'ܐܘܣܦ ܠܪ̈ܗܝܬܐ',
-'removedwatch'      => 'ܠܚܝܬ ܡܢ ܪ̈ܗܝܬܟ',
 'removedwatchtext'  => 'ܦܐܬܐ "[[:$1]]" ܐܫܬܩܠܬ ܡܢ [[Special:Watchlist|ܪ̈ܗܝܬܟ]].',
 'watch'             => 'ܪܗܝ',
 'watchthispage'     => 'ܪܗܝ ܗܕܐ ܦܐܬܐ',
 'unwatch'           => 'ܠܐ ܪܗܝ',
 'unwatchthispage'   => 'ܟܠܝ ܪܗܝܐ',
-'wlshowlast'        => 'ܚܘܝ $1 ܫܥܬ̈ܐ $2 ܝܘܡܬ̈ܐ ܐܚܪ̈ܝܬܐ $3',
+'wlshowlast'        => 'ܚܘܝ $1 ܫܥܬ̈ܐ $2 ܝܘܡܬ̈ܐ ܐܚܪ̈ܝܐ $3',
 'watchlist-options' => 'ܓܒܝܬ̈ܐ ܕܪ̈ܗܝܬܐ',
 
 # Displayed when you click the "watch" button and it is in the process of watching
@@ -1104,7 +1100,6 @@ $1',
 'delete-legend'          => 'ܫܘܦ',
 'actioncomplete'         => 'ܥܡܠܝܬܐ ܓܡܪܬ',
 'actionfailed'           => 'ܥܡܠܝܬܐ ܠܐ ܢܨܚܬ',
-'deletedarticle'         => 'ܫܦ "[[$1]]"',
 'dellogpage'             => 'ܣܓܠܐ ܕܫܝܦܐ',
 'deletionlog'            => 'ܣܓܠܐ ܕܫܝܦܐ',
 'deletecomment'          => 'ܥܠܬܐ:',
@@ -1122,7 +1117,7 @@ $1',
 # Protect
 'protectlogpage'              => 'ܣܓܠܐ ܕܢܛܪܐ',
 'protectedarticle'            => 'ܢܛܝܪܐ "[[$1]]"',
-'unprotectedarticle'          => 'ܠܐ ܢܛܝܪܐ "[[$1]]"',
+'unprotectedarticle'          => 'ܫܩܘܠ ܢܛܝܪܘܬܐ ܡܢ "[[$1]]"',
 'movedarticleprotection'      => 'ܫܢܐ ܛܘܝܒ̈ܐ ܕܢܛܪܐ ܡܢ "[[$2]]" ܠ "[[$1]]"',
 'prot_1movedto2'              => '[[$1]] ܐܬܫܢܝܬ ܠ [[$2]]',
 'protect-legend'              => 'ܚܬܬ ܢܘܛܪܐ',
@@ -1195,6 +1190,7 @@ $1',
 'sp-contributions-newbies-title' => 'ܫܘܬܦܘܝܬ̈ܐ ܕܡܦܠܚܢܐ ܠܚܘܫܒܢ̈ܐ ܚܕ̈ܬܐ',
 'sp-contributions-blocklog'      => 'ܣܓܠܐ ܕܚܪܡܐ',
 'sp-contributions-deleted'       => 'ܫܘܬܦܘܝܬ̈ܐ ܕܡܦܠܚܢܐ ܫܝܦܬ̈ܐ',
+'sp-contributions-uploads'       => 'ܡܣܩܬ̈ܐ',
 'sp-contributions-logs'          => 'ܣܓܠ̈ܐ',
 'sp-contributions-talk'          => 'ܡܡܠܠܐ',
 'sp-contributions-userrights'    => 'ܕܘܒܪܐ ܕܙܕ̈ܩܐ ܕܡܦܠܚܢܐ',
@@ -1210,11 +1206,13 @@ $1',
 'nolinkshere'              => "ܠܝܬ ܦܐܬܬ̈ܐ ܐܣܪܝܢ ܥܡ '''[[:$1]]'''.",
 'nolinkshere-ns'           => "ܠܝܬ ܦܐܬܬ̈ܐ ܐܣܪܝܢ ܥܡ '''[[:$1]]''' ܒܚܩܠܐ ܓܒܝܐ.",
 'isredirect'               => 'ܦܐܬܐ ܕܨܘܝܒܐ',
-'isimage'                  => 'ܐܣܘܪܐ ܕܨܘܪܬܐ',
+'istemplate'               => 'ܚܒܝܫܬܐ',
+'isimage'                  => 'ܐܣܘܪܐ ܕܠܦܦܐ',
 'whatlinkshere-prev'       => '{{PLURAL:$1|ܩܕܝܡܐ|$1 ܩܕ̈ܝܡܐ}}',
 'whatlinkshere-next'       => '{{PLURAL:$1|ܚܕܬܐ|$1 ܚܕ̈ܬܐ}}',
 'whatlinkshere-links'      => '← ܐܣܘܪ̈ܐ',
 'whatlinkshere-hideredirs' => '$1 ܨܘܝܒ̈ܐ',
+'whatlinkshere-hidetrans'  => '$1 ܡܬܚܪ̈ܙܢܘܬܐ',
 'whatlinkshere-hidelinks'  => '$1 ܐܣܘܪ̈ܐ',
 'whatlinkshere-hideimages' => '$1 ܐܣܘܪܐ ܕܨܘܪܬܐ',
 'whatlinkshere-filters'    => 'ܡܨܦܝܢܝܬ̈ܐ',
@@ -1241,7 +1239,7 @@ $1',
 'unblockip'                  => 'ܫܩܘܠ ܚܪܡܐ ܡܢ ܡܦܠܚܢܐ',
 'ipusubmit'                  => 'ܫܩܘܠ ܚܪܡܐ ܗܢܐ',
 'unblocked'                  => 'ܐܫܬܩܠ ܚܪܡܐ ܡܢ [[User:$1|$1]]',
-'ipblocklist'                => 'ܐܝ ܦܝ (IP) ܘܫܡܗ̈ܐ ܕܡܦܠܚܢ̈ܐ ܚܪ̈ܝܡܐ',
+'ipblocklist'                => 'ܡܦܠܚܢ̈ܐ ܡܚܪ̈ܡܐ',
 'ipblocklist-legend'         => 'ܐܫܟܚ ܡܦܠܚܢܐ ܡܚܪܡܐ',
 'ipblocklist-submit'         => 'ܒܨܝ',
 'ipblocklist-localblock'     => 'ܚܪܡܐ ܕܘܟܬܢܝܐ',
@@ -1277,8 +1275,6 @@ Do you want to change the settings?',
 'movedto'                 => 'ܐܬܫܢܝ ܠ',
 'move-subpages'           => 'ܫܢܝ ܕ̈ܦܐ ܦܪ̈ܥܝܐ (ܥܕܡܐ ܠ $1)',
 'move-talk-subpages'      => 'ܫܢܝ ܕ̈ܦܐ ܦܪ̈ܥܝܐ ܕܕܦܐ ܕܕܘܪܫܐ (ܥܕܡܐ ܠ $1)',
-'1movedto2'               => 'ܫܢܐ [[$1]] ܠ [[$2]]',
-'1movedto2_redir'         => 'ܫܢܐ [[$1]] ܠ [[$2]] ܥܠ ܪܫ ܨܘܝܒܐ',
 'movelogpage'             => 'ܣܓܠܐ ܕܫܘܢܝܐ',
 'movereason'              => 'ܥܠܬܐ:',
 'revertmove'              => 'ܐܦܢܝ',
@@ -1332,18 +1328,6 @@ Do you want to change the settings?',
 'anonusers'   => '{{SITENAME}} {{PLURAL:$2|ܡܦܠܚܢܐ ܠܐ ܝܕܝܥܐ|ܡܦܠܚܢ̈ܐ ܠܐ ܝܕ̈ܝܥܐ}} $1',
 'creditspage' => 'ܙܕ̈ܩܐ ܕܦܐܬܐ',
 
-# Info page
-'infosubtitle'   => 'ܝܕ̈ܥܬܐ ܕܦܐܬܐ',
-'numedits'       => 'ܡܢܝܢܐ ܕܫܘܚܠܦ̈ܐ (ܦܐܬܐ): $1',
-'numtalkedits'   => 'ܡܢܝܢܐ ܕܫܘܚܠܦ̈ܐ (ܦܐܬܐ  ܕܕܘܪܫܐ): $1',
-'numwatchers'    => 'ܡܢܝܢܐ ܕܪ̈ܗܝܐ: $1',
-'numauthors'     => 'ܡܢܝܢܐ ܕܡܫܚܠܦܢ̈ܐ (ܦܐܬܐ): $1',
-'numtalkauthors' => 'ܡܢܝܢܐ ܕܡܫܚܠܦܢ̈ܐ (ܦܐܬܐ ܕܕܘܪܫܐ): $1',
-
-# Patrol log
-'patrol-log-auto' => '(ܝܬܐܝܬ)',
-'patrol-log-diff' => 'ܬܢܝܬܐ $1',
-
 # Image deletion
 'filedeleteerror-short' => 'ܦܘܕܐ ܒܫܝܦܐ ܕܠܦܦܐ: $1',
 'filedeleteerror-long'  => 'ܦܘܕ̈ܐ ܐܫܟܚܬ ܟܕ ܫܝܦܐ ܠܦܦܐ:
@@ -1357,7 +1341,7 @@ $1',
 # Media information
 'thumbsize'      => 'ܥܓܪܐ ܕܨܘܪܬܐ ܙܥܘܪܬܐ:',
 'file-info'      => 'ܥܓܪܐ ܕܠܦܦܐ: $1, MIME ܐܕܫܐ: $2',
-'file-nohires'   => '<small>ܠܝܬ ܢܩܕܘܬܐ ܝܬܝܪ ܡܢ ܗܢܐ.</small>',
+'file-nohires'   => 'ܠܝܬ ܢܩܕܘܬܐ ܝܬܝܪ ܡܢ ܗܢܐ.',
 'show-big-image' => 'ܢܩܕܘܬܐ ܓܡܝܪܬܐ',
 
 # Special:NewFiles
@@ -1377,7 +1361,6 @@ $1',
 'exif-imagelength'         => 'ܐܘܪܟܐ',
 'exif-xresolution'         => 'ܢܩܕܘܬܐ ܐܘܦܩܝܬܐ',
 'exif-yresolution'         => 'ܢܩܕܘܬܐ ܥܡܘܕܝܬܐ',
-'exif-resolutionunit'      => 'ܚܕܝܘܬܐ ܕ X ܘ Y ܕܢܩܕܘܬܐ',
 'exif-imagedescription'    => 'ܟܘܢܝܐ ܕܨܘܪܬܐ',
 'exif-artist'              => 'ܣܝܘܡܐ',
 'exif-exposuretime-format' => '$1 ܪܦܦܐ ($2)',
@@ -1386,6 +1369,7 @@ $1',
 'exif-gpstrack'            => 'ܨܘܒܐ ܕܫܘܢܝܐ',
 'exif-gpsimgdirectionref'  => 'ܓܒܝܬܐ ܕܨܘܒܐ ܕܫܘܢܝܐ',
 'exif-gpsimgdirection'     => 'ܨܘܒܐ ܕܨܘܪܬܐ',
+'exif-languagecode'        => 'ܠܫܢܐ',
 
 'exif-unknowndate' => 'ܣܝܩܘܡܐ ܠܐ ܝܕܝܥܐ',
 
@@ -1427,17 +1411,18 @@ $1',
 'exif-gpsspeed-m' => 'ܡܝܠܐ ܒܫܥܬܐ',
 'exif-gpsspeed-n' => 'ܩܛܪ̈ܐ',
 
+# Pseudotags used for GPSDestDistanceRef
+'exif-gpsdestdistance-m' => 'ܡܝܠ̈ܐ',
+
 # Pseudotags used for GPSTrackRef, GPSImgDirectionRef and GPSDestBearingRef
 'exif-gpsdirection-t' => 'ܨܘܒܐ ܬܪܝܨܐ',
 'exif-gpsdirection-m' => 'ܨܘܒܐ ܡܓܢܛܝܣܝܐ',
 
 # 'all' in various places, this might be different for inflected languages
-'recentchangesall' => 'ܟܠ',
-'imagelistall'     => 'ܟܠ',
-'watchlistall2'    => 'ܟܠ',
-'namespacesall'    => 'ܟܠ',
-'monthsall'        => 'ܟܠ',
-'limitall'         => 'ܟܠ',
+'watchlistall2' => 'ܟܠ',
+'namespacesall' => 'ܟܠ',
+'monthsall'     => 'ܟܠ',
+'limitall'      => 'ܟܠ',
 
 # E-mail address confirmation
 'confirmemail'             => 'ܚܬܬ ܒܝܠܕܪܐ ܐܠܩܛܪܘܢܝܐ',
@@ -1534,7 +1519,10 @@ $1',
 
 # HTML forms
 'htmlform-submit'              => 'ܫܕܪ',
-'htmlform-reset'               => 'ܠܐ ܥܒܘܕ ܫܘܚܠܦ̈ܐ',
+'htmlform-reset'               => 'ܠܐ ܬܥܒܕ ܫܘܚܠܦ̈ܐ',
 'htmlform-selectorother-other' => 'ܐܚܪܢܐ',
+
+# New logging system
+'newuserlog-byemail' => 'ܡܠܬܐ ܕܥܠܠܐ ܐܫܬܕܪܬ ܒܝܕ ܒܝܠܕܪܐ ܐܠܩܛܪܘܢܝܐ',
 
 );

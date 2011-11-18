@@ -9,7 +9,9 @@
  *
  * @author Dark Eagle
  * @author FnTmLV
+ * @author Geimeris
  * @author GreenZeb
+ * @author Karlis
  * @author Kikos
  * @author Knakts
  * @author Marozols
@@ -20,7 +22,7 @@
  * @author לערי ריינהארט
  */
 
-/*
+/**
  * @copyright Copyright © 2006, Niklas Laxström
  * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License 2.0 or later
  */
@@ -173,14 +175,7 @@ $messages = array(
 'listingcontinuesabbrev'         => ' (turpinājums)',
 'index-category'                 => 'Indeksētās lapas',
 'noindex-category'               => 'Neindeksētās lapas',
-
-'mainpagetext'      => "'''MediaWiki veiksmīgi ieinstalēts'''",
-'mainpagedocfooter' => 'Izlasi [http://meta.wikimedia.org/wiki/Help:Contents Lietotāja pamācību], lai iegūtu vairāk informācijas par Wiki programmatūras lietošanu.
-
-== Pirmie soļi ==
-* [http://www.mediawiki.org/wiki/Manual:Configuration_settings Konfigurācijas iespēju saraksts]
-* [http://www.mediawiki.org/wiki/Manual:FAQ MediaWiki J&A]
-* [https://lists.wikimedia.org/mailman/listinfo/mediawiki-announce Parakstīties uz paziņojumiem par jaunām MediaWiki versijām]',
+'broken-file-category'           => 'Lapas, kurās ir bojātas failu saites',
 
 'about'         => 'Par',
 'article'       => 'Raksts',
@@ -210,8 +205,8 @@ $messages = array(
 'vector-action-move'             => 'Pārvietot',
 'vector-action-protect'          => 'Aizsargāt',
 'vector-action-undelete'         => 'Atjaunot',
-'vector-action-unprotect'        => 'Neaizsargāt',
-'vector-simplesearch-preference' => 'Ieslēgt uzlabotās meklēšanas piedāvājumus (tikai Vector izskatā)',
+'vector-action-unprotect'        => 'Mainīt aizsardzību',
+'vector-simplesearch-preference' => 'Ieslēgt uzlabotās meklēšanas piedāvājumus (tikai Vector apdarē)',
 'vector-view-create'             => 'Izveidot',
 'vector-view-edit'               => 'Rediģēt',
 'vector-view-history'            => 'Hronoloģija',
@@ -232,10 +227,10 @@ $messages = array(
 'history'           => 'hronoloģija',
 'history_short'     => 'Hronoloģija',
 'updatedmarker'     => 'atjaunināti kopš pēdējā apmeklējuma',
-'info_short'        => 'Informācija',
 'printableversion'  => 'Drukājama versija',
 'permalink'         => 'Pastāvīgā saite',
 'print'             => 'Drukāt',
+'view'              => 'Skatīt',
 'edit'              => 'Izmainīt šo lapu',
 'create'            => 'Izveidot',
 'editthispage'      => 'Izmainīt šo lapu',
@@ -243,11 +238,12 @@ $messages = array(
 'delete'            => 'Dzēst',
 'deletethispage'    => 'Dzēst šo lapu',
 'undelete_short'    => 'Atjaunot $1 {{PLURAL:$1|versiju|versijas}}',
+'viewdeleted_short' => 'Apskatīt {{PLURAL:$1|vienu dzēstu labojumu|$1 dzēstus labojumus}}',
 'protect'           => 'Aizsargāt',
 'protect_change'    => 'izmainīt',
 'protectthispage'   => 'Aizsargāt šo lapu',
-'unprotect'         => 'Neaizsargāt',
-'unprotectthispage' => 'Neaizsargāt šo lapu',
+'unprotect'         => 'Mainīt aizsardzību',
+'unprotectthispage' => 'Mainīt šīs lapas aizsardzību',
 'newpage'           => 'Jauna lapa',
 'talkpage'          => 'Diskusija par šo lapu',
 'talkpagelinktext'  => 'diskusija',
@@ -324,6 +320,8 @@ $1',
 'toc'                     => 'Satura rādītājs',
 'showtoc'                 => 'parādīt',
 'hidetoc'                 => 'paslēpt',
+'collapsible-collapse'    => 'Sakļaut',
+'collapsible-expand'      => 'Izplest',
 'thisisdeleted'           => 'Apskatīt vai atjaunot $1?',
 'viewdeleted'             => 'Skatīt $1?',
 'restorelink'             => '$1 {{PLURAL:$1|dzēsto versiju|dzēstās versijas}}',
@@ -335,6 +333,8 @@ $1',
 'page-rss-feed'           => '"$1" RSS barotne',
 'page-atom-feed'          => '"$1" Atom barotne',
 'red-link-title'          => '$1 (lapa neeksistē)',
+'sort-descending'         => 'Kārtot dilstošā secībā',
+'sort-ascending'          => 'Kārtot augošā secībā',
 
 # Short words for each namespace, by default used in the namespace tab in monobook
 'nstab-main'      => 'Raksts',
@@ -407,15 +407,13 @@ Par to varat ziņot [[Special:ListUsers/sysop|kādam administratoram]], norādot
 Funkcija: $1<br />
 Vaicājums: $2',
 'viewsource'           => 'Aplūkot kodu',
-'viewsourcefor'        => 'Lapa: $1',
 'actionthrottled'      => 'Darbība netika atļauta',
 'protectedpagetext'    => 'Šī lapa ir aizsargāta lai novērstu tās izmainīšanu.',
 'viewsourcetext'       => 'Tu vari apskatīties un nokopēt šīs lapas vikitekstu:',
 'protectedinterface'   => 'Šī lapa satur programmatūras interfeisā lietotu tekstu un ir bloķēta pret izmaiņām, lai pasargātu no bojājumiem.',
-'editinginterface'     => "'''Brīdinājums:''' Tu izmaini lapu, kuras saturu izmanto wiki programmatūras lietotāja saskarnē (''interfeisā''). Šīs lapas izmaiņas ietekmēs lietotāja saskarni citiem lietotājiem. Pēc modificēšanas, šīs izmaiņas būtu lietderīgi pievienot arī [http://translatewiki.net/wiki/Main_Page?setlang=en translatewiki.net], kas ir MediaWiki lokalizēšanas projekts.",
+'editinginterface'     => "'''Brīdinājums:''' Tu izmaini lapu, kuras saturu izmanto wiki programmatūras lietotāja saskarnē (''interfeisā''). Šīs lapas izmaiņas ietekmēs lietotāja saskarni citiem lietotājiem. Pēc modificēšanas, šīs izmaiņas būtu lietderīgi pievienot arī [//translatewiki.net/wiki/Main_Page?setlang=en translatewiki.net], kas ir MediaWiki lokalizēšanas projekts.",
 'sqlhidden'            => '(SQL vaicājums paslēpts)',
 'namespaceprotected'   => "Tev nav atļaujas izmainīt lapas, kas atrodas '''$1''' ''namespacē''.",
-'customcssjsprotected' => "Tev nav atļaujas izmainīt šo lapu, tāpēc, ka tā satur cita lietotāja personīgos uzstādījumus (''settings'').",
 'ns-specialprotected'  => 'Nevar izmainīt īpašās lapas.',
 'titleprotected'       => "Šī lapa ir aizsargāta pret izveidošanu. To aizsargāja [[User:$1|$1]].
 Norādītais iemesls bija ''$2''.",
@@ -452,10 +450,12 @@ Tavs lietotāja konts ir izveidots. Neaizmirsti, ka ir iespējams mainīt [[Spec
 'createaccount'              => 'Izveidot jaunu lietotāju',
 'gotaccount'                 => "Tev jau ir lietotājvārds? '''$1'''!",
 'gotaccountlink'             => 'Dodies iekšā',
+'userlogin-resetlink'        => 'Esat aizmirsis savu pieslēgšanās informāciju?',
 'createaccountmail'          => 'pa e-pastu',
 'createaccountreason'        => 'Iemesls:',
 'badretype'                  => 'Tevis ievadītās paroles nesakrīt.',
-'userexists'                 => 'Šāds lietotāja vārds jau eksistē. Izvēlies citu vārdu.',
+'userexists'                 => 'Ievadītais lietotājvārds jau ir aizņemts.
+Lūdzu, izvēlieties citu vārdu.',
 'loginerror'                 => 'Neveiksmīga ieiešana',
 'createaccounterror'         => 'Neizdevās izveidot kontu: $1',
 'nocookiesnew'               => 'Lietotājvārds tika izveidots, bet tu neesi iegājis iekšā. {{SITENAME}} izmanto sīkdatnes (<i>cookies</i>), lai lietotāji varētu tajā ieiet. Tavs pārlūks nepieņem tās. Lūdzu, atļauj to pieņemšanu un tad nāc iekšā ar savu lietotājvārdu un paroli.',
@@ -464,7 +464,7 @@ Tavs lietotāja konts ir izveidots. Neaizmirsti, ka ir iespējams mainīt [[Spec
 'loginsuccesstitle'          => 'Ieiešana veiksmīga',
 'loginsuccess'               => 'Tu esi ienācis {{grammar:lokatīvs|{{SITENAME}}}} kā "$1".',
 'nosuchuser'                 => 'Šeit nav lietotāja ar vārdu "$1". Lietotājvārdi ir reģistrjutīgi (lielie un mazie burti nav viens un tas pats) Pārbaudi, vai pareizi uzrakstīts, vai arī [[Special:UserLogin/signup|izveido jaunu kontu]].',
-'nosuchusershort'            => 'Šeit nav lietotāja ar vārdu "<nowiki>$1</nowiki>". Pārbaudi, vai nav drukas kļūda.',
+'nosuchusershort'            => 'Šeit nav lietotāja ar vārdu "$1". Pārbaudi, vai nav drukas kļūda.',
 'nouserspecified'            => 'Tev jānorāda lietotājvārds.',
 'login-userblocked'          => 'Šis lietotājs ir bloķēts. Pieslēgšanās nav atļauta.',
 'wrongpassword'              => 'Tu ievadīji nepareizu paroli. Lūdzu, mēģini vēlreiz.',
@@ -502,18 +502,13 @@ Tādēļ šobrīd no šīs IP adreses vairs nevar izveidot jaunus kontus.',
 'usernamehasherror'          => 'Lietotājvārds nevar saturēt hash simbolus',
 'login-throttled'            => 'Tu esi veicis pārāk daudz ieiešanas mēģinājumus.
 Lūdzu uzgaidi pirms mēģini vēlreiz.',
+'login-abort-generic'        => 'Jūsu pieteikšanās bija neveiksmīga — Darbība pārtraukta',
 'loginlanguagelabel'         => 'Valoda: $1',
 
-# JavaScript password checks
-'password-strength'            => 'Paroles drošības novērtējums: $1',
-'password-strength-bad'        => 'VĀJA',
-'password-strength-mediocre'   => 'vidēja',
-'password-strength-acceptable' => 'pieņemama',
-'password-strength-good'       => 'laba',
-'password-retype'              => 'Pārrakstiet paroli šeit',
-'password-retype-mismatch'     => 'Paroles nesakrīt',
+# E-mail sending
+'php-mail-error-unknown' => 'Nezināma kļūda PHP mail() funkcijā',
 
-# Password reset dialog
+# Change password dialog
 'resetpass'                 => 'Mainīt paroli',
 'resetpass_header'          => 'Mainīt konta paroli',
 'oldpassword'               => 'Vecā parole',
@@ -529,6 +524,17 @@ Notiek ieiešana...',
 'resetpass-wrong-oldpass'   => 'Nepareiza pagaidu vai galvenā parole.
 Tu jau esi veiksmīgi nomainījis savu galveno paroli, vai arī esi pieprasījis jaunu pagaidu paroli.',
 'resetpass-temp-password'   => 'Pagaidu parole:',
+
+# Special:PasswordReset
+'passwordreset'              => 'Paroles atiestatīšana',
+'passwordreset-legend'       => 'Atiestatīt paroli',
+'passwordreset-disabled'     => 'Paroles atiestates šajā viki ir atspējotas.',
+'passwordreset-username'     => 'Lietotājvārds:',
+'passwordreset-email'        => 'E-pasta adrese:',
+'passwordreset-emailtitle'   => 'Konta informācija {{SITENAME}}',
+'passwordreset-emailelement' => 'Lietotājvārds: $1
+Pagaidu parole: $2',
+'passwordreset-emailsent'    => 'Atgādinājuma e-pasts ir nosūtīts.',
 
 # Edit page toolbar
 'bold_sample'     => 'Teksts boldā',
@@ -599,8 +605,6 @@ Atceries, ka tu nevari lietot "sūtīt e-pastu šim lietotājam" iespēju, ja tu
 Tava pašreizējā IP adrese ir $3 un  bloka ID ir $5.
 Lūdzu iekļauj šos visos ziņojumos, kurus sūti adminiem, apspriežot šo bloku.',
 'blockednoreason'                  => 'iemesls nav norādīts',
-'blockedoriginalsource'            => "'''$1''' kods ir parādīts zemāk:",
-'whitelistedittitle'               => 'Lai varētu rediģēt, šeit jāielogojas.',
 'whitelistedittext'                => 'Tev $1 lai varētu rediģēt lapas.',
 'confirmedittext'                  => 'Lai varētu izmainīt lapas, vispirms jāapstiprina savu e-pasta adresi.
 Norādi un apstiprini e-pasta adresi savos [[Special:Preferences|lietotāja uzstādījumos]].',
@@ -625,13 +629,13 @@ Ja tu esi anonīms lietotājs un uzskati, ka tev ir adresēti neatbilstoši kome
 'noarticletext-nopermission'       => 'Šajā lapā pašlaik nav nekāda teksta.
 Tu vari [[Special:Search/{{PAGENAME}}|meklēt šīs lapas nosaukumu]] citās lapās,
 vai <span class="plainlinks">[{{fullurl:{{#Special:Log}}|page={{FULLPAGENAMEE}}}} meklēt saistītus reģistru ierakstus]</span>.',
-'userpage-userdoesnotexist'        => 'Lietotājs "$1" nav reģistrēts.
+'userpage-userdoesnotexist'        => 'Lietotājs "<nowiki>$1</nowiki>" nav reģistrēts.
 Lūdzu, pārliecinies vai vēlies izveidot/izmainīt šo lapu.',
 'userpage-userdoesnotexist-view'   => 'Lietotājs "$1" nav reģistrēts.',
 'blocked-notice-logextract'        => 'Šis lietotājs pašlaik ir nobloķēts.
 
 Pēdējais bloķēšanas reģistra ieraksts ir apskatāms zemāk:',
-'clearyourcache'                   => "'''Piezīme - Pēc saglabāšanas, lai būtu redzamas izmaiņas, var būt nepieciešamas iztīrīt pārlūka kešatmiņu.''' '''Mozilla / Firefox / Safari:''' turi nospiestu ''Shift'' un klikšķini ''Reload,'' vai arī spied ''Ctrl-F5'' vai ''Ctrl-R'' (''Command-R'' uz Macintosh); '''Konqueror: '''klikšķini ''Reload'' vai spied uz ''F5;'' '''Opera:''' kešu var iztīrīt ''Tools → Preferences;'' '''Internet Explorer:''' turi nospiestu ''Ctrl'' un klikšķini ''Refresh,'' vai spied ''Ctrl-F5.''",
+'clearyourcache'                   => "'''Piezīme - Pēc saglabāšanas, lai būtu redzamas izmaiņas, var būt nepieciešamas iztīrīt pārlūka kešatmiņu.''' '''Mozilla / Firefox / Safari:''' turi nospiestu ''Shift'' un klikšķini ''Reload,'' vai arī spied ''Ctrl-F5'' vai ''Ctrl-R'' (''Command-R'' uz Mac); '''Konqueror: '''klikšķini ''Reload'' vai spied uz ''F5;'' '''Opera:''' kešu var iztīrīt ''Tools → Preferences;'' '''Internet Explorer:''' turi nospiestu ''Ctrl'' un klikšķini ''Refresh,'' vai spied ''Ctrl-F5.''",
 'usercssyoucanpreview'             => "'''Ieteikums:''' Lieto pogu \"{{int:showpreview}}\", lai pārbaudītu savu jauno CSS pirms saglabāšanas.",
 'userjsyoucanpreview'              => "'''Ieteikums:''' Lieto pogu \"{{int:showpreview}}\", lai pārbaudītu savu jauno JavaScript pirms saglabāšanas.",
 'usercsspreview'                   => "'''Atceries, ka šis ir tikai tava lietotāja CSS pirmskats, lapa vēl nav saglabāta!'''",
@@ -717,7 +721,12 @@ Izskatās, ka lapa ir dzēsta.',
 Tā jau eksistē.',
 
 # Parser/template warnings
-'parser-template-loop-warning' => 'Veidne ir ievietota tādā pašā veidnē: [[$1]]',
+'expensive-parserfunction-category'       => 'Lapas ar pārāk daudz laikietilpīgiem apstrādes funkciju izsaukumiem',
+'post-expand-template-inclusion-warning'  => "'''Brīdinājums:''' iekļauto veidņu izmērs ir par lielu.
+Dažas veidnes netiks iekļautas.",
+'post-expand-template-inclusion-category' => 'Lapas, kurām pārsniegts iekļauto veidņu apjoms',
+'post-expand-template-argument-category'  => 'Lapas, kurās ir izlaisti veidņu argumenti',
+'parser-template-loop-warning'            => 'Veidne ir ievietota tādā pašā veidnē: [[$1]]',
 
 # "Undo" feature
 'undo-success' => 'Šo izmaiņu ir iespējams atcelt.
@@ -733,7 +742,7 @@ Lūdzu, pārbaudi zemāk redzamajā salīdzinājumā, vai tu to tiešām vēlies
 $3 norādītais iemesls ir ''$2''",
 
 # History pages
-'viewpagelogs'           => 'Apskatīties ar šo lapu saistītos reģistru ierakstus',
+'viewpagelogs'           => 'Apskatīt ar šo lapu saistītos reģistru ierakstus',
 'nohistory'              => 'Šai lapai nav pieejama versiju hronoloģija.',
 'currentrev'             => 'Pašreizējā versija',
 'currentrev-asof'        => 'Pašreizējā versija, $1',
@@ -768,7 +777,7 @@ Iespējams, tā ir izdzēsta vai pārdēvēta.
 Mēģiniet [[Special:Search|meklēt]], lai atrastu saistītas lapas!',
 
 # Revision deletion
-'rev-deleted-comment'         => '(komentārs nodzēsts)',
+'rev-deleted-comment'         => '(labojuma kopsavilkums dzēsts)',
 'rev-deleted-user'            => '(lietotāja vārds nodzēsts)',
 'rev-deleted-event'           => '(reģistra ieraksts nodzēsts)',
 'rev-deleted-user-contribs'   => '[lietotājvārds vai IP adrese ir dzēsta — izmaiņa slēpta no devuma]',
@@ -801,8 +810,6 @@ Sīkāku informāciju var atrast [{{fullurl:{{#Special:Log}}/delete|page={{FULLP
 'revdelete-unsuppress'        => 'Atcelt ierobežojumus atjaunotajām versijām',
 'revdelete-log'               => 'Iemesls:',
 'revdelete-submit'            => 'Piemērot {{PLURAL:$1|izvēlētajai versijai|izvēlētajām versijām}}',
-'revdelete-logentry'          => 'izmainīja lapas "[[$1]]" versiju redzamību',
-'logdelete-logentry'          => 'izmainīja ar lapu "[[$1]]" saistīto darbību redzamību',
 'revdelete-success'           => "'''Versiju redzamība veiksmīgi atjaunināta.'''",
 'revdelete-failure'           => "'''Versiju redzamību nav iespējams atjaunināt:'''
 $1",
@@ -814,13 +821,7 @@ $1",
 'revdel-restore-visible'      => 'redzamās versijas',
 'pagehist'                    => 'Lapas vēsture',
 'deletedhist'                 => 'Vēsture dzēsta',
-'revdelete-content'           => 'saturs',
-'revdelete-summary'           => 'izmaiņu kopsavilkums',
-'revdelete-uname'             => 'lietotāja vārds',
-'revdelete-restricted'        => 'piemērot administratoriem ierobežojumus',
-'revdelete-unrestricted'      => 'noņemt administratoriem ierobežojumus',
-'revdelete-hid'               => 'paslēpa $1',
-'revdelete-unhid'             => 'atjaunoja $1',
+'revdelete-modify-missing'    => 'Kļūda, mainot vienumu ar ID $1: tas ir pazudis no datubāzes!',
 'revdelete-reason-dropdown'   => '*Biežākie dzēšanas iemesli
 ** autortiesību pārkāpums
 ** nepiemērota personīgā informācija
@@ -829,20 +830,6 @@ $1",
 'revdelete-reasonotherlist'   => 'Cits iemesls',
 'revdelete-edit-reasonlist'   => 'Izmainīt dzēšanas iemeslus',
 'revdelete-offender'          => 'Versijas autors:',
-
-# Revision move
-'moverevlogentry'              => 'pārvietota {{PLURAL:$3|viena versija|$3 versijas}} no $1 uz $2',
-'revisionmove'                 => 'Pārvietot versijas no "$1"',
-'revmove-legend'               => 'Ievadīt mērķa lapu un kopsavilkumu',
-'revmove-submit'               => 'Pārvietot versijas uz izvēlēto lapu',
-'revisionmoveselectedversions' => 'Pārvietot izvēlētās versijas',
-'revmove-reasonfield'          => 'Iemesls:',
-'revmove-titlefield'           => 'Mērķa lapa:',
-'revmove-badparam-title'       => 'Slikti parametri',
-'revmove-badparam'             => 'Jūsu pieprasījums satur nelikumīgus vai nepietiekamus parametrus. 
-Lūdzu, ejiet atpakaļ uz iepriekšējo lapu un mēģiniet vēlreiz.',
-'revmove-norevisions-title'    => 'Nederīga mērķa versija',
-'revmove-nullmove-title'       => 'Nepiemērots nosaukums',
 
 # History merging
 'mergehistory'                     => 'Apvienot lapu vēstures',
@@ -876,7 +863,7 @@ Lūdzu, ejiet atpakaļ uz iepriekšējo lapu un mēģiniet vēlreiz.',
 'compareselectedversions'  => 'Salīdzināt izvēlētās versijas',
 'showhideselectedversions' => 'Rādīt/slēpt izvēlētās versijas',
 'editundo'                 => 'atcelt',
-'diff-multi'               => '({{PLURAL:$1|Viena starpversija nav parādīta|$1 starpversijas nav parādītas}}.)',
+'diff-multi'               => '({{PLURAL:$1|Viena starpversija|$1 starpversijas}} no {{PLURAL:$2|viena lietotāja|$2 lietotājiem}} nav parādīta)',
 
 # Search results
 'searchresults'                    => 'Meklēšanas rezultāti',
@@ -958,7 +945,9 @@ Pagaidām vari meklēt, izmantojot Google vai Yahoo.
 'prefs-skin'                    => 'Apdare',
 'skin-preview'                  => 'Priekšskats',
 'datedefault'                   => 'Vienalga',
+'prefs-beta'                    => 'Beta funkcijas',
 'prefs-datetime'                => 'Datums un laiks',
+'prefs-labs'                    => 'Laboratorijas funkcijas',
 'prefs-personal'                => 'Lietotāja dati',
 'prefs-rc'                      => 'Pēdējās izmaiņas',
 'prefs-watchlist'               => 'Uzraugāmie raksti',
@@ -969,6 +958,8 @@ Pagaidām vari meklēt, izmantojot Google vai Yahoo.
 'prefs-watchlist-token'         => 'Uzraugāmo lapu saraksta marķieris:',
 'prefs-misc'                    => 'Dažādi',
 'prefs-resetpass'               => 'Mainīt paroli',
+'prefs-changeemail'             => 'Mainīt e-pastu',
+'prefs-setemail'                => 'Uzstādīt e-pasta adresi',
 'prefs-email'                   => 'E-pasta uzstādījumi',
 'prefs-rendering'               => 'Izskats',
 'saveprefs'                     => 'Saglabāt',
@@ -980,8 +971,6 @@ Pagaidām vari meklēt, izmantojot Google vai Yahoo.
 'columns'                       => 'Simbolu skaits rindiņā:',
 'searchresultshead'             => 'Meklēšana',
 'resultsperpage'                => 'Lappusē parādāmo rezultātu skaits',
-'contextlines'                  => 'Cik rindiņas parādīt katram atrastajam rezultātam',
-'contextchars'                  => 'Konteksta simbolu skaits vienā rindiņā',
 'stub-threshold-disabled'       => 'Atslēgts',
 'recentchangesdays'             => 'Dienu skaits, kuru rādīt pēdējajās izmaiņās:',
 'recentchangesdays-max'         => 'Ne vairāk kā $1 {{PLURAL:$1|diena|dienas}}',
@@ -993,7 +982,7 @@ Ja vēlies, tu vari izmantot šo nejauši uzģenerēto kodu: $1',
 'savedprefs'                    => 'Tavas izvēles ir saglabātas.',
 'timezonelegend'                => 'Laika josla:',
 'localtime'                     => 'Vietējais laiks:',
-'timezoneuseserverdefault'      => 'Lietot servera noklusēto',
+'timezoneuseserverdefault'      => 'Lietot viki noklusēto ($1)',
 'timezoneuseoffset'             => 'Cita (norādi starpību)',
 'timezoneoffset'                => 'Starpība¹:',
 'servertime'                    => 'Servera laiks šobrīd:',
@@ -1016,6 +1005,7 @@ Ja vēlies, tu vari izmantot šo nejauši uzģenerēto kodu: $1',
 'prefs-files'                   => 'Attēli',
 'prefs-custom-css'              => 'Personīgais CSS',
 'prefs-custom-js'               => 'Personīgais JS',
+'prefs-common-css-js'           => 'Koplietojams CSS/JavaScript visās apdarēs:',
 'prefs-emailconfirm-label'      => 'E-pasta statuss:',
 'prefs-textboxsize'             => 'Rediģēšanas loga izmērs',
 'youremail'                     => 'Tava e-pasta adrese:',
@@ -1025,6 +1015,7 @@ Ja vēlies, tu vari izmantot šo nejauši uzģenerēto kodu: $1',
 'prefs-registration'            => 'Reģistrēšanās datums:',
 'yourrealname'                  => 'Tavs īstais vārds:',
 'yourlanguage'                  => 'Valoda:',
+'yourvariant'                   => 'Satura valodas variants:',
 'yournick'                      => 'Tava iesauka (parakstam):',
 'prefs-help-signature'          => 'Komentāri diskusiju lapās ir jāparaksta, pievienojot simbolu virkni "<nowiki>~~~~</nowiki>", kas tiek automātiski aizstāta ar tavu parakstu un parakstīšanās laiku.',
 'badsig'                        => "Kļūdains ''paraksta'' kods; pārbaudi HTML (ja tāds ir lietots).",
@@ -1039,7 +1030,7 @@ Norādītā parametra vērtība būs publiski pieejama.',
 'email'                         => 'E-pasts',
 'prefs-help-realname'           => 'Īstais vārds nav obligāti jānorāda.
 Ja tu izvēlies to norādīt, tas tiks izmantots, lai identificētu tavu darbu (ieguldījumu {{grammar:lokatīvs|{{SITENAME}}}}).',
-'prefs-help-email'              => 'E-pasts nav obligāti jānorāda, taču tā norādīšana nodrošina iespēju atsūtīt paroli, ja tu to esi aizmirsis. Šī iespēja arī ļauj citiem sazināties ar tevi, izmantojot tavu lietotāja lapu vai lietotāja diskusiju lapu, tev nekur neatklājot savu identitāti.',
+'prefs-help-email'              => 'E-pasta adrese nav obligāta, bet ir nepieciešama nozaudētas paroles atjaunošanai.',
 'prefs-help-email-required'     => 'E-pasta adrese ir obligāta.',
 'prefs-info'                    => 'Pamatinformācija',
 'prefs-i18n'                    => 'Internacionalizācija',
@@ -1055,6 +1046,10 @@ Ja tu izvēlies to norādīt, tas tiks izmantots, lai identificētu tavu darbu (
 'prefs-displaysearchoptions'    => 'Pamatuzstādījumi',
 'prefs-displaywatchlist'        => 'Pamatuzstādījumi',
 'prefs-diffs'                   => 'Izmaiņas',
+
+# User preference: e-mail validation using jQuery
+'email-address-validity-valid'   => 'E-pasta adrese šķiet derīga',
+'email-address-validity-invalid' => 'Ievadiet derīgu e-pasta adresi',
 
 # User rights
 'userrights'                  => 'Lietotāju tiesību pārvaldība',
@@ -1073,7 +1068,7 @@ Ja tu izvēlies to norādīt, tas tiks izmantots, lai identificētu tavu darbu (
 'userrights-no-interwiki'     => 'Tev nav atļaujas izmainīt lietotāju tiesības citos wiki.',
 'userrights-nodatabase'       => 'Datubāze $1 neeksistē vai nav lokāla.',
 'userrights-nologin'          => 'Tev ir [[Special:UserLogin|jāieiet iekšā]] kā adminam, lai varētu izmainīt lietotāju grupas.',
-'userrights-notallowed'       => 'Tavam lietotājvārdam nav atļauju izmainīt lietotāju grupas.',
+'userrights-notallowed'       => 'Jūsu lietotāja kontam nav atļaujas pievienot vai noņemt lietotāju tiesības.',
 'userrights-changeable-col'   => 'Grupas, kuras tu vari izmainīt',
 'userrights-unchangeable-col' => 'Grupas, kuras tu nevari izmainīt',
 
@@ -1110,6 +1105,7 @@ Ja tu izvēlies to norādīt, tas tiks izmantots, lai identificētu tavu darbu (
 'right-minoredit'            => 'Atzīmēt izmaiņas kā maznozīmīgas',
 'right-move'                 => 'Pārvietot lapas',
 'right-move-subpages'        => 'Pārvietot lapas kopā ar to apakšlapām',
+'right-move-rootuserpages'   => 'Pārvietot saknes lietotāju lapas',
 'right-movefile'             => 'Pārvietot failus',
 'right-suppressredirect'     => 'Neveidot pāradresāciju no vecā nosaukuma, pārvietojot lapu',
 'right-upload'               => 'Augšuplādēt failus',
@@ -1152,9 +1148,7 @@ Ja tu izvēlies to norādīt, tas tiks izmantots, lai identificētu tavu darbu (
 'right-userrights'           => 'Mainīt visu lietotāju tiesības',
 'right-userrights-interwiki' => 'Mainīt lietotāju tiesības citās Vikipēdijās',
 'right-siteadmin'            => 'Bloķēt un atbloķēt datubāzi',
-'right-reset-passwords'      => 'Atiestatīt citu lietotāju paroles',
 'right-sendemail'            => 'Sūtīt e-pastu citiem lietotājiem',
-'right-revisionmove'         => 'Pārvietot versijas',
 
 # User rights log
 'rightslog'      => 'Lietotāju tiesību reģistrs',
@@ -1195,7 +1189,6 @@ Ja tu izvēlies to norādīt, tas tiks izmantots, lai identificētu tavu darbu (
 'action-userrights'           => 'mainīt visu lietotāju tiesības',
 'action-userrights-interwiki' => 'mainīt lietotāju tiesības citās Vikipēdijās',
 'action-siteadmin'            => 'bloķēt vai atbloķēt datubāzi',
-'action-revisionmove'         => 'pārvietošanas versijas',
 
 # Recent changes
 'nchanges'                          => '$1 {{PLURAL:$1|izmaiņa|izmaiņas}}',
@@ -1319,8 +1312,13 @@ Pārskatāmāka versija ir pieejama [[Special:NewFiles|jauno attēlu galerijā]]
 šī faila izmērs ir $2.',
 'largefileserver'            => 'Šis fails ir lielāks nekā serveris ņem pretī.',
 'emptyfile'                  => 'Šķiet, ka tu esi augšuplādējis tukšu failu. Iespējams, faila nosaukumā esi pieļāvis kļūdu. Lūdzu, pārbaudi, vai tiešām tu vēlies augšuplādēt tieši šo failu.',
+'windows-nonascii-filename'  => 'Šī viki neatbalsta failu nosaukumus ar īpašām rakstzīmēm.',
 'fileexists'                 => "Fails ar šādu nosaukumu jau pastāv, lūdzu, pārbaudi '''<tt>[[:$1]]</tt>''', ja neesi drošs, ka vēlies to mainīt.
 [[$1|thumb]]",
+'fileexists-extension'       => "Pastāv fails ar līdzīgu nosaukumu: [[$2|thumb]]
+* Augšupielādējamā faila nosaukums: '''<tt>[[:$1]]</tt>'''
+* Esošā faila nosaukums: '''<tt>[[:$2]]</tt>'''
+Lūdzu, izvēlieties citu nosaukumu.",
 'file-thumbnail-no'          => "Faila vārds sākas ar '''<tt>$1</tt>'''.
 Izskatās, ka šis ir samazināts attēls ''(thumbnail)''.
 Ja tev ir šis pats attēls pilnā izmērā, augšuplādē to, ja nav, tad nomaini faila vārdu.",
@@ -1336,30 +1334,33 @@ Ja tu joprojām gribi augšuplādēt šo failu, tad mēģini vēlreiz, ar citu f
 'copyuploaddisabled'         => 'URL augšupielādes nav atļautas.',
 'uploadfromurl-queued'       => 'Tava augšupielāde tika pievienota rindā.',
 'uploaddisabledtext'         => 'Failu augšupielāde ir atslēgta.',
+'php-uploaddisabledtext'     => 'Failu augšupielāde ir atslēgta PHP.
+Lūdzu, pārbaudi file_uploads uzstādījumu.',
 'uploadscripted'             => 'Šis fails satur HTML vai skriptu kodu, kuru, interneta pārlūks, var kļūdas pēc, mēģināt interpretēt (ar potenciāli sliktām sekām).',
 'uploadvirus'                => 'Šis fails satur vīrusu! Sīkāk: $1',
 'upload-source'              => 'Augšuplādējamais fails',
 'sourcefilename'             => 'Faila adrese:',
 'sourceurl'                  => 'Avota URL:',
-'destfilename'               => 'Vajadzīgais faila nosaukums:',
+'destfilename'               => 'Mērķa faila nosaukums:',
 'upload-maxfilesize'         => 'Maksimālais faila izmērs: $1',
 'upload-description'         => 'Faila apraksts',
 'upload-options'             => 'Augšupielādes iestatījumi',
 'watchthisupload'            => 'Uzraudzīt šo failu',
 'filewasdeleted'             => 'Fails ar šādu nosaukumu jau ir bijis augšuplādēts un pēc tam izdzēsts.
 Apskaties $1 pirms turpini šo failu augšuplādēt atkārtoti.',
-'upload-wasdeleted'          => "'''Brīdinājums: Tu augšuplādē failu kas agrāk jau ir ticis izdzēsts.'''
-
-Apdomā labi, vai tiešām ir lietderīgi turpināt šī faila augšuplādi.
-Te var apskatīties dzēšanas reģistru, lai noskaidrotu kāpēc šo failu toreiz izdzēsa:",
 'filename-bad-prefix'        => "Faila vārds failam, kuru tu mēģini augšpulādēt, sākas ar '''\"\$1\"''', kas ir neaprakstošs vārds, kādu parasti uzģenerē digitālais fotoaparāts.
 Lūdzu izvēlies aprakstošāku vārdu šim failam.",
 'upload-success-subj'        => 'Augšupielāde veiksmīga',
 'upload-success-msg'         => 'Jūsu augšupielādēt no [$2] bija veiksmīga. Tā ir pieejama šeit: [[:{{ns:file}}:$1]]',
 'upload-failure-subj'        => 'Augšupielādes problēma',
+'upload-failure-msg'         => 'Radās problēma ar jūsu augšupielādi no [$2]:
+
+$1',
 'upload-warning-subj'        => 'Augšupielādes brīdinājums',
+'upload-warning-msg'         => 'Radās problēma ar jūsu augšupielādi no [$2]. Lai labotu šo problēmu, jūs varat atgriezties uz [[Special:Upload/stash/$1|augšupielādes formu]].',
 
 'upload-proto-error'        => 'Nepareizs protokols',
+'upload-proto-error-text'   => 'Attālinātai augšupielādei URL ir jāsākas ar <code>http://</code> vai <code>ftp://</code>.',
 'upload-file-error'         => 'Iekšējā kļūda',
 'upload-file-error-text'    => 'Iekšējā kļūda, mēģinot izveidot pagaidu failu uz servera.
 Lūdzu, sazinieties ar [[Special:ListUsers/sysop|administratoru.]]',
@@ -1368,8 +1369,19 @@ Lūdzu, sazinieties ar [[Special:ListUsers/sysop|administratoru.]]',
 'upload-unknown-size'       => 'Nezināms izmērs',
 'upload-http-error'         => 'HTTP kļūda: $1',
 
+# ZipDirectoryReader
+'zip-wrong-format' => 'Norādītais fails nebija ZIP fails.',
+
+# Special:UploadStash
+'uploadstash-errclear' => 'Failu tīrīšana bija neveiksmīga.',
+'uploadstash-refresh'  => 'Atsvaidzināt failu sarakstu',
+
 # img_auth script messages
 'img-auth-accessdenied' => 'Pieeja liegta',
+'img-auth-nopathinfo'   => 'Trūkst PATH_INFO.
+Jūsu serveris nav konfigurēts nodot šo informāciju.
+Tas var būt bāzēts uz CGI un neatbalstīt img_auth.
+Skatīt http://www.mediawiki.org/wiki/Manual:Image_Authorization.',
 'img-auth-nologinnWL'   => 'Jūs neesat iegājis un "$1" nav baltajā sarakstā.',
 'img-auth-nofile'       => 'Fails "$1" nepastāv.',
 'img-auth-isdir'        => 'Jūs mēģinājāt piekļūt direktorijai "$1".
@@ -1391,12 +1403,12 @@ Atļauta ir tikai failu piekļuve.',
 'upload_source_file' => '(fails datorā)',
 
 # Special:ListFiles
-'listfiles-summary'     => 'Šajā lapā ir redzami visi augšuplādētie faili.
-Pēc noklusējuma, pēdējie ielādētie faili atrodas saraksta augšā.
-Uzklikšķinot uz kādas kolonnas virsraksta, var sakārtot pēc kāda cita parametra.',
+'listfiles-summary'     => 'Šajā īpašajā lapā ir redzami visi augšuplādētie faili.
+Filtrējot pēc lietotāja, tiek rādītas tikai pēdējās lietotāja augšupielādētās faila versijas.',
 'listfiles_search_for'  => 'Meklēt failu pēc vārda:',
 'imgfile'               => 'fails',
 'listfiles'             => 'Attēlu uzskaitījums',
+'listfiles_thumb'       => 'Sīktēls',
 'listfiles_date'        => 'Datums',
 'listfiles_name'        => 'Nosaukums',
 'listfiles_user'        => 'Lietotājs',
@@ -1421,9 +1433,11 @@ Uzklikšķinot uz kādas kolonnas virsraksta, var sakārtot pēc kāda cita para
 'filehist-filesize'         => 'Faila izmērs',
 'filehist-comment'          => 'Komentārs',
 'filehist-missing'          => 'Fails pazudis',
-'imagelinks'                => 'Failu saites',
+'imagelinks'                => 'Faila lietojums',
 'linkstoimage'              => '{{PLURAL:$1|Šajā lapā ir saite|Šajās $1 lapās ir saites}} uz šo failu:',
 'nolinkstoimage'            => 'Nevienā lapā nav norāžu uz šo attēlu.',
+'morelinkstoimage'          => 'Skatīt [[Special:WhatLinksHere/$1|vairāk saites]] uz šo failu.',
+'linkstoimage-redirect'     => '$1 (faila pāradresācija) $2',
 'sharedupload'              => 'Šis fails ir augšupielādēts no $1 un ir koplietojams citos projektos.',
 'sharedupload-desc-there'   => 'Fails ir no $1, tāpēc tas var tikt izmantots citos projektos.
 Lūdzu, skatīt [$2 faila apraksta lapu] papildu informācijai.',
@@ -1512,11 +1526,13 @@ Apraksts ir [$2 faila apraksta lapā], kas ir parādīta zemāk.',
 Šīs saites vajadzētu izlabot, lai tās vestu tieši uz attiecīgo lapu.<br />
 Lapu uzskata par nozīmju atdalīšanas lapu, ja tā satur veidni, uz kuru ir saite no [[MediaWiki:Disambiguationspage]].",
 
-'doubleredirects'            => 'Divkāršas pāradresācijas lapas',
-'doubleredirectstext'        => 'Šajā lapā ir uzskaitītas pāradresācijas lapas, kuras pāradresē uz citām pāradresācijas lapām.
+'doubleredirects'                   => 'Divkāršas pāradresācijas lapas',
+'doubleredirectstext'               => 'Šajā lapā ir uzskaitītas pāradresācijas lapas, kuras pāradresē uz citām pāradresācijas lapām.
 Katrā rindiņā ir saites uz pirmo un otro pāradresācijas lapu, kā arī pirmā rindiņa no otrās pāradresācijas lapas teksta, kas parasti ir faktiskā "gala" lapa, uz kuru vajadzētu būt saitei pirmajā lapā.
 <del>Nosvītrotie</del> ieraksti jau ir tikuši salaboti.',
-'double-redirect-fixed-move' => '[[$1]] bija ticis pārvietots, tas tagad ir pāradresācija uz [[$2]]',
+'double-redirect-fixed-move'        => '[[$1]] bija ticis pārvietots, tas tagad ir pāradresācija uz [[$2]]',
+'double-redirect-fixed-maintenance' => 'Labota dubultā pāradresācija no [[$1]] uz [[$2]].',
+'double-redirect-fixer'             => 'Pāradresāciju labotājs',
 
 'brokenredirects'        => 'Kļūdainas pāradresācijas',
 'brokenredirectstext'    => 'Šīs ir pāradresācijas lapas uz neesošām lapām:',
@@ -1537,6 +1553,8 @@ Katrā rindiņā ir saites uz pirmo un otro pāradresācijas lapu, kā arī pirm
 'nmembers'                => '$1 {{PLURAL:$1|lapa|lapas}}',
 'nrevisions'              => '$1 {{PLURAL:$1|versija|versijas}}',
 'nviews'                  => 'skatīta $1 {{PLURAL:$1|reizi|reizes}}',
+'nimagelinks'             => 'Izmantots $1 {{PLURAL:$1|lapā|lapās}}',
+'ntransclusions'          => 'izmantots $1 {{PLURAL:$1|lapā|lapās}}',
 'specialpage-empty'       => 'Šim ziņojumam nav rezultātu.',
 'lonelypages'             => 'Lapas bez saitēm uz tām',
 'uncategorizedpages'      => 'Nekategorizētās lapas',
@@ -1573,14 +1591,16 @@ Katrā rindiņā ir saites uz pirmo un otro pāradresācijas lapu, kā arī pirm
 'usercreated'             => 'Izveidots $1, $2',
 'newpages'                => 'Jaunas lapas',
 'newpages-username'       => 'Lietotājs:',
-'ancientpages'            => 'Senākās lapas',
+'ancientpages'            => 'Vecākās lapas',
 'move'                    => 'Pārvietot',
 'movethispage'            => 'Pārvietot šo lapu',
 'unusedcategoriestext'    => 'Šīs kategorijas eksistē, tomēr nevienā rakstā vai kategorijās tās nav izmantotas.',
+'notargettitle'           => 'Bez mērķa',
 'nopagetitle'             => 'Nav tādas mērķa lapas',
 'nopagetext'              => 'Mērķa lapa, ko Jūs norādījāt, nepastāv.',
-'pager-newer-n'           => '{{PLURAL:$1|jaunāko 1|jaunākās $1}}',
-'pager-older-n'           => '{{PLURAL:$1|senāko 1|senākās $1}}',
+'pager-newer-n'           => '{{PLURAL:$1|1 jaunāku|$1 jaunākas}}',
+'pager-older-n'           => '{{PLURAL:$1|1 vecāku|$1 vecākas}}',
+'querypage-disabled'      => 'Šī īpašā lapā ir atspējota veiktspējas iemeslu dēļ.',
 
 # Book sources
 'booksources'               => 'Grāmatu avoti',
@@ -1608,9 +1628,10 @@ Tu vari sašaurināt aplūkojamo reģistru, izvēloties reģistra veidu, lietot�
 'allinnamespace'    => 'Visas lapas ($1 vārdtelpa)',
 'allnotinnamespace' => 'Visas lapas (nav $1 vārdtelpa)',
 'allpagesprev'      => 'Iepriekšējās',
-'allpagesnext'      => 'Nākošās',
+'allpagesnext'      => 'Nākamās',
 'allpagessubmit'    => 'Aiziet!',
 'allpagesprefix'    => 'Parādīt lapas ar šādu virsraksta sākumu:',
+'allpages-bad-ns'   => '{{SITENAME}} nav vārdkopas "$1".',
 
 # Special:Categories
 'categories'                    => 'Kategorijas',
@@ -1648,12 +1669,8 @@ Skatīt arī [[Special:WantedCategories|''sarkanās'' kategorijas]].",
 'activeusers-noresult'   => 'Neviens lietotājs nav atrasts.',
 
 # Special:Log/newusers
-'newuserlogpage'              => 'Jauno lietotāju reģistrs',
-'newuserlogpagetext'          => 'Jauno lietotājvārdu reģistrs.',
-'newuserlog-byemail'          => 'parole nosūtīta pa e-pastu',
-'newuserlog-create-entry'     => 'Reģistrēts lietotājvārds',
-'newuserlog-create2-entry'    => 'izveidoja jaunu kontu $1',
-'newuserlog-autocreate-entry' => 'Automātiski reģistrēts lietotājvārds',
+'newuserlogpage'     => 'Jauno lietotāju reģistrs',
+'newuserlogpagetext' => 'Jauno lietotājvārdu reģistrs.',
 
 # Special:ListGroupRights
 'listgrouprights'                 => 'Lietotāju grupu tiesības',
@@ -1675,13 +1692,18 @@ Papildu informāciju par katru individuālu piekļuves tiesību veidu, iespējam
 'emailpage'            => 'Sūtīt e-pastu lietotājam',
 'emailpagetext'        => 'Ar šo veidni ir iespējams nosūtīt e-pastu šim lietotājam.
 Tā e-pasta adrese, kuru tu esi norādījis [[Special:Preferences|savā izvēļu lapā]], parādīsies e-pasta "From" lauciņā, tādejādi saņēmējs varēs tev atbildēt.',
-'defemailsubject'      => 'E-pasts par {{grammar:akuzatīvs|{{SITENAME}}}}',
+'usermailererror'      => 'Pasta objekts atgrieza kļūdu:',
+'defemailsubject'      => '{{SITENAME}} e-pasts no lietotāja "$1"',
 'usermaildisabled'     => 'Lietotāja e-pasts atslēgts',
 'usermaildisabledtext' => 'Jūs nevarat sūtīt e-pastu citiem lietotājiem šajā viki',
 'noemailtitle'         => 'Nav e-pasta adreses',
 'noemailtext'          => 'Šis lietotājs nav norādījis derīgu e-pasta adresi.',
 'nowikiemailtitle'     => 'E-pasts nav atļauts',
 'nowikiemailtext'      => 'Šis lietotājs ir vēlējies nesaņemt e-pastu no citiem lietotājiem.',
+'emailnotarget'        => 'Neeksistējošs vai nederīgs saņēmēja lietotājvārds.',
+'emailtarget'          => 'Ievadiet saņēmēja lietotājvārdu',
+'emailusername'        => 'Lietotājvārds:',
+'emailusernamesubmit'  => 'Iesniegt',
 'email-legend'         => 'Sūtīt e-pastu citam {{SITENAME}} lietotājam',
 'emailfrom'            => 'No:',
 'emailto'              => 'Kam:',
@@ -1693,6 +1715,10 @@ Tā e-pasta adrese, kuru tu esi norādījis [[Special:Preferences|savā izvēļu
 'emailsenttext'        => 'Tavs e-pasts ir nosūtīts.',
 'emailuserfooter'      => 'Šis e-pasts ir lietotāja $1 sūtīts lietotājam $2, izmantojot "Sūtīt e-pastu šim lietotājam" funkciju {{SITENAME}}.',
 
+# User Messenger
+'usermessage-summary' => 'Atstāt sistēmas ziņojumu.',
+'usermessage-editor'  => 'Sistēmas ziņotājs',
+
 # Watchlist
 'watchlist'            => 'Mani uzraugāmie raksti',
 'mywatchlist'          => 'Mani uzraugāmie raksti',
@@ -1700,16 +1726,17 @@ Tā e-pasta adrese, kuru tu esi norādījis [[Special:Preferences|savā izvēļu
 'watchlistanontext'    => 'Lūdzu $1, lai apskatītu vai labotu savu uzraugāmo rakstu saraksta saturu.',
 'watchnologin'         => 'Neesi iegājis',
 'watchnologintext'     => 'Tev ir [[Special:UserLogin|jāieiet]], lai mainītu uzraugāmo lapu sarakstu.',
-'addedwatch'           => 'Lapa pievienota uzraugāmo lapu sarakstam',
+'addwatch'             => 'Pievienot uzraugāmo lapu sarakstam',
 'addedwatchtext'       => "Lapa \"[[:\$1]]\" ir pievienota [[Special:Watchlist|tevis uzraudzītajām lapām]], kur tiks parādītas izmaiņas, kas izdarītas šajā lapā vai šīs lapas diskusiju lapā, kā arī šī lapa tiks iezīmēta '''pustrekna''' [[Special:RecentChanges|pēdējo izmaiņu lapā]], lai to būtu vieglāk pamanīt.
 
 Ja vēlāk pārdomāsi un nevēlēsies vairs uzraudzīt šo lapu, klikšķini uz saites '''neuzraudzīt''' rīku joslā.",
-'removedwatch'         => 'Lapa vairs netiek uzraudzīta',
+'removewatch'          => 'Izņemt no uzraugāmo lapu saraksta',
 'removedwatchtext'     => 'Lapa "[[:$1]]" ir izņemta no tava [[Special:Watchlist|uzraugāmo lapu saraksta]].',
 'watch'                => 'Uzraudzīt',
 'watchthispage'        => 'Uzraudzīt šo lapu',
 'unwatch'              => 'Neuzraudzīt',
 'unwatchthispage'      => 'Pārtraukt uzraudzīšanu',
+'notanarticle'         => 'Nav satura lapa',
 'notvisiblerev'        => 'Cita lietotāja pēdējā versija ir izdzēsta',
 'watchnochange'        => 'Neviena no tevis uzraudzītajām lapām nav mainīta parādītajā laika posmā.',
 'watchlist-details'    => '(Tu uzraugi $1 {{PLURAL:$1|lapu|lapas}}, neieskaitot diskusiju lapas.)',
@@ -1724,15 +1751,16 @@ Ja vēlāk pārdomāsi un nevēlēsies vairs uzraudzīt šo lapu, klikšķini uz
 'watching'   => 'Uzrauga...',
 'unwatching' => 'Neuzrauga...',
 
-'enotif_reset'       => 'Atzīmēt visas lapas kā apskatītas',
-'enotif_newpagetext' => 'Šī ir jauna lapa.',
-'changed'            => 'izmainīja',
-'created'            => 'izveidoja',
-'enotif_subject'     => '{{grammar:ģenitīvs|{{SITENAME}}}} lapu $PAGETITLE $CHANGEDORCREATED lietotājs $PAGEEDITOR',
-'enotif_lastvisited' => '$1 lai apskatītos visas izmaiņas kopš tava pēdējā apmeklējuma.',
-'enotif_lastdiff'    => '$1 lai apskatītos šo izmaiņu.',
-'enotif_anon_editor' => 'anonīms lietotājs $1',
-'enotif_body'        => '$WATCHINGUSERNAME,
+'enotif_reset'                 => 'Atzīmēt visas lapas kā apskatītas',
+'enotif_newpagetext'           => 'Šī ir jauna lapa.',
+'enotif_impersonal_salutation' => '{{SITENAME}} lietotājs',
+'changed'                      => 'izmainīja',
+'created'                      => 'izveidoja',
+'enotif_subject'               => '{{grammar:ģenitīvs|{{SITENAME}}}} lapu $PAGETITLE $CHANGEDORCREATED lietotājs $PAGEEDITOR',
+'enotif_lastvisited'           => '$1 lai apskatītos visas izmaiņas kopš tava pēdējā apmeklējuma.',
+'enotif_lastdiff'              => '$1 lai apskatītos šo izmaiņu.',
+'enotif_anon_editor'           => 'anonīms lietotājs $1',
+'enotif_body'                  => '$WATCHINGUSERNAME,
 
 
 {{grammar:ģenitīvs|{{SITENAME}}}} lapu $PAGETITLE $CHANGEDORCREATED $PAGEEDITOR, $PAGEEDITDATE, pašreizējā versja ir $PAGETITLE_URL.
@@ -1752,13 +1780,13 @@ Tu arī vari atstatīt visu uzraugāmo lapu paziņojumu statusus uzraugāmo lapu
 
 --
 Lai izmainītu uzraugāmo lapu saraksta uzstādījumus:
-{{fullurl:{{#special:Watchlist}}/edit}}
+{{canonicalurl:{{#special:EditWatchlist}}}}
 
 Lai dzēstu lapu no uzraugāmo lapu saraksta:
 $UNWATCHURL
 
 Papildinformācija:
-{{fullurl:{{MediaWiki:Helppage}}}}',
+{{canonicalurl:{{MediaWiki:Helppage}}}}',
 
 # Delete
 'deletepage'             => 'Dzēst lapu',
@@ -1773,9 +1801,8 @@ Papildinformācija:
 'confirmdeletetext'      => 'Tu tūlīt no datubāzes dzēsīsi lapu vai attēlu, kā arī to iepriekšējās versijas. Lūdzu, apstiprini, ka tu tiešām to vēlies darīt, ka tu apzinies sekas un ka tu to dari saskaņā ar [[{{MediaWiki:Policy-url}}|vadlīnijām]].',
 'actioncomplete'         => 'Darbība pabeigta',
 'actionfailed'           => 'Darbība neizdevās',
-'deletedtext'            => 'Lapa "<nowiki>$1</nowiki>" ir izdzēsta.
+'deletedtext'            => 'Lapa "$1" ir izdzēsta.
 Šeit var apskatīties pēdējos izdzēstos: "$2".',
-'deletedarticle'         => 'izdzēsa "[[$1]]"',
 'dellogpage'             => 'Dzēšanas reģistrs',
 'dellogpagetext'         => 'Šajā lapā ir pēdējo dzēsto lapu saraksts.',
 'deletionlog'            => 'dzēšanas reģistrs',
@@ -1825,7 +1852,7 @@ Lūdzu, spied \"''back''\" un atjaunini iepriekšējo lapu. Tad mēģini vēlrei
 'protectexpiry'               => 'Beidzas:',
 'protect_expiry_invalid'      => 'Beigu termiņš ir nederīgs.',
 'protect_expiry_old'          => 'Beigu termiņs ir pagātnē.',
-'protect-text'                => "Šeit var apskatīties un izmainīt lapas '''<nowiki>$1</nowiki>''' aizsardzības līmeni.",
+'protect-text'                => "Šeit var apskatīties un izmainīt lapas '''$1''' aizsardzības līmeni.",
 'protect-locked-access'       => "Jūsu kontam nav atļaujas mainīt lapas aizsardzības pakāpi.
 Pašreizējie lapas '''$1''' iestatījumi ir:",
 'protect-cascadeon'           => 'Šī lapa pašlaik ir aizsargāta, jo tā ir iekļauta {{PLURAL:$1|sekojošā lapā|sekojošās lapās}} (mainot šīs lapas aizsardzības līmeni aizsardzība netiks noņemta):',
@@ -1894,7 +1921,6 @@ Vai nu tu šeit esi nonācis lietojot kļūdainu saiti, vai arī šī versija ja
 'undeletereset'             => 'Notīrīt',
 'undeleteinvert'            => 'Izvēlēties pretēji',
 'undeletecomment'           => 'Iemesls:',
-'undeletedarticle'          => 'atjaunoja "[[$1]]"',
 'undeletedrevisions'        => '$1 {{PLURAL:$1|versija|versijas}} {{PLURAL:$1|atjaunota|atjaunotas}}',
 'undeletedrevisions-files'  => '{{PLURAL:$1|1 versija|$1 versijas}} un {{PLURAL:$2|1 fails|$2 faili}} atjaunoti',
 'undeletedfiles'            => '{{PLURAL:$1|1 fails atjaunots|$1 faili atjaunoti}}',
@@ -1934,6 +1960,7 @@ $1',
 'sp-contributions-newbies-sub'         => 'Jaunie lietotāji',
 'sp-contributions-blocklog'            => 'Bloķēšanas reģistrs',
 'sp-contributions-deleted'             => 'Izdzēstais lietotāju devums',
+'sp-contributions-uploads'             => 'augšupielādes',
 'sp-contributions-logs'                => 'reģistri',
 'sp-contributions-talk'                => 'diskusija',
 'sp-contributions-userrights'          => 'Lietotāju tiesību pārvaldība',
@@ -1943,6 +1970,7 @@ Pēdējais bloķēšanas reģistra ieraksts ir apskatāms zemāk:',
 Pēdējais bloķēšanas reģistra ieraksts ir apskatāms zemāk:',
 'sp-contributions-search'              => 'Meklēt lietotāju veiktās izmaiņas',
 'sp-contributions-username'            => 'IP adrese vai lietotāja vārds:',
+'sp-contributions-toponly'             => 'Rādīt tikai labojumus, kuri ir jaunākās versijas',
 'sp-contributions-submit'              => 'Meklēt',
 
 # What links here
@@ -1954,7 +1982,7 @@ Pēdējais bloķēšanas reģistra ieraksts ir apskatāms zemāk:',
 'nolinkshere-ns'           => "Neviena lapa nenorāda uz '''[[:$1]]''' izvēlētajā vārdtelpā.",
 'isredirect'               => 'pāradresācijas lapa',
 'istemplate'               => 'izsaukts',
-'isimage'                  => 'attēla saite',
+'isimage'                  => 'faila saite',
 'whatlinkshere-prev'       => '{{PLURAL:$1|iepriekšējo|iepriekšējos $1}}',
 'whatlinkshere-next'       => '{{PLURAL:$1|nākamo|nākamos $1}}',
 'whatlinkshere-links'      => '← saites',
@@ -1965,6 +1993,8 @@ Pēdējais bloķēšanas reģistra ieraksts ir apskatāms zemāk:',
 'whatlinkshere-filters'    => 'Filtri',
 
 # Block/unblock
+'block'                       => 'Bloķēt lietotāju',
+'unblock'                     => 'Atbloķēt lietotāju',
 'blockip'                     => 'Bloķēt lietotāju',
 'blockip-title'               => 'Bloķēt lietotāju',
 'blockip-legend'              => 'Bloķēt lietotāju',
@@ -1993,6 +2023,7 @@ Norādi konkrētu iemeslu (piemēram, linkus uz vandalizētajām lapām).',
 'ipbhidename'                 => "Slēpt lietot'javārdu no labojumiem un sarakstiem",
 'ipbwatchuser'                => 'Uzraudzīt šī lietotāja lietotāja un lietotāja diskusijas lapas',
 'ipb-change-block'            => 'Pārbloķēt ar šiem uzstādījumiem',
+'ipb-confirm'                 => 'Apstiprināt bloķēšanu',
 'badipaddress'                => 'Nederīga IP adrese',
 'blockipsuccesssub'           => 'Nobloķēts veiksmīgi',
 'blockipsuccesstext'          => '[[Special:Contributions/$1|$1]] tika nobloķēts.<br />
@@ -2006,9 +2037,16 @@ Visus blokus var apskatīties [[Special:IPBlockList|IP bloku sarakstā]].',
 'unblockiptext'               => 'Šeit var atbloķēt iepriekš nobloķētu IP adresi vai lietotāja vārdu (atjaunot viņiem rakstīšanas piekļuvi).',
 'ipusubmit'                   => 'Noņemt šo bloku',
 'unblocked'                   => '[[User:$1|$1]] tika atbloķēts',
+'unblocked-range'             => '$1 tika atbloķēts',
 'unblocked-id'                => 'Bloks $1 tika noņemts',
-'ipblocklist'                 => 'Bloķētās IP adreses un lietotājvārdi',
+'blocklist'                   => 'Bloķētie lietotāji',
+'ipblocklist'                 => 'Bloķētie lietotāji',
 'ipblocklist-legend'          => 'Meklēt bloķētu lietotāju',
+'blocklist-userblocks'        => 'Paslēpt kontu bloķējumus',
+'blocklist-tempblocks'        => 'Paslēpt pagaidu bloķējumus',
+'blocklist-addressblocks'     => 'Paslēpt vienas IP adreses bloķējumus',
+'blocklist-params'            => 'Bloķēšanas parametri',
+'blocklist-reason'            => 'Iemesls',
 'ipblocklist-submit'          => 'Meklēt',
 'ipblocklist-localblock'      => 'Vietējais bloks',
 'ipblocklist-otherblocks'     => ' {{PLURAL:$1|Cita|Citas}} {{PLURAL:$1|bloķēšana|bloķēšanas}}',
@@ -2031,8 +2069,9 @@ Viņa bloķēšanas iemesls bija: "$2"',
 Te apakšā var apskatīties bloķēšanas reģistru:',
 'blocklogentry'               => 'nobloķēja [[$1]] uz $2 $3',
 'reblock-logentry'            => 'izmainīja bloķēšanas iestatījumus [[$1]] ar beigu termiņu $2 $3',
-'blocklogtext'                => 'Šajā lapā ir pēdējo nobloķēto un atbloķēto lietotāju un IP adrešu saraksts. Te neparādās automātiski nobloķētās IP adreses.
-Šobrīd aktīvos blokus var apskatīties [[Special:IPBlockList|bloķēto lietotāju un IP adrešu sarakstā]].',
+'blocklogtext'                => 'Šajā lapā ir pēdējo nobloķēto un atbloķēto lietotāju saraksts.
+Te neparādās automātiski nobloķētās IP adreses.
+Šobrīd aktīvos blokus var apskatīties bloķēto lietotāju [[Special:BlockList|IP adrešu sarakstā]].',
 'unblocklogentry'             => 'atbloķēja $1',
 'block-log-flags-anononly'    => 'tikai anonīmiem lietotājiem',
 'block-log-flags-nocreate'    => 'kontu veidošana atslēgta',
@@ -2113,9 +2152,6 @@ Ja tomēr vēlēsies, tad tev šī diskusiju lapa būs jāpārvieto vai jāapvie
 'movepage-page-exists'         => 'Lapa $1 jau eksistē un to nevar pārrakstīt automātiski.',
 'movepage-page-moved'          => 'Lapa $1 tika pārvietota uz $2.',
 'movepage-page-unmoved'        => 'Lapu $1 nevarēja pārvietot uz $2.',
-'1movedto2'                    => '"[[$1]]" pārdēvēju par "[[$2]]"',
-'1movedto2_redir'              => '[[$1]] tika pārdēvēts par [[$2]], izmantojot pāradresāciju',
-'move-redirect-suppressed'     => 'pāradresācija netika izveidota',
 'movelogpage'                  => 'Pārvietošanas reģistrs',
 'movelogpagetext'              => 'Lapu pārvietošanas (pārdēvēšanas) reģistrs.',
 'movesubpage'                  => '{{PLURAL:$1|Apakšlapa|Apakšlapas}}',
@@ -2173,7 +2209,7 @@ Pirmajā gadījumā var arī lietot šādu metodi, piem., [[{{#Special:Export}}/
 'allmessagesdefault'            => 'Sākotnējais teksts',
 'allmessagescurrent'            => 'Pašreizējais teksts',
 'allmessagestext'               => "Šajā lapā ir visu \"'''MediaWiki:'''\" lapās atrodamo sistēmas paziņojumu uzskaitījums.
-Šos paziņojumus var izmainīt tikai admini. Izmainot tos šeit, tie tiks izmainīti tikai šajā mediawiki instalācijā. Lai tos izmainītu visām pārējām, apskatieties [http://www.mediawiki.org/wiki/Localisation MediaWiki Localisation] un [http://translatewiki.net translatewiki.net].",
+Šos paziņojumus var izmainīt tikai admini. Izmainot tos šeit, tie tiks izmainīti tikai šajā mediawiki instalācijā. Lai tos izmainītu visām pārējām, apskatieties [//www.mediawiki.org/wiki/Localisation MediaWiki Localisation] un [//translatewiki.net translatewiki.net].",
 'allmessagesnotsupportedDB'     => "Šī lapa nedarbojas, tāpēc, ka '''wgUseDatabaseMessages''' nedarbojas.",
 'allmessages-filter-legend'     => 'Filtrs',
 'allmessages-filter'            => 'Filtrēt pēc izmainīšanas statusa:',
@@ -2188,6 +2224,7 @@ Pirmajā gadījumā var arī lietot šādu metodi, piem., [[{{#Special:Export}}/
 'thumbnail-more'           => 'Palielināt',
 'filemissing'              => 'Trūkst faila',
 'thumbnail_error'          => 'Kļūda, veidojot sīktēlu: $1',
+'djvu_page_error'          => 'DjVu lapa ir ārpus diapazona',
 'djvu_no_xml'              => 'Neizdevās ielādēt XML DjVu failam',
 'thumbnail_invalid_params' => 'Nederīgi sīktēlu parametri',
 'thumbnail_dest_directory' => 'Nevar izveidot mērķa direktoriju',
@@ -2223,6 +2260,7 @@ Pirmajā gadījumā var arī lietot šādu metodi, piem., [[{{#Special:Export}}/
 Fails tika tikai daļēji importēts.',
 'importuploaderrortemp'      => 'Importētā faila augšupielāde neizdevās.
 Pagaidu mape ir pazudusi.',
+'import-parse-failure'       => 'XML importēšanas parsēšanas kļūme',
 'import-noarticle'           => 'Nav lapas, ko importēt.',
 'import-nonewrevisions'      => 'Visas versijas bija pirms tam importētas.',
 'import-upload'              => 'Augšupielādēt XML datus',
@@ -2255,7 +2293,7 @@ Lūdzu, mēģiniet vēlreiz.',
 'tooltip-ca-viewsource'           => 'Šī lapa ir aizsargāta. Tu vari apskatīties tās izejas kodu.',
 'tooltip-ca-history'              => 'Šīs lapas iepriekšējās versijas.',
 'tooltip-ca-protect'              => 'Aizsargāt šo lapu',
-'tooltip-ca-unprotect'            => 'NEaizsargāt šo lapu',
+'tooltip-ca-unprotect'            => 'Mainīt šīs lapas aizsardzību',
 'tooltip-ca-delete'               => 'Dzēst šo lapu',
 'tooltip-ca-undelete'             => 'Atjaunot labojumus, kas izdarīti šajā lapā pirms lapas dzēšanas.',
 'tooltip-ca-move'                 => 'Pārvietot šo lapu',
@@ -2307,9 +2345,7 @@ Tas atļauj pievienot iemeslu kopsavilkumā.',
 'tooltip-summary'                 => 'Ievadiet īsu kopsavilkumu',
 
 # Metadata
-'nodublincore'      => 'Dublin Core RDF metadati šim serverim atslēgti.',
-'nocreativecommons' => 'Creative Commons RDF metadati šim serverim atslēgti.',
-'notacceptable'     => 'Vikipēdijas serveris nevar sniegt datus Jūsu klientam nolasāmā formātā.',
+'notacceptable' => 'Vikipēdijas serveris nevar sniegt datus Jūsu klientam nolasāmā formātā.',
 
 # Attribution
 'anonymous'        => '{{PLURAL:$1|Anonīmais {{grammar:ģenitīvs|{{SITENAME}}}} lietotājs|Anonīmie {{grammar:ģenitīvs|{{SITENAME}}}} lietotāji}}',
@@ -2327,12 +2363,17 @@ To visticamāk izraisīja ārēja saite uz melnajā sarakstā esošu interneta v
 'spam_reverting'      => 'Atjauno iepriekšējo versiju, kas nesatur saiti uz $1',
 
 # Info page
-'infosubtitle'   => 'Informācija lapai',
-'numedits'       => 'Labojumu skaits (lapa): $1',
-'numtalkedits'   => 'Labojumu skaits (diskusiju lapa): $1',
-'numwatchers'    => 'Uzraudzītāju skaits: $1',
-'numauthors'     => 'Atsevišķu autoru skaits (lapai): $1',
-'numtalkauthors' => 'Atsevišķu autoru skaits (diskusiju lapai): $1',
+'pageinfo-title'            => 'Informācija par "$1"',
+'pageinfo-header-edits'     => 'Labojumi',
+'pageinfo-header-watchlist' => 'Uzraugāmie raksti',
+'pageinfo-header-views'     => 'Skatījumi',
+'pageinfo-subjectpage'      => 'Lapa',
+'pageinfo-talkpage'         => 'Diskusiju lapa',
+'pageinfo-watchers'         => 'Uzraudzītāju skaits',
+'pageinfo-edits'            => 'Izmaiņu skaits',
+'pageinfo-authors'          => 'Atsevišķu autoru skaits',
+'pageinfo-views'            => 'Skatījumu skaits',
+'pageinfo-viewsperedit'     => 'Skatījumi uz labojumu',
 
 # Patrolling
 'markaspatrolleddiff'                 => 'Atzīmēt kā pārbaudītu',
@@ -2347,9 +2388,6 @@ To visticamāk izraisīja ārēja saite uz melnajā sarakstā esošu interneta v
 # Patrol log
 'patrol-log-page'      => 'Pārbaudes reģistrs',
 'patrol-log-header'    => 'Šis ir pārbaudīto versiju reģistrs.',
-'patrol-log-line'      => '"$2" lapas $1 atzīmēta kā pārbaudīta $3',
-'patrol-log-auto'      => '(automātiski)',
-'patrol-log-diff'      => 'versija $1',
 'log-show-hide-patrol' => '$1 pārbaudes reģistrs',
 
 # Image deletion
@@ -2367,18 +2405,21 @@ $1',
 'nextdiff'     => 'Jaunāka versija →',
 
 # Media information
-'mediawarning'         => "'''Brīdinājums''': Šis faila tips var saturēt ļaunprātīgu kodu, kuru izpildot, tava datora darbība var tikt traucēta.",
-'imagemaxsize'         => 'Attēlu apraksta lapās parādāmo attēlu maksimālais izmērs:',
-'thumbsize'            => 'Sīkbildes izmērs:',
-'widthheightpage'      => '$1×$2, $3 {{PLURAL:$3|lapa|lapas}}',
-'file-info'            => 'faila izmērs: $1, MIME tips: $2',
-'file-info-size'       => '$1 × $2 pikseļi, faila izmērs: $3, MIME tips: $4',
-'file-nohires'         => '<small>Augstāka izšķirtspēja nav pieejama.</small>',
-'svg-long-desc'        => 'SVG fails, definētais izmērs $1 × $2 pikseļi, faila izmērs: $3',
-'show-big-image'       => 'Pilnā izmērā',
-'file-info-gif-frames' => '$1 {{PLURAL:$1|kadrs|kadri}}',
-'file-info-png-repeat' => 'spēlēts $1 {{PLURAL:$1|reizi|reizes}}',
-'file-info-png-frames' => '$1 {{PLURAL:$1|kadrs|kadri}}',
+'mediawarning'           => "'''Brīdinājums''': Šis faila tips var saturēt ļaunprātīgu kodu, kuru izpildot, tava datora darbība var tikt traucēta.",
+'imagemaxsize'           => 'Attēlu apraksta lapās parādāmo attēlu maksimālais izmērs:',
+'thumbsize'              => 'Sīkbildes izmērs:',
+'widthheightpage'        => '$1×$2, $3 {{PLURAL:$3|lapa|lapas}}',
+'file-info'              => 'faila izmērs: $1, MIME tips: $2',
+'file-info-size'         => '$1 × $2 pikseļi, faila izmērs: $3, MIME tips: $4',
+'file-nohires'           => 'Augstāka izšķirtspēja nav pieejama.',
+'svg-long-desc'          => 'SVG fails, definētais izmērs $1 × $2 pikseļi, faila izmērs: $3',
+'show-big-image'         => 'Pilnā izmērā',
+'show-big-image-preview' => 'Šī priekšskata izmērs: $1.',
+'show-big-image-other'   => 'Citi izmēri: $1.',
+'show-big-image-size'    => '$1 × $2 pikseļi',
+'file-info-gif-frames'   => '$1 {{PLURAL:$1|kadrs|kadri}}',
+'file-info-png-repeat'   => 'spēlēts $1 {{PLURAL:$1|reizi|reizes}}',
+'file-info-png-frames'   => '$1 {{PLURAL:$1|kadrs|kadri}}',
 
 # Special:NewFiles
 'newimages'             => 'Jauno attēlu galerija',
@@ -2412,7 +2453,13 @@ Pārējie lauki, pēc noklusējuma, būs paslēpti.
 * exposuretime
 * fnumber
 * isospeedratings
-* focallength',
+* focallength
+* artist
+* copyright
+* imagedescription
+* gpslatitude
+* gpslongitude
+* gpsaltitude',
 
 # EXIF tags
 'exif-imagewidth'                  => 'platums',
@@ -2424,9 +2471,7 @@ Pārējie lauki, pēc noklusējuma, būs paslēpti.
 'exif-planarconfiguration'         => 'Datu izkārtojums',
 'exif-xresolution'                 => 'Horizontālā izšķirtspēja',
 'exif-yresolution'                 => 'Vertikālā izšķirtspēja',
-'exif-resolutionunit'              => 'X un Y izšķirtspējas mērvienība',
 'exif-jpeginterchangeformatlength' => 'JPEG datu baiti',
-'exif-transferfunction'            => 'Pārveduma funkcija',
 'exif-datetime'                    => 'Attēla pēdējās izmainīšanas datums un laiks',
 'exif-imagedescription'            => 'Attēla nosaukums',
 'exif-make'                        => 'Fotoaparāta ražotājs',
@@ -2439,9 +2484,8 @@ Pārējie lauki, pēc noklusējuma, būs paslēpti.
 'exif-colorspace'                  => 'Krāsu telpa',
 'exif-componentsconfiguration'     => 'Katras sastāvdaļas nozīme',
 'exif-compressedbitsperpixel'      => 'Attēla kompresijas pakāpe',
-'exif-pixelydimension'             => 'Derīgs attēla platums',
-'exif-pixelxdimension'             => 'Valind image height',
-'exif-makernote'                   => 'Ražotāja piezīmes',
+'exif-pixelydimension'             => 'Attēla platums',
+'exif-pixelxdimension'             => 'Attēla augstums',
 'exif-usercomment'                 => 'Lietotāja komentāri',
 'exif-relatedsoundfile'            => 'Saistītais skaņas fails',
 'exif-datetimeoriginal'            => 'Izveidošanas datums un laiks',
@@ -2452,9 +2496,9 @@ Pārējie lauki, pēc noklusējuma, būs paslēpti.
 'exif-exposureprogram'             => 'Ekspozīcijas programma',
 'exif-spectralsensitivity'         => 'Spektrālā jutība',
 'exif-isospeedratings'             => 'ISO jutība',
-'exif-shutterspeedvalue'           => 'Slēdža ātrums',
-'exif-aperturevalue'               => 'Apertūra',
-'exif-brightnessvalue'             => 'Gaišums',
+'exif-shutterspeedvalue'           => 'APEX slēdža ātrums',
+'exif-aperturevalue'               => 'APEX apertūra',
+'exif-brightnessvalue'             => 'APEX spilgtums',
 'exif-exposurebiasvalue'           => 'Ekspozīcijas nobīde',
 'exif-subjectdistance'             => 'Objekta attālums',
 'exif-meteringmode'                => 'Mērīšanas režīms',
@@ -2463,7 +2507,6 @@ Pārējie lauki, pēc noklusējuma, būs paslēpti.
 'exif-focallength'                 => 'Fokusa attālums',
 'exif-subjectarea'                 => 'Objekta laukums',
 'exif-flashenergy'                 => 'Zibspuldzes stiprums',
-'exif-spatialfrequencyresponse'    => 'Telpiskā frekvenču raksturlīkne',
 'exif-focalplanexresolution'       => 'Fokusa plaknes X izšķirtspēja',
 'exif-focalplaneyresolution'       => 'Fokusa plaknes Y izšķirtspēja',
 'exif-focalplaneresolutionunit'    => 'Fokusa plaknes izšķirtspējas vienības',
@@ -2506,6 +2549,22 @@ Pārējie lauki, pēc noklusējuma, būs paslēpti.
 'exif-gpsprocessingmethod'         => 'GPS apstrādes metodes nosaukums',
 'exif-gpsareainformation'          => 'GPS zonas nosaukums',
 'exif-gpsdatestamp'                => 'GPS datums',
+'exif-jpegfilecomment'             => 'JPEG faila komentārs',
+'exif-keywords'                    => 'Atslēgas vārdi',
+'exif-source'                      => 'Avots',
+'exif-languagecode'                => 'Valoda',
+'exif-iimversion'                  => 'IIM versija',
+'exif-iimcategory'                 => 'Kategorija',
+'exif-datetimeexpires'             => 'Neizmantot pēc',
+'exif-serialnumber'                => 'Fotoaparāta sērijas numurs',
+'exif-cameraownername'             => 'Fotoaparāta īpašnieks',
+'exif-rating'                      => 'Vērtējums (no 5)',
+'exif-copyrighted'                 => 'Autortiesību statuss',
+'exif-copyrightowner'              => 'Autortiesību īpašnieks',
+'exif-usageterms'                  => 'Izmantošanas noteikumi',
+'exif-pngfilecomment'              => 'PNG faila komentārs',
+'exif-contentwarning'              => 'Brīdinājums par saturu',
+'exif-giffilecomment'              => 'GIF faila komentārs',
 
 # EXIF attributes
 'exif-compression-1' => 'Nekompresēts',
@@ -2604,6 +2663,10 @@ Pārējie lauki, pēc noklusējuma, būs paslēpti.
 'exif-gpslongitude-e' => 'Austrumu garums',
 'exif-gpslongitude-w' => 'Rietumu garums',
 
+# Pseudotags used for GPSAltitudeRef
+'exif-gpsaltitude-above-sealevel' => '$1 {{PLURAL:$1|metrs|metri}} virs jūras līmeņa',
+'exif-gpsaltitude-below-sealevel' => '$1 {{PLURAL:$1|metrs|metri}} zem jūras līmeņa',
+
 'exif-gpsmeasuremode-2' => 'Divdimensionāls mērījums',
 'exif-gpsmeasuremode-3' => 'Trīsdimensionāls mērījums',
 
@@ -2612,21 +2675,48 @@ Pārējie lauki, pēc noklusējuma, būs paslēpti.
 'exif-gpsspeed-m' => 'Jūdzes stundā',
 'exif-gpsspeed-n' => 'Mezgli',
 
+# Pseudotags used for GPSDestDistanceRef
+'exif-gpsdestdistance-k' => 'Kilometri',
+'exif-gpsdestdistance-m' => 'Jūdzes',
+'exif-gpsdestdistance-n' => 'Jūras jūdzes',
+
 # Pseudotags used for GPSTrackRef, GPSImgDirectionRef and GPSDestBearingRef
 'exif-gpsdirection-t' => 'Patiesais virziens',
 'exif-gpsdirection-m' => 'Magnētiskais virziens',
 
+'exif-dc-date'   => 'Datums (-i)',
+'exif-dc-rights' => 'Tiesības',
+
+'exif-isospeedratings-overflow' => 'Lielāks kā 65535',
+
+'exif-iimcategory-edu' => 'Izglītība',
+'exif-iimcategory-evn' => 'Vide',
+'exif-iimcategory-hth' => 'Veselība',
+'exif-iimcategory-hum' => 'Cilvēku intereses',
+'exif-iimcategory-lab' => 'Darbs',
+'exif-iimcategory-lif' => 'Dzīvesveids un brīvā laika pavadīšana',
+'exif-iimcategory-pol' => 'Politika',
+'exif-iimcategory-rel' => 'Reliģija un ticība',
+'exif-iimcategory-sci' => 'Zinātne un tehnoloģijas',
+'exif-iimcategory-soi' => 'Sociālie jautājumi',
+'exif-iimcategory-spo' => 'Sports',
+'exif-iimcategory-war' => 'Karš, konflikti un nemieri',
+'exif-iimcategory-wea' => 'Laika apstākļi',
+
+'exif-urgency-normal' => 'Normāla ($1)',
+'exif-urgency-low'    => 'Zema ($1)',
+'exif-urgency-high'   => 'Augsta ($1)',
+'exif-urgency-other'  => 'Lietotāja definēta prioritāte ($1)',
+
 # External editor support
 'edit-externally'      => 'Izmainīt šo failu ar ārēju programmu',
-'edit-externally-help' => '(Skat. [http://www.mediawiki.org/wiki/Manual:External_editors instrukcijas] Mediawiki.org, lai iegūtu vairāk informācijas).',
+'edit-externally-help' => '(Skat. [//www.mediawiki.org/wiki/Manual:External_editors instrukcijas] Mediawiki.org, lai iegūtu vairāk informācijas).',
 
 # 'all' in various places, this might be different for inflected languages
-'recentchangesall' => 'visi',
-'imagelistall'     => 'visas',
-'watchlistall2'    => 'visas',
-'namespacesall'    => 'visas',
-'monthsall'        => 'visi',
-'limitall'         => 'visas',
+'watchlistall2' => 'visas',
+'namespacesall' => 'visas',
+'monthsall'     => 'visi',
+'limitall'      => 'visas',
 
 # E-mail address confirmation
 'confirmemail'             => 'Apstiprini e-pasta adresi',
@@ -2681,8 +2771,11 @@ Lūdzu apstiprini, ka tiešām gribi izveidot šo lapu no jauna.",
 'recreate'            => 'Izveidot no jauna',
 
 # action=purge
-'confirm_purge_button' => 'OK',
+'confirm_purge_button' => 'Labi',
 'confirm-purge-top'    => "Iztīrīt šīs lapas kešu (''cache'')?",
+
+# action=watch/unwatch
+'confirm-watch-button' => 'Labi',
 
 # Multipage image navigation
 'imgmultipageprev' => '← iepriekšējā lapa',
@@ -2745,19 +2838,25 @@ Var arī lietot [[Special:EditWatchlist|standarta izmainīšanas lapu]].',
 'watchlisttools-edit' => 'Apskatīt un izmainīt uzraugāmo rakstu sarakstu',
 'watchlisttools-raw'  => 'Izmainīt uzraugāmo rakstu saraksta kodu',
 
+# Core parser functions
+'unknown_extension_tag' => 'Nezināma paplašinājuma iezīme "$1"',
+
 # Special:Version
-'version'                          => 'Versija',
-'version-extensions'               => 'Ieinstalētie paplašinājumi',
-'version-specialpages'             => 'Īpašās lapas',
-'version-variables'                => 'Mainīgie',
-'version-hooks'                    => 'Aizķeres',
-'version-skin-extension-functions' => 'Izskata paplašinājuma funkcijas',
-'version-hook-name'                => 'Aizķeres nosaukums',
-'version-version'                  => '(Versija $1)',
-'version-license'                  => 'Licence',
-'version-software'                 => 'Instalētā programmatūra',
-'version-software-product'         => 'Produkts',
-'version-software-version'         => 'Versija',
+'version'                   => 'Versija',
+'version-extensions'        => 'Ieinstalētie paplašinājumi',
+'version-specialpages'      => 'Īpašās lapas',
+'version-variables'         => 'Mainīgie',
+'version-antispam'          => 'Spama aizsardzība',
+'version-skins'             => 'Apdares',
+'version-hooks'             => 'Aizķeres',
+'version-hook-name'         => 'Aizķeres nosaukums',
+'version-version'           => '(Versija $1)',
+'version-license'           => 'Licence',
+'version-poweredby-credits' => "Šis viki darbojas ar '''[//www.mediawiki.org/ MediaWiki]''' programmatūru, autortiesības © 2001-$1 $2.",
+'version-poweredby-others'  => 'citi',
+'version-software'          => 'Instalētā programmatūra',
+'version-software-product'  => 'Produkts',
+'version-software-version'  => 'Versija',
 
 # Special:FilePath
 'filepath'        => 'Failu adreses',
@@ -2778,7 +2877,8 @@ Var arī lietot [[Special:EditWatchlist|standarta izmainīšanas lapu]].',
 'specialpages'                   => 'Īpašās lapas',
 'specialpages-note'              => '----
 * Normālas īpašās lapas.
-* <strong class="mw-specialpagerestricted">Ierobežotas pieejas īpašās lapas.</strong>',
+* <span class="mw-specialpagerestricted">Ierobežotas pieejas īpašās lapas.</span>
+* <span class="mw-specialpagecached">Iekešotās īpašās lapas.</span>',
 'specialpages-group-maintenance' => 'Uzturēšanas atskaites',
 'specialpages-group-other'       => 'Citas īpašās lapas',
 'specialpages-group-login'       => 'Ieiet / piereģistrēties',
@@ -2842,5 +2942,10 @@ Var arī lietot [[Special:EditWatchlist|standarta izmainīšanas lapu]].',
 # SQLite database support
 'sqlite-has-fts' => '$1 ar pilnteksta meklēšanas atbalstu',
 'sqlite-no-fts'  => '$1 bez pilnteksta meklēšanas atbalsta',
+
+# New logging system
+'revdelete-restricted'   => 'piemērot administratoriem ierobežojumus',
+'revdelete-unrestricted' => 'noņemt administratoriem ierobežojumus',
+'newuserlog-byemail'     => 'parole nosūtīta pa e-pastu',
 
 );

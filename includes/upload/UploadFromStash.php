@@ -8,16 +8,51 @@
  */
 
 class UploadFromStash extends UploadBase {
+	protected $mFileKey, $mVirtualTempPath, $mFileProps, $mSourceType;
 
-	protected $initializePathInfo, $mSessionKey, $mVirtualTempPath,
-		$mFileProps, $mSourceType;
+	// an instance of UploadStash
+	private $stash;
 
-	public static function isValidSessionKey( $key, $sessionData ) {
-		return !empty( $key ) &&
-			is_array( $sessionData ) &&
-			isset( $sessionData[$key] ) &&
-			isset( $sessionData[$key]['version'] ) &&
-			$sessionData[$key]['version'] == UploadBase::SESSION_VERSION;
+	//LocalFile repo
+	private $repo;
+
+	/**
+	 * @param $user User
+	 * @param $stash UploadStash
+	 * @param $repo FileRepo
+	 */
+	public function __construct( $user = false, $stash = false, $repo = false ) {
+		// user object. sometimes this won't exist, as when running from cron.
+		$this->user = $user;
+
+		if( $repo ) {
+			$this->repo = $repo;
+		} else {
+			$this->repo = RepoGroup::singleton()->getLocalRepo();
+		}
+
+		if( $stash ) {
+			$this->stash = $stash;
+		} else {
+			if( $user ) {
+				wfDebug( __METHOD__ . " creating new UploadStash instance for " . $user->getId() . "\n" );
+			} else {
+				wfDebug( __METHOD__ . " creating new UploadStash instance with no user\n" );
+			}
+
+			$this->stash = new UploadStash( $this->repo, $this->user );
+		}
+
+		return true;
+	}
+
+	/**
+	 * @param $key string
+	 * @return bool
+	 */
+	public static function isValidKey( $key ) {
+		// this is checked in more detail in UploadStash
+		return (bool)preg_match( UploadStash::KEY_FORMAT_REGEX, $key );
 	}
 
 	/**
@@ -26,65 +61,83 @@ class UploadFromStash extends UploadBase {
 	 * @return Boolean
 	 */
 	public static function isValidRequest( $request ) {
-		$sessionData = $request->getSessionData( UploadBase::SESSION_KEYNAME );
-		return self::isValidSessionKey(
-			$request->getText( 'wpSessionKey' ),
-			$sessionData
-		);
+		// this passes wpSessionKey to getText() as a default when wpFileKey isn't set.
+		// wpSessionKey has no default which guarantees failure if both are missing
+		// (though that should have been caught earlier)
+		return self::isValidKey( $request->getText( 'wpFileKey', $request->getText( 'wpSessionKey' ) ) );
 	}
 
-	public function initialize( $name, $sessionKey, $sessionData ) {
+	/**
+	 * @param $key string
+	 * @param $name string
+	 */
+	public function initialize( $key, $name = 'upload_file' ) {
 		/**
 		 * Confirming a temporarily stashed upload.
 		 * We don't want path names to be forged, so we keep
 		 * them in the session on the server and just give
 		 * an opaque key to the user agent.
 		 */
-
+		$metadata = $this->stash->getMetadata( $key );
 		$this->initializePathInfo( $name,
-			$this->getRealPath ( $sessionData['mTempPath'] ),
-			$sessionData['mFileSize'],
+			$this->getRealPath ( $metadata['us_path'] ),
+			$metadata['us_size'],
 			false
 		);
 
-		$this->mSessionKey = $sessionKey;
-		$this->mVirtualTempPath = $sessionData['mTempPath'];
-		$this->mFileProps = $sessionData['mFileProps'];
-		$this->mSourceType = isset( $sessionData['mSourceType'] ) ?
-			$sessionData['mSourceType'] : null;
+		$this->mFileKey = $key;
+		$this->mVirtualTempPath = $metadata['us_path'];
+		$this->mFileProps = $this->stash->getFileProps( $key );
+		$this->mSourceType = $metadata['us_source_type'];
 	}
 
 	/**
 	 * @param $request WebRequest
 	 */
 	public function initializeFromRequest( &$request ) {
-		$sessionKey = $request->getText( 'wpSessionKey' );
-		$sessionData = $request->getSessionData( UploadBase::SESSION_KEYNAME );
+		// sends wpSessionKey as a default when wpFileKey is missing
+		$fileKey = $request->getText( 'wpFileKey', $request->getText( 'wpSessionKey' ) );
 
-		$desiredDestName = $request->getText( 'wpDestFile' );
-		if( !$desiredDestName )
-			$desiredDestName = $request->getText( 'wpUploadFile' );
-		return $this->initialize( $desiredDestName, $sessionKey, $sessionData[$sessionKey] );
+		// chooses one of wpDestFile, wpUploadFile, filename in that order.
+		$desiredDestName = $request->getText( 'wpDestFile', $request->getText( 'wpUploadFile', $request->getText( 'filename' ) ) );
+
+		return $this->initialize( $fileKey, $desiredDestName );
 	}
 
-	public function getSourceType() { 
-		return $this->mSourceType; 
+	/**
+	 * @return string
+	 */
+	public function getSourceType() {
+		return $this->mSourceType;
 	}
 
 	/**
 	 * File has been previously verified so no need to do so again.
+	 *
+	 * @return bool
 	 */
 	protected function verifyFile() {
 		return true;
 	}
 
 	/**
-	 * There is no need to stash the image twice
+	 * Stash the file.
+	 *
+	 * @return UploadStashFile
 	 */
-	public function stashSession( $key = null ) {
-		if ( !empty( $this->mSessionKey ) )
-			return $this->mSessionKey;
-		return parent::stashSession();
+	public function stashFile() {
+		// replace mLocalFile with an instance of UploadStashFile, which adds some methods
+		// that are useful for stashed files.
+		$this->mLocalFile = parent::stashFile();
+		return $this->mLocalFile;
+	}
+
+	/**
+	 * This should return the key instead of the UploadStashFile instance, for backward compatibility.
+	 * @return String
+	 */
+	public function stashSession() {
+		return $this->stashFile()->getFileKey();
 	}
 
 	/**
@@ -92,9 +145,56 @@ class UploadFromStash extends UploadBase {
 	 * @return success
 	 */
 	public function unsaveUploadedFile() {
-		$repo = RepoGroup::singleton()->getLocalRepo();
-		$success = $repo->freeTemp( $this->mVirtualTempPath );
-		return $success;
+		return $this->stash->removeFile( $this->mFileKey );
 	}
 
+	/**
+	 * Perform the upload, then remove the database record afterward.
+	 * @param $comment string
+	 * @param $pageText string
+	 * @param $watch bool
+	 * @param $user User
+	 * @return Status
+	 */
+	public function performUpload( $comment, $pageText, $watch, $user ) {
+		$rv = parent::performUpload( $comment, $pageText, $watch, $user );
+		$this->unsaveUploadedFile();
+		return $rv;
+	}
+
+	/**
+	 * Append a chunk to the temporary file.
+	 *
+	 * @param $chunk
+	 * @param $chunkSize
+	 * @param $offset
+	 * @return Status
+	 */
+	public function appendChunk( $chunk, $chunkSize, $offset ) {
+		//to use $this->getFileSize() here, db needs to be updated
+		//in appendToUploadFile for that
+		$fileSize = $this->stash->getFile( $this->mFileKey )->getSize();
+		if ( $fileSize + $chunkSize > $this->getMaxUploadSize()) {
+			$status = Status::newFatal( 'file-too-large' );
+		} else {
+			//append chunk
+			if ( $fileSize == $offset ) {
+				$status = $this->appendToUploadFile( $chunk,
+					$this->mVirtualTempPath );
+			} else {
+				$status = Status::newFatal( 'invalid-chunk-offset' );
+			}
+		}
+		return $status;
+	}
+
+	/**
+	 * Append the final chunk and ready file for parent::performUpload()
+	 * @return void
+	 */
+	public function finalizeFile() {
+		$this->appendFinish ( $this->mVirtualTempPath );
+		$this->cleanupTempFile();
+		$this->mTempPath = $this->getRealPath( $this->mVirtualTempPath );
+	}
 }

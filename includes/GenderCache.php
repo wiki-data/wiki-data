@@ -10,7 +10,10 @@ class GenderCache {
 	protected $default;
 	protected $misses = 0;
 	protected $missLimit = 1000;
-	
+
+	/**
+	 * @return GenderCache
+	 */
 	public static function singleton() {
 		static $that = null;
 		if ( $that === null ) {
@@ -34,7 +37,7 @@ class GenderCache {
 
 	/**
 	 * Returns the gender for given username.
-	 * @param $users String: username
+	 * @param $username String: username
 	 * @param $caller String: the calling method
 	 * @return String
 	 */
@@ -70,6 +73,9 @@ class GenderCache {
 
 	/**
 	 * Wrapper for doQuery that processes raw LinkBatch data.
+	 *
+	 * @param $data
+	 * @param $caller
 	 */
 	public function doLinkBatch( $data, $caller = '' ) {
 		$users = array();
@@ -82,7 +88,6 @@ class GenderCache {
 		}
 
 		$this->doQuery( array_keys( $users ), $caller );
-
 	}
 
 	/**
@@ -91,10 +96,22 @@ class GenderCache {
 	 * @param $caller String: the calling method
 	 */
 	public function doQuery( $users, $caller = '' ) {
-		if ( count( $users ) === 0 ) return false;
+		$default = $this->getDefault();
 
 		foreach ( (array) $users as $index => $value ) {
-			$users[$index] = strtr( $value, '_', ' ' );
+			$name = strtr( $value, '_', ' ' );
+			if ( isset( $this->cache[$name] ) ) {
+				// Skip users whose gender setting we already know
+				unset( $users[$index] );
+			} else {
+				$users[$index] = $name;
+				// For existing users, this value will be overwritten by the correct value
+				$this->cache[$name] = $default;
+			}
+		}
+
+		if ( count( $users ) === 0 ) {
+			return;
 		}
 
 		$dbr = wfGetDB( DB_SLAVE );
@@ -110,7 +127,6 @@ class GenderCache {
 		}
 		$res = $dbr->select( $table, $fields, $conds, $comment, $joins, $joins );
 
-		$default = $this->getDefault();
 		foreach ( $res as $row ) {
 			$this->cache[$row->user_name] = $row->up_value ? $row->up_value : $default;
 		}

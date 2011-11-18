@@ -1,25 +1,9 @@
 <?php
 
-class MockApi extends ApiBase {
-	public function execute() { }
-	public function getVersion() { }
-
-	public function __construct() { }
-
-	public function getAllowedParams() {
-		return array(
-			'filename' => null,
-			'enablechunks' => false,
-			'sessionkey' => null,
-		);
-	}
-}
-
 /**
  * @group Database
- * @group Destructive
  */
-class ApiTest extends ApiTestSetup {
+class ApiTest extends ApiTestCase {
 
 	function testRequireOnlyOneParameterDefault() {
 		$mock = new MockApi();
@@ -78,7 +62,7 @@ class ApiTest extends ApiTestSetup {
 	 */
 	function testApiLoginNoName() {
 		$data = $this->doApiRequest( array( 'action' => 'login',
-			'lgname' => '', 'lgpassword' => $this->user->password,
+			'lgname' => '', 'lgpassword' => self::$users['sysop']->password,
 		) );
 		$this->assertEquals( 'NoName', $data[0]['login']['result'] );
 	}
@@ -86,14 +70,15 @@ class ApiTest extends ApiTestSetup {
 	function testApiLoginBadPass() {
 		global $wgServer;
 
-		$user = $this->user;
+		$user = self::$users['sysop'];
+		$user->user->logOut();
 
 		if ( !isset( $wgServer ) ) {
 			$this->markTestIncomplete( 'This test needs $wgServer to be set in LocalSettings.php' );
 		}
 		$ret = $this->doApiRequest( array(
 			"action" => "login",
-			"lgname" => $user->userName,
+			"lgname" => $user->username,
 			"lgpassword" => "bad",
 			)
 		);
@@ -109,9 +94,9 @@ class ApiTest extends ApiTestSetup {
 		$ret = $this->doApiRequest( array(
 			"action" => "login",
 			"lgtoken" => $token,
-			"lgname" => $user->userName,
-			"lgpassword" => "bad",
-			)
+			"lgname" => $user->username,
+			"lgpassword" => "badnowayinhell",
+			), $ret[2]
 		);
 
 		$result = $ret[0];
@@ -129,11 +114,12 @@ class ApiTest extends ApiTestSetup {
 			$this->markTestIncomplete( 'This test needs $wgServer to be set in LocalSettings.php' );
 		}
 
-		$user = $this->user;
+		$user = self::$users['sysop'];
+		$user->user->logOut();
 
 		$ret = $this->doApiRequest( array(
 			"action" => "login",
-			"lgname" => $user->userName,
+			"lgname" => $user->username,
 			"lgpassword" => $user->password,
 			)
 		);
@@ -149,9 +135,9 @@ class ApiTest extends ApiTestSetup {
 		$ret = $this->doApiRequest( array(
 			"action" => "login",
 			"lgtoken" => $token,
-			"lgname" => $user->userName,
+			"lgname" => $user->username,
 			"lgpassword" => $user->password,
-			)
+			), $ret[2]
 		);
 
 		$result = $ret[0];
@@ -162,6 +148,9 @@ class ApiTest extends ApiTestSetup {
 		$this->assertEquals( "Success", $a );
 	}
 
+	/**
+	 * @group Broken
+	 */
 	function testApiGotCookie() {
 		$this->markTestIncomplete( "The server can't do external HTTP requests, and the internal one won't give cookies"  );
 
@@ -170,11 +159,13 @@ class ApiTest extends ApiTestSetup {
 		if ( !isset( $wgServer ) ) {
 			$this->markTestIncomplete( 'This test needs $wgServer to be set in LocalSettings.php' );
 		}
+		$user = self::$users['sysop'];
+
 		$req = MWHttpRequest::factory( self::$apiUrl . "?action=login&format=xml",
 			array( "method" => "POST",
 				"postData" => array(
-				"lgname" => $this->user->userName,
-				"lgpassword" => $this->user->password ) ) );
+				"lgname" => $user->username,
+				"lgpassword" => $user->password ) ) );
 		$req->execute();
 
 		libxml_use_internal_errors( true );
@@ -189,8 +180,8 @@ class ApiTest extends ApiTestSetup {
 
 		$req->setData( array(
 			"lgtoken" => $token,
-			"lgname" => $this->user->userName,
-			"lgpassword" => $this->user->password ) );
+			"lgname" => $user->username,
+			"lgpassword" => $user->password ) );
 		$req->execute();
 
 		$cj = $req->getCookieJar();
@@ -198,37 +189,37 @@ class ApiTest extends ApiTestSetup {
 		$this->assertNotEquals( false, $serverName );
 		$serializedCookie = $cj->serializeToHttpRequest( $wgScriptPath, $serverName );
 		$this->assertNotEquals( '', $serializedCookie );
-		$this->assertRegexp( '/_session=[^;]*; .*UserID=[0-9]*; .*UserName=' . $this->user->userName . '; .*Token=/', $serializedCookie );
+		$this->assertRegexp( '/_session=[^;]*; .*UserID=[0-9]*; .*UserName=' . $user->userName . '; .*Token=/', $serializedCookie );
 
 		return $cj;
 	}
 
 	/**
-	 * @depends testApiGotCookie
+	 * @todo Finish filling me out...what are we trying to test here?
 	 */
-	function testApiListPages( CookieJar $cj ) {
-		$this->markTestIncomplete( "Not done with this yet" );
+	function testApiListPages() {
 		global $wgServer;
-
-		if ( $wgServer == "http://localhost" ) {
+		if ( !isset( $wgServer ) ) {
 			$this->markTestIncomplete( 'This test needs $wgServer to be set in LocalSettings.php' );
 		}
-		$req = MWHttpRequest::factory( self::$apiUrl . "?action=query&format=xml&prop=revisions&" .
-									 "titles=Main%20Page&rvprop=timestamp|user|comment|content" );
-		$req->setCookieJar( $cj );
-		$req->execute();
-		libxml_use_internal_errors( true );
-		$sxe = simplexml_load_string( $req->getContent() );
-		$this->assertNotInternalType( "bool", $sxe );
-		$this->assertThat( $sxe, $this->isInstanceOf( "SimpleXMLElement" ) );
-		$a = $sxe->query[0]->pages[0]->page[0]->attributes();
+
+		$ret = $this->doApiRequest( array(
+			'action' => 'query',
+			'prop'   => 'revisions',
+			'titles' => 'Main Page',
+			'rvprop' => 'timestamp|user|comment|content',
+		) );
+
+		$result = $ret[0]['query']['pages'];
+		$this->markTestIncomplete( "Somebody needs to finish loving me" );
 	}
 	
 	function testRunLogin() {
+		$sysopUser = self::$users['sysop'];
 		$data = $this->doApiRequest( array(
 			'action' => 'login',
-			'lgname' => $this->sysopUser->userName,
-			'lgpassword' => $this->sysopUser->password ) );
+			'lgname' => $sysopUser->username,
+			'lgpassword' => $sysopUser->password ) );
 
 		$this->assertArrayHasKey( "login", $data[0] );
 		$this->assertArrayHasKey( "result", $data[0]['login'] );
@@ -238,8 +229,8 @@ class ApiTest extends ApiTestSetup {
 		$data = $this->doApiRequest( array(
 			'action' => 'login',
 			"lgtoken" => $token,
-			"lgname" => $this->sysopUser->userName,
-			"lgpassword" => $this->sysopUser->password ), $data );
+			"lgname" => $sysopUser->username,
+			"lgpassword" => $sysopUser->password ), $data[2] );
 
 		$this->assertArrayHasKey( "login", $data[0] );
 		$this->assertArrayHasKey( "result", $data[0]['login'] );
@@ -250,7 +241,7 @@ class ApiTest extends ApiTestSetup {
 	}
 	
 	function testGettingToken() {
-		foreach ( array( $this->user, $this->sysopUser ) as $user ) {
+		foreach ( self::$users as $user ) {
 			$this->runTokenTest( $user );
 		}
 	}

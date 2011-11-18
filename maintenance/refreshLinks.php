@@ -107,7 +107,7 @@ class RefreshLinks extends Maintenance {
 			foreach ( $res as $row ) {
 				if ( !( ++$i % $reportingInterval ) ) {
 					$this->output( "$i\n" );
-					wfWaitForSlaves( $maxLag );
+					wfWaitForSlaves();
 				}
 				$this->fixRedirect( $row->page_id );
 			}
@@ -127,7 +127,7 @@ class RefreshLinks extends Maintenance {
 			foreach ( $res as $row ) {
 				if ( !( ++$i % $reportingInterval ) ) {
 					$this->output( "$i\n" );
-					wfWaitForSlaves( $maxLag );
+					wfWaitForSlaves();
 				}
 				if ( $redirectsOnly ) {
 					$this->fixRedirect( $row->page_id );
@@ -148,7 +148,7 @@ class RefreshLinks extends Maintenance {
 
 				if ( !( $id % $reportingInterval ) ) {
 					$this->output( "$id\n" );
-					wfWaitForSlaves( $maxLag );
+					wfWaitForSlaves();
 				}
 				$this->fixRedirect( $id );
 			}
@@ -161,7 +161,7 @@ class RefreshLinks extends Maintenance {
 
 					if ( !( $id % $reportingInterval ) ) {
 						$this->output( "$id\n" );
-						wfWaitForSlaves( $maxLag );
+						wfWaitForSlaves();
 					}
 					self::fixLinksFromArticle( $id );
 				}
@@ -213,12 +213,13 @@ class RefreshLinks extends Maintenance {
 		if ( is_null( $title ) ) {
 			return;
 		}
-		$dbw->begin();
 
 		$revision = Revision::newFromTitle( $title );
 		if ( !$revision ) {
 			return;
 		}
+
+		$dbw->begin();
 
 		$options = new ParserOptions;
 		$parserOutput = $wgParser->parse( $revision->getText(), $title, $options, true, true, $revision->getId() );
@@ -227,9 +228,9 @@ class RefreshLinks extends Maintenance {
 		$dbw->commit();
 	}
 
-	/*
+	/**
 	 * Removes non-existing links from pages from pagelinks, imagelinks,
-	 * categorylinks, templatelinks and externallinks tables.
+	 * categorylinks, templatelinks, externallinks, interwikilinks, langlinks and redirect tables.
 	 *
 	 * @param $maxLag
 	 * @param $batchSize The size of deletion batches
@@ -237,7 +238,7 @@ class RefreshLinks extends Maintenance {
 	 * @author Merlijn van Deen <valhallasw@arctus.nl>
 	 */
 	private function deleteLinksFromNonexistent( $maxLag = 0, $batchSize = 100 ) {
-		wfWaitForSlaves( $maxLag );
+		wfWaitForSlaves();
 
 		$dbw = wfGetDB( DB_MASTER );
 
@@ -251,6 +252,10 @@ class RefreshLinks extends Maintenance {
 			'categorylinks' => 'cl_from',
 			'templatelinks' => 'tl_from',
 			'externallinks' => 'el_from',
+			'iwlinks' => 'iwl_from',
+			'langlinks' => 'll_from',
+			'redirect' => 'rd_from',
+			'page_props' => 'pp_page',
 		);
 
 		foreach ( $linksTables as $table => $field ) {
@@ -268,12 +273,11 @@ class RefreshLinks extends Maintenance {
 			$counter = 0;
 			$list = array();
 			$this->output( "0.." );
-
 			foreach ( $results as $row ) {
 				$counter++;
 				$list[] = $row->$field;
 				if ( ( $counter % $batchSize ) == 0 ) {
-					wfWaitForSlaves( 5 );
+					wfWaitForSlaves();
 					$dbw->delete( $table, array( $field => $list ), __METHOD__ );
 
 					$this->output( $counter . ".." );

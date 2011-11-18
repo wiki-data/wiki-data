@@ -30,7 +30,7 @@
  *
  * @ingroup SpecialPage
  */
-class SpecialActiveUsers extends QueryPage {
+class ActiveUsersPager extends UsersPager {
 
 	/**
 	 * @var FormOptions
@@ -42,10 +42,13 @@ class SpecialActiveUsers extends QueryPage {
 	 */
 	protected $groups;
 
-	function __construct( $group = null ) {
-		global $wgRequest, $wgActiveUserDays;
+	function __construct( IContextSource $context = null, $group = null ) {
+		global $wgActiveUserDays;
+
+		parent::__construct( $context );
+
 		$this->RCMaxAge = $wgActiveUserDays;
-		$un = $wgRequest->getText( 'username' );
+		$un = $this->getRequest()->getText( 'username' );
 		$this->requestedUser = '';
 		if ( $un != '' ) {
 			$username = Title::makeTitleSafe( NS_USER, $un );
@@ -55,21 +58,15 @@ class SpecialActiveUsers extends QueryPage {
 		}
 
 		$this->setupOptions();
-
-		parent::__construct( 'Activeusers' );
 	}
 
 	public function setupOptions() {
-		global $wgRequest;
-
 		$this->opts = new FormOptions();
 
 		$this->opts->add( 'hidebots', false, FormOptions::BOOL );
 		$this->opts->add( 'hidesysops', false, FormOptions::BOOL );
-		$this->opts->add( 'limit', 0, FormOptions::INT );
-		$this->opts->add( 'offset', 0, FormOptions::INT );
 
-		$this->opts->fetchValuesFromRequest( $wgRequest );
+		$this->opts->fetchValuesFromRequest( $this->getRequest() );
 
 		$this->groups = array();
 		if ( $this->opts->getValue( 'hidebots' ) == 1 ) {
@@ -80,8 +77,8 @@ class SpecialActiveUsers extends QueryPage {
 		}
 	}
 
-	function getOrderFields() {
-		return array( 'rc_user_text', 'user_id' );
+	function getIndexField() {
+		return 'rc_user_text';
 	}
 
 	function getQueryInfo() {
@@ -116,75 +113,100 @@ class SpecialActiveUsers extends QueryPage {
 		return $query;
 	}
 
-	function formatResult( $skin, $row ) {
-		global $wgLang;
+	function formatRow( $row ) {
 		$userName = $row->user_name;
 
-		$ulinks = $skin->userLink( $row->user_id, $userName );
-		$ulinks .= $skin->userToolLinks( $row->user_id, $userName );
+		$ulinks = Linker::userLink( $row->user_id, $userName );
+		$ulinks .= Linker::userToolLinks( $row->user_id, $userName );
+
+		$lang = $this->getLang();
 
 		$list = array();
-		$user = User::newFromId( $row->user_id );
-		foreach( $user->getEffectiveGroups() as $group ) {
+		foreach( self::getGroups( $row->user_id ) as $group ) {
 			if ( isset( $this->groups[$group] ) ) {
-				return false;
+				return;
 			}
-			if( in_array( $group, array( '*', 'user' ) ) ){
-				continue;
-			}
-			$list[] = SpecialListUsers::buildGroupLink( $group );
+			$list[] = self::buildGroupLink( $group, $userName );
 		}
-		$groups = $wgLang->commaList( $list );
+		$groups = $lang->commaList( $list );
 
-		$item = wfSpecialList( $ulinks, $groups );
-		$count = wfMsgExt( 'activeusers-count',
-			array( 'parsemag' ),
-			$wgLang->formatNum( $row->recentedits ),
-			$userName,
-			$wgLang->formatNum ( $this->RCMaxAge )
-		);
-		$blocked = $row->blocked ? ' ' . wfMsgExt( 'listusers-blocked', array( 'parsemag' ), $userName ) : '';
+		$item = $lang->specialList( $ulinks, $groups );
+		$count = $this->msg( 'activeusers-count' )->numParams( $row->recentedits )
+			->params( $userName )->numParams( $this->RCMaxAge )->escaped();
+		$blocked = $row->blocked ? ' ' . $this->msg( 'listusers-blocked', $userName )->escaped() : '';
 
-		return "{$item} [{$count}]{$blocked}";
-	}
-
-	function linkParameters() {
-		return array(
-			'hidebots' => isset( $this->groups['bot'] ),
-			'hidesysops' => isset( $this->groups['sysop'] ),
-			'username' => $this->requestedUser,
-		);
+		return Html::rawElement( 'li', array(), "{$item} [{$count}]{$blocked}" );
 	}
 
 	function getPageHeader() {
-		global $wgScript, $wgActiveUserDays, $wgLang;
+		global $wgScript;
 
 		$self = $this->getTitle();
-		$limit = $this->opts->getValue( 'limit' )
-			? Html::hidden( 'limit', $this->opts->getValue( 'limit' ) )
-			: '';
-		$offset = $this->opts->getValue( 'offset' )
-			? Html::hidden( 'offset', $this->opts->getValue( 'offset' ) )
-			: '';
+		$limit = $this->mLimit ? Html::hidden( 'limit', $this->mLimit ) : '';
 
-		$out = Html::rawElement( 'div', array( 'class' => 'mw-activeusers-intro' ),
-			wfMsgExt( 'activeusers-intro', array( 'parsemag', 'escape' ), $wgLang->formatNum( $wgActiveUserDays ) )
-		);
+		$out = Xml::openElement( 'form', array( 'method' => 'get', 'action' => $wgScript ) ); # Form tag
+		$out .= Xml::fieldset( $this->msg( 'activeusers' )->text() ) . "\n";
+		$out .= Html::hidden( 'title', $self->getPrefixedDBkey() ) . $limit . "\n";
 
-		$out .= Xml::openElement( 'form', array( 'method' => 'get', 'action' => $wgScript ) ); # Form tag
-		$out .= Xml::fieldset( wfMsg( 'activeusers' ) ) . "\n";
-		$out .= Html::hidden( 'title', $self->getPrefixedDBkey() ) . $limit . $offset . "\n";
+		$out .= Xml::inputLabel( $this->msg( 'activeusers-from' )->text(),
+			'username', 'offset', 20, $this->requestedUser ) . '<br />';# Username field
 
-		$out .= Xml::inputLabel( wfMsg( 'activeusers-from' ), 'username', 'offset', 20, $this->requestedUser ) . '<br />';# Username field
+		$out .= Xml::checkLabel( $this->msg( 'activeusers-hidebots' )->text(),
+			'hidebots', 'hidebots', $this->opts->getValue( 'hidebots' ) );
 
-		$out .= Xml::checkLabel( wfMsg('activeusers-hidebots'), 'hidebots', 'hidebots', $this->opts->getValue( 'hidebots' ) );
+		$out .= Xml::checkLabel( $this->msg( 'activeusers-hidesysops' )->text(),
+			'hidesysops', 'hidesysops', $this->opts->getValue( 'hidesysops' ) ) . '<br />';
 
-		$out .= Xml::checkLabel( wfMsg('activeusers-hidesysops'), 'hidesysops', 'hidesysops', $this->opts->getValue( 'hidesysops' ) ) . '<br />';
-
-		$out .= Xml::submitButton( wfMsg( 'allpagessubmit' ) ) . "\n";# Submit button and form bottom
+		$out .= Xml::submitButton( $this->msg( 'allpagessubmit' )->text() ) . "\n";# Submit button and form bottom
 		$out .= Xml::closeElement( 'fieldset' );
 		$out .= Xml::closeElement( 'form' );
 
 		return $out;
 	}
+}
+
+/**
+ * @ingroup SpecialPage
+ */
+class SpecialActiveUsers extends SpecialPage {
+
+	/**
+	 * Constructor
+	 */
+	public function __construct() {
+		parent::__construct( 'Activeusers' );
+	}
+
+	/**
+	 * Show the special page
+	 *
+	 * @param $par Mixed: parameter passed to the page or null
+	 */
+	public function execute( $par ) {
+		global $wgActiveUserDays;
+
+		$this->setHeaders();
+		$this->outputHeader();
+
+		$out = $this->getOutput();
+		$out->wrapWikiMsg( "<div class='mw-activeusers-intro'>\n$1\n</div>",
+			array( 'activeusers-intro', $this->getLang()->formatNum( $wgActiveUserDays ) ) );
+
+		$up = new ActiveUsersPager( $this->getContext() );
+
+		# getBody() first to check, if empty
+		$usersbody = $up->getBody();
+
+		$out->addHTML( $up->getPageHeader() );
+		if ( $usersbody ) {
+			$out->addHTML(
+				$up->getNavigationBar() .
+				Html::rawElement( 'ul', array(), $usersbody ) .
+				$up->getNavigationBar()
+			);
+		} else {
+			$out->addWikiMsg( 'activeusers-noresult' );
+		}
+	}
+
 }

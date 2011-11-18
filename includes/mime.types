@@ -59,7 +59,7 @@ application/xhtml+xml xhtml xht
 application/xslt+xml xslt
 application/xml xml xsl xsd
 application/xml-dtd dtd
-application/zip zip jar xpi  sxc stc  sxd std   sxi sti   sxm stm   sxw stw
+application/zip zip jar xpi sxc stc sxd std sxi sti sxm stm sxw stw
 application/x-rar rar
 audio/basic au snd
 audio/midi mid midi kar
@@ -80,6 +80,7 @@ image/bmp bmp
 image/cgm cgm
 image/gif gif
 image/ief ief
+image/jp2 j2k jp2 jpg2
 image/jpeg jpeg jpg jpe
 image/png png apng
 image/svg+xml svg
@@ -114,6 +115,7 @@ text/vnd.wap.wml wml
 text/vnd.wap.wmlscript wmls
 text/xml xml xsl xslt rss rdf
 text/x-setext etx
+text/x-sawfish jl
 video/mpeg mpeg mpg mpe
 video/ogg ogv ogm ogg
 video/quicktime qt mov
@@ -161,6 +163,3 @@ application/vnd.ms-excel.sheet.binary.macroEnabled.12 xlsb
 model/vnd.dwfx+xps dwfx
 application/vnd.ms-xpsdocument xps
 application/x-opc+zip docx dotx docm dotm potx ppsx pptx ppam pptm potm ppsm xlsx xltx xlsm xltm xlam xlsb dwfx xps
-application/vnd.google-earth.kml+xml kml
-application/vnd.google-earth.kmz kmz
-message/rfc822 eml

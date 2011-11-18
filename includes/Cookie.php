@@ -62,6 +62,9 @@ class Cookie {
 	 * A better method might be to use a blacklist like
 	 * http://publicsuffix.org/
 	 *
+	 * @fixme fails to detect 3-letter top-level domains
+	 * @fixme fails to detect 2-letter top-level domains for single-domain use (probably not a big problem in practice, but there are test cases)
+	 *
 	 * @param $domain String: the domain to validate
 	 * @param $originDomain String: (optional) the domain the cookie originates from
 	 * @return Boolean
@@ -136,6 +139,10 @@ class Cookie {
 		return $ret;
 	}
 
+	/**
+	 * @param $domain
+	 * @return bool
+	 */
 	protected function canServeDomain( $domain ) {
 		if ( $domain == $this->domain
 			|| ( strlen( $domain ) > strlen( $this->domain )
@@ -148,20 +155,19 @@ class Cookie {
 		return false;
 	}
 
+	/**
+	 * @param $path
+	 * @return bool
+	 */
 	protected function canServePath( $path ) {
-		if ( $this->path && substr_compare( $this->path, $path, 0, strlen( $this->path ) ) == 0 ) {
-			return true;
-		}
-
-		return false;
+		return ( $this->path && substr_compare( $this->path, $path, 0, strlen( $this->path ) ) == 0 );
 	}
 
+	/**
+	 * @return bool
+	 */
 	protected function isUnExpired() {
-		if ( $this->isSessionKey || $this->expires > time() ) {
-			return true;
-		}
-
-		return false;
+		return $this->isSessionKey || $this->expires > time();
 	}
 }
 

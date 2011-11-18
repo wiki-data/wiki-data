@@ -22,8 +22,6 @@
  * @author Simetrical
  */
 
-$optionsWithArgs = array( 'begin', 'max-slave-lag', 'throttle' );
-
 require_once( dirname( __FILE__ ) . '/Maintenance.php' );
 
 
@@ -81,7 +79,6 @@ TEXT;
 			}
 		}
 
-		$maxlag = intval( $maxlag );
 		$throttle = intval( $throttle );
 		if ( $begin !== '' ) {
 			$where = 'cl_to > ' . $dbw->addQuotes( $begin );
@@ -119,7 +116,7 @@ TEXT;
 			++$i;
 			if ( !( $i % self::REPORTING_INTERVAL ) ) {
 				$this->output( "$name\n" );
-				wfWaitForSlaves( $maxlag );
+				wfWaitForSlaves();
 			}
 			usleep( $throttle * 1000 );
 		}

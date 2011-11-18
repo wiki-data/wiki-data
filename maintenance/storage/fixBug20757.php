@@ -260,7 +260,7 @@ class FixBug20757 extends Maintenance {
 		static $iteration = 0;
 		++$iteration;
 		if ( ++$iteration > 50 == 0 ) {
-			wfWaitForSlaves( 5 );
+			wfWaitForSlaves();
 			$iteration = 0;
 		}
 	}
@@ -302,6 +302,9 @@ class FixBug20757 extends Maintenance {
 	/**
 	 * This is based on part of HistoryBlobStub::getText().
 	 * Determine if the text can be retrieved from the row in the normal way.
+	 * @param $stub
+	 * @param $secondaryRow
+	 * @return bool
 	 */
 	function isUnbrokenStub( $stub, $secondaryRow ) {
 		$flags = explode( ',', $secondaryRow->old_flags );

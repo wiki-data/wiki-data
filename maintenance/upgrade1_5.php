@@ -39,6 +39,12 @@ define( 'MW_UPGRADE_CALLBACK', null  ); // for self-documentation only
  * @ingroup Maintenance
  */
 class FiveUpgrade extends Maintenance {
+
+	/**
+	 * @var DatabaseBase
+	 */
+	protected $db;
+
 	function __construct() {
 		parent::__construct();
 
@@ -101,7 +107,6 @@ class FiveUpgrade extends Maintenance {
 
 		$this->cleanupSwaps = array();
 		$this->emailAuth = false; # don't preauthenticate emails
-		$this->maxLag    = 10; # if slaves are lagged more than 10 secs, wait
 		$this->step      = $this->getOption( 'step', null );
 	}
 
@@ -316,12 +321,14 @@ class FiveUpgrade extends Maintenance {
 	 */
 	function insertChunk( &$chunk ) {
 		// Give slaves a chance to catch up
-		wfWaitForSlaves( $this->maxLag );
+		wfWaitForSlaves();
 		$this->dbw->insert( $this->chunkTable, $chunk, $this->chunkFunction, $this->chunkOptions );
 	}
 
 	/**
 	 * Helper function for copyTable array_filter
+	 * @param $x
+	 * @return bool
 	 */
 	static private function notUpgradeNull( $x ) {
 		return $x !== MW_UPGRADE_NULL;
@@ -801,8 +808,10 @@ END;
 	 * Rename a given image or archived image file to the converted filename,
 	 * leaving a symlink for URL compatibility.
 	 *
-	 * @param string $oldname pre-conversion filename
-	 * @param string $basename pre-conversion base filename for dir hashing, if an archive
+	 * @param $oldname string pre-conversion filename
+	 * @param $subdirCallback string
+	 * @param $basename string pre-conversion base filename for dir hashing, if an archive
+	 * @return bool|string
 	 * @access private
 	 */
 	function renameFile( $oldname, $subdirCallback = 'wfImageDir', $basename = null ) {
@@ -1325,4 +1334,4 @@ END
 }
 
 $maintClass = 'FiveUpgrade';
-require( RUN_MAINTENANCE_IF_MAIN );
+require_once( RUN_MAINTENANCE_IF_MAIN );

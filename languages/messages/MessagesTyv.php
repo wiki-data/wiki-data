@@ -164,7 +164,6 @@ $messages = array(
 'searcharticle'     => 'Күүcедири',
 'history'           => 'Арынның Төөгүзү',
 'history_short'     => 'Төөгү',
-'info_short'        => 'Медеглел',
 'printableversion'  => 'Саазынга үндүрерин көөрү',
 'permalink'         => 'Үргүлчү холбаа',
 'print'             => 'Саазынга үндүрер',
@@ -292,11 +291,7 @@ $messages = array(
 'accountcreatedtext'      => '$1 деп ажыглакчының бүрүткел бижиини бүдүрген.',
 'loginlanguagelabel'      => 'Дыл: $1',
 
-# JavaScript password checks
-'password-strength-bad'  => 'БАГАЙ',
-'password-strength-good' => 'эки',
-
-# Password reset dialog
+# Change password dialog
 'resetpass'                 => 'Чажыт сөзү өскертир',
 'resetpass_header'          => 'Чажыт сөстү катап чогаадып кылыры',
 'oldpassword'               => 'Эгри чажыт сөс:',
@@ -385,9 +380,6 @@ The password for this new account can be changed on the ''[[Special:ChangePasswo
 'pagehist'                   => 'Арынның төөгүзү',
 'revdelete-otherreason'      => 'Өске/немелде чылдагаан:',
 'revdelete-reasonotherlist'  => 'Өске чылдагаан',
-
-# Revision move
-'revmove-reasonfield' => 'Чылдагаан:',
 
 # History merging
 'mergehistory-reason' => 'Чылдагаан:',
@@ -647,9 +639,7 @@ The password for this new account can be changed on the ''[[Special:ChangePasswo
 'activeusers-hidesysops' => 'Эргелекчыларны чажырары',
 
 # Special:Log/newusers
-'newuserlogpage'           => 'Чаа ажыглакчы кырында журнал',
-'newuserlog-create-entry'  => 'Чаа бүрүткел бижик',
-'newuserlog-create2-entry' => '$1 деп чаа бүрүткел бижикти бүдүрген',
+'newuserlogpage' => 'Чаа ажыглакчы кырында журнал',
 
 # Special:ListGroupRights
 'listgrouprights-members' => '(кежигүннүң даңзызы)',
@@ -687,7 +677,6 @@ The password for this new account can be changed on the ''[[Special:ChangePasswo
 'delete-confirm'        => '"$1" деп арынны ырадыры',
 'delete-legend'         => 'Ырадыры',
 'actioncomplete'        => 'Ажыл доосту',
-'deletedarticle'        => '"[[$1]]" деп арынны ап каан',
 'deletecomment'         => 'Чылдагаан:',
 'deleteotherreason'     => 'Өске/немелде чылдагаан:',
 'deletereasonotherlist' => 'Өске чылдагаан',
@@ -711,7 +700,6 @@ The password for this new account can be changed on the ''[[Special:ChangePasswo
 'undeletebtn'            => 'Диргисир',
 'undeletelink'           => 'көөрү/диргисири',
 'undeletecomment'        => 'Чылдагаан:',
-'undeletedarticle'       => '"[[$1]]" диргискен',
 'undelete-search-submit' => 'Дилээр',
 
 # Namespace form on various pages
@@ -859,12 +847,10 @@ The password for this new account can be changed on the ''[[Special:ChangePasswo
 'exif-subjectdistancerange-3' => 'ырак көрүш',
 
 # 'all' in various places, this might be different for inflected languages
-'recentchangesall' => 'шупту',
-'imagelistall'     => 'шупту',
-'watchlistall2'    => 'шупту',
-'namespacesall'    => 'шупту',
-'monthsall'        => 'шупту',
-'limitall'         => 'шупту',
+'watchlistall2' => 'шупту',
+'namespacesall' => 'шупту',
+'monthsall'     => 'шупту',
+'limitall'      => 'шупту',
 
 # action=purge
 'confirm_purge_button' => 'Чөп',
@@ -927,9 +913,5 @@ The password for this new account can be changed on the ''[[Special:ChangePasswo
 
 # HTML forms
 'htmlform-submit' => 'Күүcедири',
-
-# Special:DisableAccount
-'disableaccount-user'       => 'Aжыглакчының ады',
-'disableaccount-nosuchuser' => '"$1" деп бүрүткел бижик чок.',
 
 );

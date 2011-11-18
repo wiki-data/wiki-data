@@ -35,10 +35,16 @@ $.fn.makeCollapsible = function() {
 					// action must be string with 'expand' or 'collapse'
 					return;
 				}
-				if ( typeof $defaultToggle !== 'undefined' && !($defaultToggle instanceof jQuery) ) {
-					// is optional (may be undefined), but if passed it must be an instance of jQuery and nothing else
+				if ( typeof $defaultToggle == 'undefined' ) {
+					$defaultToggle = null;
+				}
+				if ( $defaultToggle !== null && !($defaultToggle instanceof $) ) {
+					// is optional (may be undefined), but if defined it must be an instance of jQuery.
+					// If it's not, abort right away.
+					// After this $defaultToggle is either null or a valid jQuery instance.
 					return;
 				}
+
 				var $containers = null;
 
 				if ( action == 'collapse' ) {
@@ -49,20 +55,20 @@ $.fn.makeCollapsible = function() {
 						// Slide doens't work with tables, but fade does as of jQuery 1.1.3
 						// http://stackoverflow.com/questions/467336#920480
 						$containers = $collapsible.find( '>tbody>tr' );
-						if ( typeof $defaultToggle !== 'undefined' && ($defaultToggle instanceof jQuery) ) { 
+						if ( $defaultToggle ) {
 							// Exclude tablerow containing togglelink
 							$containers.not( $defaultToggle.closest( 'tr' ) ).stop(true, true).fadeOut();
 						} else {
-							if ( instantHide ) {	
+							if ( instantHide ) {
 								$containers.hide();
 							} else {
 								$containers.stop( true, true ).fadeOut();
 							}
 						}
-	
+
 					} else if ( $collapsible.is( 'ul' ) || $collapsible.is( 'ol' ) ) {
 						$containers = $collapsible.find( '> li' );
-						if ( $defaultToggle && $defaultToggle.jquery ) {
+						if ( $defaultToggle ) {
 							// Exclude list-item containing togglelink
 							$containers.not( $defaultToggle.parent() ).stop( true, true ).slideUp();
 						} else {
@@ -72,12 +78,12 @@ $.fn.makeCollapsible = function() {
 								$containers.stop( true, true ).slideUp();
 							}
 						}
-	
+
 					} else { // <div>, <p> etc.
 						var $collapsibleContent = $collapsible.find( '> .mw-collapsible-content' );
-						
+
 						// If a collapsible-content is defined, collapse it
-						if ( $collapsibleContent.size() ) {
+						if ( $collapsibleContent.length ) {
 							if ( instantHide ) {
 								$collapsibleContent.hide();
 							} else {
@@ -96,31 +102,31 @@ $.fn.makeCollapsible = function() {
 					}
 
 				} else {
-				
+
 					// Expand the element
 					if ( $collapsible.is( 'table' ) ) {
 						$containers = $collapsible.find( '>tbody>tr' );
-						if ( $defaultToggle && $defaultToggle.jquery ) {
+						if ( $defaultToggle ) {
 							// Exclude tablerow containing togglelink
 							$containers.not( $defaultToggle.parent().parent() ).stop(true, true).fadeIn();
 						} else {
 							$containers.stop(true, true).fadeIn();
 						}
-	
+
 					} else if ( $collapsible.is( 'ul' ) || $collapsible.is( 'ol' ) ) {
 						$containers = $collapsible.find( '> li' );
-						if ( $defaultToggle && $defaultToggle.jquery ) {
+						if ( $defaultToggle ) {
 							// Exclude list-item containing togglelink
 							$containers.not( $defaultToggle.parent() ).stop( true, true ).slideDown();
 						} else {
 							$containers.stop( true, true ).slideDown();
 						}
-	
+
 					} else { // <div>, <p> etc.
 						var $collapsibleContent = $collapsible.find( '> .mw-collapsible-content' );
-						
+
 						// If a collapsible-content is defined, collapse it
-						if ( $collapsibleContent.size() ) {
+						if ( $collapsibleContent.length ) {
 							$collapsibleContent.slideDown();
 
 						// Otherwise assume this is a customcollapse with a remote toggle
@@ -140,12 +146,13 @@ $.fn.makeCollapsible = function() {
 				var	$that = $(that),
 					$collapsible = $that.closest( '.mw-collapsible.mw-made-collapsible' ).toggleClass( 'mw-collapsed' );
 				e.preventDefault();
-				
+				e.stopPropagation();
+
 				// It's expanded right now
 				if ( !$that.hasClass( 'mw-collapsible-toggle-collapsed' ) ) {
 					// Change link to "Show"
 					$that.removeClass( 'mw-collapsible-toggle-expanded' ).addClass( 'mw-collapsible-toggle-collapsed' );
-					if ( $that.find( '> a' ).size() ) {
+					if ( $that.find( '> a' ).length ) {
 						$that.find( '> a' ).text( expandtext );
 					} else {
 						$that.text( expandtext );
@@ -157,7 +164,7 @@ $.fn.makeCollapsible = function() {
 				} else {
 					// Change link to "Hide"
 					$that.removeClass( 'mw-collapsible-toggle-collapsed' ).addClass( 'mw-collapsible-toggle-expanded' );
-					if ( $that.find( '> a' ).size() ) {
+					if ( $that.find( '> a' ).length ) {
 						$that.find( '> a' ).text( collapsetext );
 					} else {
 						$that.text( collapsetext );
@@ -170,8 +177,12 @@ $.fn.makeCollapsible = function() {
 			// Toggles collapsible and togglelink class
 			toggleLinkPremade = function( $that, e ) {
 				var	$collapsible = $that.eq(0).closest( '.mw-collapsible.mw-made-collapsible' ).toggleClass( 'mw-collapsed' );
+				if ( $(e.target).is('a') ) {
+					return true;
+				}
 				e.preventDefault();
-				
+				e.stopPropagation();
+
 				// It's expanded right now
 				if ( !$that.hasClass( 'mw-collapsible-toggle-collapsed' ) ) {
 					// Change toggle to collapsed
@@ -193,26 +204,34 @@ $.fn.makeCollapsible = function() {
 				// For the initial state call of customtogglers there is no event passed
 				if (e) {
 					e.preventDefault();
+				e.stopPropagation();
 				}
 				// Get current state and toggle to the opposite
 				var action = $collapsible.hasClass( 'mw-collapsed' ) ? 'expand' : 'collapse';
 				$collapsible.toggleClass( 'mw-collapsed' );
-				toggleElement( $collapsible, action, $that )
-				
+				toggleElement( $collapsible, action, $that );
+
 			};
 
 		// Use custom text or default ?
-		if( !collapsetext || collapsetext === '' ){
+		if( !collapsetext ) {
 			collapsetext = mw.msg( 'collapsible-collapse' );
 		}
-		if ( !expandtext || expandtext === '' ){
+		if ( !expandtext ) {
 			expandtext = mw.msg( 'collapsible-expand' );
 		}
 
 		// Create toggle link with a space around the brackets (&nbsp;[text]&nbsp;)
-		var $toggleLink = $( '<a href="#"></a>' ).text( collapsetext ).wrap( '<span class="mw-collapsible-toggle"></span>' ).parent().prepend( '&nbsp;[' ).append( ']&nbsp;' ).bind( 'click.mw-collapse', function(e){
-			toggleLinkDefault( this, e );
-		} );
+		var $toggleLink =
+			$( '<a href="#"></a>' )
+				.text( collapsetext )
+				.wrap( '<span class="mw-collapsible-toggle"></span>' )
+				.parent()
+				.prepend( '&nbsp;[' )
+				.append( ']&nbsp;' )
+				.bind( 'click.mw-collapse', function(e) {
+					toggleLinkDefault( this, e );
+				} );
 
 		// Return if it has been enabled already.
 		if ( $that.hasClass( 'mw-made-collapsible' ) ) {
@@ -220,33 +239,33 @@ $.fn.makeCollapsible = function() {
 		} else {
 			$that.addClass( 'mw-made-collapsible' );
 		}
-		
+
 		// Check if this element has a custom position for the toggle link
 		// (ie. outside the container or deeper inside the tree)
 		// Then: Locate the custom toggle link(s) and bind them
-		if ( $that.attr( 'id' ).indexOf( 'mw-customcollapsible-' ) === 0 ) {
+		if ( ( $that.attr( 'id' ) || '' ).indexOf( 'mw-customcollapsible-' ) === 0 ) {
 
 			var thatId = $that.attr( 'id' ),
 				$customTogglers = $( '.' + thatId.replace( 'mw-customcollapsible', 'mw-customtoggle' ) );
 			mw.log( _fn + 'Found custom collapsible: #' + thatId );
-						
+
 			// Double check that there is actually a customtoggle link
-			if ( $customTogglers.size() ) {
+			if ( $customTogglers.length ) {
 				$customTogglers.bind( 'click.mw-collapse', function( e ) {
 					toggleLinkCustom( $(this), e, $that );
 				} );
 			} else {
 				mw.log( _fn + '#' + thatId + ': Missing toggler!' );
 			}
-			
+
 			// Initial state
 			if ( $that.hasClass( 'mw-collapsed' ) ) {
 				$that.removeClass( 'mw-collapsed' );
-				toggleLinkCustom( $customTogglers, null, $that )
+				toggleLinkCustom( $customTogglers, null, $that );
 			}
 
 		// If this is not a custom case, do the default:
-		// Wrap the contents add the toggle link 
+		// Wrap the contents add the toggle link
 		} else {
 
 			// Elements are treated differently
@@ -254,49 +273,52 @@ $.fn.makeCollapsible = function() {
 				// The toggle-link will be in one the the cells (td or th) of the first row
 				var	$firstRowCells = $( 'tr:first th, tr:first td', that ),
 					$toggle = $firstRowCells.find( '> .mw-collapsible-toggle' );
-	
+
 				// If theres no toggle link, add it to the last cell
-				if ( !$toggle.size() ) {
+				if ( !$toggle.length ) {
 					$firstRowCells.eq(-1).prepend( $toggleLink );
 				} else {
-					$toggleLink = $toggle.unbind( 'click.mw-collapse' ).bind( 'click.mw-collapse', function( e ){
+					$toggleLink = $toggle.unbind( 'click.mw-collapse' ).bind( 'click.mw-collapse', function( e ) {
 						toggleLinkPremade( $toggle, e );
 					} );
 				}
-				
+
 			} else if ( $that.is( 'ul' ) || $that.is( 'ol' ) ) {
 				// The toggle-link will be in the first list-item
 				var	$firstItem = $( 'li:first', $that),
 					$toggle = $firstItem.find( '> .mw-collapsible-toggle' );
-	
+
 				// If theres no toggle link, add it
-				if ( !$toggle.size() ) {
-					// Make sure the numeral order doesn't get messed up, reset to 1 unless value-attribute is already used
-					// WebKit return '' if no value, Mozilla returns '-1' is no value
-					if ( $firstItem.attr( 'value' ) == '' || $firstItem.attr( 'value' ) == '-1' ) { // Will fail with ===
+				if ( !$toggle.length ) {
+					// Make sure the numeral order doesn't get messed up, force the first (soon to be second) item
+					// to be "1". Except if the value-attribute is already used.
+					// If no value was set WebKit returns "", Mozilla returns '-1', others return null or undefined.
+					var firstval = $firstItem.attr( 'value' );
+					if ( firstval === undefined || !firstval || firstval == '-1' ) {
 						$firstItem.attr( 'value', '1' );
 					}
 					$that.prepend( $toggleLink.wrap( '<li class="mw-collapsible-toggle-li"></li>' ).parent() );
 				} else {
-					$toggleLink = $toggle.unbind( 'click.mw-collapse' ).bind( 'click.mw-collapse', function( e ){
+					$toggleLink = $toggle.unbind( 'click.mw-collapse' ).bind( 'click.mw-collapse', function( e ) {
 						toggleLinkPremade( $toggle, e );
 					} );
 				}
-	
+
 			} else { // <div>, <p> etc.
-				// If a direct child .content-wrapper does not exists, create it
-				if ( !$that.find( '> .mw-collapsible-content' ).size() ) {
-					$that.wrapInner( '<div class="mw-collapsible-content"></div>' );
-				}
-	
+
 				// The toggle-link will be the first child of the element
 				var $toggle = $that.find( '> .mw-collapsible-toggle' );
-	
+
+				// If a direct child .content-wrapper does not exists, create it
+				if ( !$that.find( '> .mw-collapsible-content' ).length ) {
+					$that.wrapInner( '<div class="mw-collapsible-content"></div>' );
+				}
+
 				// If theres no toggle link, add it
-				if ( !$toggle.size() ) {
+				if ( !$toggle.length ) {
 					$that.prepend( $toggleLink );
 				} else {
-					$toggleLink = $toggle.unbind( 'click.mw-collapse' ).bind( 'click.mw-collapse', function( e ){
+					$toggleLink = $toggle.unbind( 'click.mw-collapse' ).bind( 'click.mw-collapse', function( e ) {
 						toggleLinkPremade( $toggle, e );
 					} );
 				}
@@ -304,7 +326,7 @@ $.fn.makeCollapsible = function() {
 		}
 
 		// Initial state (only for those that are not custom)
-		if ( $that.hasClass( 'mw-collapsed' ) && $that.attr( 'id' ).indexOf( 'mw-customcollapsible-' ) !== 0 ) {
+		if ( $that.hasClass( 'mw-collapsed' ) && ( $that.attr( 'id' ) || '').indexOf( 'mw-customcollapsible-' ) !== 0 ) {
 			$that.removeClass( 'mw-collapsed' );
 			// The collapsible element could have multiple togglers
 			// To toggle the initial state only click one of them (ie. the first one, eq(0) )

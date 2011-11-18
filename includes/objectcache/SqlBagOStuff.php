@@ -19,18 +19,32 @@ class SqlBagOStuff extends BagOStuff {
 	var $serverInfo;
 	var $lastExpireAll = 0;
 	var $purgePeriod = 100;
+	var $shards = 1;
+	var $tableName = 'objectcache';
 
 	/**
 	 * Constructor. Parameters are:
-	 *   - server:   A server info structure in the format required by each 
+	 *   - server:   A server info structure in the format required by each
 	 *               element in $wgDBServers.
 	 *
-	 *   - purgePeriod: The average number of object cache requests in between 
-	 *                  garbage collection operations, where expired entries 
-	 *                  are removed from the database. Or in other words, the 
-	 *                  reciprocal of the probability of purging on any given 
-	 *                  request. If this is set to zero, purging will never be 
+	 *   - purgePeriod: The average number of object cache requests in between
+	 *                  garbage collection operations, where expired entries
+	 *                  are removed from the database. Or in other words, the
+	 *                  reciprocal of the probability of purging on any given
+	 *                  request. If this is set to zero, purging will never be
 	 *                  done.
+	 *
+	 *   - tableName:   The table name to use, default is "objectcache".
+	 *
+	 *   - shards:      The number of tables to use for data storage. If this is
+	 *                  more than 1, table names will be formed in the style
+	 *                  objectcacheNNN where NNN is the shard index, between 0 and
+	 *                  shards-1. The number of digits will be the minimum number
+	 *                  required to hold the largest shard index. Data will be
+	 *                  distributed across all tables by key hash. This is for
+	 *                  MySQL bugs 61735 and 61736.
+	 *
+	 * @param $params array
 	 */
 	public function __construct( $params ) {
 		if ( isset( $params['server'] ) ) {
@@ -39,6 +53,12 @@ class SqlBagOStuff extends BagOStuff {
 		}
 		if ( isset( $params['purgePeriod'] ) ) {
 			$this->purgePeriod = intval( $params['purgePeriod'] );
+		}
+		if ( isset( $params['tableName'] ) ) {
+			$this->tableName = $params['tableName'];
+		}
+		if ( isset( $params['shards'] ) ) {
+			$this->shards = intval( $params['shards'] );
 		}
 	}
 
@@ -70,11 +90,37 @@ class SqlBagOStuff extends BagOStuff {
 		return $this->db;
 	}
 
+	/**
+	 * Get the table name for a given key
+	 */
+	protected function getTableByKey( $key ) {
+		if ( $this->shards > 1 ) {
+			$hash = hexdec( substr( md5( $key ), 0, 8 ) ) & 0x7fffffff;
+			return $this->getTableByShard( $hash % $this->shards );
+		} else {
+			return $this->tableName;
+		}
+	}
+
+	/**
+	 * Get the table name for a given shard index
+	 */
+	protected function getTableByShard( $index ) {
+		if ( $this->shards > 1 ) {
+			$decimals = strlen( $this->shards - 1 );
+			return $this->tableName .
+				sprintf( "%0{$decimals}d", $index );
+		} else {
+			return $this->tableName;
+		}
+	}
+
 	public function get( $key ) {
 		# expire old entries if any
 		$this->garbageCollect();
 		$db = $this->getDB();
-		$row = $db->selectRow( 'objectcache', array( 'value', 'exptime' ),
+		$tableName = $this->getTableByKey( $key );
+		$row = $db->selectRow( $tableName, array( 'value', 'exptime' ),
 			array( 'keyname' => $key ), __METHOD__ );
 
 		if ( !$row ) {
@@ -90,7 +136,7 @@ class SqlBagOStuff extends BagOStuff {
 				$db->begin();
 				# Put the expiry time in the WHERE condition to avoid deleting a
 				# newly-inserted value
-				$db->delete( 'objectcache',
+				$db->delete( $tableName,
 					array(
 						'keyname' => $key,
 						'exptime' => $row->exptime
@@ -127,7 +173,9 @@ class SqlBagOStuff extends BagOStuff {
 			$db->begin();
 			// (bug 24425) use a replace if the db supports it instead of
 			// delete/insert to avoid clashes with conflicting keynames
-			$db->replace( 'objectcache', array( 'keyname' ),
+			$db->replace(
+				$this->getTableByKey( $key ),
+				array( 'keyname' ),
 				array(
 					'keyname' => $key,
 					'value' => $db->encodeBlob( $this->serialize( $value ) ),
@@ -148,7 +196,10 @@ class SqlBagOStuff extends BagOStuff {
 
 		try {
 			$db->begin();
-			$db->delete( 'objectcache', array( 'keyname' => $key ), __METHOD__ );
+			$db->delete(
+				$this->getTableByKey( $key ),
+				array( 'keyname' => $key ),
+				__METHOD__ );
 			$db->commit();
 		} catch ( DBQueryError $e ) {
 			$this->handleWriteError( $e );
@@ -161,19 +212,24 @@ class SqlBagOStuff extends BagOStuff {
 
 	public function incr( $key, $step = 1 ) {
 		$db = $this->getDB();
+		$tableName = $this->getTableByKey( $key );
 		$step = intval( $step );
 
 		try {
 			$db->begin();
-			$row = $db->selectRow( 'objectcache', array( 'value', 'exptime' ),
-				array( 'keyname' => $key ), __METHOD__, array( 'FOR UPDATE' ) );
+			$row = $db->selectRow(
+				$tableName,
+				array( 'value', 'exptime' ),
+				array( 'keyname' => $key ),
+				__METHOD__,
+				array( 'FOR UPDATE' ) );
 			if ( $row === false ) {
 				// Missing
 				$db->commit();
 
 				return null;
 			}
-			$db->delete( 'objectcache', array( 'keyname' => $key ), __METHOD__ );
+			$db->delete( $tableName, array( 'keyname' => $key ), __METHOD__ );
 			if ( $this->isExpired( $row->exptime ) ) {
 				// Expired, do not reinsert
 				$db->commit();
@@ -183,12 +239,17 @@ class SqlBagOStuff extends BagOStuff {
 
 			$oldValue = intval( $this->unserialize( $db->decodeBlob( $row->value ) ) );
 			$newValue = $oldValue + $step;
-			$db->insert( 'objectcache',
+			$db->insert( $tableName,
 				array(
 					'keyname' => $key,
 					'value' => $db->encodeBlob( $this->serialize( $newValue ) ),
 					'exptime' => $row->exptime
-				), __METHOD__ );
+				), __METHOD__, 'IGNORE' );
+
+			if ( $db->affectedRows() == 0 ) {
+				// Race condition. See bug 28611
+				$newValue = null;
+			}
 			$db->commit();
 		} catch ( DBQueryError $e ) {
 			$this->handleWriteError( $e );
@@ -201,11 +262,14 @@ class SqlBagOStuff extends BagOStuff {
 
 	public function keys() {
 		$db = $this->getDB();
-		$res = $db->select( 'objectcache', array( 'keyname' ), false, __METHOD__ );
 		$result = array();
 
-		foreach ( $res as $row ) {
-			$result[] = $row->keyname;
+		for ( $i = 0; $i < $this->shards; $i++ ) {
+			$res = $db->select( $this->getTableByShard( $i ),
+				array( 'keyname' ), false, __METHOD__ );
+			foreach ( $res as $row ) {
+				$result[] = $row->keyname;
+			}
 		}
 
 		return $result;
@@ -241,25 +305,40 @@ class SqlBagOStuff extends BagOStuff {
 	}
 
 	public function expireAll() {
+		$this->deleteObjectsExpiringBefore( wfTimestampNow() );
+	}
+
+	/**
+	 * Delete objects from the database which expire before a certain date.
+	 */
+	public function deleteObjectsExpiringBefore( $timestamp ) {
 		$db = $this->getDB();
-		$now = $db->timestamp();
+		$dbTimestamp = $db->timestamp( $timestamp );
 
 		try {
-			$db->begin();
-			$db->delete( 'objectcache', array( 'exptime < ' . $db->addQuotes( $now ) ), __METHOD__ );
-			$db->commit();
+			for ( $i = 0; $i < $this->shards; $i++ ) {
+				$db->begin();
+				$db->delete(
+					$this->getTableByShard( $i ),
+					array( 'exptime < ' . $db->addQuotes( $dbTimestamp ) ),
+					__METHOD__ );
+				$db->commit();
+			}
 		} catch ( DBQueryError $e ) {
 			$this->handleWriteError( $e );
 		}
+		return true;
 	}
 
 	public function deleteAll() {
 		$db = $this->getDB();
 
 		try {
-			$db->begin();
-			$db->delete( 'objectcache', '*', __METHOD__ );
-			$db->commit();
+			for ( $i = 0; $i < $this->shards; $i++ ) {
+				$db->begin();
+				$db->delete( $this->getTableByShard( $i ), '*', __METHOD__ );
+				$db->commit();
+			}
 		} catch ( DBQueryError $e ) {
 			$this->handleWriteError( $e );
 		}
@@ -290,7 +369,9 @@ class SqlBagOStuff extends BagOStuff {
 	 */
 	protected function unserialize( $serial ) {
 		if ( function_exists( 'gzinflate' ) ) {
-			$decomp = @gzinflate( $serial );
+			wfSuppressWarnings();
+			$decomp = gzinflate( $serial );
+			wfRestoreWarnings();
 
 			if ( false !== $decomp ) {
 				$serial = $decomp;
@@ -320,6 +401,27 @@ class SqlBagOStuff extends BagOStuff {
 
 		wfDebug( __METHOD__ . ": ignoring query error\n" );
 		$db->ignoreErrors( false );
+	}
+
+	/**
+	 * Create shard tables. For use from eval.php.
+	 */
+	public function createTables() {
+		$db = $this->getDB();
+		if ( $db->getType() !== 'mysql'
+			|| version_compare( $db->getServerVersion(), '4.1.0', '<' ) )
+		{
+			throw new MWException( __METHOD__ . ' is not supported on this DB server' );
+		}
+
+		for ( $i = 0; $i < $this->shards; $i++ ) {
+			$db->begin();
+			$db->query(
+				'CREATE TABLE ' . $db->tableName( $this->getTableByShard( $i ) ) .
+				' LIKE ' . $db->tableName( 'objectcache' ),
+				__METHOD__ );
+			$db->commit();
+		}
 	}
 }
 

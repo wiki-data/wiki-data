@@ -25,11 +25,6 @@
  * @file
  */
 
-if ( !defined( 'MEDIAWIKI' ) ) {
-	// Eclipse helper - will be ignored in production
-	require_once( 'ApiBase.php' );
-}
-
 /**
  * Unit to authenticate log-in attempts to the current wiki.
  *
@@ -55,38 +50,45 @@ class ApiLogin extends ApiBase {
 
 		$result = array();
 
-		$req = new FauxRequest( array(
-			'wpName' => $params['name'],
-			'wpPassword' => $params['password'],
-			'wpDomain' => $params['domain'],
-			'wpLoginToken' => $params['token'],
-			'wpRemember' => ''
-		) );
-
 		// Init session if necessary
 		if ( session_id() == '' ) {
 			wfSetupSession();
 		}
 
-		$loginForm = new LoginForm( $req );
+		$context = new DerivativeContext( $this->getContext() );
+		$context->setRequest( new DerivativeRequest(
+			$this->getContext()->getRequest(),
+			array(
+				'wpName' => $params['name'],
+				'wpPassword' => $params['password'],
+				'wpDomain' => $params['domain'],
+				'wpLoginToken' => $params['token'],
+				'wpRemember' => ''
+			)
+		) );
+		$loginForm = new LoginForm();
+		$loginForm->setContext( $context );
 
-		global $wgCookiePrefix, $wgUser, $wgPasswordAttemptThrottle;
+		global $wgCookiePrefix, $wgPasswordAttemptThrottle;
 
 		$authRes = $loginForm->authenticateUserData();
 		switch ( $authRes ) {
 			case LoginForm::SUCCESS:
-				$wgUser->setOption( 'rememberpassword', 1 );
-				$wgUser->setCookies( $this->getMain()->getRequest() );
+				$user = $context->getUser();
+				$this->getContext()->setUser( $user );
+				$user->setOption( 'rememberpassword', 1 );
+				$user->setCookies( $this->getRequest() );
 
-				// Run hooks. FIXME: split back and frontend from this hook.
-				// FIXME: This hook should be placed in the backend
+				// Run hooks.
+				// @todo FIXME: Split back and frontend from this hook.
+				// @todo FIXME: This hook should be placed in the backend
 				$injected_html = '';
-				wfRunHooks( 'UserLoginComplete', array( &$wgUser, &$injected_html ) );
+				wfRunHooks( 'UserLoginComplete', array( &$user, &$injected_html ) );
 
 				$result['result'] = 'Success';
-				$result['lguserid'] = intval( $wgUser->getId() );
-				$result['lgusername'] = $wgUser->getName();
-				$result['lgtoken'] = $wgUser->getToken();
+				$result['lguserid'] = intval( $user->getId() );
+				$result['lgusername'] = $user->getName();
+				$result['lgtoken'] = $user->getToken();
 				$result['cookieprefix'] = $wgCookiePrefix;
 				$result['sessionid'] = session_id();
 				break;
@@ -181,7 +183,7 @@ class ApiLogin extends ApiBase {
 
 	public function getDescription() {
 		return array(
-			'This module is used to login and get the authentication tokens. ',
+			'Log in and get the authentication tokens. ',
 			'In the event of a successful log-in, a cookie will be attached',
 			'to your session. In the event of a failed log-in, you will not ',
 			'be able to attempt another log-in through this method for 5 seconds.',
@@ -205,13 +207,17 @@ class ApiLogin extends ApiBase {
 		) );
 	}
 
-	protected function getExamples() {
+	public function getExamples() {
 		return array(
 			'api.php?action=login&lgname=user&lgpassword=password'
 		);
 	}
 
+	public function getHelpUrls() {
+		return 'http://www.mediawiki.org/wiki/API:Login';
+	}
+
 	public function getVersion() {
-		return __CLASS__ . ': $Id: ApiLogin.php 83985 2011-03-15 00:34:44Z reedy $';
+		return __CLASS__ . ': $Id: ApiLogin.php 103273 2011-11-16 00:17:26Z johnduhart $';
 	}
 }

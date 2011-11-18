@@ -9,7 +9,10 @@ class ZhClient {
 	/**
 	 * Constructor
 	 *
-	 * @access private
+	 * @param $host
+	 * @param $port
+	 *
+	 * @return ZhClient
 	 */
 	function __construct( $host, $port ) {
 		$this->mHost = $host;
@@ -19,6 +22,8 @@ class ZhClient {
 
 	/**
 	 * Check if connection to zhdaemon is successful
+	 *
+	 * @return bool
 	 */
 	function isconnected() {
 		return $this->mConnected;
@@ -28,22 +33,23 @@ class ZhClient {
 	 * Establish conncetion
 	 *
 	 * @access private
+	 *
+	 * @return bool
 	 */
 	function connect() {
 		wfSuppressWarnings();
 		$errno = $errstr = '';
 		$this->mFP = fsockopen( $this->mHost, $this->mPort, $errno, $errstr, 30 );
 		wfRestoreWarnings();
-		if ( !$this->mFP ) {
-			return false;
-		}
-		return true;
+		return !$this->mFP;
 	}
 
 	/**
 	 * Query the daemon and return the result
 	 *
 	 * @access private
+	 *
+	 * @return string
 	 */
 	function query( $request ) {
 		if ( !$this->mConnected ) {
@@ -68,10 +74,7 @@ class ZhClient {
 			$data .= $str;
 		}
 		// data should be of length $len. otherwise something is wrong
-		if ( strlen( $data ) != $len ) {
-			return false;
-		}
-		return $data;
+		return strlen( $data ) == $len;
 	}
 
 	/**
@@ -115,6 +118,7 @@ class ZhClient {
 		}
 		return $ret;
 	}
+
 	/**
 	 * Perform word segmentation
 	 *

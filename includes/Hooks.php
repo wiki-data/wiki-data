@@ -23,25 +23,6 @@
  * @file
  */
 
-/**
- * Call hook functions defined in $wgHooks
- *
- * Because programmers assign to $wgHooks, we need to be very
- * careful about its contents. So, there's a lot more error-checking
- * in here than would normally be necessary.
- *
- * @param $event String: event name
- * @param $args Array: parameters passed to hook functions
- * @return Boolean
- */
-function wfRunHooks( $event, $args = array() ) {
-	return Hooks::run( $event, $args );
-}
-
-function hookErrorHandler( $errno, $errstr ) {
-	return Hooks::hookErrorHandler( $errno, $errstr );
-}
-
 class MWHookException extends MWException {}
 
 /**
@@ -229,7 +210,7 @@ class Hooks {
 			 * problem here.
 			 */
 			$retval = null;
-			set_error_handler( array( 'Hooks', 'hookErrorHandler' ) );
+			set_error_handler( 'Hooks::hookErrorHandler' );
 			wfProfileIn( $func );
 			try {
 				$retval = call_user_func_array( $callback, $hook_args );
@@ -241,9 +222,7 @@ class Hooks {
 
 			/* String return is an error; false return means stop processing. */
 			if ( is_string( $retval ) ) {
-				global $wgOut;
-				$wgOut->showFatalError( $retval );
-				return false;
+				throw new FatalError( $retval );
 			} elseif( $retval === null ) {
 				if ( $closure ) {
 					$prettyFunc = "$event closure";
@@ -269,7 +248,7 @@ class Hooks {
 						'should return true to continue hook processing or false to abort.'
 					);
 				}
-			} else if ( !$retval ) {
+			} elseif ( !$retval ) {
 				return false;
 			}
 		}

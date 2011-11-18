@@ -26,6 +26,9 @@ class RepoGroup {
 	var $localInfo, $foreignInfo;
 	var $cache;
 
+	/**
+	 * @var RepoGroup
+	 */
 	protected static $instance;
 	const MAX_CACHE_SIZE = 1000;
 
@@ -53,6 +56,11 @@ class RepoGroup {
 
 	/**
 	 * Set the singleton instance to a given object
+	 * Used by extensions which hook into the Repo chain.
+	 * It's not enough to just create a superclass ... you have
+	 * to get people to call into it even though all they know is RepoGroup::singleton()
+	 *
+	 * @param $instance RepoGroup
 	 */
 	static function setSingleton( $instance ) {
 		self::$instance = $instance;
@@ -77,8 +85,8 @@ class RepoGroup {
 	 * Search repositories for an image.
 	 * You can also use wfFindFile() to do this.
 	 *
-	 * @param $title Mixed: Title object or string
-	 * @param $options Associative array of options:
+	 * @param $title Title|string Title object or string
+	 * @param $options array Associative array of options:
 	 *     time:           requested time for an archived image, or false for the
 	 *                     current version. An image object will be returned which was
 	 *                     created at the specified time.
@@ -100,22 +108,15 @@ class RepoGroup {
 		if ( !$this->reposInitialised ) {
 			$this->initialiseRepos();
 		}
-		if ( !($title instanceof Title) ) {
-			$title = Title::makeTitleSafe( NS_FILE, $title );
-			if ( !is_object( $title ) ) {
-				return false;
-			}
-		}
-
-		if ( $title->getNamespace() != NS_MEDIA && $title->getNamespace() != NS_FILE ) {
-			throw new MWException( __METHOD__ . ' received an Title object with incorrect namespace' );
+		$title = File::normalizeTitle( $title );
+		if ( !$title ) {
+			return false;
 		}
 
 		# Check the cache
 		if ( empty( $options['ignoreRedirect'] )
 			&& empty( $options['private'] )
-			&& empty( $options['bypassCache'] )
-			&& $title->getNamespace() == NS_FILE )
+			&& empty( $options['bypassCache'] ) )
 		{
 			$useCache = true;
 			$time = isset( $options['time'] ) ? $options['time'] : '';
@@ -171,10 +172,10 @@ class RepoGroup {
 			if ( !is_array( $item ) ) {
 				$item = array( 'title' => $item );
 			}
-			if ( !( $item['title'] instanceof Title ) )
-				$item['title'] = Title::makeTitleSafe( NS_FILE, $item['title'] );
-			if ( $item['title'] )
+			$item['title'] = File::normalizeTitle( $item['title'] );
+			if ( $item['title'] ) {
 				$items[$item['title']->getDBkey()] = $item;
+			}
 		}
 
 		$images = $this->localRepo->findFiles( $items );
@@ -193,7 +194,7 @@ class RepoGroup {
 	/**
 	 * Interface for FileRepo::checkRedirect()
 	 */
-	function checkRedirect( $title ) {
+	function checkRedirect( Title $title ) {
 		if ( !$this->reposInitialised ) {
 			$this->initialiseRepos();
 		}
@@ -284,6 +285,8 @@ class RepoGroup {
 	/**
 	 * Get the local repository, i.e. the one corresponding to the local image
 	 * table. Files are typically uploaded to the local repository.
+	 *
+	 * @return LocalRepo
 	 */
 	function getLocalRepo() {
 		return $this->getRepo( 'local' );
@@ -370,12 +373,27 @@ class RepoGroup {
 	/**
 	 * Limit cache memory
 	 */
-	function trimCache() {
+	protected function trimCache() {
 		while ( count( $this->cache ) >= self::MAX_CACHE_SIZE ) {
 			reset( $this->cache );
 			$key = key( $this->cache );
 			wfDebug( __METHOD__.": evicting $key\n" );
 			unset( $this->cache[$key] );
+		}
+	}
+
+	/**
+	 * Clear RepoGroup process cache used for finding a file
+	 * @param $title Title|null Title of the file or null to clear all files
+	 */
+	public function clearCache( Title $title = null ) {
+		if ( $title == null ) {
+			$this->cache = array();
+		} else {
+			$dbKey = $title->getDBkey();
+			if ( isset( $this->cache[$dbKey] ) ) {
+				unset( $this->cache[$dbKey] );
+			}
 		}
 	}
 }

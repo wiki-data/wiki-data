@@ -24,11 +24,6 @@
  * @file
  */
 
-if ( !defined( 'MEDIAWIKI' ) ) {
-	// Eclipse helper - will be ignored in production
-	require_once( 'ApiQueryBase.php' );
-}
-
 /**
  * @ingroup API
  */
@@ -126,6 +121,7 @@ class ApiQueryExtLinksUsage extends ApiQueryGeneratorBase {
 					ApiQueryBase::addTitleInfo( $vals, $title );
 				}
 				if ( $fld_url ) {
+					// We *could* run this through wfExpandUrl() but I think it's better to output the link verbatim, even if it's protocol-relative --Roan
 					$vals['url'] = $row->el_to;
 				}
 				$fit = $result->addValue( array( 'query', $this->getModuleName() ), null, $vals );
@@ -183,7 +179,7 @@ class ApiQueryExtLinksUsage extends ApiQueryGeneratorBase {
 		foreach ( $wgUrlProtocols as $p ) {
 			$protocols[] = substr( $p, 0, strpos( $p, ':' ) );
 		}
-	    return $protocols;
+		return $protocols;
 	}
 
 	public static function getProtocolPrefix( $protocol ) {
@@ -244,13 +240,17 @@ class ApiQueryExtLinksUsage extends ApiQueryGeneratorBase {
 		) );
 	}
 
-	protected function getExamples() {
+	public function getExamples() {
 		return array(
 			'api.php?action=query&list=exturlusage&euquery=www.mediawiki.org'
 		);
 	}
 
+	public function getHelpUrls() {
+		return 'http://www.mediawiki.org/wiki/API:Exturlusage';
+	}
+
 	public function getVersion() {
-		return __CLASS__ . ': $Id: ApiQueryExtLinksUsage.php 84736 2011-03-25 10:37:56Z reedy $';
+		return __CLASS__ . ': $Id: ApiQueryExtLinksUsage.php 103273 2011-11-16 00:17:26Z johnduhart $';
 	}
 }

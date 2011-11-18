@@ -3,7 +3,7 @@
 -- Unique indexes need to be handled with INSERT SELECT since just running
 -- the CREATE INDEX statement will fail if there are duplicate values.
 --
--- Ignore duplicates, several tables will have them (e.g. bug 16966) but in 
+-- Ignore duplicates, several tables will have them (e.g. bug 16966) but in
 -- most cases it's harmless to discard them.
 
 --------------------------------------------------------------------------------
@@ -218,7 +218,7 @@ CREATE TABLE /*_*/math_tmp (
   math_outputhash varbinary(16) NOT NULL,
   math_html_conservativeness tinyint NOT NULL,
   math_html text,
-  math_mathml text  
+  math_mathml text
 );
 
 CREATE UNIQUE INDEX /*i*/math_inputhash ON /*_*/math_tmp (math_inputhash);

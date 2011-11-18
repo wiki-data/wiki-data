@@ -24,11 +24,6 @@
  * @file
  */
 
-if ( !defined( 'MEDIAWIKI' ) ) {
-	// Eclipse helper - will be ignored in production
-	require_once( "ApiBase.php" );
-}
-
 /**
 * API module that facilitates the blocking of users. Requires API write mode
 * to be enabled.
@@ -48,30 +43,30 @@ class ApiBlock extends ApiBase {
 	 * of success. If it fails, the result will specify the nature of the error.
 	 */
 	public function execute() {
-		global $wgUser;
+		$user = $this->getUser();
 		$params = $this->extractRequestParams();
 
 		if ( $params['gettoken'] ) {
-			$res['blocktoken'] = $wgUser->editToken( '', $this->getMain()->getRequest() );
+			$res['blocktoken'] = $user->getEditToken( '', $this->getMain()->getRequest() );
 			$this->getResult()->addValue( null, $this->getModuleName(), $res );
 			return;
 		}
 
-		if ( !$wgUser->isAllowed( 'block' ) ) {
-			$this->dieUsageMsg( array( 'cantblock' ) );
+		if ( !$user->isAllowed( 'block' ) ) {
+			$this->dieUsageMsg( 'cantblock' );
 		}
 		# bug 15810: blocked admins should have limited access here
-		if ( $wgUser->isBlocked() ) {
-			$status = SpecialBlock::checkUnblockSelf( $params['user'] );
+		if ( $user->isBlocked() ) {
+			$status = SpecialBlock::checkUnblockSelf( $params['user'], $user );
 			if ( $status !== true ) {
 				$this->dieUsageMsg( array( $status ) );
 			}
 		}
-		if ( $params['hidename'] && !$wgUser->isAllowed( 'hideuser' ) ) {
-			$this->dieUsageMsg( array( 'canthide' ) );
+		if ( $params['hidename'] && !$user->isAllowed( 'hideuser' ) ) {
+			$this->dieUsageMsg( 'canthide' );
 		}
-		if ( $params['noemail'] && !SpecialBlock::canBlockEmail( $wgUser ) ) {
-			$this->dieUsageMsg( array( 'cantblock-email' ) );
+		if ( $params['noemail'] && !SpecialBlock::canBlockEmail( $user ) ) {
+			$this->dieUsageMsg( 'cantblock-email' );
 		}
 
 		$data = array(
@@ -87,13 +82,13 @@ class ApiBlock extends ApiBase {
 			'AutoBlock' => $params['autoblock'],
 			'DisableEmail' => $params['noemail'],
 			'HideUser' => $params['hidename'],
-			'DisableUTEdit' => $params['allowusertalk'],
+			'DisableUTEdit' => !$params['allowusertalk'],
 			'AlreadyBlocked' => $params['reblock'],
 			'Watch' => $params['watchuser'],
 			'Confirm' => true,
 		);
 
-		$retval = SpecialBlock::processForm( $data );
+		$retval = SpecialBlock::processForm( $data, $this->getContext() );
 		if ( $retval !== true ) {
 			// We don't care about multiple errors, just report one of them
 			$this->dieUsageMsg( $retval );
@@ -208,14 +203,18 @@ class ApiBlock extends ApiBase {
 		return '';
 	}
 
-	protected function getExamples() {
+	public function getExamples() {
 		return array(
 			'api.php?action=block&user=123.5.5.12&expiry=3%20days&reason=First%20strike',
 			'api.php?action=block&user=Vandal&expiry=never&reason=Vandalism&nocreate=&autoblock=&noemail='
 		);
 	}
 
+	public function getHelpUrls() {
+		return 'http://www.mediawiki.org/wiki/API:Block';
+	}
+
 	public function getVersion() {
-		return __CLASS__ . ': $Id: ApiBlock.php 85618 2011-04-07 14:54:38Z pcopp $';
+		return __CLASS__ . ': $Id: ApiBlock.php 103273 2011-11-16 00:17:26Z johnduhart $';
 	}
 }

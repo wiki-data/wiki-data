@@ -21,13 +21,13 @@
  */
 
 /**
- * Update for the 'page_counter' field, when $wgDisableCounters is true.
+ * Update for the 'page_counter' field, when $wgDisableCounters is false.
  *
  * Depending on $wgHitcounterUpdateFreq, this will directly increment the
  * 'page_counter' field or use the 'hitcounter' table and then collect the data
  * from that table to update the 'page_counter' field in a batch operation.
  */
-class ViewCountUpdate {
+class ViewCountUpdate implements DeferrableUpdate {
 	protected $id;
 
 	/**

@@ -28,6 +28,10 @@ require_once( dirname( __FILE__ ) . '/Maintenance.php' );
 
 class RebuildTextIndex extends Maintenance {
 	const RTI_CHUNK_SIZE = 500;
+
+	/**
+	 * @var DatabaseBase
+	 */
 	private $db;
 
 	public function __construct() {
@@ -108,7 +112,7 @@ class RebuildTextIndex extends Maintenance {
 	 */
 	private function dropMysqlTextIndex() {
 		$searchindex = $this->db->tableName( 'searchindex' );
-		if ( $this->db->indexExists( 'searchindex', 'si_title' ) ) {
+		if ( $this->db->indexExists( 'searchindex', 'si_title', __METHOD__ ) ) {
 			$this->output( "Dropping index...\n" );
 			$sql = "ALTER TABLE $searchindex DROP INDEX si_title, DROP INDEX si_text";
 			$this->db->query( $sql, __METHOD__ );

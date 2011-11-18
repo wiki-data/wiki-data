@@ -31,18 +31,16 @@ class SpecialCategories extends SpecialPage {
 	}
 
 	function execute( $par ) {
-		global $wgOut, $wgRequest;
-
 		$this->setHeaders();
 		$this->outputHeader();
-		$wgOut->allowClickjacking();
+		$this->getOutput()->allowClickjacking();
 
-		$from = $wgRequest->getText( 'from', $par );
+		$from = $this->getRequest()->getText( 'from', $par );
 
-		$cap = new CategoryPager( $from );
+		$cap = new CategoryPager( $this->getContext(), $from );
 		$cap->doQuery();
 
-		$wgOut->addHTML(
+		$this->getOutput()->addHTML(
 			Html::openElement( 'div', array( 'class' => 'mw-spcontent' ) ) .
 			wfMsgExt( 'categoriespagetext', array( 'parse' ), $cap->getNumRows() ) .
 			$cap->getStartForm( $from ) .
@@ -61,8 +59,8 @@ class SpecialCategories extends SpecialPage {
  * @ingroup SpecialPage Pager
  */
 class CategoryPager extends AlphabeticPager {
-	function __construct( $from ) {
-		parent::__construct();
+	function __construct( IContextSource $context, $from ) {
+		parent::__construct( $context );
 		$from = str_replace( ' ', '_', $from );
 		if( $from !== '' ) {
 			$from = Title::capitalize( $from, NS_CATEGORY );
@@ -114,21 +112,20 @@ class CategoryPager extends AlphabeticPager {
 	}
 
 	function formatRow($result) {
-		global $wgLang;
 		$title = Title::makeTitle( NS_CATEGORY, $result->cat_title );
-		$titleText = $this->getSkin()->link( $title, htmlspecialchars( $title->getText() ) );
+		$titleText = Linker::link( $title, htmlspecialchars( $title->getText() ) );
+		$lang = $this->getLang();
 		$count = wfMsgExt( 'nmembers', array( 'parsemag', 'escape' ),
-				$wgLang->formatNum( $result->cat_pages ) );
-		return Xml::tags('li', null, "$titleText ($count)" ) . "\n";
+				$lang->formatNum( $result->cat_pages ) );
+		return Xml::tags('li', null, $lang->specialList( $titleText, $count ) ) . "\n";
 	}
 
 	public function getStartForm( $from ) {
 		global $wgScript;
-		$t = SpecialPage::getTitleFor( 'Categories' );
 
 		return
 			Xml::tags( 'form', array( 'method' => 'get', 'action' => $wgScript ),
-				Html::hidden( 'title', $t->getPrefixedText() ) .
+				Html::hidden( 'title', $this->getTitle()->getPrefixedText() ) .
 				Xml::fieldset( wfMsg( 'categories' ),
 					Xml::inputLabel( wfMsg( 'categoriesfrom' ),
 						'from', 'from', 20, $from ) .

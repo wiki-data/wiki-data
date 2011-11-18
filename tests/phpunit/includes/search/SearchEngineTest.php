@@ -1,38 +1,43 @@
 <?php
 
-require_once dirname(dirname(dirname(__FILE__))). '/bootstrap.php';
-
 /**
  * This class is not directly tested. Instead it is extended by SearchDbTest.
  * @group Search
- * @group Stub
- * @group Destructive
+ * @group Database
  */
 class SearchEngineTest extends MediaWikiTestCase {
-	var $db, $search, $pageList;
+	protected $search, $pageList;
 
-	/*
+	function tearDown() {
+		unset( $this->search );
+	}
+
+	/**
 	 * Checks for database type & version.
 	 * Will skip current test if DB does not support search.
 	 */
 	function setUp() {
+		parent::setUp();
 		// Search tests require MySQL or SQLite with FTS
 		# Get database type and version
-		$dbType    = $this->db->getType();
+		$dbType = $this->db->getType();
 		$dbSupported =
 			($dbType === 'mysql')
-			|| (   $dbType === 'sqlite' && $this->db->getFulltextSearchModule() == 'FTS3' );
+			|| ( $dbType === 'sqlite' && $this->db->getFulltextSearchModule() == 'FTS3' );
 
 		if( !$dbSupported ) {
 			$this->markTestSkipped( "MySQL or SQLite with FTS3 only" );
 		}
+
+		$searchType = $this->db->getSearchEngine();
+		$this->search = new $searchType( $this->db );
 	}
 
 	function pageExists( $title ) {
 		return false;
 	}
 
-	function insertSearchData() {
+	function addDBData() {
 		if ( $this->pageExists( 'Not_Main_Page' ) ) {
 			return;
 		}
@@ -55,21 +60,14 @@ class SearchEngineTest extends MediaWikiTestCase {
 		$this->insertPage( 'DomainName',	'example.com', 0 );
 	}
 
-	function removeSearchData() {
-		return;
-		/*while ( count( $this->pageList ) ) {
-			list( $title, $id ) = array_pop( $this->pageList );
-			$article = new Article( $title, $id );
-			$article->doDeleteArticle( "Search Test" );
-		}*/
-	}
-
 	function fetchIds( $results ) {
 		$this->assertTrue( is_object( $results ) );
 
 		$matches = array();
-		while ( $row = $results->next() ) {
+		$row = $results->next();
+		while ( $row ) {
 			$matches[] = $row->getTitle()->getPrefixedText();
+			$row = $results->next();
 		}
 		$results->free();
 		# Search is not guaranteed to return results in a certain order;
@@ -79,77 +77,48 @@ class SearchEngineTest extends MediaWikiTestCase {
 		return $matches;
 	}
 
-	// Modified version of WikiRevision::importOldRevision()
+	/**
+	 * Insert a new page
+	 *
+	 * @param $pageName String: page name
+	 * @param $text String: page's content
+	 * @param $n Integer: unused
+	 */
 	function insertPage( $pageName, $text, $ns ) {
-			$dbw = $this->db;
-			$title = Title::newFromText( $pageName );
+		$title = Title::newFromText( $pageName );
 
-			$userId = 0;
-			$userText = 'WikiSysop';
-			$comment = 'Search Test';
+		$user = User::newFromName( 'WikiSysop' );
+		$comment = 'Search Test';
 
-			// avoid memory leak...?
-			$linkCache = LinkCache::singleton();
-			$linkCache->clear();
+		// avoid memory leak...?
+		$linkCache = LinkCache::singleton();
+		$linkCache->clear();
 
-			$article = new Article( $title );
-			$pageId = $article->getId();
-			$created = false;
-			if ( $pageId == 0 ) {
-				# must create the page...
-				$pageId = $article->insertOn( $dbw );
-				$created = true;
-			}
+		$article = new Article( $title );
+		$article->doEdit( $text, $comment, 0, false, $user );
 
-			# FIXME: Use original rev_id optionally (better for backups)
-			# Insert the row
-			$revision = new Revision( array(
-							'page'       => $pageId,
-							'text'       => $text,
-							'comment'    => $comment,
-							'user'       => $userId,
-							'user_text'  => $userText,
-							'timestamp'  => 0,
-							'minor_edit' => false,
-			) );
-			$revId = $revision->insertOn( $dbw );
-			$changed = $article->updateIfNewerOn( $dbw, $revision );
+		$this->pageList[] = array( $title, $article->getId() );
 
-			$GLOBALS['wgTitle'] = $title;
-			if ( $created ) {
-				Article::onArticleCreate( $title );
-				$article->createUpdates( $revision );
-			} elseif ( $changed ) {
-				Article::onArticleEdit( $title );
-				$article->editUpdates(
-					$text, $comment, false, 0, $revId );
-			}
-
-			$su = new SearchUpdate( $article->getId(), $pageName, $text );
-			$su->doUpdate();
-
-			$this->pageList[] = array( $title, $article->getId() );
-
-			return true;
-		}
+		return true;
+	}
 
 	function testFullWidth() {
-			$this->assertEquals(
-				array( 'FullOneUp', 'FullTwoLow', 'HalfOneUp', 'HalfTwoLow' ),
-				$this->fetchIds( $this->search->searchText( 'AZ' ) ),
-				"Search for normalized from Half-width Upper" );
-			$this->assertEquals(
-				array( 'FullOneUp', 'FullTwoLow', 'HalfOneUp', 'HalfTwoLow' ),
-				$this->fetchIds( $this->search->searchText( 'az' ) ),
-				"Search for normalized from Half-width Lower" );
-			$this->assertEquals(
-				array( 'FullOneUp', 'FullTwoLow', 'HalfOneUp', 'HalfTwoLow' ),
-				$this->fetchIds( $this->search->searchText( 'ＡＺ' ) ),
-				"Search for normalized from Full-width Upper" );
-			$this->assertEquals(
-				array( 'FullOneUp', 'FullTwoLow', 'HalfOneUp', 'HalfTwoLow' ),
-				$this->fetchIds( $this->search->searchText( 'ａｚ' ) ),
-				"Search for normalized from Full-width Lower" );
+		$this->assertEquals(
+			array( 'FullOneUp', 'FullTwoLow', 'HalfOneUp', 'HalfTwoLow' ),
+			$this->fetchIds( $this->search->searchText( 'AZ' ) ),
+			"Search for normalized from Half-width Upper" );
+		$this->assertEquals(
+			array( 'FullOneUp', 'FullTwoLow', 'HalfOneUp', 'HalfTwoLow' ),
+			$this->fetchIds( $this->search->searchText( 'az' ) ),
+			"Search for normalized from Half-width Lower" );
+		$this->assertEquals(
+			array( 'FullOneUp', 'FullTwoLow', 'HalfOneUp', 'HalfTwoLow' ),
+			$this->fetchIds( $this->search->searchText( 'ＡＺ' ) ),
+			"Search for normalized from Full-width Upper" );
+		$this->assertEquals(
+			array( 'FullOneUp', 'FullTwoLow', 'HalfOneUp', 'HalfTwoLow' ),
+			$this->fetchIds( $this->search->searchText( 'ａｚ' ) ),
+			"Search for normalized from Full-width Lower" );
 	}
 
 	function testTextSearch() {

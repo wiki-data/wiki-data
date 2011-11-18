@@ -38,7 +38,18 @@ class LogPage {
 	const SUPPRESSED_USER = 12;
 	const SUPPRESSED_ACTION = 9;
 	/* @access private */
-	var $type, $action, $comment, $params, $target, $doer;
+	var $type, $action, $comment, $params;
+
+	/**
+	 * @var User
+	 */
+	var $doer;
+
+	/**
+	 * @var Title
+	 */
+	var $target;
+
 	/* @acess public */
 	var $updateRecentChanges, $sendToUDP;
 
@@ -56,6 +67,9 @@ class LogPage {
 		$this->sendToUDP = ( $udp == 'UDP' );
 	}
 
+	/**
+	 * @return bool|int|null
+	 */
 	protected function saveContent() {
 		global $wgLogRestrictions;
 
@@ -82,6 +96,7 @@ class LogPage {
 		# And update recentchanges
 		if( $this->updateRecentChanges ) {
 			$titleObj = SpecialPage::getTitleFor( 'Log', $this->type );
+
 			RecentChange::notifyLog(
 				$now, $titleObj, $this->doer, $this->getRcComment(), '',
 				$this->type, $this->action, $this->target, $this->comment,
@@ -92,6 +107,7 @@ class LogPage {
 			if( isset( $wgLogRestrictions[$this->type] ) && $wgLogRestrictions[$this->type] != '*' ) {
 				return true;
 			}
+
 			# Notify external application via UDP.
 			# We send this to IRC but do not want to add it the RC table.
 			$titleObj = SpecialPage::getTitleFor( 'Log', $this->type );
@@ -107,9 +123,12 @@ class LogPage {
 
 	/**
 	 * Get the RC comment from the last addEntry() call
+	 *
+	 * @return string
 	 */
 	public function getRcComment() {
 		$rcComment = $this->actionText;
+
 		if( $this->comment != '' ) {
 			if ( $rcComment == '' ) {
 				$rcComment = $this->comment;
@@ -117,6 +136,7 @@ class LogPage {
 				$rcComment .= wfMsgForContent( 'colon-separator' ) . $this->comment;
 			}
 		}
+
 		return $rcComment;
 	}
 
@@ -152,6 +172,7 @@ class LogPage {
 	 *
 	 * @param $type String: logtype
 	 * @return String: log name
+	 * @deprecated in 1.19, warnings in 1.21. Use getName()
 	 */
 	public static function logName( $type ) {
 		global $wgLogNames;
@@ -170,6 +191,7 @@ class LogPage {
 	 * @todo handle missing log types
 	 * @param $type String: logtype
 	 * @return String: headertext of this logtype
+	 * @deprecated in 1.19, warnings in 1.21. Use getDescription()
 	 */
 	public static function logHeader( $type ) {
 		global $wgLogHeaders;
@@ -193,43 +215,48 @@ class LogPage {
 	{
 		global $wgLang, $wgContLang, $wgLogActions;
 
-		$key = "$type/$action";
-		# Defer patrol log to PatrolLog class
-		if( $key == 'patrol/patrol' ) {
-			return PatrolLog::makeActionText( $title, $params, $skin );
+		if ( is_null( $skin ) ) {
+			$langObj = $wgContLang;
+			$langObjOrNull = null;
+		} else {
+			$langObj = $wgLang;
+			$langObjOrNull = $wgLang;
 		}
+
+		$key = "$type/$action";
+
 		if( isset( $wgLogActions[$key] ) ) {
 			if( is_null( $title ) ) {
-				$rv = wfMsgHtml( $wgLogActions[$key] );
+				$rv = wfMsgExt( $wgLogActions[$key], array( 'parsemag', 'escape', 'language' => $langObj ) );
 			} else {
-				$titleLink = self::getTitleLink( $type, $skin, $title, $params );
-				if( $key == 'rights/rights' ) {
+				$titleLink = self::getTitleLink( $type, $langObjOrNull, $title, $params );
+
+				if( preg_match( '/^rights\/(rights|autopromote)/', $key ) ) {
+					$rightsnone = wfMsgExt( 'rightsnone', array( 'parsemag', 'language' => $langObj ) );
+
 					if( $skin ) {
-						$rightsnone = wfMsg( 'rightsnone' );
 						foreach ( $params as &$param ) {
 							$groupArray = array_map( 'trim', explode( ',', $param ) );
 							$groupArray = array_map( array( 'User', 'getGroupMember' ), $groupArray );
 							$param = $wgLang->listToText( $groupArray );
 						}
-					} else {
-						$rightsnone = wfMsgForContent( 'rightsnone' );
 					}
+
 					if( !isset( $params[0] ) || trim( $params[0] ) == '' ) {
 						$params[0] = $rightsnone;
 					}
+
 					if( !isset( $params[1] ) || trim( $params[1] ) == '' ) {
 						$params[1] = $rightsnone;
 					}
 				}
+
 				if( count( $params ) == 0 ) {
-					if ( $skin ) {
-						$rv = wfMsgHtml( $wgLogActions[$key], $titleLink );
-					} else {
-						$rv = wfMsgExt( $wgLogActions[$key], array( 'parsemag', 'escape', 'replaceafter', 'content' ), $titleLink );
-					}
+					$rv = wfMsgExt( $wgLogActions[$key], array( 'parsemag', 'escape', 'replaceafter', 'language' => $langObj ), $titleLink );
 				} else {
 					$details = '';
 					array_unshift( $params, $titleLink );
+
 					// User suppression
 					if ( preg_match( '/^(block|suppress)\/(block|reblock)$/', $key ) ) {
 						if ( $skin ) {
@@ -238,60 +265,30 @@ class LogPage {
 						} else {
 							$params[1] = $wgContLang->translateBlockExpiry( $params[1] );
 						}
-						$params[2] = isset( $params[2] ) ?
-							self::formatBlockFlags( $params[2], is_null( $skin ) ) : '';
 
+						$params[2] = isset( $params[2] ) ?
+							self::formatBlockFlags( $params[2], $langObj ) : '';
 					// Page protections
 					} elseif ( $type == 'protect' && count($params) == 3 ) {
 						// Restrictions and expiries
 						if( $skin ) {
-							$details .= htmlspecialchars( " {$params[1]}" );
+							$details .= $wgLang->getDirMark() . htmlspecialchars( " {$params[1]}" );
 						} else {
 							$details .= " {$params[1]}";
 						}
+
 						// Cascading flag...
 						if( $params[2] ) {
-							if ( $skin ) {
-								$details .= ' [' . wfMsg( 'protect-summary-cascade' ) . ']';
-							} else {
-								$details .= ' [' . wfMsgForContent( 'protect-summary-cascade' ) . ']';
-							}
+							$details .= ' [' . wfMsgExt( 'protect-summary-cascade', array( 'parsemag', 'language' => $langObj ) ) . ']';
 						}
-
-					// Page moves
-					} elseif ( $type == 'move' && count( $params ) == 3 && $action != 'move_rev' ) {
-						if( $params[2] ) {
-							if ( $skin ) {
-								$details .= ' [' . wfMsg( 'move-redirect-suppressed' ) . ']';
-							} else {
-								$details .= ' [' . wfMsgForContent( 'move-redirect-suppressed' ) . ']';
-							}
-						}
-
-					// Revision deletion
-					} elseif ( preg_match( '/^(delete|suppress)\/revision$/', $key ) && count( $params ) == 5 ) {
-						$count = substr_count( $params[2], ',' ) + 1; // revisions
-						$ofield = intval( substr( $params[3], 7 ) ); // <ofield=x>
-						$nfield = intval( substr( $params[4], 7 ) ); // <nfield=x>
-						$details .= ': ' . RevisionDeleter::getLogMessage( $count, $nfield, $ofield, false, is_null( $skin ) );
-
-					// Log deletion
-					} elseif ( preg_match( '/^(delete|suppress)\/event$/', $key ) && count( $params ) == 4 ) {
-						$count = substr_count( $params[1], ',' ) + 1; // log items
-						$ofield = intval( substr( $params[2], 7 ) ); // <ofield=x>
-						$nfield = intval( substr( $params[3], 7 ) ); // <nfield=x>
-						$details .= ': ' . RevisionDeleter::getLogMessage( $count, $nfield, $ofield, true, is_null( $skin ) );
 					}
 
-					if ( $skin ) {
-						$rv = wfMsgHtml( $wgLogActions[$key], $params ) . $details;
-					} else {
-						$rv = wfMsgExt( $wgLogActions[$key], array( 'parsemag', 'escape', 'replaceafter', 'content' ), $params ) . $details;
-					}
+					$rv = wfMsgExt( $wgLogActions[$key], array( 'parsemag', 'escape', 'replaceafter', 'language' => $langObj ), $params ) . $details;
 				}
 			}
 		} else {
 			global $wgLogActionsHandlers;
+
 			if( isset( $wgLogActionsHandlers[$key] ) ) {
 				$args = func_get_args();
 				$rv = call_user_func_array( $wgLogActionsHandlers[$key], $args );
@@ -315,28 +312,41 @@ class LogPage {
 			$rv = str_replace( '[[', '', $rv );
 			$rv = str_replace( ']]', '', $rv );
 		}
+
 		return $rv;
 	}
 
-	protected static function getTitleLink( $type, $skin, $title, &$params ) {
-		global $wgLang, $wgContLang, $wgUserrightsInterwikiDelimiter;
-		if( !$skin ) {
+	/**
+	 * TODO document
+	 * @param  $type String
+	 * @param  $lang Language or null
+	 * @param  $title Title
+	 * @param  $params Array
+	 * @return String
+	 */
+	protected static function getTitleLink( $type, $lang, $title, &$params ) {
+		global $wgContLang, $wgUserrightsInterwikiDelimiter;
+
+		if( !$lang ) {
 			return $title->getPrefixedText();
 		}
+
 		switch( $type ) {
 			case 'move':
-				$titleLink = $skin->link(
+				$titleLink = Linker::link(
 					$title,
 					htmlspecialchars( $title->getPrefixedText() ),
 					array(),
 					array( 'redirect' => 'no' )
 				);
+
 				$targetTitle = Title::newFromText( $params[0] );
+
 				if ( !$targetTitle ) {
 					# Workaround for broken database
 					$params[0] = htmlspecialchars( $params[0] );
 				} else {
-					$params[0] = $skin->link(
+					$params[0] = Linker::link(
 						$targetTitle,
 						htmlspecialchars( $params[0] )
 					);
@@ -346,51 +356,55 @@ class LogPage {
 				if( substr( $title->getText(), 0, 1 ) == '#' ) {
 					$titleLink = $title->getText();
 				} else {
-					// TODO: Store the user identifier in the parameters
+					// @todo Store the user identifier in the parameters
 					// to make this faster for future log entries
 					$id = User::idFromName( $title->getText() );
-					$titleLink = $skin->userLink( $id, $title->getText() )
-						. $skin->userToolLinks( $id, $title->getText(), false, Linker::TOOL_LINKS_NOBLOCK );
+					$titleLink = Linker::userLink( $id, $title->getText() )
+						. Linker::userToolLinks( $id, $title->getText(), false, Linker::TOOL_LINKS_NOBLOCK );
 				}
 				break;
 			case 'rights':
 				$text = $wgContLang->ucfirst( $title->getText() );
 				$parts = explode( $wgUserrightsInterwikiDelimiter, $text, 2 );
+
 				if ( count( $parts ) == 2 ) {
 					$titleLink = WikiMap::foreignUserLink( $parts[1], $parts[0],
 						htmlspecialchars( $title->getPrefixedText() ) );
+
 					if ( $titleLink !== false ) {
 						break;
 					}
 				}
-				$titleLink = $skin->link( Title::makeTitle( NS_USER, $text ) );
+				$titleLink = Linker::link( Title::makeTitle( NS_USER, $text ) );
 				break;
 			case 'merge':
-				$titleLink = $skin->link(
+				$titleLink = Linker::link(
 					$title,
 					$title->getPrefixedText(),
 					array(),
 					array( 'redirect' => 'no' )
 				);
-				$params[0] = $skin->link(
+				$params[0] = Linker::link(
 					Title::newFromText( $params[0] ),
 					htmlspecialchars( $params[0] )
 				);
-				$params[1] = $wgLang->timeanddate( $params[1] );
+				$params[1] = $lang->timeanddate( $params[1] );
 				break;
 			default:
-				if( $title->getNamespace() == NS_SPECIAL ) {
-					list( $name, $par ) = SpecialPage::resolveAliasWithSubpage( $title->getDBkey() );
+				if( $title->isSpecialPage() ) {
+					list( $name, $par ) = SpecialPageFactory::resolveAlias( $title->getDBkey() );
+
 					# Use the language name for log titles, rather than Log/X
 					if( $name == 'Log' ) {
-						$titleLink = '(' . $skin->link( $title, LogPage::logName( $par ) ) . ')';
+						$titleLink = '(' . Linker::link( $title, LogPage::logName( $par ) ) . ')';
 					} else {
-						$titleLink = $skin->link( $title );
+						$titleLink = Linker::link( $title );
 					}
 				} else {
-					$titleLink = $skin->link( $title );
+					$titleLink = Linker::link( $title );
 				}
 		}
+
 		return $titleLink;
 	}
 
@@ -402,8 +416,12 @@ class LogPage {
 	 * @param $comment String: description associated
 	 * @param $params Array: parameters passed later to wfMsg.* functions
 	 * @param $doer User object: the user doing the action
+	 *
+	 * @return bool|int|null
 	 */
 	public function addEntry( $action, $target, $comment, $params = array(), $doer = null ) {
+		global $wgContLang;
+
 		if ( !is_array( $params ) ) {
 			$params = array( $params );
 		}
@@ -411,6 +429,9 @@ class LogPage {
 		if ( $comment === null ) {
 			$comment = '';
 		}
+
+		# Truncate for whole multibyte characters.
+		$comment = $wgContLang->truncate( $comment, 255 );
 
 		$this->action = $action;
 		$this->target = $target;
@@ -443,7 +464,9 @@ class LogPage {
 		if( !strlen( $field ) || empty( $values ) ) {
 			return false; // nothing
 		}
+
 		$data = array();
+
 		foreach( $values as $value ) {
 			$data[] = array(
 				'ls_field' => $field,
@@ -451,8 +474,10 @@ class LogPage {
 				'ls_log_id' => $logid
 			);
 		}
+
 		$dbw = wfGetDB( DB_MASTER );
 		$dbw->insert( 'log_search', $data, __METHOD__, 'IGNORE' );
+
 		return true;
 	}
 
@@ -485,19 +510,17 @@ class LogPage {
 	 * into a more readable (and translated) form
 	 *
 	 * @param $flags Flags to format
-	 * @param $forContent Whether to localize the message depending of the user
-	 *                    language
+	 * @param $lang Language object to use
 	 * @return String
 	 */
-	public static function formatBlockFlags( $flags, $forContent = false ) {
-		global $wgLang;
-
+	public static function formatBlockFlags( $flags, $lang ) {
 		$flags = explode( ',', trim( $flags ) );
+
 		if( count( $flags ) > 0 ) {
 			for( $i = 0; $i < count( $flags ); $i++ ) {
-				$flags[$i] = self::formatBlockFlag( $flags[$i], $forContent );
+				$flags[$i] = self::formatBlockFlag( $flags[$i], $lang );
 			}
-			return '(' . $wgLang->commaList( $flags ) . ')';
+			return '(' . $lang->commaList( $flags ) . ')';
 		} else {
 			return '';
 		}
@@ -506,32 +529,93 @@ class LogPage {
 	/**
 	 * Translate a block log flag if possible
 	 *
-	 * @param $flag Flag to translate
-	 * @param $forContent Whether to localize the message depending of the user
-	 *                    language
+	 * @param $flag int Flag to translate
+	 * @param $lang Language object to use
 	 * @return String
 	 */
-	public static function formatBlockFlag( $flag, $forContent = false ) {
+	public static function formatBlockFlag( $flag, $lang ) {
 		static $messages = array();
+
 		if( !isset( $messages[$flag] ) ) {
 			$messages[$flag] = htmlspecialchars( $flag ); // Fallback
 
-			$msg = wfMessage( 'block-log-flags-' . $flag );
-			if ( $forContent ) {
-				$msg->inContentLanguage();
-			}
+			// For grepping. The following core messages can be used here:
+			// * block-log-flags-angry-autoblock
+			// * block-log-flags-anononly
+			// * block-log-flags-hiddenname
+			// * block-log-flags-noautoblock
+			// * block-log-flags-nocreate
+			// * block-log-flags-noemail
+			// * block-log-flags-nousertalk
+			$msg = wfMessage( 'block-log-flags-' . $flag )->inLanguage( $lang );
+
 			if ( $msg->exists() ) {
 				$messages[$flag] = $msg->escaped();
 			}
 		}
+
 		return $messages[$flag];
 	}
-}
 
-/**
- * Aliases for backwards compatibility with 1.6
- */
-define( 'MW_LOG_DELETED_ACTION', LogPage::DELETED_ACTION );
-define( 'MW_LOG_DELETED_USER', LogPage::DELETED_USER );
-define( 'MW_LOG_DELETED_COMMENT', LogPage::DELETED_COMMENT );
-define( 'MW_LOG_DELETED_RESTRICTED', LogPage::DELETED_RESTRICTED );
+
+	/**
+	 * Name of the log.
+	 * @return Message
+	 * @since 1.19
+	 */
+	public function getName() {
+		global $wgLogNames;
+
+		// BC
+		if ( isset( $wgLogNames[$this->type] ) ) {
+			$key = $wgLogNames[$this->type];
+		} else {
+			$key = 'log-name-' . $this->type;
+		}
+
+		return wfMessage( $key );
+	}
+
+	/**
+	 * Description of this log type.
+	 * @return Message
+	 * @since 1.19
+	 */
+	public function getDescription() {
+		global $wgLogHeaders;
+		// BC
+		if ( isset( $wgLogHeaders[$this->type] ) ) {
+			$key = $wgLogHeaders[$this->type];
+		} else {
+			$key = 'log-description-' . $this->type;
+		}
+		return wfMessage( $key );
+	}
+
+	/**
+	 * Returns the right needed to read this log type.
+	 * @return string
+	 * @since 1.19
+	 */
+	public function getRestriction() {
+		global $wgLogRestrictions;
+		if ( isset( $wgLogRestrictions[$this->type] ) ) {
+			$restriction = $wgLogRestrictions[$this->type];
+		} else {
+			// '' always returns true with $user->isAllowed()
+			$restriction = '';
+		}
+		return $restriction;
+	}
+
+	/**
+	 * Tells if this log is not viewable by all.
+	 * @return bool
+	 * @since 1.19
+	 */
+	public function isRestricted() {
+		$restriction = $this->getRestriction();
+		return $restriction !== '' && $restriction !== '*';
+	}
+
+}

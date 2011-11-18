@@ -22,7 +22,7 @@
  * @author Tim Starling
  * @copyright © 2009, Tim Starling, Domas Mituzas
  * @copyright © 2010, Max Sem
- * @copyright © 2011, Ashar Voultoiz
+ * @copyright © 2011, Antoine Musso
  */
 class BacklinkCache {
 
@@ -75,6 +75,8 @@ class BacklinkCache {
 	 * Serialization handler, diasallows to serialize the database to prevent
 	 * failures after this class is deserialized from cache with dead DB
 	 * connection.
+	 *
+	 * @return array
 	 */
 	function __sleep() {
 		return array( 'partitionCache', 'fullResultCache', 'title' );
@@ -91,6 +93,8 @@ class BacklinkCache {
 
 	/**
 	 * Set the Database object to use
+	 *
+	 * @param $db DatabaseBase
 	 */
 	public function setDB( $db ) {
 		$this->db = $db;
@@ -114,7 +118,7 @@ class BacklinkCache {
 	 * @param $table String
 	 * @param $startId Integer or false
 	 * @param $endId Integer or false
-	 * @return TitleArray
+	 * @return TitleArrayFromResult
 	 */
 	public function getLinks( $table, $startId = false, $endId = false ) {
 		wfProfileIn( __METHOD__ );
@@ -151,7 +155,7 @@ class BacklinkCache {
 			return $ta;
 		}
 
-		// FIXME : make this a function?
+		// @todo FIXME: Make this a function?
 		if ( !isset( $this->fullResultCache[$table] ) ) {
 			wfDebug( __METHOD__ . ": from DB\n" );
 			$res = $this->getDB()->select(
@@ -188,7 +192,13 @@ class BacklinkCache {
 		if ( isset( $prefixes[$table] ) ) {
 			return $prefixes[$table];
 		} else {
-			throw new MWException( "Invalid table \"$table\" in " . __CLASS__ );
+			$prefix = null;
+			wfRunHooks( 'BacklinkCacheGetPrefix', array( $table, &$prefix ) );
+			if( $prefix ) {
+				return $prefix;
+			} else {
+				throw new MWException( "Invalid table \"$table\" in " . __CLASS__ );
+			}
 		}
 	}
 
@@ -200,15 +210,25 @@ class BacklinkCache {
 	protected function getConditions( $table ) {
 		$prefix = $this->getPrefix( $table );
 
-		// FIXME imagelinks and categorylinks do not rely on getNamespace,
+		// @todo FIXME: imagelinks and categorylinks do not rely on getNamespace,
 		// they could be moved up for nicer case statements
 		switch ( $table ) {
 			case 'pagelinks':
 			case 'templatelinks':
+				$conds = array(
+					"{$prefix}_namespace" => $this->title->getNamespace(),
+					"{$prefix}_title"     => $this->title->getDBkey(),
+					"page_id={$prefix}_from"
+				);
+				break;
 			case 'redirect':
 				$conds = array(
 					"{$prefix}_namespace" => $this->title->getNamespace(),
 					"{$prefix}_title"     => $this->title->getDBkey(),
+					$this->getDb()->makeList( array(
+						"{$prefix}_interwiki = ''",
+						"{$prefix}_interwiki is null",
+					), LIST_OR ),
 					"page_id={$prefix}_from"
 				);
 				break;
@@ -225,7 +245,10 @@ class BacklinkCache {
 				);
 				break;
 			default:
-				throw new MWException( "Invalid table \"$table\" in " . __CLASS__ );
+				$conds = null;
+				wfRunHooks( 'BacklinkCacheGetConditions', array( $table, $this->title, &$conds ) );
+				if( !$conds )
+					throw new MWException( "Invalid table \"$table\" in " . __CLASS__ );
 		}
 
 		return $conds;
@@ -253,7 +276,7 @@ class BacklinkCache {
 
 	/**
 	 * Partition the backlinks into batches.
-	 * Returns an array giving the start and end of each range. The firsti
+	 * Returns an array giving the start and end of each range. The first
 	 * batch has a start of false, and the last batch has an end of false.
 	 *
 	 * @param $table String: the links table name
@@ -262,7 +285,7 @@ class BacklinkCache {
 	 */
 	public function partition( $table, $batchSize ) {
 
-		// 1) try this per process cache first
+		// 1) try partition cache ... 
 
 		if ( isset( $this->partitionCache[$table][$batchSize] ) ) {
 			wfDebug( __METHOD__ . ": got from partition cache\n" );
@@ -272,8 +295,7 @@ class BacklinkCache {
 		$this->partitionCache[$table][$batchSize] = false;
 		$cacheEntry =& $this->partitionCache[$table][$batchSize];
 
-
-		// 2) try full result cache
+		// 2) ... then try full result cache ...
 
 		if ( isset( $this->fullResultCache[$table] ) ) {
 			$cacheEntry = $this->partitionResult( $this->fullResultCache[$table], $batchSize );
@@ -281,7 +303,6 @@ class BacklinkCache {
 
 			return $cacheEntry['batches'];
 		}
-
 
 		// 3) ... fallback to memcached ...
 
@@ -317,7 +338,7 @@ class BacklinkCache {
 
 	/**
 	 * Partition a DB result with backlinks in it into batches
-	 * @param $res database result
+	 * @param $res ResultWrapper database result
 	 * @param $batchSize integer
 	 * @return array @see 
 	 */

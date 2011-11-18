@@ -1,14 +1,11 @@
 /**
  * Simple Placeholder-based Localization
  *
- * Call on a selection of HTML which contains <msg key="message-key" /> elements or elements with
- * title-msg="message-key" or alt-msg="message-key" attributes. <msg /> elements will be replaced
+ * Call on a selection of HTML which contains <html:msg key="message-key" /> elements or elements with
+ * title-msg="message-key" or alt-msg="message-key" attributes. <html:msg /> elements will be replaced
  * with localized text, elements with title-msg and alt-msg attributes will receive localized title
  * and alt attributes.
- *
- * Note that "msg" elements must have html namespacing such as "<html:msg />" to be compatible with
- * Internet Explorer.
- *
+ * *
  * Example:
  *		<p class="somethingCool">
  *			<html:msg key="my-message" />
@@ -23,7 +20,7 @@
  */
 ( function( $ ) {
 /**
- * Localizes a DOM selection by replacing <msg /> elements with localized text and adding
+ * Localizes a DOM selection by replacing <html:msg /> elements with localized text and adding
  * localized title and alt attributes to elements with title-msg and alt-msg attributes
  * respectively.
  *
@@ -32,13 +29,24 @@
  */
 
 $.fn.localize = function( options ) {
-	options = $.extend( { 'prefix': '' }, options );
+	options = $.extend( { 'prefix': '', 'keys': {}, 'params': {} }, options );
+	function msg( key ) {
+		var args = key in options.params ? options.params[key] : [];
+		// Format: mw.msg( key [, p1, p2, ...] )
+		args.unshift( options.prefix + ( key in options.keys ? options.keys[key] : key ) );
+		return mw.msg.apply( mw, args );
+	};
 	return $(this)
+		// Ok, so here's the story on this selector.
+		// In IE 6/7, searching for 'msg' turns up the 'html:msg', but searching for 'html:msg' does not.
+		// In later IE and other browsers, searching for 'html:msg' turns up the 'html:msg', but searching for 'msg' does not.
+		// So searching for both 'msg' and 'html:msg' seems to get the job done.
+		// This feels pretty icky, though.
 		.find( 'msg,html\\:msg' )
 			.each( function() {
 				var $el = $(this);
 				$el
-					.text( mw.msg( options.prefix + $el.attr( 'key' ) ) )
+					.text( msg( $el.attr( 'key' ) ) )
 					.replaceWith( $el.html() );
 			} )
 			.end()
@@ -46,7 +54,7 @@ $.fn.localize = function( options ) {
 			.each( function() {
 				var $el = $(this);
 				$el
-					.attr( 'title', mw.msg( options.prefix + $el.attr( 'title-msg' ) ) )
+					.attr( 'title', msg( $el.attr( 'title-msg' ) ) )
 					.removeAttr( 'title-msg' );
 			} )
 			.end()
@@ -54,7 +62,7 @@ $.fn.localize = function( options ) {
 			.each( function() {
 				var $el = $(this);
 				$el
-					.attr( 'alt', mw.msg( options.prefix + $el.attr( 'alt-msg' ) ) )
+					.attr( 'alt', msg( $el.attr( 'alt-msg' ) ) )
 					.removeAttr( 'alt-msg' );
 			} )
 			.end();

@@ -1,4 +1,4 @@
-MediaWiki 1.18 is a collaborative project released under the
+MediaWiki 1.19 is a collaborative project released under the
 GNU General Public License v2. We would like to recognize the
 following names for their contribution to the product.
 
@@ -9,7 +9,9 @@ following names for their contribution to the product.
 * Andrew Garrett
 * Aryeh Gregor
 * Ashar Voultoiz
+* Brian Wolff
 * Bertrand Grondin
+* Brad Jorsch
 * Brion Vibber
 * Bryan Tong Minh
 * Chad Horohoe
@@ -30,9 +32,11 @@ following names for their contribution to the product.
 * Ilmari Karonen
 * Jack D. Pond
 * Jack Phoenix
+* Jan Paul Posma
 * Jason Richey
 * Jon Harald Søby
 * Juliano F. Ravasi
+* Leo Koppelkamm
 * Leon Weber
 * Leslie Hoare
 * Marco Schuster
@@ -52,6 +56,7 @@ following names for their contribution to the product.
 * Remember the dot
 * Roan Kattouw
 * Robert Stojnić
+* Robin Pepermans
 * Rotem Liss
 * Ryan Lane
 * Ryan Schmidt
@@ -62,6 +67,7 @@ following names for their contribution to the product.
 * Soxred93
 * Thomas Bleher
 * Tim Starling
+* Timo Tijhof
 * Tom Gries
 * Trevor Parscal
 * Victor Vasiliev
@@ -73,9 +79,11 @@ following names for their contribution to the product.
 * Ahmad Sherif
 * Alejandro Mery
 * Amalthea
+* Amir E. Aharoni
 * Antonio Ospite
 * Azliq7
-* Bawolff
+* Beau
+* Bergi
 * Borislav Manolov
 * Brad Jorsch
 * Brent G
@@ -83,13 +91,18 @@ following names for their contribution to the product.
 * Carlin
 * Carsten Nielsen
 * Conrad Irwin
+* cryptocoryne
 * Dan Barrett
+* Dan Collins
 * Dan Nessett
 * Daniel Arnold
 * Denny Vrandecic
-* Derk-Jan Hartman
-* DieBuche
+* Edward Z. Yang
+* Erwin Dokter
 * FunPika
+* fomafix
+* Gero Scholz
+* Grunny
 * Harry Burt
 * Ireas
 * Jaska Zedlik
@@ -106,6 +119,7 @@ following names for their contribution to the product.
 * Louperivois
 * Lucas Garczewski
 * Luigi Corsaro
+* Lupo
 * Manuel Menal
 * Marcin Cieślak
 * Marcus Buck
@@ -114,34 +128,50 @@ following names for their contribution to the product.
 * Matthew Britton
 * mati
 * Max Sikström
+* merl
 * Michael Dale
 * Michael De La Rue
+* Michael M.
+* Michael Newton
 * Michael Walsh
 * Mike Horvath
 * Mormegil
+* MrBlueSky
 * MrPete
+* MZMcBride
+* mybugs.mail
 * Nakon
 * Nathan Larson
 * nephele
+* Nik
+* Nx.devnull
 * Nikolaos S. Karastathis
 * Olaf Lenz
+* Olivier Finlay Beaton
 * Paul Copperman
 * Paul Oranje
 * PieRRoMaN
 * quietust
 * René Kijewski
+* rgcjonas
 * Robert Treat
 * RockMFR
-* ST47
+* Rusty Burchfield
+* Salvatore Ingala
 * Scott Colcord
 * Simon Walker
 * Solitarius
 * Stefano Codari
 * Str4nd
 * svip
+* The Evil IP address
 * Tisane
 * Umherirrender
+* Van de Bugger
 * Ville Stadista
+* Vitaliy Filippov
+* William Demchick
+* Yuvaraj Pandian T
 * Zachary Hauri
 
 == Translators ==

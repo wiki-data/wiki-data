@@ -41,8 +41,11 @@
  * @ingroup Cache
  */
 abstract class BagOStuff {
-	var $debugMode = false;
+	private $debugMode = false;
 
+	/**
+	 * @param $bool bool
+	 */
 	public function setDebug( $bool ) {
 		$this->debugMode = $bool;
 	}
@@ -53,6 +56,8 @@ abstract class BagOStuff {
 	/**
 	 * Get an item with the given key. Returns false if it does not exist.
 	 * @param $key string
+	 *
+	 * @return bool|Object
 	 */
 	abstract public function get( $key );
 
@@ -64,7 +69,7 @@ abstract class BagOStuff {
 	 */
 	abstract public function set( $key, $value, $exptime = 0 );
 
-	/*
+	/**
 	 * Delete an item.
 	 * @param $key string
 	 * @param $time int Amount of time to delay the operation (mostly memcached-specific)
@@ -84,6 +89,16 @@ abstract class BagOStuff {
 	public function keys() {
 		/* stub */
 		return array();
+	}
+
+	/**
+	 * Delete all objects expiring before a certain date.
+	 *
+	 * @return true on success, false if unimplemented
+	 */
+	public function deleteObjectsExpiringBefore( $date ) {
+		// stub
+		return false;
 	}
 
 	/* *** Emulated functions *** */

@@ -344,6 +344,16 @@ class MWMemcached {
 		return false;
 	}
 
+	public function lock( $key, $timeout = 0 ) {
+		/* stub */
+		return true;
+	}
+
+	public function unlock( $key ) {
+		/* stub */
+		return true;
+	}
+
 	// }}}
 	// {{{ disconnect_all()
 
@@ -947,6 +957,15 @@ class MWMemcached {
 			$this->stats[$cmd]++;
 		} else {
 			$this->stats[$cmd] = 1;
+		}
+		
+		// TTLs higher than 30 days will be detected as absolute TTLs
+		// (UNIX timestamps), and will result in the cache entry being
+		// discarded immediately because the expiry is in the past.
+		// Clamp expiries >30d at 30d, unless they're >=1e9 in which
+		// case they are likely to really be absolute (1e9 = 2011-09-09)
+		if ( $exp > 2592000 && $exp < 1000000000 ) {
+			$exp = 2592000;
 		}
 
 		$flags = 0;

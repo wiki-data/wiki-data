@@ -14,6 +14,8 @@ class MultiWriteBagOStuff extends BagOStuff {
 	 *   - caches:   This should have a numbered array of cache parameter 
 	 *               structures, in the style required by $wgObjectCaches. See
 	 *               the documentation of $wgObjectCaches for more detail.
+	 *
+	 * @param $params array
 	 */
 	public function __construct( $params ) {
 		if ( !isset( $params['caches'] ) ) {
@@ -87,9 +89,25 @@ class MultiWriteBagOStuff extends BagOStuff {
 		array_shift( $args );
 
 		foreach ( $this->caches as $cache ) {
-			$ret = $ret && call_user_func_array( array( $cache, $method ), $args );
+			if ( !call_user_func_array( array( $cache, $method ), $args ) ) {
+				$ret = false;
+			}
 		}
 		return $ret;
 	}
 
+	/**
+	 * Delete objects expiring before a certain date. 
+	 *
+	 * Succeed if any of the child caches succeed.
+	 */
+	public function deleteObjectsExpiringBefore( $date ) {
+		$ret = false;
+		foreach ( $this->caches as $cache ) {
+			if ( $cache->deleteObjectsExpiringBefore( $date ) ) {
+				$ret = true;
+			}
+		}
+		return $ret;
+	}
 }

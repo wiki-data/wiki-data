@@ -7,11 +7,13 @@
  * @ingroup Media
  */
 define( 'MW_NO_OUTPUT_COMPRESSION', 1 );
-require_once( './includes/WebStart.php' );
+if ( isset( $_SERVER['MW_COMPILED'] ) ) {
+	require ( 'phase3/includes/WebStart.php' );
+} else {
+	require ( dirname( __FILE__ ) . '/includes/WebStart.php' );
+}
 
 $wgTrivialMimeDetection = true; //don't use fancy mime detection, just check the file extension for jpg/gif/png.
-
-require_once( "$IP/includes/StreamFile.php" );
 
 wfThumbMain();
 wfLogProfilingData();
@@ -24,10 +26,12 @@ function wfThumbMain() {
 	$headers = array();
 
 	// Get input parameters
-	if ( get_magic_quotes_gpc() ) {
-		$params = array_map( 'stripslashes', $_REQUEST );
+	if ( defined( 'THUMB_HANDLER' ) ) {
+		$params = $_REQUEST; // called from thumb_handler.php
 	} else {
-		$params = $_REQUEST;
+		$params = get_magic_quotes_gpc()
+			? array_map( 'stripslashes', $_REQUEST )
+			: $_REQUEST;
 	}
 
 	$fileName = isset( $params['f'] ) ? $params['f'] : '';
@@ -41,26 +45,26 @@ function wfThumbMain() {
 	if ( isset( $params['p'] ) ) {
 		$params['page'] = $params['p'];
 	}
-	unset( $params['r'] );
+	unset( $params['r'] ); // ignore 'r' because we unconditionally pass File::RENDER
 
 	// Is this a thumb of an archived file?
-	$isOld = (isset( $params['archived'] ) && $params['archived']);
+	$isOld = ( isset( $params['archived'] ) && $params['archived'] );
 	unset( $params['archived'] );
 
 	// Some basic input validation
 	$fileName = strtr( $fileName, '\\/', '__' );
 
 	// Actually fetch the image. Method depends on whether it is archived or not.
-	if( $isOld ) {
+	if ( $isOld ) {
 		// Format is <timestamp>!<name>
 		$bits = explode( '!', $fileName, 2 );
-		if( !isset($bits[1]) ) {
+		if ( count( $bits ) != 2 ) {
 			wfThumbError( 404, wfMsg( 'badtitletext' ) );
 			wfProfileOut( __METHOD__ );
 			return;
 		}
 		$title = Title::makeTitleSafe( NS_FILE, $bits[1] );
-		if( is_null($title) ) {
+		if ( is_null( $title ) ) {
 			wfThumbError( 404, wfMsg( 'badtitletext' ) );
 			wfProfileOut( __METHOD__ );
 			return;
@@ -73,7 +77,7 @@ function wfThumbMain() {
 	// Check permissions if there are read restrictions
 	if ( !in_array( 'read', User::getGroupPermissions( array( '*' ) ), true ) ) {
 		if ( !$img->getTitle()->userCanRead() ) {
-			wfThumbError( 403, 'Access denied. You do not have permission to access ' . 
+			wfThumbError( 403, 'Access denied. You do not have permission to access ' .
 				'the source file.' );
 			wfProfileOut( __METHOD__ );
 			return;
@@ -116,13 +120,13 @@ function wfThumbMain() {
 		}
 	}
 
-	// Stream the file if it exists already
+	// Stream the file if it exists already...
 	try {
-		if ( false != ( $thumbName = $img->thumbName( $params ) ) ) {
+		$thumbName = $img->thumbName( $params );
+		if ( $thumbName !== false ) { // valid params?
 			$thumbPath = $img->getThumbPath( $thumbName );
-
 			if ( is_file( $thumbPath ) ) {
-				wfStreamFile( $thumbPath, $headers );
+				StreamFile::stream( $thumbPath, $headers );
 				wfProfileOut( __METHOD__ );
 				return;
 			}
@@ -133,6 +137,7 @@ function wfThumbMain() {
 		return;
 	}
 
+	// Thumbnail isn't already there, so create the new thumbnail...
 	try {
 		$thumb = $img->transform( $params, File::RENDER_NOW );
 	} catch( Exception $ex ) {
@@ -140,6 +145,7 @@ function wfThumbMain() {
 		$thumb = false;
 	}
 
+	// Check for thumbnail generation errors...
 	$errorMsg = false;
 	if ( !$thumb ) {
 		$errorMsg = wfMsgHtml( 'thumbnail_error', 'File::transform() returned false' );
@@ -150,16 +156,22 @@ function wfThumbMain() {
 	} elseif ( $thumb->getPath() == $img->getPath() ) {
 		$errorMsg = wfMsgHtml( 'thumbnail_error', 'Image was not scaled, ' .
 			'is the requested width bigger than the source?' );
-	} else {
-		wfStreamFile( $thumb->getPath(), $headers );
 	}
+
 	if ( $errorMsg !== false ) {
 		wfThumbError( 500, $errorMsg );
+	} else {
+		// Stream the file if there were no errors
+		StreamFile::stream( $thumb->getPath(), $headers );
 	}
 
 	wfProfileOut( __METHOD__ );
 }
 
+/**
+ * @param $status
+ * @param $msg
+ */
 function wfThumbError( $status, $msg ) {
 	global $wgShowHostnames;
 	header( 'Cache-Control: no-cache' );
@@ -172,7 +184,7 @@ function wfThumbError( $status, $msg ) {
 	} else {
 		header( 'HTTP/1.1 500 Internal server error' );
 	}
-	if( $wgShowHostnames ) {
+	if ( $wgShowHostnames ) {
 		$url = htmlspecialchars( isset( $_SERVER['REQUEST_URI'] ) ? $_SERVER['REQUEST_URI'] : '' );
 		$hostname = htmlspecialchars( wfHostname() );
 		$debug = "<!-- $url -->\n<!-- $hostname -->\n";

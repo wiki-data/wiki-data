@@ -24,11 +24,6 @@
  * @file
  */
 
-if ( !defined( 'MEDIAWIKI' ) ) {
-	// Eclipse helper - will be ignored in production
-	require_once( 'ApiQueryBase.php' );
-}
-
 /**
  * A query action to enumerate the recent changes that were done to the wiki.
  * Various filters are supported.
@@ -52,7 +47,7 @@ class ApiQueryRecentChanges extends ApiQueryGeneratorBase {
 	 * Get an array mapping token names to their handler functions.
 	 * The prototype for a token function is func($pageid, $title, $rc)
 	 * it should return a token or false (permission denied)
-	 * @return array(tokenname => function)
+	 * @return array array(tokenname => function)
 	 */
 	protected function getTokenFunctions() {
 		// Don't call the hooks twice
@@ -73,7 +68,6 @@ class ApiQueryRecentChanges extends ApiQueryGeneratorBase {
 	}
 
 	/**
-	 * @static
 	 * @param  $pageid
 	 * @param  $title
 	 * @param $rc RecentChange
@@ -90,7 +84,7 @@ class ApiQueryRecentChanges extends ApiQueryGeneratorBase {
 		// The patrol token is always the same, let's exploit that
 		static $cachedPatrolToken = null;
 		if ( is_null( $cachedPatrolToken ) ) {
-			$cachedPatrolToken = $wgUser->editToken( 'patrol' );
+			$cachedPatrolToken = $wgUser->getEditToken( 'patrol' );
 		}
 
 		return $cachedPatrolToken;
@@ -130,7 +124,7 @@ class ApiQueryRecentChanges extends ApiQueryGeneratorBase {
 	 * @param $resultPageSet ApiPageSet
 	 */
 	public function run( $resultPageSet = null ) {
-		global $wgUser;
+		$user = $this->getUser();
 		/* Get the parameters of the request. */
 		$params = $this->extractRequestParams();
 
@@ -141,7 +135,7 @@ class ApiQueryRecentChanges extends ApiQueryGeneratorBase {
 		 */
 		$this->addTables( 'recentchanges' );
 		$index = array( 'recentchanges' => 'rc_timestamp' ); // May change
-		$this->addWhereRange( 'rc_timestamp', $params['dir'], $params['start'], $params['end'] );
+		$this->addTimestampWhereRange( 'rc_timestamp', $params['dir'], $params['start'], $params['end'] );
 		$this->addWhereFld( 'rc_namespace', $params['namespace'] );
 		$this->addWhereFld( 'rc_deleted', 0 );
 
@@ -159,12 +153,12 @@ class ApiQueryRecentChanges extends ApiQueryGeneratorBase {
 					|| ( isset( $show['redirect'] ) && isset( $show['!redirect'] ) )
 					|| ( isset( $show['patrolled'] ) && isset( $show['!patrolled'] ) )
 			) {
-				$this->dieUsageMsg( array( 'show' ) );
+				$this->dieUsageMsg( 'show' );
 			}
 
 			// Check permissions
 			if ( isset( $show['patrolled'] ) || isset( $show['!patrolled'] ) ) {
-				if ( !$wgUser->useRCPatrol() && !$wgUser->useNPPatrol() ) {
+				if ( !$user->useRCPatrol() && !$user->useNPPatrol() ) {
 					$this->dieUsage( 'You need the patrol right to request the patrolled flag', 'permissiondenied' );
 				}
 			}
@@ -220,27 +214,19 @@ class ApiQueryRecentChanges extends ApiQueryGeneratorBase {
 			/* Set up internal members based upon params. */
 			$this->initProperties( $prop );
 
-			if ( $this->fld_patrolled && !$wgUser->useRCPatrol() && !$wgUser->useNPPatrol() ) {
+			if ( $this->fld_patrolled && !$user->useRCPatrol() && !$user->useNPPatrol() ) {
 				$this->dieUsage( 'You need the patrol right to request the patrolled flag', 'permissiondenied' );
 			}
 
 			/* Add fields to our query if they are specified as a needed parameter. */
-			$this->addFieldsIf( 'rc_id', $this->fld_ids );
-			$this->addFieldsIf( 'rc_this_oldid', $this->fld_ids );
-			$this->addFieldsIf( 'rc_last_oldid', $this->fld_ids );
+			$this->addFieldsIf( array( 'rc_id', 'rc_this_oldid', 'rc_last_oldid' ), $this->fld_ids );
 			$this->addFieldsIf( 'rc_comment', $this->fld_comment || $this->fld_parsedcomment );
 			$this->addFieldsIf( 'rc_user', $this->fld_user );
 			$this->addFieldsIf( 'rc_user_text', $this->fld_user || $this->fld_userid );
-			$this->addFieldsIf( 'rc_minor', $this->fld_flags );
-			$this->addFieldsIf( 'rc_bot', $this->fld_flags );
-			$this->addFieldsIf( 'rc_new', $this->fld_flags );
-			$this->addFieldsIf( 'rc_old_len', $this->fld_sizes );
-			$this->addFieldsIf( 'rc_new_len', $this->fld_sizes );
+			$this->addFieldsIf( array( 'rc_minor', 'rc_new', 'rc_bot' ) , $this->fld_flags );
+			$this->addFieldsIf( array( 'rc_old_len', 'rc_new_len' ), $this->fld_sizes );
 			$this->addFieldsIf( 'rc_patrolled', $this->fld_patrolled );
-			$this->addFieldsIf( 'rc_logid', $this->fld_loginfo );
-			$this->addFieldsIf( 'rc_log_type', $this->fld_loginfo );
-			$this->addFieldsIf( 'rc_log_action', $this->fld_loginfo );
-			$this->addFieldsIf( 'rc_params', $this->fld_loginfo );
+			$this->addFieldsIf( array( 'rc_logid', 'rc_log_type', 'rc_log_action', 'rc_params' ), $this->fld_loginfo );
 			$showRedirects = $this->fld_redirect || isset( $show['redirect'] ) || isset( $show['!redirect'] );
 		}
 
@@ -253,6 +239,7 @@ class ApiQueryRecentChanges extends ApiQueryGeneratorBase {
 		if ( $params['toponly'] || $showRedirects ) {
 			$this->addTables( 'page' );
 			$this->addJoinConds( array( 'page' => array( 'LEFT JOIN', array( 'rc_namespace=page_namespace', 'rc_title=page_title' ) ) ) );
+			$this->addFields( 'page_is_redirect' );
 
 			if ( $params['toponly'] ) {
 				$this->addWhere( 'rc_this_oldid = page_latest' );
@@ -277,6 +264,8 @@ class ApiQueryRecentChanges extends ApiQueryGeneratorBase {
 
 		$titles = array();
 
+		$result = $this->getResult();
+
 		/* Iterate through the rows, adding data extracted from them to our query result. */
 		foreach ( $res as $row ) {
 			if ( ++ $count > $params['limit'] ) {
@@ -293,7 +282,7 @@ class ApiQueryRecentChanges extends ApiQueryGeneratorBase {
 				if ( !$vals ) {
 					continue;
 				}
-				$fit = $this->getResult()->addValue( array( 'query', $this->getModuleName() ), null, $vals );
+				$fit = $result->addValue( array( 'query', $this->getModuleName() ), null, $vals );
 				if ( !$fit ) {
 					$this->setContinueEnumParameter( 'start', wfTimestamp( TS_ISO_8601, $row->rc_timestamp ) );
 					break;
@@ -305,7 +294,7 @@ class ApiQueryRecentChanges extends ApiQueryGeneratorBase {
 
 		if ( is_null( $resultPageSet ) ) {
 			/* Format the result */
-			$this->getResult()->setIndexedTagName_internal( array( 'query', $this->getModuleName() ), 'rc' );
+			$result->setIndexedTagName_internal( array( 'query', $this->getModuleName() ), 'rc' );
 		} else {
 			$resultPageSet->populateFromTitles( $titles );
 		}
@@ -416,8 +405,7 @@ class ApiQueryRecentChanges extends ApiQueryGeneratorBase {
 		}
 
 		if ( $this->fld_parsedcomment && isset( $row->rc_comment ) ) {
-			global $wgUser;
-			$vals['parsedcomment'] = $wgUser->getSkin()->formatComment( $row->rc_comment, $title );
+			$vals['parsedcomment'] = Linker::formatComment( $row->rc_comment, $title );
 		}
 
 		if ( $this->fld_redirect ) {
@@ -437,8 +425,11 @@ class ApiQueryRecentChanges extends ApiQueryGeneratorBase {
 			$vals['logaction'] = $row->rc_log_action;
 			ApiQueryLogEvents::addLogParams(
 				$this->getResult(),
-				$vals, $row->rc_params,
-				$row->rc_log_type, $row->rc_timestamp
+				$vals,
+				$row->rc_params,
+				$row->rc_log_action,
+				$row->rc_log_type,
+				$row->rc_timestamp
 			);
 		}
 
@@ -636,13 +627,17 @@ class ApiQueryRecentChanges extends ApiQueryGeneratorBase {
 		) );
 	}
 
-	protected function getExamples() {
+	public function getExamples() {
 		return array(
 			'api.php?action=query&list=recentchanges'
 		);
 	}
 
+	public function getHelpUrls() {
+		return 'http://www.mediawiki.org/wiki/API:Recentchanges';
+	}
+
 	public function getVersion() {
-		return __CLASS__ . ': $Id: ApiQueryRecentChanges.php 85772 2011-04-10 21:52:34Z reedy $';
+		return __CLASS__ . ': $Id: ApiQueryRecentChanges.php 103273 2011-11-16 00:17:26Z johnduhart $';
 	}
 }

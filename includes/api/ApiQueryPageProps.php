@@ -24,11 +24,6 @@
  * @file
  */
 
-if ( !defined( 'MEDIAWIKI' ) ) {
-	// Eclipse helper - will be ignored in production
-	require_once( 'ApiQueryBase.php' );
-}
-
 /**
  * A query module to show basic page information.
  *
@@ -142,13 +137,17 @@ class ApiQueryPageProps extends ApiQueryBase {
 		return 'Get various properties defined in the page content';
 	}
 
-	protected function getExamples() {
+	public function getExamples() {
 		return array(
 			'api.php?action=query&prop=pageprops&titles=Category:Foo',
 		);
 	}
 
+	public function getHelpUrls() {
+		return 'http://www.mediawiki.org/wiki/API:Properties#pageprops_.2F_pp';
+	}
+
 	public function getVersion() {
-		return __CLASS__ . ': $Id: ApiQueryPageProps.php 82312 2011-02-16 23:38:21Z reedy $';
+		return __CLASS__ . ': $Id: ApiQueryPageProps.php 103273 2011-11-16 00:17:26Z johnduhart $';
 	}
 }

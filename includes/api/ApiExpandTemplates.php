@@ -24,11 +24,6 @@
  * @file
  */
 
-if ( !defined( 'MEDIAWIKI' ) ) {
-	// Eclipse helper - will be ignored in production
-	require_once( "ApiBase.php" );
-}
-
 /**
  * API module that functions as a shortcut to the wikitext preprocessor. Expands
  * any templates in a provided string, and returns the result of this expansion
@@ -52,7 +47,7 @@ class ApiExpandTemplates extends ApiBase {
 		// Create title for parser
 		$title_obj = Title::newFromText( $params['title'] );
 		if ( !$title_obj ) {
-			$title_obj = Title::newFromText( 'API' ); // default
+			$this->dieUsageMsg( array( 'invalidtitle', $params['title'] ) );
 		}
 
 		$result = $this->getResult();
@@ -60,6 +55,10 @@ class ApiExpandTemplates extends ApiBase {
 		// Parse text
 		global $wgParser;
 		$options = new ParserOptions();
+
+		if ( $params['includecomments'] ) {
+			$options->setRemoveComments( false );
+		}
 
 		if ( $params['generatexml'] ) {
 			$wgParser->startExternalParse( $title_obj, $options, OT_PREPROCESS );
@@ -86,8 +85,12 @@ class ApiExpandTemplates extends ApiBase {
 			'title' => array(
 				ApiBase::PARAM_DFLT => 'API',
 			),
-			'text' => null,
+			'text' => array(
+				ApiBase::PARAM_TYPE => 'string',
+				ApiBase::PARAM_REQUIRED => true,
+			),
 			'generatexml' => false,
+			'includecomments' => false,
 		);
 	}
 
@@ -96,20 +99,31 @@ class ApiExpandTemplates extends ApiBase {
 			'text' => 'Wikitext to convert',
 			'title' => 'Title of page',
 			'generatexml' => 'Generate XML parse tree',
+			'includecomments' => 'Whether to include HTML comments in the output',
 		);
 	}
 
 	public function getDescription() {
-		return 'This module expand all templates in wikitext';
+		return 'Expands all templates in wikitext';
 	}
 
-	protected function getExamples() {
+	public function getPossibleErrors() {
+		return array_merge( parent::getPossibleErrors(), array(
+			array( 'invalidtitle', 'title' ),
+		) );
+	}
+
+	public function getExamples() {
 		return array(
 			'api.php?action=expandtemplates&text={{Project:Sandbox}}'
 		);
 	}
 
+	public function getHelpUrls() {
+		return 'http://www.mediawiki.org/wiki/API:Parsing_wikitext#expandtemplates';
+	}
+
 	public function getVersion() {
-		return __CLASS__ . ': $Id: ApiExpandTemplates.php 78829 2010-12-22 20:52:06Z reedy $';
+		return __CLASS__ . ': $Id: ApiExpandTemplates.php 103273 2011-11-16 00:17:26Z johnduhart $';
 	}
 }

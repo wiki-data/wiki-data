@@ -1,442 +1,255 @@
 /*
- * JavaScript backwards-compatibility alternatives and other convenience functions
- */
-
-jQuery.extend({
-	trimLeft : function( str ) {
-		return str === null ? '' : str.toString().replace( /^\s+/, '' );
-	},
-	trimRight : function( str ) {
-		return str === null ?
-				'' : str.toString().replace( /\s+$/, '' );
-	},
-	ucFirst : function( str ) {
-		return str.substr( 0, 1 ).toUpperCase() + str.substr( 1, str.length );
-	},
-	escapeRE : function( str ) {
-		return str.replace ( /([\\{}()|.?*+\-^$\[\]])/g, "\\$1" );
-	},
-	// $.isDomElement( document.getElementById('content') ) === true
-	// $.isDomElement( document.getElementsByClassName('portal') ) === false (array)
-	// $.isDomElement( document.getElementsByClassName('portal')[0] ) === true
-	// $.isDomElement( $('#content') ) === false (jQuery object)
-	// $.isDomElement( $('#content').get(0) ) === true
-	// $.isDomElement( 'hello world' ) === false
-	isDomElement : function( el ) {
-		return !!el.nodeType;
-	},
-	isEmpty : function( v ) {
-		var key;
-		if ( v === "" || v === 0 || v === "0" || v === null
-			|| v === false || typeof v === 'undefined' )
-		{
-			return true;
-		}
-		// the for-loop could potentially contain prototypes
-		// to avoid that we check it's length first
-		if ( v.length === 0 ) {
-			return true;
-		}
-		if ( typeof v === 'object' ) {
-			for ( key in v ) {
-				return false;
-			}
-			return true;
-		}
-		return false;
-	},
-	compareArray : function( arrThis, arrAgainst ) {
-		if ( arrThis.length != arrAgainst.length ) {
-			return false;
-		}
-		for ( var i = 0; i < arrThis.length; i++ ) {
-			if ( arrThis[i] instanceof Array ) {
-				if ( !$.compareArray( arrThis[i], arrAgainst[i] ) ) {
-					return false;
-				}
-			} else if ( arrThis[i] !== arrAgainst[i] ) {
-				return false;
-			}
-		}
-		return true;
-	},
-	compareObject : function( objectA, objectB ) {
-	
-		// Do a simple check if the types match
-		if ( typeof( objectA ) == typeof( objectB ) ) {
-	
-			// Only loop over the contents if it really is an object
-			if ( typeof( objectA ) == 'object' ) {
-				// If they are aliases of the same object (ie. mw and mediaWiki) return now
-				if ( objectA === objectB ) {
-					return true;
-				} else {
-					// Iterate over each property
-					for ( var prop in objectA ) {
-						// Check if this property is also present in the other object
-						if ( prop in objectB ) {
-							// Compare the types of the properties
-							var type = typeof( objectA[prop] );
-							if ( type == typeof( objectB[prop] ) ) {
-								// Recursively check objects inside this one
-								switch ( type ) {
-									case 'object' :
-										if ( !$.compareObject( objectA[prop], objectB[prop] ) ) {
-											return false;
-										}
-										break;
-									case 'function' :
-										// Functions need to be strings to compare them properly
-										if ( objectA[prop].toString() !== objectB[prop].toString() ) {
-											return false;
-										}
-										break;
-									default:
-										// Strings, numbers
-										if ( objectA[prop] !== objectB[prop] ) {
-											return false;
-										}
-										break;
-								}
-							} else {
-								return false;
-							}
-						} else {
-							return false;
-						}
-					}
-					// Check for properties in B but not in A
-					// This is about 15% faster (tested in Safari 5 and Firefox 3.6)
-					// ...than incrementing a count variable in the above and below loops
-					// See also: http://www.mediawiki.org/wiki/ResourceLoader/Default_modules/compareObject_test#Results
-					for ( var prop in objectB ) {
-						if ( !( prop in objectA ) ) {
-							return false;
-						}
-					}
-				}
-			}
-		} else {
-			return false;
-		}
-		return true;
-	}
-});
-
-/*
  * Core MediaWiki JavaScript Library
  */
 
-// Attach to window
-window.mediaWiki = new ( function( $ ) {
-
-	/* Constants */
-
-	// This will not change until we are 100% ready to turn off legacy globals
-	var LEGACY_GLOBALS = true;
+// Attach to window and globally alias
+window.mw = window.mediaWiki = new ( function( $ ) {
 
 	/* Private Members */
 
-	// List of messages that have been requested to be loaded
+	/**
+	 * @var object List of messages that have been requested to be loaded.
+	 */
 	var messageQueue = {};
 
-	/* Prototypes */
+	/* Object constructors */
 
 	/**
-	 * An object which allows single and multiple get/set/exists functionality
-	 * on a list of key / value pairs.
+	 * Map
 	 *
-	 * @param {boolean} global Whether to get/set/exists values on the window
-	 *   object or a private object
+	 * Creates an object that can be read from or written to from prototype functions
+	 * that allow both single and multiple variables at once.
+	 *
+	 * @param global boolean Whether to store the values in the global window
+	 *  object or a exclusively in the object property 'values'.
+	 * @return Map
 	 */
 	function Map( global ) {
 		this.values = ( global === true ) ? window : {};
+		return this;
 	}
 
-	/**
-	 * Gets the value of a key, or a list of key/value pairs for an array of keys.
-	 *
-	 * If called with no arguments, all values will be returned.
-	 *
-	 * @param selection mixed Key or array of keys to get values for
-	 * @param fallback mixed Value to use in case key(s) do not exist (optional)
-	 */
-	Map.prototype.get = function( selection, fallback ) {
-		if ( typeof selection === 'object' ) {
-			selection = $.makeArray( selection );
-			var results = {};
-			for ( var i = 0; i < selection.length; i++ ) {
-				results[selection[i]] = this.get( selection[i], fallback );
-			}
-			return results;
-		} else if ( typeof selection === 'string' ) {
-			if ( typeof this.values[selection] === 'undefined' ) {
-				if ( typeof fallback !== 'undefined' ) {
-					return fallback;
+	Map.prototype = {
+		/**
+		 * Get the value of one or multiple a keys.
+		 *
+		 * If called with no arguments, all values will be returned.
+		 *
+		 * @param selection mixed String key or array of keys to get values for.
+		 * @param fallback mixed Value to use in case key(s) do not exist (optional).
+		 * @return mixed If selection was a string returns the value or null,
+		 *  If selection was an array, returns an object of key/values (value is null if not found),
+		 *  If selection was not passed or invalid, will return the 'values' object member (be careful as
+		 *  objects are always passed by reference in JavaScript!).
+		 * @return Values as a string or object, null if invalid/inexistant.
+		 */
+		get: function( selection, fallback ) {
+			if ( $.isArray( selection ) ) {
+				selection = $.makeArray( selection );
+				var results = {};
+				for ( var i = 0; i < selection.length; i++ ) {
+					results[selection[i]] = this.get( selection[i], fallback );
 				}
-				return null;
-			}
-			return this.values[selection];
-		}
-		return this.values;
-	};
-
-	/**
-	 * Sets one or multiple key/value pairs.
-	 *
-	 * @param selection mixed Key or object of key/value pairs to set
-	 * @param value mixed Value to set (optional, only in use when key is a string)
-	 */
-	Map.prototype.set = function( selection, value ) {
-		if ( typeof selection === 'object' ) {
-			for ( var s in selection ) {
-				this.values[s] = selection[s];
-			}
-		} else if ( typeof selection === 'string' && typeof value !== 'undefined' ) {
-			this.values[selection] = value;
-		}
-	};
-
-	/**
-	 * Checks if one or multiple keys exist.
-	 *
-	 * @param selection mixed Key or array of keys to check
-	 * @return boolean Existence of key(s)
-	 */
-	Map.prototype.exists = function( selection ) {
-		if ( typeof selection === 'object' ) {
-			for ( var s = 0; s < selection.length; s++ ) {
-				if ( !( selection[s] in this.values ) ) {
-					return false;
+				return results;
+			} else if ( typeof selection === 'string' ) {
+				if ( this.values[selection] === undefined ) {
+					if ( fallback !== undefined ) {
+						return fallback;
+					}
+					return null;
 				}
+				return this.values[selection];
 			}
-			return true;
-		} else {
-			return selection in this.values;
+			if ( selection === undefined ) {
+				return this.values;
+			} else {
+				return null; // invalid selection key
+			}
+		},
+
+		/**
+		 * Sets one or multiple key/value pairs.
+		 *
+		 * @param selection mixed String key or array of keys to set values for.
+		 * @param value mixed Value to set (optional, only in use when key is a string)
+		 * @return bool This returns true on success, false on failure.
+		 */
+		set: function( selection, value ) {
+			if ( $.isPlainObject( selection ) ) {
+				for ( var s in selection ) {
+					this.values[s] = selection[s];
+				}
+				return true;
+			} else if ( typeof selection === 'string' && value !== undefined ) {
+				this.values[selection] = value;
+				return true;
+			}
+			return false;
+		},
+
+		/**
+		 * Checks if one or multiple keys exist.
+		 *
+		 * @param selection mixed String key or array of keys to check
+		 * @return boolean Existence of key(s)
+		 */
+		exists: function( selection ) {
+			if ( typeof selection === 'object' ) {
+				for ( var s = 0; s < selection.length; s++ ) {
+					if ( !( selection[s] in this.values ) ) {
+						return false;
+					}
+				}
+				return true;
+			} else {
+				return selection in this.values;
+			}
 		}
 	};
 
 	/**
-	 * Message object, similar to Message in PHP
+	 * Message
+	 *
+	 * Object constructor for messages,
+	 * similar to the Message class in MediaWiki PHP.
+	 *
+	 * @param map Map Instance of mw.Map
+	 * @param key String
+	 * @param parameters Array
+	 * @return Message
 	 */
 	function Message( map, key, parameters ) {
-		this.format = 'parse';
+		this.format = 'plain';
 		this.map = map;
 		this.key = key;
-		this.parameters = typeof parameters === 'undefined' ? [] : $.makeArray( parameters );
-	}
-
-	/**
-	 * Appends parameters for replacement
-	 *
-	 * @param parameters mixed First in a list of variadic arguments to append as message parameters
-	 */
-	Message.prototype.params = function( parameters ) {
-		for ( var i = 0; i < parameters.length; i++ ) {
-			this.parameters[this.parameters.length] = parameters[i];
-		}
+		this.parameters = parameters === undefined ? [] : $.makeArray( parameters );
 		return this;
-	};
-
-	/**
-	 * Converts message object to it's string form based on the state of format
-	 *
-	 * @return {string} String form of message
-	 */
-	Message.prototype.toString = function() {
-		if ( !this.map.exists( this.key ) ) {
-			// Return <key> if key does not exist
-			return '<' + this.key + '>';
-		}
-		var text = this.map.get( this.key );
-		var parameters = this.parameters;
-		text = text.replace( /\$(\d+)/g, function( string, match ) {
-			var index = parseInt( match, 10 ) - 1;
-			return index in parameters ? parameters[index] : '$' + match;
-		} );
-		
-		if ( this.format === 'plain' ) {
-			return text;
-		}
-		if ( this.format === 'escaped' ) {
-			// According to Message.php this needs {{-transformation, which is
-			// still todo
-			return mediaWiki.html.escape( text );
-		}
-		
-		/* This should be fixed up when we have a parser
-		if ( this.format === 'parse' && 'language' in mediaWiki ) {
-			text = mediaWiki.language.parse( text );
-		}
-		*/
-		return text;
-	};
-
-	/**
-	 * Changes format to parse and converts message to string
-	 *
-	 * @return {string} String form of parsed message
-	 */
-	Message.prototype.parse = function() {
-		this.format = 'parse';
-		return this.toString();
-	};
-
-	/**
-	 * Changes format to plain and converts message to string
-	 *
-	 * @return {string} String form of plain message
-	 */
-	Message.prototype.plain = function() {
-		this.format = 'plain';
-		return this.toString();
-	};
-	
-	/**
-	 * Changes the format to html escaped and converts message to string
-	 * 
-	 * @return {string} String form of html escaped message
-	 */
-	Message.prototype.escaped = function() {
-		this.format = 'escaped';
-		return this.toString();
-	};
-
-	/**
-	 * Checks if message exists
-	 *
-	 * @return {string} String form of parsed message
-	 */
-	Message.prototype.exists = function() {
-		return this.map.exists( this.key );
-	};
-
-	/**
-	 * User object
-	 */
-	function User() {
-
-		/* Private Members */
-
-		var that = this;
-
-		/* Public Members */
-
-		this.options = new Map();
-
-		/* Public Methods */
-
-		/**
-		 * Generates a random user session ID (32 alpha-numeric characters).
-		 * 
-		 * This information would potentially be stored in a cookie to identify a user during a
-		 * session or series of sessions. It's uniqueness should not be depended on.
-		 * 
-		 * @return string random set of 32 alpha-numeric characters
-		 */
-		function generateId() {
-			var id = '';
-			var seed = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
-			for ( var i = 0, r; i < 32; i++ ) {
-				r = Math.floor( Math.random() * seed.length );
-				id += seed.substring( r, r + 1 );
-			}
-			return id;
-		}
-
-		/**
-		 * Gets the current user's name.
-		 * 
-		 * @return mixed user name string or null if users is anonymous
-		 */
-		this.name = function() {
-			return mediaWiki.config.get( 'wgUserName' );
-		};
-
-		/**
-		 * Checks if the current user is anonymous.
-		 * 
-		 * @return boolean
-		 */
-		this.anonymous = function() {
-			return that.name() ? false : true;
-		};
-
-		/**
-		 * Gets a random session ID automatically generated and kept in a cookie.
-		 * 
-		 * This ID is ephemeral for everyone, staying in their browser only until they close
-		 * their browser.
-		 * 
-		 * Do not use this method before the first call to mw.loader.go(), it depends on
-		 * jquery.cookie, which is added to the first pay-load just after mediaWiki is defined, but
-		 * won't be loaded until the first call to go().
-		 * 
-		 * @return string user name or random session ID
-		 */
-		this.sessionId = function () {
-			var sessionId = $.cookie( 'mediaWiki.user.sessionId' );
-			if ( typeof sessionId == 'undefined' || sessionId === null ) {
-				sessionId = generateId();
-				$.cookie( 'mediaWiki.user.sessionId', sessionId, { 'expires': null, 'path': '/' } );
-			}
-			return sessionId;
-		};
-
-		/**
-		 * Gets the current user's name or a random ID automatically generated and kept in a cookie.
-		 * 
-		 * This ID is persistent for anonymous users, staying in their browser up to 1 year. The
-		 * expiration time is reset each time the ID is queried, so in most cases this ID will
-		 * persist until the browser's cookies are cleared or the user doesn't visit for 1 year.
-		 * 
-		 * Do not use this method before the first call to mw.loader.go(), it depends on
-		 * jquery.cookie, which is added to the first pay-load just after mediaWiki is defined, but
-		 * won't be loaded until the first call to go().
-		 * 
-		 * @return string user name or random session ID
-		 */
-		this.id = function() {
-			var name = that.name();
-			if ( name ) {
-				return name;
-			}
-			var id = $.cookie( 'mediaWiki.user.id' );
-			if ( typeof id == 'undefined' || id === null ) {
-				id = generateId();
-			}
-			// Set cookie if not set, or renew it if already set
-			$.cookie( 'mediaWiki.user.id', id, { 'expires': 365, 'path': '/' } );
-			return id;
-		};
 	}
+
+	Message.prototype = {
+		/**
+		 * Appends (does not replace) parameters for replacement to the .parameters property.
+		 *
+		 * @param parameters Array
+		 * @return Message
+		 */
+		params: function( parameters ) {
+			for ( var i = 0; i < parameters.length; i++ ) {
+				this.parameters.push( parameters[i] );
+			}
+			return this;
+		},
+
+		/**
+		 * Converts message object to it's string form based on the state of format.
+		 *
+		 * @return string Message as a string in the current form or <key> if key does not exist.
+		 */
+		toString: function() {
+
+			if ( !this.map.exists( this.key ) ) {
+				// Use <key> as text if key does not exist
+				if ( this.format !== 'plain' ) {
+					// format 'escape' and 'parse' need to have the brackets and key html escaped
+					return mw.html.escape( '<' + this.key + '>' );
+				}
+				return '<' + this.key + '>';
+			}
+			var	text = this.map.get( this.key ),
+				parameters = this.parameters;
+
+			text = text.replace( /\$(\d+)/g, function( string, match ) {
+				var index = parseInt( match, 10 ) - 1;
+				return index in parameters ? parameters[index] : '$' + match;
+			} );
+
+			if ( this.format === 'plain' ) {
+				return text;
+			}
+			if ( this.format === 'escaped' ) {
+				// According to Message.php this needs {{-transformation, which is
+				// still todo
+				return mw.html.escape( text );
+			}
+
+			/* This should be fixed up when we have a parser
+			if ( this.format === 'parse' && 'language' in mw ) {
+				text = mw.language.parse( text );
+			}
+			*/
+			return text;
+		},
+
+		/**
+		 * Changes format to parse and converts message to string
+		 *
+		 * @return {string} String form of parsed message
+		 */
+		parse: function() {
+			this.format = 'parse';
+			return this.toString();
+		},
+
+		/**
+		 * Changes format to plain and converts message to string
+		 *
+		 * @return {string} String form of plain message
+		 */
+		plain: function() {
+			this.format = 'plain';
+			return this.toString();
+		},
+
+		/**
+		 * Changes the format to html escaped and converts message to string
+		 *
+		 * @return {string} String form of html escaped message
+		 */
+		escaped: function() {
+			this.format = 'escaped';
+			return this.toString();
+		},
+
+		/**
+		 * Checks if message exists
+		 *
+		 * @return {string} String form of parsed message
+		 */
+		exists: function() {
+			return this.map.exists( this.key );
+		}
+	};
 
 	/* Public Members */
 
-	/*
+	/**
 	 * Dummy function which in debug mode can be replaced with a function that
-	 * does something clever
+	 * emulates console.log in console-less environments.
 	 */
 	this.log = function() { };
 
-	/*
-	 * Make the Map-class publicly available
+	/**
+	 * @var constructor Make the Map constructor publicly available.
 	 */
 	this.Map = Map;
 
-	/*
+	/**
 	 * List of configuration values
 	 *
-	 * In legacy mode the values this object wraps will be in the global space
+	 * Dummy placeholder. Initiated in startUp module as a new instance of mw.Map().
+	 * If $wgLegacyJavaScriptGlobals is true, this Map will have its values
+	 * in the global window object.
 	 */
-	this.config = new this.Map( LEGACY_GLOBALS );
+	this.config = null;
 
-	/*
-	 * Information about the current user
+	/**
+	 * @var object
+	 *
+	 * Empty object that plugins can be installed in.
 	 */
-	this.user = new User();
+	this.libs = {};
 
-	/*
+	/**
 	 * Localization system
 	 */
 	this.messages = new this.Map();
@@ -447,29 +260,32 @@ window.mediaWiki = new ( function( $ ) {
 	 * Gets a message object, similar to wfMessage()
 	 *
 	 * @param key string Key of message to get
-	 * @param parameters mixed First argument in a list of variadic arguments, each a parameter for $
-	 * replacement
+	 * @param parameter_1 mixed First argument in a list of variadic arguments,
+	 *  each a parameter for $N replacement in messages.
+	 * @return Message
 	 */
-	this.message = function( key, parameters ) {
+	this.message = function( key, parameter_1 /* [, parameter_2] */ ) {
+		var parameters;
 		// Support variadic arguments
-		if ( typeof parameters !== 'undefined' ) {
+		if ( parameter_1 !== undefined ) {
 			parameters = $.makeArray( arguments );
 			parameters.shift();
 		} else {
 			parameters = [];
 		}
-		return new Message( mediaWiki.messages, key, parameters );
+		return new Message( mw.messages, key, parameters );
 	};
 
 	/**
 	 * Gets a message string, similar to wfMsg()
 	 *
 	 * @param key string Key of message to get
-	 * @param parameters mixed First argument in a list of variadic arguments, each a parameter for $
-	 * replacement
+	 * @param parameters mixed First argument in a list of variadic arguments,
+	 *  each a parameter for $N replacement in messages.
+	 * @return String.
 	 */
 	this.msg = function( key, parameters ) {
-		return mediaWiki.message.apply( mediaWiki.message, arguments ).toString();
+		return mw.message.apply( mw.message, arguments ).toString();
 	};
 
 	/**
@@ -488,36 +304,64 @@ window.mediaWiki = new ( function( $ ) {
 		 * making it impossible to hold back registration of jquery until after
 		 * mediawiki.
 		 *
+		 * For exact details on support for script, style and messages, look at
+		 * mw.loader.implement.
+		 *
 		 * Format:
-		 *   {
-		 *     'moduleName': {
-		 *       'dependencies': ['required module', 'required module', ...], (or) function() {}
-		 *       'state': 'registered', 'loading', 'loaded', 'ready', or 'error'
-		 *       'script': function() {},
-		 *       'style': 'css code string',
-		 *       'messages': { 'key': 'value' },
-		 *       'version': ############## (unix timestamp)
-		 *     }
-		 *   }
+		 *	{
+		 *		'moduleName': {
+		 *			'version': ############## (unix timestamp),
+		 *			'dependencies': ['required.foo', 'bar.also', ...], (or) function() {}
+		 *			'group': 'somegroup', (or) null,
+		 *			'source': 'local', 'someforeignwiki', (or) null
+		 *			'state': 'registered', 'loading', 'loaded', 'ready', or 'error'
+		 *			'script': ...,
+		 *			'style': ...,
+		 *			'messages': { 'key': 'value' },
+		 *		}
+		 *	}
 		 */
-		var registry = {};
-		// List of modules which will be loaded as when ready
-		var batch = [];
-		// List of modules to be loaded
-		var queue = [];
-		// List of callback functions waiting for modules to be ready to be called
-		var jobs = [];
-		// Flag indicating that requests should be suspended
-		var suspended = true;
-		// Flag inidicating that document ready has occured
-		var ready = false;
-		// Marker element for adding dynamic styles
-		var $marker = $( 'head meta[name=ResourceLoaderDynamicStyles]' );
+		var	registry = {},
+			/**
+			 * Mapping of sources, keyed by source-id, values are objects.
+			 * Format:
+			 *	{
+			 *		'sourceId': {
+			 *			'loadScript': 'http://foo.bar/w/load.php'
+			 *		}
+			 *	}
+			 */
+			sources = {},
+			// List of modules which will be loaded as when ready
+			batch = [],
+			// List of modules to be loaded
+			queue = [],
+			// List of callback functions waiting for modules to be ready to be called
+			jobs = [],
+			// Flag inidicating that document ready has occured
+			ready = false,
+			// Selector cache for the marker element. Use getMarker() to get/use the marker!
+			$marker = null;
 
 		/* Private Methods */
 
+		function getMarker(){
+			// Cached ?
+			if ( $marker ) {
+				return $marker;
+			} else {
+				$marker = $( 'meta[name="ResourceLoaderDynamicStyles"]' );
+				if ( $marker.length ) {
+					return $marker;
+				}
+				mw.log( 'getMarker> No <meta name="ResourceLoaderDynamicStyles"> found, inserting dynamically.' );
+				$marker = $( '<meta>' ).attr( 'name', 'ResourceLoaderDynamicStyles' ).appendTo( 'head' );
+				return $marker;
+			}
+		}
+
 		function compare( a, b ) {
-			if ( a.length != b.length ) {
+			if ( a.length !== b.length ) {
 				return false;
 			}
 			for ( var i = 0; i < b.length; i++ ) {
@@ -537,10 +381,10 @@ window.mediaWiki = new ( function( $ ) {
 		 * Generates an ISO8601 "basic" string from a UNIX timestamp
 		 */
 		function formatVersionNumber( timestamp ) {
-			function pad( a, b, c ) {
-				return [a < 10 ? '0' + a : a, b < 10 ? '0' + b : b, c < 10 ? '0' + c : c].join( '' );
-			}
-			var d = new Date();
+			var	pad = function( a, b, c ) {
+					return [a < 10 ? '0' + a : a, b < 10 ? '0' + b : b, c < 10 ? '0' + c : c].join( '' );
+				},
+				d = new Date();
 			d.setTime( timestamp * 1000 );
 			return [
 				pad( d.getUTCFullYear(), d.getUTCMonth() + 1, d.getUTCDate() ), 'T',
@@ -552,7 +396,7 @@ window.mediaWiki = new ( function( $ ) {
 		 * Recursively resolves dependencies and detects circular references
 		 */
 		function recurse( module, resolved, unresolved ) {
-			if ( typeof registry[module] === 'undefined' ) {
+			if ( registry[module] === undefined ) {
 				throw new Error( 'Unknown dependency: ' + module );
 			}
 			// Resolves dynamic loader function and replaces it with its own results
@@ -616,7 +460,7 @@ window.mediaWiki = new ( function( $ ) {
 		 *
 		 * @param states string or array of strings of module states to filter by
 		 * @param modules array list of module names to filter (optional, all modules
-		 *   will be used by default)
+		 *  will be used by default)
 		 * @return array list of filtered module names
 		 */
 		function filter( states, modules ) {
@@ -626,7 +470,7 @@ window.mediaWiki = new ( function( $ ) {
 			}
 			// If called without a list of modules, build and use a list of all modules
 			var list = [], module;
-			if ( typeof modules === 'undefined' ) {
+			if ( modules === undefined ) {
 				modules = [];
 				for ( module in registry ) {
 					modules[modules.length] = module;
@@ -635,9 +479,9 @@ window.mediaWiki = new ( function( $ ) {
 			// Build a list of modules which are in one of the specified states
 			for ( var s = 0; s < states.length; s++ ) {
 				for ( var m = 0; m < modules.length; m++ ) {
-					if ( typeof registry[modules[m]] === 'undefined' ) {
+					if ( registry[modules[m]] === undefined ) {
 						// Module does not exist
-						if ( states[s] == 'undefined' ) {
+						if ( states[s] === 'undefined' ) {
 							// OK, undefined
 							list[list.length] = modules[m];
 						}
@@ -658,9 +502,8 @@ window.mediaWiki = new ( function( $ ) {
 		 *
 		 * @param module string module name to execute
 		 */
-		function execute( module ) {
-			var _fn = 'mw.loader::execute> ';
-			if ( typeof registry[module] === 'undefined' ) {
+		function execute( module, callback ) {
+			if ( registry[module] === undefined ) {
 				throw new Error( 'Module has not been registered yet: ' + module );
 			} else if ( registry[module].state === 'registered' ) {
 				throw new Error( 'Module has not been requested from the server yet: ' + module );
@@ -669,30 +512,81 @@ window.mediaWiki = new ( function( $ ) {
 			} else if ( registry[module].state === 'ready' ) {
 				throw new Error( 'Module has already been loaded: ' + module );
 			}
-			// Add style sheet to document
-			if ( typeof registry[module].style === 'string' && registry[module].style.length ) {
-				$marker.before( mediaWiki.html.element( 'style',
-						{ type: 'text/css' },
-						new mediaWiki.html.Cdata( registry[module].style )
-					) );
-			} else if ( typeof registry[module].style === 'object'
-				&& !( $.isArray( registry[module].style ) ) )
-			{
+			// Add styles
+			var style;
+			if ( $.isPlainObject( registry[module].style ) ) {
 				for ( var media in registry[module].style ) {
-					$marker.before( mediaWiki.html.element( 'style',
-						{ type: 'text/css', media: media },
-						new mediaWiki.html.Cdata( registry[module].style[media] )
-					) );
+					style = registry[module].style[media];
+					if ( $.isArray( style ) ) {
+						for ( var i = 0; i < style.length; i++ ) {
+							getMarker().before( mw.html.element( 'link', {
+								'type': 'text/css',
+								'media': media,
+								'rel': 'stylesheet',
+								'href': style[i]
+							} ) );
+						}
+					} else if ( typeof style === 'string' ) {
+						getMarker().before( mw.html.element( 'style', {
+							'type': 'text/css',
+							'media': media
+						}, new mw.html.Cdata( style ) ) );
+					}
 				}
 			}
 			// Add localizations to message system
-			if ( typeof registry[module].messages === 'object' ) {
-				mediaWiki.messages.set( registry[module].messages );
+			if ( $.isPlainObject( registry[module].messages ) ) {
+				mw.messages.set( registry[module].messages );
 			}
 			// Execute script
 			try {
-				registry[module].script( jQuery );
-				registry[module].state = 'ready';
+				var	script = registry[module].script,
+					markModuleReady = function() {
+						registry[module].state = 'ready';
+						handlePending( module );
+						if ( $.isFunction( callback ) ) {
+							callback();
+						}
+					},
+					nestedAddScript = function( arr, callback, i ) {
+						// Recursively call addScript() in its own callback
+						// for each element of arr.
+						if ( i >= arr.length ) {
+							// We're at the end of the array
+							callback();
+							return;
+						}
+
+						addScript( arr[i], function() {
+							nestedAddScript( arr, callback, i + 1 );
+						} );
+					};
+
+				if ( $.isArray( script ) ) {
+					registry[module].state = 'loading';
+					nestedAddScript( script, markModuleReady, 0 );
+				} else if ( $.isFunction( script ) ) {
+					script( $ );
+					markModuleReady();
+				}
+			} catch ( e ) {
+				// This needs to NOT use mw.log because these errors are common in production mode
+				// and not in debug mode, such as when a symbol that should be global isn't exported
+				if ( window.console && typeof window.console.log === 'function' ) {
+					console.log( 'mw.loader::execute> Exception thrown by ' + module + ': ' + e.message );
+				}
+				registry[module].state = 'error';
+				throw e;
+			}
+		}
+
+		/**
+		 * Automatically executes jobs and modules which are pending with satistifed dependencies.
+		 *
+		 * This is used when dependencies are satisfied, such as when a module is executed.
+		 */
+		function handlePending( module ) {
+			try {
 				// Run jobs who's dependencies have just been met
 				for ( var j = 0; j < jobs.length; j++ ) {
 					if ( compare(
@@ -708,7 +602,7 @@ window.mediaWiki = new ( function( $ ) {
 				}
 				// Execute modules who's dependencies have just been met
 				for ( var r in registry ) {
-					if ( registry[r].state == 'loaded' ) {
+					if ( registry[r].state === 'loaded' ) {
 						if ( compare(
 							filter( ['ready'], registry[r].dependencies ),
 							registry[r].dependencies ) )
@@ -718,13 +612,6 @@ window.mediaWiki = new ( function( $ ) {
 					}
 				}
 			} catch ( e ) {
-				// This needs to NOT use mw.log because these errors are common in production mode
-				// and not in debug mode, such as when a symbol that should be global isn't exported
-				if ( window.console && typeof window.console.log === 'function' ) {
-					console.log( _fn + 'Exception thrown by ' + module + ': ' + e.message );
-					console.log( e );
-				}
-				registry[module].state = 'error';
 				// Run error callbacks of jobs affected by this condition
 				for ( var j = 0; j < jobs.length; j++ ) {
 					if ( $.inArray( module, jobs[j].dependencies ) !== -1 ) {
@@ -751,9 +638,12 @@ window.mediaWiki = new ( function( $ ) {
 			if ( typeof dependencies === 'string' ) {
 				dependencies = [dependencies];
 				if ( dependencies[0] in registry ) {
-					for ( var n = 0; n < registry[dependencies[0]].dependencies.length; n++ ) {
-						dependencies[dependencies.length] =
-							registry[dependencies[0]].dependencies[n];
+					// Cache repetitively accessed deep level object member
+					var	regItemDeps = registry[dependencies[0]].dependencies,
+						// Cache to avoid looped access to length property
+						regItemDepLen = regItemDeps.length;
+					for ( var n = 0; n < regItemDepLen; n++ ) {
+						dependencies[dependencies.length] = regItemDeps[n];
 					}
 				}
 			}
@@ -762,7 +652,8 @@ window.mediaWiki = new ( function( $ ) {
 				jobs[jobs.length] = {
 					'dependencies': filter(
 						['undefined', 'registered', 'loading', 'loaded'],
-						dependencies ),
+						dependencies
+					),
 					'ready': ready,
 					'error': error
 				};
@@ -775,7 +666,7 @@ window.mediaWiki = new ( function( $ ) {
 				}
 			}
 			// Work the queue
-			mediaWiki.loader.work();
+			mw.loader.work();
 		}
 
 		function sortQuery(o) {
@@ -792,16 +683,113 @@ window.mediaWiki = new ( function( $ ) {
 			return sorted;
 		}
 
+		/**
+		 * Converts a module map of the form { foo: [ 'bar', 'baz' ], bar: [ 'baz, 'quux' ] }
+		 * to a query string of the form foo.bar,baz|bar.baz,quux
+		 */
+		function buildModulesString( moduleMap ) {
+			var arr = [], p;
+			for ( var prefix in moduleMap ) {
+				p = prefix === '' ? '' : prefix + '.';
+				arr.push( p + moduleMap[prefix].join( ',' ) );
+			}
+			return arr.join( '|' );
+		}
+
+		/**
+		 * Adds a script tag to the body, either using document.write or low-level DOM manipulation,
+		 * depending on whether document-ready has occured yet.
+		 *
+		 * @param src String: URL to script, will be used as the src attribute in the script tag
+		 * @param callback Function: Optional callback which will be run when the script is done
+		 */
+		function addScript( src, callback ) {
+			var done = false, script;
+			if ( ready ) {
+				// jQuery's getScript method is NOT better than doing this the old-fashioned way
+				// because jQuery will eval the script's code, and errors will not have sane
+				// line numbers.
+				script = document.createElement( 'script' );
+				script.setAttribute( 'src', src );
+				script.setAttribute( 'type', 'text/javascript' );
+				if ( $.isFunction( callback ) ) {
+					// Attach handlers for all browsers -- this is based on jQuery.ajax
+					script.onload = script.onreadystatechange = function() {
+
+						if (
+							!done
+							&& (
+								!script.readyState
+								|| /loaded|complete/.test( script.readyState )
+							)
+						) {
+
+							done = true;
+
+							// Handle memory leak in IE
+							script.onload = script.onreadystatechange = null;
+
+							callback();
+
+							if ( script.parentNode ) {
+								script.parentNode.removeChild( script );
+							}
+
+							// Dereference the script
+							script = undefined;
+						}
+					};
+				}
+				document.body.appendChild( script );
+			} else {
+				document.write( mw.html.element(
+					'script', { 'type': 'text/javascript', 'src': src }, ''
+				) );
+				if ( $.isFunction( callback ) ) {
+					// Document.write is synchronous, so this is called when it's done
+					callback();
+				}
+			}
+		}
+
+		/**
+		 * Asynchronously append a script tag to the end of the body
+		 * that invokes load.php
+		 * @param moduleMap {Object}: Module map, see buildModulesString()
+		 * @param currReqBase {Object}: Object with other parameters (other than 'modules') to use in the request
+		 * @param sourceLoadScript {String}: URL of load.php
+		 */
+		function doRequest( moduleMap, currReqBase, sourceLoadScript ) {
+			var request = $.extend(
+				{ 'modules': buildModulesString( moduleMap ) },
+				currReqBase
+			);
+			request = sortQuery( request );
+			// Asynchronously append a script tag to the end of the body
+			// Append &* to avoid triggering the IE6 extension check
+			addScript( sourceLoadScript + '?' + $.param( request ) + '&*' );
+		}
+
 		/* Public Methods */
 
 		/**
 		 * Requests dependencies from server, loading and executing when things when ready.
 		 */
 		this.work = function() {
-			// Appends a list of modules to the batch
+				// Build a list of request parameters common to all requests.
+			var	reqBase = {
+					skin: mw.config.get( 'skin' ),
+					lang: mw.config.get( 'wgUserLanguage' ),
+					debug: mw.config.get( 'debug' )
+				},
+				// Split module batch by source and by group.
+				splits = {},
+				maxQueryLength = mw.config.get( 'wgResourceLoaderMaxQueryLength', -1 );
+
+			// Appends a list of modules from the queue to the batch
 			for ( var q = 0; q < queue.length; q++ ) {
 				// Only request modules which are undefined or registered
-				if ( !( queue[q] in registry ) || registry[queue[q]].state == 'registered' ) {
+				if ( !( queue[q] in registry ) || registry[queue[q]].state === 'registered' ) {
 					// Prevent duplicate entries
 					if ( $.inArray( queue[q], batch ) === -1 ) {
 						batch[batch.length] = queue[q];
@@ -812,81 +800,148 @@ window.mediaWiki = new ( function( $ ) {
 					}
 				}
 			}
-			// Clean up the queue
+			// Early exit if there's nothing to load...
+			if ( !batch.length ) {
+				return;
+			}
+
+			// The queue has been processed into the batch, clear up the queue.
 			queue = [];
-			// After document ready, handle the batch
-			if ( !suspended && batch.length ) {
-				// Always order modules alphabetically to help reduce cache
-				// misses for otherwise identical content
-				batch.sort();
-				// Build a list of request parameters
-				var base = {
-					'skin': mediaWiki.config.get( 'skin' ),
-					'lang': mediaWiki.config.get( 'wgUserLanguage' ),
-					'debug': mediaWiki.config.get( 'debug' )
-				};
-				// Extend request parameters with a list of modules in the batch
-				var requests = [];
-				// Split into groups
-				var groups = {};
-				for ( var b = 0; b < batch.length; b++ ) {
-					var group = registry[batch[b]].group;
-					if ( !( group in groups ) ) {
-						groups[group] = [];
-					}
-					groups[group][groups[group].length] = batch[b];
+
+			// Always order modules alphabetically to help reduce cache
+			// misses for otherwise identical content.
+			batch.sort();
+
+			// Split batch by source and by group.
+			for ( var b = 0; b < batch.length; b++ ) {
+				var	bSource = registry[batch[b]].source,
+					bGroup = registry[batch[b]].group;
+				if ( !( bSource in splits ) ) {
+					splits[bSource] = {};
 				}
-				for ( var group in groups ) {
+				if ( !( bGroup in splits[bSource] ) ) {
+					splits[bSource][bGroup] = [];
+				}
+				var bSourceGroup = splits[bSource][bGroup];
+				bSourceGroup[bSourceGroup.length] = batch[b];
+			}
+
+			// Clear the batch - this MUST happen before we append any
+			// script elements to the body or it's possible that a script
+			// will be locally cached, instantly load, and work the batch
+			// again, all before we've cleared it causing each request to
+			// include modules which are already loaded.
+			batch = [];
+
+			var source, group, modules, maxVersion, sourceLoadScript;
+
+			for ( source in splits ) {
+
+				sourceLoadScript = sources[source].loadScript;
+
+				for ( group in splits[source] ) {
+
+					// Cache access to currently selected list of
+					// modules for this group from this source.
+					modules = splits[source][group];
+
 					// Calculate the highest timestamp
-					var version = 0;
-					for ( var g = 0; g < groups[group].length; g++ ) {
-						if ( registry[groups[group][g]].version > version ) {
-							version = registry[groups[group][g]].version;
+					maxVersion = 0;
+					for ( var g = 0; g < modules.length; g++ ) {
+						if ( registry[modules[g]].version > maxVersion ) {
+							maxVersion = registry[modules[g]].version;
 						}
 					}
-					requests[requests.length] = $.extend(
-						{ 'modules': groups[group].join( '|' ), 'version': formatVersionNumber( version ) }, base
-					);
-				}
-				// Clear the batch - this MUST happen before we append the
-				// script element to the body or it's possible that the script
-				// will be locally cached, instantly load, and work the batch
-				// again, all before we've cleared it causing each request to
-				// include modules which are already loaded
-				batch = [];
-				// Asynchronously append a script tag to the end of the body
-				function request() {
-					var html = '';
-					for ( var r = 0; r < requests.length; r++ ) {
-						requests[r] = sortQuery( requests[r] );
-						// Build out the HTML
-						var src = mediaWiki.config.get( 'wgLoadScript' ) + '?' + $.param( requests[r] );
-						html += mediaWiki.html.element( 'script',
-							{ type: 'text/javascript', src: src }, '' );
+
+					var	currReqBase = $.extend( { 'version': formatVersionNumber( maxVersion ) }, reqBase ),
+						currReqBaseLength = $.param( currReqBase ).length,
+						moduleMap = {},
+						// We may need to split up the request to honor the query string length limit,
+						// so build it piece by piece.
+						l = currReqBaseLength + 9; // '&modules='.length == 9
+
+					moduleMap = {}; // { prefix: [ suffixes ] }
+
+					for ( var i = 0; i < modules.length; i++ ) {
+							// Determine how many bytes this module would add to the query string
+						var	lastDotIndex = modules[i].lastIndexOf( '.' ),
+							// Note that these substr() calls work even if lastDotIndex == -1
+							prefix = modules[i].substr( 0, lastDotIndex ),
+							suffix = modules[i].substr( lastDotIndex + 1 ),
+							bytesAdded = prefix in moduleMap
+								? suffix.length + 3 // '%2C'.length == 3
+								: modules[i].length + 3; // '%7C'.length == 3
+
+						// If the request would become too long, create a new one,
+						// but don't create empty requests
+						if ( maxQueryLength > 0 && !$.isEmptyObject( moduleMap ) && l + bytesAdded > maxQueryLength ) {
+							// This request would become too long, create a new one
+							// and fire off the old one
+							doRequest( moduleMap, currReqBase, sourceLoadScript );
+							moduleMap = {};
+							l = currReqBaseLength + 9;
+						}
+						if ( !( prefix in moduleMap ) ) {
+							moduleMap[prefix] = [];
+						}
+						moduleMap[prefix].push( suffix );
+						l += bytesAdded;
 					}
-					return html;
-				}
-				// Load asynchronously after documument ready
-				if ( ready ) {
-					setTimeout( function() { $( 'body' ).append( request() ); }, 0 );
-				} else {
-					document.write( request() );
+					// If there's anything left in moduleMap, request that too
+					if ( !$.isEmptyObject( moduleMap ) ) {
+						doRequest( moduleMap, currReqBase, sourceLoadScript );
+					}
 				}
 			}
 		};
 
 		/**
-		 * Registers a module, letting the system know about it and its
-		 * dependencies. loader.js files contain calls to this function.
+		 * Register a source.
+		 *
+		 * @param id {String}: Short lowercase a-Z string representing a source, only used internally.
+		 * @param props {Object}: Object containing only the loadScript property which is a url to
+		 * the load.php location of the source.
+		 * @return {Boolean}
 		 */
-		this.register = function( module, version, dependencies, group ) {
+		this.addSource = function( id, props ) {
+			// Allow multiple additions
+			if ( typeof id === 'object' ) {
+				for ( var source in id ) {
+					mw.loader.addSource( source, id[source] );
+				}
+				return true;
+			}
+
+			if ( sources[id] !== undefined ) {
+				throw new Error( 'source already registered: ' + id );
+			}
+
+			sources[id] = props;
+
+			return true;
+		};
+
+		/**
+		 * Registers a module, letting the system know about it and its
+		 * properties. Startup modules contain calls to this function.
+		 *
+		 * @param module {String}: Module name
+		 * @param version {Number}: Module version number as a timestamp (falls backs to 0)
+		 * @param dependencies {String|Array|Function}: One string or array of strings of module
+		 *  names on which this module depends, or a function that returns that array.
+		 * @param group {String}: Group which the module is in (optional, defaults to null)
+		 * @param source {String}: Name of the source. Defaults to local.
+		 */
+		this.register = function( module, version, dependencies, group, source ) {
 			// Allow multiple registration
 			if ( typeof module === 'object' ) {
 				for ( var m = 0; m < module.length; m++ ) {
+					// module is an array of module names
 					if ( typeof module[m] === 'string' ) {
-						mediaWiki.loader.register( module[m] );
+						mw.loader.register( module[m] );
+					// module is an array of arrays
 					} else if ( typeof module[m] === 'object' ) {
-						mediaWiki.loader.register.apply( mediaWiki.loader, module[m] );
+						mw.loader.register.apply( mw.loader, module[m] );
 					}
 				}
 				return;
@@ -895,15 +950,16 @@ window.mediaWiki = new ( function( $ ) {
 			if ( typeof module !== 'string' ) {
 				throw new Error( 'module must be a string, not a ' + typeof module );
 			}
-			if ( typeof registry[module] !== 'undefined' ) {
-				throw new Error( 'module already implemeneted: ' + module );
+			if ( registry[module] !== undefined ) {
+				throw new Error( 'module already implemented: ' + module );
 			}
 			// List the module as registered
 			registry[module] = {
-				'state': 'registered',
-				'group': typeof group === 'string' ? group : null,
+				'version': version !== undefined ? parseInt( version, 10 ) : 0,
 				'dependencies': [],
-				'version': typeof version !== 'undefined' ? parseInt( version, 10 ) : 0
+				'group': typeof group === 'string' ? group : null,
+				'source': typeof source === 'string' ? source: 'local',
+				'state': 'registered'
 			};
 			if ( typeof dependencies === 'string' ) {
 				// Allow dependencies to be given as a single module name
@@ -919,44 +975,44 @@ window.mediaWiki = new ( function( $ ) {
 		 * Implements a module, giving the system a course of action to take
 		 * upon loading. Results of a request for one or more modules contain
 		 * calls to this function.
+		 *
+		 * All arguments are required.
+		 *
+		 * @param module String: Name of module
+		 * @param script Mixed: Function of module code or String of URL to be used as the src
+		 *  attribute when adding a script element to the body
+		 * @param style Object: Object of CSS strings keyed by media-type or Object of lists of URLs
+		 *  keyed by media-type
+		 * @param msgs Object: List of key/value pairs to be passed through mw.messages.set
 		 */
-		this.implement = function( module, script, style, localization ) {
-			// Automatically register module
-			if ( typeof registry[module] === 'undefined' ) {
-				mediaWiki.loader.register( module );
-			}
+		this.implement = function( module, script, style, msgs ) {
 			// Validate input
-			if ( !$.isFunction( script ) ) {
-				throw new Error( 'script must be a function, not a ' + typeof script );
+			if ( typeof module !== 'string' ) {
+				throw new Error( 'module must be a string, not a ' + typeof module );
 			}
-			if ( typeof style !== 'undefined'
-				&& typeof style !== 'string'
-				&& typeof style !== 'object' )
-			{
-				throw new Error( 'style must be a string or object, not a ' + typeof style );
+			if ( !$.isFunction( script ) && !$.isArray( script ) ) {
+				throw new Error( 'script must be a function or an array, not a ' + typeof script );
 			}
-			if ( typeof localization !== 'undefined'
-				&& typeof localization !== 'object' )
-			{
-				throw new Error( 'localization must be an object, not a ' + typeof localization );
+			if ( !$.isPlainObject( style ) ) {
+				throw new Error( 'style must be an object, not a ' + typeof style );
 			}
-			if ( typeof registry[module] !== 'undefined'
-				&& typeof registry[module].script !== 'undefined' )
-			{
-				throw new Error( 'module already implemeneted: ' + module );
+			if ( !$.isPlainObject( msgs ) ) {
+				throw new Error( 'msgs must be an object, not a ' + typeof msgs );
+			}
+			// Automatically register module
+			if ( registry[module] === undefined ) {
+				mw.loader.register( module );
+			}
+			// Check for duplicate implementation
+			if ( registry[module] !== undefined && registry[module].script !== undefined ) {
+				throw new Error( 'module already implemented: ' + module );
 			}
 			// Mark module as loaded
 			registry[module].state = 'loaded';
 			// Attach components
 			registry[module].script = script;
-			if ( typeof style === 'string'
-				|| typeof style === 'object' && !( style instanceof Array ) )
-			{
-				registry[module].style = style;
-			}
-			if ( typeof localization === 'object' ) {
-				registry[module].messages = localization;
-			}
+			registry[module].style = style;
+			registry[module].messages = msgs;
 			// Execute or queue callback
 			if ( compare(
 				filter( ['ready'], registry[module].dependencies ),
@@ -972,19 +1028,18 @@ window.mediaWiki = new ( function( $ ) {
 		 * Executes a function as soon as one or more required modules are ready
 		 *
 		 * @param dependencies string or array of strings of modules names the callback
-		 *   dependencies to be ready before
-		 * executing
+		 *  dependencies to be ready before executing
 		 * @param ready function callback to execute when all dependencies are ready (optional)
 		 * @param error function callback to execute when if dependencies have a errors (optional)
 		 */
 		this.using = function( dependencies, ready, error ) {
+			var tod = typeof dependencies;
 			// Validate input
-			if ( typeof dependencies !== 'object' && typeof dependencies !== 'string' ) {
-				throw new Error( 'dependencies must be a string or an array, not a ' +
-					typeof dependencies );
+			if ( tod !== 'object' && tod !== 'string' ) {
+				throw new Error( 'dependencies must be a string or an array, not a ' + tod );
 			}
 			// Allow calling with a single dependency as a string
-			if ( typeof dependencies === 'string' ) {
+			if ( tod === 'string' ) {
 				dependencies = [dependencies];
 			}
 			// Resolve entire dependency map
@@ -1011,35 +1066,29 @@ window.mediaWiki = new ( function( $ ) {
 		 * Loads an external script or one or more modules for future use
 		 *
 		 * @param modules mixed either the name of a module, array of modules,
-		 *   or a URL of an external script or style
+		 *  or a URL of an external script or style
 		 * @param type string mime-type to use if calling with a URL of an
-		 *   external script or style; acceptable values are "text/css" and
-		 *   "text/javascript"; if no type is provided, text/javascript is
-		 *   assumed
+		 *  external script or style; acceptable values are "text/css" and
+		 *  "text/javascript"; if no type is provided, text/javascript is assumed.
 		 */
 		this.load = function( modules, type ) {
 			// Validate input
 			if ( typeof modules !== 'object' && typeof modules !== 'string' ) {
-				throw new Error( 'modules must be a string or an array, not a ' +
-					typeof modules );
+				throw new Error( 'modules must be a string or an array, not a ' + typeof modules );
 			}
 			// Allow calling with an external script or single dependency as a string
 			if ( typeof modules === 'string' ) {
 				// Support adding arbitrary external scripts
-				if ( modules.substr( 0, 7 ) == 'http://' || modules.substr( 0, 8 ) == 'https://' ) {
+				if ( /^(https?:)?\/\//.test( modules ) ) {
 					if ( type === 'text/css' ) {
-						$( 'head' )
-							.append( $( '<link rel="stylesheet" type="text/css" />' )
-							.attr( 'href', modules ) );
+						$( 'head' ).append( $( '<link/>', {
+							rel: 'stylesheet',
+							type: 'text/css',
+							href: modules
+						} ) );
 						return true;
-					} else if ( type === 'text/javascript' || typeof type === 'undefined' ) {
-						var script = mediaWiki.html.element( 'script',
-							{ type: 'text/javascript', src: modules }, '' );
-						if ( ready ) {
-							$( 'body' ).append( script );
-						} else {
-							document.write( script );
-						}
+					} else if ( type === 'text/javascript' || type === undefined ) {
+						addScript( modules );
 						return true;
 					}
 					// Unknown type
@@ -1066,14 +1115,6 @@ window.mediaWiki = new ( function( $ ) {
 		};
 
 		/**
-		 * Flushes the request queue and begin executing load requests on demand
-		 */
-		this.go = function() {
-			suspended = false;
-			mediaWiki.loader.work();
-		};
-
-		/**
 		 * Changes the state of a module
 		 *
 		 * @param module string module name or object of module name/state pairs
@@ -1082,12 +1123,12 @@ window.mediaWiki = new ( function( $ ) {
 		this.state = function( module, state ) {
 			if ( typeof module === 'object' ) {
 				for ( var m in module ) {
-					mediaWiki.loader.state( m, module[m] );
+					mw.loader.state( m, module[m] );
 				}
 				return;
 			}
 			if ( !( module in registry ) ) {
-				mediaWiki.loader.register( module );
+				mw.loader.register( module );
 			}
 			registry[module].state = state;
 		};
@@ -1097,12 +1138,48 @@ window.mediaWiki = new ( function( $ ) {
 		 *
 		 * @param module string name of module to get version for
 		 */
-		this.version = function( module ) {
+		this.getVersion = function( module ) {
 			if ( module in registry && 'version' in registry[module] ) {
 				return formatVersionNumber( registry[module].version );
 			}
 			return null;
 		};
+
+		/**
+		* @deprecated use mw.loader.getVersion() instead
+		*/
+		this.version = function() {
+			return mw.loader.getVersion.apply( mw.loader, arguments );
+		};
+
+		/**
+		 * Gets the state of a module
+		 *
+		 * @param module string name of module to get state for
+		 */
+		this.getState = function( module ) {
+			if ( module in registry && 'state' in registry[module] ) {
+				return registry[module].state;
+			}
+			return null;
+		};
+
+		/**
+		 * Get names of all registered modules.
+		 *
+		 * @return {Array}
+		 */
+		this.getModuleNames = function() {
+			var names = $.map( registry, function( i, key ) {
+				return key;
+			} );
+			return names;
+		};
+
+		/**
+		 * For backwards-compatibility with Squid-cached pages. Loads mw.user
+		 */
+		this.go = function() { mw.loader.load( 'mediawiki.user' ); };
 
 		/* Cache document ready status */
 
@@ -1111,7 +1188,7 @@ window.mediaWiki = new ( function( $ ) {
 
 	/** HTML construction helper functions */
 	this.html = new ( function () {
-		function escapeCallback( s ) {
+		var escapeCallback = function( s ) {
 			switch ( s ) {
 				case "'":
 					return '&#039;';
@@ -1124,7 +1201,7 @@ window.mediaWiki = new ( function( $ ) {
 				case '&':
 					return '&amp;';
 			}
-		}
+		};
 
 		/**
 		 * Escape a string for HTML. Converts special characters to HTML entities.
@@ -1154,51 +1231,67 @@ window.mediaWiki = new ( function( $ ) {
 		 * @param name The tag name.
 		 * @param attrs An object with members mapping element names to values
 		 * @param contents The contents of the element. May be either:
-		 *    - string: The string is escaped.
-		 *    - null or undefined: The short closing form is used, e.g. <br/>.
-		 *    - this.Raw: The value attribute is included without escaping.
-		 *    - this.Cdata: The value attribute is included, and an exception is
-		 *      thrown if it contains an illegal ETAGO delimiter.
-		 *      See http://www.w3.org/TR/1999/REC-html401-19991224/appendix/notes.html#h-B.3.2
+		 *  - string: The string is escaped.
+		 *  - null or undefined: The short closing form is used, e.g. <br/>.
+		 *  - this.Raw: The value attribute is included without escaping.
+		 *  - this.Cdata: The value attribute is included, and an exception is
+		 *   thrown if it contains an illegal ETAGO delimiter.
+		 *   See http://www.w3.org/TR/1999/REC-html401-19991224/appendix/notes.html#h-B.3.2
 		 *
 		 * Example:
-		 *    var h = mw.html;
-		 *    return h.element( 'div', {},
-		 *        new h.Raw( h.element( 'img', {src: '<'} ) ) );
+		 *	var h = mw.html;
+		 *	return h.element( 'div', {},
+		 *		new h.Raw( h.element( 'img', {src: '<'} ) ) );
 		 * Returns <div><img src="&lt;"/></div>
 		 */
 		this.element = function( name, attrs, contents ) {
-			var s = '<' + name;
+			var v, s = '<' + name;
 			for ( var attrName in attrs ) {
-				s += ' ' + attrName + '="' + this.escape( attrs[attrName] ) + '"';
+				v = attrs[attrName];
+				// Convert name=true, to name=name
+				if ( v === true ) {
+					v = attrName;
+				// Skip name=false
+				} else if ( v === false ) {
+					continue;
+				}
+				s += ' ' + attrName + '="' + this.escape( '' + v ) + '"';
 			}
-			if ( typeof contents == 'undefined' || contents === null ) {
+			if ( contents === undefined || contents === null ) {
 				// Self close tag
 				s += '/>';
 				return s;
 			}
 			// Regular open tag
 			s += '>';
-			if ( typeof contents === 'string') {
-				// Escaped
-				s += this.escape( contents );
-			} else if ( contents instanceof this.Raw ) {
-				// Raw HTML inclusion
-				s += contents.value;
-			} else if ( contents instanceof this.Cdata ) {
-				// CDATA
-				if ( /<\/[a-zA-z]/.test( contents.value ) ) {
-					throw new Error( 'mw.html.element: Illegal end tag found in CDATA' );
-				}
-				s += contents.value;
-			} else {
-				throw new Error( 'mw.html.element: Invalid type of contents' );
+			switch ( typeof contents ) {
+				case 'string':
+					// Escaped
+					s += this.escape( contents );
+					break;
+				case 'number':
+				case 'boolean':
+					// Convert to string
+					s += '' + contents;
+					break;
+				default:
+					if ( contents instanceof this.Raw ) {
+						// Raw HTML inclusion
+						s += contents.value;
+					} else if ( contents instanceof this.Cdata ) {
+						// CDATA
+						if ( /<\/[a-zA-z]/.test( contents.value ) ) {
+							throw new Error( 'mw.html.element: Illegal end tag found in CDATA' );
+						}
+						s += contents.value;
+					} else {
+						throw new Error( 'mw.html.element: Invalid type of contents' );
+					}
 			}
 			s += '</' + name + '>';
 			return s;
 		};
 	} )();
-
 
 	/* Extension points */
 
@@ -1206,16 +1299,11 @@ window.mediaWiki = new ( function( $ ) {
 
 } )( jQuery );
 
-/* Auto-register from pre-loaded startup scripts */
+// Alias $j to jQuery for backwards compatibility
+window.$j = jQuery;
 
-if ( $.isFunction( startUp ) ) {
+// Auto-register from pre-loaded startup scripts
+if ( typeof startUp !== 'undefined' && jQuery.isFunction( startUp ) ) {
 	startUp();
 	delete startUp;
 }
-
-// Add jQuery Cookie to initial payload (used in mediaWiki.user)
-mediaWiki.loader.load( 'jquery.cookie' );
-
-// Alias $j to jQuery for backwards compatibility
-window.$j = jQuery;
-window.mw = mediaWiki;

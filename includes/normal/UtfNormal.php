@@ -28,19 +28,6 @@
  * @defgroup UtfNormal UtfNormal
  */
 
-require_once dirname(__FILE__).'/UtfNormalUtil.php';
-
-/**
- * For using the ICU wrapper
- */
-define( 'UNORM_NONE', 1 );
-define( 'UNORM_NFD',  2 );
-define( 'UNORM_NFKD', 3 );
-define( 'UNORM_NFC',  4 );
-define( 'UNORM_DEFAULT', UNORM_NFC );
-define( 'UNORM_NFKC', 5 );
-define( 'UNORM_FCD',  6 );
-
 define( 'NORMALIZE_ICU', function_exists( 'utf8_normalize' ) );
 define( 'NORMALIZE_INTL', function_exists( 'normalizer_normalize' ) );
 
@@ -59,6 +46,17 @@ define( 'NORMALIZE_INTL', function_exists( 'normalizer_normalize' ) );
  * @ingroup UtfNormal
  */
 class UtfNormal {
+	/**
+	 * For using the ICU wrapper
+	 */
+	const UNORM_NONE = 1;
+	const UNORM_NFD  = 2;
+	const UNORM_NFKD = 3;
+	const UNORM_NFC  = 4;
+	const UNORM_NFKC = 5;
+	const UNORM_FCD  = 6;
+	const UNORM_DEFAULT = self::UNORM_NFC;
+
 	static $utfCombiningClass = null;
 	static $utfCanonicalComp = null;
 	static $utfCanonicalDecomp = null;
@@ -79,19 +77,30 @@ class UtfNormal {
 	 * @return string a clean, shiny, normalized UTF-8 string
 	 */
 	static function cleanUp( $string ) {
-		if( NORMALIZE_ICU || NORMALIZE_INTL ) {
-			# We exclude a few chars that ICU would not.
-			$string = preg_replace(
-				'/[\x00-\x08\x0b\x0c\x0e-\x1f]/',
-				UTF8_REPLACEMENT,
-				$string );
-			$string = str_replace( UTF8_FFFE, UTF8_REPLACEMENT, $string );
-			$string = str_replace( UTF8_FFFF, UTF8_REPLACEMENT, $string );
+		if( NORMALIZE_ICU ) {
+			$string = self::replaceForNativeNormalize( $string );
 
 			# UnicodeString constructor fails if the string ends with a
 			# head byte. Add a junk char at the end, we'll strip it off.
-			if ( NORMALIZE_ICU ) return rtrim( utf8_normalize( $string . "\x01", UNORM_NFC ), "\x01" );
-			if ( NORMALIZE_INTL ) return normalizer_normalize( $string, Normalizer::FORM_C );
+			return rtrim( utf8_normalize( $string . "\x01", self::UNORM_NFC ), "\x01" );
+		} elseif( NORMALIZE_INTL ) {
+			$string = self::replaceForNativeNormalize( $string );
+			$norm = normalizer_normalize( $string, Normalizer::FORM_C );
+			if( $norm === null || $norm === false ) {
+				# normalizer_normalize will either return false or null
+				# (depending on which doc you read) if invalid utf8 string.
+				# quickIsNFCVerify cleans up invalid sequences.
+
+				if( UtfNormal::quickIsNFCVerify( $string ) ) {
+					# if that's true, the string is actually already normal.
+					return $string;
+				} else {
+					# Now we are valid but non-normal
+					return normalizer_normalize( $string, Normalizer::FORM_C );
+				}
+			} else {
+				return $norm;
+			}
 		} elseif( UtfNormal::quickIsNFCVerify( $string ) ) {
 			# Side effect -- $string has had UTF-8 errors cleaned up.
 			return $string;
@@ -112,7 +121,7 @@ class UtfNormal {
 		if( NORMALIZE_INTL )
 			return normalizer_normalize( $string, Normalizer::FORM_C );
 		elseif( NORMALIZE_ICU )
-			return utf8_normalize( $string, UNORM_NFC );
+			return utf8_normalize( $string, self::UNORM_NFC );
 		elseif( UtfNormal::quickIsNFC( $string ) )
 			return $string;
 		else
@@ -130,7 +139,7 @@ class UtfNormal {
 		if( NORMALIZE_INTL )
 			return normalizer_normalize( $string, Normalizer::FORM_D );
 		elseif( NORMALIZE_ICU )
-			return utf8_normalize( $string, UNORM_NFD );
+			return utf8_normalize( $string, self::UNORM_NFD );
 		elseif( preg_match( '/[\x80-\xff]/', $string ) )
 			return UtfNormal::NFD( $string );
 		else
@@ -149,7 +158,7 @@ class UtfNormal {
 		if( NORMALIZE_INTL )
 			return normalizer_normalize( $string, Normalizer::FORM_KC );
 		elseif( NORMALIZE_ICU )
-			return utf8_normalize( $string, UNORM_NFKC );
+			return utf8_normalize( $string, self::UNORM_NFKC );
 		elseif( preg_match( '/[\x80-\xff]/', $string ) )
 			return UtfNormal::NFKC( $string );
 		else
@@ -168,7 +177,7 @@ class UtfNormal {
 		if( NORMALIZE_INTL )
 			return normalizer_normalize( $string, Normalizer::FORM_KD );
 		elseif( NORMALIZE_ICU )
-			return utf8_normalize( $string, UNORM_NFKD );
+			return utf8_normalize( $string, self::UNORM_NFKD );
 		elseif( preg_match( '/[\x80-\xff]/', $string ) )
 			return UtfNormal::NFKD( $string );
 		else
@@ -199,7 +208,7 @@ class UtfNormal {
 		UtfNormal::loadData();
 		$len = strlen( $string );
 		for( $i = 0; $i < $len; $i++ ) {
-			$c = $string{$i};
+			$c = $string[$i];
 			$n = ord( $c );
 			if( $n < 0x80 ) {
 				continue;
@@ -290,7 +299,7 @@ class UtfNormal {
 		foreach( $matches[1] as $str ) {
 			$chunk = strlen( $str );
 
-			if( $str{0} < "\x80" ) {
+			if( $str[0] < "\x80" ) {
 				# ASCII chunk: guaranteed to be valid UTF-8
 				# and in normal form C, so skip over it.
 				$base += $chunk;
@@ -308,13 +317,13 @@ class UtfNormal {
 			$len = $chunk + 1; # Counting down is faster. I'm *so* sorry.
 
 			for( $i = -1; --$len; ) {
-				$remaining = $tailBytes[$c = $str{++$i}];
+				$remaining = $tailBytes[$c = $str[++$i]];
 				if( $remaining ) {
 					# UTF-8 head byte!
 					$sequence = $head = $c;
 					do {
 						# Look for the defined number of tail bytes...
-						if( --$len && ( $c = $str{++$i} ) >= "\x80" && $c < "\xc0" ) {
+						if( --$len && ( $c = $str[++$i] ) >= "\x80" && $c < "\xc0" ) {
 							# Legal tail bytes are nice.
 							$sequence .= $c;
 						} else {
@@ -502,7 +511,7 @@ class UtfNormal {
 		$len = strlen( $string );
 		$out = '';
 		for( $i = 0; $i < $len; $i++ ) {
-			$c = $string{$i};
+			$c = $string[$i];
 			$n = ord( $c );
 			if( $n < 0x80 ) {
 				# ASCII chars never decompose
@@ -529,9 +538,9 @@ class UtfNormal {
 					# A lookup table would be slightly faster,
 					# but adds a lot of memory & disk needs.
 					#
-					$index = ( (ord( $c{0} ) & 0x0f) << 12
-					         | (ord( $c{1} ) & 0x3f) <<  6
-					         | (ord( $c{2} ) & 0x3f) )
+					$index = ( (ord( $c[0] ) & 0x0f) << 12
+					         | (ord( $c[1] ) & 0x3f) <<  6
+					         | (ord( $c[2] ) & 0x3f) )
 					       - UNICODE_HANGUL_FIRST;
 					$l = intval( $index / UNICODE_HANGUL_NCOUNT );
 					$v = intval( ($index % UNICODE_HANGUL_NCOUNT) / UNICODE_HANGUL_TCOUNT);
@@ -564,7 +573,7 @@ class UtfNormal {
 		$combiners = array();
 		$lastClass = -1;
 		for( $i = 0; $i < $len; $i++ ) {
-			$c = $string{$i};
+			$c = $string[$i];
 			$n = ord( $c );
 			if( $n >= 0x80 ) {
 				if( $n >= 0xf0 ) {
@@ -620,7 +629,7 @@ class UtfNormal {
 		$x1 = ord(substr(UTF8_HANGUL_VBASE,0,1));
 		$x2 = ord(substr(UTF8_HANGUL_TEND,0,1));
 		for( $i = 0; $i < $len; $i++ ) {
-			$c = $string{$i};
+			$c = $string[$i];
 			$n = ord( $c );
 			if( $n < 0x80 ) {
 				# No combining characters here...
@@ -680,8 +689,8 @@ class UtfNormal {
 						#
 						#$lIndex = utf8ToCodepoint( $startChar ) - UNICODE_HANGUL_LBASE;
 						#$vIndex = utf8ToCodepoint( $c ) - UNICODE_HANGUL_VBASE;
-						$lIndex = ord( $startChar{2} ) - 0x80;
-						$vIndex = ord( $c{2}         ) - 0xa1;
+						$lIndex = ord( $startChar[2] ) - 0x80;
+						$vIndex = ord( $c[2]         ) - 0xa1;
 
 						$hangulPoint = UNICODE_HANGUL_FIRST +
 							UNICODE_HANGUL_TCOUNT *
@@ -699,23 +708,23 @@ class UtfNormal {
 							  $startChar <= UTF8_HANGUL_LAST &&
 							  !$lastHangul ) {
 						# $tIndex = utf8ToCodepoint( $c ) - UNICODE_HANGUL_TBASE;
-						$tIndex = ord( $c{2} ) - 0xa7;
-						if( $tIndex < 0 ) $tIndex = ord( $c{2} ) - 0x80 + (0x11c0 - 0x11a7);
+						$tIndex = ord( $c[2] ) - 0xa7;
+						if( $tIndex < 0 ) $tIndex = ord( $c[2] ) - 0x80 + (0x11c0 - 0x11a7);
 
 						# Increment the code point by $tIndex, without
 						# the function overhead of decoding and recoding UTF-8
 						#
-						$tail = ord( $startChar{2} ) + $tIndex;
+						$tail = ord( $startChar[2] ) + $tIndex;
 						if( $tail > 0xbf ) {
 							$tail -= 0x40;
-							$mid = ord( $startChar{1} ) + 1;
+							$mid = ord( $startChar[1] ) + 1;
 							if( $mid > 0xbf ) {
-								$startChar{0} = chr( ord( $startChar{0} ) + 1 );
+								$startChar[0] = chr( ord( $startChar[0] ) + 1 );
 								$mid -= 0x40;
 							}
-							$startChar{1} = chr( $mid );
+							$startChar[1] = chr( $mid );
 						}
-						$startChar{2} = chr( $tail );
+						$startChar[2] = chr( $tail );
 
 						# If there's another jamo char after this, *don't* try to merge it.
 						$lastHangul = 1;
@@ -744,8 +753,24 @@ class UtfNormal {
 		$len = strlen( $string );
 		$out = '';
 		for( $i = 0; $i < $len; $i++ ) {
-			$out .= $string{$i};
+			$out .= $string[$i];
 		}
 		return $out;
+	}
+	/**
+	 * Function to replace some characters that we don't want
+	 * but most of the native normalize functions keep.
+	 *
+	 * @param $string String The string
+	 * @return String String with the character codes replaced.
+	 */
+	private static function replaceForNativeNormalize( $string ) { 
+		$string = preg_replace(
+			'/[\x00-\x08\x0b\x0c\x0e-\x1f]/',
+			UTF8_REPLACEMENT,
+			$string );
+		$string = str_replace( UTF8_FFFE, UTF8_REPLACEMENT, $string );
+		$string = str_replace( UTF8_FFFF, UTF8_REPLACEMENT, $string );
+		return $string;
 	}
 }

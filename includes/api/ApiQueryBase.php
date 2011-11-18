@@ -24,11 +24,6 @@
  * @file
  */
 
-if ( !defined( 'MEDIAWIKI' ) ) {
-	// Eclipse helper - will be ignored in production
-	require_once( 'ApiBase.php' );
-}
-
 /**
  * This is a base class for all Query modules.
  * It provides some common functionality such as constructing various SQL
@@ -54,6 +49,9 @@ abstract class ApiQueryBase extends ApiBase {
 	 *
 	 * Public caching will only be allowed if *all* the modules that supply
 	 * data for a given request return a cache mode of public.
+	 *
+	 * @param $params
+	 * @return string
 	 */
 	public function getCacheMode( $params ) {
 		return 'private';
@@ -84,20 +82,11 @@ abstract class ApiQueryBase extends ApiBase {
 			$this->tables = array_merge( $this->tables, $tables );
 		} else {
 			if ( !is_null( $alias ) ) {
-				$tables = $this->getAliasedName( $tables, $alias );
+				$this->tables[$alias] = $tables;
+			} else {
+				$this->tables[] = $tables;
 			}
-			$this->tables[] = $tables;
 		}
-	}
-
-	/**
-	 * Get the SQL for a table name with alias
-	 * @param $table string Table name
-	 * @param $alias string Alias
-	 * @return string SQL
-	 */
-	protected function getAliasedName( $table, $alias ) {
-		return $this->getDB()->tableName( $table ) . ' ' . $alias;
 	}
 
 	/**
@@ -118,7 +107,7 @@ abstract class ApiQueryBase extends ApiBase {
 
 	/**
 	 * Add a set of fields to select to the internal array
-	 * @param $value mixed Field name or array of field names
+	 * @param $value array|string Field name or array of field names
 	 */
 	protected function addFields( $value ) {
 		if ( is_array( $value ) ) {
@@ -130,7 +119,7 @@ abstract class ApiQueryBase extends ApiBase {
 
 	/**
 	 * Same as addFields(), but add the fields only if a condition is met
-	 * @param $value mixed See addFields()
+	 * @param $value array|string See addFields()
 	 * @param $condition bool If false, do nothing
 	 * @return bool $condition
 	 */
@@ -220,12 +209,27 @@ abstract class ApiQueryBase extends ApiBase {
 
 		if ( $sort ) {
 			$order = $field . ( $isDirNewer ? '' : ' DESC' );
-			if ( !isset( $this->options['ORDER BY'] ) ) {
-				$this->addOption( 'ORDER BY', $order );
-			} else {
-				$this->addOption( 'ORDER BY', $this->options['ORDER BY'] . ', ' . $order );
-			}
+			// Append ORDER BY
+			$optionOrderBy = isset( $this->options['ORDER BY'] ) ? (array)$this->options['ORDER BY'] : array();
+			$optionOrderBy[] = $order;
+			$this->addOption( 'ORDER BY', $optionOrderBy );
 		}
+	}
+
+	/**
+	 * Add a WHERE clause corresponding to a range, similar to addWhereRange,
+	 * but converts $start and $end to database timestamps.
+	 * @see addWhereRange
+	 * @param $field
+	 * @param $dir
+	 * @param $start
+	 * @param $end
+	 * @param $sort bool
+	 */
+	protected function addTimestampWhereRange( $field, $dir, $start, $end, $sort = true ) {
+		$db = $this->getDb();
+		return $this->addWhereRange( $field, $dir,
+			$db->timestampOrNull( $start ), $db->timestampOrNull( $end ), $sort );
 	}
 
 	/**
@@ -359,14 +363,15 @@ abstract class ApiQueryBase extends ApiBase {
 	protected function setContinueEnumParameter( $paramName, $paramValue ) {
 		$paramName = $this->encodeParamName( $paramName );
 		$msg = array( $paramName => $paramValue );
-		$this->getResult()->disableSizeCheck();
-		$this->getResult()->addValue( 'query-continue', $this->getModuleName(), $msg );
-		$this->getResult()->enableSizeCheck();
+		$result = $this->getResult();
+		$result->disableSizeCheck();
+		$result->addValue( 'query-continue', $this->getModuleName(), $msg );
+		$result->enableSizeCheck();
 	}
 
 	/**
 	 * Get the Query database connection (read-only)
-	 * @return Database
+	 * @return DatabaseBase
 	 */
 	protected function getDB() {
 		if ( is_null( $this->mDb ) ) {
@@ -498,8 +503,7 @@ abstract class ApiQueryBase extends ApiBase {
 	 * @return void
 	 */
 	public function showHiddenUsersAddBlockInfo( $showBlockInfo ) {
-		global $wgUser;
-		$userCanViewHiddenUsers = $wgUser->isAllowed( 'hideuser' );
+		$userCanViewHiddenUsers = $this->getUser()->isAllowed( 'hideuser' );
 
 		if ( $showBlockInfo || !$userCanViewHiddenUsers ) {
 			$this->addTables( 'ipblocks' );
@@ -520,6 +524,25 @@ abstract class ApiQueryBase extends ApiBase {
 		}
 	}
 
+	/**
+	 * @param $hash string
+	 * @return bool
+	 */
+	public function validateSha1Hash( $hash ) {
+		return preg_match( '/[a-fA-F0-9]{40}/', $hash );
+	}
+
+	/**
+	 * @param $hash string
+	 * @return bool
+	 */
+	public function validateSha1Base36Hash( $hash ) {
+		return preg_match( '/[a-zA-Z0-9]{31}/', $hash );
+	}
+
+	/**
+	 * @return array
+	 */
 	public function getPossibleErrors() {
 		return array_merge( parent::getPossibleErrors(), array(
 			array( 'invalidtitle', 'title' ),
@@ -532,7 +555,7 @@ abstract class ApiQueryBase extends ApiBase {
 	 * @return string
 	 */
 	public static function getBaseVersion() {
-		return __CLASS__ . ': $Id: ApiQueryBase.php 84431 2011-03-20 22:46:09Z reedy $';
+		return __CLASS__ . ': $Id: ApiQueryBase.php 103273 2011-11-16 00:17:26Z johnduhart $';
 	}
 }
 

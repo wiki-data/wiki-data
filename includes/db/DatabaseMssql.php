@@ -117,7 +117,7 @@ class DatabaseMssql extends DatabaseBase {
 		}
 	}
 
-	function doQuery( $sql ) {
+	protected function doQuery( $sql ) {
 		wfDebug( "SQL: [$sql]\n" );
 		$this->offset = 0;
 
@@ -345,7 +345,7 @@ class DatabaseMssql extends DatabaseBase {
 					$row->Column_name = trim( $col );
 					$result[] = clone $row;
 				}
-			} else if ( $index == 'PRIMARY' && stristr( $row->index_description, 'PRIMARY' ) ) {
+			} elseif ( $index == 'PRIMARY' && stristr( $row->index_description, 'PRIMARY' ) ) {
 				$row->Non_unique = 0;
 				$cols = explode( ", ", $row->index_keys );
 				foreach ( $cols as $col ) {
@@ -452,14 +452,14 @@ class DatabaseMssql extends DatabaseBase {
 					$sql .= ',';
 				}
 				if ( is_string( $value ) ) {
-					$sql .= $this->addIdentifierQuotes( $value );
+					$sql .= $this->addQuotes( $value );
 				} elseif ( is_null( $value ) ) {
 					$sql .= 'null';
 				} elseif ( is_array( $value ) || is_object( $value ) ) {
 					if ( is_object( $value ) && strtolower( get_class( $value ) ) == 'blob' ) {
-						$sql .= $this->addIdentifierQuotes( $value->fetch() );
+						$sql .= $this->addQuotes( $value );
 					}  else {
-						$sql .= $this->addIdentifierQuotes( serialize( $value ) );
+						$sql .= $this->addQuotes( serialize( $value ) );
 					}
 				} else {
 					$sql .= $value;
@@ -510,35 +510,6 @@ class DatabaseMssql extends DatabaseBase {
 	}
 
 	/**
-	 * Format a table name ready for use in constructing an SQL query
-	 *
-	 * This does two important things: it brackets table names which as necessary,
-	 * and it adds a table prefix if there is one.
-	 *
-	 * All functions of this object which require a table name call this function
-	 * themselves. Pass the canonical name to such functions. This is only needed
-	 * when calling query() directly.
-	 *
-	 * @param $name String: database table name
-	 */
-	function tableName( $name ) {
-		global $wgSharedDB;
-		# Skip quoted literals
-		if ( $name != '' && $name { 0 } != '[' ) {
-			if ( $this->mTablePrefix !== '' &&  strpos( '.', $name ) === false ) {
-				$name = "{$this->mTablePrefix}$name";
-			}
-			if ( isset( $wgSharedDB ) && "{$this->mTablePrefix}user" == $name ) {
-				$name = "[$wgSharedDB].[$name]";
-			} else {
-				# Standard quoting
-				if ( $name != '' ) $name = "[$name]";
-			}
-		}
-		return $name;
-	}
-
-	/**
 	 * Return the next in a sequence, save the value for retrieval via insertId()
 	 */
 	function nextSequenceValue( $seqName ) {
@@ -566,82 +537,6 @@ class DatabaseMssql extends DatabaseBase {
 		} else {
 			return $this->nextSequenceValue( $seqName );
 		}
-	}
-
-
-	# REPLACE query wrapper
-	# MSSQL simulates this with a DELETE followed by INSERT
-	# $row is the row to insert, an associative array
-	# $uniqueIndexes is an array of indexes. Each element may be either a
-	# field name or an array of field names
-	#
-	# It may be more efficient to leave off unique indexes which are unlikely to collide.
-	# However if you do this, you run the risk of encountering errors which wouldn't have
-	# occurred in MySQL
-	function replace( $table, $uniqueIndexes, $rows, $fname = 'DatabaseMssql::replace' ) {
-		$table = $this->tableName( $table );
-
-		if ( count( $rows ) == 0 ) {
-			return;
-		}
-
-		# Single row case
-		if ( !is_array( reset( $rows ) ) ) {
-			$rows = array( $rows );
-		}
-
-		foreach ( $rows as $row ) {
-			# Delete rows which collide
-			if ( $uniqueIndexes ) {
-				$sql = "DELETE FROM $table WHERE ";
-				$first = true;
-				foreach ( $uniqueIndexes as $index ) {
-					if ( $first ) {
-						$first = false;
-						$sql .= "(";
-					} else {
-						$sql .= ') OR (';
-					}
-					if ( is_array( $index ) ) {
-						$first2 = true;
-						foreach ( $index as $col ) {
-							if ( $first2 ) {
-								$first2 = false;
-							} else {
-								$sql .= ' AND ';
-							}
-							$sql .= $col . '=' . $this->addQuotes( $row[$col] );
-						}
-					} else {
-						$sql .= $index . '=' . $this->addQuotes( $row[$index] );
-					}
-				}
-				$sql .= ')';
-				$this->query( $sql, $fname );
-			}
-
-			# Now insert the row
-			$sql = "INSERT INTO $table (" . $this->makeList( array_keys( $row ), LIST_NAMES ) . ') VALUES (' .
-				$this->makeList( $row, LIST_COMMA ) . ')';
-			$this->query( $sql, $fname );
-		}
-	}
-
-	# DELETE where the condition is a join
-	function deleteJoin( $delTable, $joinTable, $delVar, $joinVar, $conds, $fname = "DatabaseMssql::deleteJoin" ) {
-		if ( !$conds ) {
-			throw new DBUnexpectedError( $this, 'DatabaseMssql::deleteJoin() called with empty $conds' );
-		}
-
-		$delTable = $this->tableName( $delTable );
-		$joinTable = $this->tableName( $joinTable );
-		$sql = "DELETE FROM $delTable WHERE $delVar IN (SELECT $joinVar FROM $joinTable ";
-		if ( $conds != '*' ) {
-			$sql .= 'WHERE ' . $this->makeList( $conds, LIST_AND );
-		}
-		$sql .= ')';
-
-		$this->query( $sql, $fname );
 	}
 
 	# Returns the size of a text field, or -1 for "unlimited"
@@ -736,7 +631,7 @@ class DatabaseMssql extends DatabaseBase {
 		return $version;
 	}
 
-	function tableExists ( $table, $schema = false ) {
+	function tableExists ( $table, $fname = __METHOD__, $schema = false ) {
 		$res = sqlsrv_query( $this->mConn, "SELECT * FROM information_schema.tables
 			WHERE table_type='BASE TABLE' AND table_name = '$table'" );
 		if ( $res === false ) {
@@ -806,48 +701,6 @@ class DatabaseMssql extends DatabaseBase {
 	function rollback( $fname = 'DatabaseMssql::rollback' ) {
 		sqlsrv_rollback( $this->mConn );
 		$this->mTrxLevel = 0;
-	}
-
-	function setup_database() {
-		global $wgDBuser;
-
-		// Make sure that we can write to the correct schema
-		$ctest = "mediawiki_test_table";
-		if ( $this->tableExists( $ctest ) ) {
-			$this->doQuery( "DROP TABLE $ctest" );
-		}
-		$SQL = "CREATE TABLE $ctest (a int)";
-		$res = $this->doQuery( $SQL );
-		if ( !$res ) {
-			print "<b>FAILED</b>. Make sure that the user " . htmlspecialchars( $wgDBuser ) . " can write to the database</li>\n";
-			die();
-		}
-		$this->doQuery( "DROP TABLE $ctest" );
-
-		$res = $this->sourceFile( "../maintenance/mssql/tables.sql" );
-		if ( $res !== true ) {
-			echo " <b>FAILED</b></li>";
-			die( htmlspecialchars( $res ) );
-		}
-
-		# Avoid the non-standard "REPLACE INTO" syntax
-		$f = fopen( "../maintenance/interwiki.sql", 'r' );
-		if ( $f == false ) {
-			die( "<li>Could not find the interwiki.sql file" );
-		}
-		# We simply assume it is already empty as we have just created it
-		$SQL = "INSERT INTO interwiki(iw_prefix,iw_url,iw_local) VALUES ";
-		while ( ! feof( $f ) ) {
-			$line = fgets( $f, 1024 );
-			$matches = array();
-			if ( !preg_match( '/^\s*(\(.+?),(\d)\)/', $line, $matches ) ) {
-				continue;
-			}
-			$this->query( "$SQL $matches[1],$matches[2])" );
-		}
-		print " (table interwiki successfully populated)...\n";
-
-		$this->commit();
 	}
 
 	/**
@@ -956,12 +809,12 @@ class DatabaseMssql extends DatabaseBase {
 				$tableClause .= ' ON (' . $this->makeList( (array)$join_conds_safe[$table][1], LIST_AND ) . ')';
 				$retJOIN[] = $tableClause;
 			// Is there an INDEX clause?
-			} else if ( isset( $use_index_safe[$table] ) ) {
+			} elseif ( isset( $use_index_safe[$table] ) ) {
 				$tableClause = $this->tableName( $table );
 				$tableClause .= ' ' . $this->useIndexClause( implode( ',', (array)$use_index_safe[$table] ) );
 				$ret[] = $tableClause;
 			// Is there a JOIN clause?
-			} else if ( isset( $join_conds_safe[$table] ) ) {
+			} elseif ( isset( $join_conds_safe[$table] ) ) {
 				$tableClause = $join_conds_safe[$table][0] . ' ' . $this->tableName( $table );
 				$tableClause .= ' ON (' . $this->makeList( (array)$join_conds_safe[$table][1], LIST_AND ) . ')';
 				$retJOIN[] = $tableClause;
@@ -987,6 +840,15 @@ class DatabaseMssql extends DatabaseBase {
 		} else {
 			return parent::addQuotes( $s );
 		}
+	}
+
+	public function addIdentifierQuotes( $s ) {
+		// http://msdn.microsoft.com/en-us/library/aa223962.aspx
+		return '[' . $s . ']';
+	}
+
+	public function isQuotedIdentifier( $name ) {
+		return $name[0] == '[' && substr( $name, -1, 1 ) == ']';
 	}
 
 	function selectDB( $db ) {
@@ -1066,7 +928,7 @@ class MssqlField implements Field {
 		$this->tablename = $info['TABLE_NAME'];
 		$this->default = $info['COLUMN_DEFAULT'];
 		$this->max_length = $info['CHARACTER_MAXIMUM_LENGTH'];
-		$this->nullable = ( strtolower( $info['IS_NULLABLE'] ) == 'no' ) ? false:true;
+		$this->nullable = !( strtolower( $info['IS_NULLABLE'] ) == 'no' );
 		$this->type = $info['DATA_TYPE'];
 	}
 

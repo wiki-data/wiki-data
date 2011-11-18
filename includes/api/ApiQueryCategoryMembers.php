@@ -24,11 +24,6 @@
  * @file
  */
 
-if ( !defined( 'MEDIAWIKI' ) ) {
-	// Eclipse helper - will be ignored in production
-	require_once( "ApiQueryBase.php" );
-}
-
 /**
  * A query module to enumerate pages that belong to a category.
  *
@@ -123,33 +118,42 @@ class ApiQueryCategoryMembers extends ApiQueryGeneratorBase {
 			$this->addOption( 'USE INDEX', 'cl_timestamp' );
 		} else {
 			if ( $params['continue'] ) {
-				// type|from|sortkey
 				$cont = explode( '|', $params['continue'], 3 );
 				if ( count( $cont ) != 3 ) {
 					$this->dieUsage( 'Invalid continue param. You should pass the original value returned '.
 						'by the previous query', '_badcontinue'
 					);
 				}
-				
+
 				// Remove the types to skip from $queryTypes
 				$contTypeIndex = array_search( $cont[0], $queryTypes );
 				$queryTypes = array_slice( $queryTypes, $contTypeIndex );
-				
+
 				// Add a WHERE clause for sortkey and from
-				$from = intval( $cont[1] );
-				$escSortkey = $this->getDB()->addQuotes( $cont[2] );
+				// pack( "H*", $foo ) is used to convert hex back to binary
+				$escSortkey = $this->getDB()->addQuotes( pack( "H*", $cont[1] ) );
+				$from = intval( $cont[2] );
 				$op = $dir == 'newer' ? '>' : '<';
 				// $contWhere is used further down
 				$contWhere = "cl_sortkey $op $escSortkey OR " .
 					"(cl_sortkey = $escSortkey AND " .
 					"cl_from $op= $from)";
-				
+				// The below produces ORDER BY cl_sortkey, cl_from, possibly with DESC added to each of them
+				$this->addWhereRange( 'cl_sortkey', $dir, null, null );
+				$this->addWhereRange( 'cl_from', $dir, null, null );
 			} else {
+				$startsortkey = $params['startsortkeyprefix'] !== null ?
+					Collation::singleton()->getSortkey( $params['startsortkeyprefix'] ) :
+					$params['startsortkey'];
+				$endsortkey = $params['endsortkeyprefix'] !== null ?
+					Collation::singleton()->getSortkey( $params['endsortkeyprefix'] ) :
+					$params['endsortkey'];
+
 				// The below produces ORDER BY cl_sortkey, cl_from, possibly with DESC added to each of them
 				$this->addWhereRange( 'cl_sortkey',
 					$dir,
-					$params['startsortkey'],
-					$params['endsortkey'] );
+					$startsortkey,
+					$endsortkey );
 				$this->addWhereRange( 'cl_from', $dir, null, null );
 			}
 			$this->addOption( 'USE INDEX', 'cl_sortkey' );
@@ -189,6 +193,8 @@ class ApiQueryCategoryMembers extends ApiQueryGeneratorBase {
 			$res = $this->select( __METHOD__ );
 			$rows = iterator_to_array( $res );
 		}
+
+		$result = $this->getResult();
 		$count = 0;
 		foreach ( $rows as $row ) {
 			if ( ++ $count > $limit ) {
@@ -197,12 +203,9 @@ class ApiQueryCategoryMembers extends ApiQueryGeneratorBase {
 				if ( $params['sort'] == 'timestamp' ) {
 					$this->setContinueEnumParameter( 'start', wfTimestamp( TS_ISO_8601, $row->cl_timestamp ) );
 				} else {
-					// Continue format is type|from|sortkey
-					// The order is a bit weird but it's convenient to put the sortkey at the end
-					// because we don't have to worry about pipes in the sortkey that way
-					// (and type and from can't contain pipes anyway)
+					$sortkey = bin2hex( $row->cl_sortkey );
 					$this->setContinueEnumParameter( 'continue',
-						"{$row->cl_type}|{$row->cl_from}|{$row->cl_sortkey}"
+						"{$row->cl_type}|$sortkey|{$row->cl_from}"
 					);
 				}
 				break;
@@ -226,7 +229,7 @@ class ApiQueryCategoryMembers extends ApiQueryGeneratorBase {
 					ApiQueryBase::addTitleInfo( $vals, $title );
 				}
 				if ( $fld_sortkey ) {
-					$vals['sortkey'] = $row->cl_sortkey;
+					$vals['sortkey'] = bin2hex( $row->cl_sortkey );
 				}
 				if ( $fld_sortkeyprefix ) {
 					$vals['sortkeyprefix'] = $row->cl_sortkey_prefix;
@@ -237,14 +240,15 @@ class ApiQueryCategoryMembers extends ApiQueryGeneratorBase {
 				if ( $fld_timestamp ) {
 					$vals['timestamp'] = wfTimestamp( TS_ISO_8601, $row->cl_timestamp );
 				}
-				$fit = $this->getResult()->addValue( array( 'query', $this->getModuleName() ),
+				$fit = $result->addValue( array( 'query', $this->getModuleName() ),
 						null, $vals );
 				if ( !$fit ) {
 					if ( $params['sort'] == 'timestamp' ) {
 						$this->setContinueEnumParameter( 'start', wfTimestamp( TS_ISO_8601, $row->cl_timestamp ) );
 					} else {
+						$sortkey = bin2hex( $row->cl_sortkey );
 						$this->setContinueEnumParameter( 'continue',
-							"{$row->cl_type}|{$row->cl_from}|{$row->cl_sortkey}"
+							"{$row->cl_type}|$sortkey|{$row->cl_from}"
 						);
 					}
 					break;
@@ -255,7 +259,7 @@ class ApiQueryCategoryMembers extends ApiQueryGeneratorBase {
 		}
 
 		if ( is_null( $resultPageSet ) ) {
-			$this->getResult()->setIndexedTagName_internal(
+			$result->setIndexedTagName_internal(
 					 array( 'query', $this->getModuleName() ), 'cm' );
 		}
 	}
@@ -323,6 +327,8 @@ class ApiQueryCategoryMembers extends ApiQueryGeneratorBase {
 			),
 			'startsortkey' => null,
 			'endsortkey' => null,
+			'startsortkeyprefix' => null,
+			'endsortkeyprefix' => null,
 		);
 	}
 
@@ -336,7 +342,7 @@ class ApiQueryCategoryMembers extends ApiQueryGeneratorBase {
 				'What pieces of information to include',
 				' ids           - Adds the page ID',
 				' title         - Adds the title and namespace ID of the page',
-				' sortkey       - Adds the sortkey used for sorting in the category (may not be human-readble)',
+				' sortkey       - Adds the sortkey used for sorting in the category (hexadecimal string)',
 				' sortkeyprefix - Adds the sortkey prefix used for sorting in the category (human-readable part of the sortkey)',
 				' type          - Adds the type that the page has been categorised as (page, subcat or file)',
 				' timestamp     - Adds the timestamp of when the page was included',
@@ -347,8 +353,10 @@ class ApiQueryCategoryMembers extends ApiQueryGeneratorBase {
 			'dir' => 'In which direction to sort',
 			'start' => "Timestamp to start listing from. Can only be used with {$p}sort=timestamp",
 			'end' => "Timestamp to end listing at. Can only be used with {$p}sort=timestamp",
-			'startsortkey' => "Sortkey to start listing from. Can only be used with {$p}sort=sortkey",
-			'endsortkey' => "Sortkey to end listing at. Can only be used with {$p}sort=sortkey",
+			'startsortkey' => "Sortkey to start listing from. Must be given in binary format. Can only be used with {$p}sort=sortkey",
+			'endsortkey' => "Sortkey to end listing at. Must be given in binary format. Can only be used with {$p}sort=sortkey",
+			'startsortkeyprefix' => "Sortkey prefix to start listing from. Can only be used with {$p}sort=sortkey. Overrides {$p}startsortkey",
+			'endsortkeyprefix' => "Sortkey prefix to end listing BEFORE (not at, if this value occurs it will not be included!). Can only be used with {$p}sort=sortkey. Overrides {$p}endsortkey",
 			'continue' => 'For large categories, give the value retured from previous query',
 			'limit' => 'The maximum number of pages to return.',
 		);
@@ -379,7 +387,7 @@ class ApiQueryCategoryMembers extends ApiQueryGeneratorBase {
 		);
 	}
 
-	protected function getExamples() {
+	public function getExamples() {
 		return array(
 			'Get first 10 pages in [[Category:Physics]]:',
 			'  api.php?action=query&list=categorymembers&cmtitle=Category:Physics',
@@ -388,7 +396,11 @@ class ApiQueryCategoryMembers extends ApiQueryGeneratorBase {
 		);
 	}
 
+	public function getHelpUrls() {
+		return 'http://www.mediawiki.org/wiki/API:Categorymembers';
+	}
+
 	public function getVersion() {
-		return __CLASS__ . ': $Id: ApiQueryCategoryMembers.php 84905 2011-03-28 15:01:20Z catrope $';
+		return __CLASS__ . ': $Id: ApiQueryCategoryMembers.php 103273 2011-11-16 00:17:26Z johnduhart $';
 	}
 }

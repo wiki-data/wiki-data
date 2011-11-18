@@ -21,7 +21,7 @@
  * @ingroup MaintenanceLanguage
  *
  * @author Ævar Arnfjörð Bjarmason <avarab@gmail.com>
- * @author Ashar Voultoiz <hashar at free dot fr>
+ * @author Antoine Musso <hashar at free dot fr>
  *
  * Output is posted from time to time on:
  * http://www.mediawiki.org/wiki/Localisation_statistics
@@ -95,8 +95,9 @@ $wgGeneralMessages = $wgLanguages->getGeneralMessages();
 $wgRequiredMessagesNumber = count( $wgGeneralMessages['required'] );
 
 foreach ( $wgLanguages->getLanguages() as $code ) {
-	# Don't check English or RTL English
-	if ( $code == 'en' || $code == 'enRTL' ) {
+	# Don't check English, RTL English or dummy language codes
+	if ( $code == 'en' || $code == 'enRTL' || (is_array( $wgDummyLanguageCodes ) &&
+		in_array( $code, $wgDummyLanguageCodes ) ) ) {
 		continue;
 	}
 

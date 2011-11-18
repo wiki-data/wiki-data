@@ -60,23 +60,29 @@ class UnwatchedpagesPage extends QueryPage {
 		return array( 'page_namespace', 'page_title' );
 	}
 
+	/**
+	 * @param $skin Skin
+	 * @param $result
+	 * @return string
+	 */
 	function formatResult( $skin, $result ) {
 		global $wgContLang;
 
 		$nt = Title::makeTitle( $result->namespace, $result->title );
 		$text = $wgContLang->convert( $nt->getPrefixedText() );
 
-		$plink = $skin->linkKnown(
+		$plink = Linker::linkKnown(
 			$nt,
 			htmlspecialchars( $text )
 		);
-		$wlink = $skin->linkKnown(
+		$token = WatchAction::getWatchToken( $nt, $this->getUser() );
+		$wlink = Linker::linkKnown(
 			$nt,
 			wfMsgHtml( 'watch' ),
 			array(),
-			array( 'action' => 'watch' )
+			array( 'action' => 'watch', 'token' => $token )
 		);
 
-		return wfSpecialList( $plink, $wlink );
+		return $this->getLang()->specialList( $plink, $wlink );
 	}
 }

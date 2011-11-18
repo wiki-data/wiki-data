@@ -24,11 +24,6 @@
  * @file
  */
 
-if ( !defined( 'MEDIAWIKI' ) ) {
-	// Eclipse helper - will be ignored in production
-	require_once( 'ApiQueryBase.php' );
-}
-
 /**
  * Query module to enumerate change tags.
  *
@@ -64,9 +59,7 @@ class ApiQueryTags extends ApiQueryBase {
 		$this->addTables( 'change_tag' );
 		$this->addFields( 'ct_tag' );
 
-		if ( $this->fld_hitcount ) {
-			$this->addFields( 'count(*) AS hitcount' );
-		}
+		$this->addFieldsIf( 'count(*) AS hitcount', $this->fld_hitcount );
 
 		$this->addOption( 'LIMIT', $this->limit + 1 );
 		$this->addOption( 'GROUP BY', 'ct_tag' );
@@ -115,9 +108,8 @@ class ApiQueryTags extends ApiQueryBase {
 		}
 
 		if ( $this->fld_description ) {
-			$msg = wfMsg( "tag-$tagName-description" );
-			$msg = wfEmptyMsg( "tag-$tagName-description" ) ? '' : $msg;
-			$tag['description'] = $msg;
+			$msg = wfMessage( "tag-$tagName-description" );
+			$tag['description'] = $msg->exists() ? $msg->text() : '';
 		}
 
 		if ( $this->fld_hitcount ) {
@@ -181,13 +173,13 @@ class ApiQueryTags extends ApiQueryBase {
 		return 'List change tags';
 	}
 
-	protected function getExamples() {
+	public function getExamples() {
 		return array(
 			'api.php?action=query&list=tags&tgprop=displayname|description|hitcount'
 		);
 	}
 
 	public function getVersion() {
-		return __CLASS__ . ': $Id: ApiQueryTags.php 83462 2011-03-07 17:10:22Z hashar $';
+		return __CLASS__ . ': $Id: ApiQueryTags.php 103273 2011-11-16 00:17:26Z johnduhart $';
 	}
 }

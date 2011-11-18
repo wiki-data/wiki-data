@@ -40,9 +40,14 @@ class SearchMySQL extends SearchEngine {
 		parent::__construct( $db );
 	}
 
-	/** 
-	 * Parse the user's query and transform it into an SQL fragment which will 
+	/**
+	 * Parse the user's query and transform it into an SQL fragment which will
 	 * become part of a WHERE clause
+	 *
+	 * @param $filteredText string
+	 * @param $fullText string
+	 *
+	 * @return string
 	 */
 	function parseQuery( $filteredText, $fulltext ) {
 		global $wgContLang;
@@ -50,7 +55,7 @@ class SearchMySQL extends SearchEngine {
 		$searchon = '';
 		$this->searchTerms = array();
 
-		# FIXME: This doesn't handle parenthetical expressions.
+		# @todo FIXME: This doesn't handle parenthetical expressions.
 		$m = array();
 		if( preg_match_all( '/([-+<>~]?)(([' . $lc . ']+)(\*?)|"[^"]*")/',
 			  $filteredText, $m, PREG_SET_ORDER ) ) {
@@ -171,12 +176,24 @@ class SearchMySQL extends SearchEngine {
 	protected function searchInternal( $term, $fulltext ) {
 		global $wgCountTotalSearchHits;
 
+		// This seems out of place, why is this called with empty term?
+		if ( trim( $term ) === '' ) return null;
+
 		$filteredTerm = $this->filter( $term );
-		$resultSet = $this->db->query( $this->getQuery( $filteredTerm, $fulltext ) );
+		$query = $this->getQuery( $filteredTerm, $fulltext );
+		$resultSet = $this->db->select(
+			$query['tables'], $query['fields'], $query['conds'],
+			__METHOD__, $query['options'], $query['joins']
+		);
 
 		$total = null;
 		if( $wgCountTotalSearchHits ) {
-			$totalResult = $this->db->query( $this->getCountQuery( $filteredTerm, $fulltext ) );
+			$query = $this->getCountQuery( $filteredTerm, $fulltext );
+			$totalResult = $this->db->select(
+				$query['tables'], $query['fields'], $query['conds'],
+				__METHOD__, $query['options'], $query['joins']
+			);
+
 			$row = $totalResult->fetchObject();
 			if( $row ) {
 				$total = intval( $row->c );
@@ -187,74 +204,76 @@ class SearchMySQL extends SearchEngine {
 		return new MySQLSearchResultSet( $resultSet, $this->searchTerms, $total );
 	}
 
-
-	/**
-	 * Return a partial WHERE clause to exclude redirects, if so set
-	 * @return String
-	 */
-	function queryRedirect() {
-		if( $this->showRedirects ) {
-			return '';
-		} else {
-			return 'page_is_redirect=0';
+	public function supports( $feature ) {
+		switch( $feature ) {
+		case 'list-redirects':
+		case 'title-suffix-filter':
+			return true;
+		default:
+			return false;
 		}
 	}
 
 	/**
-	 * Return a partial WHERE clause to limit the search to the given namespaces
-	 * @return String
+	 * Add special conditions
+	 * @param $query Array
+	 * @since 1.18
 	 */
-	function queryNamespaces() {
-		if( is_null($this->namespaces) )
-			return '';  # search all
-		if ( !count( $this->namespaces ) ) {
-			$namespaces = '0';
-		} else {
-			$namespaces = $this->db->makeList( $this->namespaces );
+	protected function queryFeatures( &$query ) {
+		foreach ( $this->features as $feature => $value ) {
+			if ( $feature ===  'list-redirects' && !$value ) {
+				$query['conds']['page_is_redirect'] = 0;
+			} elseif( $feature === 'title-suffix-filter' && $value ) {
+				$query['conds'][] = 'page_title' . $this->db->buildLike( $this->db->anyString(), $value );
+			}
 		}
-		return 'page_namespace IN (' . $namespaces . ')';
 	}
 
 	/**
-	 * Return a LIMIT clause to limit results on the query.
-	 * @return String
+	 * Add namespace conditions
+	 * @param $query Array
+	 * @since 1.18 (changed)
 	 */
-	function queryLimit() {
-		return $this->db->limitResult( '', $this->limit, $this->offset );
+	function queryNamespaces( &$query ) {
+		if ( is_array( $this->namespaces ) ) {
+			if ( count( $this->namespaces ) === 0 ) {
+				$this->namespaces[] = '0';
+			}
+			$query['conds']['page_namespace'] = $this->namespaces;
+		}
 	}
 
 	/**
-	 * Does not do anything for generic search engine
-	 * subclasses may define this though
-	 * @return String
+	 * Add limit options
+	 * @param $query Array
+	 * @since 1.18
 	 */
-	function queryRanking( $filteredTerm, $fulltext ) {
-		return '';
+	protected function limitResult( &$query ) {
+		$query['options']['LIMIT'] = $this->limit;
+		$query['options']['OFFSET'] = $this->offset;
 	}
 
 	/**
-	 * Construct the full SQL query to do the search.
+	 * Construct the SQL query to do the search.
 	 * The guts shoulds be constructed in queryMain()
 	 * @param $filteredTerm String
 	 * @param $fulltext Boolean
+	 * @return Array
+	 * @since 1.18 (changed)
 	 */
 	function getQuery( $filteredTerm, $fulltext ) {
-		$query = $this->queryMain( $filteredTerm, $fulltext ) . ' ';
+		$query = array(
+			'tables' => array(),
+			'fields' => array(),
+			'conds' => array(),
+			'options' => array(),
+			'joins' => array(),
+		);
 
-		$redir = $this->queryRedirect();
-
-		if ( $redir ) {
-			$query .= 'AND ' . $redir . ' ';
-		}
-
-		$namespace = $this->queryNamespaces();
-
-		if ( $namespace ) {
-			$query .= 'AND ' . $namespace . ' ';
-		}
-
-		$query .= $this->queryRanking( $filteredTerm, $fulltext ) . ' ' .
-			$this->queryLimit();
+		$this->queryMain( $query, $filteredTerm, $fulltext );
+		$this->queryFeatures( $query );
+		$this->queryNamespaces( $query );
+		$this->limitResult( $query );
 
 		return $query;
 	}
@@ -270,36 +289,40 @@ class SearchMySQL extends SearchEngine {
 
 	/**
 	 * Get the base part of the search query.
-	 * The actual match syntax will depend on the server
-	 * version; MySQL 3 and MySQL 4 have different capabilities
-	 * in their fulltext search indexes.
 	 *
 	 * @param $filteredTerm String
 	 * @param $fulltext Boolean
-	 * @return String
+	 * @since 1.18 (changed)
 	 */
-	function queryMain( $filteredTerm, $fulltext ) {
+	function queryMain( &$query, $filteredTerm, $fulltext ) {
 		$match = $this->parseQuery( $filteredTerm, $fulltext );
-		$page        = $this->db->tableName( 'page' );
-		$searchindex = $this->db->tableName( 'searchindex' );
-		return 'SELECT page_id, page_namespace, page_title ' .
-			"FROM $page,$searchindex " .
-			'WHERE page_id=si_page AND ' . $match;
+		$query['tables'][] = 'page';
+		$query['tables'][] = 'searchindex';
+		$query['fields'][] = 'page_id';
+		$query['fields'][] = 'page_namespace';
+		$query['fields'][] = 'page_title';
+		$query['conds'][] = 'page_id=si_page';
+		$query['conds'][] = $match;
 	}
 
+	/**
+	 * @since 1.18 (changed)
+	 */
 	function getCountQuery( $filteredTerm, $fulltext ) {
 		$match = $this->parseQuery( $filteredTerm, $fulltext );
 
-		return $this->db->selectSQLText( array( 'page', 'searchindex' ),
-			'COUNT(*) AS c',
-			array(
-				'page_id=si_page',
-				$match,
-				$this->queryRedirect(),
-				$this->queryNamespaces()
-			),
-			__METHOD__
+		$query = array(
+			'tables' => array( 'page', 'searchindex' ),
+			'fields' => array( 'COUNT(*) as c' ),
+			'conds' => array( 'page_id=si_page', $match ),
+			'options' => array(),
+			'joins' => array(),
 		);
+
+		$this->queryFeatures( $query );
+		$this->queryNamespaces( $query );
+
+		return $query;
 	}
 
 	/**
@@ -396,7 +419,7 @@ class SearchMySQL extends SearchEngine {
 	/**
 	 * Check MySQL server's ft_min_word_len setting so we know
 	 * if we need to pad short words...
-	 * 
+	 *
 	 * @return int
 	 */
 	protected function minSearchLength() {

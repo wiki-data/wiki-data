@@ -43,6 +43,7 @@ class UpdateMediaWiki extends Maintenance {
 		$this->addOption( 'quick', 'Skip 5 second countdown before starting' );
 		$this->addOption( 'doshared', 'Also update shared tables' );
 		$this->addOption( 'nopurge', 'Do not purge the objectcache table after updates' );
+		$this->addOption( 'force', 'Override when $wgAllowSchemaUpdates disables this script' );
 	}
 
 	function getDbType() {
@@ -75,12 +76,20 @@ class UpdateMediaWiki extends Maintenance {
 	}
 
 	function execute() {
-		global $wgVersion, $wgTitle, $wgLang;
+		global $wgVersion, $wgTitle, $wgLang, $wgAllowSchemaUpdates;
+
+		if( !$wgAllowSchemaUpdates && !$this->hasOption( 'force' ) ) {
+			$this->error( "Do not run update.php on this wiki. If you're seeing this you should\n"
+				. "probably ask for some help in performing your schema updates.\n\n"
+				. "If you know what you are doing, you can continue with --force", true );
+		}
 
 		$wgLang = Language::factory( 'en' );
 		$wgTitle = Title::newFromText( "MediaWiki database updater" );
 
 		$this->output( "MediaWiki {$wgVersion} Updater\n\n" );
+
+		wfWaitForSlaves( 5 ); // let's not kill databases, shall we? ;) --tor
 
 		if ( !$this->hasOption( 'skip-compat-checks' ) ) {
 			$this->compatChecks();
@@ -103,7 +112,7 @@ class UpdateMediaWiki extends Maintenance {
 
 		$shared = $this->hasOption( 'doshared' );
 
-		$updates = array('core','extensions');
+		$updates = array( 'core', 'extensions', 'stats' );
 		if( !$this->hasOption('nopurge') ) {
 			$updates[] = 'purge';
 		}
@@ -112,8 +121,12 @@ class UpdateMediaWiki extends Maintenance {
 		$updater->doUpdates( $updates );
 
 		foreach( $updater->getPostDatabaseUpdateMaintenance() as $maint ) {
+			if ( $updater->updateRowExists( $maint ) ) {
+				continue;
+			}
 			$child = $this->runChild( $maint );
 			$child->execute();
+			$updater->insertUpdateRow( $maint );
 		}
 
 		$this->output( "\nDone.\n" );

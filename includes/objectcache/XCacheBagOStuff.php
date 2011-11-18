@@ -33,7 +33,6 @@ class XCacheBagOStuff extends BagOStuff {
 	 */
 	public function set( $key, $value, $expire = 0 ) {
 		xcache_set( $key, serialize( $value ), $expire );
-
 		return true;
 	}
 
@@ -46,7 +45,6 @@ class XCacheBagOStuff extends BagOStuff {
 	 */
 	public function delete( $key, $time = 0 ) {
 		xcache_unset( $key );
-
 		return true;
 	}
 }

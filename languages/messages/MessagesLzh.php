@@ -96,8 +96,8 @@ $messages = array(
 'tog-shownumberswatching'     => '放哨有',
 'tog-oldsig'                  => '覽原署名：',
 'tog-fancysig'                => '署以本碼待之（免自連）',
-'tog-externaleditor'          => '它器修文（高人用，需設之。[http://www.mediawiki.org/wiki/Manual:External_editors 閱。]）',
-'tog-externaldiff'            => '它器修異（高人用，需設之。[http://www.mediawiki.org/wiki/Manual:External_editors 閱。]）',
+'tog-externaleditor'          => '它器修文（高人用，需設之。[//www.mediawiki.org/wiki/Manual:External_editors 閱。]）',
+'tog-externaldiff'            => '它器修異（高人用，需設之。[//www.mediawiki.org/wiki/Manual:External_editors 閱。]）',
 'tog-showjumplinks'           => '鏈往字',
 'tog-uselivepreview'          => '即覽嚐鮮（JavaScript）',
 'tog-forceeditsummary'        => '漏概醒之',
@@ -195,15 +195,6 @@ $messages = array(
 'index-category'                 => '已索之頁',
 'noindex-category'               => '未索之頁',
 
-'mainpagetext'      => "'''共筆臺已立'''",
-'mainpagedocfooter' => "欲識維基，見[http://meta.wikimedia.org/wiki/Help:Contents User's Guide]
-
-== 始 ==
-
-* [http://www.mediawiki.org/wiki/Manual:Configuration_settings Configuration settings list]
-* [http://www.mediawiki.org/wiki/Manual:FAQ MediaWiki FAQ]
-* [https://lists.wikimedia.org/mailman/listinfo/mediawiki-announce MediaWiki release mailing list]",
-
 'about'         => '述',
 'article'       => '文',
 'newwindow'     => '啟窗',
@@ -254,7 +245,6 @@ $messages = array(
 'history'           => '誌',
 'history_short'     => '誌',
 'updatedmarker'     => '新也',
-'info_short'        => '快訊',
 'printableversion'  => '印本',
 'permalink'         => '恆鏈',
 'print'             => '印',
@@ -426,18 +416,16 @@ $1',
 函式： $1<br />
 問語： $2',
 'viewsource'           => '覽源',
-'viewsourcefor'        => '$1',
 'actionthrottled'      => '無為',
 'actionthrottledtext'  => '基反垃圾之量，於短時中限欲，爾之上限已過。數分後再試之。',
 'protectedpagetext'    => '該頁被錮無纂也。',
 'viewsourcetext'       => '爾可視及複之本頁之原始碼。',
 'protectedinterface'   => '此頁司版，錮之以遠濫。',
-'editinginterface'     => "'''警示：'''此頁司版，一髮牽身，惠慎之。如譯之，可慮[http://translatewiki.net/wiki/Main_Page?setlang=zh-hant translatewiki.net]也，為MediaWiki軟件本地化之計劃也。",
+'editinginterface'     => "'''警示：'''此頁司版，一髮牽身，惠慎之。如譯之，可慮[//translatewiki.net/wiki/Main_Page?setlang=zh-hant translatewiki.net]也，為MediaWiki軟件本地化之計劃也。",
 'sqlhidden'            => '（SQL隱然）',
 'cascadeprotected'     => '此頁"迭緘"矣。$1頁牽連如下：
 $2',
 'namespaceprotected'   => "子權未逮，莫能纂'''$1'''。",
-'customcssjsprotected' => '牽他人，子權未逮，莫能纂之。',
 'ns-specialprotected'  => '奇頁禁纂也。',
 'titleprotected'       => "緘焉自[[User:$1|$1]]防建也。因''$2''也。",
 
@@ -486,7 +474,7 @@ $2',
 'loginsuccesstitle'          => '登簿成矣',
 'loginsuccess'               => "'''$1'''登{{SITENAME}}矣",
 'nosuchuser'                 => '查無此人。',
-'nosuchusershort'            => '查無"<nowiki>$1</nowiki>"，惠核之。',
+'nosuchusershort'            => '查無"$1"，惠核之。',
 'nouserspecified'            => '簿名須也',
 'login-userblocked'          => '此簿已被封。登無簿也。',
 'wrongpassword'              => '符節不合，惠核之。',
@@ -528,16 +516,7 @@ $2',
 # E-mail sending
 'php-mail-error-unknown' => '於 PHP mail() 參數現錯',
 
-# JavaScript password checks
-'password-strength'            => '預之符節強度：$1',
-'password-strength-bad'        => '壞',
-'password-strength-mediocre'   => '中等',
-'password-strength-acceptable' => '可受',
-'password-strength-good'       => '良好',
-'password-retype'              => '在此重鍵符節',
-'password-retype-mismatch'     => '符節不配',
-
-# Password reset dialog
+# Change password dialog
 'resetpass'                 => '變符',
 'resetpass_announce'        => '爾乃過郵之臨符登之。要完登，汝乃需設新符節：',
 'resetpass_text'            => '<!-- 加字 -->',
@@ -606,9 +585,6 @@ $2',
 * 見禁之人：$7
 
 存惑可詢$1，或[[{{MediaWiki:Grouppage-sysop}}|有秩]]，[[Special:Preferences|簿註]]無驛則信不遣。另，子用IP $3，禁號為#$5。詢時切附之。",
-'blockedoriginalsource'            => "'''$1'''本源如下：",
-'blockededitsource'                => "子'''$1纂文'''如下：",
-'whitelistedittitle'               => '登簿以纂',
 'whitelistedittext'                => '$1後方可纂文。',
 'confirmedittext'                  => '驛證方可纂文。惠見[[Special:Preferences|簿註]]。',
 'nosuchsectiontitle'               => '無尋節',
@@ -627,12 +603,12 @@ $2',
 <span class="plainlinks">[{{fullurl:{{#Special:Log}}|page={{FULLPAGENAMEE}}}} 尋誌]，
 或[{{fullurl:{{FULLPAGENAME}}|action=edit}} 纂頁]</span>。',
 'noarticletext-nopermission'       => '查無此文。[[Special:Search/{{PAGENAME}}|尋題]]，或<span class="plainlinks">[{{fullurl:{{#Special:Log}}|page={{FULLPAGENAMEE}}}} 尋誌]</span>。',
-'userpage-userdoesnotexist'        => '「$1」之簿未增也。請建纂本頁前查之。',
+'userpage-userdoesnotexist'        => '「<nowiki>$1</nowiki>」之簿未增也。請建纂本頁前查之。',
 'userpage-userdoesnotexist-view'   => '「$1」之簿未增也。',
 'blocked-notice-logextract'        => '該簿現鎖也。
 下列之記鎖，以察之：',
 'clearyourcache'                   => "'''註：'''重取頁面，文方新焉。
-'''Mozilla / Firefox / Safari:'''押''Shift''並點''重新載入''，或合鍵''Ctrl-F5''或''Ctrl-R''（Macintosh為''Command-R''）。
+'''Mozilla / Firefox / Safari:'''押''Shift''並點''重新載入''，或合鍵''Ctrl-F5''或''Ctrl-R''（Mac為''Command-R''）。
 '''Konqueror:'''點''Reload''，或押''F5''。
 ：''Opera:'''須至''Tools→Preferences''清謄本。
 '''Internet Explorer:'''押''Ctrl''並點''重新整理''，或合鍵''Ctrl-F5''。",
@@ -818,8 +794,6 @@ $2',
 'revdelete-unsuppress'        => '復審解限',
 'revdelete-log'               => '因：',
 'revdelete-submit'            => '擇{{PLURAL:$1|審}}使之',
-'revdelete-logentry'          => '「[[$1]]」之見審動矣',
-'logdelete-logentry'          => '「[[$1]]」之事見動矣',
 'revdelete-success'           => "'''見審已更也。'''",
 'revdelete-failure'           => "'''見審無更也：'''
 $1",
@@ -831,15 +805,6 @@ $1",
 'revdel-restore-visible'      => '可見之審',
 'pagehist'                    => '頁史',
 'deletedhist'                 => '刪史',
-'revdelete-content'           => '字',
-'revdelete-summary'           => '摘',
-'revdelete-uname'             => '簿名',
-'revdelete-restricted'        => '應限至有秩',
-'revdelete-unrestricted'      => '除限自有秩',
-'revdelete-hid'               => '隱$1',
-'revdelete-unhid'             => '非隱$1',
-'revdelete-log-message'       => '$1之修$2',
-'logdelete-log-message'       => '$1之事$2',
 'revdelete-hide-current'      => '錯藏於$1 $2項：現之審也，無藏之。',
 'revdelete-show-no-access'    => '錯示於$1 $2項：「限」之項，爾無通行權也。',
 'revdelete-modify-no-access'  => '錯改於$1 $2項：「限」之項，爾無通行權也。',
@@ -859,24 +824,6 @@ $1",
 'suppressionlog'     => '誌廢',
 'suppressionlogtext' => '下乃刪及錮物之列也。
 [[Special:IPBlockList|IP之錮]]有現之閱。',
-
-# Revision move
-'moverevlogentry'              => '遷$1至$2有{{PLURAL:$3|審一|審$3}}',
-'revisionmove'                 => '從「$1」遷審',
-'revmove-explain'              => '下之審將由$1遷至定標也。目無存，則建之。另以併之史中。',
-'revmove-legend'               => '設標頁以之摘',
-'revmove-submit'               => '遷審至定頁上',
-'revisionmoveselectedversions' => '遷已選之審',
-'revmove-reasonfield'          => '由：',
-'revmove-titlefield'           => '標頁：',
-'revmove-badparam-title'       => '壞參數',
-'revmove-badparam'             => '爾之求有無足之參數也。返再試矣。',
-'revmove-norevisions-title'    => '無效之標審',
-'revmove-norevisions'          => '爾未定一或多之審作此或無存也。',
-'revmove-nullmove-title'       => '壞題',
-'revmove-nullmove'             => '標源之題不可同也。返「$1」試他名之。',
-'revmove-success-existing'     => '由[[$2]]中遷現頁[[$3]]有審{{PLURAL:$1|一|$1}}。',
-'revmove-success-created'      => '由[[$2]]中遷新頁[[$3]]有審{{PLURAL:$1|一|$1}}。',
 
 # History merging
 'mergehistory'                     => '併頁之誌',
@@ -937,7 +884,6 @@ $1",
 'searchmenu-legend'                => '尋選',
 'searchmenu-exists'                => "'''在此wiki中有頁為\"[[:\$1]]\"。'''",
 'searchmenu-new'                   => "'''在此wiki上建頁\"[[:\$1]]\"！'''",
-'searchmenu-new-nocreate'          => '「$1」為效無之頁名或建於爾也。',
 'searchhelp-url'                   => 'Help:目錄',
 'searchmenu-prefix'                => '[[Special:PrefixIndex/$1|查此首之頁]]',
 'searchprofile-articles'           => '容',
@@ -1017,8 +963,6 @@ $1",
 'columns'                       => '列：',
 'searchresultshead'             => '尋',
 'resultsperpage'                => '頁示尋',
-'contextlines'                  => '尋分列',
-'contextchars'                  => '列有字',
 'stub-threshold'                => '<a href="#" class="stub">短頁連</a>格式門檻（位元組）：',
 'stub-threshold-disabled'       => '禁',
 'recentchangesdays'             => '近易示日：',
@@ -1206,11 +1150,8 @@ $1",
 'right-userrights'            => '纂簿權',
 'right-userrights-interwiki'  => '纂另wiki他簿之權',
 'right-siteadmin'             => '鎖與解鎖資料庫',
-'right-reset-passwords'       => '設他簿之符節',
 'right-override-export-depth' => '出有五層深之頁',
 'right-sendemail'             => '擬書傳予他簿',
-'right-revisionmove'          => '遷審',
-'right-disableaccount'        => '停簿',
 
 # User rights log
 'rightslog'  => '職權志',
@@ -1377,8 +1318,6 @@ $1",
 'upload-description'         => '檔述',
 'upload-options'             => '貢項',
 'watchthisupload'            => '派哨',
-'upload-wasdeleted'          => "'''警示：復獻棄檔，慎續之。'''
-誌刪如下：",
 'filename-bad-prefix'        => "獻檔以'''「$1」'''首，常由相機瞎造，惠更述之。",
 'upload-success-subj'        => '檔案安矣',
 'upload-success-msg'         => '爾自[$2]之貢安矣，見於此：[[:{{ns:file}}:$1]]',
@@ -1482,7 +1421,6 @@ $1',
 [[Special:WhatLinksHere/$2|整表]]可供之閱也。',
 'nolinkstoimage'                    => '無頁連本檔也。',
 'morelinkstoimage'                  => '閱檔[[Special:WhatLinksHere/$1|接]]。',
-'redirectstofile'                   => '下檔轉到此檔有$1：',
 'duplicatesoffile'                  => '下檔重此檔有$1（[[Special:FileDuplicateSearch/$2|詳]]）：',
 'sharedupload'                      => '此檔為$1之共傳，可另項用也。',
 'sharedupload-desc-there'           => '此檔為$1之共傳，可另項用也。
@@ -1722,12 +1660,8 @@ $1',
 'activeusers-noresult'   => '無簿矣。',
 
 # Special:Log/newusers
-'newuserlogpage'              => '誌簿',
-'newuserlogpagetext'          => '此為誌簿之記也',
-'newuserlog-byemail'          => '號發自電郵',
-'newuserlog-create-entry'     => '新簿',
-'newuserlog-create2-entry'    => '已註$1之簿',
-'newuserlog-autocreate-entry' => '已自註之簿',
+'newuserlogpage'     => '誌簿',
+'newuserlogpagetext' => '此為誌簿之記也',
 
 # Special:ListGroupRights
 'listgrouprights'                      => '權任一覽',
@@ -1786,9 +1720,7 @@ $1',
 'watchlistanontext'    => '$1以治哨',
 'watchnologin'         => '未登簿',
 'watchnologintext'     => '[[Special:UserLogin|登簿]]以治哨。',
-'addedwatch'           => '派哨',
 'addedwatchtext'       => "\"[[:\$1]]\"哨派矣。後有易、議者可見於[[Special:Watchlist|哨站]]，且'''粗體'''列於[[Special:RecentChanges|近易]]。",
-'removedwatch'         => '撤哨',
 'removedwatchtext'     => '"[[:$1]]"[[Special:Watchlist|哨]]撤矣。',
 'watch'                => '派哨',
 'watchthispage'        => '哨此報',
@@ -1836,11 +1768,11 @@ $NEWPAGE
 {{SITENAME}}敬上
 
 --
-欲更哨令，惠訪{{fullurl:{{#special:Watchlist}}/edit}}
+欲更哨令，惠訪{{canonicalurl:{{#special:EditWatchlist}}}}
 
 欲刪之頁，惠訪$UNWATCHURL
 
-饋助之，惠訪{{fullurl:{{MediaWiki:Helppage}}}}',
+饋助之，惠訪{{canonicalurl:{{MediaWiki:Helppage}}}}',
 
 # Delete
 'deletepage'             => '刪頁',
@@ -1855,9 +1787,7 @@ $NEWPAGE
 'confirmdeletetext'      => '欲刪此物與誌，知後果、合[[{{MediaWiki:Policy-url}}]]後再為之。',
 'actioncomplete'         => '成矣',
 'actionfailed'           => '敗矣',
-'deletedtext'            => '"<nowiki>$1</nowiki>"刪矣，見誌刪於$2。',
-'deletedarticle'         => '刪焉「[[$1]]」',
-'suppressedarticle'      => '廢焉「[[$1]]」',
+'deletedtext'            => '"$1"刪矣，見誌刪於$2。',
 'dellogpage'             => '誌刪',
 'dellogpagetext'         => '近刪如下：',
 'deletionlog'            => '誌刪',
@@ -1904,7 +1834,7 @@ $NEWPAGE
 'protect_expiry_invalid'      => '屆期不明。',
 'protect_expiry_old'          => '屆期已過。',
 'protect-unchain-permissions' => '解鎖更遠之項',
-'protect-text'                => "緘捆'''<nowiki>$1</nowiki>'''。",
+'protect-text'                => "緘捆'''$1'''。",
 'protect-locked-blocked'      => "簿禁，'''$1'''緘昔如下：",
 'protect-locked-dblock'       => "庫鎖，'''$1'''緘昔如下：",
 'protect-locked-access'       => "未准，'''$1'''緘昔如下：",
@@ -1969,7 +1899,6 @@ $NEWPAGE
 'undeletereset'                => '歸白',
 'undeleteinvert'               => '反相',
 'undeletecomment'              => '因：',
-'undeletedarticle'             => '還焉"[[$1]]"',
 'undeletedrevisions'           => '$1審已還',
 'undeletedrevisions-files'     => '$1審、$2檔已還',
 'undeletedfiles'               => '$1檔已還',
@@ -2109,7 +2038,7 @@ $1',
 'blocklog-showsuppresslog'        => '此簿曾被禁隱。誌廢示下：',
 'blocklogentry'                   => '禁[[$1]]屆$2$3',
 'reblock-logentry'                => '改[[$1]]之禁，屆$2$3',
-'blocklogtext'                    => '此誌禁赦；自禁不示。見[[Special:IPBlockList|此]]列今禁者。',
+'blocklogtext'                    => '此誌禁赦；自禁不示。見[[Special:BlockList|此]]列今禁者。',
 'unblocklogentry'                 => '$1赦焉',
 'block-log-flags-anononly'        => '惟禁匿',
 'block-log-flags-nocreate'        => '禁增簿',
@@ -2195,9 +2124,6 @@ $1',
 'movepage-page-moved'          => '頁$1遷$2矣。',
 'movepage-page-unmoved'        => '頁$1遷$2不成。',
 'movepage-max-pages'           => '上之$1頁遷矣同非自遷之下。',
-'1movedto2'                    => '[[$1]]遷至[[$2]]',
-'1movedto2_redir'              => '[[$1]]遷至[[$2]]為渡',
-'move-redirect-suppressed'     => '渡押',
 'movelogpage'                  => '誌遷',
 'movelogpagetext'              => '頁遷如下：',
 'movereason'                   => '因',
@@ -2249,7 +2175,7 @@ $1',
 'allmessagesdefault'            => '慣話文',
 'allmessagescurrent'            => '今話文',
 'allmessagestext'               => '此列MediaWiki官話。
-如貢正宗MediaWiki本地化，[http://www.mediawiki.org/wiki/Localisation MediaWiki本地化]與[http://translatewiki.net translatewiki.net]閱之。',
+如貢正宗MediaWiki本地化，[//www.mediawiki.org/wiki/Localisation MediaWiki本地化]與[//translatewiki.net translatewiki.net]閱之。',
 'allmessagesnotsupportedDB'     => "'''\$wgUseDatabaseMessages'''閉庫，'''無纂也。",
 'allmessages-filter-legend'     => '濾',
 'allmessages-filter'            => '以易濾：',
@@ -2428,14 +2354,6 @@ $1',
 'spam_reverting'      => '還新審之無鏈$1者。',
 'spam_blanking'       => '審皆鏈$1，遂令白頁。',
 
-# Info page
-'infosubtitle'   => '頁註',
-'numedits'       => '有纂$1',
-'numtalkedits'   => '有議$1',
-'numwatchers'    => '有哨$1',
-'numauthors'     => '編者$1',
-'numtalkauthors' => '議者$1',
-
 # Skin names
 'skinname-standard'    => '經典',
 'skinname-nostalgia'   => '懷古',
@@ -2461,8 +2379,6 @@ $1',
 # Patrol log
 'patrol-log-page'      => '誌哨',
 'patrol-log-header'    => '此乃誌哨也。',
-'patrol-log-line'      => '令哨$2之$1$3',
-'patrol-log-auto'      => '（自行）',
 'log-show-hide-patrol' => '$1誌巡',
 
 # Image deletion
@@ -2488,7 +2404,7 @@ $1',
 'widthheightpage'      => '$1矩$2，共$3頁',
 'file-info'            => '大小：$1，MIME類型：$2',
 'file-info-size'       => '像素$1矩$2，大小：$3，MIME類型：$4',
-'file-nohires'         => '<small>無以更晰。</small>',
+'file-nohires'         => '無以更晰。',
 'svg-long-desc'        => 'SVG檔，貌有像素$1矩$2，幅$3',
 'show-big-image'       => '全幅',
 'file-info-gif-looped' => '循',
@@ -2529,7 +2445,13 @@ $1',
 * exposuretime
 * fnumber
 * isospeedratings
-* focallength',
+* focallength
+* artist
+* copyright
+* imagedescription
+* gpslatitude
+* gpslongitude
+* gpsaltitude',
 
 # EXIF tags
 'exif-imagewidth'                => '寬',
@@ -2572,17 +2494,20 @@ $1',
 
 'exif-gaincontrol-0' => '無',
 
+# Pseudotags used for GPSDestDistanceRef
+'exif-gpsdestdistance-k' => '千米',
+'exif-gpsdestdistance-m' => '哩',
+'exif-gpsdestdistance-n' => '浬',
+
 # External editor support
 'edit-externally'      => '以外部程式修此文',
-'edit-externally-help' => '（請閱[http://www.mediawiki.org/wiki/Manual:External_editors 安裝指引]以知詳情）',
+'edit-externally-help' => '（請閱[//www.mediawiki.org/wiki/Manual:External_editors 安裝指引]以知詳情）',
 
 # 'all' in various places, this might be different for inflected languages
-'recentchangesall' => '全',
-'imagelistall'     => '全',
-'watchlistall2'    => '全',
-'namespacesall'    => '全',
-'monthsall'        => '全',
-'limitall'         => '全',
+'watchlistall2' => '全',
+'namespacesall' => '全',
+'monthsall'     => '全',
+'limitall'      => '全',
 
 # E-mail address confirmation
 'confirmemail'              => '核郵驛',
@@ -2719,42 +2644,39 @@ $1',
 'duplicate-defaultsort' => '警：預之排鍵「$2」蓋前之排鍵「$1」。',
 
 # Special:Version
-'version'                          => '版',
-'version-extensions'               => '裝展',
-'version-specialpages'             => '奇頁',
-'version-parserhooks'              => '語鈎',
-'version-variables'                => '變數',
-'version-antispam'                 => '垃圾之防',
-'version-skins'                    => '皮',
-'version-other'                    => '他',
-'version-mediahandlers'            => '媒處',
-'version-hooks'                    => '鈎',
-'version-extension-functions'      => '展函',
-'version-parser-extensiontags'     => '語展標',
-'version-parser-function-hooks'    => '語函鈎',
-'version-skin-extension-functions' => '面版展函',
-'version-hook-name'                => '鈎名',
-'version-hook-subscribedby'        => '用於',
-'version-version'                  => '（版 $1）',
-'version-license'                  => '牌',
-'version-poweredby-credits'        => "此 Wiki 以 '''[http://www.mediawiki.org/ MediaWiki]''' 之驅，權 © 2001-$1 $2。",
-'version-poweredby-others'         => '其他',
-'version-license-info'             => 'MediaWiki乃自由軟件；爾依自由軟件基金會之GNU通用公共授權之款，就此本程序再發佈及／或修；依之二版（自選之）或後之。
+'version'                       => '版',
+'version-extensions'            => '裝展',
+'version-specialpages'          => '奇頁',
+'version-parserhooks'           => '語鈎',
+'version-variables'             => '變數',
+'version-antispam'              => '垃圾之防',
+'version-skins'                 => '皮',
+'version-other'                 => '他',
+'version-mediahandlers'         => '媒處',
+'version-hooks'                 => '鈎',
+'version-extension-functions'   => '展函',
+'version-parser-extensiontags'  => '語展標',
+'version-parser-function-hooks' => '語函鈎',
+'version-hook-name'             => '鈎名',
+'version-hook-subscribedby'     => '用於',
+'version-version'               => '（版 $1）',
+'version-license'               => '牌',
+'version-poweredby-credits'     => "此 Wiki 以 '''[//www.mediawiki.org/ MediaWiki]''' 之驅，權 © 2001-$1 $2。",
+'version-poweredby-others'      => '其他',
+'version-license-info'          => 'MediaWiki乃自由軟件；爾依自由軟件基金會之GNU通用公共授權之款，就此本程序再發佈及／或修；依之二版（自選之）或後之。
 
 MediaWiki乃為用之發，無擔之責也；亦無售目之默擔也。參GNU通用公共授權之詳。
 
-爾乃收附本程序之[{{SERVER}}{{SCRIPTPATH}}/COPYING GNU通用公共授權副本]；如無者，致函至自由軟件基金會：51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA，或[http://www.gnu.org/licenses/old-licenses/gpl-2.0.html 閱之]。',
-'version-software'                 => '裝件',
-'version-software-product'         => '品',
-'version-software-version'         => '版',
+爾乃收附本程序之[{{SERVER}}{{SCRIPTPATH}}/COPYING GNU通用公共授權副本]；如無者，致函至自由軟件基金會：51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA，或[//www.gnu.org/licenses/old-licenses/gpl-2.0.html 閱之]。',
+'version-software'              => '裝件',
+'version-software-product'      => '品',
+'version-software-version'      => '版',
 
 # Special:FilePath
 'filepath'         => '檔路',
 'filepath-page'    => '檔名：',
 'filepath-submit'  => '往',
-'filepath-summary' => '此奇頁取一檔之整路。圖以全解像示之，他檔會以有關之程式啟動也。
-
-輸檔名之，不包「{{ns:file}}:」開頭也。',
+'filepath-summary' => '此奇頁取一檔之整路。圖以全解像示之，他檔會以有關之程式啟動也。',
 
 # Special:FileDuplicateSearch
 'fileduplicatesearch'          => '擇重檔',
@@ -2827,17 +2749,9 @@ MediaWiki乃為用之發，無擔之責也；亦無售目之默擔也。參GNU�
 'sqlite-has-fts' => '$1 含全文之尋',
 'sqlite-no-fts'  => '$1 不含全文之尋',
 
-# Special:DisableAccount
-'disableaccount'             => '停簿',
-'disableaccount-user'        => '簿名：',
-'disableaccount-reason'      => '因：',
-'disableaccount-confirm'     => "停此簿。
-此簿無登、重設符節，或收知電。
-若用之，乃立去。
-''意停簿無系秩之介無回也。''",
-'disableaccount-mustconfirm' => '爾須確乃認停爾之簿也。',
-'disableaccount-nosuchuser'  => '「$1」之簿無存也。',
-'disableaccount-success'     => '「$1」之簿已久停簿。',
-'disableaccount-logentry'    => '久停之簿[[$1]]',
+# New logging system
+'revdelete-restricted'   => '應限至有秩',
+'revdelete-unrestricted' => '除限自有秩',
+'newuserlog-byemail'     => '號發自電郵',
 
 );

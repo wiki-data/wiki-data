@@ -24,11 +24,6 @@
  * @file
  */
 
-if ( !defined( 'MEDIAWIKI' ) ) {
-	// Eclipse helper - will be ignored in production
-	require_once( "ApiQueryBase.php" );
-}
-
 /**
  * This query adds an <images> subelement to all pages with the list of images embedded into those pages.
  *
@@ -50,7 +45,6 @@ class ApiQueryImages extends ApiQueryGeneratorBase {
 
 	/**
 	 * @param $resultPageSet ApiPageSet
-	 * @return
 	 */
 	private function run( $resultPageSet = null ) {
 		if ( $this->getPageSet()->getGoodTitleCount() == 0 ) {
@@ -80,11 +74,15 @@ class ApiQueryImages extends ApiQueryGeneratorBase {
 			);
 		}
 
+		$dir = ( $params['dir'] == 'descending' ? ' DESC' : '' );
 		// Don't order by il_from if it's constant in the WHERE clause
 		if ( count( $this->getPageSet()->getGoodTitles() ) == 1 ) {
-			$this->addOption( 'ORDER BY', 'il_to' );
+			$this->addOption( 'ORDER BY', 'il_to' . $dir );
 		} else {
-			$this->addOption( 'ORDER BY', 'il_from, il_to' );
+			$this->addOption( 'ORDER BY', array(
+						'il_from' . $dir,
+						'il_to' . $dir
+			));
 		}
 		$this->addOption( 'LIMIT', $params['limit'] + 1 );
 
@@ -155,7 +153,14 @@ class ApiQueryImages extends ApiQueryGeneratorBase {
 			'continue' => null,
 			'images' => array(
 				ApiBase::PARAM_ISMULTI => true,
-			)
+			),
+			'dir' => array(
+				ApiBase::PARAM_DFLT => 'ascending',
+				ApiBase::PARAM_TYPE => array(
+					'ascending',
+					'descending'
+				)
+			),
 		);
 	}
 
@@ -164,6 +169,7 @@ class ApiQueryImages extends ApiQueryGeneratorBase {
 			'limit' => 'How many images to return',
 			'continue' => 'When more results are available, use this to continue',
 			'images' => 'Only list these images. Useful for checking whether a certain page has a certain Image.',
+			'dir' => 'The direction in which to list',
 		);
 	}
 
@@ -177,7 +183,7 @@ class ApiQueryImages extends ApiQueryGeneratorBase {
 		) );
 	}
 
-	protected function getExamples() {
+	public function getExamples() {
 		return array(
 			'Get a list of images used in the [[Main Page]]:',
 			'  api.php?action=query&prop=images&titles=Main%20Page',
@@ -186,7 +192,11 @@ class ApiQueryImages extends ApiQueryGeneratorBase {
 		);
 	}
 
+	public function getHelpUrls() {
+		return 'http://www.mediawiki.org/wiki/API:Properties#images_.2F_im';
+	}
+
 	public function getVersion() {
-		return __CLASS__ . ': $Id: ApiQueryImages.php 82429 2011-02-19 00:30:18Z reedy $';
+		return __CLASS__ . ': $Id: ApiQueryImages.php 103273 2011-11-16 00:17:26Z johnduhart $';
 	}
 }

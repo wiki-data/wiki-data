@@ -48,15 +48,20 @@ class WantedCategoriesPage extends WantedQueryPage {
 		);
 	}
 
+	/**
+	 * @param $skin Skin
+	 * @param $result
+	 * @return string
+	 */
 	function formatResult( $skin, $result ) {
-		global $wgLang, $wgContLang;
+		global $wgContLang;
 
 		$nt = Title::makeTitle( $result->namespace, $result->title );
 		$text = htmlspecialchars( $wgContLang->convert( $nt->getText() ) );
 
 		$plink = $this->isCached() ?
-			$skin->link( $nt, $text ) :
-			$skin->link(
+			Linker::link( $nt, $text ) :
+			Linker::link(
 				$nt,
 				$text,
 				array(),
@@ -64,8 +69,9 @@ class WantedCategoriesPage extends WantedQueryPage {
 				array( 'broken' )
 			);
 
-		$nlinks = wfMsgExt( 'nmembers', array( 'parsemag', 'escape'),
-			$wgLang->formatNum( $result->value ) );
-		return wfSpecialList($plink, $nlinks);
+		$lang = $this->getLang();
+		$nlinks = wfMsgExt( 'nmembers', array( 'parsemag', 'escape' ),
+			$lang->formatNum( $result->value ) );
+		return $lang->specialList( $plink, $nlinks );
 	}
 }

@@ -35,6 +35,11 @@ class LocalRepo extends FSRepo {
 		}
 	}
 
+	/**
+	 * @param $title
+	 * @param $archiveName
+	 * @return OldLocalFile
+	 */
 	function newFromArchiveName( $title, $archiveName ) {
 		return OldLocalFile::newFromArchiveName( $title, $this, $archiveName );
 	}
@@ -44,33 +49,30 @@ class LocalRepo extends FSRepo {
 	 * filearchive table. This needs to be done in the repo because it needs to
 	 * interleave database locks with file operations, which is potentially a
 	 * remote operation.
+	 *
+	 * @param $storageKeys array
+	 *
 	 * @return FileRepoStatus
 	 */
 	function cleanupDeletedBatch( $storageKeys ) {
 		$root = $this->getZonePath( 'deleted' );
 		$dbw = $this->getMasterDB();
 		$status = $this->newGood();
-		$storageKeys = array_unique($storageKeys);
+		$storageKeys = array_unique( $storageKeys );
 		foreach ( $storageKeys as $key ) {
 			$hashPath = $this->getDeletedHashPath( $key );
 			$path = "$root/$hashPath$key";
 			$dbw->begin();
-			$inuse = $dbw->selectField( 'filearchive', '1',
-				array( 'fa_storage_group' => 'deleted', 'fa_storage_key' => $key ),
-				__METHOD__, array( 'FOR UPDATE' ) );
-			if( !$inuse ) {
-				$sha1 = self::getHashFromKey( $key );
-				$ext = substr( $key, strcspn( $key, '.' ) + 1 );
-				$ext = File::normalizeExtension($ext);
-				$inuse = $dbw->selectField( 'oldimage', '1',
-					array( 'oi_sha1' => $sha1,
-						'oi_archive_name ' . $dbw->buildLike( $dbw->anyString(), ".$ext" ),
-						$dbw->bitAnd('oi_deleted', File::DELETED_FILE) => File::DELETED_FILE ),
-					__METHOD__, array( 'FOR UPDATE' ) );
-			}
-			if ( !$inuse ) {
+			// Check for usage in deleted/hidden files and pre-emptively
+			// lock the key to avoid any future use until we are finished.
+			$deleted = $this->deletedFileHasKey( $key, 'lock' );
+			$hidden = $this->hiddenFileHasKey( $key, 'lock' );
+			if ( !$deleted && !$hidden ) { // not in use now
 				wfDebug( __METHOD__ . ": deleting $key\n" );
-				if ( !@unlink( $path ) ) {
+				wfSuppressWarnings();
+				$unlink = unlink( $path );
+				wfRestoreWarnings();
+				if ( !$unlink ) {
 					$status->error( 'undelete-cleanup-error', $path );
 					$status->failCount++;
 				}
@@ -84,9 +86,45 @@ class LocalRepo extends FSRepo {
 	}
 
 	/**
+	 * Check if a deleted (filearchive) file has this sha1 key
+	 * @param $key String File storage key (base-36 sha1 key with file extension)
+	 * @param $lock String|null Use "lock" to lock the row via FOR UPDATE
+	 * @return bool File with this key is in use
+	 */
+	protected function deletedFileHasKey( $key, $lock = null ) {
+		$options = ( $lock === 'lock' ) ? array( 'FOR UPDATE' ) : array();
+
+		$dbw = $this->getMasterDB();
+		return (bool)$dbw->selectField( 'filearchive', '1',
+			array( 'fa_storage_group' => 'deleted', 'fa_storage_key' => $key ),
+			__METHOD__, $options
+		);
+	}
+
+	/**
+	 * Check if a hidden (revision delete) file has this sha1 key
+	 * @param $key String File storage key (base-36 sha1 key with file extension)
+	 * @param $lock String|null Use "lock" to lock the row via FOR UPDATE
+	 * @return bool File with this key is in use
+	 */
+	protected function hiddenFileHasKey( $key, $lock = null ) {
+		$options = ( $lock === 'lock' ) ? array( 'FOR UPDATE' ) : array();
+
+		$sha1 = self::getHashFromKey( $key );
+		$ext = File::normalizeExtension( substr( $key, strcspn( $key, '.' ) + 1 ) );
+
+		$dbw = $this->getMasterDB();
+		return (bool)$dbw->selectField( 'oldimage', '1',
+			array( 'oi_sha1' => $sha1,
+				'oi_archive_name ' . $dbw->buildLike( $dbw->anyString(), ".$ext" ),
+				$dbw->bitAnd( 'oi_deleted', File::DELETED_FILE ) => File::DELETED_FILE ),
+			__METHOD__, array( 'FOR UPDATE' )
+		);
+	}
+
+	/**
 	 * Gets the SHA1 hash from a storage key
 	 *
-	 * @static
 	 * @param string $key
 	 * @return string
 	 */
@@ -98,16 +136,12 @@ class LocalRepo extends FSRepo {
 	 * Checks if there is a redirect named as $title
 	 *
 	 * @param $title Title of file
+	 * @return bool
 	 */
-	function checkRedirect( $title ) {
+	function checkRedirect( Title $title ) {
 		global $wgMemc;
 
-		if( is_string( $title ) ) {
-			$title = Title::newFromText( $title );
-		}
-		if( $title instanceof Title && $title->getNamespace() == NS_MEDIA ) {
-			$title = Title::makeTitle( NS_FILE, $title->getText() );
-		}
+		$title = File::normalizeTitle( $title, 'exception' );
 
 		$memcKey = $this->getSharedCacheKey( 'image_redirect', md5( $title->getDBkey() ) );
 		if ( $memcKey === false ) {
@@ -173,6 +207,7 @@ class LocalRepo extends FSRepo {
 	/**
 	 * Get an array or iterator of file objects for files that have a given 
 	 * SHA-1 content hash.
+	 * @return Array
 	 */
 	function findBySha1( $hash ) {
 		$dbr = $this->getSlaveDB();
@@ -209,6 +244,7 @@ class LocalRepo extends FSRepo {
 	 * Get a key on the primary cache for this repository.
 	 * Returns false if the repository's cache is not accessible at this site. 
 	 * The parameters are the parts of the key, as for wfMemcKey().
+	 * @return string
 	 */
 	function getSharedCacheKey( /*...*/ ) {
 		$args = func_get_args();
@@ -219,8 +255,9 @@ class LocalRepo extends FSRepo {
 	 * Invalidates image redirect cache related to that image
 	 *
 	 * @param $title Title of page
+	 * @return void
 	 */
-	function invalidateImageRedirect( $title ) {
+	function invalidateImageRedirect( Title $title ) {
 		global $wgMemc;
 		$memcKey = $this->getSharedCacheKey( 'image_redirect', md5( $title->getDBkey() ) );
 		if ( $memcKey ) {

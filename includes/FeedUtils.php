@@ -31,16 +31,15 @@ class FeedUtils {
 	 * @return Boolean
 	 */
 	public static function checkFeedOutput( $type ) {
-		global $wgFeed, $wgFeedClasses;
+		global $wgOut, $wgFeed, $wgFeedClasses;
 
 		if ( !$wgFeed ) {
-			global $wgOut;
 			$wgOut->addWikiMsg( 'feed-unavailable' );
 			return false;
 		}
 
 		if( !isset( $wgFeedClasses[$type] ) ) {
-			wfHttpError( 500, "Internal Server Error", "Unsupported feed type." );
+			$wgOut->addWikiMsg( 'feed-invalid' );
 			return false;
 		}
 
@@ -103,61 +102,85 @@ class FeedUtils {
 		$anon = new User();
 		$accErrors = $title->getUserPermissionsErrors( 'read', $anon, true );
 
-		if( $title->getNamespace() >= 0 && !$accErrors && $newid ) {
-			if( $oldid ) {
-				wfProfileIn( __METHOD__."-dodiff" );
+		# Early exist when the page is not an article, on errors and no newid to
+		# compare.
+		if( $title->getNamespace() < 0 || $accErrors || !$newid ) {
+			wfProfileOut( __METHOD__ );
+			return $completeText;
+		}
 
-				#$diffText = $de->getDiff( wfMsg( 'revisionasof',
-				#	$wgLang->timeanddate( $timestamp ),
-				#	$wgLang->date( $timestamp ),
-				#	$wgLang->time( $timestamp ) ),
-				#	wfMsg( 'currentrev' ) );
-				
-				// Don't bother generating the diff if we won't be able to show it
-				if ( $wgFeedDiffCutoff > 0 ) {
-					$de = new DifferenceEngine( $title, $oldid, $newid );
-					$diffText = $de->getDiff(
-						wfMsg( 'previousrevision' ), // hack
-						wfMsg( 'revisionasof',
-							$wgLang->timeanddate( $timestamp ),
-							$wgLang->date( $timestamp ),
-							$wgLang->time( $timestamp ) ) );
-				}
+		if( $oldid ) {
+			wfProfileIn( __METHOD__."-dodiff" );
 
-				if ( $wgFeedDiffCutoff <= 0 || ( strlen( $diffText ) > $wgFeedDiffCutoff ) ) {
-					// Omit large diffs
-					$diffLink = $title->escapeFullUrl(
-						'diff=' . $newid .
-						'&oldid=' . $oldid );
-					$diffText = '<a href="' .
-						$diffLink .
-						'">' .
-						htmlspecialchars( wfMsgForContent( 'showdiff' ) ) .
-						'</a>';
-				} elseif ( $diffText === false ) {
-					// Error in diff engine, probably a missing revision
-					$diffText = "<p>Can't load revision $newid</p>";
-				} else {
-					// Diff output fine, clean up any illegal UTF-8
-					$diffText = UtfNormal::cleanUp( $diffText );
-					$diffText = self::applyDiffStyle( $diffText );
-				}
-				wfProfileOut( __METHOD__."-dodiff" );
+			#$diffText = $de->getDiff( wfMsg( 'revisionasof',
+			#	$wgLang->timeanddate( $timestamp ),
+			#	$wgLang->date( $timestamp ),
+			#	$wgLang->time( $timestamp ) ),
+			#	wfMsg( 'currentrev' ) );
+
+			// Don't bother generating the diff if we won't be able to show it
+			if ( $wgFeedDiffCutoff > 0 ) {
+				$de = new DifferenceEngine( $title, $oldid, $newid );
+				$diffText = $de->getDiff(
+					wfMsg( 'previousrevision' ), // hack
+					wfMsg( 'revisionasof',
+					$wgLang->timeanddate( $timestamp ),
+					$wgLang->date( $timestamp ),
+					$wgLang->time( $timestamp ) ) );
+			}
+
+			if ( $wgFeedDiffCutoff <= 0 || ( strlen( $diffText ) > $wgFeedDiffCutoff ) ) {
+				// Omit large diffs
+				$diffText = self::getDiffText( $title, $newid, $oldid);
+			} elseif ( $diffText === false ) {
+				// Error in diff engine, probably a missing revision
+				$diffText = "<p>Can't load revision $newid</p>";
 			} else {
-				$rev = Revision::newFromId( $newid );
-				if( is_null( $rev ) ) {
-					$newtext = '';
-				} else {
-					$newtext = $rev->getText();
-				}
+				// Diff output fine, clean up any illegal UTF-8
+				$diffText = UtfNormal::cleanUp( $diffText );
+				$diffText = self::applyDiffStyle( $diffText );
+			}
+			wfProfileOut( __METHOD__."-dodiff" );
+		} else {
+			$rev = Revision::newFromId( $newid );
+			if( $wgFeedDiffCutoff <= 0 || is_null( $rev ) ) {
+				$newtext = '';
+			} else {
+				$newtext = $rev->getText();
+			}
+			if ( $wgFeedDiffCutoff <= 0 || strlen( $newtext ) > $wgFeedDiffCutoff ) {
+				// Omit large new page diffs, bug 29110
+				$diffText = self::getDiffText( $title, $newid );
+			} else {
 				$diffText = '<p><b>' . wfMsg( 'newpage' ) . '</b></p>' .
 					'<div>' . nl2br( htmlspecialchars( $newtext ) ) . '</div>';
 			}
-			$completeText .= $diffText;
 		}
+		$completeText .= $diffText;
 
 		wfProfileOut( __METHOD__ );
 		return $completeText;
+	}
+
+	/**
+	 * Generates a diff link. Used when the full diff is not wanted for example
+	 * when $wgFeedDiffCutoff is 0.
+	 *
+	 * @param $title Title object: used to generate the diff URL
+	 * @param $newid Integer newid for this diff
+	 * @param $oldid Integer|null oldid for the diff. Null means it is a new article
+	 */
+	protected static function getDiffText( Title $title, $newid, $oldid = null ) {
+		$queryParameters = ($oldid == null)
+			? "diff={$newid}"
+			: "diff={$newid}&oldid={$oldid}" ;
+		$diffLink = $title->escapeFullUrl( $queryParameters );
+
+		$diffText = Html::RawElement( 'a', array( 'href' => $diffLink ),
+			htmlspecialchars( wfMsgForContent( 'showdiff' ) )
+		);
+
+		return $diffText;
 	}
 
 	/**
@@ -167,7 +190,6 @@ class FeedUtils {
 	 *
 	 * @param $text String: diff's HTML output
 	 * @return String: modified HTML
-	 * @private
 	 */
 	public static function applyDiffStyle( $text ) {
 		$styles = array(

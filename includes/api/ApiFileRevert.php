@@ -24,11 +24,6 @@
  * @file
  */
 
-if ( !defined( 'MEDIAWIKI' ) ) {
-	// Eclipse helper - will be ignored in production
-	require_once( "ApiBase.php" );
-}
-
 /**
  * @ingroup API
  */
@@ -47,13 +42,12 @@ class ApiFileRevert extends ApiBase {
 	}
 
 	public function execute() {
-		global $wgUser;
-
-		// First check permission to upload/revert
-		$this->checkPermissions( $wgUser );
-
 		$this->params = $this->extractRequestParams();
+		// Extract the file and archiveName from the request parameters
 		$this->validateParameters();
+
+		// Check whether we're allowed to revert this file
+		$this->checkPermissions( $this->getUser() );
 
 		$sourceUrl = $this->file->getArchiveVirtualUrl( $this->archiveName );
 		$status = $this->file->upload( $sourceUrl, $this->params['comment'], $this->params['comment'] );
@@ -61,13 +55,13 @@ class ApiFileRevert extends ApiBase {
 		if ( $status->isGood() ) {
 			$result = array( 'result' => 'Success' );
 		} else {
-			$result = array( 
-				'result' => 'Failure', 
+			$result = array(
+				'result' => 'Failure',
 				'errors' => $this->getResult()->convertStatusToArray( $status ),
 			);
 		}
 
-		$this->getResult()->addValue( null, $this->getModuleName(), $result );	
+		$this->getResult()->addValue( null, $this->getModuleName(), $result );
 
 	}
 
@@ -77,14 +71,13 @@ class ApiFileRevert extends ApiBase {
 	 * @param $user User The user to check.
 	 */
 	protected function checkPermissions( $user ) {
-		$permission = $user->isAllowedAll( 'edit', 'upload' );
+		$permissionErrors = array_merge(
+			$this->file->getTitle()->getUserPermissionsErrors( 'edit' , $user ),
+			$this->file->getTitle()->getUserPermissionsErrors( 'upload' , $user )
+		);
 
-		if ( $permission !== true ) {
-			if ( !$user->isLoggedIn() ) {
-				$this->dieUsageMsg( array( 'mustbeloggedin', 'upload' ) );
-			} else {
-				$this->dieUsageMsg( array( 'badaccess-groups' ) );
-			}
+		if ( $permissionErrors ) {
+			$this->dieUsageMsg( $permissionErrors[0] );
 		}
 	}
 
@@ -101,14 +94,14 @@ class ApiFileRevert extends ApiBase {
 		// Check if the file really exists
 		$this->file = wfLocalFile( $title );
 		if ( !$this->file->exists() ) {
-			$this->dieUsageMsg( array( 'notanarticle' ) );
+			$this->dieUsageMsg( 'notanarticle' );
 		}
 
 		// Check if the archivename is valid for this file
 		$this->archiveName = $this->params['archivename'];
 		$oldFile = RepoGroup::singleton()->getLocalRepo()->newFromArchiveName( $title, $this->archiveName );
 		if ( !$oldFile->exists() ) {
-			$this->dieUsageMsg( array( 'filerevert-badversion' ) );
+			$this->dieUsageMsg( 'filerevert-badversion' );
 		}
 	}
 
@@ -131,7 +124,7 @@ class ApiFileRevert extends ApiBase {
 			),
 			'archivename' => array(
 				ApiBase::PARAM_TYPE => 'string',
-				ApiBase::PARAM_REQUIRED => true,			
+				ApiBase::PARAM_REQUIRED => true,
 			),
 			'token' => null,
 		);
@@ -176,7 +169,7 @@ class ApiFileRevert extends ApiBase {
 		return '';
 	}
 
-	protected function getExamples() {
+	public function getExamples() {
 		return array(
 			'Revert Wiki.png to the version of 20110305152740:',
 			'    api.php?action=filerevert&filename=Wiki.png&comment=Revert&archivename=20110305152740!Wiki.png&token=+\\',
@@ -184,6 +177,6 @@ class ApiFileRevert extends ApiBase {
 	}
 
 	public function getVersion() {
-		return __CLASS__ . ': $Id: ApiFileRevert.php 84653 2011-03-24 00:43:27Z reedy $';
+		return __CLASS__ . ': $Id: ApiFileRevert.php 103273 2011-11-16 00:17:26Z johnduhart $';
 	}
 }

@@ -220,31 +220,6 @@ echo "</pre>";
 		return $this->frameFunctions($args->command,$callerFrame,$args->trimExpand(2,false));
 	}	
 	
-	function hook_ShowMissingArticle ($a) {
-		global $wgOut,$wgNamespacesWithSubpages;
-		$t = Title::newFromText($a->mTitle->getPrefixedText());
-		$ns = $t->getNamespace();
-		if (!$t->isSubpage()) return true;
-		$parts = explode( '/', $t->getText());
-		$args = array();
-		$suffix = '';
-		while (count ($parts)>1) {
-		   array_unshift($args,array_pop($parts));
-		   $suffix .= "";
-		   $title = Title::newFromText(implode('/',$parts).$suffix,$ns);
-		   if(!$title->exists()) continue;
-		   
-		   $text = '{{:' . $title->getPrefixedText();
-		   foreach ($args as $k=>$v) {
-		      $text.= '|'.($k+1) . "=" . preg_replace('/{/','&#123;',$v);
-		      $text.= '|sub'.($k+1) . "=" . preg_replace('/{/','&#123;',$v);
-		   }
-		   $text.="}}";
-			$wgOut->addWikiText($text);
-			return false;
-		}	
-		return true;
-	}	
 }	
 
 //####### Used Hooks ######################

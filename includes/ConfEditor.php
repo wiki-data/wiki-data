@@ -84,6 +84,10 @@ class ConfEditor {
 
 	/**
 	 * Simple entry point for command-line testing
+	 *
+	 * @param $text string
+	 *
+	 * @return string
 	 */
 	static function test( $text ) {
 		try {
@@ -306,14 +310,14 @@ class ConfEditor {
 	function parseScalar( $str ) {
 		if ( $str !== '' && $str[0] == '\'' )
 			// Single-quoted string
-			// @todo Fixme: trim() call is due to mystery bug where whitespace gets
+			// @todo FIXME: trim() call is due to mystery bug where whitespace gets
 			// appended to the token; without it we ended up reading in the
 			// extra quote on the end!
 			return strtr( substr( trim( $str ), 1, -1 ),
 				array( '\\\'' => '\'', '\\\\' => '\\' ) );
-		if ( $str !== '' && @$str[0] == '"' )
+		if ( $str !== '' && $str[0] == '"' )
 			// Double-quoted string
-			// @todo Fixme: trim() call is due to mystery bug where whitespace gets
+			// @todo FIXME: trim() call is due to mystery bug where whitespace gets
 			// appended to the token; without it we ended up reading in the
 			// extra quote on the end!
 			return stripcslashes( substr( trim( $str ), 1, -1 ) );
@@ -472,7 +476,7 @@ class ConfEditor {
 		return $extraPath;
 	}
 
-	/*
+	/**
 	 * Find the path name of first element in the array.
 	 * If the array is empty, this will return the \@extra interstitial element.
 	 * If the specified path is not found or is not an array, it will return false.

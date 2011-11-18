@@ -24,11 +24,6 @@
  * @file
  */
 
-if ( !defined( 'MEDIAWIKI' ) ) {
-	// Eclipse helper - will be ignored in production
-	require_once( "ApiBase.php" );
-}
-
 /**
  * API Module to facilitate sending of emails to users
  * @ingroup API
@@ -40,8 +35,6 @@ class ApiEmailUser extends ApiBase {
 	}
 
 	public function execute() {
-		global $wgUser;
-
 		$params = $this->extractRequestParams();
 
 		// Validate target
@@ -51,7 +44,7 @@ class ApiEmailUser extends ApiBase {
 		}
 
 		// Check permissions and errors
-		$error = SpecialEmailUser::getPermissionsError( $wgUser, $params['token'] );
+		$error = SpecialEmailUser::getPermissionsError( $this->getUser(), $params['token'] );
 		if ( $error ) {
 			$this->dieUsageMsg( array( $error ) );
 		}
@@ -138,13 +131,17 @@ class ApiEmailUser extends ApiBase {
 		return '';
 	}
 
-	protected function getExamples() {
+	public function getExamples() {
 		return array(
 			'api.php?action=emailuser&target=WikiSysop&text=Content'
 		);
 	}
 
+	public function getHelpUrls() {
+		return 'http://www.mediawiki.org/wiki/API:E-mail';
+	}
+
 	public function getVersion() {
-		return __CLASS__ . ': $Id: ApiEmailUser.php 83270 2011-03-05 03:35:49Z bawolff $';
+		return __CLASS__ . ': $Id: ApiEmailUser.php 103273 2011-11-16 00:17:26Z johnduhart $';
 	}
 }

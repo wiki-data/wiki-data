@@ -31,8 +31,6 @@
  * @ingroup Maintenance
  */
 
-$wgUseNormalUser = (bool)getenv( 'MW_WIKIUSER' );
-
 $optionsWithArgs = array( 'd' );
 
 /** */
@@ -45,8 +43,11 @@ if ( isset( $options['d'] ) ) {
 	}
 	if ( $d > 1 ) {
 		$lb = wfGetLB();
-		foreach ( $lb->mServers as $i => $server ) {
-			$lb->mServers[$i]['flags'] |= DBO_DEBUG;
+		$serverCount = $lb->getServerCount(); 
+		for ( $i = 0; $i < $serverCount; $i++ ) {
+			$server = $lb->getServerInfo( $i );
+			$server['flags'] |= DBO_DEBUG;
+			$lb->setServerInfo( $i, $server );
 		}
 	}
 	if ( $d > 2 ) {
@@ -55,7 +56,7 @@ if ( isset( $options['d'] ) ) {
 }
 
 if ( function_exists( 'readline_add_history' )
-	&& posix_isatty( 0 /*STDIN*/ ) )
+	&& Maintenance::posix_isatty( 0 /*STDIN*/ ) )
 {
 	$useReadline = true;
 } else {

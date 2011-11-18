@@ -40,8 +40,10 @@ elseif (file_exists ($_SERVER['DOCUMENT_ROOT'].'/LocalSettings.php'))
 	require_once( "$IP/includes/DefaultSettings.php" );
 	include_once($wgMwSitePath.'/LocalSettings.php');
 }
-else
-	die ('<b>Wiki not installed.</b> Try <a href="/w/config">config</a>.');
+else {
+	require_once( "$IP/includes/templates/NoLocalSettings.php" );
+	die();
+}
 	
 
 

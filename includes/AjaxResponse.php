@@ -6,10 +6,6 @@
  * @ingroup Ajax
  */
 
-if ( !defined( 'MEDIAWIKI' ) ) {
-	die( 1 );
-}
-
 /**
  * Handle responses for Ajax requests (send headers, print
  * content, that sort of thing)
@@ -197,6 +193,11 @@ class AjaxResponse {
 		}
 	}
 
+	/**
+	 * @param $mckey
+	 * @param $touched
+	 * @return bool
+	 */
 	function loadFromMemcached( $mckey, $touched ) {
 		global $wgMemc;
 
@@ -220,6 +221,11 @@ class AjaxResponse {
 		return false;
 	}
 
+	/**
+	 * @param $mckey
+	 * @param $expiry int
+	 * @return bool
+	 */
 	function storeInMemcached( $mckey, $expiry = 86400 ) {
 		global $wgMemc;
 

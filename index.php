@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This is the main web entry point for MediaWiki.
  *
@@ -37,89 +36,23 @@
  * @file
  */
 
-# Initialise common code.  This gives us access to GlobalFunctions, the AutoLoader, and
-# the globals $wgRequest, $wgOut, $wgUser, $wgLang and $wgContLang, amongst others; it
-# does *not* load $wgTitle or $wgArticle
-require ( dirname( __FILE__ ) . '/includes/WebStart.php' );
-
-wfProfileIn( 'index.php' );
-wfProfileIn( 'index.php-setup' );
-
-$maxLag = $wgRequest->getVal( 'maxlag' );
-if ( !is_null( $maxLag ) ) {
-	list( $host, $lag ) = wfGetLB()->getMaxLag();
-	if ( $lag > $maxLag ) {
-		header( 'HTTP/1.1 503 Service Unavailable' );
-		header( 'Retry-After: ' . max( intval( $maxLag ), 5 ) );
-		header( 'X-Database-Lag: ' . intval( $lag ) );
-		header( 'Content-Type: text/plain' );
-		if( $wgShowHostnames ) {
-			echo "Waiting for $host: $lag seconds lagged\n";
-		} else {
-			echo "Waiting for a database server: $lag seconds lagged\n";
-		}
-		exit;
-	}
+# Bail on old versions of PHP.  Pretty much every other file in the codebase
+# has structures (try/catch, foo()->bar(), etc etc) which throw parse errors in
+# PHP 4. Setup.php and ObjectCache.php have structures invalid in PHP 5.0 and
+# 5.1, respectively.
+if ( !function_exists( 'version_compare' ) || version_compare( phpversion(), '5.2.3' ) < 0 ) {
+	require( dirname( __FILE__ ) . '/includes/PHPVersionError.php' );
+	wfPHPVersionError( 'index.php' );
 }
 
-# Initialize MediaWiki base class
-$context = RequestContext::getMain();
-$mediaWiki = new MediaWiki( $context );
-
-# Set title from request parameters
-$wgTitle = $mediaWiki->getTitle();
-$action = $wgRequest->getVal( 'action', 'view' );
-
-wfProfileOut( 'index.php-setup' );
-
-# Send Ajax requests to the Ajax dispatcher.
-if ( $wgUseAjax && $action == 'ajax' ) {
-	$dispatcher = new AjaxDispatcher();
-	$dispatcher->performAction();
-	wfProfileOut( 'index.php' );
-	$mediaWiki->restInPeace();
-	exit;
+# Initialise common code.  This gives us access to GlobalFunctions, the
+# AutoLoader, and the globals $wgRequest, $wgOut, $wgUser, $wgLang and
+# $wgContLang, amongst others; it does *not* load $wgTitle
+if ( isset( $_SERVER['MW_COMPILED'] ) ) {
+	require ( 'phase3/includes/WebStart.php' );
+} else {
+	require ( dirname( __FILE__ ) . '/includes/WebStart.php' );
 }
 
-if ( $wgUseFileCache && $wgTitle !== null ) {
-	wfProfileIn( 'index.php-filecache' );
-	// Raw pages should handle cache control on their own,
-	// even when using file cache. This reduces hits from clients.
-	if ( $action != 'raw' && HTMLFileCache::useFileCache() ) {
-		/* Try low-level file cache hit */
-		$cache = new HTMLFileCache( $wgTitle, $action );
-		if ( $cache->isFileCacheGood( /* Assume up to date */ ) ) {
-			/* Check incoming headers to see if client has this cached */
-			if ( !$context->output->checkLastModified( $cache->fileCacheTime() ) ) {
-				$cache->loadFromFileCache();
-			}
-			# Do any stats increment/watchlist stuff
-			$wgArticle = MediaWiki::articleFromTitle( $wgTitle );
-			$wgArticle->viewUpdates();
-			# Tell OutputPage that output is taken care of
-			$context->output->disable();
-			wfProfileOut( 'index.php-filecache' );
-			$mediaWiki->finalCleanup();
-			wfProfileOut( 'index.php' );
-			$mediaWiki->restInPeace();
-			exit;
-		}
-	}
-	wfProfileOut( 'index.php-filecache' );
-}
-
-# Setting global variables in mediaWiki
-$mediaWiki->setVal( 'DisableHardRedirects', $wgDisableHardRedirects );
-$mediaWiki->setVal( 'EnableCreativeCommonsRdf', $wgEnableCreativeCommonsRdf );
-$mediaWiki->setVal( 'EnableDublinCoreRdf', $wgEnableDublinCoreRdf );
-$mediaWiki->setVal( 'Server', $wgServer );
-$mediaWiki->setVal( 'SquidMaxage', $wgSquidMaxage );
-$mediaWiki->setVal( 'UseExternalEditor', $wgUseExternalEditor );
-$mediaWiki->setVal( 'UsePathInfo', $wgUsePathInfo );
-
-$mediaWiki->performRequestForTitle( $wgArticle );
-$mediaWiki->finalCleanup();
-
-wfProfileOut( 'index.php' );
-
-$mediaWiki->restInPeace();
+$mediaWiki = new MediaWiki();
+$mediaWiki->run();

@@ -143,9 +143,8 @@ $messages = array(
 'nstab-category'  => 'Категория',
 
 # General errors
-'error'         => 'Жаңылыш',
-'viewsource'    => 'Байкоо',
-'viewsourcefor' => '$1 үчүн',
+'error'      => 'Жаңылыш',
+'viewsource' => 'Байкоо',
 
 # Login and logout pages
 'welcomecreation'         => '== Кош келиңиз, $1! ==
@@ -168,22 +167,21 @@ $messages = array(
 'accountcreated'          => 'Катталды',
 'loginlanguagelabel'      => 'Тил: $1',
 
-# Password reset dialog
+# Change password dialog
 'oldpassword' => 'Эски сырсөз:',
 'newpassword' => 'Жаңы сырсөз:',
 
 # Edit pages
-'summary'            => 'Кыска түшүндүрүү:',
-'savearticle'        => 'Баракты сактап кой',
-'showpreview'        => 'Алдын ала көрсөт',
-'showdiff'           => 'Өзгөртүүлөрдү көрсөт',
-'whitelistedittitle' => 'Оңдоо үчүн катоодон өтүү зарыл',
-'accmailtitle'       => 'Сырсөз жөнөтүлдү.',
-'accmailtext'        => '"$1" үчүн сырсөз $2 ге жөнөтүлдү.',
-'newarticle'         => '(Жаңы)',
-'editing'            => 'Оңдоо $1',
-'yourtext'           => 'Текстиңиз',
-'yourdiff'           => 'Айырмалар',
+'summary'      => 'Кыска түшүндүрүү:',
+'savearticle'  => 'Баракты сактап кой',
+'showpreview'  => 'Алдын ала көрсөт',
+'showdiff'     => 'Өзгөртүүлөрдү көрсөт',
+'accmailtitle' => 'Сырсөз жөнөтүлдү.',
+'accmailtext'  => '"$1" үчүн сырсөз $2 ге жөнөтүлдү.',
+'newarticle'   => '(Жаңы)',
+'editing'      => 'Оңдоо $1',
+'yourtext'     => 'Текстиңиз',
+'yourdiff'     => 'Айырмалар',
 
 # History pages
 'next'      => 'кийинки',
@@ -307,7 +305,6 @@ $messages = array(
 # Watchlist
 'watchlist'         => 'Байкоо тизмем',
 'watchnologin'      => 'Катталган жок',
-'addedwatch'        => 'Байкоо тизмеге кошумчаланды',
 'watch'             => 'Байкоо',
 'watchlistcontains' => 'Байкоо тизмеңизде $1 {{PLURAL:$1|барак бар|барак бар}}.',
 'wlshowlast'        => 'Соңку $1 саат $2 күн $3 көрсөт.',
@@ -319,7 +316,6 @@ $messages = array(
 'deletepage'     => 'Баракты өчүрүп кой',
 'confirm'        => 'Ырастоо',
 'actioncomplete' => 'Иш-аракет жыйынтыкталды',
-'deletedarticle' => 'өчүрүлдү "[[$1]]"',
 'deletecomment'  => 'Себеп',
 
 # Restrictions (nouns)
@@ -392,9 +388,8 @@ $messages = array(
 'exif-focalplaneresolutionunit-2' => 'дюйм',
 
 # 'all' in various places, this might be different for inflected languages
-'recentchangesall' => 'баары',
-'watchlistall2'    => 'баары',
-'namespacesall'    => 'баары',
+'watchlistall2' => 'баары',
+'namespacesall' => 'баары',
 
 # E-mail address confirmation
 'confirmemail'          => 'Электрондук даректи ырастоо',

@@ -27,6 +27,10 @@ class DBABagOStuff extends BagOStuff {
 
 	/**
 	 * Encode value and expiry for storage
+	 * @param $value
+	 * @param $expiry
+	 *
+	 * @return string
 	 */
 	function encode( $value, $expiry ) {
 		# Convert to absolute time
@@ -36,7 +40,7 @@ class DBABagOStuff extends BagOStuff {
 	}
 
 	/**
-	 * @return list containing value first and expiry second
+	 * @return array list containing value first and expiry second
 	 */
 	function decode( $blob ) {
 		if ( !is_string( $blob ) ) {
@@ -180,8 +184,10 @@ class DBABagOStuff extends BagOStuff {
 
 		$result[] = $k1;
 
-		while ( $key = dba_nextkey( $reader ) ) {
+		$key = dba_nextkey( $reader );
+		while ( $key ) {
 			$result[] = $key;
+			$key = dba_nextkey( $reader );
 		}
 
 		return $result;

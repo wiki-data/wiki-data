@@ -2,7 +2,7 @@
 /**
  * A few constants that might be needed during LocalSettings.php.
  *
- * Note: these constants must all be resolvable at compile time by HipHop, 
+ * Note: these constants must all be resolvable at compile time by HipHop,
  * since this file will not be executed during request startup for a compiled
  * MediaWiki.
  *
@@ -85,16 +85,6 @@ define( 'NS_IMAGE', NS_FILE );
 define( 'NS_IMAGE_TALK', NS_FILE_TALK );
 /**@}*/
 
-/**
- * Available feeds objects
- * Should probably only be defined when a page is syndicated ie when
- * $wgOut->isSyndicated() is true
- */
-$wgFeedClasses = array(
-	'rss' => 'RSSFeed',
-	'atom' => 'AtomFeed',
-);
-
 /**@{
  * Cache type
  */
@@ -120,7 +110,6 @@ define( 'MEDIATYPE_OFFICE',     'OFFICE' );      // Office Documents, Spreadshee
 define( 'MEDIATYPE_TEXT',       'TEXT' );        // Plain text (possibly containing program code or scripts)
 define( 'MEDIATYPE_EXECUTABLE', 'EXECUTABLE' );  // binary executable
 define( 'MEDIATYPE_ARCHIVE',    'ARCHIVE' );     // archive file (zip, tar, etc)
-define( 'MEDIATYPE_DATA',       'DATA' );        // A generic data file (like kml and kmz)
 /**@}*/
 
 /**@{
@@ -160,13 +149,12 @@ define( 'MW_DATE_ISO', 'ISO 8601' );
 
 /**@{
  * RecentChange type identifiers
- * This may be obsolete; log items are now used for moves?
  */
 define( 'RC_EDIT', 0);
 define( 'RC_NEW', 1);
-define( 'RC_MOVE', 2);
+define( 'RC_MOVE', 2); // obsolete
 define( 'RC_LOG', 3);
-define( 'RC_MOVE_OVER_REDIRECT', 4);
+define( 'RC_MOVE_OVER_REDIRECT', 4); // obsolete
 /**@}*/
 
 /**@{
@@ -249,4 +237,15 @@ define( 'APCOND_ISIP', 5 );
 define( 'APCOND_IPINRANGE', 6 );
 define( 'APCOND_AGE_FROM_EDIT', 7 );
 define( 'APCOND_BLOCKED', 8 );
+define( 'APCOND_ISBOT', 9 );
 /**@}*/
+
+/**
+ * Protocol constants for wfExpandUrl()
+ */
+define( 'PROTO_HTTP', 'http://' );
+define( 'PROTO_HTTPS', 'https://' );
+define( 'PROTO_RELATIVE', '//' );
+define( 'PROTO_CURRENT', null );
+define( 'PROTO_CANONICAL', 1 );
+define( 'PROTO_INTERNAL', 2 );

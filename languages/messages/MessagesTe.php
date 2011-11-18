@@ -11,6 +11,7 @@
  * @author Kiranmayee
  * @author Meno25
  * @author Mpradeep
+ * @author Praveen Illa
  * @author Ravichandra
  * @author Sunil Mohan
  * @author The Evil IP address
@@ -18,6 +19,7 @@
  * @author Veeven
  * @author Ævar Arnfjörð Bjarmason <avarab@gmail.com>
  * @author לערי ריינהארט
+ * @author రహ్మానుద్దీన్
  * @author రాకేశ్వర
  * @author వైజాసత్య
  */
@@ -56,72 +58,72 @@ $namespaceAliases = array(
 );
 
 $specialPageAliases = array(
-	'DoubleRedirects'           => array( 'రెండుసార్లుదారిమార్పు' ),
+	'Allmessages'               => array( 'అన్నిసందేశాలు' ),
+	'Allpages'                  => array( 'అన్నిపేజీలు' ),
+	'Ancientpages'              => array( 'పురాతనపేజీలు' ),
+	'Blankpage'                 => array( 'ఖాళీపేజి' ),
+	'Block'                     => array( 'అడ్డగించు', 'ఐపినిఅడ్డగించు', 'వాడుకరినిఅడ్డగించు' ),
+	'Blockme'                   => array( 'నన్నుఅడ్డగించు' ),
+	'Booksources'               => array( 'పుస్తకమూలాలు' ),
 	'BrokenRedirects'           => array( 'తెగిపోయినదారిమార్పులు' ),
-	'Disambiguations'           => array( 'అయోమయనివృత్తి' ),
-	'Userlogin'                 => array( 'వాడుకరిప్రవేశం' ),
-	'Userlogout'                => array( 'వాడుకరినిష్క్రమణ' ),
+	'Categories'                => array( 'వర్గాలు' ),
+	'ChangePassword'            => array( 'సంకేతపదముమార్చు' ),
+	'Confirmemail'              => array( 'ఈమెయిలుధ్రువపరచు' ),
 	'CreateAccount'             => array( 'ఖాతాసృష్టించు' ),
-	'Preferences'               => array( 'అభిరుచులు' ),
-	'Watchlist'                 => array( 'వీక్షణజాబితా' ),
-	'Recentchanges'             => array( 'ఇటీవలిమార్పులు' ),
-	'Upload'                    => array( 'ఎక్కింపు' ),
+	'Deadendpages'              => array( 'అగాధపేజీలు' ),
+	'Disambiguations'           => array( 'అయోమయనివృత్తి' ),
+	'DoubleRedirects'           => array( 'రెండుసార్లుదారిమార్పు' ),
+	'Emailuser'                 => array( 'వాడుకరికిఈమెయిలుచెయ్యి' ),
+	'Export'                    => array( 'ఎగుమతి' ),
+	'Fewestrevisions'           => array( 'అతితక్కువకూర్పులు' ),
+	'Import'                    => array( 'దిగుమతి' ),
 	'Listfiles'                 => array( 'ఫైళ్లజాబితా', 'బొమ్మలజాబితా' ),
-	'Newimages'                 => array( 'కొత్తఫైళ్లు', 'కొత్తబొమ్మలు' ),
-	'Listusers'                 => array( 'వాడుకరులజాబితా' ),
 	'Listgrouprights'           => array( 'గుంపుహక్కులజాబితా', 'వాడుకరులగుంపుహక్కులు' ),
-	'Statistics'                => array( 'గణాంకాలు' ),
-	'Randompage'                => array( 'యాదృచ్చికపేజీ' ),
+	'Listusers'                 => array( 'వాడుకరులజాబితా' ),
+	'Log'                       => array( 'చిట్టా', 'చిట్టాలు' ),
 	'Lonelypages'               => array( 'ఒంటరిపేజీలు', 'అనాధపేజీలు' ),
-	'Uncategorizedpages'        => array( 'వర్గీకరించనిపేజీలు' ),
+	'Longpages'                 => array( 'పొడుగుపేజీలు' ),
+	'MergeHistory'              => array( 'చరిత్రనువిలీనంచేయి' ),
+	'Mostcategories'            => array( 'ఎక్కువవర్గములు' ),
+	'Mostrevisions'             => array( 'ఎక్కువకూర్పులు' ),
+	'Movepage'                  => array( 'వ్యాసమునుతరలించు' ),
+	'Mycontributions'           => array( 'నా_మార్పులు-చేర్పులు' ),
+	'Mypage'                    => array( 'నాపేజీ' ),
+	'Mytalk'                    => array( 'నాచర్చ' ),
+	'Newimages'                 => array( 'కొత్తఫైళ్లు', 'కొత్తబొమ్మలు' ),
+	'Newpages'                  => array( 'కొత్తపేజీలు' ),
+	'Popularpages'              => array( 'ప్రాచుర్యంపొందినపేజీలు' ),
+	'Preferences'               => array( 'అభిరుచులు' ),
+	'Protectedpages'            => array( 'సంరక్షితపేజీలు' ),
+	'Randompage'                => array( 'యాదృచ్చికపేజీ' ),
+	'Randomredirect'            => array( 'యాదుచ్చికదారిమార్పు' ),
+	'Recentchanges'             => array( 'ఇటీవలిమార్పులు' ),
+	'Recentchangeslinked'       => array( 'చివరిమార్పులలింకులు', 'సంబంధితమార్పులు' ),
+	'Revisiondelete'            => array( 'కూర్పుతొలగించు' ),
+	'Search'                    => array( 'అన్వేషణ' ),
+	'Shortpages'                => array( 'చిన్నపేజీలు' ),
+	'Specialpages'              => array( 'ప్రత్యేకపేజీలు' ),
+	'Statistics'                => array( 'గణాంకాలు' ),
 	'Uncategorizedcategories'   => array( 'వర్గీకరించనివర్గములు' ),
 	'Uncategorizedimages'       => array( 'వర్గీకరించనిఫైళ్లు', 'వర్గీకరించనిబొమ్మలు' ),
+	'Uncategorizedpages'        => array( 'వర్గీకరించనిపేజీలు' ),
 	'Uncategorizedtemplates'    => array( 'వర్గీకరించనిమూసలు' ),
 	'Unusedcategories'          => array( 'వాడనివర్గములు' ),
 	'Unusedimages'              => array( 'వాడనిఫైళ్లు', 'వాడనిబొమ్మలు' ),
-	'Wantedpages'               => array( 'అవసరమైనపేజీలు', 'విరిగిపోయినలింకులు' ),
+	'Unusedtemplates'           => array( 'వాడనిమూసలు' ),
+	'Unwatchedpages'            => array( 'వీక్షించనిపేజీలు' ),
+	'Upload'                    => array( 'ఎక్కింపు' ),
+	'Userlogin'                 => array( 'వాడుకరిప్రవేశం' ),
+	'Userlogout'                => array( 'వాడుకరినిష్క్రమణ' ),
+	'Userrights'                => array( 'వాడుకరిహక్కులు' ),
+	'Version'                   => array( 'కూర్పు' ),
 	'Wantedcategories'          => array( 'కోరినవర్గాలు' ),
 	'Wantedfiles'               => array( 'అవసరమైనఫైళ్లు' ),
+	'Wantedpages'               => array( 'అవసరమైనపేజీలు', 'విరిగిపోయినలింకులు' ),
 	'Wantedtemplates'           => array( 'అవసరమైననమూనాలు' ),
-	'Mostcategories'            => array( 'ఎక్కువవర్గములు' ),
-	'Mostrevisions'             => array( 'ఎక్కువకూర్పులు' ),
-	'Fewestrevisions'           => array( 'అతితక్కువకూర్పులు' ),
-	'Shortpages'                => array( 'చిన్నపేజీలు' ),
-	'Longpages'                 => array( 'పొడుగుపేజీలు' ),
-	'Newpages'                  => array( 'కొత్తపేజీలు' ),
-	'Ancientpages'              => array( 'పురాతనపేజీలు' ),
-	'Deadendpages'              => array( 'అగాధపేజీలు' ),
-	'Protectedpages'            => array( 'సంరక్షితపేజీలు' ),
-	'Allpages'                  => array( 'అన్నిపేజీలు' ),
-	'Specialpages'              => array( 'ప్రత్యేకపేజీలు' ),
-	'Emailuser'                 => array( 'వాడుకరికిఈమెయిలుచెయ్యి' ),
-	'Confirmemail'              => array( 'ఈమెయిలుధ్రువపరచు' ),
+	'Watchlist'                 => array( 'వీక్షణజాబితా' ),
 	'Whatlinkshere'             => array( 'ఇక్కడికిలింకున్నపేజీలు' ),
-	'Recentchangeslinked'       => array( 'చివరిమార్పులలింకులు', 'సంబంధితమార్పులు' ),
-	'Movepage'                  => array( 'వ్యాసమునుతరలించు' ),
-	'Blockme'                   => array( 'నన్నుఅడ్డగించు' ),
-	'Booksources'               => array( 'పుస్తకమూలాలు' ),
-	'Categories'                => array( 'వర్గాలు' ),
-	'Export'                    => array( 'ఎగుమతి' ),
-	'Version'                   => array( 'కూర్పు' ),
-	'Allmessages'               => array( 'అన్నిసందేశాలు' ),
-	'Log'                       => array( 'చిట్టా', 'చిట్టాలు' ),
-	'Block'                     => array( 'అడ్డగించు', 'ఐపినిఅడ్డగించు', 'వాడుకరినిఅడ్డగించు' ),
-	'Import'                    => array( 'దిగుమతి' ),
-	'Userrights'                => array( 'వాడుకరిహక్కులు' ),
-	'Unwatchedpages'            => array( 'వీక్షించనిపేజీలు' ),
-	'Revisiondelete'            => array( 'కూర్పుతొలగించు' ),
-	'Unusedtemplates'           => array( 'వాడనిమూసలు' ),
-	'Randomredirect'            => array( 'యాదుచ్చికదారిమార్పు' ),
-	'Mypage'                    => array( 'నాపేజీ' ),
-	'Mytalk'                    => array( 'నాచర్చ' ),
-	'Mycontributions'           => array( 'నా_మార్పులు-చేర్పులు' ),
-	'Popularpages'              => array( 'ప్రాచుర్యంపొందినపేజీలు' ),
-	'Search'                    => array( 'అన్వేషణ' ),
-	'Resetpass'                 => array( 'సంకేతపదముమార్చు' ),
 	'Withoutinterwiki'          => array( 'అంతరవికీలేకుండా' ),
-	'MergeHistory'              => array( 'చరిత్రనువిలీనంచేయి' ),
-	'Blankpage'                 => array( 'ఖాళీపేజి' ),
 );
 
 $magicWords = array(
@@ -135,6 +137,8 @@ $magicWords = array(
 );
 
 $linkTrail = "/^([\xE0\xB0\x81-\xE0\xB1\xAF]+)(.*)$/sDu";
+
+$digitGroupingPattern = "##,##,###";
 
 $messages = array(
 # User preference toggles
@@ -166,10 +170,10 @@ $messages = array(
 'tog-enotifminoredits'        => 'చిన్న మార్పులు చేసినప్పుడు కూడా నాకు ఈ-మెయిలు పంపించు',
 'tog-enotifrevealaddr'        => 'గమనింపు మెయిళ్ళలో నా ఈ-మెయిలు చిరునామాను చూపించు',
 'tog-shownumberswatching'     => 'వీక్షకుల సంఖ్యను చూపించు',
-'tog-oldsig'                  => 'ప్రస్తుత సంతకపు మునుజూపు:',
+'tog-oldsig'                  => 'ప్రస్తుత సంతకం:',
 'tog-fancysig'                => 'సంతకాన్ని వికీపాఠ్యంగా తీసుకో (ఆటోమెటిక్‌ లింకు లేకుండా)',
-'tog-externaleditor'          => 'మామూలుగా బయటి కూర్పరిని వాడు (నిపుణులకు మాత్రమే, మీ కంప్యూటర్లో ప్రత్యేక అమరికలు అవసరమవుతాయి)',
-'tog-externaldiff'            => 'మార్పులను చూడటానికి బయటి సాఫ్టువేరును వాడు (నిపుణులకు మాత్రమే, మీ కంప్యూటర్లో ప్రత్యేక అమరికలు అవసరమవుతాయి)',
+'tog-externaleditor'          => 'మామూలుగా బయటి ఎడిటరును వాడు (నిపుణులకు మాత్రమే. మీ కంప్యూటర్లో ప్రత్యేక అమరికలు అవసరమవుతాయి. [//www.mediawiki.org/wiki/Manual:External_editors మరింత సమాచారం.])',
+'tog-externaldiff'            => 'మార్పులను చూడటానికి బయటి సాఫ్టువేరును వాడు (నిపుణులకు మాత్రమే, మీ కంప్యూటర్లో ప్రత్యేక అమరికలు అవసరమవుతాయి. [//www.mediawiki.org/wiki/Manual:External_editors మరింత సమాచారం.])',
 'tog-showjumplinks'           => '"ఇక్కడికి గెంతు" లింకులను చూపించు',
 'tog-uselivepreview'          => 'రాస్తున్నదానిని ఎప్పటికప్పుడు సరిచూడండి (జావాస్క్రిప్టు) (పరీక్షాదశలో ఉంది)',
 'tog-forceeditsummary'        => 'దిద్దుబాటు సారాంశం ఖాళీగా ఉంటే ఆ విషయాన్ని నాకు సూచించు',
@@ -196,13 +200,13 @@ $messages = array(
 'editfont-serif'     => 'సెరిఫ్ ఫాంటు',
 
 # Dates
-'sunday'        => 'ఆదివారము',
-'monday'        => 'సోమవారము',
-'tuesday'       => 'మంగళవారము',
-'wednesday'     => 'బుధవారము',
-'thursday'      => 'గురువారము',
-'friday'        => 'శుక్రవారము',
-'saturday'      => 'శనివారము',
+'sunday'        => 'ఆదివారం',
+'monday'        => 'సోమవారం',
+'tuesday'       => 'మంగళవారం',
+'wednesday'     => 'బుధవారం',
+'thursday'      => 'గురువారం',
+'friday'        => 'శుక్రవారం',
+'saturday'      => 'శనివారం',
 'sun'           => 'ఆది',
 'mon'           => 'సోమ',
 'tue'           => 'మంగళ',
@@ -264,15 +268,7 @@ $messages = array(
 'listingcontinuesabbrev'         => '(కొనసాగింపు)',
 'index-category'                 => 'సూచీకరించిన పేజీలు',
 'noindex-category'               => 'సూచీకరించని పేజీలు',
-
-'mainpagetext'      => "'''మీడియా వికీని విజయవంతంగా ప్రతిష్టించాం.'''",
-'mainpagedocfooter' => 'వికీ సాఫ్టువేరును వాడటనికి కావలిసిన సమాచారం కోసం [http://meta.wikimedia.org/wiki/Help:Contents వాడుకరుల గైడు]ను సందర్శించండి.
-
-== మొదలు పెట్టండి ==
-
-* [http://www.mediawiki.org/wiki/Manual:Configuration_settings మీడియావికీ పనితీరు, అమరిక మార్చుకునేందుకు వీలుకల్పించే చిహ్నాల జాబితా]
-* [http://www.mediawiki.org/wiki/Manual:FAQ మీడియావికీపై తరుచుగా అడిగే ప్రశ్నలు]
-* [https://lists.wikimedia.org/mailman/listinfo/mediawiki-announce మీడియావికీ సాఫ్టువేరు కొత్త వెర్షను విడుదలల గురించి తెలిపే మెయిలింగు లిస్టు]',
+'broken-file-category'           => 'తెగిపోయిన ఫైలులింకులు గల పేజీలు',
 
 'about'         => 'గురించి',
 'article'       => 'వ్యాసము',
@@ -288,7 +284,7 @@ $messages = array(
 # Cologne Blue skin
 'qbfind'         => 'వెతుకు',
 'qbbrowse'       => 'విహరించు',
-'qbedit'         => 'మార్చు',
+'qbedit'         => 'సవరించు',
 'qbpageoptions'  => 'ఈ పేజీ',
 'qbpageinfo'     => 'సందర్భం',
 'qbmyoptions'    => 'నా పేజీలు',
@@ -302,10 +298,10 @@ $messages = array(
 'vector-action-move'             => 'తరలించు',
 'vector-action-protect'          => 'సంరక్షించు',
 'vector-action-undelete'         => 'తిరిగి చేర్చు',
-'vector-action-unprotect'        => 'సంరక్షించ వద్దు',
+'vector-action-unprotect'        => 'సంరక్షణను మార్చు',
 'vector-simplesearch-preference' => 'మెరుగైన అన్వేషణ సలహాలని చేతనంచేయి (వెక్టర్ అలంకారానికి మాత్రమే)',
 'vector-view-create'             => 'సృష్టించు',
-'vector-view-edit'               => 'మార్చు',
+'vector-view-edit'               => 'సవరించు',
 'vector-view-history'            => 'చరిత్రని చూడండి',
 'vector-view-view'               => 'చదువు',
 'vector-view-viewsource'         => 'మూలాన్ని చూడండి',
@@ -321,29 +317,28 @@ $messages = array(
 'searchbutton'      => 'వెతుకు',
 'go'                => 'వెళ్లు',
 'searcharticle'     => 'వెళ్లు',
-'history'           => 'పుట చరిత్ర',
+'history'           => 'పేజీ చరిత్ర',
 'history_short'     => 'చరిత్ర',
 'updatedmarker'     => 'నేను కిందటిసారి వచ్చిన తరువాత జరిగిన మార్పులు',
-'info_short'        => 'సమాచారం',
 'printableversion'  => 'ముద్రించుకోదగ్గ కూర్పు',
 'permalink'         => 'శాశ్వత లింకు',
 'print'             => 'ముద్రించు',
 'view'              => 'చూచుట',
-'edit'              => 'మార్చు',
+'edit'              => 'సవరించు',
 'create'            => 'సృష్టించు',
-'editthispage'      => 'ఈ పుటని మార్చండి',
+'editthispage'      => 'ఈ పేజీని సవరించండి',
 'create-this-page'  => 'ఈ పేజీని సృష్టించండి',
-'delete'            => 'తుడిచివేయి',
-'deletethispage'    => 'ఈ పుటను తొలగించు',
+'delete'            => 'తీసివేయి',
+'deletethispage'    => 'ఈ పేజీని తొలగించండి',
 'undelete_short'    => '{{PLURAL:$1|ఒక్క రచనను|$1 రచనలను}} పునఃస్థాపించు',
 'viewdeleted_short' => '{{PLURAL:$1|తొలగించిన ఒక మార్పు|$1 తొలగించిన మార్పుల}}ను చూడండి',
 'protect'           => 'సంరక్షించు',
 'protect_change'    => 'మార్చు',
 'protectthispage'   => 'ఈ పేజీని సంరక్షించు',
-'unprotect'         => 'సంరక్షించ వద్దు',
-'unprotectthispage' => 'ఈ పేజీని సంరక్షించవద్దు',
-'newpage'           => 'కొత్త పుట',
-'talkpage'          => 'ఈ పుటని చర్చించండి',
+'unprotect'         => 'సంరక్షణ మార్పు',
+'unprotectthispage' => 'ఈ పుట సంరక్షణను మార్చండి',
+'newpage'           => 'కొత్త పేజీ',
+'talkpage'          => 'ఈ పేజీని చర్చించండి',
 'talkpagelinktext'  => 'చర్చ',
 'specialpage'       => 'ప్రత్యేక పేజీ',
 'personaltools'     => 'వ్యక్తిగత పనిముట్లు',
@@ -391,7 +386,7 @@ $1',
 'edithelppage'         => 'Help:దిద్దుబాట్లు ఎలా చెయ్యాలి',
 'helppage'             => 'Help:సూచిక',
 'mainpage'             => 'మొదటి పేజీ',
-'mainpage-description' => 'మొదటి పుట',
+'mainpage-description' => 'మొదటి పేజీ',
 'policy-url'           => 'Project:విధానం',
 'portal'               => 'సముదాయ పందిరి',
 'portal-url'           => 'Project:సముదాయ పందిరి',
@@ -412,9 +407,9 @@ $1',
 'newmessagesdifflink'     => 'క్రితం సంచికతో గల తేడాలు',
 'youhavenewmessagesmulti' => '$1లో మీకో సందేశం ఉంది',
 'editsection'             => 'మార్చు',
-'editold'                 => 'మార్చు',
+'editold'                 => 'సవరించు',
 'viewsourceold'           => 'మూలాన్ని చూడండి',
-'editlink'                => 'మార్చు',
+'editlink'                => 'సవరించు',
 'viewsourcelink'          => 'మూలాన్ని చూడండి',
 'editsectionhint'         => 'విభాగాన్ని మార్చు: $1',
 'toc'                     => 'విషయ సూచిక',
@@ -433,12 +428,14 @@ $1',
 'page-rss-feed'           => '"$1" ఆరెసెస్సు(RSS) ఫీడు',
 'page-atom-feed'          => '"$1" ఆటమ్ ఫీడు',
 'red-link-title'          => '$1 (పుట లేదు)',
+'sort-descending'         => 'అవరోహణ క్రమంలో అమర్చు',
+'sort-ascending'          => 'ఆరోహణ క్రమంలో అమర్చు',
 
 # Short words for each namespace, by default used in the namespace tab in monobook
-'nstab-main'      => 'పుట',
-'nstab-user'      => 'వాడుకరి పుట',
+'nstab-main'      => 'పేజీ',
+'nstab-user'      => 'వాడుకరి పేజీ',
 'nstab-media'     => 'మీడియా పేజీ',
-'nstab-special'   => 'ప్రత్యేక పుట',
+'nstab-special'   => 'ప్రత్యేక పేజీ',
 'nstab-project'   => 'ప్రాజెక్టు పేజీ',
 'nstab-image'     => 'దస్త్రం',
 'nstab-mediawiki' => 'సందేశం',
@@ -500,6 +497,7 @@ $1',
 'badarticleerror'      => 'ఈ పేజీపై ఈ పని చేయడం కుదరదు.',
 'cannotdelete'         => '"$1" అనే పేజీ లేదా ఫైలుని తొలగించలేకపోయాం.
 దాన్ని ఇప్పటికే ఎవరైనా తొలగించి ఉండవచ్చు.',
+'cannotdelete-title'   => '"$1" పుటను తొలగించలేరు',
 'badtitle'             => 'తప్పు శీర్షిక',
 'badtitletext'         => 'మీరు కోరిన పుట యొక్క పేరు చెల్లనిది, ఖాళీగా ఉంది, లేదా తప్పుగా ఇచ్చిన అంతర్వికీ లేదా అంతర-భాషా శీర్షిక అయివుండాలి.
 శీర్షికలలో ఉపయోగించకూడని అక్షరాలు దానిలో ఉండివుండొచ్చు.',
@@ -511,7 +509,6 @@ $1',
 ఫంక్షను: $1<br />
 క్వీరీ: $2',
 'viewsource'           => 'మూలాన్ని చూపించు',
-'viewsourcefor'        => '$1 కొరకు',
 'actionthrottled'      => 'కార్యాన్ని ఆపేసారు',
 'actionthrottledtext'  => 'స్పామును తగ్గించటానికి తీసుకున్న నిర్ణయాల వల్ల, మీరు ఈ కార్యాన్ని అతి తక్కువ సమయంలో బోలెడన్ని సార్లు చేయకుండా అడ్డుకుంటున్నాము. కొన్ని నిమిషాలు ఆగి మరలా ప్రయత్నించండి.',
 'protectedpagetext'    => 'ఈ పేజీపై దిద్దుబాట్లు చెయ్యనివ్వకుండా లాకు చేసాం.',
@@ -519,12 +516,11 @@ $1',
 'protectedinterface'   => 'సాఫ్టువేరు ఇంటరుఫేసుకు చెందిన టెక్స్టును ఈ పేజీ అందిస్తుంది. దుశ్చర్యల నివారణ కోసమై దీన్ని లాకు చేసాం.',
 'editinginterface'     => "'''హెచ్చరిక''': సాఫ్టువేరుకు ఇంటరుఫేసు టెక్స్టును అందించే పేజీని మీరు సరిదిద్దుతున్నారు.
 ఈ పేజీలో చేసే మార్పుల వల్ల ఇతర వాడుకరులకు ఇంటరుఫేసు కనబడే విధానంలో తేడావస్తుంది.
-అనువాదాల కొరకైతే, [http://translatewiki.net/wiki/Main_Page?setlang=te ట్రాన్స్‌లేట్ వికీ.నెట్], మీడియావికీ స్థానికీకరణ ప్రాజెక్టు, ని వాడండి.",
+అనువాదాల కొరకైతే, [//translatewiki.net/wiki/Main_Page?setlang=te ట్రాన్స్‌లేట్ వికీ.నెట్], మీడియావికీ స్థానికీకరణ ప్రాజెక్టు, ని వాడండి.",
 'sqlhidden'            => '(SQL క్విరీని చూపించటం లేదు)',
 'cascadeprotected'     => 'కింది {{PLURAL:$1|పేజీని|పేజీలను}} కాస్కేడింగు ఆప్షనుతో చేసి సంరక్షించారు. ప్రస్తుత పేజీ, ఈ పేజీల్లో ఇంక్లూడు అయి ఉంది కాబట్టి, దిద్దుబాటు చేసే వీలు లేకుండా ఇది కూడా రక్షణలో ఉంది.
 $2',
 'namespaceprotected'   => "'''$1''' నేంస్పేసులో మార్పులు చేయటానికి మీకు అనుమతి లేదు.",
-'customcssjsprotected' => 'వేరే వాడుకరి వ్యక్తిగత సెట్టింగులు ఉన్నాయి కాబట్టి, ఈ పేజీలో దిద్దుబాటు చేసేందుకు మీకు అనుమతి లేదు.',
 'ns-specialprotected'  => 'ప్రత్యేక పేజీలపై దిద్దుబాట్లు చేయలేరు.',
 'titleprotected'       => "సభ్యులు [[User:$1|$1]] ఈ పేజీని సృష్టించనివ్వకుండా నిరోదిస్తున్నారు.
 అందుకు ఇచ్చిన కారణం: ''$2''.",
@@ -543,8 +539,8 @@ $2',
 
 మీ ఖాతాని సృష్టించాం.
 మీ [[Special:Preferences|{{SITENAME}} అభిరుచులను]] మార్చుకోవడం మరువకండి.',
-'yourname'                   => 'వాడుకరిపేరు:',
-'yourpassword'               => 'మీ సంకేతపదం',
+'yourname'                   => 'వాడుకరి పేరు:',
+'yourpassword'               => 'సంకేతపదం:',
 'yourpasswordagain'          => 'సంకేతపదాన్ని మళ్ళీ ఇవ్వండి:',
 'remembermypassword'         => 'ఈ కంప్యూటరులో నా ప్రవేశాన్ని గుర్తుంచుకో (గరిష్ఠంగా $1 {{PLURAL:$1|రోజు|రోజుల}}కి)',
 'securelogin-stick-https'    => 'ప్రవేశం తర్వాత కూడా HTTPSకి అనుసంధానమై ఉండు',
@@ -553,7 +549,7 @@ $2',
 'login'                      => 'ప్రవేశించండి',
 'nav-login-createaccount'    => 'లోనికి ప్రవేశించండి / ఖాతాని సృష్టించుకోండి',
 'loginprompt'                => '{{SITENAME}}లోకి ప్రవేశించాలంటే మీ విహారిణిలో కూకీలు చేతనమై ఉండాలి.',
-'userlogin'                  => 'ప్రవేశం / ఖాతా సృష్టింపు',
+'userlogin'                  => 'ప్రవేశంచు / ఖాతా సృష్టించు',
 'userloginnocreate'          => 'ప్రవేశించండి',
 'logout'                     => 'నిష్క్రమించు',
 'userlogout'                 => 'నిష్క్రమించు',
@@ -563,11 +559,12 @@ $2',
 'createaccount'              => 'ఖాతాని సృష్టించు',
 'gotaccount'                 => "ఇప్పటికే మీకు ఖాతా ఉందా? '''$1'''.",
 'gotaccountlink'             => 'ప్రవేశించండి',
+'userlogin-resetlink'        => 'మీ ప్రవేశ వివరాలను మరచిపోయారా?',
 'createaccountmail'          => 'ఈ-మెయిలు ద్వారా',
 'createaccountreason'        => 'కారణం:',
 'badretype'                  => 'మీరు ఇచ్చిన రెండు సంకేతపదాలు ఒకదానితో మరొకటి సరిపోలడం లేదు.',
-'userexists'                 => 'మీరిచ్చిన వాడుకరిపేరు ఇప్పటికే వాడుకలో ఉంది.
-వేరే పేరు ఎంచుకోండి.',
+'userexists'                 => 'ఇచ్చిన వాడుకరిపేరు ఇప్పటికే వాడుకలో ఉంది.
+వేరే పేరును ఎంచుకోండి.',
 'loginerror'                 => 'ప్రవేశంలో పొరపాటు',
 'createaccounterror'         => 'ఖాతాని సృష్టించలేకపోయాం: $1',
 'nocookiesnew'               => 'ఖాతాని సృష్టించాం, కానీ ఇంకా లోనికి ప్రవేశించలేదు.
@@ -577,13 +574,15 @@ $2',
 'nocookieslogin'             => 'వాడుకరుల ప్రవేశానికై {{SITENAME}} కూకీలను వాడుతుంది.
 మీరు కుకీలని అచేతనం చేసివున్నారు.
 వాటిని చేతనంచేసి ప్రయత్నించండి.',
-'noname'                     => 'మీరు సరైన సభ్యనామం ఇవ్వలేదు.',
+'nocookiesfornew'            => 'మూలాన్ని కనుక్కోలేకపోయాం కాబట్టి, ఈ వాడుకరి ఖాతాను సృష్టించలేకపోయాం.
+మీ కంప్యూటర్లో కూకీలు చేతనమై ఉన్నాయని నిశ్చయించుకొని, ఈ పేజీని తిరిగి లోడు చేసి, మళ్ళీ ప్రయత్నించండి.',
+'noname'                     => 'మీరు సరైన వాడుకరిపేరు ఇవ్వలేదు.',
 'loginsuccesstitle'          => 'ప్రవేశం విజయవంతమైనది',
 'loginsuccess'               => "'''మీరు ఇప్పుడు {{SITENAME}}లోనికి \"\$1\"గా ప్రవేశించారు.'''",
 'nosuchuser'                 => '"$1" అనే పేరుతో వాడుకరులు లేరు.
 వాడుకరి పేర్లు కేస్ సెన్సిటివ్.
 అక్షరక్రమం సరిచూసుకోండి, లేదా [[Special:UserLogin/signup|కొత్త ఖాతా సృష్టించుకోండి]].',
-'nosuchusershort'            => '"<nowiki>$1</nowiki>" అనే పేరుతో సభ్యులు లేరు. పేరు సరి చూసుకోండి.',
+'nosuchusershort'            => '"$1" అనే పేరుతో సభ్యులు లేరు. పేరు సరి చూసుకోండి.',
 'nouserspecified'            => 'సభ్యనామాన్ని తప్పనిసరిగా ఎంచుకోవాలి.',
 'login-userblocked'          => 'ఈ వాడుకరిని నిరోధించారు. ప్రవేశానికి అనుమతి లేదు.',
 'wrongpassword'              => 'ఈ సంకేతపదం సరైనది కాదు. దయచేసి మళ్లీ ప్రయత్నించండి.',
@@ -624,19 +623,14 @@ $2',
 'usernamehasherror'          => 'వాడుకరిపేరులో హాష్ అక్షరాలు ఉండకూడదు',
 'login-throttled'            => 'గత కొద్దిసేపటి నుండి మీరు చాలా ప్రవేశ ప్రయత్నాలు చేసారు.
 మళ్ళీ ప్రయత్నించే ముందు కాసేపు వేచివుండండి.',
+'login-abort-generic'        => 'మీ లాగిన్ ప్రయత్నం విఫలమైంది - ఆగిపోయింది',
 'loginlanguagelabel'         => 'భాష: $1',
 'suspicious-userlogout'      => 'సరిగా పనిచేయని విహారిణి లేదా కాషింగ్ ప్రాక్సీ వల్ల పంపబడడం చేత, నిష్క్రమించాలనే మీ అభ్యర్థనని నిరాకరించారు.',
 
-# JavaScript password checks
-'password-strength'            => 'అంచనావేసిన సంకేతపదపు  బలం: $1',
-'password-strength-bad'        => 'బలహీనం',
-'password-strength-mediocre'   => 'పర్లేదు',
-'password-strength-acceptable' => 'ఆమోదయోగ్యం',
-'password-strength-good'       => 'పటిష్ఠం',
-'password-retype'              => 'సంకేతపదాన్ని మళ్ళీ ఇక్కడ ఇవ్వండి',
-'password-retype-mismatch'     => 'సంకేతపదాలు సరిపోలలేదు',
+# E-mail sending
+'php-mail-error-unknown' => 'PHP యొక్క mail() ఫంక్షన్‍లో ఏదో తెలియని లోపం దొర్లింది',
 
-# Password reset dialog
+# Change password dialog
 'resetpass'                 => 'సంకేతపదాన్ని మార్చండి',
 'resetpass_announce'        => 'మీకు పంపిన తాత్కాలిక సంకేతంతో ప్రవేశించివున్నారు.
 ప్రవేశాన్ని పూర్తిచేసేందుకు, మీరు తప్పనిసరిగా ఇక్కడ కొత్త సంకేతపదాన్ని అమర్చుకోవాలి:',
@@ -653,6 +647,42 @@ $2',
 'resetpass-wrong-oldpass'   => 'తప్పుడు తాత్కాలిక లేదా ప్రస్తుత సంకేతపదం.
 మీరు మీ సంకేతపదాన్ని ఇప్పటికే విజయవంతంగా మార్చుకొనివుండవచ్చు లేదా కొత్త తాత్కాలిక సంకేతపదం కోసం అభ్యర్థించారు.',
 'resetpass-temp-password'   => 'తాత్కాలిక సంకేతపదం:',
+
+# Special:PasswordReset
+'passwordreset'                => 'సంకేతపదాన్ని మార్చుకోండి',
+'passwordreset-text'           => 'మీ ఖాతా వివరాలను గుర్తు చేసే ఈమెయిలు కోసం ఈ ఫారాన్ని పూర్తి చెయ్యండి.',
+'passwordreset-legend'         => 'సంకేతపదాన్ని మార్చుకోండి',
+'passwordreset-disabled'       => 'ఈ వికీలో సంకేతపదాల మార్పును అచేతనం చేసాం.',
+'passwordreset-pretext'        => '{{PLURAL:$1||డేటా శకలాల్లోంచి ఒకదాన్ని ఇవ్వండి}}',
+'passwordreset-username'       => 'వాడుకరిపేరు:',
+'passwordreset-email'          => 'ఈ-మెయిలు చిరునామా:',
+'passwordreset-emailtitle'     => '{{SITENAME}}లో ఖాతా వివరాలు',
+'passwordreset-emailtext-ip'   => 'ఎవరో (బహుశా మీరే, ఐపీ అడ్రసు $1 నుంచి)  {{SITENAME}} ($4) లో మీ ఖాతా వివరాలను చెప్పమంటూ అడిగారు. కింది వాడుకరి {{PLURAL:$3|ఖాతా|ఖాతాలు}}
+ఈ ఈమెయిలు అడ్రసుతో అనుసంధింపబడి ఉన్నాయి:
+
+$2
+
+{{PLURAL:$3|ఈ తాత్కాలిక సంకేతపదానికి|ఈ తాత్కాలిక సంకేతపదాలకు}} {{PLURAL:$5|ఒక్క రోజులో|$5 రోజుల్లో}} కాలం చెల్లుతుంది.
+ఇప్పుడు మీరు లాగినై కొత్త సంకేతపదాన్ని ఎంచుకోవాల్సి ఉంటుంది. ఈ అభ్యర్ధన చేసింది మరెవరైనా అయినా, లేక మీ అసలు సంకేతపదం మీకు గుర్తొచ్చి, మార్చాల్సిన అవసరం లేకపోయినా, మీరీ సందేశాన్ని పట్టించుకోనక్కర్లేదు. పాత సంకేతపదాన్నే వాడుతూ పోవచ్చు.',
+'passwordreset-emailtext-user' => '{{SITENAME}} లోని వాడుకరి $1, {{SITENAME}} ($4) లోని మీ ఖాతా వివరాలను చెప్పమంటూ అడిగారు. కింది వాడుకరి {{PLURAL:$3|ఖాతా|ఖాతాలు}}
+ఈ ఈమెయిలు అడ్రసుతో అనుసంధింపబడి ఉన్నాయి:
+
+$2
+
+{{PLURAL:$3|ఈ తాత్కాలిక సంకేతపదానికి|ఈ తాత్కాలిక సంకేతపదాలకు}} {{PLURAL:$5|ఒక్క రోజులో|$5 రోజుల్లో}} కాలం చెల్లుతుంది.
+ఇప్పుడు మీరు లాగినై కొత్త సంకేతపదాన్ని ఎంచుకోవాల్సి ఉంటుంది. ఈ అభ్యర్ధన చేసింది మరెవరైనా అయినా, లేక మీ అసలు సంకేతపదం మీకు గుర్తొచ్చి, మార్చాల్సిన అవసరం లేకపోయినా, మీరీ సందేశాన్ని పట్టించుకోనక్కర్లేదు. పాత సంకేతపదాన్నే వాడుతూ పోవచ్చు.',
+'passwordreset-emailelement'   => 'వాడుకరిపేరు: $1
+తాత్కాలిక సంకేతపదం: $2',
+'passwordreset-emailsent'      => 'జ్ఞాపకం ఈమెయిలు పంపించాం.',
+
+# Special:ChangeEmail
+'changeemail'          => 'ఈ-మెయిలు చిరునామా మార్పు',
+'changeemail-header'   => 'ఖాతా ఈ-మెయిల్ చిరునామాని మార్చండి',
+'changeemail-oldemail' => 'ప్రస్తుత ఈ-మెయిలు చిరునామా:',
+'changeemail-newemail' => 'కొత్త ఈ-మెయిలు చిరునామా:',
+'changeemail-none'     => '(ఏమీలేదు)',
+'changeemail-submit'   => 'ఈ-మెయిల్ మార్చు',
+'changeemail-cancel'   => 'రద్దుచేయి',
 
 # Edit page toolbar
 'bold_sample'     => 'బొద్దు అక్షరాలు',
@@ -677,9 +707,9 @@ $2',
 'subject'                          => 'విషయం/శీర్షిక:',
 'minoredit'                        => 'ఇది ఒక చిన్న మార్పు',
 'watchthis'                        => 'ఈ పుట మీద కన్నేసి ఉంచు',
-'savearticle'                      => 'పుటను భద్రపరుచు',
-'preview'                          => 'సరిచూడు',
-'showpreview'                      => 'సరిచూడు',
+'savearticle'                      => 'పేజీని భద్రపరచు',
+'preview'                          => 'మునుజూపు',
+'showpreview'                      => 'మునుజూపు',
 'showlivepreview'                  => 'తాజా మునుజూపు',
 'showdiff'                         => 'తేడాలను చూపించు',
 'anoneditwarning'                  => "'''హెచ్చరిక:''' మీరు లోనికి ప్రవేశించలేదు.
@@ -721,9 +751,6 @@ $2',
 మీ ప్రస్తుత ఐపీ చిరునామా $3, మరియు నిరోధపు ఐడీ: $5.
 మీ సంప్రదింపులన్నిటిలోను అన్ని పై వివరాలను ఉదహరించండి.',
 'blockednoreason'                  => 'కారణమేమీ ఇవ్వలేదు',
-'blockedoriginalsource'            => "'''$1''' యొక్క మూలాన్ని కింద ఇచ్చాం:",
-'blockededitsource'                => "'''$1''' లో '''మీ దిద్దుబాట్ల''' పూర్తి పాఠాన్ని కింద ఇచ్చాం:",
-'whitelistedittitle'               => 'మార్పులు చెయ్యడానికి ప్రవేశించివుండాలి',
 'whitelistedittext'                => 'పుటలలో మార్పులు చెయ్యడానికి మీరు $1 ఉండాలి.',
 'confirmedittext'                  => 'పేజీల్లో మార్పులు చేసేముందు మీ ఈ-మెయిలు చిరునామా ధృవీకరించాలి. [[Special:Preferences|మీ అభిరుచుల]]లో మీ ఈ-మెయిలు చిరునామా రాసి, ధృవీకరించండి.',
 'nosuchsectiontitle'               => 'విభాగాన్ని కనగొనలేకపోయాం',
@@ -749,7 +776,7 @@ $2',
 'noarticletext-nopermission'       => 'ప్రస్తుతం ఈ పేజీలో పాఠ్యమేమీ లేదు.
 మీరు ఇతర పేజీలలో [[Special:Search/{{PAGENAME}}|ఈ పేజీ శీర్షిక కోసం వెతకవచ్చు]],
 లేదా <span class="plainlinks">[{{fullurl:{{#Special:Log}}|page={{FULLPAGENAMEE}}}} సంబంధిత చిట్టాలలో వెతకండి]</span>.',
-'userpage-userdoesnotexist'        => '"$1" అనే వాడుకరి ఖాతా నమోదయిలేదు. మీరు ఈ పేజీని సృష్టించ/సరిదిద్దాలనుకుంటే, సరిచూసుకోండి.',
+'userpage-userdoesnotexist'        => '"<nowiki>$1</nowiki>" అనే వాడుకరి ఖాతా నమోదయిలేదు. మీరు ఈ పేజీని సృష్టించ/సరిదిద్దాలనుకుంటే, సరిచూసుకోండి.',
 'userpage-userdoesnotexist-view'   => 'వాడుకరి ఖాతా "$1" నమోదుకాలేదు.',
 'blocked-notice-logextract'        => 'ప్రస్తుతం ఈ వాడుకరిని నిరోధించారు.
 నిరోధపు చిట్టాలోని చివరి పద్దుని మీ సమాచారం కోసం ఈ క్రింద ఇస్తున్నాం:',
@@ -759,9 +786,13 @@ $2',
 'usercsspreview'                   => "'''మీరు వాడుకరి CSSను కేవలం సరిచూస్తున్నారని గుర్తుంచుకోండి.'''
 '''దాన్నింకా భద్రపరచలేదు!'''",
 'userjspreview'                    => "'''గుర్తుంచుకోండి, మీరింకా మీ వాడుకరి జావాస్క్రిప్ట్&zwnj;ను భద్రపరచలేదు, కేవలం పరీక్షిస్తున్నారు/సరిచూస్తున్నారు!'''",
+'sitecsspreview'                   => "'''మీరు చూస్తున్నది ఈ CSS మునుజూపును మాత్రమేనని గుర్తుంచుకోండి.'''
+'''దీన్నింకా భద్రపరచలేదు!'''",
+'sitejspreview'                    => "'''మీరు చూస్తున్నది ఈ JavaScript మునుజూపును మాత్రమేనని గుర్తుంచుకోండి.''' 
+'''దీన్నింకా భద్రపరచలేదు!'''",
 'userinvalidcssjstitle'            => "'''హెచ్చరిక:''' \"\$1\" అనే అలంకారం లేదు.
 అభిమత .css మరియు .js పుటల శీర్షికలు ఇంగ్లీషు చిన్నబడి అక్షరాల లోనే ఉండాలని గుర్తుంచుకోండి, ఉదాహరణకు ఇలా {{ns:user}}:Foo/vector.css అంతేగానీ, {{ns:user}}:Foo/Vector.css ఇలా కాదు.",
-'updated'                          => '(తాజా అయ్యింది)',
+'updated'                          => '(నవీకరించబడింది)',
 'note'                             => "'''గమనిక:'''",
 'previewnote'                      => "'''ఇది మునుజూపు మాత్రమే;
 మార్పులని ఇంకా భద్రపరచలేదు!'''",
@@ -775,6 +806,7 @@ $2',
 
 '''మీరు చేసినది సరైన దిద్దుబాటే అయితే, మళ్ళీ ప్రయత్నించండి. అయినా పనిచెయ్యకపోతే, ఓ సారి లాగౌటయ్యి, మళ్ళీ లాగినయి చూడండి.'''",
 'token_suffix_mismatch'            => "'''మీ క్లయంటు, దిద్దుబాటు టోకెన్‌లోని వ్యాకరణ గుర్తులను గజిబిజి చేసింది కాబట్టి మీ దిద్దుబాటును తిరస్కరించాం. పేజీలోని పాఠ్యాన్ని చెడగొట్టకుండా ఉండేందుకు గాను, ఆ దిద్దుబాటును రద్దు చేశాం. వెబ్‌లో ఉండే లోపభూయిష్టమైన అజ్ఞాత ప్రాక్సీ సర్వీసులను వాడినపుడు ఒక్కోసారి ఇలా జరుగుతుంది.'''",
+'edit_form_incomplete'             => '’’’ఈ ఎడిట్ ఫారంలోని కొన్ని భాగాలు సర్వరును చేరలేదు; మీ మార్పుచేర్పులు భద్రంగా ఉన్నాయని ధృవపరచుకుని, మళ్ళీ ప్రయత్నించండి.’’’',
 'editing'                          => '$1కి మార్పులు',
 'editingsection'                   => '$1కు మార్పులు (విభాగం)',
 'editingcomment'                   => '$1 దిద్దుబాటు (కొత్త విభాగం)',
@@ -840,8 +872,8 @@ $2',
 
 పార్సరు {{PLURAL:$2|పిలుపు|పిలుపులు}} $2 కంటే తక్కువ ఉండాలి,  ప్రస్తుతం {{PLURAL:$1|$1 పిలుపు ఉంది|$1  పిలుపులు ఉన్నాయి}}.',
 'expensive-parserfunction-category'       => 'పార్సరు సందేశాలు అధికంగా ఉన్న పేజీలు',
-'post-expand-template-inclusion-warning'  => 'హెచ్చరిక: మూస చేర్పు సైజూ చాలా పెద్దదిగా ఉంది.
-కొన్ని మూసలను చేర్చము.',
+'post-expand-template-inclusion-warning'  => "'''హెచ్చరిక''': మూస చేర్పు సైజు చాలా పెద్దదిగా ఉంది.
+కొన్ని మూసలను చేర్చలేదు.",
 'post-expand-template-inclusion-category' => 'మూస చేర్పు సైజును అధిగమించిన పేజీలు',
 'post-expand-template-argument-warning'   => 'హెచ్చరిక: చాల పెద్ద సైజున్న మూస ఆర్గ్యుమెంటు, కనీసం ఒకటి, ఈ పేజీలో ఉంది.
 ఈ ఆర్గ్యుమెంట్లను వదలివేసాం.',
@@ -959,8 +991,6 @@ $3 చెప్పిన కారణం: ''$2''",
 'revdelete-unsuppress'        => 'పునస్థాపిత కూర్పులపై నిబంధనలను తీసివెయ్యి',
 'revdelete-log'               => 'కారణం:',
 'revdelete-submit'            => 'ఎంచుకున్న {{PLURAL:$1|కూర్పుకు|కూర్పులకు}} ఆపాదించు',
-'revdelete-logentry'          => '[[$1]] కూర్పు కనబడే విధానాన్ని మార్చాం',
-'logdelete-logentry'          => '[[$1]] ఘటన కనబడే విధానాన్ని మార్చాం',
 'revdelete-success'           => "'''కూర్పు కనబడే విధానాన్ని జయప్రదంగా తాజాకరించాం.'''",
 'revdelete-failure'           => "'''కూర్పు కనబడే పద్ధతిని తాజాపరచలేకపోయాం:'''
 $1",
@@ -972,15 +1002,6 @@ $1",
 'revdel-restore-visible'      => 'కనిపిస్తున్న కూర్పులు',
 'pagehist'                    => 'పేజీ చరిత్ర',
 'deletedhist'                 => 'తొలగించిన చరిత్ర',
-'revdelete-content'           => 'సమాచారాన్ని',
-'revdelete-summary'           => 'మార్పు సంగ్రహం',
-'revdelete-uname'             => 'వాడుకరిపేరు',
-'revdelete-restricted'        => 'నిర్వాహకులకు ఆంక్షలు విధించాను',
-'revdelete-unrestricted'      => 'నిర్వాహకులకున్న ఆంక్షలను ఎత్తేశాను',
-'revdelete-hid'               => '$1 చూపించవద్దు',
-'revdelete-unhid'             => '$1 చూపించు',
-'revdelete-log-message'       => '$2 {{PLURAL:$2|కూర్పు|కూర్పుల}}పై $1',
-'logdelete-log-message'       => '$2 {{PLURAL:$2|ఘటన|ఘటనల}}కు $1',
 'revdelete-hide-current'      => '$2, $1 నాటి అంశాన్ని దాచడంలో లోపం దొర్లింది: ఇది ప్రస్తుత కూర్పు.
 దీన్ని దాచలేము.',
 'revdelete-show-no-access'    => '$2, $1 నాటి అంశాన్ని చూపడంలో లోపం దొర్లింది: ఇది "నిరోధించబడింది" అని గుర్తించబడింది.
@@ -1004,24 +1025,6 @@ $1",
 'suppressionlog'     => 'అణచివేతల చిట్టా',
 'suppressionlogtext' => 'నిర్వాహకులకు కనబడని విషయం కలిగిన తొలగింపులు, నిరోధాల జాబితా ఇది.
 ప్రస్తుతం అమల్లో ఉన్న నిషేధాలు, నిరోధాల జాబితా కోసం [[Special:IPBlockList|ఐపీ నిరోధాల జాబితా]] చూడండి.',
-
-# Revision move
-'moverevlogentry'              => '$1 నుండి {{PLURAL:$3|ఒక కూర్పుని|$3 కూర్పులని}} $2కి తరలించారు',
-'revisionmove'                 => '"$1" నుండి కూర్పులను తరలించు',
-'revmove-explain'              => 'ఈ క్రింది కూర్పులు $1 నుండి పేర్కొన్న లక్ష్యిత పుటకి తరలించబడతాయి. లక్ష్యం ఉనికిలో లేకపోతే, దాన్ని సృష్టిస్తాం. ఉంటే, ఈ కూర్పులు ఆ పుట చరిత్రలో విలీనమవుతాయి.',
-'revmove-legend'               => 'లక్ష్యిత పుట మరియు సారాంశం',
-'revmove-submit'               => 'ఎంచుకున్న పుటకి కూర్పులను తరలించు',
-'revisionmoveselectedversions' => 'ఎంచుకున్న కూర్పులను తరలించు',
-'revmove-reasonfield'          => 'కారణం:',
-'revmove-titlefield'           => 'లక్ష్యిత పుట:',
-'revmove-badparam-title'       => 'తప్పుడు పరామితులు',
-'revmove-badparam'             => 'మీ అభ్యర్ధనలో చెల్లని పరామితులు ఉన్నాయి లేదా తగినన్ని లేవు. దయచేసి "వెనక్కి" వెళ్ళి మళ్ళీ ప్రయత్నించండి.',
-'revmove-norevisions-title'    => 'తప్పుడు లక్ష్యపు కూర్పు',
-'revmove-norevisions'          => 'ఈ చర్యని చేయవలసిన ఒకటి లేదా అంతకంటే ఎక్కువ లక్ష్యిత కూర్పులని మీరు పేర్కొనలేదు లేదా పేర్కొన్న కూర్పు ఉనికిలో లేదు.',
-'revmove-nullmove-title'       => 'తప్పు శీర్షిక',
-'revmove-nullmove'             => 'మూల మరియు లక్ష్యిత పుటలు ఒకటే. దయచేసి "వెనక్కి" నొక్కి "$1"కి భిన్నమైన ఒక పుట పేరుని ఇవ్వండి.',
-'revmove-success-existing'     => '{{PLURAL:$1|[[$2]] నుండి ఒక కూర్పుని|[[$2]] నుండి $1 కూర్పులని}} ఇప్పటికే ఉన్న పుట [[$3]]కి తరలించాం.',
-'revmove-success-created'      => '{{PLURAL:$1|[[$2]] నుండి ఒక కూర్పుని|[[$2]] నుండి $1 కూర్పులని}} [[$3]] అనే కొత్తగా సృష్టించిన పుటకి తరలించాం.',
 
 # History merging
 'mergehistory'                     => 'పేజీ చరితాలను విలీనం చెయ్యి',
@@ -1055,7 +1058,7 @@ $1",
 # Diffs
 'history-title'            => '"$1" కూర్పుల చరితం',
 'difference'               => '(సంచికల మధ్య తేడా)',
-'difference-multipage'     => '(పుటల మధ్య తేడా)',
+'difference-multipage'     => '(పేజీల మధ్య తేడా)',
 'lineno'                   => 'పంక్తి $1:',
 'compareselectedversions'  => 'ఎంచుకున్న సంచికలను పోల్చిచూడు',
 'showhideselectedversions' => 'ఎంచుకున్న కూర్పులను చూపించు/దాచు',
@@ -1128,12 +1131,13 @@ $1",
 'searchdisabled'                   => '{{SITENAME}} అన్వేషణ తాత్కాలికంగా పని చెయ్యడం లేదు. ఈలోగా మీరు గూగుల్‌ ఉపయోగించి అన్వేషించవచ్చు. ఒక గమనిక: గూగుల్‌ ద్వారా కాలదోషం పట్టిన ఫలితాలు రావడానికి అవకాశం ఉంది.',
 
 # Quickbar
-'qbsettings'               => 'క్విక్‌బార్',
-'qbsettings-none'          => 'ఏదీకాదు',
-'qbsettings-fixedleft'     => 'స్థిర ఎడమ',
-'qbsettings-fixedright'    => 'స్థిర కుడి',
-'qbsettings-floatingleft'  => 'ఎడమకు ఒదిగి',
-'qbsettings-floatingright' => 'కుడికి ఒదిగి',
+'qbsettings'                => 'క్విక్‌బార్',
+'qbsettings-none'           => 'ఏదీకాదు',
+'qbsettings-fixedleft'      => 'స్థిర ఎడమ',
+'qbsettings-fixedright'     => 'స్థిర కుడి',
+'qbsettings-floatingleft'   => 'ఎడమకు ఒదిగి',
+'qbsettings-floatingright'  => 'కుడికి ఒదిగి',
+'qbsettings-directionality' => 'స్థిరం, మీ లిపి మరియు భాషల యొక్క దిశ ఆధారంగా',
 
 # Preferences page
 'preferences'                   => 'అభిరుచులు',
@@ -1145,7 +1149,9 @@ $1",
 'prefs-skin'                    => 'అలంకారం',
 'skin-preview'                  => 'మునుజూపు/సరిచూడు',
 'datedefault'                   => 'ఏదైనా పరవాలేదు',
+'prefs-beta'                    => 'బీటా సౌలభ్యాలు',
 'prefs-datetime'                => 'తేదీ, సమయం',
+'prefs-labs'                    => 'ప్రయోగాత్మక సౌలభ్యాలు',
 'prefs-personal'                => 'వాడుకరి వివరాలు',
 'prefs-rc'                      => 'ఇటీవలి మార్పులు, మొలకలు',
 'prefs-watchlist'               => 'వీక్షణ జాబితా',
@@ -1156,6 +1162,8 @@ $1",
 'prefs-watchlist-token'         => 'వీక్షణాజాబితా టోకెను:',
 'prefs-misc'                    => 'ఇతరాలు',
 'prefs-resetpass'               => 'సంకేతపదాన్ని మార్చుకోండి',
+'prefs-changeemail'             => 'ఈ-మెయిలు చిరునామా మార్పు',
+'prefs-setemail'                => 'ఒక ఈ-మెయిల్ చిరునామాని అమర్చండి',
 'prefs-email'                   => 'ఈ-మెయిల్ ఎంపికలు',
 'prefs-rendering'               => 'రూపురేఖలు',
 'saveprefs'                     => 'భద్రపరచు',
@@ -1167,8 +1175,6 @@ $1",
 'columns'                       => 'వరుసలు:',
 'searchresultshead'             => 'అన్వేషణ',
 'resultsperpage'                => 'పేజీకి ఫలితాలు:',
-'contextlines'                  => 'హిట్టుకు లైన్లు:',
-'contextchars'                  => 'లైనుకు సందర్భాలు:',
 'stub-threshold'                => '<a href="#" class="stub">మొలక లింకు</a> ఫార్మాటింగు కొరకు హద్దు (బైట్లు):',
 'stub-threshold-disabled'       => 'అచేతనం',
 'recentchangesdays'             => 'ఇటీవలి మార్పులు లో చూపించవలసిన రోజులు:',
@@ -1180,8 +1186,8 @@ $1",
 'savedprefs'                    => 'మీ అభిరుచులను భద్రపరిచాం.',
 'timezonelegend'                => 'టైం జోను:',
 'localtime'                     => 'స్థానిక సమయం:',
-'timezoneuseserverdefault'      => 'సర్వరు అమరికని వాడు',
-'timezoneuseoffset'             => 'ఇతర (తేడాని ఇవ్వండి)',
+'timezoneuseserverdefault'      => 'వికీ అప్రమేయాన్ని ఉపయోగించు ($1)',
+'timezoneuseoffset'             => 'ఇతర (భేదాన్ని ఇవ్వండి)',
 'timezoneoffset'                => 'తేడా¹:',
 'servertime'                    => 'సర్వరు సమయం:',
 'guesstimezone'                 => 'తేడాను బ్రౌజరు నుండి తీసుకో',
@@ -1208,7 +1214,7 @@ $1",
 'prefs-emailconfirm-label'      => 'ఈ-మెయిల్ నిర్ధారణ:',
 'prefs-textboxsize'             => 'ఎడిటింగ్ విండో పరిమాణం',
 'youremail'                     => 'మీ ఈ-మెయిలు*',
-'username'                      => 'వాడుకరిపేరు:',
+'username'                      => 'వాడుకరి పేరు:',
 'uid'                           => 'వాడుకరి ID:',
 'prefs-memberingroups'          => '{{PLURAL:$1|గుంపు|గుంపుల}} లో సభ్యులు:',
 'prefs-registration'            => 'నమోదు సమయం:',
@@ -1280,11 +1286,11 @@ $1",
 'group-suppress'      => 'పరాకులు',
 'group-all'           => '(అందరూ)',
 
-'group-user-member'          => 'వాడుకరి',
+'group-user-member'          => '{{GENDER:$1|వాడుకరి}}',
 'group-autoconfirmed-member' => 'ఆటోమాటిగ్గా నిర్థారించబడిన వాడుకరి',
 'group-bot-member'           => 'బాట్',
-'group-sysop-member'         => 'నిర్వాహకుడు',
-'group-bureaucrat-member'    => 'అధికారి',
+'group-sysop-member'         => '{{GENDER:$1|నిర్వాహకుడు|నిర్వాహకురాలు}}',
+'group-bureaucrat-member'    => '{{GENDER:$1|అధికారి|అధికారిణి}}',
 'group-suppress-member'      => 'పరాకు',
 
 'grouppage-user'          => '{{ns:project}}:వాడుకరులు',
@@ -1352,11 +1358,8 @@ $1",
 'right-userrights'            => 'వాడుకరులందరి హక్కులను మార్చు',
 'right-userrights-interwiki'  => 'ఇతర వికీల్లోని వాడుకరుల హక్కులను మార్చు',
 'right-siteadmin'             => 'డేటాబేసును లాక్, అన్‌లాక్ చెయ్యి',
-'right-reset-passwords'       => 'మిగతా వాడుకరుల సందేశమును మార్చుము',
 'right-override-export-depth' => '5 లింకుల లోతు వరకు ఉన్న పేజీలతో సహా, పేజీలను ఎగుమతి చెయ్యి',
 'right-sendemail'             => 'ఇతర వాడుకరులకు ఈ-మెయిలు పంపించగలగడం',
-'right-revisionmove'          => 'కూర్పులని తరలించగలగడం',
-'right-disableaccount'        => 'ఖాతాలని అచేతనం చెయ్యడం',
 
 # User rights log
 'rightslog'      => 'వాడుకరుల హక్కుల మార్పుల చిట్టా',
@@ -1365,8 +1368,8 @@ $1",
 'rightsnone'     => '(ఏమీలేవు)',
 
 # Associated actions - in the sentence "You do not have permission to X"
-'action-read'                 => 'ఈ పేజీని చూసే',
-'action-edit'                 => 'ఈ పుటని మార్చే',
+'action-read'                 => 'ఈ పేజీని చదవండి',
+'action-edit'                 => 'ఈ పేజీని సవరించండి',
 'action-createpage'           => 'పేజీలను సృష్టించే',
 'action-createtalk'           => 'చర్చాపేజీలను సృష్టించే',
 'action-createaccount'        => 'ఈ వాడుకరి ఖాతాని సృష్టించే',
@@ -1399,7 +1402,6 @@ $1",
 'action-userrights'           => 'అందరు వాడుకరుల హక్కులను మార్చే',
 'action-userrights-interwiki' => 'ఇతర వికీలలో వాడుకరుల యొక్క హక్కులను మార్చే',
 'action-siteadmin'            => 'డాటాబేసుకి తాళం వేసే లేదా తీసే',
-'action-revisionmove'         => 'కూర్పులని తరలించడానికి',
 
 # Recent changes
 'nchanges'                          => '{{PLURAL:$1|ఒక మార్పు|$1 మార్పులు}}',
@@ -1433,7 +1435,7 @@ $1",
 'rc_categories_any'                 => 'ఏదయినా',
 'newsectionsummary'                 => '/* $1 */ కొత్త విభాగం',
 'rc-enhanced-expand'                => 'వివరాలని చూపించు (జావాస్క్రిప్ట్ అవసరం)',
-'rc-enhanced-hide'                  => 'వివరాలని దాచు',
+'rc-enhanced-hide'                  => 'వివరాలను దాచు',
 
 # Recent changes linked
 'recentchangeslinked'          => 'సంబంధిత మార్పులు',
@@ -1442,7 +1444,7 @@ $1",
 'recentchangeslinked-title'    => '$1 కు సంబంధించిన మార్పులు',
 'recentchangeslinked-noresult' => 'మీరిచ్చిన కాలంలో ఇక్కడికి లింకు ఉన్న పేజీలలో ఎటువంటు మార్పులూ జరగలేదు.',
 'recentchangeslinked-summary'  => "దీనికి లింకై ఉన్న పేజీల్లో జరిగిన చివరి మార్పులు ఇక్కడ చూడవచ్చు. మీ వీక్షణ జాబితాలో ఉన్న పేజీలు '''బొద్దు'''గా ఉంటాయి.",
-'recentchangeslinked-page'     => 'పుట పేరు:',
+'recentchangeslinked-page'     => 'పేజీ పేరు:',
 'recentchangeslinked-to'       => 'ఇచ్చిన పేజీకి లింకయివున్న పేజీలలో జరిగిన మార్పులను చూపించు',
 
 # Upload
@@ -1489,8 +1491,8 @@ $1",
 'filetype-bad-ie-mime'        => 'ఈ ఫైలుని ఎగుమతి చేయలేరు ఎందుకంటే ఇంటర్నెట్ ఎక్స్‌ప్లోరర్ దీన్ని "$1" గా చూపిస్తుంది, ఇది అనుమతి లేని మరియు ప్రమాదకారమైన ఫైలు రకం.',
 'filetype-unwanted-type'      => "'''\".\$1\"''' అనేది అవాంఛిత ఫైలు రకం.
 \$2 {{PLURAL:\$3|అనేది వాడదగ్గ ఫైలు రకం|అనేవి వాడదగ్గ ఫైలు రకాలు}}.",
-'filetype-banned-type'        => "'''\".\$1\"''' అనే ఫైలు రకాన్ని అనుమతించం.
-అనుమతించే {{PLURAL:\$3|ఫైలు రకం ఇదీ|ఫైలు రకాలు ఇవీ}}: \$2.",
+'filetype-banned-type'        => '\'\'\'".$1"\'\'\' {{PLURAL:$4|అనేది అనుమతించబడిన ఫైలు రకం కాదు|అనేవి అనుమతించబడిన ఫైలు రకాలు కాదు}}.
+అనుమతించబడిన {{PLURAL:$3|ఫైలు రకం|ఫైలు రకాలు}} $2.',
 'filetype-missing'            => 'ఫైలుకి పొడగింపు (".jpg" లాంటిది) లేదు.',
 'empty-file'                  => 'మీరు సమర్పించిన దస్త్రం ఖాళీగా ఉంది.',
 'file-too-large'              => 'మీరు సమర్పించిన దస్త్రం చాలా పెద్దగా ఉంది.',
@@ -1506,6 +1508,7 @@ $1",
 'large-file'                  => 'ఫైళ్ళు $1 కంటే పెద్దవిగా ఉండకుండా ఉంటే మంచిది; ఈ ఫైలు $2 ఉంది.',
 'largefileserver'             => 'ఈ ఫైలు సైజు సర్వరులో విధించిన పరిమితి కంటే ఎక్కువగా ఉంది.',
 'emptyfile'                   => 'మీరు అప్‌లోడు చేసిన ఫైలు ఖాళీగా ఉన్నట్లుంది. ఫైలు పేరును ఇవ్వడంలో స్పెల్లింగు తప్పు దొర్లి ఉండొచ్చు. మీరు అప్‌లోడు చెయ్యదలచింది ఇదో కాదో నిర్ధారించుకోండి.',
+'windows-nonascii-filename'   => 'దస్త్రాల పేర్లలో ప్రత్యేక అక్షరాలకు ఈ వికీలో తోడ్పాటు లేదు.',
 'fileexists'                  => "ఈ పేరుతో ఒక ఫైలు ఇప్పటికే ఉంది.
 దీనిని మీరు మార్చాలో లేదో తెలియకపోతె ఫైలు '''<tt>[[:$1]]</tt>'''ని చూడండి.
 [[$1|thumb]]",
@@ -1540,6 +1543,8 @@ $1",
 దయచేసి file_uploads అమరికని చూడండి.',
 'uploadscripted'              => 'ఈ ఫైల్లో HTML కోడు గానీ స్క్రిప్టు కోడు గానీ ఉంది. వెబ్ బ్రౌజరు దాన్ని పొరపాటుగా అనువదించే అవకాశం ఉంది.',
 'uploadvirus'                 => 'ఈ ఫైలులో వైరస్‌ ఉంది! వివరాలు: $1',
+'uploadjava'                  => 'ఇదొక ZIP ఫైలు, ఇందులో ఒక Java .class ఫైలు ఉంది.
+Java ఫైళ్ళ వలన భద్రతకు తూట్లు పడే అవకాశం ఉంది కాబట్టి, వాటిని ఎక్కించడానికి అనుమతి లేదు.',
 'upload-source'               => 'మూల ఫైలు',
 'sourcefilename'              => 'మూలం ఫైలుపేరు:',
 'sourceurl'                   => 'మూల URL:',
@@ -1549,10 +1554,6 @@ $1",
 'upload-options'              => 'ఎక్కింపు వికల్పాలు',
 'watchthisupload'             => 'ఈ ఫైలుని గమనించు',
 'filewasdeleted'              => 'ఇదే పేరుతో ఉన్న ఒక ఫైలును గతంలో అప్లోడు చేసారు, తరువాతి కాలంలో దాన్ని తొలగించారు. దాన్నీ మళ్ళీ అప్లోడు చేసే ముందు, మీరు $1 ను చూడాలి',
-'upload-wasdeleted'           => "'''హెచ్చరిక: గతంలో తొలగించబడ్డ ఫైలుని మీరు ఎక్కిస్తున్నారు.'''
-
-కొనసాగే ముందు ఈ ఫైలుని ఎక్కించడం సరియో కాదో చూసుకోండి.
-సౌలభ్యంకోసం ఈ ఫైలు యొక్క తొలగింపు చిట్టాని ఇక్కడ ఇస్తున్నాం:",
 'filename-bad-prefix'         => "మీరు అప్లోడు చేస్తున్న ఫైలు పేరు '''\"\$1\"''' తో మొదలవుతుంది. ఇది డిజిటల్ కెమెరాలు ఆటోమాటిగ్గా ఇచ్చే పేరు. మరింత వివరంగా ఉండే పేరును ఎంచుకోండి.",
 'upload-success-subj'         => 'అప్‌లోడు జయప్రదం',
 'upload-success-msg'          => '[$2] నుండి మీ ఎక్కింపు సఫలమైంది. అది ఇక్కడ అందుబాటులో ఉంది: [[:{{ns:file}}:$1]]',
@@ -1573,26 +1574,38 @@ $1',
 'upload-unknown-size'       => 'సైజు తెలియదు',
 'upload-http-error'         => 'ఒక HTTP పొరపాటు జరిగింది: $1',
 
+# ZipDirectoryReader
+'zip-file-open-error' => 'ఈ ఫైలును ZIP పరీక్ష కోసం తెరవబోతే, ఏదో తెలియని లోపం ఎదురైంది.',
+'zip-wrong-format'    => 'ఇచ్చినది ZIP ఫైలు కాదు.',
+'zip-bad'             => 'ఫైలు చెడిపోయిన, లేదా చదవడానికి వీల్లేని ZIP ఫైలు అయ్యుండాలి.
+దానిపై భద్రతా పరమైన పరీక్ష చెయ్యలేం.',
+'zip-unsupported'     => 'ఇది MediaWiki కి పట్టులేని ZIP అంశాలు కలిగిన ZIP ఫైలు.
+దీనిపై సరైన భద్రతా పరీక్షలు చెయ్యలేం.',
+
 # Special:UploadStash
-'uploadstash-refresh' => 'దస్త్రాల జాబిజాను తాజాకరించు',
+'uploadstash-summary'  => 'ఎక్కించినప్పటికీ వికీలో ప్రచురితం కాని  (లేదా ఎక్కింపు జరుగుతున్న) ఫైళ్ళు ఈ పేజీలో కనిపిస్తాయి. ఈ ఫైళ్ళు ఎక్కించిన వాడుకరికి తప్ప మరొకరికి కనబడవు.',
+'uploadstash-badtoken' => 'ఆ చర్య విఫలమైంది. బహుశా మీ ఎడిటింగు అనుమతులకు కాలం చెల్లిందేమో. మళ్ళీ ప్రయత్నించండి.',
+'uploadstash-errclear' => 'ఫైళ్ళ తీసివేత విఫలమైంది.',
+'uploadstash-refresh'  => 'దస్త్రాల జాబిజాను తాజాకరించు',
 
 # img_auth script messages
-'img-auth-accessdenied' => 'అనుమతిని నిరాకరించారు',
-'img-auth-nopathinfo'   => 'PATH_INFO లేదు.
+'img-auth-accessdenied'     => 'అనుమతిని నిరాకరించారు',
+'img-auth-nopathinfo'       => 'PATH_INFO లేదు.
 మీ సర్వరు ఈ సమాచారాన్ని పంపించేందుకు అనువుగా అమర్చి లేదు.
 అది CGI ఆధారితమై ఉండొచ్చు. అంచేత img_auth కు అనుకూలంగా లేదు.
 http://www.mediawiki.org/wiki/Manual:Image_Authorization చూడండి.',
-'img-auth-notindir'     => 'అభ్యర్థించిన తోవ ఎక్కింపు సంచయంలో లేదు.',
-'img-auth-badtitle'     => '"$1" నుండి సరైన శీర్షికని నిర్మించలేకపోయాం.',
-'img-auth-nologinnWL'   => 'మీరు ప్రవేశించి లేరు మరియు "$1" అనేది తెల్లజాబితాలో లేదు.',
-'img-auth-nofile'       => '"$1" అనే ఫైలు ఉనికిలో లేదు.',
-'img-auth-isdir'        => 'మీరు "$1" అనే సంచయాన్ని చూడడానికి ప్రయత్నిస్తున్నారు.
+'img-auth-notindir'         => 'అభ్యర్థించిన తోవ ఎక్కింపు సంచయంలో లేదు.',
+'img-auth-badtitle'         => '"$1" నుండి సరైన శీర్షికని నిర్మించలేకపోయాం.',
+'img-auth-nologinnWL'       => 'మీరు ప్రవేశించి లేరు మరియు "$1" అనేది తెల్లజాబితాలో లేదు.',
+'img-auth-nofile'           => '"$1" అనే ఫైలు ఉనికిలో లేదు.',
+'img-auth-isdir'            => 'మీరు "$1" అనే సంచయాన్ని చూడడానికి ప్రయత్నిస్తున్నారు.
 ఫైళ్ళను చూడడానికి మాత్రమే అనుమతివుంది.',
-'img-auth-streaming'    => '"$1" ను ప్రసారిస్తున్నాం.',
-'img-auth-public'       => 'img_auth.php యొక్క పని, గోప్యవికీలనుండి ఫైళ్ళ వివరాలను బయట పెట్టడం.
+'img-auth-streaming'        => '"$1" ను ప్రసారిస్తున్నాం.',
+'img-auth-public'           => 'img_auth.php యొక్క పని, గోప్యవికీలనుండి ఫైళ్ళ వివరాలను బయట పెట్టడం.
 ఇది బహిరంగ వికీగా తయారుచేయబడింది.
 సరైన భద్రత కోసం, img_auth.php ను అచేతనం చేసాం.',
-'img-auth-noread'       => '"$1"ని చూడడానికి వాడుకరికి అనుమతి లేదు.',
+'img-auth-noread'           => '"$1"ని చూడడానికి వాడుకరికి అనుమతి లేదు.',
+'img-auth-bad-query-string' => 'ఈ URL లో తప్పుడు క్వెరీ స్ట్రింగు ఉంది.',
 
 # HTTP errors
 'http-invalid-url'      => 'తప్పుడు URL: $1',
@@ -1634,7 +1647,7 @@ http://www.mediawiki.org/wiki/Manual:Image_Authorization చూడండి.',
 
 # File description page
 'file-anchor-link'                  => 'ఫైలు',
-'filehist'                          => 'ఫైలు చరితం',
+'filehist'                          => 'దస్త్రపు చరిత్ర',
 'filehist-help'                     => 'తేదీ/సమయం ను నొక్కి ఆ సమయాన ఫైలు ఎలా ఉండేదో చూడవచ్చు.',
 'filehist-deleteall'                => 'అన్నిటినీ తొలగించు',
 'filehist-deleteone'                => 'తొలగించు',
@@ -1649,14 +1662,14 @@ http://www.mediawiki.org/wiki/Manual:Image_Authorization చూడండి.',
 'filehist-filesize'                 => 'ఫైలు సైజు',
 'filehist-comment'                  => 'వ్యాఖ్య',
 'filehist-missing'                  => 'ఫైలు కనిపించుటలేదు',
-'imagelinks'                        => 'ఫైలు లింకులు',
+'imagelinks'                        => 'దస్త్రపు వాడుక',
 'linkstoimage'                      => 'కింది {{PLURAL:$1|పేజీ|$1 పేజీల}} నుండి ఈ ఫైలుకి లింకులు ఉన్నాయి:',
 'linkstoimage-more'                 => '$1 కంటే ఎక్కువ {{PLURAL:$1|పేజీలు|పేజీలు}} ఈ ఫైలుకి లింకుని కలిగివున్నాయి.
 ఈ ఫైలుకి లింకున్న {{PLURAL:$1|మొదటి ఒక పేజీని|మొదటి $1 పేజీలను}} ఈ క్రింది జాబితా చూపిస్తుంది.
 [[Special:WhatLinksHere/$2|పూర్తి జాబితా]] కూడా ఉంది.',
 'nolinkstoimage'                    => 'ఈ ఫైలుకు లింకున్న పేజీలు లేవు.',
 'morelinkstoimage'                  => 'ఈ ఫైలుకు ఇంకా [[Special:WhatLinksHere/$1| లింకులను]] చూడు',
-'redirectstofile'                   => 'క్రింద పేర్కొన్న {{PLURAL:$1|ఫైలు ఈ ఫైలుకి దారిమార్పు చెందుతుంది|$1 ఫైళ్ళు ఈ ఫైలుకి దారిమార్పు చెందుతాయి}}:',
+'linkstoimage-redirect'             => '$1 (దస్త్రపు దారిమార్పు) $2',
 'duplicatesoffile'                  => 'క్రింద పేర్కొన్న {{PLURAL:$1|ఫైలు ఈ ఫైలుకి నకలు|$1 ఫైళ్ళు ఈ ఫైలుకి నకళ్ళు}} ([[Special:FileDuplicateSearch/$2|మరిన్ని వివరాలు]]):',
 'sharedupload'                      => 'ఈ ఫైలు $1 నుండి మరియు దీనిని ఇతర ప్రాజెక్టులలో కూడా ఉపయోగిస్తూవుండవచ్చు.',
 'sharedupload-desc-there'           => 'ఈ ఫైలు $1 నుండి వచ్చింది అలానే ఇతర ప్రాజెక్టులలో కూడా ఉపయోగిస్తూ ఉండవచ్చు.
@@ -1746,20 +1759,21 @@ http://www.mediawiki.org/wiki/Manual:Image_Authorization చూడండి.',
 'statistics-users-active-desc' => 'గత {{PLURAL:$1|రోజు|$1 రోజుల}}లో ఒక్క చర్యైనా చేసిన వాడుకరులు',
 'statistics-mostpopular'       => 'ఎక్కువగా చూసిన పేజీలు',
 
-'disambiguations'      => 'అయోమయ నివృత్తి పేజీలు',
+'disambiguations'      => 'అయోమయ నివృత్తి పుటలకు లింకున్న పుటలు',
 'disambiguationspage'  => 'Template:అయోమయ నివృత్తి',
 'disambiguations-text' => "కింది పేజీలు '''అయోమయ నివృత్తి''' పేజీకి లింకవుతున్నాయి. కానీ అవి సంబంధిత పేజీకి నేరుగా లింకు అవాలి. <br /> [[MediaWiki:Disambiguationspage]] నుంది లింకు ఉన్న మూసను వాడే పేజీని అయోమయ నివృత్తి పేజీగా భావిస్తారు.",
 
-'doubleredirects'            => 'జంట దారిమార్పులు',
-'doubleredirectstext'        => 'ఇతర దారిమార్పు పుటలకి తీసుకెళ్ళే దారిమార్పులని ఈ పుట చూపిస్తుంది.
+'doubleredirects'                   => 'జంట దారిమార్పులు',
+'doubleredirectstext'               => 'ఇతర దారిమార్పు పుటలకి తీసుకెళ్ళే దారిమార్పులని ఈ పుట చూపిస్తుంది.
 ప్రతీ వరుసలో మొదటి మరియు రెండవ దారిమార్పులకు లంకెలు, ఆలానే రెండవ దారిమార్పు పుట యొక్క లక్ష్యం ఉన్నాయి. సాధారణంగా ఈ రెండవ దారిమార్పు యొక్క లక్ష్యమే "అసలైనది", అదే మొదటి దారిమార్పు యొక్క లక్ష్యంగా ఉండాలి.
 <del>కొట్టివేయబడిన</del> పద్దులు పరిష్కరించబడ్డవి.',
-'double-redirect-fixed-move' => '[[$1]]ని తరలించారు, అది ప్రస్తుతం [[$2]]కి దారిమార్పు.',
-'double-redirect-fixer'      => 'దారిమార్పు సరిద్దువారు',
+'double-redirect-fixed-move'        => '[[$1]]ని తరలించారు, అది ప్రస్తుతం [[$2]]కి దారిమార్పు.',
+'double-redirect-fixed-maintenance' => '[[$1]] కు జమిలి దారిమార్పును [[$2]] కు సరిచేస్తున్నాం.',
+'double-redirect-fixer'             => 'దారిమార్పు సరిద్దువారు',
 
 'brokenredirects'        => 'తెగిపోయిన దారిమార్పులు',
 'brokenredirectstext'    => 'కింది దారిమార్పులు లేని-పేజీలకు మళ్ళించుతున్నాయి:',
-'brokenredirects-edit'   => 'మార్చు',
+'brokenredirects-edit'   => 'సవరించు',
 'brokenredirects-delete' => 'తొలగించు',
 
 'withoutinterwiki'         => 'భాషా లింకులు లేని పేజీలు',
@@ -1816,9 +1830,9 @@ http://www.mediawiki.org/wiki/Manual:Image_Authorization చూడండి.',
 'listusers-editsonly'     => 'మార్పులు చేసిన వాడుకరులను మాత్రమే చూపించు',
 'listusers-creationsort'  => 'చేరిన తేదీ క్రమంలో చూపించు',
 'usereditcount'           => '$1 {{PLURAL:$1|మార్పు|మార్పులు}}',
-'usercreated'             => '$1న $2కి చేరారు',
-'newpages'                => 'కొత్త పుటలు',
-'newpages-username'       => 'వాడుకరిపేరు:',
+'usercreated'             => '$1 న $2కి {{GENDER:$3|చేరారు}}',
+'newpages'                => 'కొత్త పేజీలు',
+'newpages-username'       => 'వాడుకరి పేరు:',
 'ancientpages'            => 'పాత పేజీలు',
 'move'                    => 'తరలించు',
 'movethispage'            => 'ఈ పేజీని తరలించు',
@@ -1832,6 +1846,7 @@ http://www.mediawiki.org/wiki/Manual:Image_Authorization చూడండి.',
 'pager-newer-n'           => '{{PLURAL:$1|1 కొత్తది|$1 కొత్తవి}}',
 'pager-older-n'           => '{{PLURAL:$1|1 పాతది|$1 పాతవి}}',
 'suppress'                => 'పరాకు',
+'querypage-disabled'      => 'పనితీరు కారణాల వలన, ఈ ప్రత్యేకపేజీని అశక్తం చేసాం.',
 
 # Book sources
 'booksources'               => 'పుస్తక మూలాలు',
@@ -1857,7 +1872,7 @@ http://www.mediawiki.org/wiki/Manual:Image_Authorization చూడండి.',
 'prevpage'          => 'మునుపటి పేజీ ($1)',
 'allpagesfrom'      => 'ఇక్కడ మొదలు పెట్టి పేజీలు చూపించు:',
 'allpagesto'        => 'ఇక్కడవరకు ఉన్న పేజీలు చూపించు:',
-'allarticles'       => 'అన్ని పుటలు',
+'allarticles'       => 'అన్ని పేజీలు',
 'allinnamespace'    => 'అన్ని పేజీలు ($1 namespace)',
 'allnotinnamespace' => 'అన్ని పేజీలు ($1 నేంస్పేస్ లేనివి)',
 'allpagesprev'      => 'పూర్వపు',
@@ -1882,7 +1897,7 @@ http://www.mediawiki.org/wiki/Manual:Image_Authorization చూడండి.',
 'sp-deletedcontributions-contribs' => 'మార్పులు చేర్పులు',
 
 # Special:LinkSearch
-'linksearch'       => 'బయటి లింకులు',
+'linksearch'       => 'బయటి లింకుల అన్వేషణ',
 'linksearch-pat'   => 'వెతకాల్సిన నమూనా:',
 'linksearch-ns'    => 'పేరుబరి:',
 'linksearch-ok'    => 'వెతుకు',
@@ -1906,12 +1921,8 @@ http://www.mediawiki.org/wiki/Manual:Image_Authorization చూడండి.',
 'activeusers-noresult'   => 'వాడుకరులెవరూ లేరు.',
 
 # Special:Log/newusers
-'newuserlogpage'              => 'కొత్త వాడుకరుల చిట్టా',
-'newuserlogpagetext'          => 'ఇది వాడుకరి నమోదుల చిట్టా.',
-'newuserlog-byemail'          => 'ఈ-మెయిలులో సంకేతపదం పంపించాం',
-'newuserlog-create-entry'     => 'కొత్త వాడుకరి ఖాతా',
-'newuserlog-create2-entry'    => '$1 అనే కొత్త ఖాతాని సృష్టించారు',
-'newuserlog-autocreate-entry' => 'ఖాతాని ఆటోమెటిగ్గా సృష్టించాం',
+'newuserlogpage'     => 'కొత్త వాడుకరుల చిట్టా',
+'newuserlogpagetext' => 'ఇది వాడుకరి నమోదుల చిట్టా.',
 
 # Special:ListGroupRights
 'listgrouprights'                      => 'వాడుకరి గుంపుల హక్కులు',
@@ -1939,13 +1950,16 @@ http://www.mediawiki.org/wiki/Manual:Image_Authorization చూడండి.',
 'emailpage'            => 'వాడుకరికి ఈ-మెయిలుని పంపించు',
 'emailpagetext'        => 'వాడుకరికి ఈమెయిలు సందేశము పంపించుటకు క్రింది ఫారంను ఉపయోగించవచ్చు. [[Special:Preferences|మీ వాడుకరి అభిరుచుల]]లో మీరిచ్చిన ఈ-మెయిలు చిరునామా "నుండి" ఆ సందేశం వచ్చినట్లుగా ఉంటుంది, కనుక వేగుని అందుకునేవారు నేరుగా మీకు జవాబివ్వగలుగుతారు.',
 'usermailererror'      => 'మెయిలు ఆబ్జెక్టు ఈ లోపాన్ని చూపింది:',
-'defemailsubject'      => '{{SITENAME}} ఈ-మెయిలు',
+'defemailsubject'      => 'వాడుకరి "$1" నుండి {{SITENAME}} ఈ-మెయిలు',
 'usermaildisabled'     => 'వాడుకరి ఈ-మెయిళ్ళు అచేతనం చేసారు',
 'usermaildisabledtext' => 'ఈ వికీలో మీరు ఇతర వాడుకరులకి ఈ-మెయిళ్ళని పంపించలేరు',
 'noemailtitle'         => 'ఈ-మెయిలు చిరునామా లేదు',
 'noemailtext'          => 'ఈ వాడుకరి సరైన ఈ-మెయిలు చిరునామాని ఇవ్వలేదు.',
 'nowikiemailtitle'     => 'ఈ-మెయిళ్ళను అనుమతించరు',
 'nowikiemailtext'      => 'ఇతర వాడుకరుల నుండి ఈ-మెయిళ్ళను అందుకోడానికి ఈ వాడుకరి సుముఖంగా లేరు.',
+'emailtarget'          => 'అందుకొనేవారి వాడుకరిపేరు ఇవ్వండి',
+'emailusername'        => 'వాడుకరిపేరు:',
+'emailusernamesubmit'  => 'దాఖలుచెయ్యి',
 'email-legend'         => 'మరో {{SITENAME}} వాడుకరికి వేగు పంపించండి',
 'emailfrom'            => 'ఎవరు:',
 'emailto'              => 'ఎవరికి:',
@@ -1970,14 +1984,14 @@ http://www.mediawiki.org/wiki/Manual:Image_Authorization చూడండి.',
 'watchlistanontext'    => 'మీ వీక్షణ జాబితా లోని అంశాలను చూసేందుకు లేదా మార్చేందుకు మీరు $1 ఉండాలి.',
 'watchnologin'         => 'లాగిన్‌ అయిలేరు',
 'watchnologintext'     => 'మీ వీక్షణ జాబితాను మార్చడానికి మీరు [[Special:UserLogin|లాగిన్‌]] అయి ఉండాలి.',
-'addedwatch'           => 'వీక్షణ జాబితాలో చేరింది',
+'addwatch'             => 'వీక్షణ జాబితాలో చేర్చు',
 'addedwatchtext'       => "\"[[:\$1]]\" అనే పుట మీ [[Special:Watchlist|వీక్షణ జాబితా]]లో చేరింది.
 భవిష్యత్తులో ఈ పుటకి మరియు సంబంధిత చర్చాపుటకి జరిగే మార్పులు అక్కడ కనిపిస్తాయి, మరియు  [[Special:RecentChanges|ఇటీవలి మార్పుల జాబితా]]లో సులభంగా గుర్తించడానికి ఈ పుట '''బొద్దుగా''' కనిపిస్తుంది.",
-'removedwatch'         => 'వీక్షణ జాబితా నుండి తొలగించబడినది',
+'removewatch'          => 'వీక్షణ జాబితా నుండి తొలగించు',
 'removedwatchtext'     => '"[[:$1]]" అనే పేజీ [[Special:Watchlist|మీ వీక్షణ జాబితా]] నుండి తొలగించబడినది.',
 'watch'                => 'వీక్షించు',
 'watchthispage'        => 'ఈ పుట మీద కన్నేసి ఉంచు',
-'unwatch'              => 'వీక్షించ వద్దు',
+'unwatch'              => 'వీక్షించవద్దు',
 'unwatchthispage'      => 'వీక్షణను ఆపు',
 'notanarticle'         => 'వ్యాసం పేజీ కాదు',
 'notvisiblerev'        => 'ఈ కూర్పును తొలగించాం',
@@ -2026,16 +2040,16 @@ $NEWPAGE
 
 --
 మీ వీక్షణజాబితా అమరికలను మార్చుకునేందుకు,
-{{fullurl:{{#special:Watchlist}}/edit}} ని చూడండి.
+{{canonicalurl:{{#special:EditWatchlist}}}} ని చూడండి.
 
 ఈ పేజీని మీ వీక్షణజాబితా నుండి తొలగించుకునేందుకు,
 $UNWATCHURL కి వెళ్ళండి.
 
 మీ అభిప్రాయాలు చెప్పేందుకు మరియు మరింత సహాయానికై:
-{{fullurl:{{MediaWiki:helppage}}}}',
+{{canonicalurl:{{MediaWiki:helppage}}}}',
 
 # Delete
-'deletepage'             => 'పుటని తొలగించు',
+'deletepage'             => 'పేజీని తొలగించు',
 'confirm'                => 'ధృవీకరించు',
 'excontent'              => "ఇదివరకు విషయ సంగ్రహం: '$1'",
 'excontentauthor'        => 'ఉన్న విషయ సంగ్రహం: "$1" (మరియు దీని ఒకే ఒక్క రచయిత "[[Special:Contributions/$2|$2]]")',
@@ -2047,9 +2061,7 @@ $UNWATCHURL కి వెళ్ళండి.
 'confirmdeletetext'      => 'మీరో పేజీనో, బొమ్మనో దాని చరిత్రతోపాటుగా శాశ్వతంగా డేటాబేసు నుండి తీసెయ్యబోతున్నారు. మీరు చెయ్యదలచింది ఇదేననీ, దీని పర్యవసానాలు మీకు తెలుసనీ, దీన్ని [[{{MediaWiki:Policy-url}}|నిభందనల]] ప్రకారమే చేస్తున్నారనీ నిర్ధారించుకోండి.',
 'actioncomplete'         => 'పని పూర్తయింది',
 'actionfailed'           => 'చర్య విఫలమైంది',
-'deletedtext'            => '"<nowiki>$1</nowiki>" తుడిచివేయబడింది. ఇటీవలి తుడిచివేతలకు సంబంధించిన నివేదిక కొరకు $2 చూడండి.',
-'deletedarticle'         => '"[[$1]]"ని తొలగించారు',
-'suppressedarticle'      => '"[[$1]]" ను అణచి ఉంచాం',
+'deletedtext'            => '"$1" తుడిచివేయబడింది. ఇటీవలి తుడిచివేతలకు సంబంధించిన నివేదిక కొరకు $2 చూడండి.',
 'dellogpage'             => 'తొలగింపుల చిట్టా',
 'dellogpagetext'         => 'ఇది ఇటీవలి తుడిచివేతల జాబితా.',
 'deletionlog'            => 'తొలగింపుల చిట్టా',
@@ -2102,7 +2114,7 @@ $UNWATCHURL కి వెళ్ళండి.
 'protect_expiry_invalid'      => 'గడువు సమయాన్ని సరిగ్గా ఇవ్వలేదు.',
 'protect_expiry_old'          => 'మీరిచ్చిన గడువు ప్రస్తుత సమయం కంటే ముందు ఉంది.',
 'protect-unchain-permissions' => 'మరిన్ని సంరక్షణ వికల్పాలను తెరువు',
-'protect-text'                => "ఈ పెజీ '''<nowiki>$1</nowiki>''' ఎంత సంరక్షణలొ వుందో మీరు ఇక్కడ చూడవచ్చు, మార్చవచ్చు.",
+'protect-text'                => "ఈ పెజీ '''$1''' ఎంత సంరక్షణలొ వుందో మీరు ఇక్కడ చూడవచ్చు, మార్చవచ్చు.",
 'protect-locked-blocked'      => "నిరోధించబడి ఉండగా మీరు సంరక్షణ స్థాయిని మార్చలేరు. ప్రస్తుతం '''$1''' పేజీకి ఉన్న సెట్టింగులివి:",
 'protect-locked-dblock'       => "ప్రస్తుతం అమల్లో ఉన్న డేటాబేసు లాకు కారణంగా సంరక్షణ స్థాయిని సెట్ చెయ్యడం కుదరదు. ప్రస్తుతం '''$1''' పేజీకి ఉన్న సెట్టింగులివి:",
 'protect-locked-access'       => "మీ ఖాతకు పేజీ రక్షన స్థాయిని మార్చే హక్కులు లేవు.
@@ -2171,7 +2183,6 @@ $UNWATCHURL కి వెళ్ళండి.
 'undeletereset'                => 'మునుపటి వలె',
 'undeleteinvert'               => 'ఎంపికని తిరగవెయ్యి',
 'undeletecomment'              => 'కారణం:',
-'undeletedarticle'             => '"[[$1]]" పునఃస్థాపన జరిగింది',
 'undeletedrevisions'           => '{{PLURAL:$1|ఒక సంచిక|$1 సంచికల}} పునఃస్థాపన జరిగింది',
 'undeletedrevisions-files'     => '{{PLURAL:$1|ఒక కూర్పు|$1 కూర్పులు}} మరియు {{PLURAL:$2|ఒక ఫైలు|$2 ఫైళ్ళ}}ను పునస్థాపించాం',
 'undeletedfiles'               => '{{PLURAL:$1|ఒక ఫైలును|$1 ఫైళ్లను}} పునఃస్థాపించాం',
@@ -2194,9 +2205,10 @@ $UNWATCHURL కి వెళ్ళండి.
 'undelete-show-file-submit'    => 'అవును',
 
 # Namespace form on various pages
-'namespace'      => 'పేరుబరి:',
-'invert'         => 'ఎంపికను తిరగవెయ్యి',
-'blanknamespace' => '(మొదటి)',
+'namespace'             => 'పేరుబరి:',
+'invert'                => 'ఎంపికను తిరగవెయ్యి',
+'namespace_association' => 'సంబంధిత పేరుబరి (నేమ్ స్పేసు)',
+'blanknamespace'        => '(మొదటి)',
 
 # Contributions
 'contributions'       => 'వాడుకరి రచనలు',
@@ -2229,13 +2241,13 @@ $UNWATCHURL కి వెళ్ళండి.
 # What links here
 'whatlinkshere'            => 'ఇక్కడికి లంకెలున్న పుటలు',
 'whatlinkshere-title'      => '"$1"కి లింకున్న పుటలు',
-'whatlinkshere-page'       => 'పుట:',
+'whatlinkshere-page'       => 'పేజీ:',
 'linkshere'                => "కిందనున్న పేజీల నుండి '''[[:$1]]'''కు లింకులు ఉన్నాయి:",
 'nolinkshere'              => "'''[[:$1]]'''కు ఏ పేజీ నుండీ లింకు లేదు.",
 'nolinkshere-ns'           => "'''[[:$1]]''' పేజీకి లింకయ్యే పేజీలు ఎంచుకున్న నేంస్పేసులో లేవు.",
 'isredirect'               => 'దారిమార్పు పుట',
 'istemplate'               => 'పేజీకి జతపరిచారు',
-'isimage'                  => 'బొమ్మ లింకు',
+'isimage'                  => 'దస్త్రపు లంకె',
 'whatlinkshere-prev'       => '{{PLURAL:$1|మునుపటిది|మునుపటి $1}}',
 'whatlinkshere-next'       => '{{PLURAL:$1|తరువాతది|తరువాతి $1}}',
 'whatlinkshere-links'      => '← లింకులు',
@@ -2246,7 +2258,9 @@ $UNWATCHURL కి వెళ్ళండి.
 'whatlinkshere-filters'    => 'వడపోతలు',
 
 # Block/unblock
-'blockip'                         => 'సభ్యుని నిరోధించు',
+'block'                           => 'వాడుకరి నిరోధం',
+'unblock'                         => 'వాడుకరిపై నిరోధాన్ని తీసెయ్యండి',
+'blockip'                         => 'వాడుకరి నిరోధం',
 'blockip-title'                   => 'వాడుకరిని నిరోధించు',
 'blockip-legend'                  => 'వాడుకరి నిరోధం',
 'blockiptext'                     => 'ఏదైనా ప్రత్యేక ఐపీ చిరునామానో లేదా వాడుకరిపేరునో రచనలు చెయ్యకుండా నిరోధించాలంటే కింది ఫారాన్ని వాడండి.
@@ -2263,8 +2277,9 @@ $UNWATCHURL కి వెళ్ళండి.
 ** బయటి సైట్లకు లింకులు పెట్టి స్పాము చెయ్యడం
 ** పేజీల్లోకి చెత్తను ఎక్కించడం
 ** బెదిరింపు ప్రవర్తన/వేధింపు
-** అనేక ఎకౌంట్లు సృష్టించి దుశ్చర్యకు పాలపడడం
-** అనుచితమైన సభ్యనామం',
+** అనేక ఖాతాలను సృష్టించి దుశ్చర్యకు పాల్పడడం
+** అనుచితమైన వాడుకరిపేరు',
+'ipb-hardblock'                   => 'లాగినై ఉన్న వాడుకరులు ఈ ఐపీ అడ్రసు నుంచి మార్పుచేర్పులు చెయ్యకుండా నిరోధించండి',
 'ipbcreateaccount'                => 'ఖాతా సృష్టింపుని నివారించు',
 'ipbemailban'                     => 'వాడుకరిని ఈ-మెయిల్ చెయ్యకుండా నివారించు',
 'ipbenableautoblock'              => 'ఈ వాడుకరి వాడిన చివరి ఐపీ అడ్రసును, అలాగే ఆ తరువాత వాడే అడ్రసులను కూడా ఆటోమాటిగ్గా నిరోధించు',
@@ -2275,26 +2290,35 @@ $UNWATCHURL కి వెళ్ళండి.
 'ipbotherreason'                  => 'ఇతర/అదనపు కారణం',
 'ipbhidename'                     => 'మార్పులు మరియు జాబితాల నుండి ఈ వాడుకరిపేరుని దాచు',
 'ipbwatchuser'                    => 'ఈ సభ్యుని సభ్యుని పేజీ, చర్చాపేజీలను వీక్షణలో ఉంచు',
+'ipb-disableusertalk'             => 'నిరోధంలో ఉండగా ఈ వాడుకరి తన స్వంత చర్చ పేజీలో మార్పుచేర్పులు చెయ్యకుండా నిరోధించు',
 'ipb-change-block'                => 'ఈ అమరికలతో వాడుకరిని పునర్నిరోధించు',
+'ipb-confirm'                     => 'నిరోధాన్ని ధృవపరచండి',
 'badipaddress'                    => 'సరైన ఐ.పి. అడ్రసు కాదు',
 'blockipsuccesssub'               => 'నిరోధం విజయవంతం అయింది',
 'blockipsuccesstext'              => '[[Special:Contributions/$1|$1]] నిరోధించబడింది.
 <br />నిరోధాల సమీక్ష కొరకు [[Special:IPBlockList|ఐ.పి. నిరొధాల జాబితా]] చూడండి.',
+'ipb-blockingself'                => 'మిమ్మల్ని మీరే నిరోధించుకోబోతున్నారు! అదే మీ నిశ్చయమా?',
 'ipb-edit-dropdown'               => 'నిరోధపు కారణాలను మార్చండి',
 'ipb-unblock-addr'                => '$1 పై ఉన్న నిరోధాన్ని తొలగించండి',
-'ipb-unblock'                     => 'సభ్యనామం లేక ఐపీ అడ్రసుపై ఉన్న నిరోధాన్ని తొలగించండి',
+'ipb-unblock'                     => 'వాడుకరిపేరు లేక ఐపీ అడ్రసుపై ఉన్న నిరోధాన్ని తొలగించండి',
 'ipb-blocklist'                   => 'అమల్లో ఉన్న నిరోధాలను చూపించు',
 'ipb-blocklist-contribs'          => '$1 యొక్క మార్పులు-చేర్పులు',
 'unblockip'                       => 'సభ్యునిపై నిరోధాన్ని తొలగించు',
 'unblockiptext'                   => 'కింది ఫారం ఉపయోగించి, నిరోధించబడిన ఐ.పీ. చిరునామా లేదా సభ్యునికి తిరిగి రచనలు చేసే అధికారం ఇవ్వవచ్చు.',
 'ipusubmit'                       => 'ఈ నిరోధాన్ని తొలగించు',
 'unblocked'                       => '[[User:$1|$1]]పై నిరోధం తొలగించబడింది',
+'unblocked-range'                 => '$1 పై నిరోధాన్ని తీసేసాం',
 'unblocked-id'                    => '$1 అనే నిరోధాన్ని తొలగించాం',
-'ipblocklist'                     => 'నిరోధించబడిన ఐ.పీ. చిరునామాలు మరియు వాడుకరుల పేర్లు',
+'blocklist'                       => 'నిరోధిత వాడుకరులు',
+'ipblocklist'                     => 'నిరోధించబడిన వాడుకరులు',
 'ipblocklist-legend'              => 'నిరోధించబడిన సభ్యుని వెతకండి',
 'blocklist-userblocks'            => 'ఖాతా నిరోధాలను దాచు',
 'blocklist-tempblocks'            => 'తాత్కాలిక నిరోధాలను దాచు',
+'blocklist-addressblocks'         => 'ఏకైక ఐపీ నిరోధాలను దాచు',
 'blocklist-timestamp'             => 'కాలముద్ర',
+'blocklist-target'                => 'గమ్యం',
+'blocklist-expiry'                => 'కాలం చేల్లేది',
+'blocklist-by'                    => 'నిర్వాహకుని నిరోధం',
 'blocklist-params'                => 'నిరోధపు పరామితులు',
 'blocklist-reason'                => 'కారణం',
 'ipblocklist-submit'              => 'వెతుకు',
@@ -2321,7 +2345,7 @@ $UNWATCHURL కి వెళ్ళండి.
 వివరాల కోసం అణచివేత చిట్టా కింద చూపబడింది:',
 'blocklogentry'                   => '"[[$1]]" పై నిరోధం అమలయింది. నిరోధ కాలం $2 $3',
 'reblock-logentry'                => '[[$1]] కై నిరోధపు అమరికలను $2 $3 గడువుతో మార్చారు',
-'blocklogtext'                    => 'వాడుకరుల నిరోధాలు, పునస్థాపనల చిట్టా ఇది. ఆటోమాటిక్‌గా నిరోధానికి గురైన ఐ.పి. చిరునామాలు ఈ జాబితాలో ఉండవు. ప్రస్తుతం అమల్లో ఉన్న నిరోధాలు, నిషేధాల కొరకు [[Special:IPBlockList|ఐ.పి. నిరోధాల జాబితా]]ను చూడండి.',
+'blocklogtext'                    => 'వాడుకరుల నిరోధాలు, పునస్థాపనల చిట్టా ఇది. ఆటోమాటిక్‌గా నిరోధానికి గురైన ఐ.పి. చిరునామాలు ఈ జాబితాలో ఉండవు. ప్రస్తుతం అమల్లో ఉన్న నిరోధాలు, నిషేధాల కొరకు [[Special:BlockList|ఐ.పి. నిరోధాల జాబితా]]ను చూడండి.',
 'unblocklogentry'                 => '$1పై నిరోధం తొలగించబడింది',
 'block-log-flags-anononly'        => 'అజ్ఞాత వాడుకర్లు మాత్రమే',
 'block-log-flags-nocreate'        => 'ఖాతా సృష్టించడాన్ని అశక్తం చేసాం',
@@ -2337,6 +2361,7 @@ $UNWATCHURL కి వెళ్ళండి.
 'ipb_already_blocked'             => '"$1" ను ఇప్పటికే నిరోధించాం',
 'ipb-needreblock'                 => '$1ని ఇప్పటికే నిరోధించారు. ఆ అమరికలని మీరు మార్చాలనుకుంటున్నారా?',
 'ipb-otherblocks-header'          => 'ఇతర {{PLURAL:$1|నిరోధం|నిరోధాలు}}',
+'unblock-hideuser'                => 'ఈ వాడుకరి యొక్క వాడుకరిపేరు దాచబడి ఉంది కాబట్టి, వారిపై నిరోధాన్ని తీసెయ్యలేరు.',
 'ipb_cant_unblock'                => 'లోపం: నిరోధించిన ఐడీ $1 దొరకలేదు. దానిపై ఉన్న నిరోధాన్ని ఈసరికే తొలగించి ఉండవచ్చు.',
 'ipb_blocked_as_range'            => 'లోపం: ఐపీ $1 ను నేరుగా నిరోధించలేదు, అంచేత నిరోధాన్ని రద్దుపరచలేము.  అయితే, అది $2 శ్రేణిలో భాగంగా నిరోధానికి గురైంది, ఈ శ్రేణిపై ఉన్న నిరోధాన్ని రద్దుపరచవచ్చు.',
 'ip_range_invalid'                => 'సరైన ఐపీ శ్రేణి కాదు.',
@@ -2389,6 +2414,16 @@ $UNWATCHURL కి వెళ్ళండి.
 '''హెచ్చరిక!'''
 ఈ మార్పు బాగా జనరంజకమైన పేజీలకు అనూహ్యం కావచ్చు;
 దాని పరిణామాలను అర్ధం చేసుకుని ముందుకుసాగండి.",
+'movepagetext-noredirectfixer' => "కింది ఫారాన్ని వాడి, ఓ పేజీ పేరు మార్చవచ్చు. దాని చరిత్ర పూర్తిగా కొత్త పేరుకు తరలిపోతుంది. 
+పాత శీర్షిక కొత్తదానికి దారిమార్పు పేజీగా మారిపోతుంది.
+[[Special:DoubleRedirects|double]] లేదా [[Special:BrokenRedirects|broken redirects]] లను చూడటం మరువకండి.
+లింకులు వెళ్ళాల్సిన చోటికి వెళ్తున్నాయని నిర్ధారించుకోవాల్సిన బాధ్యత మీదే.
+కొత్త పేరుతో ఈసరికే ఏదైనా పేజీ ఉంటే - అది ఖాళీగా ఉన్నా లేక మార్పుచేర్పుల చరిత్ర ఏమీ లేని దారిమార్పు పేజీ అయినా తప్ప- తరలింపు ’’’జరుగదు’’’ అని గమనించండి.
+అంటే, ఏదైనా పొరపాటు జరిగితే పేరును తిరిగి పాత పేరుకే మార్చగలరు తప్ప, ఈపాటికే ఉన్న పేజీపై ఓవరరైటు చెయ్యలేరు.
+
+'''హెచ్చరిక!'''
+బహుళ వ్యాప్తి పొందిన ఓ పేజీలో ఈ మార్పు చాలా తీవ్రమైనది, ఊహించనిదీ అవుతుంది.
+దాని పర్యవసానాలు అర్థం చేసుకున్నాకే ముందుకు వెళ్ళండి.",
 'movepagetalktext'             => "దానితో పాటు సంబంధిత చర్చా పేజీ కూడా ఆటోమాటిక్‌‌గా తరలించబడుతుంది, '''కింది సందర్భాలలో తప్ప:'''
 *ఒక నేంస్పేసు నుండి ఇంకోదానికి తరలించేటపుడు,
 *కొత్త పేరుతో ఇప్పటికే ఒక చర్చా పేజీ ఉంటే,
@@ -2421,9 +2456,6 @@ $UNWATCHURL కి వెళ్ళండి.
 'movepage-page-moved'          => '$1 అనే పేజీని $2 కి తరలించాం.',
 'movepage-page-unmoved'        => '$1 అనే పేజీని $2 కి తరలించలేకపోయాము.',
 'movepage-max-pages'           => '$1 యొక్క గరిష్ఠ పరిమితి {{PLURAL:$1|పేజీ|పేజీలు}} వరకు తరలించడమైనది. ఇక ఆటోమాటిగ్గా తరలించము.',
-'1movedto2'                    => '[[$1]]ని [[$2]]కి తరలించారు',
-'1movedto2_redir'              => '[[$1]] ను దారిమార్పు ద్వారా [[$2]] కు తరలించాం',
-'move-redirect-suppressed'     => 'దారిమార్పు లేకుండా',
 'movelogpage'                  => 'తరలింపుల చిట్టా',
 'movelogpagetext'              => 'కింద తరలించిన పేజీల జాబితా ఉన్నది.',
 'movesubpage'                  => '{{PLURAL:$1|ఉపపేజీ|ఉపపేజీలు}}',
@@ -2482,14 +2514,14 @@ $UNWATCHURL కి వెళ్ళండి.
 'allmessagesname'               => 'పేరు',
 'allmessagesdefault'            => 'డీఫాల్టు పాఠ్యం',
 'allmessagescurrent'            => 'ప్రస్తుత పాఠ్యం',
-'allmessagestext'               => 'మీడియావికీ నేంస్పేసులో ఉన్న అన్ని సిస్టం సందేశాల జాబితా ఇది.
-మీరు అన్ని వికీపీడియాలకూ కలిపి ఒకేసారి అనువదించాలని అనుకుంటే, దయచేసి [http://www.mediawiki.org/wiki/Localisation మీడియావికీ అనువాదం] మరియూ [http://translatewiki.net బేటావికీ] సైట్లను చూడండి.',
+'allmessagestext'               => 'మీడియావికీ పేరుబరిలో ఉన్న అంతరవర్తి సందేశాల జాబితా ఇది.
+సాధారణ మీడియావికీ స్థానికీకరణకి మీరు తోడ్పడాలనుకుంటే, దయచేసి [//www.mediawiki.org/wiki/Localisation మీడియావికీ స్థానికీకరణ] మరియు [//translatewiki.net ట్రాన్స్&zwnj;లేట్&zwnj;వికీ.నెట్] సైట్లను చూడండి.',
 'allmessagesnotsupportedDB'     => "'''\$wgUseDatabaseMessages''' అన్నది అచేతనం చేసి ఉన్నందువల్ల ఈ పేజీని వాడలేరు.",
 'allmessages-filter-legend'     => 'వడపోత',
 'allmessages-filter'            => 'కస్టమైజేషను స్థితిని బట్టి వడకట్టు:',
-'allmessages-filter-unmodified' => 'మార్చాబడనిది',
+'allmessages-filter-unmodified' => 'మార్చబడనివి',
 'allmessages-filter-all'        => 'అన్నీ',
-'allmessages-filter-modified'   => 'మార్చబడినది',
+'allmessages-filter-modified'   => 'మార్చబడినవి',
 'allmessages-prefix'            => 'ఉపసర్గ పై వడపోత:',
 'allmessages-language'          => 'భాష:',
 'allmessages-filter-submit'     => 'వెళ్ళు',
@@ -2519,8 +2551,8 @@ $UNWATCHURL కి వెళ్ళండి.
 'import-interwiki-namespace' => 'లక్ష్యిత నేంస్పేసు:',
 'import-upload-filename'     => 'పైలుపేరు:',
 'import-comment'             => 'వ్యాఖ్య:',
-'importtext'                 => 'మూల వికీ లోని [[Special:Export|ఎగుమతి సౌలభ్యా]]న్ని ఉపయోగించి ఫైలుని మీ కంప్యూటర్లోనికి దిగుమతి చేసుకోండి.
-ఆపై ఇక్కడికి ఎగుమతి చేయండి.',
+'importtext'                 => '[[Special:Export|ఎగుమతి ఉపకరణాన్ని]] ఉపయోగించి, ఈ ఫైలుని  మూల వికీ నుంచి ఎగుమతి చెయ్యండి.
+దాన్ని మీ కంప్యూటర్లో భద్రపరచి, ఆపై ఇక్కడికి ఎక్కించండి.',
 'importstart'                => 'పేజీలను దిగుమతి చేస్తున్నాం...',
 'import-revision-count'      => '$1 {{PLURAL:$1|కూర్పు|కూర్పులు}}',
 'importnopages'              => 'దిగుమతి చెయ్యడానికి పేజీలేమీ లేవు.',
@@ -2581,8 +2613,8 @@ $UNWATCHURL కి వెళ్ళండి.
 'tooltip-search-go'               => 'ఇదే పేరుతో పేజీ ఉంటే అక్కడికి తీసుకెళ్ళు',
 'tooltip-search-fulltext'         => 'పేజీలలో ఈ పాఠ్యం కొరకు వెతుకు',
 'tooltip-p-logo'                  => 'మొదటి పుటను దర్శించండి',
-'tooltip-n-mainpage'              => 'మొదటి పుటని దర్శించండి',
-'tooltip-n-mainpage-description'  => 'మొదటి పుటని దర్శించండి',
+'tooltip-n-mainpage'              => 'మొదటి పేజీని దర్శించండి',
+'tooltip-n-mainpage-description'  => 'మొదటి పేజీని దర్శించండి',
 'tooltip-n-portal'                => 'ప్రాజెక్టు గురించి, మీరేం చేయవచ్చు, సమాచారం ఎక్కడ దొరుకుతుంది',
 'tooltip-n-currentevents'         => 'వర్తమాన ఘటనలకు సంబంధించిన సమాచారాన్ని పొందండి.',
 'tooltip-n-recentchanges'         => 'వికీలో ఇటీవల జరిగిన మార్పుల జాబితా.',
@@ -2623,9 +2655,7 @@ $UNWATCHURL కి వెళ్ళండి.
 'tooltip-summary'                 => 'చిన్న సారాంశాన్ని ఇవ్వండి',
 
 # Metadata
-'nodublincore'      => 'డబ్లిన్ కోర్ RDF మెటాడేటాను ఈ సర్వరుకు అశక్తం చేసాం.',
-'nocreativecommons' => 'క్రియేటివ్ కామన్స్ RDF మెటాడేటాను ఈ సర్వరుకు అశక్తం చేసాం.',
-'notacceptable'     => 'ఈ వికీ సర్వరు మీ క్లయంటు చదవగలిగే రీతిలో డేటాను ఇవ్వలేదు.',
+'notacceptable' => 'ఈ వికీ సర్వరు మీ క్లయంటు చదవగలిగే రీతిలో డేటాను ఇవ్వలేదు.',
 
 # Attribution
 'anonymous'        => '{{SITENAME}} యొక్క అజ్ఞాత {{PLURAL:$1|వాడుకరి|వాడుకరులు}}',
@@ -2649,12 +2679,15 @@ $UNWATCHURL కి వెళ్ళండి.
 'spam_blanking'       => '$1 కు లింకులు ఉన్న కూర్పులన్నిటినీ ఖాళీ చేస్తున్నాం',
 
 # Info page
-'infosubtitle'   => 'పేజీ గురించి సమాచారం',
-'numedits'       => 'మార్పుల సంఖ్య (వ్యాసం): $1',
-'numtalkedits'   => 'మార్పుల సంఖ్య (చర్చా పేజీ): $1',
-'numwatchers'    => 'వీక్షకుల సంఖ్య: $1',
-'numauthors'     => 'భిన్నమైన రచయితల సంఖ్య (వ్యాసం): $1',
-'numtalkauthors' => 'భిన్నమైన రచయితల సంఖ్య (చర్చా పేజీ): $1',
+'pageinfo-title'            => '"$1" గురించి సమాచారం',
+'pageinfo-header-edits'     => 'మార్పులు',
+'pageinfo-header-watchlist' => 'వీక్షణ జాబితా',
+'pageinfo-header-views'     => 'వీక్షణలు',
+'pageinfo-subjectpage'      => 'పుట',
+'pageinfo-talkpage'         => 'చర్చా పేజీ',
+'pageinfo-watchers'         => 'వీక్షకుల సంఖ్య',
+'pageinfo-edits'            => 'మార్పుల సంఖ్య',
+'pageinfo-views'            => 'వీక్షణల సంఖ్య',
 
 # Skin names
 'skinname-standard'    => 'సంప్రదాయ',
@@ -2681,9 +2714,6 @@ $UNWATCHURL కి వెళ్ళండి.
 # Patrol log
 'patrol-log-page'      => 'నిఘా చిట్టా',
 'patrol-log-header'    => 'ఇది పర్యవేక్షించిన కూర్పుల చిట్టా.',
-'patrol-log-line'      => 'మొత్తం $1లోని $2లను $3గా పెట్రోలు చేసినట్లుగా గుర్తించాము',
-'patrol-log-auto'      => '(దావంత అదే)',
-'patrol-log-diff'      => 'కూర్పు $1',
 'log-show-hide-patrol' => '$1 పర్యవేక్షణ చిట్టా',
 
 # Image deletion
@@ -2702,23 +2732,24 @@ $1',
 'nextdiff'     => 'తరువాతి మార్పు →',
 
 # Media information
-'mediawarning'         => "'''హెచ్చరిక''': ఈ రకపు ఫైలులో హానికరమైన కోడ్‌ ఉండవచ్చు.
+'mediawarning'           => "'''హెచ్చరిక''': ఈ రకపు ఫైలులో హానికరమైన కోడ్‌ ఉండవచ్చు.
 దాన్ని నడపడం వల్ల, మీ సిస్టమ్ లొంగిపోవచ్చు.",
-'imagemaxsize'         => "బొమ్మ పరిమాణంపై పరిమితి:<br />''(దస్త్రపు వివరణ పుటల కొరకు)''",
-'thumbsize'            => 'నఖచిత్రం వైశాల్యం:',
-'widthheightpage'      => '$1×$2, $3 {{PLURAL:$3|పేజీ|పేజీలు}}',
-'file-info'            => 'ఫైలు పరిమాణం: $1, MIME రకం: $2',
-'file-info-size'       => '$1 × $2 పిక్సెళ్ళు, ఫైలు పరిమాణం: $3, MIME రకం: $4',
-'file-nohires'         => '<small>మరింత స్పష్టమైన బొమ్మ లేదు.</small>',
-'svg-long-desc'        => 'SVG ఫైలు, నామమాత్రంగా $1 × $2 పిక్సెళ్ళు, ఫైలు పరిమాణం: $3',
-'show-big-image'       => 'అసలు పరిమాణం',
-'show-big-image-other' => '<small>ఇతర వైశాల్యాలు: $1.</small>',
-'show-big-image-size'  => '$1 × $2 పిక్సెళ్ళు',
-'file-info-gif-looped' => 'లూపులో పడింది',
-'file-info-gif-frames' => '$1 {{PLURAL:$1|ఫ్రేము|ఫ్రేములు}}',
-'file-info-png-looped' => 'పునరావృతమవుతుంది',
-'file-info-png-repeat' => '{{PLURAL:$1|ఒకసారి|$1 సార్లు}} ఆడించారు',
-'file-info-png-frames' => '$1 {{PLURAL:$1|ఫ్రేము|ఫ్రేములు}}',
+'imagemaxsize'           => "బొమ్మ పరిమాణంపై పరిమితి:<br />''(దస్త్రపు వివరణ పుటల కొరకు)''",
+'thumbsize'              => 'నఖచిత్రం వైశాల్యం:',
+'widthheightpage'        => '$1×$2, $3 {{PLURAL:$3|పేజీ|పేజీలు}}',
+'file-info'              => 'ఫైలు పరిమాణం: $1, MIME రకం: $2',
+'file-info-size'         => '$1 × $2 పిక్సెళ్ళు, ఫైలు పరిమాణం: $3, MIME రకం: $4',
+'file-nohires'           => 'మరింత స్పష్టమైన బొమ్మ లేదు.',
+'svg-long-desc'          => 'SVG ఫైలు, నామమాత్రంగా $1 × $2 పిక్సెళ్ళు, ఫైలు పరిమాణం: $3',
+'show-big-image'         => 'అసలు పరిమాణం',
+'show-big-image-preview' => 'ఈ మునుజూపు పరిమాణం: $1.',
+'show-big-image-other'   => 'ఇతర వైశాల్యాలు: $1.',
+'show-big-image-size'    => '$1 × $2 పిక్సెళ్ళు',
+'file-info-gif-looped'   => 'లూపులో పడింది',
+'file-info-gif-frames'   => '$1 {{PLURAL:$1|ఫ్రేము|ఫ్రేములు}}',
+'file-info-png-looped'   => 'పునరావృతమవుతుంది',
+'file-info-png-repeat'   => '{{PLURAL:$1|ఒకసారి|$1 సార్లు}} ఆడించారు',
+'file-info-png-frames'   => '$1 {{PLURAL:$1|ఫ్రేము|ఫ్రేములు}}',
 
 # Special:NewFiles
 'newimages'             => 'కొత్త ఫైళ్ళ కొలువు',
@@ -2732,6 +2763,15 @@ $1',
 'bydate'                => 'తేదీ వారీగ',
 'sp-newimages-showfrom' => '$2, $1 నుండి మొదలుపెట్టి కొత్త ఫైళ్ళను చూపించు',
 
+# Video information, used by Language::formatTimePeriod() to format lengths in the above messages
+'seconds-abbrev' => '$1క్ష',
+'days-abbrev'    => '$1రో',
+'seconds'        => '{{PLURAL:$1|$1 క్షణం|$1 క్షణాల}}',
+'minutes'        => '{{PLURAL:$1|ఒక నిమిషం|$1 నిమిషాల}}',
+'hours'          => '{{PLURAL:$1|ఒక గంట|$1 గంటల}}',
+'days'           => '{{PLURAL:$1|ఒక రోజు|$1 రోజుల}}',
+'ago'            => '$1 క్రితం',
+
 # Bad image list
 'bad_image_list' => 'కింద తెలిపిన తీరులో కలపాలి:
 
@@ -2743,16 +2783,20 @@ $1',
 'metadata-help'     => 'ఈ ఫైలులో అదనపు సమాచారం ఉంది, బహుశా దీన్ని సృష్టించడానికి లేదా సాంఖ్యీకరించడానికి వాడిన డిజిటల్ కేమెరా లేదా స్కానర్ ఆ సమాచారాన్ని చేర్చివుంవచ్చు. ఈ ఫైలుని అసలు స్థితి నుండి మారిస్తే, కొన్ని వివరాలు ఆ మారిన ఫైలులో పూర్తిగా ప్రతిఫలించకపోవచ్చు.',
 'metadata-expand'   => 'విస్తరిత వివరాలను చూపించు',
 'metadata-collapse' => 'విస్తరిత వివరాలను దాచు',
-'metadata-fields'   => 'కింద జాబితాలో ఉన్న వివరాలను బొమ్మ పేజీలో, బొమ్మ మేటాడేటాలో మూసుకు పోయినప్పుడు కూడా చూపిస్తారు.
-మిగిలిన వివరాలు దాచేసి ఉంటాయి. ఇక్కడ మీరు బొమ్మలో చూపించాలని అనుకుంటున్న వివరాల
-మీడియావికీ పేర్లను చేరిస్తేగనక, వాటిని బొమ్మ పేజీలో చూపిస్తుంది.
+'metadata-fields'   => 'కింది జాబితాలో ఉన్న మెటాడేటా ఫీల్డులు, బొమ్మ పేజీలో మేటాడేటా టేబులు మూసుకొన్నపుడు కనబడతాయి. మిగతావి దాచేసి ఉంటాయి. 
 * make
 * model
 * datetimeoriginal
 * exposuretime
 * fnumber
 * isospeedratings
-* focallength',
+* focallength
+* artist
+* copyright
+* imagedescription
+* gpslatitude
+* gpslongitude
+* gpsaltitude',
 
 # EXIF tags
 'exif-imagewidth'                  => 'వెడల్పు',
@@ -2767,13 +2811,11 @@ $1',
 'exif-ycbcrpositioning'            => 'Y మరియు C స్థానాలు',
 'exif-xresolution'                 => 'క్షితిజసమాంతర స్పష్టత',
 'exif-yresolution'                 => 'లంబ స్పష్టత',
-'exif-resolutionunit'              => 'X, Y స్పష్టతల కొలమానం',
 'exif-stripoffsets'                => 'బొమ్మ డేటా ఉన్న స్థలం',
 'exif-rowsperstrip'                => 'ఒక్కో పట్టికి ఉన్న అడ్డువరుసలు',
 'exif-stripbytecounts'             => 'ఒక్కో కుదించిన పట్టీలో ఉన్న బైట్లు',
 'exif-jpeginterchangeformat'       => 'JPEG SOI కి ఆఫ్‌సెట్',
 'exif-jpeginterchangeformatlength' => 'JPEG డాటా యొక్క బైట్లు',
-'exif-transferfunction'            => 'బదిలీ ఫంక్షన్',
 'exif-whitepoint'                  => 'శ్వేతబిందు వర్ణోగ్రత (క్రొమాటిసిటీ)',
 'exif-primarychromaticities'       => 'ప్రైమారిటీల వర్ణోగ్రతలు',
 'exif-ycbcrcoefficients'           => 'వర్ణస్థల మార్పు మాత్రిక స్థానసూచికలు',
@@ -2790,9 +2832,8 @@ $1',
 'exif-colorspace'                  => 'వర్ణస్థలం',
 'exif-componentsconfiguration'     => 'ప్రతీ అంగం యొక్క అర్థం',
 'exif-compressedbitsperpixel'      => 'బొమ్మ కుదింపు పద్ధతి',
-'exif-pixelydimension'             => 'సరైన బొమ్మ వెడల్పు',
-'exif-pixelxdimension'             => 'బొమ్మ సరైన ఎత్తు',
-'exif-makernote'                   => 'తయారీదారు గమనికలు',
+'exif-pixelydimension'             => 'బొమ్మ వెడల్పు',
+'exif-pixelxdimension'             => 'బొమ్మ ఎత్తు',
 'exif-usercomment'                 => 'వాడుకరి వ్యాఖ్యలు',
 'exif-relatedsoundfile'            => 'సంబంధిత శబ్ద ఫైలు',
 'exif-datetimeoriginal'            => 'డేటా తయారైన తేదీ, సమయం',
@@ -2806,10 +2847,9 @@ $1',
 'exif-exposureprogram'             => 'ఎక్స్పోజరు ప్రోగ్రాము',
 'exif-spectralsensitivity'         => 'వర్ణపట సున్నితత్వం',
 'exif-isospeedratings'             => 'ISO స్పీడు రేటింగు',
-'exif-oecf'                        => 'ఆప్టోఎలెక్ట్రానిక్ మార్పు గుణకం',
-'exif-shutterspeedvalue'           => 'షట్టరు వేగం',
-'exif-aperturevalue'               => 'ఎపర్చరు',
-'exif-brightnessvalue'             => 'దీప్తి',
+'exif-shutterspeedvalue'           => 'APEX షట్టరు వేగం',
+'exif-aperturevalue'               => 'APEX ఎపర్చరు',
+'exif-brightnessvalue'             => 'APEX దీప్తి',
 'exif-exposurebiasvalue'           => 'ఎక్స్పోజరు బయాస్',
 'exif-maxaperturevalue'            => 'గరిష్ఠ లాండు ఎపర్చరు',
 'exif-subjectdistance'             => 'వస్తువు దూరం',
@@ -2819,7 +2859,6 @@ $1',
 'exif-focallength'                 => 'కటకపు నాభ్యంతరం',
 'exif-subjectarea'                 => 'వస్తువు ప్రదేశం',
 'exif-flashenergy'                 => 'ఫ్లాష్ శక్తి',
-'exif-spatialfrequencyresponse'    => 'స్పేషియల్ పౌనఃపున్య స్పందన',
 'exif-focalplanexresolution'       => 'X నాభి తలపు స్పష్టత',
 'exif-focalplaneyresolution'       => 'Y నాభి తలపు స్పష్టత',
 'exif-focalplaneresolutionunit'    => 'నాభితలపు స్పష్టత కొలమానం',
@@ -2828,7 +2867,6 @@ $1',
 'exif-sensingmethod'               => 'గ్రహించే పద్ధతి',
 'exif-filesource'                  => 'ఫైలు మూలం',
 'exif-scenetype'                   => 'దృశ్యపు రకం',
-'exif-cfapattern'                  => 'CFA క్రమం',
 'exif-customrendered'              => 'కస్టమ్ బొమ్మ ప్రాసెసింగు',
 'exif-exposuremode'                => 'ఎక్స్పోజరు పద్ధతి',
 'exif-whitebalance'                => 'తెలుపు సంతులనం',
@@ -2873,10 +2911,60 @@ $1',
 'exif-gpsareainformation'          => 'GPS ప్రదేశం యొక్క పేరు',
 'exif-gpsdatestamp'                => 'GPS తేదీ',
 'exif-gpsdifferential'             => 'GPS తేడా సవరణ',
+'exif-jpegfilecomment'             => 'JPEG బొమ్మ వ్యాఖ్య',
+'exif-keywords'                    => 'కీలకపదాలు',
+'exif-worldregioncreated'          => 'ఫొటో తీసిన ప్రపంచపు ప్రాంతం',
+'exif-countrycreated'              => 'ఫొటో తీసిన దేశం',
+'exif-countrycodecreated'          => 'ఫొటో తీసిన దేశపు కోడ్',
+'exif-provinceorstatecreated'      => 'ఫొటో తీసిన రాష్ట్రం లేదా ప్రాంతీయ విభాగం',
+'exif-citycreated'                 => 'ఫొటో తీసిన నగరం',
+'exif-sublocationcreated'          => 'ఫొటో తీసిన నగరపు విభాగం',
+'exif-worldregiondest'             => 'ప్రపంచపు ప్రాంతం చూపబడింది',
+'exif-countrydest'                 => 'దేశం చూపబడింది',
+'exif-countrycodedest'             => 'దేశపు కోడ్ చూపబడింది',
+'exif-provinceorstatedest'         => 'రాష్ట్రం లేదా ప్రాంతీయ విభాగం చూపబడింది',
+'exif-citydest'                    => 'నగరం చూపబడింది',
+'exif-sublocationdest'             => 'నగరపు విభాగం చూపబడింది',
 'exif-objectname'                  => 'పొట్టి శీర్షిక',
+'exif-specialinstructions'         => 'ప్రత్యేక సూచనలు',
+'exif-headline'                    => 'శీర్షిక',
+'exif-credit'                      => 'క్రెడిట్/సమర్పించినవారు',
+'exif-source'                      => 'మూలం',
+'exif-editstatus'                  => 'బొమ్మ యొక్క ఎడిటోరియల్ స్థితి',
+'exif-urgency'                     => 'ఎంత త్వరగా కావాలి',
+'exif-locationdest'                => 'చూపించిన ప్రాంతం',
+'exif-objectcycle'                 => 'ఈ మాధ్యమం ఉద్దేశించిన సమయం',
+'exif-contact'                     => 'సంప్రదింపు సమాచారం',
+'exif-writer'                      => '',
+'exif-languagecode'                => 'భాష',
+'exif-iimversion'                  => 'IIM రూపాంతరం',
+'exif-iimcategory'                 => 'వర్గం',
+'exif-iimsupplementalcategory'     => 'అనుషంగిక వర్గాలు',
+'exif-datetimeexpires'             => 'దీని తరువాత వాడవద్దు',
+'exif-identifier'                  => 'గుర్తింపకం',
+'exif-lens'                        => 'వాడిన కటకం',
+'exif-serialnumber'                => 'కెమేరా యొక్క సీరియల్ నంబర్',
+'exif-cameraownername'             => 'కేమెరా యజమాని',
+'exif-rating'                      => 'రేటింగు (5 కి గాను)',
+'exif-rightscertificate'           => 'హక్కుల నిర్వాహణ ధృవీకరణ పత్రం',
+'exif-copyrighted'                 => 'కాపీహక్కుల స్థితి',
+'exif-copyrightowner'              => 'కాపీ హక్కుదారు',
+'exif-usageterms'                  => 'వాడుక నియమాలు',
+'exif-morepermissionsurl'          => 'ప్రత్యామ్నాయ లైసెన్సు సమాచారం',
+'exif-pngfilecomment'              => 'PNG ఫైలు వ్యాఖ్య',
+'exif-disclaimer'                  => 'నిష్పూచీ',
+'exif-contentwarning'              => 'విషయపు హెచ్చరిక',
+'exif-giffilecomment'              => 'GIF ఫైలు వ్యాఖ్య',
+'exif-intellectualgenre'           => 'అంశము యొక్క రకము',
+'exif-subjectnewscode'             => 'సబ్జెక్టు కోడ్',
+'exif-event'                       => 'చూపించిన ఘటన',
+'exif-organisationinimage'         => 'చూపించిన సంస్థ',
+'exif-personinimage'               => 'చిత్రంలో ఉన్న వ్యక్తి',
 
 # EXIF attributes
 'exif-compression-1' => 'కుదించని',
+
+'exif-copyrighted-true' => 'నకలుహక్కులుకలది',
 
 'exif-unknowndate' => 'అజ్ఞాత తేదీ',
 
@@ -2885,9 +2973,9 @@ $1',
 'exif-orientation-3' => '180° తిప్పాం',
 'exif-orientation-4' => 'నిలువుగా తిరగేసాం',
 'exif-orientation-5' => 'అపసవ్య దిశలో 90° తిప్పి, నిలువుగా తిరగేసాం',
-'exif-orientation-6' => 'సవ్యదిశలో 90° తిప్పాం',
+'exif-orientation-6' => 'అపసవ్యదిశలో 90° తిప్పారు',
 'exif-orientation-7' => 'సవ్యదిశలో 90° తిప్పి, నిలువుగా తిరగేసాం',
-'exif-orientation-8' => 'అపసవ్యదిశలో 90° తిప్పాం',
+'exif-orientation-8' => 'సవ్యదిశలో 90° తిప్పారు',
 
 'exif-planarconfiguration-1' => 'స్థూల ఆకృతి',
 'exif-planarconfiguration-2' => 'సమతల ఆకృతి',
@@ -2955,6 +3043,8 @@ $1',
 'exif-sensingmethod-7' => 'త్రిసరళరేఖా సెన్సర్',
 'exif-sensingmethod-8' => 'వర్ణ అనుక్రమ రేఖా సెన్సర్',
 
+'exif-filesource-3' => 'సాంఖ్యీక సాధారణ కెమెరా',
+
 'exif-scenetype-1' => 'ఎటువంటి హంగులూ లేకుండా ఫొటోతీయబడిన బొమ్మ',
 
 'exif-customrendered-0' => 'సాధారణ ప్రక్రియ',
@@ -3003,6 +3093,10 @@ $1',
 'exif-gpslongitude-e' => 'తూర్పు రేఖాంశం',
 'exif-gpslongitude-w' => 'పశ్చిమ రేఖాంశం',
 
+# Pseudotags used for GPSAltitudeRef
+'exif-gpsaltitude-above-sealevel' => 'సముద్రమట్టానికి $1 {{PLURAL:$1|మీటరు|మీటర్లు}} ఎగువన',
+'exif-gpsaltitude-below-sealevel' => 'సముద్రమట్టానికి $1 {{PLURAL:$1|మీటరు|మీటర్లు}} దిగువున',
+
 'exif-gpsstatus-a' => 'కొలత జరుగుతూంది',
 'exif-gpsstatus-v' => 'కొలత ఇంటర్‌ఆపరేటబిలిటీ',
 
@@ -3014,21 +3108,59 @@ $1',
 'exif-gpsspeed-m' => 'గంటకి మైళ్ళు',
 'exif-gpsspeed-n' => 'ముడులు',
 
+# Pseudotags used for GPSDestDistanceRef
+'exif-gpsdestdistance-k' => 'కిలోమీటర్లు',
+'exif-gpsdestdistance-m' => 'మైళ్ళు',
+'exif-gpsdestdistance-n' => 'నాటికల్ మైళ్ళు',
+
+'exif-objectcycle-a' => 'ఉదయం మాత్రమే',
+'exif-objectcycle-p' => 'సాయంత్రం మాత్రమే',
+'exif-objectcycle-b' => 'ఉదయమూ మరియు సాయంత్రమూ',
+
 # Pseudotags used for GPSTrackRef, GPSImgDirectionRef and GPSDestBearingRef
 'exif-gpsdirection-t' => 'వాస్తవ దిశ',
 'exif-gpsdirection-m' => 'అయస్కాంత దిశ',
 
+'exif-dc-contributor' => 'సహాయకులు',
+'exif-dc-date'        => 'తేదీ‍‍(లు)',
+'exif-dc-publisher'   => 'ప్రచురణకర్త',
+'exif-dc-relation'    => 'సంబంధిత మీడియా',
+'exif-dc-rights'      => 'హక్కులు',
+'exif-dc-source'      => 'మీడియా మూలము',
+'exif-dc-type'        => 'మీడియా యొక్క రకము',
+
+'exif-rating-rejected' => 'తిరస్కరించబడింది',
+
+'exif-isospeedratings-overflow' => '65535 కంటే ఎక్కువ',
+
+'exif-iimcategory-ace' => 'కళలు, సంస్కృతి మరియు వినోదం',
+'exif-iimcategory-clj' => 'నేరము మరియు చట్టము',
+'exif-iimcategory-dis' => 'విపత్తులు మరియు ప్రమాదాలు',
+'exif-iimcategory-edu' => 'విద్య',
+'exif-iimcategory-evn' => 'పర్యావరణం',
+'exif-iimcategory-hth' => 'ఆరోగ్యం',
+'exif-iimcategory-lif' => 'జీవనశైలి మరియు కాలక్షేపం',
+'exif-iimcategory-pol' => 'రాజకీయాలు',
+'exif-iimcategory-rel' => 'మతం మరియు విశ్వాసం',
+'exif-iimcategory-sci' => 'వైజ్ఞానికం మరియు సాంకేతికం',
+'exif-iimcategory-soi' => 'సాంఘిక సమస్యలు',
+'exif-iimcategory-spo' => 'క్రీడలు',
+'exif-iimcategory-war' => 'యుద్ధం, సంఘర్షణలు మరియు అనిశ్చితి',
+'exif-iimcategory-wea' => 'వాతావరణం',
+
+'exif-urgency-normal' => 'సాధారణం ($1)',
+'exif-urgency-low'    => 'తక్కువ ($1)',
+'exif-urgency-high'   => 'ఎక్కువ ($1)',
+
 # External editor support
 'edit-externally'      => 'బయటి అప్లికేషను వాడి ఈ ఫైలును మార్చు',
-'edit-externally-help' => '(మరింత సమాచారం కొరకు [http://www.mediawiki.org/wiki/Manual:External_editors సెటప్‌ సూచనల]ని చూడండి)',
+'edit-externally-help' => '(మరింత సమాచారం కొరకు [//www.mediawiki.org/wiki/Manual:External_editors సెటప్‌ సూచనల]ని చూడండి)',
 
 # 'all' in various places, this might be different for inflected languages
-'recentchangesall' => 'అన్నీ',
-'imagelistall'     => 'అన్నీ',
-'watchlistall2'    => 'అన్నీ',
-'namespacesall'    => 'అన్నీ',
-'monthsall'        => 'అన్నీ',
-'limitall'         => 'అన్నీ',
+'watchlistall2' => 'అన్నీ',
+'namespacesall' => 'అన్నీ',
+'monthsall'     => 'అన్నీ',
+'limitall'      => 'అన్నీ',
 
 # E-mail address confirmation
 'confirmemail'              => 'ఈ-మెయిలు చిరునామా ధృవీకరించండి',
@@ -3094,15 +3226,22 @@ $1',
 'trackbackdeleteok' => 'ట్రాక్‌బాక్&zwnj;ని విజయవంతంగా తొలగించాం.',
 
 # Delete conflict
-'deletedwhileediting' => "'''హెచ్చరిక''': మీరు మార్పులు చేయటం మొదలుపెట్టాక ఈ పేజీ తొలగించబడింది!",
-'confirmrecreate'     => "మీరు పేజీ రాయటం మొదలుపెట్టిన తరువాత [[User:$1|$1]] ([[User talk:$1|చర్చ]]) దానిని తీసివేసారు. దానికి ఈ కారణం ఇచ్చారు: ''$2''
+'deletedwhileediting'      => "'''హెచ్చరిక''': మీరు మార్పులు చేయటం మొదలుపెట్టాక ఈ పేజీ తొలగించబడింది!",
+'confirmrecreate'          => "మీరు పేజీ రాయటం మొదలుపెట్టిన తరువాత [[User:$1|$1]] ([[User talk:$1|చర్చ]]) దానిని తీసివేసారు. దానికి ఈ కారణం ఇచ్చారు: ''$2''
 మీరు ఈ పేజీని మళ్ళీ తయారు చేయాలనుకుంటున్నారని ధృవీకరించండి.",
-'recreate'            => 'మళ్లీ సృష్టించు',
+'confirmrecreate-noreason' => 'మీరు మార్చడం మొదలుపెట్టిన తర్వాత ఈ పుటను వాడుకరి [[User:$1|$1]] ([[User talk:$1|చర్చ]]) తొలగించారు. ఈ పుటను మీరు నిజంగానే పునఃసృష్టించాలనుకుంటున్నారని నిర్ధారించండి.',
+'recreate'                 => 'మళ్లీ సృష్టించు',
 
 # action=purge
 'confirm_purge_button' => 'సరే',
 'confirm-purge-top'    => 'ఈ పేజీ యొక్క పాత కాపీని తొలగించమంటారా?',
 'confirm-purge-bottom' => 'పేజీ తాడనతో కోశం ఖాళీ అయి, ఇట్టీవలి కూర్పును కనబడేలా చేస్తుంది.',
+
+# action=watch/unwatch
+'confirm-watch-button'   => 'సరే',
+'confirm-watch-top'      => 'ఈ పుటను మీ వీక్షణ జాబితాలో చేర్చాలా?',
+'confirm-unwatch-button' => 'సరే',
+'confirm-unwatch-top'    => 'ఈ పుటను మీ వీక్షణ జాబితా నుండి తొలగించాలా?',
 
 # Multipage image navigation
 'imgmultipageprev' => '← మునుపటి పేజీ',
@@ -3115,10 +3254,10 @@ $1',
 'descending_abbrev'        => 'అవరోహణ',
 'table_pager_next'         => 'తరువాతి పేజీ',
 'table_pager_prev'         => 'ముందరి పేజీ',
-'table_pager_first'        => 'మొదటి పుట',
+'table_pager_first'        => 'మొదటి పేజీ',
 'table_pager_last'         => 'చివరి పేజీ',
 'table_pager_limit'        => 'పేజీకి $1 అంశాలను చూపించు',
-'table_pager_limit_label'  => 'పుటకి ఎన్ని అంశాలు:',
+'table_pager_limit_label'  => 'పేజీకి ఎన్ని అంశాలు:',
 'table_pager_limit_submit' => 'వెళ్ళు',
 'table_pager_empty'        => 'ఫలితాలు లేవు',
 
@@ -3164,38 +3303,40 @@ $1',
 'watchlisttools-edit' => 'వీక్షణ జాబితాను చూపించు, మార్చు',
 'watchlisttools-raw'  => 'ముడి వీక్షణ జాబితాలో మార్పులు చెయ్యి',
 
+# Signatures
+'signature' => '[[{{ns:user}}:$1|$2]] ([[{{ns:user_talk}}:$1|చర్చ]])',
+
 # Core parser functions
 'unknown_extension_tag' => '"$1" అనే ట్యాగు ఈ పొడిగింతకు తెలియదు',
 'duplicate-defaultsort' => 'హెచ్చరిక: డిఫాల్టు పేర్చు కీ "$2", గత డిఫాల్టు పేర్చు కీ "$1" ని అతిక్రమిస్తుంది.',
 
 # Special:Version
-'version'                          => 'సంచిక',
-'version-extensions'               => 'స్థాపించిన పొడగింతలు',
-'version-specialpages'             => 'ప్రత్యేక పేజీలు',
-'version-parserhooks'              => 'పార్సరు కొక్కాలు',
-'version-variables'                => 'చరరాశులు',
-'version-skins'                    => 'అలంకారాలు',
-'version-other'                    => 'ఇతర',
-'version-mediahandlers'            => 'మీడియాను ఫైళ్లను నడిపించే పొడిగింపులు',
-'version-hooks'                    => 'కొక్కాలు',
-'version-extension-functions'      => 'పొడిగింపు ఫంక్షనులు',
-'version-parser-extensiontags'     => 'పార్సరు పొడిగింపు ట్యాగులు',
-'version-parser-function-hooks'    => 'పార్సరుకు కొక్కాలు',
-'version-skin-extension-functions' => 'తొడుగును మెరుగుపరిచే ఫంక్షనులు',
-'version-hook-name'                => 'కొక్కెం పేరు',
-'version-hook-subscribedby'        => 'ఉపయోగిస్తున్నవి',
-'version-version'                  => '(సంచిక $1)',
-'version-license'                  => 'లైసెన్సు',
-'version-poweredby-credits'        => "ఈ వికీ  '''[http://www.mediawiki.org/ మీడియావికీ]'''చే శక్తిమంతం, కాపీహక్కులు  © 2001-$1 $2.",
-'version-poweredby-others'         => 'ఇతరులు',
-'version-license-info'             => 'మీడియావికీ అన్నది స్వేచ్ఛా మృదూపకరణం; మీరు దీన్ని పునఃపంపిణీ చేయవచ్చు మరియు/లేదా ఫ్రీ సాఫ్ట్&zwnj;వేర్ ఫౌండేషన్ ప్రచురించిన గ్నూ జనరల్ పబ్లిక్ లైసెస్సు వెర్షను 2 లేదా (మీ ఎంపిక ప్రకారం) అంతకంటే కొత్త వెర్షను యొక్క నియమాలకు లోబడి మార్చుకోవచ్చు.
+'version'                       => 'సంచిక',
+'version-extensions'            => 'స్థాపించిన పొడగింతలు',
+'version-specialpages'          => 'ప్రత్యేక పేజీలు',
+'version-parserhooks'           => 'పార్సరు కొక్కాలు',
+'version-variables'             => 'చరరాశులు',
+'version-skins'                 => 'అలంకారాలు',
+'version-other'                 => 'ఇతర',
+'version-mediahandlers'         => 'మీడియాను ఫైళ్లను నడిపించే పొడిగింపులు',
+'version-hooks'                 => 'కొక్కాలు',
+'version-extension-functions'   => 'పొడిగింపు ఫంక్షనులు',
+'version-parser-extensiontags'  => 'పార్సరు పొడిగింపు ట్యాగులు',
+'version-parser-function-hooks' => 'పార్సరుకు కొక్కాలు',
+'version-hook-name'             => 'కొక్కెం పేరు',
+'version-hook-subscribedby'     => 'ఉపయోగిస్తున్నవి',
+'version-version'               => '(సంచిక $1)',
+'version-license'               => 'లైసెన్సు',
+'version-poweredby-credits'     => "ఈ వికీ  '''[//www.mediawiki.org/ మీడియావికీ]'''చే శక్తిమంతం, కాపీహక్కులు  © 2001-$1 $2.",
+'version-poweredby-others'      => 'ఇతరులు',
+'version-license-info'          => 'మీడియావికీ అన్నది స్వేచ్ఛా మృదూపకరణం; మీరు దీన్ని పునఃపంపిణీ చేయవచ్చు మరియు/లేదా ఫ్రీ సాఫ్ట్&zwnj;వేర్ ఫౌండేషన్ ప్రచురించిన గ్నూ జనరల్ పబ్లిక్ లైసెస్సు వెర్షను 2 లేదా (మీ ఎంపిక ప్రకారం) అంతకంటే కొత్త వెర్షను యొక్క నియమాలకు లోబడి మార్చుకోవచ్చు.
 
 మీడియావికీ ప్రజోపయోగ ఆకాంక్షతో పంపిణీ చేయబడుతుంది, కానీ ఎటువంటి వారంటీ లేకుండా; కనీసం ఏదైనా ప్రత్యేక ఉద్దేశానికి సరిపడుతుందని గానీ లేదా వస్తుత్వం యొక్క అంతర్నిహిత వారంటీ లేకుండా. మరిన్ని వివరాలకు గ్నూ జనరల్ పబ్లిక్ లైసెన్సుని చూడండి.
 
-ఈ ఉపకరణంతో పాటు మీకు [{{SERVER}}{{SCRIPTPATH}}/COPYING గ్నూ జనరల్ పబ్లిక్ లైసెన్సు  యొక్క ఒక కాపీ] అందివుండాలి; లేకపోతే, Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA అన్న చిరునామాకి వ్రాయండి లేదా [http://www.gnu.org/licenses/old-licenses/gpl-2.0.html జాలం లోనే చదవండి].',
-'version-software'                 => 'ప్రవేశపెట్టిన సాఫ్టువేర్లు',
-'version-software-product'         => 'ప్రోడక్టు',
-'version-software-version'         => 'వెర్షను',
+ఈ ఉపకరణంతో పాటు మీకు [{{SERVER}}{{SCRIPTPATH}}/COPYING గ్నూ జనరల్ పబ్లిక్ లైసెన్సు  యొక్క ఒక కాపీ] అందివుండాలి; లేకపోతే, Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA అన్న చిరునామాకి వ్రాయండి లేదా [//www.gnu.org/licenses/old-licenses/gpl-2.0.html జాలం లోనే చదవండి].',
+'version-software'              => 'ప్రవేశపెట్టిన సాఫ్టువేర్లు',
+'version-software-product'      => 'ప్రోడక్టు',
+'version-software-version'      => 'వెర్షను',
 
 # Special:FilePath
 'filepath'         => 'పూర్తి చిరునామా',
@@ -3217,11 +3358,11 @@ $1',
 'fileduplicatesearch-noresults' => '"$1" అనే పేరుగల దస్త్రమేమీ కనబడలేదు.',
 
 # Special:SpecialPages
-'specialpages'                   => 'ప్రత్యేక పుటలు',
+'specialpages'                   => 'ప్రత్యేక పేజీలు',
 'specialpages-note'              => '----
 * మామూలు ప్రత్యేక పుటలు.
 * <strong class="mw-specialpagerestricted">నియంత్రిత ప్రత్యేక పుటలు.</strong>
-* <span class="mw-specialpagecached">Cached-only ప్రత్యేక పుటలు.</span>',
+* <span class="mw-specialpagecached">Cached ప్రత్యేక పుటలు (పాతబడి ఉండొచ్చు).</span>',
 'specialpages-group-maintenance' => 'నిర్వహణా నివేదికలు',
 'specialpages-group-other'       => 'ఇతర ప్రత్యేక పేజీలు',
 'specialpages-group-login'       => 'ప్రవేశించండి / నమోదుచేసుకోండి',
@@ -3263,13 +3404,15 @@ $1',
 'tags-hitcount'           => '$1 {{PLURAL:$1|మార్పు|మార్పులు}}',
 
 # Special:ComparePages
-'comparepages'     => 'పుటల పోలిక',
-'compare-selector' => 'పుట కూర్పుల పోలిక',
-'compare-page1'    => 'పుట 1',
-'compare-page2'    => 'పుట 2',
-'compare-rev1'     => 'కూర్పు 1',
-'compare-rev2'     => 'కూర్పు 2',
-'compare-submit'   => 'పోల్చిచూడు',
+'comparepages'             => 'పుటల పోలిక',
+'compare-selector'         => 'పుట కూర్పుల పోలిక',
+'compare-page1'            => 'పుట 1',
+'compare-page2'            => 'పుట 2',
+'compare-rev1'             => 'కూర్పు 1',
+'compare-rev2'             => 'కూర్పు 2',
+'compare-submit'           => 'పోల్చిచూడు',
+'compare-invalid-title'    => 'మీరు ఇచ్చిన శీర్షిక చెల్లనిది.',
+'compare-title-not-exists' => 'మీరు పేర్కొన్న శీర్షిక లేనే లేదు.',
 
 # Database error messages
 'dberr-header'      => 'ఈ వికీ సమస్యాత్మకంగా ఉంది',
@@ -3296,13 +3439,10 @@ $1',
 'sqlite-has-fts' => '$1 పూర్తి-పాఠ్య అన్వేషణ తోడ్పాటుతో',
 'sqlite-no-fts'  => '$1 పూర్తి-పాఠ్య అన్వేషణ తోడ్పాటు లేకుండా',
 
-# Special:DisableAccount
-'disableaccount'             => 'వాడుకరి ఖాతాని అచేతనంచేయి',
-'disableaccount-user'        => 'వాడుకరిపేరు:',
-'disableaccount-reason'      => 'కారణం:',
-'disableaccount-mustconfirm' => 'ఈ ఖాతాని అచేతనించదలచుకున్నారు మీరు తప్పనిసరిగా నిర్ధారించాలి.',
-'disableaccount-nosuchuser'  => '"$1" అనే వాడుకరి ఖాతా లేనే లేదు.',
-'disableaccount-success'     => '"$1" అనే వాడుకరి ఖాతాని శాశ్వతంగా అచేతనం చేసారు.',
-'disableaccount-logentry'    => 'వాడుకరి ఖాతా [[$1]] ను శాశ్వతంగా అచేతనించారు',
+# New logging system
+'revdelete-restricted'       => 'నిర్వాహకులకు ఆంక్షలు విధించాను',
+'revdelete-unrestricted'     => 'నిర్వాహకులకున్న ఆంక్షలను ఎత్తేశాను',
+'logentry-newusers-newusers' => '$1 వాడుకరి ఖాతాను {{GENDER:$2|సృష్టించారు}}',
+'newuserlog-byemail'         => 'ఈ-మెయిలులో సంకేతపదం పంపించాం',
 
 );

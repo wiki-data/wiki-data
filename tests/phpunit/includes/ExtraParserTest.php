@@ -9,10 +9,14 @@ class ExtraParserTest extends MediaWikiTestCase {
 		global $wgMemc;
 		global $wgContLang;
 		global $wgShowDBErrorBacktrace;
+		global $wgLanguageCode;
+		global $wgAlwaysUseTidy;
 
 		$wgShowDBErrorBacktrace = true;
+		$wgLanguageCode = 'en';
 		$wgContLang = new Language( 'en' );
 		$wgMemc = new EmptyBagOStuff;
+		$wgAlwaysUseTidy = false;
 		
 		$this->options = new ParserOptions;
 		$this->options->setTemplateCallback( array( __CLASS__, 'statelessFetchTemplate' ) );
@@ -41,13 +45,11 @@ class ExtraParserTest extends MediaWikiTestCase {
 	}
 	
 	function testPreSaveTransform() {
-		global $wgUser, $wgTitle;
+		global $wgUser;
 		$title = Title::newFromText( __FUNCTION__ );
-		$oldTitle = $wgTitle; $wgTitle = $title; # Used by transformMsg()
 		$outputText = $this->parser->preSaveTransform( "Test\r\n{{subst:Foo}}\n{{Bar}}", $title, $wgUser, $this->options );
 
 		$this->assertEquals( "Test\nContent of ''Template:Foo''\n{{Bar}}", $outputText );
-		$wgTitle = $oldTitle;
 	}
 	
 	function testPreprocess() {
@@ -61,10 +63,32 @@ class ExtraParserTest extends MediaWikiTestCase {
 	 * cleanSig() makes all templates substs and removes tildes
 	 */
 	function testCleanSig() {
+		global $wgCleanSignatures;
+		$oldCleanSignature = $wgCleanSignatures;
+		$wgCleanSignatures = true;
+
 		$title = Title::newFromText( __FUNCTION__ );
 		$outputText = $this->parser->cleanSig( "{{Foo}} ~~~~" );
+
+		$wgCleanSignatures = $oldCleanSignature;
 		
 		$this->assertEquals( "{{SUBST:Foo}} ", $outputText );
+	}
+
+	/**
+	 * cleanSig() should do nothing if disabled
+	 */
+	function testCleanSigDisabled() {
+		global $wgCleanSignatures;
+		$oldCleanSignature = $wgCleanSignatures;
+		$wgCleanSignatures = false;
+
+		$title = Title::newFromText( __FUNCTION__ );
+		$outputText = $this->parser->cleanSig( "{{Foo}} ~~~~" );
+
+		$wgCleanSignatures = $oldCleanSignature;
+		
+		$this->assertEquals( "{{Foo}} ~~~~", $outputText );
 	}
 	
 	/**
@@ -109,5 +133,21 @@ class ExtraParserTest extends MediaWikiTestCase {
 			'text' => $text,
 			'finalTitle' => $title,
 			'deps' => $deps );
+	}
+	function testTrackingCategory() {
+		$title = Title::newFromText( __FUNCTION__ );
+		$catName =  wfMsgForContent( 'broken-file-category' );
+		$cat = Title::makeTitleSafe( NS_CATEGORY, $catName );
+		$expected = array( $cat->getDBkey() );
+		$parserOutput = $this->parser->parse( "[[file:nonexistent]]" , $title, $this->options );
+		$result = $parserOutput->getCategoryLinks();
+		$this->assertEquals( $expected, $result );
+	}
+	function testTrackingCategorySpecial() {
+		// Special pages shouldn't have tracking cats.
+		$title = SpecialPage::getTitleFor( 'Contributions' );
+		$parserOutput = $this->parser->parse( "[[file:nonexistent]]" , $title, $this->options );
+		$result = $parserOutput->getCategoryLinks();
+		$this->assertEmpty( $result );
 	}
  }

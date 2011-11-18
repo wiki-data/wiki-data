@@ -24,11 +24,6 @@
  * @file
  */
 
-if ( !defined( 'MEDIAWIKI' ) ) {
-	// Eclipse helper - will be ignored in production
-	require_once( 'ApiBase.php' );
-}
-
 /**
  * API module that imports an XML file like Special:Import does
  *
@@ -41,14 +36,13 @@ class ApiImport extends ApiBase {
 	}
 
 	public function execute() {
-		global $wgUser;
-
+		$user = $this->getUser();
 		$params = $this->extractRequestParams();
 
 		$isUpload = false;
 		if ( isset( $params['interwikisource'] ) ) {
-			if ( !$wgUser->isAllowed( 'import' ) ) {
-				$this->dieUsageMsg( array( 'cantimport' ) );
+			if ( !$user->isAllowed( 'import' ) ) {
+				$this->dieUsageMsg( 'cantimport' );
 			}
 			if ( !isset( $params['interwikipage'] ) ) {
 				$this->dieUsageMsg( array( 'missingparam', 'interwikipage' ) );
@@ -61,8 +55,8 @@ class ApiImport extends ApiBase {
 			);
 		} else {
 			$isUpload = true;
-			if ( !$wgUser->isAllowed( 'importupload' ) ) {
-				$this->dieUsageMsg( array( 'cantimport-upload' ) );
+			if ( !$user->isAllowed( 'importupload' ) ) {
+				$this->dieUsageMsg( 'cantimport-upload' );
 			}
 			$source = ImportStreamSource::newFromUpload( 'xml' );
 		}
@@ -88,8 +82,9 @@ class ApiImport extends ApiBase {
 		}
 
 		$resultData = $reporter->getData();
-		$this->getResult()->setIndexedTagName( $resultData, 'page' );
-		$this->getResult()->addValue( null, $this->getModuleName(), $resultData );
+		$result = $this->getResult();
+		$result->setIndexedTagName( $resultData, 'page' );
+		$result->addValue( null, $this->getModuleName(), $resultData );
 	}
 
 	public function mustBePosted() {
@@ -157,15 +152,19 @@ class ApiImport extends ApiBase {
 		return '';
 	}
 
-	protected function getExamples() {
+	public function getExamples() {
 		return array(
 			'Import [[meta:Help:Parserfunctions]] to namespace 100 with full history:',
 			'  api.php?action=import&interwikisource=meta&interwikipage=Help:ParserFunctions&namespace=100&fullhistory=&token=123ABC',
 		);
 	}
 
+	public function getHelpUrls() {
+		return 'http://www.mediawiki.org/wiki/API:Import';
+	}
+
 	public function getVersion() {
-		return __CLASS__ . ': $Id: ApiImport.php 85585 2011-04-06 22:16:38Z brion $';
+		return __CLASS__ . ': $Id: ApiImport.php 103273 2011-11-16 00:17:26Z johnduhart $';
 	}
 }
 
@@ -176,6 +175,14 @@ class ApiImport extends ApiBase {
 class ApiImportReporter extends ImportReporter {
 	private $mResultArr = array();
 
+	/**
+	 * @param $title Title
+	 * @param $origTitle Title
+	 * @param $revisionCount int
+	 * @param $successCount int
+	 * @param $pageInfo
+	 * @return void
+	 */
 	function reportPage( $title, $origTitle, $revisionCount, $successCount, $pageInfo ) {
 		// Add a result entry
 		$r = array();

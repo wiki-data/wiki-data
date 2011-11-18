@@ -8,7 +8,7 @@
 
 require_once( dirname(__FILE__) . '/../../maintenance/Maintenance.php' );
 
-/*
+/**
  * Class for handling database updates. Roughly based off of updaters.inc, with
  * a few improvements :)
  *
@@ -31,12 +31,6 @@ abstract class DatabaseUpdater {
 	protected $extensionUpdates = array();
 
 	/**
-	 * Used to hold schema files during installation process
-	 * @var array
-	 */
-	protected $newExtensions = array();
-
-	/**
 	 * Handle to the database subclass
 	 *
 	 * @var DatabaseBase
@@ -46,7 +40,11 @@ abstract class DatabaseUpdater {
 	protected $shared = false;
 
 	protected $postDatabaseUpdateMaintenance = array(
-		'DeleteDefaultMessages'
+		'DeleteDefaultMessages',
+		'PopulateRevisionLength',
+		'PopulateRevisionSha1',
+		'PopulateImageSha1',
+		'FixExtLinksProtocolRelative',
 	);
 
 	/**
@@ -65,7 +63,9 @@ abstract class DatabaseUpdater {
 		} else {
 			$this->maintenance = new FakeMaintenance;
 		}
+		$this->maintenance->setDB( $db );
 		$this->initOldGlobals();
+		$this->loadExtensions();
 		wfRunHooks( 'LoadExtensionSchemaUpdates', array( $this ) );
 	}
 
@@ -88,7 +88,25 @@ abstract class DatabaseUpdater {
 	}
 
 	/**
-	 * @static
+	 * Loads LocalSettings.php, if needed, and initialises everything needed for LoadExtensionSchemaUpdates hook
+	 */
+	private function loadExtensions() {
+		if ( !defined( 'MEDIAWIKI_INSTALL' ) ) {
+			return; // already loaded
+		}
+		$vars = Installer::getExistingLocalSettings();
+		if ( !$vars ) {
+			return; // no LocalSettings found
+		}
+		if ( !isset( $vars['wgHooks'] ) || !isset( $vars['wgHooks']['LoadExtensionSchemaUpdates'] ) ) {
+			return;
+		}
+		global $wgHooks, $wgAutoloadClasses;
+		$wgHooks['LoadExtensionSchemaUpdates'] = $vars['wgHooks']['LoadExtensionSchemaUpdates'];
+		$wgAutoloadClasses = $wgAutoloadClasses + $vars['wgAutoloadClasses'];
+	}
+
+	/**
 	 * @throws MWException
 	 * @param DatabaseBase $db
 	 * @param bool $shared
@@ -157,20 +175,29 @@ abstract class DatabaseUpdater {
 	}
 
 	/**
-	 * Add a brand new extension to MediaWiki. Used during the initial install
-	 * @param $ext String Name of extension
-	 * @param $sqlPath String Full path to the schema file
+	 * @param $tableName string
+	 * @param $indexName string
+	 * @param $sqlPath string
 	 */
-	public function addNewExtension( $ext, $sqlPath ) {
-		$this->newExtensions[ strtolower( $ext ) ] = $sqlPath;
+	public function addExtensionIndex( $tableName, $indexName, $sqlPath ) {
+		$this->extensionUpdates[] = array( 'addIndex', $tableName, $indexName, $sqlPath, true );
 	}
 
 	/**
-	 * Get the list of extensions that registered a schema with our DB type
-	 * @return array
+	 * @param $tableName string
+	 * @param $columnName string
+	 * @param $sqlPath string
 	 */
-	public function getNewExtensions() {
-		return $this->newExtensions;
+	public function addExtensionField( $tableName, $columnName, $sqlPath ) {
+		$this->extensionUpdates[] = array( 'addField', $tableName, $columnName, $sqlPath, true );
+	}
+
+	/**
+	 * Add a maintenance script to be run after the database updates are complete
+	 * @param $class string Name of a Maintenance subclass
+	 */
+	public function addPostDatabaseUpdateMaintenance( $class ) {
+		$this->postDatabaseUpdateMaintenance[] = $class;
 	}
 
 	/**
@@ -182,6 +209,9 @@ abstract class DatabaseUpdater {
 		return $this->extensionUpdates;
 	}
 
+	/**
+	 * @return array
+	 */
 	public function getPostDatabaseUpdateMaintenance() {
 		return $this->postDatabaseUpdateMaintenance;
 	}
@@ -191,7 +221,7 @@ abstract class DatabaseUpdater {
 	 *
 	 * @param $what Array: what updates to perform
 	 */
-	public function doUpdates( $what = array( 'core', 'extensions', 'purge' ) ) {
+	public function doUpdates( $what = array( 'core', 'extensions', 'purge', 'stats' ) ) {
 		global $wgVersion;
 
 		$what = array_flip( $what );
@@ -207,8 +237,9 @@ abstract class DatabaseUpdater {
 
 		if( isset( $what['purge'] ) ) {
 			$this->purgeCache();
+			$this->rebuildLocalisationCache();
 		}
-		if ( isset( $what['core'] ) ) {
+		if ( isset( $what['stats'] ) ) {
 			$this->checkStats();
 		}
 	}
@@ -234,7 +265,12 @@ abstract class DatabaseUpdater {
 		$this->updates = array_merge( $this->updates, $updates );
 	}
 
+	/**
+	 * @param $version
+	 * @param $updates array
+	 */
 	protected function setAppliedUpdates( $version, $updates = array() ) {
+		$this->db->clearFlag( DBO_DDLMODE );
 		if( !$this->canUseNewUpdatelog() ) {
 			return;
 		}
@@ -242,12 +278,16 @@ abstract class DatabaseUpdater {
 		$this->db->insert( 'updatelog',
 			array( 'ul_key' => $key, 'ul_value' => serialize( $updates ) ),
 			 __METHOD__ );
+		$this->db->setFlag( DBO_DDLMODE );
 	}
 
 	/**
 	 * Helper function: check if the given key is present in the updatelog table.
 	 * Obviously, only use this for updates that occur after the updatelog table was
 	 * created!
+	 * @param $key String Name of the key to check for
+	 *
+	 * @return bool
 	 */
 	public function updateRowExists( $key ) {
 		$row = $this->db->selectRow(
@@ -260,6 +300,23 @@ abstract class DatabaseUpdater {
 	}
 
 	/**
+	 * Helper function: Add a key to the updatelog table
+	 * Obviously, only use this for updates that occur after the updatelog table was
+	 * created!
+	 * @param $key String Name of key to insert
+	 * @param $val String [optional] value to insert along with the key
+	 */
+	public function insertUpdateRow( $key, $val = null ) {
+		$this->db->clearFlag( DBO_DDLMODE );
+		$values = array( 'ul_key' => $key );
+		if( $val && $this->canUseNewUpdatelog() ) {
+			$values['ul_value'] = $val;
+		}
+		$this->db->insert( 'updatelog', $values, __METHOD__, 'IGNORE' );
+		$this->db->setFlag( DBO_DDLMODE );
+	}
+
+	/**
 	 * Updatelog was changed in 1.17 to have a ul_value column so we can record
 	 * more information about what kind of updates we've done (that's what this
 	 * class does). Pre-1.17 wikis won't have this column, and really old wikis
@@ -268,8 +325,8 @@ abstract class DatabaseUpdater {
 	 * @return boolean
 	 */
 	protected function canUseNewUpdatelog() {
-		return $this->db->tableExists( 'updatelog' ) &&
-			$this->db->fieldExists( 'updatelog', 'ul_value' );
+		return $this->db->tableExists( 'updatelog', __METHOD__ ) &&
+			$this->db->fieldExists( 'updatelog', 'ul_value', __METHOD__ );
 	}
 
 	/**
@@ -277,6 +334,8 @@ abstract class DatabaseUpdater {
 	 * $wgExtNewTables/Fields/Indexes. This is nasty :) We refactored a lot
 	 * of this in 1.17 but we want to remain back-compatible for a while. So
 	 * load up these old global-based things into our update list.
+	 *
+	 * @return array
 	 */
 	protected function getOldGlobalUpdates() {
 		global $wgExtNewFields, $wgExtNewTables, $wgExtModifiedFields,
@@ -350,7 +409,7 @@ abstract class DatabaseUpdater {
 	 * @param $fullpath Boolean Whether to treat $patch path as a relative or not
 	 */
 	protected function addTable( $name, $patch, $fullpath = false ) {
-		if ( $this->db->tableExists( $name ) ) {
+		if ( $this->db->tableExists( $name, __METHOD__ ) ) {
 			$this->output( "...$name table already exists.\n" );
 		} else {
 			$this->output( "Creating $name table..." );
@@ -367,9 +426,9 @@ abstract class DatabaseUpdater {
 	 * @param $fullpath Boolean Whether to treat $patch path as a relative or not
 	 */
 	protected function addField( $table, $field, $patch, $fullpath = false ) {
-		if ( !$this->db->tableExists( $table ) ) {
+		if ( !$this->db->tableExists( $table, __METHOD__ ) ) {
 			$this->output( "...$table table does not exist, skipping new field patch\n" );
-		} elseif ( $this->db->fieldExists( $table, $field ) ) {
+		} elseif ( $this->db->fieldExists( $table, $field, __METHOD__ ) ) {
 			$this->output( "...have $field field in $table table.\n" );
 		} else {
 			$this->output( "Adding $field field to table $table..." );
@@ -386,7 +445,7 @@ abstract class DatabaseUpdater {
 	 * @param $fullpath Boolean Whether to treat $patch path as a relative or not
 	 */
 	protected function addIndex( $table, $index, $patch, $fullpath = false ) {
-		if ( $this->db->indexExists( $table, $index ) ) {
+		if ( $this->db->indexExists( $table, $index, __METHOD__ ) ) {
 			$this->output( "...$index key already set on $table table.\n" );
 		} else {
 			$this->output( "Adding $index key to table $table... " );
@@ -404,7 +463,7 @@ abstract class DatabaseUpdater {
 	 * @param $fullpath Boolean Whether to treat $patch path as a relative or not
 	 */
 	protected function dropField( $table, $field, $patch, $fullpath = false ) {
-		if ( $this->db->fieldExists( $table, $field ) ) {
+		if ( $this->db->fieldExists( $table, $field, __METHOD__ ) ) {
 			$this->output( "Table $table contains $field field. Dropping... " );
 			$this->applyPatch( $patch, $fullpath );
 			$this->output( "ok\n" );
@@ -422,12 +481,27 @@ abstract class DatabaseUpdater {
 	 * @param $fullpath Boolean: Whether to treat $patch path as a relative or not
 	 */
 	protected function dropIndex( $table, $index, $patch, $fullpath = false ) {
-		if ( $this->db->indexExists( $table, $index ) ) {
-			$this->output( "Dropping $index from table $table... " );
+		if ( $this->db->indexExists( $table, $index, __METHOD__ ) ) {
+			$this->output( "Dropping $index key from table $table... " );
 			$this->applyPatch( $patch, $fullpath );
 			$this->output( "ok\n" );
 		} else {
 			$this->output( "...$index key doesn't exist.\n" );
+		}
+	}
+
+	/**
+	 * @param $table string
+	 * @param $patch string
+	 * @param $fullpath bool
+	 */
+	protected function dropTable( $table, $patch, $fullpath = false ) {
+		if ( $this->db->tableExists( $table, __METHOD__ ) ) {
+			$this->output( "Dropping table $table... " );
+			$this->applyPatch( $patch, $fullpath );
+			$this->output( "ok\n" );
+		} else {
+			$this->output( "...$table doesn't exist.\n" );
 		}
 	}
 
@@ -440,13 +514,17 @@ abstract class DatabaseUpdater {
 	 * @param $fullpath Boolean: whether to treat $patch path as a relative or not
 	 */
 	public function modifyField( $table, $field, $patch, $fullpath = false ) {
-		if ( !$this->db->tableExists( $table ) ) {
+		$updateKey = "$table-$field-$patch";
+		if ( !$this->db->tableExists( $table, __METHOD__ ) ) {
 			$this->output( "...$table table does not exist, skipping modify field patch\n" );
-		} elseif ( !$this->db->fieldExists( $table, $field ) ) {
+		} elseif ( !$this->db->fieldExists( $table, $field, __METHOD__ ) ) {
 			$this->output( "...$field field does not exist in $table table, skipping modify field patch\n" );
+		} elseif( $this->updateRowExists( $updateKey ) ) {
+			$this->output( "...$field in table $table already modified by patch $patch\n" );
 		} else {
 			$this->output( "Modifying $field field of table $table..." );
 			$this->applyPatch( $patch, $fullpath );
+			$this->insertUpdateRow( $updateKey );
 			$this->output( "ok\n" );
 		}
 	}
@@ -476,11 +554,14 @@ abstract class DatabaseUpdater {
 			$this->output( "done.\n" );
 			return;
 		}
-		SiteStatsInit::doAllAndCommit( false );
+		SiteStatsInit::doAllAndCommit( $this->db );
 	}
 
 	# Common updater functions
 
+	/**
+	 * Sets the number of active users in the site_stats table
+	 */
 	protected function doActiveUsersInit() {
 		$activeUsers = $this->db->selectField( 'site_stats', 'ss_active_users', false, __METHOD__ );
 		if ( $activeUsers == -1 ) {
@@ -496,36 +577,39 @@ abstract class DatabaseUpdater {
 		$this->output( "...ss_active_users user count set...\n" );
 	}
 
+	/**
+	 * Populates the log_user_text field in the logging table
+	 */
 	protected function doLogUsertextPopulation() {
-		if ( $this->updateRowExists( 'populate log_usertext' ) ) {
-			$this->output( "...log_user_text field already populated.\n" );
-			return;
-		}
-
-		$this->output(
+		if ( !$this->updateRowExists( 'populate log_usertext' ) ) {
+			$this->output(
 			"Populating log_user_text field, printing progress markers. For large\n" .
 			"databases, you may want to hit Ctrl-C and do this manually with\n" .
 			"maintenance/populateLogUsertext.php.\n" );
-		$task = new PopulateLogUsertext();
-		$task->execute();
-		$this->output( "Done populating log_user_text field.\n" );
-	}
 
-	protected function doLogSearchPopulation() {
-		if ( $this->updateRowExists( 'populate log_search' ) ) {
-			$this->output( "...log_search table already populated.\n" );
-			return;
+			$task = $this->maintenance->runChild( 'PopulateLogUsertext' );
+			$task->execute();
 		}
-
-		$this->output(
-			"Populating log_search table, printing progress markers. For large\n" .
-			"databases, you may want to hit Ctrl-C and do this manually with\n" .
-			"maintenance/populateLogSearch.php.\n" );
-		$task = new PopulateLogSearch();
-		$task->execute();
-		$this->output( "Done populating log_search table.\n" );
 	}
 
+	/**
+	 * Migrate log params to new table and index for searching
+	 */
+	protected function doLogSearchPopulation() {
+		if ( !$this->updateRowExists( 'populate log_search' ) ) {
+			$this->output(
+				"Populating log_search table, printing progress markers. For large\n" .
+				"databases, you may want to hit Ctrl-C and do this manually with\n" .
+				"maintenance/populateLogSearch.php.\n" );
+
+			$task = $this->maintenance->runChild( 'PopulateLogSearch' );
+			$task->execute();
+		}
+	}
+
+	/**
+	 * Updates the timestamps in the transcache table
+	 */
 	protected function doUpdateTranscacheField() {
 		if ( $this->updateRowExists( 'convert transcache field' ) ) {
 			$this->output( "...transcache tc_time already converted.\n" );
@@ -537,6 +621,9 @@ abstract class DatabaseUpdater {
 		$this->output( "ok\n" );
 	}
 
+	/**
+	 * Update CategoryLinks collation
+	 */
 	protected function doCollationUpdate() {
 		global $wgCategoryCollation;
 		if ( $this->db->selectField(
@@ -549,7 +636,31 @@ abstract class DatabaseUpdater {
 			return;
 		}
 
-		$task = new UpdateCollation();
+		$task = $this->maintenance->runChild( 'UpdateCollation' );
 		$task->execute();
+	}
+
+	/**
+	 * Migrates user options from the user table blob to user_properties
+	 */
+	protected function doMigrateUserOptions() {
+		$cl = $this->maintenance->runChild( 'ConvertUserOptions', 'convertUserOptions.php' );
+		$this->output( "Migrating remaining user_options... " );
+		$cl->execute();
+		$this->output( "done.\n" );
+	}
+
+	/**
+	 * Rebuilds the localisation cache
+	 */
+	protected function rebuildLocalisationCache() {
+		/**
+		 * @var $cl RebuildLocalisationCache
+		 */
+		$cl = $this->maintenance->runChild( 'RebuildLocalisationCache', 'rebuildLocalisationCache.php' );
+		$this->output( "Rebuilding localisation cache...\n" );
+		$cl->setForce();
+		$cl->execute();
+		$this->output( "Rebuilding localisation cache done.\n" );
 	}
 }

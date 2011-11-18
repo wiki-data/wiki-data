@@ -24,11 +24,6 @@
  * @file
  */
 
-if ( !defined( 'MEDIAWIKI' ) ) {
-	// Eclipse helper - will be ignored in production
-	require_once( "ApiQueryBase.php" );
-}
-
 /**
  * A query module to list all external URLs found on a given set of pages.
  *
@@ -69,8 +64,14 @@ class ApiQueryExternalLinks extends ApiQueryBase {
 			$this->addOption( 'ORDER BY', 'el_from' );
 		}
 
+		// If we're querying all protocols, use DISTINCT to avoid repeating protocol-relative links twice
+		if ( $protocol === null ) {
+			$this->addOption( 'DISTINCT' );
+		}
+
 		$this->addOption( 'LIMIT', $params['limit'] + 1 );
-		if ( !is_null( $params['offset'] ) ) {
+		$offset = isset( $params['offset'] ) ? $params['offset'] : 0;
+		if ( $offset ) {
 			$this->addOption( 'OFFSET', $params['offset'] );
 		}
 
@@ -81,14 +82,15 @@ class ApiQueryExternalLinks extends ApiQueryBase {
 			if ( ++$count > $params['limit'] ) {
 				// We've reached the one extra which shows that
 				// there are additional pages to be had. Stop here...
-				$this->setContinueEnumParameter( 'offset', @$params['offset'] + $params['limit'] );
+				$this->setContinueEnumParameter( 'offset', $offset + $params['limit'] );
 				break;
 			}
 			$entry = array();
+			// We *could* run this through wfExpandUrl() but I think it's better to output the link verbatim, even if it's protocol-relative --Roan
 			ApiResult::setContent( $entry, $row->el_to );
 			$fit = $this->addPageSubItem( $row->el_from, $entry );
 			if ( !$fit ) {
-				$this->setContinueEnumParameter( 'offset', @$params['offset'] + $count - 1 );
+				$this->setContinueEnumParameter( 'offset', $offset + $count - 1 );
 				break;
 			}
 		}
@@ -141,14 +143,18 @@ class ApiQueryExternalLinks extends ApiQueryBase {
 		) );
 	}
 
-	protected function getExamples() {
+	public function getExamples() {
 		return array(
 			'Get a list of external links on the [[Main Page]]:',
 			'  api.php?action=query&prop=extlinks&titles=Main%20Page',
 		);
 	}
 
+	public function getHelpUrls() {
+		return 'http://www.mediawiki.org/wiki/API:Properties#extlinks_.2F_el';
+	}
+
 	public function getVersion() {
-		return __CLASS__ . ': $Id: ApiQueryExternalLinks.php 84736 2011-03-25 10:37:56Z reedy $';
+		return __CLASS__ . ': $Id: ApiQueryExternalLinks.php 103273 2011-11-16 00:17:26Z johnduhart $';
 	}
 }

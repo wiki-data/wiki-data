@@ -6,13 +6,13 @@
  * As of february 2011, it only tests some revisions and date related
  * magic variables.
  *
- * @author Ashar Voultoiz
- * @copyright Copyright © 2011, Ashar Voultoiz
+ * @author Antoine Musso
+ * @copyright Copyright © 2011, Antoine Musso
  * @file
  */
 
 /** */
-class MagicVariableTest extends PHPUnit_Framework_TestCase {
+class MagicVariableTest extends MediaWikiTestCase {
 	/** Will contains a parser object*/
 	private $testParser = null;
 
@@ -38,6 +38,12 @@ class MagicVariableTest extends PHPUnit_Framework_TestCase {
 
 		# initialize parser output
 		$this->testParser->clearState();
+
+		# Needs a title to do magic word stuff
+		$title = Title::newFromText( 'Tests' );
+		$title->mRedirect = false; # Else it needs a db connection just to check if it's a redirect (when deciding the page language)
+
+		$this->testParser->setTitle( $title );
 	}
 
 	/** destroy parser (TODO: is it really neded?)*/
@@ -46,7 +52,7 @@ class MagicVariableTest extends PHPUnit_Framework_TestCase {
 	}
 
 	############### TESTS #############################################
-	# FIXME:
+	# @todo FIXME:
 	#  - those got copy pasted, we can probably make them cleaner
 	#  - tests are lacking useful messages
 
@@ -109,6 +115,24 @@ class MagicVariableTest extends PHPUnit_Framework_TestCase {
 	/** @dataProvider MediaWikiProvide::Months */
 	function testRevisionmonthoneIsUnPadded( $month ) {
 		$this->assertUnPadded( 'revisionmonth1', $month );
+	}
+
+	/**
+	 * Rough tests for {{SERVERNAME}} magic word
+	 * Bug 31176
+	 */
+	function testServernameFromDifferentProtocols() {
+		global $wgServer;
+		$saved_wgServer= $wgServer;
+
+		$wgServer = 'http://localhost/';
+		$this->assertMagic( 'localhost', 'servername' );
+		$wgServer = 'https://localhost/';
+		$this->assertMagic( 'localhost', 'servername' );
+		$wgServer = '//localhost/';  # bug 31176
+		$this->assertMagic( 'localhost', 'servername' );
+
+		$wgServer = $saved_wgServer;
 	}
 
 	############### HELPERS ############################################

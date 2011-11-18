@@ -24,11 +24,6 @@
  * @file
  */
 
-if ( !defined( 'MEDIAWIKI' ) ) {
-	// Eclipse helper - will be ignored in production
-	require_once( "ApiQueryBase.php" );
-}
-
 /**
  * A query module to list all wiki links on a given set of pages.
  *
@@ -39,7 +34,7 @@ class ApiQueryLinks extends ApiQueryGeneratorBase {
 	const LINKS = 'links';
 	const TEMPLATES = 'templates';
 
-	private $table, $prefix, $description;
+	private $table, $prefix, $description, $helpUrl;
 
 	public function __construct( $query, $moduleName ) {
 		switch ( $moduleName ) {
@@ -48,12 +43,16 @@ class ApiQueryLinks extends ApiQueryGeneratorBase {
 				$this->prefix = 'pl';
 				$this->description = 'link';
 				$this->titlesParam = 'titles';
+				$this->titlesParamDescription = 'Only list links to these titles. Useful for checking whether a certain page links to a certain title.';
+				$this->helpUrl = 'http://www.mediawiki.org/wiki/API:Properties#links_.2F_pl';
 				break;
 			case self::TEMPLATES:
 				$this->table = 'templatelinks';
 				$this->prefix = 'tl';
 				$this->description = 'template';
 				$this->titlesParam = 'templates';
+				$this->titlesParamDescription = 'Only list these templates. Useful for checking whether a certain page uses a certain template.';
+				$this->helpUrl = 'http://www.mediawiki.org/wiki/API:Properties#templates_.2F_tl';
 				break;
 			default:
 				ApiBase::dieDebug( __METHOD__, 'Unknown module name' );
@@ -129,6 +128,7 @@ class ApiQueryLinks extends ApiQueryGeneratorBase {
 			);
 		}
 
+		$dir = ( $params['dir'] == 'descending' ? ' DESC' : '' );
 		// Here's some MySQL craziness going on: if you use WHERE foo='bar'
 		// and later ORDER BY foo MySQL doesn't notice the ORDER BY is pointless
 		// but instead goes and filesorts, because the index for foo was used
@@ -136,15 +136,15 @@ class ApiQueryLinks extends ApiQueryGeneratorBase {
 		// clause from the ORDER BY clause
 		$order = array();
 		if ( count( $this->getPageSet()->getGoodTitles() ) != 1 ) {
-			$order[] = "{$this->prefix}_from";
+			$order[] = $this->prefix . '_from' . $dir;
 		}
 		if ( count( $params['namespace'] ) != 1 ) {
-			$order[] = "{$this->prefix}_namespace";
+			$order[] = $this->prefix . '_namespace' . $dir;
 		}
 
-		$order[] = "{$this->prefix}_title";
-		$this->addOption( 'ORDER BY', implode( ', ', $order ) );
-		$this->addOption( 'USE INDEX', "{$this->prefix}_from" );
+		$order[] = $this->prefix . "_title" . $dir;
+		$this->addOption( 'ORDER BY', $order );
+		$this->addOption( 'USE INDEX', $this->prefix . '_from' );
 		$this->addOption( 'LIMIT', $params['limit'] + 1 );
 
 		$res = $this->select( __METHOD__ );
@@ -205,29 +205,32 @@ class ApiQueryLinks extends ApiQueryGeneratorBase {
 			$this->titlesParam => array(
 				ApiBase::PARAM_ISMULTI => true,
 			),
+			'dir' => array(
+				ApiBase::PARAM_DFLT => 'ascending',
+				ApiBase::PARAM_TYPE => array(
+					'ascending',
+					'descending'
+				)
+			),
 		);
 	}
 
 	public function getParamDescription() {
 		$desc = $this->description;
-		$arr = array(
+		return array(
 			'namespace' => "Show {$desc}s in this namespace(s) only",
 			'limit' => "How many {$desc}s to return",
 			'continue' => 'When more results are available, use this to continue',
+			$this->titlesParam => $this->titlesParamDescription,
+			'dir' => 'The direction in which to list',
 		);
-		if ( $this->getModuleName() == self::LINKS ) {
-			$arr[$this->titlesParam] = 'Only list links to these titles. Useful for checking whether a certain page links to a certain title.';
-		} else if ( $this->getModuleName() == self::TEMPLATES ) {
-			$arr[$this->titlesParam] = 'Only list these templates. Useful for checking whether a certain page uses a certain template.';
-		}
-		return $arr;
 	}
 
 	public function getDescription() {
 		return "Returns all {$this->description}s from the given page(s)";
 	}
 
-	protected function getExamples() {
+	public function getExamples() {
 		return array(
 			"Get {$this->description}s from the [[Main Page]]:",
 			"  api.php?action=query&prop={$this->getModuleName()}&titles=Main%20Page",
@@ -238,7 +241,11 @@ class ApiQueryLinks extends ApiQueryGeneratorBase {
 		);
 	}
 
+	public function getHelpUrls() {
+		return $this->helpUrl;
+	}
+
 	public function getVersion() {
-		return __CLASS__ . ': $Id: ApiQueryLinks.php 82429 2011-02-19 00:30:18Z reedy $';
+		return __CLASS__ . ': $Id: ApiQueryLinks.php 103273 2011-11-16 00:17:26Z johnduhart $';
 	}
 }

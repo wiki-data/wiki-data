@@ -57,8 +57,10 @@ class XxxCustomSkin extends Xxx
 		global $wgRequest;
 		if (!$wgRequest->getVal('useskin'))
 		{
-			$wgUser->setOption('skin',$this->getSkinName());
-			$wgUser->mSkin =& new SkinCustomSkin();
+		  $this->context = RequestContext::getMain();
+		  $this->context->setSkin(new SkinCustomSkin());
+//			$wgUser->setOption('skin',$this->getSkinName());
+//			$wgUser->mSkin =& 
 		}
 		return true;
 	}
@@ -114,7 +116,32 @@ class XxxCustomSkin extends Xxx
 		$this->extraHeadText .= "\n$text";
 #		die (htmlspecialchars($this->extraHeadText));
 	}
-
+	function hook_ShowMissingArticle ($a) {
+		global $wgOut,$wgNamespacesWithSubpages;
+		$t = Title::newFromText($a->mTitle->getPrefixedText());
+		$ns = $t->getNamespace();
+		if (!$t->isSubpage()) return true;
+		$parts = explode( '/', $t->getText());
+		$args = array();
+		$suffix = '';
+		while (count ($parts)>1) {
+		   array_unshift($args,array_pop($parts));
+		   $suffix .= "";
+		   $title = Title::newFromText(implode('/',$parts).$suffix,$ns);
+		   if(!$title->exists()) continue;
+		   
+		   $text = '{{:' . $title->getPrefixedText();
+		   $text .= "|path=" . preg_replace('/{/','&#123;',implode('/',$args));
+		   foreach ($args as $k=>$v) {
+		      $text.= '|'.($k+1) . "=" . preg_replace('/{/','&#123;',$v);
+		      $text.= '|sub'.($k+1) . "=" . preg_replace('/{/','&#123;',$v);
+		   }
+		   $text.="}}";
+			$wgOut->addWikiText($text);
+			return false;
+		}	
+		return true;
+	}	
 	function hook_UnknownAction($action,$article)
 	{
 		global $wgOut;
@@ -137,6 +164,8 @@ class XxxCustomSkin extends Xxx
 #			$out=htmlspecialchars($text)."\n--------------------\n";
 			$tagStack=array();
 
+      $depth = 0;
+      $color = 0;
 			while (preg_match('/^([\s\S]*?)<(\/?)(.\w+)(.*?)(\/?)>([\s\S]*?)(<\/\3>[\s\S]*)?$/',$text,$m))
 			{
 				list ($all,$before,$prefix,$tag,$attrs,$postfix,$value,$after) = $m;
@@ -176,7 +205,8 @@ class XxxCustomSkin extends Xxx
 						break;
 					case 'template':
 						$depth++;
-						$out .= "<span class=\"wiki-$tag\">" .'{{';
+						$color = ($color + 1)%10;
+						$out .= "<span class=\"wiki-$tag color-{$color} depth-{$depth}\" >" .'{{';
 						break;
 					case '/template':
 						$out .="\n" . str_repeat ("\t",$depth) . "}}</span>";
@@ -342,7 +372,7 @@ function wfXxxCustomSkinDeclare()
 			$skinArgs['HEADLINKS']		= $this->data['headlinks'];
 			$skinArgs['EXTRAHEAD']		= $wgXxxCustomSkin->extraHeadText; 
 			$skinArgs['HEADSCRIPTS'] 	= $this->data['headscripts'];
-			$skinArgs['VARSCRIPT']		= Skin::makeGlobalVariablesScript( $this->data );
+//			$skinArgs['VARSCRIPT']		= Skin::makeGlobalVariablesScript( $this->data );
 			$skinArgs['JSMIMETYPE']		= $this->data['jsmimetype'];
 			$skinArgs['STYLEPATH']		= $this->data['stylepath'];
 
@@ -422,17 +452,17 @@ function wfXxxCustomSkinDeclare()
 			$skinArgs['TOOLBOX'] = '';
 			if($this->data['notspecialpage'])
 				$skinArgs['TOOLBOX']		.='<li id="t-whatlinkshere"><a href="' . htmlspecialchars($this->data['nav_urls']['whatlinkshere']['href']). '"'
-											 . $skin->tooltipAndAccesskey('t-whatlinkshere') .'>'
+											 . Linker::tooltipAndAccesskeyAttribs('t-whatlinkshere') .'>'
 											 . wfMsg('whatlinkshere') .'</a></li>';
 
 			if( $this->data['nav_urls']['recentchangeslinked'] ) 
 				$skinArgs['TOOLBOX']		.='<li id="t-recentchangeslinked"><a href="' . htmlspecialchars($this->data['nav_urls']['recentchangeslinked']['href']). '"'
-											 . $skin->tooltipAndAccesskey('t-recentchangeslinked') .'>'
+											 . Linker::tooltipAndAccesskeyAttribs('t-recentchangeslinked') .'>'
 											 . wfMsg('recentchangeslinked') .'</a></li>';
 
 			if( $this->data['nav_urls']['trackbacklink'] ) 
 				$skinArgs['TOOLBOX']		.='<li id="t-trackbacklink"><a href="' . htmlspecialchars($this->data['nav_urls']['trackbacklink']['href']). '"'
-											 . $skin->tooltipAndAccesskey('t-trackbacklink') .'>'
+											 . Linker::tooltipAndAccesskeyAttribs('t-trackbacklink') .'>'
 											 . wfMsg('trackbacklink') .'</a></li>';
 
 			if(!empty($this->data['feeds'])) 
@@ -441,7 +471,7 @@ function wfXxxCustomSkinDeclare()
 				foreach($this->data['feeds'] as $key => $feed)
 				{
 					$skinArgs['TOOLBOX']	.='<span id="feed-' . Sanitizer::escapeId($key) .'">'
-											 .'<a href="' . htmlspecialchars($feed['href']) .'"' . $skin->tooltipAndAccesskey('feed-'.$key).'>'
+											 .'<a href="' . htmlspecialchars($feed['href']) .'"' . Linker::tooltipAndAccesskeyAttribs('feed-'.$key).'>'
 											 . htmlspecialchars($feed['text']).'></a>&nbsp;</span>';
 				}
 				$skinArgs['TOOLBOX']		.='</li>';
@@ -452,7 +482,7 @@ function wfXxxCustomSkinDeclare()
 				if($this->data['nav_urls'][$special]) 
 				{
 					$skinArgs['TOOLBOX']	.='<li id="t-' . $special .'">'
-											 .'<a href="' . htmlspecialchars($this->data['nav_urls'][$special]['href']).'"'. $skin->tooltipAndAccesskey('t-'.$special) .'>'
+											 .'<a href="' . htmlspecialchars($this->data['nav_urls'][$special]['href']).'"'. Linker::tooltipAndAccesskeyAttribs('t-'.$special) .'>'
 											 . wfMsg($special)
 											 .'</a></li>';
 				}
@@ -461,13 +491,13 @@ function wfXxxCustomSkinDeclare()
 
 			if(!empty($this->data['nav_urls']['print'])) 
 				$skinArgs['TOOLBOX']		.='<li id="t-print"><a href="' . htmlspecialchars($this->data['nav_urls']['print']['href']). '"'
-											 . $skin->tooltipAndAccesskey('t-print') .'>'
+											 . Linker::tooltipAndAccesskeyAttribs('t-print') .'>'
 											 . wfMsg('printableversion') .'</a></li>';
 
 			if(!empty($this->data['nav_urls']['permalink'])) 
 			{
 				$skinArgs['TOOLBOX']		.='<li id="t-permalink"><a href="' . htmlspecialchars($this->data['nav_urls']['permalink']['href']). '"'
-											 . $skin->tooltipAndAccesskey('t-permalink') .'>'
+											 . Linker::tooltipAndAccesskeyAttribs('t-permalink') .'>'
 											 . wfMsgForContent('permalink') .'</a></li>';
 			}
 			elseif ($this->data['nav_urls']['permalink']['href'] === '') 
@@ -503,7 +533,7 @@ function wfXxxCustomSkinDeclare()
 	 			{ 
 	 				$skinArgs['SIDEBAR']	.='<li id="' . Sanitizer::escapeId($val['id']) .'"'
 	 										. ($val['active'] ? 'class="active"':'') .'>'
-	 										. '<a href="' . htmlspecialchars($val['href']).'"'. $skin->tooltipAndAccesskey($val['id']) .'>'
+	 										. '<a href="' . htmlspecialchars($val['href']).'"'. Linker::tooltipAndAccesskeyAttribs($val['id']) .'>'
 	 										.  htmlspecialchars($val['text'])
 	 										. '</a></li>';
 				} 

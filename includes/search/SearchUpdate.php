@@ -13,10 +13,10 @@
  *
  * @ingroup Search
  */
-class SearchUpdate {
+class SearchUpdate implements DeferrableUpdate {
 
-	/* private */ var $mId = 0, $mNamespace, $mTitle, $mText;
-	/* private */ var $mTitleWords;
+	private $mId = 0, $mNamespace, $mTitle, $mText;
+	private $mTitleWords;
 
 	function __construct( $id, $title, $text = false ) {
 		$nt = Title::newFromText( $title );
@@ -37,7 +37,7 @@ class SearchUpdate {
 		global $wgContLang, $wgDisableSearchUpdate;
 
 		if( $wgDisableSearchUpdate || !$this->mId ) {
-			return false;
+			return;
 		}
 
 		wfProfileIn( __METHOD__ );

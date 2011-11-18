@@ -33,8 +33,7 @@ class RandomPage extends SpecialPage {
 	protected $extra = array(); // Extra SQL statements
 
 	public function __construct( $name = 'Randompage' ){
-		global $wgContentNamespaces;
-		$this->namespaces = $wgContentNamespaces;
+		$this->namespaces = MWNamespace::getContentNamespaces();
 		parent::__construct( $name );
 	}
 
@@ -55,9 +54,9 @@ class RandomPage extends SpecialPage {
 	}
 
 	public function execute( $par ) {
-		global $wgOut, $wgContLang, $wgRequest;
+		global $wgContLang;
 
-		if ($par) {
+		if ( $par ) {
 			$this->setNamespace( $wgContLang->getNsIndex( $par ) );
 		}
 
@@ -65,15 +64,15 @@ class RandomPage extends SpecialPage {
 
 		if( is_null( $title ) ) {
 			$this->setHeaders();
-			$wgOut->addWikiMsg( strtolower( $this->mName ) . '-nopages',
+			$this->getOutput()->addWikiMsg( strtolower( $this->getName() ) . '-nopages',
 				$this->getNsList(), count( $this->namespaces ) );
 			return;
 		}
 
 		$redirectParam = $this->isRedirect() ? array( 'redirect' => 'no' ) : array();
-		$query = array_merge( $wgRequest->getValues(), $redirectParam );
+		$query = array_merge( $this->getRequest()->getValues(), $redirectParam );
 		unset( $query['title'] );
-		$wgOut->redirect( $title->getFullUrl( $query ) );
+		$this->getOutput()->redirect( $title->getFullUrl( $query ) );
 	}
 
 	/**
@@ -86,7 +85,7 @@ class RandomPage extends SpecialPage {
 		$nsNames = array();
 		foreach( $this->namespaces as $n ) {
 			if( $n === NS_MAIN ) {
-				$nsNames[] = wfMsgForContent( 'blanknamespace' );
+				$nsNames[] = wfMsgNoTrans( 'blanknamespace' );
 			} else {
 				$nsNames[] = $wgContLang->getNsText( $n );
 			}
@@ -126,15 +125,7 @@ class RandomPage extends SpecialPage {
 	}
 
 	protected function getQueryInfo( $randstr ) {
-		global $wgExtraRandompageSQL;
 		$redirect = $this->isRedirect() ? 1 : 0;
-
-		if ( $wgExtraRandompageSQL ) {
-			$this->extra[] = $wgExtraRandompageSQL;
-		}
-		if ( $this->addExtraSQL() ) {
-			$this->extra[] = $this->addExtraSQL();
-		}
 
 		return array(
 			'tables' => array( 'page' ),
@@ -167,13 +158,5 @@ class RandomPage extends SpecialPage {
 		);
 
 		return $dbr->fetchObject( $res );
-	}
-
-	/* an alternative to $wgExtraRandompageSQL so subclasses
-	 * can add their own SQL by overriding this function
-	 * @deprecated, append to $this->extra instead
-	 */
-	public function addExtraSQL() {
-		return '';
 	}
 }

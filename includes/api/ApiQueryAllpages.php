@@ -24,11 +24,6 @@
  * @file
  */
 
-if ( !defined( 'MEDIAWIKI' ) ) {
-	// Eclipse helper - will be ignored in production
-	require_once( 'ApiQueryBase.php' );
-}
-
 /**
  * Query module to enumerate all available pages.
  *
@@ -111,29 +106,37 @@ class ApiQueryAllpages extends ApiQueryGeneratorBase {
 		}
 
 		// Page protection filtering
-		if ( !empty( $params['prtype'] ) ) {
+		if ( count( $params['prtype'] ) || $params['prexpiry'] != 'all' ) {
 			$this->addTables( 'page_restrictions' );
 			$this->addWhere( 'page_id=pr_page' );
 			$this->addWhere( 'pr_expiry>' . $db->addQuotes( $db->timestamp() ) );
-			$this->addWhereFld( 'pr_type', $params['prtype'] );
 
-			if ( isset( $params['prlevel'] ) ) {
-				// Remove the empty string and '*' from the prlevel array
-				$prlevel = array_diff( $params['prlevel'], array( '', '*' ) );
+			if ( count( $params['prtype'] ) ) {
+				$this->addWhereFld( 'pr_type', $params['prtype'] );
 
-				if ( !empty( $prlevel ) ) {
-					$this->addWhereFld( 'pr_level', $prlevel );
+				if ( isset( $params['prlevel'] ) ) {
+					// Remove the empty string and '*' from the prlevel array
+					$prlevel = array_diff( $params['prlevel'], array( '', '*' ) );
+
+					if ( count( $prlevel ) ) {
+						$this->addWhereFld( 'pr_level', $prlevel );
+					}
 				}
-			}
-			if ( $params['prfiltercascade'] == 'cascading' ) {
-				$this->addWhereFld( 'pr_cascade', 1 );
-			} elseif ( $params['prfiltercascade'] == 'noncascading' ) {
-				$this->addWhereFld( 'pr_cascade', 0 );
-			}
+				if ( $params['prfiltercascade'] == 'cascading' ) {
+					$this->addWhereFld( 'pr_cascade', 1 );
+				} elseif ( $params['prfiltercascade'] == 'noncascading' ) {
+					$this->addWhereFld( 'pr_cascade', 0 );
+				}
 
-			$this->addOption( 'DISTINCT' );
-
+				$this->addOption( 'DISTINCT' );
+			}
 			$forceNameTitleIndex = false;
+
+			if ( $params['prexpiry'] == 'indefinite' ) {
+				$this->addWhere( "pr_expiry = {$db->addQuotes( $db->getInfinity() )} OR pr_expiry IS NULL" );
+			} elseif ( $params['prexpiry'] == 'definite' ) {
+				$this->addWhere( "pr_expiry != {$db->addQuotes( $db->getInfinity() )}" );
+			}
 
 		} elseif ( isset( $params['prlevel'] ) ) {
 			$this->dieUsage( 'prlevel may not be used without prtype', 'params' );
@@ -256,7 +259,15 @@ class ApiQueryAllpages extends ApiQueryGeneratorBase {
 					'all'
 				),
 				ApiBase::PARAM_DFLT => 'all'
-			)
+			),
+			'prexpiry' => array(
+				ApiBase::PARAM_TYPE => array(
+					'indefinite',
+					'definite',
+					'all'
+				),
+				ApiBase::PARAM_DFLT => 'all'
+			),
 		);
 	}
 
@@ -275,7 +286,13 @@ class ApiQueryAllpages extends ApiQueryGeneratorBase {
 			'prlevel' => "The protection level (must be used with {$p}prtype= parameter)",
 			'prfiltercascade' => "Filter protections based on cascadingness (ignored when {$p}prtype isn't set)",
 			'filterlanglinks' => 'Filter based on whether a page has langlinks',
-			'limit' => 'How many total pages to return.'
+			'limit' => 'How many total pages to return.',
+			'prexpiry' => array(
+				'Which protection expiry to filter the page on',
+				' indefinite - Get only pages with indefinite protection expiry',
+				' definite - Get only pages with a definite (specific) protection expiry',
+				' all - Get pages with any protections expiry'
+			),
 		);
 	}
 
@@ -290,7 +307,7 @@ class ApiQueryAllpages extends ApiQueryGeneratorBase {
 		) );
 	}
 
-	protected function getExamples() {
+	public function getExamples() {
 		return array(
 			'Simple Use',
 			' Show a list of pages starting at the letter "B"',
@@ -303,7 +320,11 @@ class ApiQueryAllpages extends ApiQueryGeneratorBase {
 		);
 	}
 
+	public function getHelpUrls() {
+		return 'http://www.mediawiki.org/wiki/API:Allpages';
+	}
+
 	public function getVersion() {
-		return __CLASS__ . ': $Id: ApiQueryAllpages.php 82858 2011-02-26 16:29:48Z btongminh $';
+		return __CLASS__ . ': $Id: ApiQueryAllpages.php 103273 2011-11-16 00:17:26Z johnduhart $';
 	}
 }
