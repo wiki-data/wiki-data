@@ -89,6 +89,21 @@ class Xss extends Xxx
 
 		$dbr=$this->getDbr();
 		$pref=$this->S('internalprefix');
+
+		if (!$dbr->tableExists("{$pref}tables"))
+		{
+			$sql=<<<END
+CREATE TABLE `{$pref}fields` (
+  `table_name` char(160) NOT NULL,
+  `table_prop` char(160) NOT NULL,
+  `table_val` char(160) NOT NULL,
+  PRIMARY KEY  (`table_name`,`table_prop`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+END;
+			$dbr->query($sql,__METHOD__,__LINE__);
+		}
+
+
 		if (!$dbr->tableExists("{$pref}fields"))
 		{
 			$sql=<<<END
@@ -578,13 +593,13 @@ SELECT * FROM (
 			field_name AS fi, 
 			field_type AS ty, 
 			field_reference AS re 
-		FROM xss_fields 
+		FROM $fieldTable 
 	) UNION ( 
 		SELECT 	field_reference AS ta, 
 			field_reverse AS fi, 
 			CONCAT('rev_',field_type) AS ty, 
 			field_table AS re
-		FROM xss_fields 
+		FROM $fieldTable 
                 WHERE (field_type = 'multi' OR field_type='reference') AND field_reverse <>''
 	) 
 ) AS sch

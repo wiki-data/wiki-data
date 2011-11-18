@@ -148,8 +148,6 @@ echo "</pre>";
 			return array($newParser->parse( $text, $parser->mTitle, $options, false)->mText,'isHTML'=>true);
 */
 		case 'time':
-					return "AAA";
-
 			$before = microtime(true);
 			$ret = $frame->expand($args[0]);
 			$after = microtime(true);
