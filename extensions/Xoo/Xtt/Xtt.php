@@ -205,7 +205,7 @@ static function guessValue($type,&$value)
 				
 			case 'page':
 				$t=Title::newFromText($value);
-				if ($t) return $t->getPrefixedDBkey($value);
+				if ($t) return $t->getPrefixedDbKey($value);
 				else	return false;
 			
 			case 'reference':
@@ -369,12 +369,12 @@ static function guessValue($type,&$value)
 	}	
 	static function normalizeName(&$s)
 	{
-		if ($s==='' or preg_match('/[#@?&<>=:]/',$s)) return false;
+		if ($s==='' or preg_match('/[#=]/',$s)) return false;
 		$s=trim(preg_replace('/[_\s]+/',' ',$s));
 		if (is_numeric($s)) return false;
 		$t=Title::newFromText($s);
 		if (!$t) return false;
-		$s=$t->getDBkey();
+		$s=$t->getPrefixedDBkey();
 		return $s;
 	}
 }

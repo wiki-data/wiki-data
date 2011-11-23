@@ -71,7 +71,7 @@ class XwwTitle extends Xxx
 
 	function var_FULLBASEPAGENAME(&$parser)
 	{
-		return $this->titleFunctions($parser, 'fullbasepagename',$parser->mTitle->getPrefixedText());
+		return $this->titleFunctions($parser, 'fullbasepagename',$parser->mTitle);
 	}
 
 	function var_FULLBASEPAGENAMEE(&$parser)

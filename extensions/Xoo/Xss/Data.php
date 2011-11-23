@@ -93,7 +93,7 @@ class Xss extends Xxx
 		if (!$dbr->tableExists("{$pref}tables"))
 		{
 			$sql=<<<END
-CREATE TABLE `{$pref}fields` (
+CREATE TABLE `{$pref}tables` (
   `table_name` char(160) NOT NULL,
   `table_prop` char(160) NOT NULL,
   `table_val` char(160) NOT NULL,
@@ -411,6 +411,7 @@ END;
 ##
 ###################################
 # TODO: fix so that row names really work as described
+		case 'ref':
 		case 'row':
 		case 'set':
 		case 'guess':
@@ -439,7 +440,7 @@ END;
 			$tableTitle=Title::makeTitle(NS_XSSDATA,$tableName);
 			$parser->fetchTemplate($tableTitle);
 
-			$pageName = $parser->mTitle->getFullText();
+			$pageName = $parser->mTitle->getPrefixedDBKey();
 			if ($this->outputRowExists($parser,$rowName)) return $this->formatError ("Duplicate row name $rowName"); 
 			# TODO: handle this more wiki way, probably display anyway, just not save
 
@@ -448,6 +449,7 @@ END;
 			
 			# if we're setting, we're done;
 			if ($args->command=='set') return $errorMessage;
+			if ($args->command=='ref') return $rowName;
 			
 			# else format the row as a pretty table
 			$returnText="";
@@ -814,7 +816,7 @@ ORDER BY ta, fi;
 		if (is_numeric($s)) return false;
 		$t=Title::newFromText($s);
 		if (!$t) return false;
-		$s=$t->getDBkey();
+		$s=$t->getPrefixedDbKey();
 		return $s;
 	}
 	
@@ -1070,7 +1072,7 @@ ORDER BY ta, fi;
 				
 				$pref = ($this->removePrefix($rowName,'#'));
 				if ($rowName=='' && $pref){
-					$rowName = $parser->mTitle->getDbKey().'#'. ($onMissingId ? $onMissingId : $parser->getRandomString());
+					$rowName = $parser->mTitle->getPrefixedDbKey().'#'. ($onMissingId ? $onMissingId : $parser->getRandomString());
 				} elseif ($rowName=='' && !$pref){
 					$rowName = 'guid_'.$parser->getRandomString();
 				} elseif (!$this->normalizeName ($rowName)) {
@@ -1081,7 +1083,7 @@ ORDER BY ta, fi;
 			else # row name not supplied, so we use the parameter, or a random string
 			{
 #				$rowName="test";
-				$rowName = $parser->mTitle->getDbKey();
+				$rowName = $parser->mTitle->getPrefixedDbKey();
 				$argOffset=2;
 			}
 			
@@ -1362,6 +1364,8 @@ ORDER BY ta, fi;
 			}
 			$returnText.='<a href="'. $pageTitle->escapeFullUrl("command=browse&sort={$_GET['sort']}&direction={$_GET['direction']}&data_offset=".($offset+$limit)."&data_limit=$limit").'" onclick="if(window.loadContent) { loadContent(this) ; return false }">▶</a>';
 			$returnText.='</small></h2>'; 
+			
+			//TODO:: Use XssQuery::MakeQuery (?) for browsing table data
 			
 			$DIR = $_GET['direction'] == 'desc' ? 'DESC' : 'ASC'; 
 			$ORDERBY = $_GET['sort'] ? "ORDER BY" . $this->escapeName($_GET['sort']) . " $DIR" : '';
@@ -1944,7 +1948,7 @@ ORDER BY ta, fi;
 					 . '_page_ns =' . $newTitle->getNamespace() .','
 					 . '_page_title =' . $this->escapeValue($newTitle->getPrefixedDbKey()) . ','
 					 . '_row_ref = CONCAT(' . $this->escapeValue($newTitle->getPrefixedDbKey() . '#' ) . ', _row_name'
-					 . ') WHERE _page_id='.$pageId.' AND _row_ref LIKE ' . $this->escapeValue($oldTitle->getDbKey() . '#%');
+					 . ') WHERE _page_id='.$pageId.' AND _row_ref LIKE ' . $this->escapeValue($oldTitle->getPrefixedDbKey() . '#%');
 				$dbr->query($sql);
 				$tableCounter++;		
 			}

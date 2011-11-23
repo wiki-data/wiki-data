@@ -514,7 +514,7 @@ class XxxArgs
 	var $mFrame = null;
 	var $mArgs = array();
 	var $mBits = array();
-
+   var $count = 0;
 
 	function __construct(&$frame,&$args)
 	{

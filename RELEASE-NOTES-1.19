@@ -1,0 +1,246 @@
+= MediaWiki release notes =
+
+Security reminder: MediaWiki does not require PHP's register_globals
+setting since version 1.2.0. If you have it on, turn it '''off''' if you can.
+
+== MediaWiki 1.19 ==
+
+THIS IS NOT A RELEASE YET
+
+MediaWiki 1.19 is an alpha-quality branch and is not recommended for use in
+production.
+
+=== Configuration changes in 1.19 ===
+* Changed LoginAuthenticateAudit hook so that it may be called before a
+  valid user is available.  In those cases, an anonymouse user object
+  will be supplied
+* Removed SkinTemplateSetupPageCss hook; use BeforePageDisplay instead.
+* (bug 27132) movefile right granted by default to registered users.
+* Default cookie lifetime ($wgCookieExpiration) is increased to 180 days.
+* (bug 31204) Removed old user.user_options
+* $wgMaxImageArea now applies to jpeg files if they are not scaled with
+  ImageMagick.
+* Introduced $wgQueryPageDefaultLimit (defaults to 50) for the number of
+  items to show by default on query pages (special pages such as Whatlinkshere).
+
+=== New features in 1.19 ===
+* (bug 19838) Possibility to get all interwiki prefixes if the interwiki
+  cache is used.
+* $wgDnsBlacklistUrls now accepts an array with url and key as the
+  elements to work with DNSBLs that require keys, such as
+  Project Honeypot.
+* (bug 30022) Add support for custom loadScript sources to ResourceLoader.
+* (bug 19052) Unicode space separator characters (Zs) now terminates external
+  links and images links.
+* (bug 30160) Add public method to mw.loader to get module names from registry.
+* (bug 15558) Parameters to special pages included in wikitext can now be passed
+  as with templates.
+* Installer now issues a warning if mod_security is present.
+* (bug 29455) Add support for a filter callback function in jQuery byteLimit
+  plugin.
+* Extensions can now participate in the extraction of titles from url paths
+* Added two new GetLocalURL hooks to better serve extensions working on a
+  limited type of titles.
+* Added a --no-updates flag to importDump.php that skips updating the links
+  tables.
+* Most presentational html attributes like valign are now converted to inline
+  css style rules. These attributes were removed from html5 and so we clean
+  them up when $wgHtml5 is enabled. This can be disabled using
+  $wgCleanupPresentationalAttributes.
+* Magic words (time and number-formatting ones, plus DIRECTIONMARK, but not
+  NAMESPACE) now depend on the page content language instead of the site
+  language. In theory this sets the right magic words in system messages,
+  although they are not used there.
+* (bug 30451) Add page_props to RefreshLinks::deleteLinksFromNonexistent
+* (bug 30450) Clear page_props table on page deletion
+* Hook added to check for exempt from account creation throttle
+* (bug 30344) Add configuration variable for setting custom priorities when
+  generating sitemaps
+* (bug 96170) Add array support for space-separated list attributes (like
+  'class') in the Html helper class.
+* (bug 26470) Add checkered background image on hover on files pages.
+* (bug 30774) mediawiki.html: Add support for numbers and booleans in the
+  attribute values and element contents.
+* Conversion script between Tifinagh and Latin for the Tachelhit language
+* (bug 16755) Add options 'noreplace' and 'noerror' to {{DEFAULTSORT:...}}
+  to stop it from replace an already existing default sort, and suppress error.
+* (bug 18578) Rewrote revision delete related messages to allow better
+  localisation
+* (bug 30364) LanguageConverter now depends on the page content language
+  instead of the wiki content language
+* Jump links will now be usable in css-capable browsers instead of only
+  in outdated text browsers.
+* New common*.css files usable by skins instead of having to copy piles
+  of generic styles from MonoBook or Vector's css.
+* Some deprecated presentational html attributes will now be automatically
+  converted to css.
+* (bug 31297) Add support for namespaces in Special:RecentChanges subpage filter
+  syntax.
+* The default user signature now contains a talk link in addition to the user link.
+* (bug 25306) Add link of old page title to MediaWiki:Delete_and_move_reason
+* Added hook BitmapHandlerCheckImageArea
+* (experimental) $wgRealNameInInterface can be enabled to display a user's
+  real name in some parts of the interface instead of a username.
+* (bug 30062) Add $wgDBprefix option to cli installer
+* getUserPermissionsErrors and getUserPermissionsErrorsExpensive hooks are now
+  also called when checking for 'read' permission
+* Introduce $wgEnableSearchContributorsByIP which controls whether searching
+  for an IP address redirects to the contributions list for that IP
+
+=== Bug fixes in 1.19 ===
+* $wgUploadNavigationUrl should be used for file redlinks if
+  $wgUploadMissingFileUrl is not set. The first was used for this
+  until the second was introduced in 1.17.
+* (bug 25355) Parser generates edit section links for special pages.
+* (bug 27894) Move 'editondblclick' event listener down from body to
+  div#bodyContent.
+* (bug 30172) The check for posix_isatty() in maintenance scripts did not detect
+  when the function exists but is disabled. Introduced
+  Maintenance::posix_isatty().
+* (bug 30264) Changed installer-generated LocalSettings.php to use
+  require_once() instead require() for included extensions.
+* Do not convert text in the user interface language to another script.
+* (bug 26283) Previewing user JS/CSS pages didn't load other user JS/CSS pages
+* (bug 11374) Improved diff readability for colorblind people.
+* (bug 26486) ResourceLoader modules with paths to nonexistent files cause PHP
+  warnings/notices to be thrown.
+* (bug 30335) Fix for HTMLForms using GET breaking when non-friendly URLs are
+  used
+* (bug 28649) Avoiding half truncated multi-byte unicode characters when
+  truncating log comments.
+* Show --batch-size option in help of maintenance scripts that support it
+* (bug 4381) Magic quotes cleaning was not comprehensive, key strings were not
+  unescaped
+* (bug 23057) Importers no longer can 'edit' or 'create' a fully-protected page by
+  importing a new revision into it
+* Allow moving the associated talk pages of subpages even if the base page
+  has no subpage.
+* Per page edit-notices now work in namespaces without subpages enabled.
+* (bug 30245) Use the correct way to construct a log page title
+* (bug 31081) $wgEnotifUseJobQ caused many unnecessary jobs to be queued
+* (bug 30202) File names are now restricted on upload to 240 bytes, because of
+  restrictions on some of the database fields.
+* Timezones are now recognised in user preferences when offset is different
+  due to DST
+* (bug 31692) "summary" parameter now also work when undoing revisions
+* (bug 18823) "move succeeded" text displayed bluelinks even when redirect was
+   suppressed
+* (bug 31921) Magic words REVISIONDAY, REVISIONMONTH and REVISIONYEAR now give
+  current values on preview
+* (bug 19186) Special:UserLogin's title on Special:SpecialPages now says
+  "create account" when the user cannot create an account
+* (bug 31818) 'usercreated' message now supports GENDER
+* (bug 32022) Our phpunit.php script can now be executed from another directory
+* (bug 26020) Setting $wgEmailConfirmToEdit to true no longer removes diffs
+  from recent changes feeds
+* (bug 30232) add current time to message wlnote on Special:Watchlist
+* (bug 29110) $wgFeedDiffCutoff did not affect new pages
+* (bug 32168) Add wfRemoveDotSegments for use in wfExpandUrl
+* (bug 32358) Do not display "No higher resolution available" for dimensionless
+  files (like audio files)
+* (bug 32168) Add wfAssembleUrl for use in wfExpandUrl
+* (bug 32168) fixed - wfExpandUrl expands dot segments now
+* (bug 31535) Upload comments now truncated properly, and don't have brackets
+* (bug 32450) Scripts pages in MediaWiki: namespace parse [[Category:#]] links 
+
+=== API changes in 1.19 ===
+* (bug 19838) siprop=interwikimap can now use the interwiki cache.
+* (bug 29748) Add API search prefix support.
+* (bug 29684) Set forgotten parameter types in ApiQueryIWLinks.
+* (bug 29685) do not output NULL parentid with list=deletedrevs&drprop=parentid.
+* siprop=interwikimap and siprop=languages can use silanguagecode to have
+  a best effort language name translation. Use CLDR extension for best result.
+* (bug 30230) action=expandtemplates should not silently override invalid title
+  inputs.
+* (bug 18634) Create API to fetch MediaWiki's language fallback tree structure.
+* (bug 26885) Allow show/hide of account blocks, temporary blocks and single IP
+  address blocks for list=blocks.
+* (bug 30591) Add support to only return keys in ApiAllMessages.
+* The API now respects $wgShowHostnames and won't share the hostname in
+  severedby if it's set to false
+* wlexcludeuser parameter added to ApiFeedWatchlist
+
+=== Languages updated in 1.19 ===
+
+MediaWiki supports over 350 languages. Many localisations are updated
+regularly. Below only new and removed languages are listed, as well as
+changes to languages because of Bugzilla reports.
+
+* Canadian English (en-ca) (new).
+* Uighur (Latin) (ug-latn) was incorrectly marked as right-to-left language.
+* (bug 30217) Make pt-br a fallback of pt.
+* (bug 31193) Set fallback language of Assamese from Bengali to English.
+* Update date format for dsb and hsb: month names need the genitive.
+* (bug 28643) Serbian variant conversion improvements (Nikola Smolenski)
+
+=== Other changes in 1.19 ===
+* jquery.mwPrototypes module was renamed to jquery.mwExtension.
+* The maintenance script populateSha1.php was renamed to the more concise
+  populateImageSha1.php
+* The Client-IP header is no longer checked for when trying to resolve a client's
+  real IP address.
+* (bug 22096) Although IE5.x and below was already unsupported officially, stylesheets
+  existing exclusively for IE5.0 and IE5.5 have now been removed (which were in skins
+  'chick' and 'monobook').
+* The constructor for CategoryView has changed, the second parameter is now a
+  Context source and is required.
+
+== Compatibility ==
+
+MediaWiki 1.19 requires PHP 5.2.3. PHP 4 is no longer supported.
+
+MySQL is the recommended DBMS. PostgreSQL or SQLite can also be used, but
+support for them is somewhat less mature. There is experimental support for IBM
+DB2 and Microsoft SQL Server.
+
+The supported versions are:
+
+* MySQL 4.0 or later
+* PostgreSQL 8.3 or later
+* SQLite 3
+* Oracle 9.0.1 or later
+
+== Upgrading ==
+
+1.19 has several database changes since 1.18, and will not work without schema
+updates.
+
+If upgrading from before 1.11, and you are using a wiki as a commons
+repository, make sure that it is updated as well. Otherwise, errors may arise
+due to database schema changes.
+
+If upgrading from before 1.7, you may want to run refreshLinks.php to ensure
+new database fields are filled with data.
+
+If you are upgrading from MediaWiki 1.4.x or earlier, some major database
+changes are made, and there is a slightly higher chance that things could
+break. Don't forget to always back up your database before upgrading!
+
+See the file UPGRADE for more detailed upgrade instructions.
+
+For notes on 1.17.x and older releases, see HISTORY.
+
+== Online documentation ==
+
+Documentation for both end-users and site administrators is available on
+MediaWiki.org, and is covered under the GNU Free Documentation License (except
+for pages that explicitly state that their contents are in the public domain):
+
+	http://www.mediawiki.org/wiki/Documentation
+
+== Mailing list ==
+
+A mailing list is available for MediaWiki user support and discussion:
+
+	http://lists.wikimedia.org/mailman/listinfo/mediawiki-l
+
+A low-traffic announcements-only list is also available:
+
+	http://lists.wikimedia.org/mailman/listinfo/mediawiki-announce
+
+It's highly recommended that you sign up for one of these lists if you're
+going to run a public MediaWiki, so you can be notified of security fixes.
+
+== IRC help ==
+
+There's usually someone online in #mediawiki on irc.freenode.net.
