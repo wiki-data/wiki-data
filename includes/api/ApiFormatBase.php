@@ -164,7 +164,7 @@ abstract class ApiFormatBase extends ApiBase {
 <small>
 You are looking at the HTML representation of the <?php echo( $this->mFormat ); ?> format.<br />
 HTML is good for debugging, but probably is not suitable for your application.<br />
-See <a href='http://www.mediawiki.org/wiki/API'>complete documentation</a>, or
+See <a href='https://www.mediawiki.org/wiki/API'>complete documentation</a>, or
 <a href='<?php echo( $script ); ?>'>API help</a> for more information.
 </small>
 <?php
@@ -265,6 +265,8 @@ See <a href='http://www.mediawiki.org/wiki/API'>complete documentation</a>, or
 		$text = preg_replace( "#(($protos).*?)(&quot;)?([ \\'\"<>\n]|&lt;|&gt;|&quot;)#", '<a href="\\1">\\1</a>\\3\\4', $text );
 		// identify requests to api.php
 		$text = preg_replace( "#api\\.php\\?[^ \\()<\n\t]+#", '<a href="\\0">\\0</a>', $text );
+		// identify requests to index.php
+		$text = preg_replace( "#index\\.php\\?[^ \\()<\n\t]+#", '<a href="\\0">\\0</a>', $text );
 		if ( $this->mHelp ) {
 			// make strings inside * bold
 			$text = preg_replace( "#\\*[^<>\n]+\\*#", '<b>\\0</b>', $text );
@@ -290,7 +292,7 @@ See <a href='http://www.mediawiki.org/wiki/API'>complete documentation</a>, or
 	}
 
 	public function getHelpUrls() {
-		return 'http://www.mediawiki.org/wiki/API:Data_formats';
+		return 'https://www.mediawiki.org/wiki/API:Data_formats';
 	}
 
 	public function getDescription() {
@@ -298,7 +300,7 @@ See <a href='http://www.mediawiki.org/wiki/API'>complete documentation</a>, or
 	}
 
 	public static function getBaseVersion() {
-		return __CLASS__ . ': $Id: ApiFormatBase.php 103273 2011-11-16 00:17:26Z johnduhart $';
+		return __CLASS__ . ': $Id: ApiFormatBase.php 104468 2011-11-28 19:02:59Z reedy $';
 	}
 }
 
@@ -371,6 +373,6 @@ class ApiFormatFeedWrapper extends ApiFormatBase {
 	}
 
 	public function getVersion() {
-		return __CLASS__ . ': $Id: ApiFormatBase.php 103273 2011-11-16 00:17:26Z johnduhart $';
+		return __CLASS__ . ': $Id: ApiFormatBase.php 104468 2011-11-28 19:02:59Z reedy $';
 	}
 }

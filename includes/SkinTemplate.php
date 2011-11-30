@@ -139,7 +139,7 @@ class SkinTemplate extends Skin {
 		global $wgDisableCounters, $wgSitename, $wgLogo, $wgHideInterlanguageLinks;
 		global $wgMaxCredits, $wgShowCreditsIfMax;
 		global $wgPageShowWatchingUsers;
-		global $wgUseTrackbacks, $wgUseSiteJs, $wgDebugComments;
+		global $wgUseSiteJs, $wgDebugComments;
 		global $wgArticlePath, $wgScriptPath, $wgServer;
 
 		wfProfileIn( __METHOD__ );
@@ -215,13 +215,6 @@ class SkinTemplate extends Skin {
 			$tpl->set( 'html5version', $wgHtml5Version );
 			$tpl->set( 'headlinks', $out->getHeadLinks() );
 			$tpl->set( 'csslinks', $out->buildCssLinks() );
-
-			if( $wgUseTrackbacks && $out->isArticleRelated() ) {
-				$tpl->set( 'trackbackhtml', $out->getTitle()->trackbackRDF() );
-			} else {
-				$tpl->set( 'trackbackhtml', null );
-			}
-
 			$tpl->set( 'pageclass', $this->getPageClasses( $this->getTitle() ) );
 			$tpl->set( 'skinnameclass', ( 'skin-' . Sanitizer::escapeClass( $this->getSkinName() ) ) );
 		}
@@ -296,14 +289,14 @@ class SkinTemplate extends Skin {
 
 		$contentlang = $wgContLang->getCode();
 		$contentdir  = $wgContLang->getDir();
-		$userlang = $this->getLang()->getCode();
-		$userdir  = $this->getLang()->getDir();
+		$userlang = $this->getLanguage()->getCode();
+		$userdir  = $this->getLanguage()->getDir();
 
 		$tpl->set( 'lang', $userlang );
 		$tpl->set( 'dir', $userdir );
-		$tpl->set( 'rtl', $this->getLang()->isRTL() );
+		$tpl->set( 'rtl', $this->getLanguage()->isRTL() );
 
-		$tpl->set( 'capitalizeallnouns', $this->getLang()->capitalizeAllNouns() ? ' capitalize-all-nouns' : '' );
+		$tpl->set( 'capitalizeallnouns', $this->getLanguage()->capitalizeAllNouns() ? ' capitalize-all-nouns' : '' );
 		$tpl->set( 'showjumplinks', $user->getOption( 'showjumplinks' ) );
 		$tpl->set( 'username', $user->isAnon() ? null : $this->username );
 		$tpl->set( 'userdisplayname', $user->isAnon() ? null : $this->userdisplayname );
@@ -336,9 +329,9 @@ class SkinTemplate extends Skin {
 		$tpl->set( 'numberofwatchingusers', false );
 		if ( $out->isArticle() && $this->getTitle()->exists() ) {
 			if ( $this->isRevisionCurrent() ) {
-				$article = new Article( $this->getTitle(), 0 );
+				$page = WikiPage::factory( $this->getTitle() );
 				if ( !$wgDisableCounters ) {
-					$viewcount = $article->getCount();
+					$viewcount = $page->getCount();
 					if ( $viewcount ) {
 						$tpl->set( 'viewcount', $this->msg( 'viewcount' )->numParams( $viewcount )->parse() );
 					}
@@ -358,9 +351,9 @@ class SkinTemplate extends Skin {
 				}
 
 				if ( $wgMaxCredits != 0 ) {
-					$tpl->set( 'credits', Action::factory( 'credits', $article )->getCredits( $wgMaxCredits, $wgShowCreditsIfMax ) );
+					$tpl->set( 'credits', Action::factory( 'credits', $page, $this->getContext() )->getCredits( $wgMaxCredits, $wgShowCreditsIfMax ) );
 				} else {
-					$tpl->set( 'lastmod', $this->lastModified( $article ) );
+					$tpl->set( 'lastmod', $this->lastModified( $page ) );
 				}
 			}
 			$tpl->set( 'copyright', $this->getCopyright() );
@@ -558,11 +551,19 @@ class SkinTemplate extends Skin {
 		/* set up the default links for the personal toolbar */
 		$personal_urls = array();
 
-		$page = $request->getVal( 'returnto', $this->thispage );
-		$query = $request->getVal( 'returntoquery', $this->thisquery );
-		$a = array( 'returnto' => $page );
-		if( $query != '' ) {
-			$a['returntoquery'] = $query;
+		# Due to bug 32276, if a user does not have read permissions, 
+		# $this->getTitle() will just give Special:Badtitle, which is 
+		# not especially useful as a returnto parameter. Use the title 
+		# from the request instead, if there was one.
+		$page = Title::newFromURL( $request->getVal( 'title', '' ) );
+		$page = $request->getVal( 'returnto', $page );
+		$a = array();
+		if ( strval( $page ) !== '' ) {
+			$a['returnto'] = $page;
+			$query = $request->getVal( 'returntoquery', $this->thisquery );
+			if( $query != '' ) {
+				$a['returntoquery'] = $query;
+			}
 		}
 		$returnto = wfArrayToCGI( $a );
 		if( $this->loggedin ) {
@@ -887,7 +888,7 @@ class SkinTemplate extends Skin {
 						'href' => $title->getLocalURL( $this->editUrlOptions() ),
 						'primary' => true, // don't collapse this in vector
 					);
-					
+
 					// section link
 					if ( $showNewSection ) {
 						// Adds new section link
@@ -996,7 +997,7 @@ class SkinTemplate extends Skin {
 				// Checks that language conversion is enabled and variants exist
 				// And if it is not in the special namespace
 				if( count( $variants ) > 1 ) {
-					// Gets preferred variant (note that user preference is 
+					// Gets preferred variant (note that user preference is
 					// only possible for wiki content language variant)
 					$preferred = $pageLang->getPreferredVariant();
 					// Loops over each variant
@@ -1127,7 +1128,6 @@ class SkinTemplate extends Skin {
 	 * @private
 	 */
 	protected function buildNavUrls() {
-		global $wgUseTrackbacks;
 		global $wgUploadNavigationUrl;
 
 		wfProfileIn( __METHOD__ );
@@ -1150,7 +1150,6 @@ class SkinTemplate extends Skin {
 		$nav_urls['permalink'] = false;
 		$nav_urls['whatlinkshere'] = false;
 		$nav_urls['recentchangeslinked'] = false;
-		$nav_urls['trackbacklink'] = false;
 		$nav_urls['contributions'] = false;
 		$nav_urls['log'] = false;
 		$nav_urls['blockip'] = false;
@@ -1188,11 +1187,6 @@ class SkinTemplate extends Skin {
 			if ( $this->getTitle()->getArticleId() ) {
 				$nav_urls['recentchangeslinked'] = array(
 					'href' => SpecialPage::getTitleFor( 'Recentchangeslinked', $this->thispage )->getLocalUrl()
-				);
-			}
-			if ( $wgUseTrackbacks ) {
-				$nav_urls['trackbacklink'] = array(
-					'href' => $out->getTitle()->trackbackURL()
 				);
 			}
 		}
@@ -1427,10 +1421,6 @@ abstract class BaseTemplate extends QuickTemplate {
 			$toolbox['recentchangeslinked']['msg'] = 'recentchangeslinked-toolbox';
 			$toolbox['recentchangeslinked']['id'] = 't-recentchangeslinked';
 		}
-		if ( isset( $this->data['nav_urls']['trackbacklink'] ) && $this->data['nav_urls']['trackbacklink'] ) {
-			$toolbox['trackbacklink'] = $this->data['nav_urls']['trackbacklink'];
-			$toolbox['trackbacklink']['id'] = 't-trackbacklink';
-		}
 		if ( isset( $this->data['feeds'] ) && $this->data['feeds'] ) {
 			$toolbox['feeds']['id'] = 'feedlinks';
 			$toolbox['feeds']['links'] = array();
@@ -1477,6 +1467,7 @@ abstract class BaseTemplate extends QuickTemplate {
 	 * This is in reality the same list as already stored in personal_urls
 	 * however it is reformatted so that you can just pass the individual items
 	 * to makeListItem instead of hardcoding the element creation boilerplate.
+	 * @return array
 	 */
 	function getPersonalTools() {
 		$personal_tools = array();
@@ -1510,7 +1501,7 @@ abstract class BaseTemplate extends QuickTemplate {
 		if ( !isset( $sidebar['LANGUAGES'] ) ) {
 			$sidebar['LANGUAGES'] = true;
 		}
-		
+
 		if ( !isset( $options['search'] ) || $options['search'] !== true ) {
 			unset( $sidebar['SEARCH'] );
 		}
@@ -1520,7 +1511,7 @@ abstract class BaseTemplate extends QuickTemplate {
 		if ( isset( $options['languages'] ) && $options['languages'] === false ) {
 			unset( $sidebar['LANGUAGES'] );
 		}
-		
+
 		$boxes = array();
 		foreach ( $sidebar as $boxName => $content ) {
 			if ( $content === false ) {
@@ -1554,7 +1545,7 @@ abstract class BaseTemplate extends QuickTemplate {
 						'generated' => false,
 						'content'   => $this->data['language_urls'],
 					);
-				} 
+				}
 				break;
 			default:
 				$msgObj = $this->getMsg( $boxName );
@@ -1567,7 +1558,7 @@ abstract class BaseTemplate extends QuickTemplate {
 				break;
 			}
 		}
-		
+
 		// HACK: Compatibility with extensions still using SkinTemplateToolboxEnd
 		$hookContents = null;
 		if ( isset( $boxes['TOOLBOX'] ) ) {
@@ -1582,7 +1573,7 @@ abstract class BaseTemplate extends QuickTemplate {
 			}
 		}
 		// END hack
-		
+
 		if ( isset( $options['htmlOnly'] ) && $options['htmlOnly'] === true ) {
 			foreach ( $boxes as $boxName => $box ) {
 				if ( is_array( $box['content'] ) ) {
@@ -1592,7 +1583,7 @@ abstract class BaseTemplate extends QuickTemplate {
 					}
 					// HACK, shove the toolbox end onto the toolbox if we're rendering itself
 					if ( $hookContents ) {
-						$content .= "\n	$hookContents"; 
+						$content .= "\n	$hookContents";
 					}
 					// END hack
 					$content .= "\n</ul>\n";
@@ -1622,7 +1613,7 @@ abstract class BaseTemplate extends QuickTemplate {
 				// END hack
 			}
 		}
-		
+
 		return $boxes;
 	}
 

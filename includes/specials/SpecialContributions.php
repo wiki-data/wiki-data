@@ -74,21 +74,19 @@ class SpecialContributions extends SpecialPage {
 		$this->opts['target'] = $target;
 		$this->opts['topOnly'] = $request->getBool( 'topOnly' );
 
-		$nt = Title::makeTitleSafe( NS_USER, $target );
-		if( !$nt ) {
+		$userObj = User::newFromName( $target, false );
+		if( !$userObj ) {
 			$out->addHTML( $this->getForm() );
 			return;
 		}
-		$id = User::idFromName( $nt->getText() );
+		$nt = $userObj->getUserPage();
+		$id = $userObj->getID();
 
 		if( $this->opts['contribs'] != 'newbie' ) {
 			$target = $nt->getText();
-			$out->addSubtitle( $this->contributionsSub( $nt, $id ) );
+			$out->addSubtitle( $this->contributionsSub( $userObj ) );
 			$out->setHTMLTitle( $this->msg( 'pagetitle', wfMsgExt( 'contributions-title', array( 'parsemag' ), $target ) ) );
-			$userObj = User::newFromName( $target, false );
-			if ( is_object( $userObj ) ) {
-				$this->getSkin()->setRelevantUser( $userObj );
-			}
+			$this->getSkin()->setRelevantUser( $userObj );
 		} else {
 			$out->addSubtitle( $this->msg( 'sp-contributions-newbies-sub') );
 			$out->setHTMLTitle( $this->msg( 'pagetitle', wfMsg( 'sp-contributions-newbies-title' ) ) );
@@ -99,6 +97,8 @@ class SpecialContributions extends SpecialPage {
 		} else {
 			$this->opts['namespace'] = '';
 		}
+
+		$this->opts['nsInvert'] = (bool) $request->getVal( 'nsInvert' );
 
 		$this->opts['tagfilter'] = (string) $request->getVal( 'tagfilter' );
 
@@ -167,6 +167,7 @@ class SpecialContributions extends SpecialPage {
 				'month' => $this->opts['month'],
 				'deletedOnly' => $this->opts['deletedOnly'],
 				'topOnly' => $this->opts['topOnly'],
+				'nsInvert' => $this->opts['nsInvert'],
 			) );
 			if( !$pager->getNumRows() ) {
 				$out->addWikiMsg( 'nocontribs', $target );
@@ -190,8 +191,7 @@ class SpecialContributions extends SpecialPage {
 				if ( IP::isIPAddress( $target ) ) {
 					$message = 'sp-contributions-footer-anon';
 				} else {
-					$userObj = User::newFromName( $target );
-					if ( !$userObj || $userObj->isAnon() ) {
+					if ( $userObj->isAnon() ) {
 						// No message for non-existing users
 						return;
 					}
@@ -208,22 +208,21 @@ class SpecialContributions extends SpecialPage {
 
 	/**
 	 * Generates the subheading with links
-	 * @param $nt Title object for the target
-	 * @param $id Integer: User ID for the target
+	 * @param $userObj User object for the target
 	 * @return String: appropriately-escaped HTML to be output literally
 	 * @todo FIXME: Almost the same as getSubTitle in SpecialDeletedContributions.php. Could be combined.
 	 */
-	protected function contributionsSub( $nt, $id ) {
-		if ( $id === null ) {
-			$user = htmlspecialchars( $nt->getText() );
+	protected function contributionsSub( $userObj ) {
+		if ( $userObj->isAnon() ) {
+			$user = htmlspecialchars( $userObj->getName() );
 		} else {
-			$user = Linker::link( $nt, htmlspecialchars( $nt->getText() ) );
+			$user = Linker::link( $userObj->getUserPage(), htmlspecialchars( $userObj->getName() ) );
 		}
-		$userObj = User::newFromName( $nt->getText(), /* check for username validity not needed */ false );
-		$talk = $nt->getTalkPage();
+		$nt = $userObj->getUserPage();
+		$talk = $userObj->getTalkPage();
 		if( $talk ) {
 			$tools = self::getUserLinks( $nt, $talk, $userObj, $this->getUser() );
-			$links = $this->getLang()->pipeList( $tools );
+			$links = $this->getLanguage()->pipeList( $tools );
 
 			// Show a note if the user is blocked and display the last block log entry.
 			if ( $userObj->isBlocked() ) {
@@ -240,7 +239,7 @@ class SpecialContributions extends SpecialPage {
 							$userObj->isAnon() ?
 								'sp-contributions-blocked-notice-anon' :
 								'sp-contributions-blocked-notice',
-							$nt->getText() # Support GENDER in 'sp-contributions-blocked-notice'
+							$userObj->getName() # Support GENDER in 'sp-contributions-blocked-notice'
 						),
 						'offset' => '' # don't use WebRequest parameter offset
 					)
@@ -354,6 +353,10 @@ class SpecialContributions extends SpecialPage {
 			$this->opts['namespace'] = '';
 		}
 
+		if( !isset( $this->opts['nsInvert'] ) ) {
+			$this->opts['nsInvert'] = '';
+		}
+
 		if( !isset( $this->opts['contribs'] ) ) {
 			$this->opts['contribs'] = 'user';
 		}
@@ -381,7 +384,7 @@ class SpecialContributions extends SpecialPage {
 		$f = Xml::openElement( 'form', array( 'method' => 'get', 'action' => $wgScript, 'class' => 'mw-contributions-form' ) );
 
 		# Add hidden params for tracking except for parameters in $skipParameters
-		$skipParameters = array( 'namespace', 'deletedOnly', 'target', 'contribs', 'year', 'month', 'topOnly' );
+		$skipParameters = array( 'namespace', 'nsInvert', 'deletedOnly', 'target', 'contribs', 'year', 'month', 'topOnly' );
 		foreach ( $this->opts as $name => $value ) {
 			if( in_array( $name, $skipParameters ) ) {
 				continue;
@@ -404,6 +407,7 @@ class SpecialContributions extends SpecialPage {
 				Xml::label( wfMsg( 'namespace' ), 'namespace' ) . ' ' .
 				Xml::namespaceSelector( $this->opts['namespace'], '' )
 			) .
+			Xml::checkLabel( wfMsg('invert'), 'nsInvert', 'nsInvert', $this->opts['nsInvert'] ) . '&#160;' .
 			Xml::checkLabel( wfMsg( 'history-show-deleted' ),
 				'deletedOnly', 'mw-show-deleted-only', $this->opts['deletedOnly'] ) . '<br />' .
 			Xml::tags( 'p', null, Xml::checkLabel( wfMsg( 'sp-contributions-toponly' ),
@@ -446,6 +450,7 @@ class ContribsPager extends ReverseChronologicalPager {
 		$this->contribs = isset( $options['contribs'] ) ? $options['contribs'] : 'users';
 		$this->namespace = isset( $options['namespace'] ) ? $options['namespace'] : '';
 		$this->tagFilter = isset( $options['tagfilter'] ) ? $options['tagfilter'] : false;
+		$this->nsInvert = isset( $options['nsInvert'] ) ? $options['nsInvert'] : false;
 
 		$this->deletedOnly = !empty( $options['deletedOnly'] );
 		$this->topOnly = !empty( $options['topOnly'] );
@@ -468,6 +473,7 @@ class ContribsPager extends ReverseChronologicalPager {
 
 		$user = $this->getUser();
 		$conds = array_merge( $userCond, $this->getNamespaceCond() );
+
 		// Paranoia: avoid brute force searches (bug 17342)
 		if( !$user->isAllowed( 'deletedhistory' ) ) {
 			$conds[] = $this->mDb->bitAnd('rev_deleted',Revision::DELETED_USER) . ' = 0';
@@ -539,7 +545,11 @@ class ContribsPager extends ReverseChronologicalPager {
 
 	function getNamespaceCond() {
 		if( $this->namespace !== '' ) {
-			return array( 'page_namespace' => (int)$this->namespace );
+			if ( $this->nsInvert ) {
+				return array( 'page_namespace != ' . (int)$this->namespace );
+			} else {
+				return array( 'page_namespace' => (int)$this->namespace );
+			}
 		} else {
 			return array();
 		}
@@ -664,8 +674,8 @@ class ContribsPager extends ReverseChronologicalPager {
 			$chardiff = ' ';
 		}
 
-		$comment = $this->getLang()->getDirMark() . Linker::revComment( $rev, false, true );
-		$date = $this->getLang()->timeanddate( wfTimestamp( TS_MW, $row->rev_timestamp ), true );
+		$comment = $this->getLanguage()->getDirMark() . Linker::revComment( $rev, false, true );
+		$date = $this->getLanguage()->timeanddate( wfTimestamp( TS_MW, $row->rev_timestamp ), true );
 		if( $rev->userCan( Revision::DELETED_TEXT, $user ) ) {
 			$d = Linker::linkKnown(
 				$page,

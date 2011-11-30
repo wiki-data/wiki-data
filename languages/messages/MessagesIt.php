@@ -82,7 +82,7 @@ $namespaceAliases = array(
 	'Discussioni_immagine' => NS_FILE_TALK,
 );
 
-$separatorTransformTable = array( ',' => '.', '.' => ',' );
+$separatorTransformTable = array( ',' => "\xc2\xa0", '.' => ',' );
 
 $dateFormats = array(
 	'mdy time' => 'H:i',
@@ -609,6 +609,7 @@ Si prega di segnalare l\'accaduto a un [[Special:ListUsers/sysop|amministratore]
 'badarticleerror'      => 'Operazione non consentita per questa pagina.',
 'cannotdelete'         => 'Non è stato possibile cancellare il file "$1".
 Potrebbe essere stato già cancellato da qualcun altro.',
+'cannotdelete-title'   => 'Impossibile eliminare la pagina "$1"',
 'badtitle'             => 'Titolo non corretto',
 'badtitletext'         => 'Il titolo della pagina richiesta è vuoto, errato o con caratteri non ammessi oppure deriva da un errore nei collegamenti tra siti wiki diversi o versioni in lingue diverse dello stesso sito.',
 'perfcached'           => "I dati che seguono sono estratti da una copia ''cache'' del database, non aggiornati in tempo reale.",
@@ -1459,7 +1460,6 @@ L'operazione non può essere annullata.",
 'right-autopatrol'            => 'Segna automaticamente le proprie modifiche come verificate',
 'right-patrolmarks'           => 'Usa la funzione di verifica delle ultime modifiche',
 'right-unwatchedpages'        => 'Visualizza una lista di pagine non osservate',
-'right-trackback'             => 'Invia un trackback',
 'right-mergehistory'          => 'Fonde la cronologia delle pagine',
 'right-userrights'            => "Modifica tutti i diritti dell'utente",
 'right-userrights-interwiki'  => 'Modifica i diritti degli utenti di altre wiki',
@@ -1506,7 +1506,6 @@ L'operazione non può essere annullata.",
 'action-patrol'               => 'segnare le modifiche degli altri utenti come verificate',
 'action-autopatrol'           => 'segnare le proprie modifiche come verificate',
 'action-unwatchedpages'       => 'visionare la lista di pagine non osservate',
-'action-trackback'            => 'inviare una trackback',
 'action-mergehistory'         => 'unire la cronologia di questa pagina',
 'action-userrights'           => 'modificare tutti i diritti degli utenti',
 'action-userrights-interwiki' => 'modificare i diritti degli utenti su altre wiki',
@@ -1813,23 +1812,24 @@ Di seguito viene mostrata la descrizione presente nella [$2 pagina di descrizion
 'filerevert-badversion'     => 'Non esistono versioni locali precedenti del file con il timestamp richiesto.',
 
 # File deletion
-'filedelete'                  => 'Cancella $1',
-'filedelete-legend'           => 'Cancella il file',
-'filedelete-intro'            => "Stai per cancellare il file '''[[Media:$1|$1]]''' con tutta la sua cronologia.",
-'filedelete-intro-old'        => "Stai cancellando la versione di '''[[Media:$1|$1]]''' del [$4 $2, $3].",
-'filedelete-comment'          => 'Motivo:',
-'filedelete-submit'           => 'Cancella',
-'filedelete-success'          => "Il file '''$1''' è stato cancellato.",
-'filedelete-success-old'      => "La versione del file '''[[Media:$1|$1]]''' del $2, $3  è stata cancellata.",
-'filedelete-nofile'           => "Non esiste un file '''$1'''.",
-'filedelete-nofile-old'       => "In archivio non ci sono versioni di '''$1''' con le caratteristiche indicate",
-'filedelete-otherreason'      => 'Altra motivazione o motivazione aggiuntiva:',
-'filedelete-reason-otherlist' => 'Altra motivazione',
-'filedelete-reason-dropdown'  => '*Motivazioni più comuni per la cancellazione
+'filedelete'                   => 'Cancella $1',
+'filedelete-legend'            => 'Cancella il file',
+'filedelete-intro'             => "Stai per cancellare il file '''[[Media:$1|$1]]''' con tutta la sua cronologia.",
+'filedelete-intro-old'         => "Stai cancellando la versione di '''[[Media:$1|$1]]''' del [$4 $2, $3].",
+'filedelete-comment'           => 'Motivo:',
+'filedelete-submit'            => 'Cancella',
+'filedelete-success'           => "Il file '''$1''' è stato cancellato.",
+'filedelete-success-old'       => "La versione del file '''[[Media:$1|$1]]''' del $2, $3  è stata cancellata.",
+'filedelete-nofile'            => "Non esiste un file '''$1'''.",
+'filedelete-nofile-old'        => "In archivio non ci sono versioni di '''$1''' con le caratteristiche indicate",
+'filedelete-otherreason'       => 'Altra motivazione o motivazione aggiuntiva:',
+'filedelete-reason-otherlist'  => 'Altra motivazione',
+'filedelete-reason-dropdown'   => '*Motivazioni più comuni per la cancellazione
 ** Violazione di copyright
 ** File duplicato',
-'filedelete-edit-reasonlist'  => 'Modifica le motivazioni per la cancellazione',
-'filedelete-maintenance'      => 'Cancellazione e recupero di file temporaneamente disattivati durante la manutenzione.',
+'filedelete-edit-reasonlist'   => 'Modifica le motivazioni per la cancellazione',
+'filedelete-maintenance'       => 'Cancellazione e recupero di file temporaneamente disattivati durante la manutenzione.',
+'filedelete-maintenance-title' => 'Impossibile eliminare il file',
 
 # MIME search
 'mimesearch'         => 'Ricerca in base al tipo MIME',
@@ -1975,8 +1975,8 @@ Potrebbero essere presenti immagini che sono usate da altri siti con un collegam
 'booksources-invalid-isbn'  => "L'ISBN inserito sembra non essere valido; verificare che non siano stati commessi errori nel copiarlo dalla fonte originale.",
 
 # Special:Log
-'specialloguserlabel'  => 'Utente:',
-'speciallogtitlelabel' => 'Titolo:',
+'specialloguserlabel'  => 'Azione effettuata da:',
+'speciallogtitlelabel' => 'Azione effettuata su:',
 'log'                  => 'Log',
 'all-logs-page'        => 'Tutti i registri pubblici',
 'alllogstext'          => "Presentazione unificata di tutti i registri di {{SITENAME}}.
@@ -3408,13 +3408,6 @@ Questo codice di conferma scadrà automaticamente alle $4.',
 'scarytranscludedisabled' => "[L'inclusione di pagine tra siti wiki non è attiva]",
 'scarytranscludefailed'   => '[Errore: Impossibile ottenere il template $1]',
 'scarytranscludetoolong'  => '[Errore: URL troppo lunga]',
-
-# Trackbacks
-'trackbackbox'      => 'Informazioni di trackback per questa voce:<br />
-$1',
-'trackbackremove'   => '([$1 Elimina])',
-'trackbacklink'     => 'Trackback',
-'trackbackdeleteok' => 'Informazioni di trackback eliminate correttamente.',
 
 # Delete conflict
 'deletedwhileediting'      => "'''Attenzione''': questa pagina è stata cancellata dopo che hai cominciato a modificarla!",

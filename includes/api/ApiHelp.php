@@ -151,13 +151,13 @@ class ApiHelp extends ApiBase {
 
 	public function getHelpUrls() {
 		return array(
-			'http://www.mediawiki.org/wiki/API:Main_page',
-			'http://www.mediawiki.org/wiki/API:FAQ',
-			'http://www.mediawiki.org/wiki/API:Quick_start_guide',
+			'https://www.mediawiki.org/wiki/API:Main_page',
+			'https://www.mediawiki.org/wiki/API:FAQ',
+			'https://www.mediawiki.org/wiki/API:Quick_start_guide',
 		);
 	}
 
 	public function getVersion() {
-		return __CLASS__ . ': $Id: ApiHelp.php 103273 2011-11-16 00:17:26Z johnduhart $';
+		return __CLASS__ . ': $Id: ApiHelp.php 104434 2011-11-28 15:17:46Z reedy $';
 	}
 }

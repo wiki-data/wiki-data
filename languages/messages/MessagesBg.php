@@ -1391,12 +1391,12 @@ $1",
 'group-suppress'      => 'Ревизори',
 'group-all'           => '(всички)',
 
-'group-user-member'          => 'Потребител',
+'group-user-member'          => '{{GENDER:$1|потребител}}',
 'group-autoconfirmed-member' => 'Автоматично одобрен потребител',
 'group-bot-member'           => 'Бот',
 'group-sysop-member'         => 'Администратор',
-'group-bureaucrat-member'    => 'Бюрократ',
-'group-suppress-member'      => 'Ревизор',
+'group-bureaucrat-member'    => '{{GENDER:$1|бюрократ}}',
+'group-suppress-member'      => '{{GENDER:$1|ревизор}}',
 
 'grouppage-user'          => '{{ns:project}}:Потребители',
 'grouppage-autoconfirmed' => '{{ns:project}}:Автоматично одобрени потребители',
@@ -1458,7 +1458,6 @@ $1",
 'right-autopatrol'            => 'автоматично отбелязване на редакции като проверени',
 'right-patrolmarks'           => 'Показване на отбелязаните като патрулирани последни промени',
 'right-unwatchedpages'        => 'преглеждане на списъка с ненаблюдаваните страници',
-'right-trackback'             => 'изпращане на обратна следа',
 'right-mergehistory'          => 'сливане на редакционни истории на страници',
 'right-userrights'            => 'редактиране на потребителските права',
 'right-userrights-interwiki'  => 'редактиране на потребителски права на потребители в други уикита',
@@ -1502,7 +1501,6 @@ $1",
 'action-patrol'               => 'отбелязване на чуждите редакции като проверени',
 'action-autopatrol'           => 'отбелязване на собствените редакции като автоматично патрулирани',
 'action-unwatchedpages'       => 'преглеждане на списъка с ненаблюдавани страници',
-'action-trackback'            => 'оставяне на обратна следа',
 'action-mergehistory'         => 'сливане на историята на тази страница',
 'action-userrights'           => 'редактиране на всички потребителски права',
 'action-userrights-interwiki' => 'редактиране на потребителските права на потребители от други уикита',
@@ -2213,6 +2211,7 @@ $UNWATCHURL
 'movedarticleprotection'      => 'преместване на настройките за защита от „[[$2]]“ на „[[$1]]“',
 'protect-title'               => 'Смяна на нивото на защита на "$1"',
 'prot_1movedto2'              => '„[[$1]]“ преместена като „[[$2]]“',
+'protect-badnamespace-text'   => 'Страниците в това именно пространство не могат да бъдат защитени.',
 'protect-legend'              => 'Потвърждение на защитата',
 'protectcomment'              => 'Причина:',
 'protectexpiry'               => 'Изтича на:',
@@ -2883,6 +2882,7 @@ $1',
 'minutes' => '{{PLURAL:$1|$1 минута|$1 минути}}',
 'hours'   => '{{PLURAL:$1|$1 час|$1 часа}}',
 'days'    => '{{PLURAL:$1|$1 ден|$1 дни}}',
+'ago'     => 'преди $1',
 
 # Bad image list
 'bad_image_list' => 'Спазва се следният формат:
@@ -3304,13 +3304,6 @@ $5
 'scarytranscludedisabled' => '[Включването между уикита е деактивирано]',
 'scarytranscludefailed'   => '[Зареждането на шаблона за $1 не сполучи]',
 'scarytranscludetoolong'  => '[Адресът е твърде дълъг]',
-
-# Trackbacks
-'trackbackbox'      => 'Обратни следи за статията:<br />
-$1',
-'trackbackremove'   => '([$1 Изтриване])',
-'trackbacklink'     => 'Обратна следа',
-'trackbackdeleteok' => 'Обратната следа беше изтрита.',
 
 # Delete conflict
 'deletedwhileediting'      => "'''Внимание''': Страницата е била изтрита, след като сте започнали да я редактирате!",

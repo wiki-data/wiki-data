@@ -409,7 +409,7 @@ Peul desse ch'a l'é già stàit ëscancelà da cheidun d'àutr.",
 Funsion: $1<br />
 Arcesta: $2',
 'viewsource'           => 'Vardé la sorgiss',
-'viewsource-title'     => 'Varda soeziss për $1',
+'viewsource-title'     => 'Vëdde la sorgiss ëd $1',
 'actionthrottled'      => 'Assion frenà',
 'actionthrottledtext'  => "Për evité che gent ò màchine an carìo dla rumenta, st'assion-sì as peul nen fesse tròp ëd soèns, e chiel/chila a l'ha arpetula tròpe vire. Ch'a sia gentil, ch'a preuva torna antra dontre minute.",
 'protectedpagetext'    => "Sta pàgina-sì a l'è stàita blocà për evité che a-j faso dle modìfiche.",
@@ -1280,7 +1280,6 @@ Costa anformassion a sarà pùblica.",
 'right-autopatrol'            => 'Avèj na pròpria modìfica automaticament marcà com verificà',
 'right-patrolmarks'           => "Vëdde le marche ëd verìfica ant j'ùltime modìfiche",
 'right-unwatchedpages'        => 'Vëdde na lista dle pàgine nen cudìe',
-'right-trackback'             => "Gionté dj'anliure anverse",
 'right-mergehistory'          => 'Fonde la stòria dle pàgine',
 'right-userrights'            => "Modifiché tùit ij drit ëd n'utent",
 'right-userrights-interwiki'  => "Modifiché ij drit utent dj'utent ansima a d'àutre wiki",
@@ -1327,11 +1326,11 @@ Costa anformassion a sarà pùblica.",
 'action-patrol'               => "marché la modìfica dj'àutri com verificà",
 'action-autopatrol'           => 'avèj soe modìfiche marcà com verificà',
 'action-unwatchedpages'       => 'vardé la lista dle pàgine che gnun a ten sot-euj',
-'action-trackback'            => "spedì n'anliura anversa",
 'action-mergehistory'         => 'fonde la stòria dë sta pàgina-sì',
 'action-userrights'           => "modifiché tùit ij drit dj'utent",
 'action-userrights-interwiki' => "modifiché ij drit ëd j'utent ansima a d'àutre wiki",
 'action-siteadmin'            => 'bloché o dësbloché la base ëd dàit',
+'action-sendemail'            => 'mandé un corel',
 
 # Recent changes
 'nchanges'                          => '$1 {{PLURAL:$1|modìfica|modìfiche}}',
@@ -1549,7 +1548,7 @@ A peul pa esse controlà da bin për la sicurëssa.",
 'img-auth-nopathinfo'       => "PATH_INFO mancant.
 Sò servent a l'é nen ampostà për passé costa anformassion.
 Peul desse ch'a sia basà an sij CGI e a peul pa mantnì img_auth.
-[http://www.mediawiki.org/wiki/Manual:Image_Authorization. Ch'a bèica l'autorisassin dla figura.]",
+[http://www.mediawiki.org/wiki/Manual:Image_Authorization. Ch'a bèica l'autorisassion dla figura.]",
 'img-auth-notindir'         => "Ël senté ciamà a l'é pa ant ël dossié configurà për carié.",
 'img-auth-badtitle'         => 'As peul pa fesse un tìtol bon për "$1".',
 'img-auth-nologinnWL'       => 'A l\'é pa intrà ant ël sistema e "$1" a l\'é pa ant la lista bianca.',
@@ -1666,7 +1665,7 @@ La descrission an soa [$2 pàgina ëd dëscrission ëd l'archivi] a l'é smonùa
 ** duplicassion (visadì ch'a-i era già)",
 'filedelete-edit-reasonlist'   => 'Modifiché la rason ëd lë scancelament',
 'filedelete-maintenance'       => "Lë scancelament e la restaurassion d'archivi a l'é al moment disabilità durant la manutension.",
-'filedelete-maintenance-title' => "As peul pa scanselesse l'archivi",
+'filedelete-maintenance-title' => "As peul pa scancelesse l'archivi",
 
 # MIME search
 'mimesearch'         => 'Arserca për sòrt MIME',
@@ -1715,7 +1714,7 @@ Ch'as visa ëd controlé che në stamp a-j serva nen a dj'àutri stamp anans che
 'statistics-users-active-desc' => "Utent che a l'han fàit n'assion ant {{PLURAL:$1|l'ùltim di|j'ùltim $1 di}}",
 'statistics-mostpopular'       => "Pàgine ch'a 'ncontro dë pì",
 
-'disambiguations'      => "Pàgine ch'a pòrto a pàgine ëd disambiguassion",
+'disambiguations'      => "Pàgine ch'a men-o vers dle pàgine d'omonimìe",
 'disambiguationspage'  => "Template:Gestion dj'omonimìe",
 'disambiguations-text' => "Ste pàgine-sì a men-o a na '''pàgina ëd gestion dj'omònim''', mach che a dovrìo ëmné bele drit a n'artìcol.<br />
 Na pàgina as trata coma \"pàgina ëd gestion dj'omònim\" se a deuvra në stamp dont l'anliura as treuva ant ël [[MediaWiki:Disambiguationspage]]",
@@ -1814,8 +1813,8 @@ Për piasì, ch'a nòta che d'àutri sit an sl'aragnà a peulo coleghesse a n'ar
 'booksources-invalid-isbn'  => "L'ISBN dàit a smija che a sia pa vàlid; ch'a contròla s'a-i é n'eror an copiand da la sorgiss original.",
 
 # Special:Log
-'specialloguserlabel'  => 'Utent:',
-'speciallogtitlelabel' => 'Tìtol:',
+'specialloguserlabel'  => 'Esecutor:',
+'speciallogtitlelabel' => 'Obietiv (tìtol o utent):',
 'log'                  => 'Registr',
 'all-logs-page'        => 'Tùit ij registr pùblich',
 'alllogstext'          => 'Visualisassion combinà ëd tùit ij registr ëd {{SITENAME}}.
@@ -1861,7 +1860,7 @@ Ch'a bèica ëdcò [[Special:WantedCategories|le categorìe domandà]].",
 'linksearch-ok'    => 'Sërché',
 'linksearch-text'  => 'As peulo dovresse dij ciapatut com "*.wikipedia.org".
 A-i é dabzògn almanch d\'un domini a livel pi àut, për esempi "*.org".<br />
-Protocòj ch\'as peulo dovresse: <tt>$1</tt> (Da pa gionté gnun ëd costi an toa arserca).',
+Protocòj ch\'as peulo dovresse: <tt>$1</tt> (ch\'a gionta gnun ëd costi an soa arserca).',
 'linksearch-line'  => "$1 a l'ha n'anliura ch'a-j riva dzora da $2",
 'linksearch-error' => 'Ij ciapatut as peulo butesse mach an prinsipi dël nòm dël sërvent.',
 
@@ -2164,12 +2163,12 @@ l'avìa travajaje ansima anans che a la scancelèisso.
 'undeletedrevisions-files'     => "{{PLURAL:$1|Na|$1}} revision e {{PLURAL:$2|n'|$2&nbsp;}}archivi pijàit andré",
 'undeletedfiles'               => "{{PLURAL:$1|N'|$1&nbsp;}}archivi pijàit andaré",
 'cannotundelete'               => "Riprìstin falì; a peul esse che i fusse antra doi a felo ant l'istess temp e l'àutr a sia riva prima.",
-'undeletedpage'                => "'''$1 a l'é stait pijait andaré'''
+'undeletedpage'                => "'''$1 a l'é stàit pijait andaré'''
 
-Che as varda ël [[Special:Log/delete|Registr djë scancelament]] për ës-ciairé j'ùltim scancelament e disdëscancelament.",
+Che as varda ël [[Special:Log/delete|Registr djë scancelament]] për ës-ciairé j'ùltim scancelament e arcuperassion.",
 'undelete-header'              => "Ch'a varda [[Special:Log/delete|ël registr djë scancelament]] për ës-ciairé j'ùltim dëscancelament.",
 'undelete-search-title'        => 'Sërché dle pàgine scancelà',
-'undelete-search-box'          => 'Arsërca ant le pàgine scancelà',
+'undelete-search-box'          => 'Arserché dle pàgine scancelà',
 'undelete-search-prefix'       => "Smon le pàgine ch'as anandio për:",
 'undelete-search-submit'       => 'Sërca',
 'undelete-no-results'          => "A-i é pa gnun-a pàgina parej ant l'archivi djë scancelassion.",
@@ -2177,7 +2176,7 @@ Che as varda ël [[Special:Log/delete|Registr djë scancelament]] për ës-ciair
 'undelete-bad-store-key'       => "As peul pa disdëscancelesse la revision d'archivi col marcatemp $1: l'archivi a-i era già pì anans d'esse scancelà.",
 'undelete-cleanup-error'       => 'Eror ën scanceland l\'archivi nen dovrà "$1".',
 'undelete-missing-filearchive' => "As peul nen ricuperesse l'archivi con l'identità $1 përchè a-i é pa ant la base dat. A peul esse ch'a l'abio già disdëscancelalo.",
-'undelete-error'               => 'Eror an scanseland dle pàgine',
+'undelete-error'               => "Pàgina d'eror d'arcuperassion",
 'undelete-error-short'         => "Eror ën disdëscanceland l'archivi: $1",
 'undelete-error-long'          => "Eror antramentr ch'as disdëscancelava l'archivi:
 
@@ -2495,7 +2494,7 @@ Se costa ùltima possibilità a fussa lòn che a-j serv, a podrìa ëdcò dovré
 'exportcuronly'     => 'Ciapa sù mach la version corenta, pa tuta la stòria',
 'exportnohistory'   => "----
 '''Nòta:''' la possibilità d'esporté la stòria completa dle pàgine a l'é staita gavà për dle question corelà a le prestassion dël sistema.",
-'exportlistauthors' => 'Anclud na lista completa ëd contribudor për minca pàgina',
+'exportlistauthors' => 'Anclude na lista completa dij contributor për minca pàgina',
 'export-submit'     => 'Esporté',
 'export-addcattext' => "Gionta pàgine da 'nt la categorìa:",
 'export-addcat'     => 'Gionta',
@@ -3275,13 +3274,6 @@ Cost còdes ëd conferma a scad ai \$4.",
 'scarytranscludedisabled' => "[L'inclusion ëd pàgine antra wiki diferente a l'é nen abilità]",
 'scarytranscludefailed'   => "[Darmagi, ma lë stamp $1 a l'é pa podusse carié]",
 'scarytranscludetoolong'  => "[L'URL a l'é tròp longa]",
-
-# Trackbacks
-'trackbackbox'      => 'Anformassion për feje ël traciament a sta vos-sì:<br />
-$1',
-'trackbackremove'   => '([$1 Gava via])',
-'trackbacklink'     => 'Traciament',
-'trackbackdeleteok' => "J'anformassion për fé traciament a son staite gavà via.",
 
 # Delete conflict
 'deletedwhileediting'      => "'''Avertensa''': sta pàgina-sì a l'é staita scancelà quand che chiel (chila) a l'avìa già anandiasse a modifichela!",

@@ -561,7 +561,7 @@ $messages = array(
 
 # Categories related messages
 'pagecategories'                 => '{{PLURAL:$1|لا تصانيف|التصنيف|التصنيفان|التصنيفات}}',
-'category_header'                => 'الصفحات في التصنيف "$1"',
+'category_header'                => 'صفحات تصنيف "$1"',
 'subcategories'                  => 'التصنيفات الفرعية',
 'category-media-header'          => 'الوسائط في التصنيف "$1"',
 'category-empty'                 => "''هذا التصنيف لا يحتوي حاليا على صفحات أو وسائط.''",
@@ -572,7 +572,7 @@ $messages = array(
 'category-article-count'         => '{{PLURAL:$2|لا يحتوي هذا التصنيف أي صفحات.|هذا التصنيف يحتوي على الصفحة التالية فقط.|{{PLURAL:$1||الصفحة التالية|الصفحتان التاليتان|ال$1 صفحات التالية|ال$1 صفحة التالية|ال$1 صفحة التالية}} في هذا التصنيف، من إجمالي $2.}}',
 'category-article-count-limited' => '{{PLURAL:$1||الصفحة التالية|الصفحتان التاليتان|ال$1 صفحات التالية|ال$1 صفحة التالية|ال$1 صفحة التالية}} في التصنيف الحالي.',
 'category-file-count'            => '{{PLURAL:$2|هذا التصنيف يحتوي فقط على الملف التالي.|{{PLURAL:$1|الملف|ال$1 ملف}} التالية في هذا التصنيف، من إجمالي $2.}}',
-'category-file-count-limited'    => 'بالأسفل {{PLURAL:$1|ملف|$1 ملف}} في التصنيف الحالي.',
+'category-file-count-limited'    => '{{PLURAL:$1|الملف التالي|الملفان التاليان|ال$1 ملفات التالية|ال$1 ملفًا تاليًا|ال$1 ملف تالٍ}} في التصنيف الحالي.',
 'listingcontinuesabbrev'         => 'متابعة',
 'index-category'                 => 'صفحات مفهرسة',
 'noindex-category'               => 'صفحات غير مفهرسة',
@@ -1285,31 +1285,31 @@ $2
 'rev-deleted-user'            => '(اسم المستخدم تمت إزالته)',
 'rev-deleted-event'           => '(فعل السجل تمت إزالته)',
 'rev-deleted-user-contribs'   => '[اسم المستخدم أو عنوان الأيبي تمت إزالته - التعديل مخفي من المساهمات]',
-'rev-deleted-text-permission' => "تم '''حذف''' مراجعة هذه الصفحة.
-قد تتوفر تفاصيل في [{{fullurl:{{#Special:Log}}/delete|page={{FULLPAGENAMEE}}}} سجل الحذف].",
-'rev-deleted-text-unhide'     => "مراجعة الصفحة هذه تم '''حذفها'''.
-ربما تكون هناك تفاصيل في [{{fullurl:{{#Special:Log}}/delete|page={{FULLPAGENAMEE}}}} سجل الحذف].
-كإداري مازال بإمكانك [$1 رؤية هذه المراجعة] إذا أردت المتابعة.",
-'rev-suppressed-text-unhide'  => "تم '''حذف''' مراجعة الصفحة هذه.
-قد تتوفر تفاصيل في [{{fullurl:{{#Special:Log}}/suppress|page={{FULLPAGENAMEE}}}} سجل الحذف].
-لا يزال بإمكانك كإداري [$1 رؤية هذه المراجعة] إذا أردت المتابعة.",
-'rev-deleted-text-view'       => "تم '''حذف''' مراجعة هذه الصفحة.
-كإداري يمكنك رؤيتها؛ ربما تكون هناك تفاصيل في [{{fullurl:{{#Special:Log}}/delete|page={{FULLPAGENAMEE}}}} سجل الحذف].",
-'rev-suppressed-text-view'    => "تم '''حذف''' مراجعة هذه الصفحة.
-تستطيع كإداري مشاهدتها؛ وقد تتوفر تفاصيل في  [{{fullurl:{{#Special:Log}}/suppress|page={{FULLPAGENAMEE}}}} سجل الحذف].",
-'rev-deleted-no-diff'         => "لا يمكنك رؤية هذا الفرق لأن واحدة من المراجعات تم '''حذفها'''.
-ربما تكون هناك تفاصيل في [{{fullurl:{{#Special:Log}}/delete|page={{FULLPAGENAMEE}}}} سجل الحذف].",
+'rev-deleted-text-permission' => "'''حُذِفت''' مراجعة هذه الصفحة.
+يمكنك العثور على التفاصيل في [{{fullurl:{{#Special:Log}}/delete|page={{FULLPAGENAMEE}}}} سجل الحذف].",
+'rev-deleted-text-unhide'     => "'''حُذِفت''' مراجعة الصفحة هذه.
+يمكن العثور على تفاصيل في [{{fullurl:{{#Special:Log}}/delete|page={{FULLPAGENAMEE}}}} سجل الحذف].
+مازال بإمكانك [$1 رؤية هذه المراجعة] إذا أردت المتابعة.",
+'rev-suppressed-text-unhide'  => "'''أُخفيت''' مراجعة الصفحة هذه.
+يمكنك العثور على التفاصيل في [{{fullurl:{{#Special:Log}}/suppress|page={{FULLPAGENAMEE}}}} سجل الإخفاء].
+بإمكانك [$1 رؤية هذه المراجعة] إذا أردت المتابعة.",
+'rev-deleted-text-view'       => "'''حُذِفت''' مراجعة هذه الصفحة.
+يمكنك رؤيتها؛ ويمكنك العثور على التفاصيل في [{{fullurl:{{#Special:Log}}/delete|page={{FULLPAGENAMEE}}}} سجل الحذف].",
+'rev-suppressed-text-view'    => "'''أُخفيت''' مراجعة الصفحة هذه.
+يمكنك رؤيتها؛ ويمكنك العثور على التفاصيل في  [{{fullurl:{{#Special:Log}}/suppress|page={{FULLPAGENAMEE}}}} سجل الإخفاء].",
+'rev-deleted-no-diff'         => "لا يمكنك رؤية هذا الفرق لأن إحدى المراجعات '''حُذِفت'''.
+يمكنك العثور على التفاصيل في [{{fullurl:{{#Special:Log}}/delete|page={{FULLPAGENAMEE}}}} سجل الحذف].",
 'rev-suppressed-no-diff'      => "ليس بإمكانك مشاهدة هذا الفرق لأن إحدى المراجعات '''حذفت'''.",
-'rev-deleted-unhide-diff'     => "واحدة من مراجعتي هذا الفرق تم '''حذفها'''.
-ربما تكون هناك تفاصيل في [{{fullurl:{{#Special:Log}}/delete|page={{FULLPAGENAMEE}}}} سجل الحذف].
-كإداري مازال بإمكانك [$1 رؤية هذا الفرق] إذا أردت المتابعة.",
-'rev-suppressed-unhide-diff'  => "واحدة من مراجعتي هذا الفرق تم '''حذفها'''.
-ربما توجد تفاصيل في [{{fullurl:{{#Special:Log}}/suppress|page={{FULLPAGENAMEE}}}} سجل الحذف].
-كإداري مازال بإمكانك [$1 رؤية هذا الفرق] إذا أردت المتابعة.",
-'rev-deleted-diff-view'       => "واحدة من المراجعتي هذا الفرق تم '''حذفها'''.
-كإداري يمكنك رؤية هذا الفرق؛ ربما تكون هناك تفاصيل في [{{fullurl:{{#Special:Log}}/delete|page={{FULLPAGENAMEE}}}} سجل الحذف].",
-'rev-suppressed-diff-view'    => "واحدة من المراجعتي هذا الفرق تم '''إخفاؤها'''.
-كإداري يمكنك رؤية هذا الفرق؛ ربما تكون هناك تفاصيل في [{{fullurl:{{#Special:Log}}/suppress|page={{FULLPAGENAMEE}}}} سجل الإخفاء].",
+'rev-deleted-unhide-diff'     => "'''حُذِفت''' إحدى مراجعتي هذا الفرق.
+يمكن العثور على التفاصيل في [{{fullurl:{{#Special:Log}}/delete|page={{FULLPAGENAMEE}}}} سجل الحذف].
+بإمكانك [$1 رؤية هذا الفرق] إذا أردت المتابعة.",
+'rev-suppressed-unhide-diff'  => "'''أُخفيت''' إحدى مراجعتي هذا الفرق.
+يمكنك العثور على التفاصيل في [{{fullurl:{{#Special:Log}}/suppress|page={{FULLPAGENAMEE}}}} سجل الإخفاء].
+بإمكانك [$1 رؤية هذا الفرق] إذا أردت المتابعة.",
+'rev-deleted-diff-view'       => "'''حُذِفت''' إحدى مراجعتي هذا الفرق.
+يمكنك رؤية الفرق؛ ويمكنك العثور على التفاصيل في [{{fullurl:{{#Special:Log}}/delete|page={{FULLPAGENAMEE}}}} سجل الحذف].",
+'rev-suppressed-diff-view'    => "'''أُخفيت''' إحدى مراجعتي هذا الفرق.
+يمكنك رؤية هذا الفرق؛ ويمكنك العثور على التفاصيل في [{{fullurl:{{#Special:Log}}/suppress|page={{FULLPAGENAMEE}}}} سجل الإخفاء].",
 'rev-delundel'                => 'أظهر/أخف',
 'rev-showdeleted'             => 'أظهر',
 'revisiondelete'              => 'حذف/استرجاع المراجعات',
@@ -1717,7 +1717,6 @@ $1",
 'right-autopatrol'            => 'علم تعديلات المستخدم مراجعة تلقائيا',
 'right-patrolmarks'           => 'رؤية علامات المراجعة في أحدث التغييرات',
 'right-unwatchedpages'        => 'رؤية قائمة بالصفحات غير المراقبة',
-'right-trackback'             => 'تنفيذ تراكباك',
 'right-mergehistory'          => 'دمج تاريخ الصفحات',
 'right-userrights'            => 'تعديل كل صلاحيات المستخدمين',
 'right-userrights-interwiki'  => 'تعديل صلاحيات المستخدم للمستخدمين في الويكيات الأخرى',
@@ -1763,7 +1762,6 @@ $1",
 'action-patrol'               => 'التعليم على تعديلات الآخرين كمراجعة',
 'action-autopatrol'           => 'جعل تعديلك معلم عليه كمراجع',
 'action-unwatchedpages'       => 'رؤية قائمة الصفحات غير المراقبة',
-'action-trackback'            => 'تنفيذ تراكباك',
 'action-mergehistory'         => 'دمج تاريخ هذه الصفحة',
 'action-userrights'           => 'تعديل كل صلاحيات المستخدم',
 'action-userrights-interwiki' => 'تعديل صلاحيات المستخدم للمستخدمين في الويكيات الأخرى',
@@ -1802,7 +1800,7 @@ $1",
 'rc_categories_any'                 => 'أي',
 'newsectionsummary'                 => '/* $1 */ قسم جديد',
 'rc-enhanced-expand'                => 'عرض التفاصيل (يتطلب جافاسكريبت)',
-'rc-enhanced-hide'                  => 'إخفاء التفاصيل',
+'rc-enhanced-hide'                  => 'أخفِ التفاصيل',
 
 # Recent changes linked
 'recentchangeslinked'          => 'تغييرات ذات علاقة',
@@ -1985,10 +1983,10 @@ $1',
 
 # img_auth script messages
 'img-auth-accessdenied'     => 'رفض الوصول',
-'img-auth-nopathinfo'       => 'PATH_INFO مفقودة.
-خادمك ليس مضبوطا لتمرير هذه المعلومات.
-ربما يكون CGI-based ولا يمكنه دعم img_auth.
-انظر http://www.mediawiki.org/wiki/Manual:Image_Authorization.',
+'img-auth-nopathinfo'       => 'PATH_INFO مفقود.
+خادومك ليس مضبوطا لتمرير هذه المعلومات.
+ربما يكون مبني على CGI ولا يمكنه دعم img_auth.
+[//www.mediawiki.org/wiki/Manual:Image_Authorization راجع تصريح الصور].',
 'img-auth-notindir'         => 'المسار المطلوب غير موجود في مجلد الرفع المضبوط.',
 'img-auth-badtitle'         => 'تعذر تشكيل عنوان صالح من "$1".',
 'img-auth-nologinnWL'       => 'لست والجا و"$1" ليست في القائمة البيضاء.',
@@ -2098,7 +2096,7 @@ $1',
 'filedelete-intro'            => "أنت على وشك حذف الملف '''[[Media:$1|$1]]''' مع كل تاريخه.",
 'filedelete-intro-old'        => "أنت تحذف نسخة '''[[Media:$1|$1]]''' بتاريخ [$4 $3، $2].",
 'filedelete-comment'          => 'السبب:',
-'filedelete-submit'           => 'حذف',
+'filedelete-submit'           => 'احذف',
 'filedelete-success'          => "'''$1''' تم حذفه.",
 'filedelete-success-old'      => "نسخة '''[[Media:$1|$1]]''' بتاريخ $3، $2 تم حذفها.",
 'filedelete-nofile'           => "'''$1''' غير موجود.",
@@ -2190,7 +2188,7 @@ $1',
 'ncategories'             => '$1 {{PLURAL:$1|تصنيف واحد|تصنيفان|تصنيفات|تصنيف|تصنيفا}}',
 'nlinks'                  => '{{PLURAL:$1|لا وصلات|وصلة واحدة|وصلتان|$1 وصلات|$1 وصلة}}',
 'nmembers'                => '{{PLURAL:$1|لا أعضاء|عضو واحد|عضوان|$1 أعضاء|$1 عضوا|$1 عضو}}',
-'nrevisions'              => '{{PLURAL:$1|تعديل وحيد|تعديلان|$1 تعديلات|$1 تعديل|$1 تعديلا}}',
+'nrevisions'              => '{{PLURAL:$1|لا مراجعات|مراجعة واحدة|مراجعتان|$1 مراجعات|$1 مراجعة}}',
 'nviews'                  => '{{PLURAL:$1|مشاهدة واحدة|مشاهدتان|$1 مشاهدات|$1 مشاهدة}}',
 'nimagelinks'             => 'مستخدم في {{PLURAL:$1||صفحة واحدة|صفحتين|$1 صفحات|$1 صفحة}}',
 'ntransclusions'          => 'مستخدم في {{PLURAL:$1||صفحة واحدة|صفحتين|$1 صفحات|$1 صفحة}}',
@@ -2231,7 +2229,7 @@ $1',
 'listusers'               => 'قائمة الأعضاء',
 'listusers-editsonly'     => 'اعرض المستخدمين الذين قاموا بتعديلات فقط',
 'listusers-creationsort'  => 'رتب حسب تاريخ الإنشاء',
-'usereditcount'           => '$1 {{PLURAL:$1|تعديل|تعديل}}',
+'usereditcount'           => '{{PLURAL:$1|لا تعديلات|تعديل واحد|تعديلان|$1 تعديلات|$1 تعديلًا|$1 تعديل}}',
 'usercreated'             => '{{GENDER:$3|أنشأه|أنشأته}} في $1 الساعة $2',
 'newpages'                => 'صفحات جديدة',
 'newpages-username'       => 'اسم المستخدم:',
@@ -2259,8 +2257,8 @@ $1',
 'booksources-invalid-isbn'  => 'رقم ISBN المعطى لا يبدو صحيحا؛ تحقق من أخطاء النسخ من المصدر الأصلي.',
 
 # Special:Log
-'specialloguserlabel'  => 'المستخدم:',
-'speciallogtitlelabel' => 'العنوان:',
+'specialloguserlabel'  => 'المؤدي:',
+'speciallogtitlelabel' => 'الهدف (عنوان أو مستخدم):',
 'log'                  => 'سجلات',
 'all-logs-page'        => 'كل السجلات العامة',
 'alllogstext'          => 'عرض شامل لكل السجلات المتوفرة في {{SITENAME}}.
@@ -2408,9 +2406,9 @@ $1',
 'wlheader-showupdated' => "* الصفحات التي تم تحريرها بعد زيارتك لها لآخر مرة معروضة بالخط '''الغليظ'''",
 'watchmethod-recent'   => 'فحص التعديلات الأخيرة للصفحات المراقبة',
 'watchmethod-list'     => 'فحص الصفحات المراقبة للتعديلات الحديثة',
-'watchlistcontains'    => 'تحتوي قائمة مراقبتك على $1 {{PLURAL:$1|صفحة|صفحة}}.',
+'watchlistcontains'    => 'تحتوي قائمة مراقبتك على {{PLURAL:$1|لا صفحات|صفحة واحدة|صفحتان|$1 صفحات|$1 صفحة}}.',
 'iteminvalidname'      => "مشكلة في المدخل '$1'، اسم غير صحيح...",
-'wlnote'               => "بالأسفل {{PLURAL:$1|لا توجد تغييرات|التغيير الأخير|آخر تغييرين|آخر '''$1''' تغييرات|آخر '''$1''' تغييرا|آخر '''$1''' تغيير}} في {{PLURAL:$2||'''الساعة''' الماضية|'''الساعتين''' الماضيتين|ال'''$2''' ساعات الماضية|ال'''$2''' ساعة الماضية}}.",
+'wlnote'               => "بالأسفل {{PLURAL:$1|لا توجد تغييرات|التغيير الأخير|آخر تغييرين|آخر '''$1''' تغييرات|آخر '''$1''' تغييرا|آخر '''$1''' تغيير}} في {{PLURAL:$2||'''الساعة''' الماضية|'''الساعتين''' الماضيتين|ال'''$2''' ساعات الماضية|ال'''$2''' ساعة الماضية}} وفقا ل$3، $4.",
 'wlshowlast'           => 'عرض آخر $1 ساعات $2 أيام $3',
 'watchlist-options'    => 'خيارات قائمة المراقبة',
 
@@ -2484,10 +2482,10 @@ $UNWATCHURL
 ** خرق لحقوق التأليف والنشر
 ** تخريب',
 'delete-edit-reasonlist' => 'عدل أسباب الحذف',
-'delete-toobig'          => 'هذه الصفحة لها تاريخ تعديل كبير، أكثر من $1 {{PLURAL:$1|مراجعة|مراجعة}}.
-حذف مثل هذه الصفحات تم تحديده لمنع الاضطراب العرضي في {{SITENAME}}.',
-'delete-warning-toobig'  => 'هذه الصفحة لها تاريخ تعديل كبير، أكثر من $1 {{PLURAL:$1|مراجعة|مراجعة}}.
-حذفها ربما يؤدي إلى اضطراب عمليات قاعدة البيانات في {{SITENAME}}؛
+'delete-toobig'          => 'لهذه الصفحة تاريخ تعديل طويل، أكثر من {{PLURAL:$1||مراجعة واحدة|مراجعتين|$1 مراجعات|$1 مراجعة}}.
+قُيّد محذف مثل هذه الصفحات لمنع الاضطراب المفاجئة في {{SITENAME}}.',
+'delete-warning-toobig'  => 'لهذه الصفحة تاريخ تعديل طويل، أكثر من {{PLURAL:$1||مراجعة واحدة|مراجعتين|$1 مراجعات|$1 مراجعة}}.
+قد يؤدي حذفها إلى اضطراب عمليات قاعدة البيانات في {{SITENAME}}؛
 استمر مع الحذر.',
 
 # Rollback
@@ -2744,7 +2742,7 @@ $1',
 'blocklist-userblocks'            => 'أخفِ منع الحسابات',
 'blocklist-tempblocks'            => 'أخفِ المنع المؤقت',
 'blocklist-addressblocks'         => 'أخفِ منع عنوان آيبي واحد',
-'blocklist-rangeblocks'           => 'إخفاء منع النطاقات',
+'blocklist-rangeblocks'           => 'أخفِ منع النطاقات',
 'blocklist-timestamp'             => 'الزمن',
 'blocklist-target'                => 'الهدف',
 'blocklist-expiry'                => 'ينتهي في',
@@ -2753,7 +2751,7 @@ $1',
 'blocklist-reason'                => 'السبب',
 'ipblocklist-submit'              => 'ابحث',
 'ipblocklist-localblock'          => 'المنع المحلي',
-'ipblocklist-otherblocks'         => '{{PLURAL:$1||المنع الآخر|المنعان الآخران|المنوعات الأخريات}}',
+'ipblocklist-otherblocks'         => '{{PLURAL:$1||المنع الآخر|المنعان الآخران|المنوعات الأخرى}}',
 'infiniteblock'                   => 'لا نهائي',
 'expiringblock'                   => 'ينتهي في يوم $1 عند الساعة $2',
 'anononlyblock'                   => 'مجهول فقط',
@@ -2764,7 +2762,7 @@ $1',
 'ipblocklist-empty'               => 'قائمة المنع فارغة.',
 'ipblocklist-no-results'          => 'عنوان الأيبي أو اسم المستخدم المطلوب غير ممنوع.',
 'blocklink'                       => 'امنع',
-'unblocklink'                     => 'رفع المنع',
+'unblocklink'                     => 'ارفع المنع',
 'change-blocklink'                => 'تغيير المنع',
 'contribslink'                    => 'مساهمات',
 'emaillink'                       => 'أرسل بريدًا إلكترونيًا',
@@ -2794,7 +2792,7 @@ $1',
 'ipb_hide_invalid'                => 'غير قادر على إخفاء هذا الحساب؛ ربما يكون قد قام بالكثير من التعديلات.',
 'ipb_already_blocked'             => '"$1" ممنوع بالفعل',
 'ipb-needreblock'                 => '$1 ممنوع بالفعل. هل تريد تغيير الإعدادات؟',
-'ipb-otherblocks-header'          => '{{PLURAL:$1||المنع الآخر|المنعان الآخران|المنوعات الأخريات}}',
+'ipb-otherblocks-header'          => '{{PLURAL:$1||المنع الآخر|المنعان الآخران|المنوعات الأخرى}}',
 'unblock-hideuser'                => 'لا يمكنك إلغاء منع هذا المستخدم لأن اسم مستخدمه أُخفي.',
 'ipb_cant_unblock'                => 'خطأ: لم يتم إيجاد الممنوع $1.
 ربما تم رفع منعه بالفعل.',
@@ -2824,8 +2822,8 @@ $1',
 من فضلك تأكد من أن هذا حقا ما ترغب القيام به، ومن أنك سوف تقوم بإزالة الغلق بعد الانتهاء من الصيانة.',
 'unlockdbtext'        => 'فتح قاعدة البيانات سيسترجع قدرة كل المستخدمين على تحرير الصفحات، تغيير تفضيلاتهم، تعديل قوائم المراقبة الخاصة بهم، وأشياء أخرى تحتاج التغيير في قاعدة البيانات.
 من فضلك أكد أن هذا هو ما تريده.',
-'lockconfirm'         => 'نعم، أنا أريد فعلا قفل قاعدة البيانات.',
-'unlockconfirm'       => 'نعم، أنا أريد فعلا فتح قاعدة البيانات.',
+'lockconfirm'         => 'نعم، أريد فعلا قفل قاعدة البيانات.',
+'unlockconfirm'       => 'نعم، أريد فعلا فتح قاعدة البيانات.',
 'lockbtn'             => 'قفل قاعدة البيانات',
 'unlockbtn'           => 'رفع غلق قاعدة البيانات',
 'locknoconfirm'       => 'لم تقم بتعليم صندوق التأكيد.',
@@ -2883,7 +2881,7 @@ $1',
 'move-watch'                   => 'راقب هذه الصفحة',
 'movepagebtn'                  => 'انقل الصفحة',
 'pagemovedsub'                 => 'تم النقل بنجاح',
-'movepage-moved'               => '\'\'\'"$1" تم نقلها إلى "$2"\'\'\'',
+'movepage-moved'               => '\'\'\'نُقِلت "$1" إلى "$2"\'\'\'',
 'movepage-moved-redirect'      => 'تم إنشاء تحويلة.',
 'movepage-moved-noredirect'    => 'إنشاء التحويلة تم التغاضي عنه.',
 'articleexists'                => 'توجد صفحة بهذا الاسم، أو أن الاسم الذي تم اختياره غير صالح.
@@ -2891,19 +2889,19 @@ $1',
 'cantmove-titleprotected'      => 'لا يمكنك نقل صفحة إلى هذا الموقع، لأن العنوان الجديد تمت حمايته ضد الإنشاء',
 'talkexists'                   => "'''الصفحة نفسها تم نقلها بنجاح، ولكن صفحة النقاش لم يمكن نقلها لوجود صفحة مسبقا تحت العنوان الجديد.
 من فضلك ادمجهما يدويا.'''",
-'movedto'                      => 'تم نقلها إلى',
+'movedto'                      => 'نُقِلت إلى',
 'movetalk'                     => 'انقل صفحة النقاش المرفقة',
 'move-subpages'                => 'انقل الصفحات الفرعية (حتى $1)',
 'move-talk-subpages'           => 'انقل الصفحات الفرعية لصفحة النقاش (حتى $1)',
 'movepage-page-exists'         => 'الصفحة $1 موجودة بالفعل ولا يمكن الكتابة عليها تلقائيا.',
-'movepage-page-moved'          => 'تم نقل الصفحة $1 إلى $2.',
-'movepage-page-unmoved'        => 'لم يمكن نقل الصفحة $1 إلى $2.',
-'movepage-max-pages'           => 'الحد الأقصى $1 {{PLURAL:$1|صفحة|صفحة}} تم نقله ولن يتم نقل المزيد تلقائيا.',
+'movepage-page-moved'          => 'نُقِلت صفحة $1 إلى $2.',
+'movepage-page-unmoved'        => 'لم يمكن نقل صفحة $1 إلى $2.',
+'movepage-max-pages'           => 'تم نقل الحد الأقصى وهو {{PLURAL:$1||صفحة واحدة|صفحتان|$1 صفحات|$1 صفحة}} ولن يتم نقل المزيد تلقائيا.',
 'movelogpage'                  => 'سجل النقل',
 'movelogpagetext'              => 'بالأسفل قائمة بالصفحات التي تم نقلها.',
-'movesubpage'                  => '{{PLURAL:$1|صفحة فرعية|صفحات فرعية}}',
-'movesubpagetext'              => 'هذه الصفحة لديها $1 {{PLURAL:$1|صفحة فرعية|صفحة فرعية}} معروضة بالأسفل.',
-'movenosubpage'                => 'هذه الصفحة ليس لديها صفحات فرعية.',
+'movesubpage'                  => '{{PLURAL:$1||الصفحة الفرعية|الصفحتان الفرعيتان|الصفحات الفرعية}}',
+'movesubpagetext'              => 'لهذه الصفحة {{PLURAL:$1||صفحة فرعية واحدة معروضة|صفحتان فرعيتان معروضتان|$1 صفحات فرعية معروضة|$1 صفحة فرعية معروضة}} بالأسفل.',
+'movenosubpage'                => 'ليس لهذه الصفحة صفحات فرعية.',
 'movereason'                   => 'السبب:',
 'revertmove'                   => 'استرجع',
 'delete_and_move'              => 'حذف ونقل',
@@ -3029,9 +3027,9 @@ $1',
 'importlogpage'                    => 'سجل الاستيراد',
 'importlogpagetext'                => 'عمليات الاستيراد الإدارية للصفحات مع تاريخ التعديل من ويكيات أخرى.',
 'import-logentry-upload'           => 'استورد [[$1]] بواسطة رفع ملف',
-'import-logentry-upload-detail'    => '$1 {{PLURAL:$1|مراجعة واحدة|مراجعة}}',
+'import-logentry-upload-detail'    => '{{PLURAL:$1|لا مراجعات|مراجعة واحدة|مراجعتان|$1 مراجعات|$1 مراجعة}}',
 'import-logentry-interwiki'        => 'استورد عبر الويكي $1',
-'import-logentry-interwiki-detail' => '$1 {{PLURAL:$1|مراجعة واحدة|مراجعة}} من $2',
+'import-logentry-interwiki-detail' => '{{PLURAL:$1||مراجعة واحدة|مراجعتان|$1 مراجعات|$1 مراجعة}} من $2',
 
 # Tooltip help for the actions
 'tooltip-pt-userpage'             => 'صفحة المستخدم الخاصة بك',
@@ -3220,7 +3218,7 @@ $1',
 'mediawarning'           => "'''تحذير''': قد يحتوي نوع هذا الملف على كود خبيث، يمكن عند تشغيله السيطرة على نظامك.",
 'imagemaxsize'           => "حد حجم الصور:<br />''(لصفحات وصف الملفات)''",
 'thumbsize'              => 'حجم العرض المصغر:',
-'widthheightpage'        => '$1×$2، $3 {{PLURAL:$3|صفحة|صفحة}}',
+'widthheightpage'        => '$1×$2، {{PLURAL:$3|لا صفحات|صفحة واحدة|صفحتان|$3 صفحات|$3 صفحة}}',
 'file-info'              => 'حجم الملف: $1، نوع MIME: $2',
 'file-info-size'         => '$1 × $2 بكسل حجم الملف: $3، نوع MIME: $4',
 'file-info-size-pages'   => '$1 × $2 بكسل, حجم الملف  : $3 ، نوع الملف : $4 ، $5 {{PLURAL:$5| صفحة | صفحات}}',
@@ -3228,7 +3226,7 @@ $1',
 'svg-long-desc'          => 'ملف SVG، أبعاده $1 × $2 بكسل، حجم الملف: $3',
 'show-big-image'         => 'دقة كاملة',
 'show-big-image-preview' => 'حجم هذه المعاينة: $1.',
-'show-big-image-other'   => 'الأبعاد الأخرى: $1.',
+'show-big-image-other'   => '{{PLURAL:$2||البعد الآخر|البعدان الآخران|الأبعاد الأخرى}}: $1.',
 'show-big-image-size'    => '$1 × $2 بكسل',
 'file-info-gif-looped'   => 'ملفوف',
 'file-info-gif-frames'   => '{{PLURAL:$1||إطار واحد|إطاران|$1 إطارات|$1 إطارا|$1 إطار}}',
@@ -3496,9 +3494,9 @@ $1',
 'exif-orientation-3' => 'دار 180°',
 'exif-orientation-4' => 'دار أفقيا',
 'exif-orientation-5' => 'دار 90° CCW و انزلق رأسيا',
-'exif-orientation-6' => 'دار 90° CW',
+'exif-orientation-6' => 'مدورة 90° عكس عقارب الساعة',
 'exif-orientation-7' => 'دار 90° CW و انزلق رأسيا',
-'exif-orientation-8' => 'دار 90° عكس عقارب الساعة',
+'exif-orientation-8' => 'مدورة 90° في اتجاه عقارب الساعة',
 
 'exif-planarconfiguration-1' => 'صيغة تشنكي',
 'exif-planarconfiguration-2' => 'صيغة مستوية',
@@ -3791,13 +3789,6 @@ $5
 'scarytranscludefailed'   => '[البحث عن القالب فشل ل$1]',
 'scarytranscludetoolong'  => '[المسار طويل للغاية]',
 
-# Trackbacks
-'trackbackbox'      => 'المتابعات لهذه الصفحة:<br />
-$1',
-'trackbackremove'   => '([$1 حذف])',
-'trackbacklink'     => 'متابعة',
-'trackbackdeleteok' => 'المتابعة تم حذفها بنجاح.',
-
 # Delete conflict
 'deletedwhileediting'      => "'''تحذير''': هذه الصفحة تم حذفها بعد أن بدأت أنت بتعديلها!",
 'confirmrecreate'          => "حذف المستخدم [[User:$1|$1]] ([[User talk:$1|نقاش]]) هذه الصفحة بعد أن بدأت أنت بتحريرها للسبب التالي:
@@ -3837,7 +3828,7 @@ $1',
 'table_pager_first'        => 'الصفحة الأولى',
 'table_pager_last'         => 'الصفحة الأخيرة',
 'table_pager_limit'        => 'اعرض $1 مدخلة في الصفحة',
-'table_pager_limit_label'  => 'العناصر لكل صفحة:',
+'table_pager_limit_label'  => 'العناصر في كل صفحة:',
 'table_pager_limit_submit' => 'اذهب',
 'table_pager_empty'        => 'لا نتائج',
 
@@ -3854,19 +3845,19 @@ $1',
 'size-gigabytes' => '$1 جيجابايت',
 
 # Live preview
-'livepreview-loading' => 'تحميل…',
-'livepreview-ready'   => 'تحميل… جاهز!',
+'livepreview-loading' => 'يُحمّل...',
+'livepreview-ready'   => 'يُحمّل… جاهز!',
 'livepreview-failed'  => 'فشل العرض المباشر!
 حاول تجربة العرض العادي.',
 'livepreview-error'   => 'لم ينجح الاتصال: $1 "$2"
 حاول تجربة العرض العادي.',
 
 # Friendlier slave lag warnings
-'lag-warn-normal' => 'التغييرات الأحدث من $1 {{PLURAL:$1|ثانية|ثانية}} قد لا تظهر في هذه القائمة.',
+'lag-warn-normal' => 'التغييرات الأحدث من {{PLURAL:$1|أقل من ثانية|ثانية واحدة|ثانيتين|$1 ثوانٍ|$1 ثانية}} قد لا تظهر في هذه القائمة.',
 'lag-warn-high'   => 'نتيجة لوجود تأخر كبير في تحديث قاعدة بيانات الخادوم، التغييرات الأحدث من {{PLURAL:$1|أقل من ثانية|ثانية واحدة|ثانيتين|$1 ثوانٍ|$1 ثانية}} ربما لا تكون ظاهرة في هذه القائمة.',
 
 # Watchlist editor
-'watchlistedit-numitems'       => 'قائمة مراقبتك تحتوي على {{PLURAL:$1|عنوان واحد|$1 عنوان}}، بدون احتساب صفحات النقاش.',
+'watchlistedit-numitems'       => 'قائمة مراقبتك تحتوي على {{PLURAL:$1||عنوان واحد|عنوانين|$1 عناوين|$1 عنوانًا|$1 عنوان}}، بدون احتساب صفحات النقاش.',
 'watchlistedit-noitems'        => 'قائمة مراقبتك لا تحتوي على أية عناوين.',
 'watchlistedit-normal-title'   => 'تعديل قائمة المراقبة',
 'watchlistedit-normal-legend'  => 'إزالة عناوين من قائمة المراقبة',
@@ -3874,7 +3865,7 @@ $1',
 لإزالة عنوان، اضغط على الصندوق بجواره، واضغط "{{int:Watchlistedit-normal-submit}}".
 يمكنك أيضا [[Special:EditWatchlist/raw|تعديل القائمة الخام]].',
 'watchlistedit-normal-submit'  => 'أزل العناوين',
-'watchlistedit-normal-done'    => '{{PLURAL:$1|عنوان واحد|$1 عنوان}} تمت إزالته من قائمة مراقبتك:',
+'watchlistedit-normal-done'    => 'تمت إزالة {{PLURAL:$1||عنوان واحد|عنوانين|$1 عناوين|$1 عنوانا|$1 عنوان}} من قائمة مراقبتك:',
 'watchlistedit-raw-title'      => 'تعديل قائمة المراقبة الخام',
 'watchlistedit-raw-legend'     => 'عدل قائمة المراقبة الخام',
 'watchlistedit-raw-explain'    => 'العناوين في قائمة مراقبتك معروضة بالأسفل، ويمكن تعديلها عن طريق الإضافة والإزالة من القائمة؛ عنوان واحد لكل سطر.
@@ -3883,7 +3874,7 @@ $1',
 'watchlistedit-raw-titles'     => 'العناوين:',
 'watchlistedit-raw-submit'     => 'حدث قائمة المراقبة',
 'watchlistedit-raw-done'       => 'قائمة مراقبتك تم تحديثها.',
-'watchlistedit-raw-added'      => '{{PLURAL:$1|عنوان واحد|$1 عنوان}} تمت إضافته:',
+'watchlistedit-raw-added'      => 'تمت إضافة {{PLURAL:$1||عنوان واحد|عنوانين|$1 عناوين|$1 عنوانا|$1 عنوان}}:',
 'watchlistedit-raw-removed'    => 'تمت إزالة {{PLURAL:$1||عنوان واحد|عنوانين|$1 عناوين|$1 عنوانا|$1 عنوان}}:',
 
 # Watchlist editing tools
@@ -4091,10 +4082,15 @@ $1',
 # New logging system
 'logentry-delete-delete'              => '{{GENDER:$2|حذف|حذفت}} $1 صفحة $3',
 'logentry-delete-restore'             => '{{GENDER:$2|استعاد|استعادت}} $1 صفحة $3',
-'logentry-delete-event'               => '$1 {{GENDER:$2|changed}} بإمكانك رؤية {{PLURAL:$5|a log event|$5 log events}} على $3: $4',
-'logentry-delete-event-legacy'        => '$1 {{GENDER:$2|changed}} رؤية أحداث تسجيل الدخول على $3',
-'logentry-delete-revision-legacy'     => '$1 {{GENDER:$2|changed}} رؤية المراجعات على صفحة $3',
+'logentry-delete-event'               => '{{GENDER:$2|غيّر|غيّرت}} $1 إمكانية مشاهدة {{PLURAL:$5||حدث|حدثين|$5 أحداث|$5 حدثًا|$5 حدث}} في سجل $3: $4',
+'logentry-delete-revision'            => '{{GENDER:$2|غيّر|غيّرت}} $1 إمكانية مشاهدة {{PLURAL:$5||مراجعة واحدة|مراجعتين|$5 مراجعات|$5 مراجعة}} في صفحة $3: $4',
+'logentry-delete-event-legacy'        => '{{GENDER:$2|غيّر|غيّرت}} $1 إمكانية رؤية أحداث سجل $3',
+'logentry-delete-revision-legacy'     => '{{GENDER:$2|غيّر|غيّرت}} $1 إمكانية رؤية مراجعات صفحة $3',
 'logentry-suppress-delete'            => '$1 {{GENDER:$2|suppressed}} صفحة $3',
+'logentry-suppress-event'             => '{{GENDER:$2|غيّر|غيّرت}} $1 بسرية إمكانية مشاهدة {{PLURAL:$5||حدث|حدثين|$5 أحداث|$5 حدثًا|$5 حدث}} في سجل $3: $4',
+'logentry-suppress-revision'          => '{{GENDER:$2|غيّر|غيّرت}} $1 بسرية إمكانية مشاهدة {{PLURAL:$5||مراجعة واحدة|مراجعتين|$5 مراجعات|$5 مراجعة}} في صفحة $3: $4',
+'logentry-suppress-event-legacy'      => '{{GENDER:$2|غيّر|غيّرت}} $1 بسرية إمكانية رؤية أحداث سجل $3',
+'logentry-suppress-revision-legacy'   => '{{GENDER:$2|غيّر|غيّرت}} $1 بسرية إمكانية رؤية مراجعات صفحة $3',
 'revdelete-content-hid'               => 'محتوى مخفي',
 'revdelete-summary-hid'               => 'ملخص التحرير مخفي',
 'revdelete-uname-hid'                 => 'اسم المستخدم مخفي',
@@ -4107,10 +4103,10 @@ $1',
 'logentry-move-move-noredirect'       => '{{GENDER:$2|نقل|نقلت}} $1 صفحة $3 إلى $4 دون ترك تحويلة',
 'logentry-move-move_redir'            => '{{GENDER:$2|نقل|نقلت}} $1 صفحة $3 إلى التحويلة $4',
 'logentry-move-move_redir-noredirect' => '{{GENDER:$2|نقل|نقلت}} $1 صفحة $3 إلى التحويلة $4 دون ترك تحويلة',
-'logentry-newusers-newusers'          => '$1 {{GENDER:$2|created}} حساب أحد المستخدمين',
-'logentry-newusers-create'            => '$1 {{GENDER:$2|created}} حساب أحد المستخدمين',
-'logentry-newusers-create2'           => '$1 {{GENDER:$2|created}} {{GENDER:$4|حساب أحد المستخدمين }} $3',
-'logentry-newusers-autocreate'        => 'حساب  $1  قد  {{GENDER:$2| استحدث}} تلقائياً',
+'logentry-newusers-newusers'          => '{{GENDER:$2|أنشأ|أنشأت}} $1 حساب مستخدم',
+'logentry-newusers-create'            => '{{GENDER:$2|أنشأ|أنشأت}} $1 حساب مستخدم',
+'logentry-newusers-create2'           => '{{GENDER:$2|أنشأ|أنشأت}} $1 حساب {{GENDER:$4|المستخدم|المستخدمة}} $3',
+'logentry-newusers-autocreate'        => '{{GENDER:$2|أنشئ}} حساب $1 تلقائياً',
 'newuserlog-byemail'                  => 'كلمة السر تم إرسالها بواسطة البريد الإلكتروني',
 
 );

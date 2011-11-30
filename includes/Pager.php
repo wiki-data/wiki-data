@@ -100,6 +100,13 @@ abstract class IndexPager extends ContextSource implements Pager {
 	protected $mLastShown, $mFirstShown, $mPastTheEndIndex, $mDefaultQuery, $mNavigationBar;
 
 	/**
+	 * HTMLForm object
+	 *
+	 * @var HTMLForm
+	 */
+	protected $mHTMLForm;
+
+	/**
 	 * Result object for the query. Warning: seek before use.
 	 *
 	 * @var ResultWrapper
@@ -551,12 +558,52 @@ abstract class IndexPager extends ContextSource implements Pager {
 		}
 		foreach ( $this->mLimitsShown as $limit ) {
 			$links[] = $this->makeLink(
-				$this->getLang()->formatNum( $limit ),
+				$this->getLanguage()->formatNum( $limit ),
 				array( 'offset' => $offset, 'limit' => $limit ),
 				'num'
 			);
 		}
 		return $links;
+	}
+
+	/**
+	 * Assembles an HTMLForm for the Pager and returns the HTML
+	 *
+	 * @return string
+	 */
+	public function buildHTMLForm() {
+		if ( $this->getHTMLFormFields() === null ) {
+			throw new MWException( __METHOD__ . " was called without any form fields being defined" );
+		}
+
+		$this->mHTMLForm = new HTMLForm( $this->getHTMLFormFields(), $this->getContext() );
+		$this->mHTMLForm->setMethod( 'get' );
+		$this->mHTMLForm->setWrapperLegendMsg( $this->getHTMLFormLegend() );
+		$this->mHTMLForm->setSubmitTextMsg( $this->getHTMLFormSubmit() );
+		$this->addHiddenFields();
+		$this->modifyHTMLForm( $this->mHTMLForm );
+		$this->mHTMLForm->prepareForm();
+
+		return $this->mHTMLForm->getHTML( '' );
+	}
+
+	/**
+	 * Adds hidden elements to forms for things that are in the query string.
+	 * This is so that parameters like offset stick through form submissions
+	 */
+	protected function addHiddenFields() {
+		$query = $this->getRequest()->getQueryValues();
+		$fieldsBlacklist = array( 'title' );
+		$fields = $this->mHTMLForm->getFlatFields();
+		foreach ( $fields as $name => $field ) {
+			$fieldsBlacklist[] = $field->getName();
+		}
+		foreach ( $query as $name => $value ) {
+			if ( in_array( $name, $fieldsBlacklist ) ) {
+				continue;
+			}
+			$this->mHTMLForm->addHiddenField( $name, $value );
+		}
 	}
 
 	/**
@@ -635,6 +682,43 @@ abstract class IndexPager extends ContextSource implements Pager {
 	 * @return Boolean
 	 */
 	protected function getDefaultDirections() { return false; }
+
+	/**
+	 * Returns an array for HTMLForm fields for the pager
+	 *
+	 * Only used if the pager makes use of HTMLForms
+	 *
+	 * @return array|null
+	 */
+	protected function getHTMLFormFields() { return null; }
+
+	/**
+	 * Message name for the fieldset legend text
+	 *
+	 * Only used if the pager makes use of HTMLForms
+	 *
+	 * @return string
+	 */
+	protected function getHTMLFormLegend() { return ''; }
+
+	/**
+	 * Message name for the submit button text
+	 *
+	 * Only used if the pager makes use of HTMLForms
+	 *
+	 * @return string
+	 */
+	protected function getHTMLFormSubmit() { return ''; }
+
+	/**
+	 * If the pager needs to do any modifications to the Form, override this
+	 * function.
+	 *
+	 * Only used if the pager makes use of HTMLForms
+	 *
+	 * @param HTMLForm $form
+	 */
+	protected function modifyHTMLForm( HTMLForm $form ) {}
 }
 
 
@@ -657,7 +741,7 @@ abstract class AlphabeticPager extends IndexPager {
 			return $this->mNavigationBar;
 		}
 
-		$lang = $this->getLang();
+		$lang = $this->getLanguage();
 
 		$opts = array( 'parsemag', 'escapenoentities' );
 		$linkTexts = array(
@@ -750,7 +834,7 @@ abstract class ReverseChronologicalPager extends IndexPager {
 			return $this->mNavigationBar;
 		}
 
-		$nicenumber = $this->getLang()->formatNum( $this->mLimit );
+		$nicenumber = $this->getLanguage()->formatNum( $this->mLimit );
 		$linkTexts = array(
 			'prev' => wfMsgExt(
 				'pager-newer-n',
@@ -768,7 +852,7 @@ abstract class ReverseChronologicalPager extends IndexPager {
 
 		$pagingLinks = $this->getPagingLinks( $linkTexts );
 		$limitLinks = $this->getLimitLinks();
-		$limits = $this->getLang()->pipeList( $limitLinks );
+		$limits = $this->getLanguage()->pipeList( $limitLinks );
 
 		$this->mNavigationBar = "({$pagingLinks['first']}" .
 			wfMsgExt( 'pipe-separator' , 'escapenoentities' ) .
@@ -1016,7 +1100,7 @@ abstract class TablePager extends IndexPager {
 			'next' => 'arrow_disabled_right_25.png',
 			'last' => 'arrow_disabled_last_25.png',
 		);
-		if( $this->getLang()->isRTL() ) {
+		if( $this->getLanguage()->isRTL() ) {
 			$keys = array_keys( $labels );
 			$images = array_combine( $keys, array_reverse( $images ) );
 			$disabledImages = array_combine( $keys, array_reverse( $disabledImages ) );
@@ -1060,7 +1144,7 @@ abstract class TablePager extends IndexPager {
 			# will be a string.
 			if( is_int( $value ) ){
 				$limit = $value;
-				$text = $this->getLang()->formatNum( $limit );
+				$text = $this->getLanguage()->formatNum( $limit );
 			} else {
 				$limit = $key;
 				$text = $value;
@@ -1069,6 +1153,27 @@ abstract class TablePager extends IndexPager {
 		}
 		$s .= Html::closeElement( 'select' );
 		return $s;
+	}
+
+	/**
+	 * Returns an HTMLFormField definition for the "Items per page:" dropdown
+	 *
+	 * @return array
+	 */
+	protected function getHTMLFormLimitSelect() {
+		$f = array(
+			'class' => 'HTMLItemsPerPageField',
+			'label-message' => 'table_pager_limit_label',
+			'options' => array(),
+			'default' => $this->mDefaultLimit,
+			'name' => 'limit',
+		);
+
+		foreach( $this->mLimitsShown as $limit ) {
+			$f['options'][$this->getLanguage()->formatNum( $limit )] = $limit;
+		}
+
+		return $f;
 	}
 
 	/**
@@ -1157,4 +1262,31 @@ abstract class TablePager extends IndexPager {
 	 * @return Array
 	 */
 	abstract function getFieldNames();
+}
+
+/**
+ * Items per page dropdown for HTMLForm
+ */
+class HTMLItemsPerPageField extends HTMLSelectField {
+	/**
+	 * Basically don't do any validation. If it's a number that's fine. Also,
+	 * add it to the list if it's not there already
+	 *
+	 * @param $value
+	 * @param $alldata
+	 * @return bool
+	 */
+	function validate( $value, $alldata ) {
+		if ( $value == '' ) {
+			return true;
+		}
+
+		if ( !in_array( $value, $this->mParams['options'] ) ) {
+			$this->mParams['options'][ $this->mParent->getLanguage()->formatNum( $value ) ] = intval($value);
+			asort( $this->mParams['options'] );
+		}
+
+		return true;
+	}
+
 }

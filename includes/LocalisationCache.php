@@ -163,12 +163,7 @@ class LocalisationCache {
 					$storeClass = 'LCStore_Accel';
 					break;
 				case 'detect':
-					try {
-						$c = wfGetCache( CACHE_ACCEL );
-						$storeClass = 'LCStore_Accel';
-					} catch( Exception $c ) {
-						$storeClass = $wgCacheDirectory ? 'LCStore_CDB' : 'LCStore_DB';
-					}
+					$storeClass = $wgCacheDirectory ? 'LCStore_CDB' : 'LCStore_DB';
 					break;
 				default:
 					throw new MWException(
@@ -842,7 +837,7 @@ interface LCStore {
 
 /**
  * LCStore implementation which uses PHP accelerator to store data.
- * This will work if one of XCache, eAccelerator, or APC cacher is configured.
+ * This will work if one of XCache, WinCache or APC cacher is configured.
  * (See ObjectCache.php)
  */
 class LCStore_Accel implements LCStore {

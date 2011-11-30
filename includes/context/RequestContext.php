@@ -165,9 +165,19 @@ class RequestContext implements IContextSource {
 	/**
 	 * Set the Language object
 	 *
+	 * @deprecated 1.19 Use setLanguage instead
 	 * @param $l Mixed Language instance or language code
 	 */
 	public function setLang( $l ) {
+		$this->setLanguage( $l );
+	}
+
+	/**
+	 * Set the Language object
+	 *
+	 * @param $l Mixed Language instance or language code
+	 */
+	public function setLanguage( $l ) {
 		if ( $l instanceof Language ) {
 			$this->lang = $l;
 		} elseif ( is_string( $l ) ) {
@@ -180,11 +190,19 @@ class RequestContext implements IContextSource {
 	}
 
 	/**
+	 * @deprecated 1.19 Use getLanguage instead
+	 * @return Language
+	 */
+	public function getLang() {
+		return $this->getLanguage();
+	}
+
+	/**
 	 * Get the Language object
 	 *
 	 * @return Language
 	 */
-	public function getLang() {
+	public function getLanguage() {
 		if ( $this->lang === null ) {
 			global $wgLanguageCode, $wgContLang;
 			$code = $this->getRequest()->getVal(

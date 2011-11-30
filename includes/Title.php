@@ -1946,6 +1946,57 @@ class Title {
 	}
 
 	/**
+	 * Returns true if the title is inside the specified namespace.
+	 * 
+	 * Please make use of this instead of comparing to getNamespace()
+	 * This function is much more resistant to changes we may make
+	 * to namespaces than code that makes direct comparisons.
+	 * @param $ns The namespace
+	 * @return bool
+	 * @since 1.19
+	 */
+	public function inNamespace( $ns ) {
+		return MWNamespace::equals( $this->getNamespace(), $ns );
+	}
+
+	/**
+	 * Returns true if the title is inside one of the specified namespaces.
+	 *
+	 * @param ...$namespaces The namespaces to check for
+	 * @return bool
+	 * @since 1.19
+	 */
+	public function inNamespaces( /* ... */ ) {
+		$namespaces = func_get_args();
+		if ( count( $namespaces ) > 0 && is_array( $namespaces[0] ) ) {
+			$namespaces = $namespaces[0];
+		}
+
+		foreach ( $namespaces as $ns ) {
+			if ( $this->inNamespace( $ns ) ) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * Returns true if the title has the same subject namespace as the
+	 * namespace specified.
+	 * For example this method will take NS_USER and return true if namespace
+	 * is either NS_USER or NS_USER_TALK since both of them have NS_USER
+	 * as their subject namespace.
+	 *
+	 * This is MUCH simpler than individually testing for equivilance
+	 * against both NS_USER and NS_USER_TALK, and is also forward compatible.
+	 * @since 1.19
+	 */
+	public function hasSubjectNamespace( $ns ) {
+		return MWNamespace::subjectEquals( $this->getNamespace(), $ns );
+	}
+
+	/**
 	 * Does this have subpages?  (Warning, usually requires an extra DB query.)
 	 *
 	 * @return Bool
@@ -3383,10 +3434,7 @@ class Title {
 			$dbw->delete( 'page', array( 'page_id' => $newid ), __METHOD__ );
 			if ( !$dbw->cascadingDeletes() ) {
 				$dbw->delete( 'revision', array( 'rev_page' => $newid ), __METHOD__ );
-				global $wgUseTrackbacks;
-				if ( $wgUseTrackbacks ) {
-					$dbw->delete( 'trackbacks', array( 'tb_page' => $newid ), __METHOD__ );
-				}
+
 				$dbw->delete( 'pagelinks', array( 'pl_from' => $newid ), __METHOD__ );
 				$dbw->delete( 'imagelinks', array( 'il_from' => $newid ), __METHOD__ );
 				$dbw->delete( 'categorylinks', array( 'cl_from' => $newid ), __METHOD__ );
@@ -4096,46 +4144,6 @@ class Title {
 	}
 
 	/**
-	 * Get the trackback URL for this page
-	 *
-	 * @return String Trackback URL
-	 */
-	public function trackbackURL() {
-		global $wgScriptPath, $wgServer, $wgScriptExtension;
-
-		return "$wgServer$wgScriptPath/trackback$wgScriptExtension?article="
-			. htmlspecialchars( urlencode( $this->getPrefixedDBkey() ) );
-	}
-
-	/**
-	 * Get the trackback RDF for this page
-	 *
-	 * @return String Trackback RDF
-	 */
-	public function trackbackRDF() {
-		$url = htmlspecialchars( $this->getFullURL() );
-		$title = htmlspecialchars( $this->getText() );
-		$tburl = $this->trackbackURL();
-
-		// Autodiscovery RDF is placed in comments so HTML validator
-		// won't barf. This is a rather icky workaround, but seems
-		// frequently used by this kind of RDF thingy.
-		//
-		// Spec: http://www.sixapart.com/pronet/docs/trackback_spec
-		return "<!--
-<rdf:RDF xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\"
-		 xmlns:dc=\"http://purl.org/dc/elements/1.1/\"
-		 xmlns:trackback=\"http://madskills.com/public/xml/rss/module/trackback/\">
-<rdf:Description
-   rdf:about=\"$url\"
-   dc:identifier=\"$url\"
-   dc:title=\"$title\"
-   trackback:ping=\"$tburl\" />
-</rdf:RDF>
--->";
-	}
-
-	/**
 	 * Generate strings used for xml 'id' names in monobook tabs
 	 *
 	 * @param $prepend string defaults to 'nstab-'
@@ -4278,7 +4286,7 @@ class Title {
 	/**
 	 * Get a backlink cache object
 	 *
-	 * @return object BacklinkCache
+	 * @return BacklinkCache
 	 */
 	function getBacklinkCache() {
 		if ( is_null( $this->mBacklinkCache ) ) {
@@ -4322,8 +4330,8 @@ class Title {
 
 		wfRunHooks( 'TitleGetRestrictionTypes', array( $this, &$types ) );
 
-		wfDebug( __METHOD__ . ': applicable restriction types for ' .
-			$this->getPrefixedText() . ' are ' . implode( ',', $types ) . "\n" );
+		wfDebug( __METHOD__ . ': applicable restrictions to [[' .
+			$this->getPrefixedText() . ']] are {' . implode( ',', $types ) . "}\n" );
 
 		return $types;
 	}

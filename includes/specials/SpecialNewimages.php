@@ -30,16 +30,15 @@ class SpecialNewFiles extends IncludableSpecialPage {
 		$this->setHeaders();
 		$this->outputHeader();
 
+		$out = $this->getOutput();
 		$pager = new NewFilesPager( $this->getContext(), $par );
 
 		if ( !$this->including() ) {
-			$form = $pager->getForm();
-			$form->prepareForm();
-			$form->displayForm( '' );
+			$out->addHTML( $pager->buildHTMLForm() );
 		}
-		$this->getOutput()->addHTML( $pager->getBody() );
+		$out->addHTML( $pager->getBody() );
 		if ( !$this->including() ) {
-			$this->getOutput()->addHTML( $pager->getNavigationBar() );
+			$out->addHTML( $pager->getNavigationBar() );
 		}
 	}
 }
@@ -49,6 +48,11 @@ class SpecialNewFiles extends IncludableSpecialPage {
  * @ingroup SpecialPage Pager
  */
 class NewFilesPager extends ReverseChronologicalPager {
+
+	/**
+	 * @var ImageGallery
+	 */
+	var $gallery;
 
 	function __construct( IContextSource $context, $par = null ) {
 		$this->like = $context->getRequest()->getText( 'like' );
@@ -115,12 +119,12 @@ class NewFilesPager extends ReverseChronologicalPager {
 		$this->gallery->add(
 			$title,
 			"$ul<br />\n<i>"
-				. htmlspecialchars( $this->getLang()->timeanddate( $row->img_timestamp, true ) )
+				. htmlspecialchars( $this->getLanguage()->timeanddate( $row->img_timestamp, true ) )
 				. "</i><br />\n"
 		);
 	}
 
-	function getForm() {
+	protected function getHTMLFormFields() {
 		global $wgMiserMode;
 
 		$fields = array(
@@ -133,17 +137,6 @@ class NewFilesPager extends ReverseChronologicalPager {
 				'type' => 'check',
 				'label' => wfMessage( 'showhidebots', wfMsg( 'show' ) ),
 				'name' => 'showbots',
-			#	'default' => $this->getRequest()->getBool( 'showbots', 0 ),
-			),
-			'limit' => array(
-				'type' => 'hidden',
-				'default' => $this->getRequest()->getText( 'limit' ),
-				'name' => 'limit',
-			),
-			'offset' => array(
-				'type' => 'hidden',
-				'default' => $this->getRequest()->getText( 'offset' ),
-				'name' => 'offset',
 			),
 		);
 
@@ -151,12 +144,14 @@ class NewFilesPager extends ReverseChronologicalPager {
 			unset( $fields['like'] );
 		}
 
-		$form = new HTMLForm( $fields, $this->getContext() );
-		$form->setTitle( $this->getTitle() );
-		$form->setSubmitText( wfMsg( 'ilsubmit' ) );
-		$form->setMethod( 'get' );
-		$form->setWrapperLegend( wfMsg( 'newimages-legend' ) );
+		return $fields;
+	}
 
-		return $form;
+	protected function getHTMLFormLegend() {
+		return 'newimages-legend';
+	}
+
+	protected function getHTMLFormSubmit() {
+		return 'ilsubmit';
 	}
 }

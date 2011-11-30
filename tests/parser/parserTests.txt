@@ -615,6 +615,26 @@ disabled
 </dl>
 !! end
 
+!! test
+Definition and unordered list using wiki syntax nested in unordered list using html tags.
+!! input
+<ul><li>
+; term : description 
+* unordered
+</li>
+</ul>
+!! result
+<ul><li>
+<dl><dt> term&#160;</dt><dd> description 
+</dd></dl>
+<ul><li> unordered
+</li></ul>
+</li>
+</ul>
+
+!! end
+
+
 ###
 ### External links
 ###
@@ -1169,6 +1189,29 @@ URL-encoding in URL functions (multiple parameters)
 </p>
 !! end
 
+!! test
+Brackets in urls
+!! input
+http://example.com/index.php?foozoid%5B%5D=bar
+
+http://example.com/index.php?foozoid&#x5B;&#x5D;=bar
+!! result
+<p><a rel="nofollow" class="external free" href="http://example.com/index.php?foozoid%5B%5D=bar">http://example.com/index.php?foozoid%5B%5D=bar</a>
+</p><p><a rel="nofollow" class="external free" href="http://example.com/index.php?foozoid%5B%5D=bar">http://example.com/index.php?foozoid%5B%5D=bar</a>
+</p>
+!! end
+
+!! test
+IPv6 urls (bug 21261)
+!! options
+disabled
+!! input
+http://[2404:130:0:1000::187:2]/index.php
+!! result
+<p><a rel="nofollow" class="external free" href="http://[2404:130:0:1000::187:2]/index.php">http://2404:130:0:1000::187:2/index.php</a>
+</p>
+!! end
+
 ###
 ### Quotes
 ###
@@ -1431,6 +1474,29 @@ Table security: embedded pipes (http://lists.wikimedia.org/mailman/htdig/wikitec
 </td>
 </tr>
 </table>
+
+!! end
+
+
+!! test
+Indented table markup mixed with indented pre content (proposed in bug 6200)
+!! input
+ <table>
+ <tr>
+ <td>
+ Text that should be rendered preformatted
+ </td>
+ </tr>
+ </table>
+!! result
+ <table>
+ <tr>
+ <td>
+<pre>Text that should be rendered preformatted
+</pre>
+ </td>
+ </tr>
+ </table>
 
 !! end
 
@@ -8522,18 +8588,18 @@ comment
 !! end
 
 !! test
+Bad images - basic functionality
 !! options
 disabled
-Bad images - basic functionality
 !! input
 [[File:Bad.jpg]]
 !! result
 !! end
 
 !! test
+Bad images - bug 16039: text after bad image disappears
 !! options
 disabled
-Bad images - bug 16039: text after bad image disappears
 !! input
 Foo bar
 [[File:Bad.jpg]]

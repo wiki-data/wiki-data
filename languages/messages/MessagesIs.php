@@ -1343,9 +1343,9 @@ Tölvupóstfang þitt er ekki gefið upp þegar aðrir notendur hafa samband vi�
 # Rights
 'right-read'                  => 'Lesa síður',
 'right-edit'                  => 'Breyta síðum',
-'right-createpage'            => 'Gera síður (sem eru ekki spjallsíður)',
-'right-createtalk'            => 'Gera spjallsíður',
-'right-createaccount'         => 'Gera nýja notandaaðganga',
+'right-createpage'            => 'Skapa síður (sem eru ekki spjallsíður)',
+'right-createtalk'            => 'Skapa spjallsíður',
+'right-createaccount'         => 'Stofna nýja notandaaðganga',
 'right-minoredit'             => 'Merkja sem minniháttarbreytingar',
 'right-move'                  => 'Færa síður',
 'right-move-subpages'         => 'Færa síður með undirsíðum þeirra',
@@ -1768,7 +1768,7 @@ Leitarstrengurinn á að vera á þessu formi: efnistag/myndasnið, t.d. <tt>ima
 
 # Unused templates
 'unusedtemplates'     => 'Ónotuð snið',
-'unusedtemplatestext' => 'Þetta er listi yfir allar síður í {{ns:sniða}} nafnrýminu sem ekki eru notaðar í neinum öðrum síðum. Munið að gá að öðrum tenglum í sniðin áður en þeim er eytt.',
+'unusedtemplatestext' => 'Þetta er listi yfir allar síður í {{ns:snið}} nafnrýminu sem ekki eru notaðar í neinum öðrum síðum. Munið að gá að öðrum tenglum í sniðin áður en þeim er eytt.',
 'unusedtemplateswlh'  => 'aðrir tenglar',
 
 # Random page
@@ -2931,6 +2931,7 @@ Ef skránni hefur verið breytt, kann að vera að einhverjar upplýsingar eigi 
 'exif-focalplaneresolutionunit'    => 'Eining upplausnar brennidepils flatar',
 'exif-subjectlocation'             => 'Staðsetning viðfangsefnis',
 'exif-exposureindex'               => 'Vísistala lýsingar',
+'exif-sensingmethod'               => 'Skynjun',
 'exif-filesource'                  => 'Uppruni skráar',
 'exif-scenetype'                   => 'Myndefni',
 'exif-customrendered'              => 'Sérstök myndvinnsla',
@@ -3271,13 +3272,6 @@ $5
 # Scary transclusion
 'scarytranscludefailed'  => '[Gat ekki sótt snið fyrir $1]',
 'scarytranscludetoolong' => '[vefslóðin er of löng]',
-
-# Trackbacks
-'trackbackbox'      => 'Varanlegir tenglar fyrir þessa grein:<br />
-$1',
-'trackbackremove'   => '([$1 eydd])',
-'trackbacklink'     => 'Varanlegur tengill',
-'trackbackdeleteok' => 'Varanlega tenglinum var eytt.',
 
 # Delete conflict
 'deletedwhileediting'      => "'''Viðvörun''': Þessari síðu var eytt eftir að þú fórst að breyta henni!",

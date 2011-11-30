@@ -1606,7 +1606,6 @@ $1",
 'right-autopatrol'            => 'סימון אוטומטי של עריכות של המשתמש כבדוקות',
 'right-patrolmarks'           => 'צפייה בסימוני עריכות בדוקות בשינויים האחרונים',
 'right-unwatchedpages'        => 'הצגת רשימה של דפים שאינם במעקב',
-'right-trackback'             => 'שליחת טרקבק',
 'right-mergehistory'          => 'מיזוג היסטוריות של דפים',
 'right-userrights'            => 'עריכת כל הרשאות המשתמש',
 'right-userrights-interwiki'  => 'עריכת הרשאות המשתמש של משתמשים באתרי ויקי אחרים',
@@ -1653,11 +1652,11 @@ $1",
 'action-patrol'               => 'לסמן עריכות של אחרים כבדוקות',
 'action-autopatrol'           => 'לסמן את עריכותיכם כבדוקות',
 'action-unwatchedpages'       => 'לצפות ברשימת הדפים שאינם במעקב',
-'action-trackback'            => 'לשלוח טרקבק',
 'action-mergehistory'         => 'למזג את ההיסטוריה של דף זה',
 'action-userrights'           => 'לערוך את כל הרשאות המשתמש',
 'action-userrights-interwiki' => 'לערוך את ההרשאות של משתמשים באתרי ויקי אחרים',
 'action-siteadmin'            => 'לנעול או לבטל את נעילת בסיס הנתונים',
+'action-sendemail'            => 'לשלוח דואר אלקטרוני',
 
 # Recent changes
 'nchanges'                          => '{{PLURAL:$1|שינוי אחד|$1 שינויים}}',
@@ -2095,7 +2094,7 @@ $1',
 'mostlinked'              => 'הדפים המקושרים ביותר',
 'mostlinkedcategories'    => 'הקטגוריות המקושרות ביותר',
 'mostlinkedtemplates'     => 'התבניות המקושרות ביותר',
-'mostcategories'          => 'הדפים מרובי־הקטגוריות ביותר',
+'mostcategories'          => 'הדפים עם המספר הרב ביותר של קטגוריות',
 'mostimages'              => 'הקבצים המקושרים ביותר',
 'mostrevisions'           => 'הדפים בעלי מספר העריכות הגבוה ביותר',
 'prefixindex'             => 'רשימת הדפים המתחילים ב…',
@@ -2142,8 +2141,8 @@ $1',
 'booksources-invalid-isbn'  => 'המסת"ב שניתן כנראה אינו תקין; אנא בדקו אם ביצעתם טעויות בהעתקה מהמידע המקורי.',
 
 # Special:Log
-'specialloguserlabel'  => 'משתמש:',
-'speciallogtitlelabel' => 'כותרת:',
+'specialloguserlabel'  => 'בוצעו על ידי המשתמש:',
+'speciallogtitlelabel' => 'יעד (כותרת או משתמש):',
 'log'                  => 'יומנים',
 'all-logs-page'        => 'כל היומנים הציבוריים',
 'alllogstext'          => 'תצוגה משולבת של כל סוגי היומנים הזמינים ב{{grammar:תחילית|{{SITENAME}}}}.
@@ -3618,13 +3617,6 @@ $5
 'scarytranscludedisabled' => '[הכללת דפים בין אתרים מבוטלת]',
 'scarytranscludefailed'   => '[הכללת התבנית נכשלה בגלל $1]',
 'scarytranscludetoolong'  => '[כתובת ה־URL ארוכה מדי]',
-
-# Trackbacks
-'trackbackbox'      => 'טרקבקים לדף זה:<br />
-$1',
-'trackbackremove'   => '([$1 מחיקה])',
-'trackbacklink'     => 'טרקבק',
-'trackbackdeleteok' => 'הטרקבק נמחק בהצלחה.',
 
 # Delete conflict
 'deletedwhileediting'      => "'''אזהרה''': דף זה נמחק לאחר שהתחלתם לערוך!",

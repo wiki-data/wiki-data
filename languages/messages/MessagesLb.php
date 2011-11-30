@@ -1250,7 +1250,7 @@ Dëst kann net réckgängeg gemaach ginn.",
 'prefs-memberingroups'          => 'Member vun {{PLURAL:$1|der Benotzergrupp|de Benotzergruppen}}:',
 'prefs-registration'            => 'Zäitpunkt vum Opmaache vum Benotzerkont:',
 'yourrealname'                  => 'Richtegen Numm:',
-'yourlanguage'                  => 'Sprooch vun der Benotzeruewerfläch:',
+'yourlanguage'                  => 'Sprooch:',
 'yourvariant'                   => 'Sproochvariant fir den Inhalt:',
 'prefs-help-variant'            => 'Är léifste Variant oder Orthographie an där Inhaltssäite vun dëser Wiki gewise solle ginn.',
 'yournick'                      => 'Ënnerschrëft:',
@@ -1386,7 +1386,6 @@ Si muss manner wéi $1 {{PLURAL:$1|Zeechen|Zeechen}} hunn.',
 'right-autopatrol'            => 'Déi eegen Ännerungen automatesch als nogekuckt markéieren',
 'right-patrolmarks'           => 'Markéierung "nogekuckt" an de rezenten Ännerunge weisen',
 'right-unwatchedpages'        => 'Lëscht vun den net iwwerwaachte Säite weisen',
-'right-trackback'             => 'En Trackback matdeelen',
 'right-mergehistory'          => 'Zesummeféierung vum Historique vun de Versioune vu Säiten',
 'right-userrights'            => 'All Benotzerrechter änneren',
 'right-userrights-interwiki'  => 'Benotzerrechter vu Benotzer op anere Wiki-Siten änneren',
@@ -1433,11 +1432,11 @@ Si muss manner wéi $1 {{PLURAL:$1|Zeechen|Zeechen}} hunn.',
 'action-patrol'               => "d'Ännerunge vun Aneren als nogekuckt markéieren",
 'action-autopatrol'           => 'eegen Ännerungen als nogekuckt ze markéieren',
 'action-unwatchedpages'       => "d'Lëscht vun den net iwwerwaachte Säiten ze kucken",
-'action-trackback'            => "en ''Trackback'' matzedeelen",
 'action-mergehistory'         => "d'Versiounsgeschicht vun dëser Säit zesummenzeféieren",
 'action-userrights'           => "all Benotzerrechter z'änneren",
 'action-userrights-interwiki' => "d'Rechter vu Benotzer vun anere Wikien z'änneren",
 'action-siteadmin'            => "d'Datebank ze spären oder d'Spär opzehiewen",
+'action-sendemail'            => 'Maile schécken',
 
 # Recent changes
 'nchanges'                          => '$1 {{PLURAL:$1|Ännerung|Ännerungen}}',
@@ -1907,8 +1906,8 @@ Denkt w.e.g. drunn datt aner Internetsäiten dëse Fichier mat enger direkter UR
 'booksources-invalid-isbn'  => "D'ISBN-Nummer déi Dir uginn hutt schéngt net gëlteg ze sinn. Kuckt w.e.g. no ob beim Kopéiere kee Feeler geschitt ass.",
 
 # Special:Log
-'specialloguserlabel'  => 'Benotzer:',
-'speciallogtitlelabel' => 'Titel:',
+'specialloguserlabel'  => 'Aktive Benotzer:',
+'speciallogtitlelabel' => 'Zil (Titel oder Benotzer):',
 'log'                  => 'Logbicher',
 'all-logs-page'        => 'All ëffentlech Logbicher',
 'alllogstext'          => "Dëst ass eng kombinéiert Lëscht vu Logbicher op {{SITENAME}}.
@@ -1952,7 +1951,8 @@ Kuckt och [[Special:WantedCategories|Gewënschte Kategorien]].',
 'linksearch-pat'   => 'Sich-Critère:',
 'linksearch-ns'    => 'Nummraum:',
 'linksearch-ok'    => 'Sichen',
-'linksearch-text'  => 'Sougennante "Wildcards" wéi zum Beispill <tt>*.example.com</tt> kënne benotzt ginn.<br />
+'linksearch-text'  => 'Sougennante "Wildcards" wéi zum Beispill <tt>*.example.com</tt> kënne benotzt ginn.
+Et muss mindestens en Top-Level-Domaine ugi ginn, wéi z. Bsp. ".org".<br />
 Ënnerstëtzte Protekoller: <tt>$1</tt>',
 'linksearch-line'  => '$1 verlinkt vun $2',
 'linksearch-error' => 'Wildcards (*,?) kënnen nëmmen am Ufank vum Host-Numm benotzt ginn.',
@@ -2283,6 +2283,7 @@ $1',
 # Namespace form on various pages
 'namespace'                     => 'Nummraum:',
 'invert'                        => 'Auswiel ëmdréinen',
+'tooltip-invert'                => 'Klickt dës Këscht fir Ännerungen am erausgesichten Nummraum (an den associéierten Nummraim wa se markéiert sinn) ze verstoppen.',
 'namespace_association'         => 'Associéierten Nummraum',
 'tooltip-namespace_association' => 'Dës Këscht uklicke fir den Diskussiouns oder den associéierten Nummraum mat dem erausgesichten Nummraum matanzebezéien',
 'blanknamespace'                => '(Haapt)',
@@ -2580,6 +2581,7 @@ Wann nëmmen déi aktuell Versioun exportéiert soll ginn, kënnt Dir och e Link
 'exportcuronly'     => 'Nëmmen déi aktuell Versioun exportéieren an net de ganzen Historique',
 'exportnohistory'   => "----
 '''Hiwäis:''' Den Export vu komplette Versiounshistoriquen ass aus Performancegrënn bis op weideres net méiglech.",
+'exportlistauthors' => 'Fir all Säit eng komplett Lëscht vun deenen déi un der Säit matgeschafft hunn drasetzen',
 'export-submit'     => 'Exportéieren',
 'export-addcattext' => 'Säiten aus Kategorie derbäisetzen:',
 'export-addcat'     => 'Derbäisetzen',
@@ -3341,13 +3343,6 @@ Dëse Confirmatiouns-Code leeft den $4 of.',
 'scarytranscludefailed'   => "[D'Siche no der Schabloun fir $1 huet net funktionéiert]",
 'scarytranscludetoolong'  => "[D'URL ass ze laang]",
 
-# Trackbacks
-'trackbackbox'      => "''Trackbacke'' fir dës Säit:<br />
-$1",
-'trackbackremove'   => '([$1 läschen])',
-'trackbacklink'     => 'Zréckverfollegen',
-'trackbackdeleteok' => "Den ''Trackback'' gouf geläscht.",
-
 # Delete conflict
 'deletedwhileediting'      => "'''Opgepasst''': Dës Säit gouf geläscht nodeems datt dir ugefaangen hutt se z'änneren!",
 'confirmrecreate'          => "De Benotzer [[User:$1|$1]] ([[User talk:$1|Diskussioun]]) huet dës Säit geläscht, nodeems datt där ugefaangen hutt drun ze schaffen. D'Begrënnung war: ''$2'' Bestätegt w.e.g., datt Dir dës Säit wierklich erëm nei opmaache wëllt.",
@@ -3390,7 +3385,7 @@ $1",
 'autosumm-new'     => "Säit ugeluecht mat: '$1'",
 
 # Live preview
-'livepreview-loading' => 'Lueden …',
+'livepreview-loading' => 'Lueden…',
 'livepreview-ready'   => 'Lueden … Fäerdeg!',
 'livepreview-failed'  => "Live-Preview huet net fonctionéiert! Benotzt w.e.g. d'Fonctioun ''Kucken ouni ofzespäicheren''.",
 'livepreview-error'   => "Verbindung net méiglech: $1 „$2“.

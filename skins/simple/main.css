@@ -84,10 +84,6 @@ a:hover {
 	left: 0;
 }
 
-#footer {
-	display: none;
-}
-
 body {
 	margin: 0;
 	padding: 0;
@@ -353,6 +349,13 @@ a.new,
 }
 li.new {
 	text-decoration: line-through;
+}
+/**
+ * Overrides text justification (user preference)
+ * See bug 31990
+ */
+#catlinks {
+	text-align: center;
 }
 .catlinks {
 	text-align: center;

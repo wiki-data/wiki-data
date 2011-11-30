@@ -187,7 +187,7 @@ $wgStyleDirectory = false;
 $wgArticlePath      = false;
 
 /**
- * The URL path for the images directory. Will default to "{$IP}/images" in Setup.php
+ * The URL path for the images directory. Will default to "{$wgScriptPath}/images" in Setup.php
  */
 $wgUploadPath       = false;
 
@@ -556,6 +556,13 @@ $wgCheckFileExtensions = true;
  * WARNING: setting this to false is insecure for public wikis.
  */
 $wgStrictFileExtensions = true;
+
+/**
+ * Setting this to true will disable the upload system's checks for HTML/JavaScript.
+ * THIS IS VERY DANGEROUS on a publicly editable site, so USE wgGroupPermissions
+ * TO RESTRICT UPLOADING to only those that you trust
+ */
+$wgDisableUploadScriptChecks = false;
 
 /** Warn if uploaded files are larger than this (in bytes), or false to disable*/
 $wgUploadSizeWarning = false;
@@ -1308,9 +1315,6 @@ $wgDBAvgStatusPoll = 2000;
 
 /** Set to true if using InnoDB tables */
 $wgDBtransactions	= false;
-/** Set to true for compatibility with extensions that might be checking.
- * MySQL 3.23.x is no longer supported. */
-$wgDBmysql4			= true;
 
 /**
  * Set to true to engage MySQL 4.1/5.0 charset-related features;
@@ -1485,7 +1489,7 @@ $wgCacheDirectory = false;
  *   - CACHE_NONE:       Do not cache
  *   - CACHE_DB:         Store cache objects in the DB
  *   - CACHE_MEMCACHED:  MemCached, must specify servers in $wgMemCachedServers
- *   - CACHE_ACCEL:      eAccelerator, APC, XCache or WinCache
+ *   - CACHE_ACCEL:      APC, XCache or WinCache
  *   - CACHE_DBA:        Use PHP's DBA extension to store in a DBM-style
  *                       database. This is slow, and is not recommended for
  *                       anything other than debugging.
@@ -1535,7 +1539,6 @@ $wgObjectCaches = array(
 	CACHE_ACCEL => array( 'factory' => 'ObjectCache::newAccelerator' ),
 	CACHE_MEMCACHED => array( 'factory' => 'ObjectCache::newMemcached' ),
 
-	'eaccelerator' => array( 'class' => 'eAccelBagOStuff' ),
 	'apc' => array( 'class' => 'APCBagOStuff' ),
 	'xcache' => array( 'class' => 'XCacheBagOStuff' ),
 	'wincache' => array( 'class' => 'WinCacheBagOStuff' ),
@@ -1876,19 +1879,19 @@ $wgExtraLanguageNames = array();
  * and excludes them when running the transstat.php script.
  */
 $wgDummyLanguageCodes = array(
-	'als',		# => 'gsw'
-	'bat-smg',	# => 'sgs'
-	'be-x-old',	# => 'be-tarask'
-	'bh',		# => 'bho'
-	'fiu-vro',	# => 'vro'
-	'nb',		# => 'no'
-	'qqq',		# Used for message documentation.
-	'qqx',		# Used for viewing message keys.
-	'roa-rup',	# => 'rup'
-	'simple',	# => 'en'
-	'zh-classical',	# => 'lzh'
-	'zh-min-nan',	# => 'nan'
-	'zh-yue',	# => 'yue'
+	'als' => 'gsw',
+	'bat-smg' => 'sgs',
+	'be-x-old' => 'be-tarask',
+	'bh' => 'bho',
+	'fiu-vro' => 'vro',
+	'nb' => 'no',
+	'qqq' => 'qqq', # Used for message documentation.
+	'qqx' => 'qqx', # Used for viewing message keys.
+	'roa-rup' => 'rup',
+	'simple' => 'en',
+	'zh-classical' => 'lzh',
+	'zh-min-nan' => 'nan',
+	'zh-yue' => 'yue',
 );
 
 /**
@@ -2247,7 +2250,7 @@ $wgShowIPinHeader	= true;
  * Use a user's real name inside the user interface for display instead of the username
  * (experimental)
  */
-$wgRealNameInInterface = true;
+$wgRealNameInInterface = false;
 
 /**
  * Site notice shown at the top of each page
@@ -2343,13 +2346,6 @@ $wgUseSiteJs = true;
 
 /** Use the site's Cascading Style Sheets (CSS)? */
 $wgUseSiteCss = true;
-
-/**
- * Set to false to disable application of access keys and tooltips,
- * eg to avoid keyboard conflicts with system keys or as a low-level
- * optimization.
- */
-$wgEnableTooltipsAndAccesskeys = true;
 
 /**
  * Break out of framesets. This can be used to prevent clickjacking attacks,
@@ -2967,7 +2963,7 @@ $wgTidyInternal = extension_loaded( 'tidy' );
 $wgDebugTidy = false;
 
 /** Allow raw, unchecked HTML in <html>...</html> sections.
- * THIS IS VERY DANGEROUS on a publically editable site, so USE wgGroupPermissions
+ * THIS IS VERY DANGEROUS on a publicly editable site, so USE wgGroupPermissions
  * TO RESTRICT EDITING to only those that you trust
  */
 $wgRawHtml = false;
@@ -3476,7 +3472,6 @@ $wgGroupPermissions['sysop']['movefile']         = true;
 $wgGroupPermissions['sysop']['unblockself']      = true;
 $wgGroupPermissions['sysop']['suppressredirect'] = true;
 #$wgGroupPermissions['sysop']['mergehistory']     = true;
-#$wgGroupPermissions['sysop']['trackback']        = true;
 
 // Permission to change users' group assignments
 $wgGroupPermissions['bureaucrat']['userrights']  = true;
@@ -4127,14 +4122,6 @@ $wgAggregateStatsID = false;
  * Does not work if pages are cached (for example with squid).
  */
 $wgDisableCounters = false;
-
-/**
- * Support blog-style "trackbacks" for articles.  See
- * http://www.sixapart.com/pronet/docs/trackback_spec for details.
- *
- * If enabling this, you also need to grant the 'trackback' right to a group
- */
-$wgUseTrackbacks = false;
 
 /**
  * Parser test suite files to be run by parserTests.php when no specific
@@ -5254,7 +5241,6 @@ $wgMaxRedirectLinksRetrieved = 500;
  */
 $wgActions = array(
 	'credits' => true,
-	'deletetrackback' => true,
 	'history' => true,
 	'info' => true,
 	'markpatrolled' => true,

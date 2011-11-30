@@ -222,7 +222,7 @@ abstract class DatabaseUpdater {
 	 * @param $what Array: what updates to perform
 	 */
 	public function doUpdates( $what = array( 'core', 'extensions', 'purge', 'stats' ) ) {
-		global $wgVersion;
+		global $wgLocalisationCacheConf, $wgVersion;
 
 		$what = array_flip( $what );
 		if ( isset( $what['core'] ) ) {
@@ -235,9 +235,12 @@ abstract class DatabaseUpdater {
 
 		$this->setAppliedUpdates( $wgVersion, $this->updates );
 
-		if( isset( $what['purge'] ) ) {
+		if ( isset( $what['purge'] ) ) {
 			$this->purgeCache();
-			$this->rebuildLocalisationCache();
+
+			if ( $wgLocalisationCacheConf['manualRecache'] ) {
+				$this->rebuildLocalisationCache();
+			}
 		}
 		if ( isset( $what['stats'] ) ) {
 			$this->checkStats();
@@ -414,7 +417,7 @@ abstract class DatabaseUpdater {
 		} else {
 			$this->output( "Creating $name table..." );
 			$this->applyPatch( $patch, $fullpath );
-			$this->output( "ok\n" );
+			$this->output( "done.\n" );
 		}
 	}
 
@@ -427,13 +430,13 @@ abstract class DatabaseUpdater {
 	 */
 	protected function addField( $table, $field, $patch, $fullpath = false ) {
 		if ( !$this->db->tableExists( $table, __METHOD__ ) ) {
-			$this->output( "...$table table does not exist, skipping new field patch\n" );
+			$this->output( "...$table table does not exist, skipping new field patch.\n" );
 		} elseif ( $this->db->fieldExists( $table, $field, __METHOD__ ) ) {
 			$this->output( "...have $field field in $table table.\n" );
 		} else {
 			$this->output( "Adding $field field to table $table..." );
 			$this->applyPatch( $patch, $fullpath );
-			$this->output( "ok\n" );
+			$this->output( "done.\n" );
 		}
 	}
 
@@ -450,7 +453,7 @@ abstract class DatabaseUpdater {
 		} else {
 			$this->output( "Adding $index key to table $table... " );
 			$this->applyPatch( $patch, $fullpath );
-			$this->output( "ok\n" );
+			$this->output( "done.\n" );
 		}
 	}
 
@@ -466,7 +469,7 @@ abstract class DatabaseUpdater {
 		if ( $this->db->fieldExists( $table, $field, __METHOD__ ) ) {
 			$this->output( "Table $table contains $field field. Dropping... " );
 			$this->applyPatch( $patch, $fullpath );
-			$this->output( "ok\n" );
+			$this->output( "done.\n" );
 		} else {
 			$this->output( "...$table table does not contain $field field.\n" );
 		}
@@ -484,7 +487,7 @@ abstract class DatabaseUpdater {
 		if ( $this->db->indexExists( $table, $index, __METHOD__ ) ) {
 			$this->output( "Dropping $index key from table $table... " );
 			$this->applyPatch( $patch, $fullpath );
-			$this->output( "ok\n" );
+			$this->output( "done.\n" );
 		} else {
 			$this->output( "...$index key doesn't exist.\n" );
 		}
@@ -499,7 +502,7 @@ abstract class DatabaseUpdater {
 		if ( $this->db->tableExists( $table, __METHOD__ ) ) {
 			$this->output( "Dropping table $table... " );
 			$this->applyPatch( $patch, $fullpath );
-			$this->output( "ok\n" );
+			$this->output( "done.\n" );
 		} else {
 			$this->output( "...$table doesn't exist.\n" );
 		}
@@ -516,16 +519,16 @@ abstract class DatabaseUpdater {
 	public function modifyField( $table, $field, $patch, $fullpath = false ) {
 		$updateKey = "$table-$field-$patch";
 		if ( !$this->db->tableExists( $table, __METHOD__ ) ) {
-			$this->output( "...$table table does not exist, skipping modify field patch\n" );
+			$this->output( "...$table table does not exist, skipping modify field patch.\n" );
 		} elseif ( !$this->db->fieldExists( $table, $field, __METHOD__ ) ) {
-			$this->output( "...$field field does not exist in $table table, skipping modify field patch\n" );
+			$this->output( "...$field field does not exist in $table table, skipping modify field patch.\n" );
 		} elseif( $this->updateRowExists( $updateKey ) ) {
-			$this->output( "...$field in table $table already modified by patch $patch\n" );
+			$this->output( "...$field in table $table already modified by patch $patch.\n" );
 		} else {
 			$this->output( "Modifying $field field of table $table..." );
 			$this->applyPatch( $patch, $fullpath );
 			$this->insertUpdateRow( $updateKey );
-			$this->output( "ok\n" );
+			$this->output( "done.\n" );
 		}
 	}
 
@@ -589,6 +592,7 @@ abstract class DatabaseUpdater {
 
 			$task = $this->maintenance->runChild( 'PopulateLogUsertext' );
 			$task->execute();
+			$this->output( "done.\n" );
 		}
 	}
 
@@ -604,6 +608,7 @@ abstract class DatabaseUpdater {
 
 			$task = $this->maintenance->runChild( 'PopulateLogSearch' );
 			$task->execute();
+			$this->output( "done.\n" );
 		}
 	}
 
@@ -618,7 +623,7 @@ abstract class DatabaseUpdater {
 
 		$this->output( "Converting tc_time from UNIX epoch to MediaWiki timestamp... " );
 		$this->applyPatch( 'patch-tc-timestamp.sql' );
-		$this->output( "ok\n" );
+		$this->output( "done.\n" );
 	}
 
 	/**
@@ -636,8 +641,10 @@ abstract class DatabaseUpdater {
 			return;
 		}
 
+		$this->output( "Updating category collations..." );
 		$task = $this->maintenance->runChild( 'UpdateCollation' );
 		$task->execute();
+		$this->output( "...done.\n" );
 	}
 
 	/**
@@ -661,6 +668,6 @@ abstract class DatabaseUpdater {
 		$this->output( "Rebuilding localisation cache...\n" );
 		$cl->setForce();
 		$cl->execute();
-		$this->output( "Rebuilding localisation cache done.\n" );
+		$this->output( "done.\n" );
 	}
 }

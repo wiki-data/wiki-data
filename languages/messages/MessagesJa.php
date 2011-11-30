@@ -725,6 +725,7 @@ URLを間違って打ったか、不正なリンクを辿った可能性があ�
 少し時間をおいてからもう一度操作してください。',
 'protectedpagetext'    => 'このページは編集できないように保護されています。',
 'viewsourcetext'       => 'このページのソースを閲覧し、コピーすることができます：',
+'viewyourtext'         => "このページに対する'''あなたの編集'''のソースを閲覧し、コピーすることができます：",
 'protectedinterface'   => 'このページはソフトウェアのインターフェースに使用されるテキストが保存されており、いたずらなどの防止のために保護されています。',
 'editinginterface'     => "'''警告：'''ソフトウェアのインターフェースに使用されているテキストを編集しています。
 このページの変更はすべての利用者のユーザーインタフェースに影響します。
@@ -1130,7 +1131,7 @@ IPアドレスは複数の利用者の間で共有されていることがあり
 そのページは、すでに存在しています。',
 
 # Parser/template warnings
-'expensive-parserfunction-warning'        => "'''警告：'''このページでの、高負荷な構文解析関数の呼び出し回数が多過ぎます。
+'expensive-parserfunction-warning'        => "'''警告：'''このページでの、高負荷なパーサー関数の呼び出し回数が多過ぎます。
 
 呼び出しは{{PLURAL:$2|$2}}回以下である必要があります（現在は{{PLURAL:$1|$1}}回）。",
 'expensive-parserfunction-category'       => '高負荷な構文解析関数の呼び出しが多過ぎるページ',
@@ -1198,27 +1199,27 @@ $3による理由は以下の通りです：''$2''",
 [{{fullurl:{{#Special:Log}}/delete|page={{FULLPAGENAMEE}}}} 削除記録]に詳細情報があるかもしれません。",
 'rev-deleted-text-unhide'     => "この版は'''削除されています'''。
 [{{fullurl:{{#Special:Log}}/delete|page={{FULLPAGENAMEE}}}} 削除記録]に詳細情報があるかもしれません。
-管理者は、このまま[$1 この版を見る]ことができます。",
+このまま[$1 この版を見る]ことができます。",
 'rev-suppressed-text-unhide'  => "この版は'''秘匿されています'''。
 [{{fullurl:{{#Special:Log}}/suppress|page={{FULLPAGENAMEE}}}} 秘匿記録]に詳細情報があるかもしれません。
-管理者は、このまま[$1 この版を見る]ことができます。",
+このまま[$1 この版を見る]ことができます。",
 'rev-deleted-text-view'       => "この版は'''削除されています'''。
-管理者は、内容を見ることができます。[{{fullurl:{{#Special:Log}}/delete|page={{FULLPAGENAMEE}}}} 削除記録]に詳細情報があるかもしれません。",
+内容を見ることができます。[{{fullurl:{{#Special:Log}}/delete|page={{FULLPAGENAMEE}}}} 削除記録]に詳細情報があるかもしれません。",
 'rev-suppressed-text-view'    => "この版は'''秘匿されています'''。
-管理者は、内容を見ることができます。[{{fullurl:{{#Special:Log}}/suppress|page={{FULLPAGENAMEE}}}} 秘匿記録]に詳細情報があるかもしれません。",
+内容を見ることができます。[{{fullurl:{{#Special:Log}}/suppress|page={{FULLPAGENAMEE}}}} 秘匿記録]に詳細情報があるかもしれません。",
 'rev-deleted-no-diff'         => "どちらかの版が'''削除されているため'''、差分表示できません。
 [{{fullurl:{{#Special:Log}}/delete|page={{FULLPAGENAMEE}}}} 削除記録]に詳細情報があるかもしれません。",
 'rev-suppressed-no-diff'      => "指定された差分は'''削除された'''版を含んでいるため表示出来ません。",
 'rev-deleted-unhide-diff'     => "この差分の一方の版は'''削除されています'''。
 [{{fullurl:{{#Special:Log}}/delete|page={{FULLPAGENAMEE}}}} 削除記録]に詳細情報があるかもしれません。
-管理者は、このまま[$1 この差分を見る]ことができます。",
+このまま[$1 この差分を見る]ことができます。",
 'rev-suppressed-unhide-diff'  => "この差分の一方の版は'''秘匿されています'''。
 [{{fullurl:{{#Special:Log}}/suppress|page={{FULLPAGENAMEE}}}} 秘匿記録]に詳細情報があるかもしれません。
-管理者は、このまま[$1 この差分を見る]ことができます。",
+このまま[$1 この差分を見る]ことができます。",
 'rev-deleted-diff-view'       => "この差分の一方の版は'''削除されています'''。
-管理者は、この差分を見ることができます。[{{fullurl:{{#Special:Log}}/delete|page={{FULLPAGENAMEE}}}} 削除記録]に詳細情報があるかもしれません。",
+この差分を見ることができます。[{{fullurl:{{#Special:Log}}/delete|page={{FULLPAGENAMEE}}}} 削除記録]に詳細情報があるかもしれません。",
 'rev-suppressed-diff-view'    => "この差分の一方の版は'''秘匿されています'''。
-管理者は、この差分を見ることができます。[{{fullurl:{{#Special:Log}}/suppress|page={{FULLPAGENAMEE}}}} 秘匿記録]に詳細情報があるかもしれません。",
+この差分を見ることができます。[{{fullurl:{{#Special:Log}}/suppress|page={{FULLPAGENAMEE}}}} 秘匿記録]に詳細情報があるかもしれません。",
 'rev-delundel'                => '表示/非表示',
 'rev-showdeleted'             => '表示',
 'revisiondelete'              => '版の削除と復帰',
@@ -1526,8 +1527,8 @@ HTMLタグを見直してください。',
 'prefs-diffs'                   => '差分',
 
 # User preference: e-mail validation using jQuery
-'email-address-validity-valid'   => '有効なようです',
-'email-address-validity-invalid' => '有効なアドレスが必要です!',
+'email-address-validity-valid'   => '電子メールアドレスは有効なようです',
+'email-address-validity-invalid' => '有効な電子メールアドレスを入力してください',
 
 # User rights
 'userrights'                   => '利用者権限の管理',
@@ -1546,8 +1547,8 @@ HTMLタグを見直してください。',
 'userrights-reason'            => '理由：',
 'userrights-no-interwiki'      => '他ウィキ上における利用者権限の編集権限はありません。',
 'userrights-nodatabase'        => 'データベース$1は存在しないか、ローカル上にありません。',
-'userrights-nologin'           => '利用者権限が割り当てられている管理者権限アカウントで[[Special:UserLogin|ログイン]]する必要があります。',
-'userrights-notallowed'        => 'あなたのアカウントには利用者権限を追加又は削除する権限はありません。',
+'userrights-nologin'           => '利用者権限を付与するには、管理者アカウントで[[Special:UserLogin|ログイン]]する必要があります。',
+'userrights-notallowed'        => 'あなたのアカウントには利用者権限を追加または除去する権限がありません。',
 'userrights-changeable-col'    => '変更可能なグループ',
 'userrights-unchangeable-col'  => '変更できないグループ',
 
@@ -1628,7 +1629,6 @@ HTMLタグを見直してください。',
 'right-autopatrol'            => '自分の編集を自動的に巡回済みにする',
 'right-patrolmarks'           => '最近の更新で巡回済み印の閲覧',
 'right-unwatchedpages'        => 'ウォッチされていないページ一覧の閲覧',
-'right-trackback'             => 'トラックバックの投稿',
 'right-mergehistory'          => 'ページ履歴の統合',
 'right-userrights'            => '全利用者権限の編集',
 'right-userrights-interwiki'  => '他のウィキの利用者の利用者権限の編集',
@@ -1669,16 +1669,17 @@ HTMLタグを見直してください。',
 'action-suppressionlog'       => 'この非公開記録の表示',
 'action-block'                => 'この利用者の編集をブロック',
 'action-protect'              => 'このページの保護レベルの変更',
+'action-rollback'             => '特定ページを最後に編集した利用者の編集の即時巻き戻し',
 'action-import'               => '他のウィキからのこのページの取り込み',
 'action-importupload'         => 'ファイルアップロードからこのページの取り込み',
 'action-patrol'               => '他の利用者の編集を巡回済みにする',
 'action-autopatrol'           => '自身の編集を巡回済みにする',
 'action-unwatchedpages'       => 'ウォッチされていないページ一覧の表示',
-'action-trackback'            => 'トラックバックの投稿',
 'action-mergehistory'         => 'このページの履歴統合',
 'action-userrights'           => '全利用者権限の変更',
 'action-userrights-interwiki' => '他のウィキ上の利用者の利用者権限変更',
 'action-siteadmin'            => 'データベースのロックもしくはロック解除',
+'action-sendemail'            => '電子メールの送信',
 
 # Recent changes
 'nchanges'                          => '$1回の変更',
@@ -1707,7 +1708,7 @@ HTMLタグを見直してください。',
 'minoreditletter'                   => '細',
 'newpageletter'                     => '新',
 'boteditletter'                     => 'ボ',
-'unpatrolledletter'                 => '！',
+'unpatrolledletter'                 => '!',
 'number_of_watching_users_pageview' => '[$1人の利用者がウォッチしています]',
 'rc_categories'                     => 'カテゴリを制限（"|"区切り）',
 'rc_categories_any'                 => 'すべて',
@@ -1902,10 +1903,10 @@ $1',
 
 # img_auth script messages
 'img-auth-accessdenied'     => 'アクセスが拒否されました',
-'img-auth-nopathinfo'       => 'PATH_INFOが見つかりません。
+'img-auth-nopathinfo'       => 'PATH_INFO が見つかりません。
 サーバーが、この情報を渡すように構成されていません。
-CGIベースで、img_authに対応できない可能性もあります。
-http://www.mediawiki.org/wiki/Manual:Image_Authorization を参照してください。',
+CGI ベースであるため、img_auth に対応できない可能性もあります。
+[//www.mediawiki.org/wiki/Manual:Image_Authorization 画像の認可を参照してください。]',
 'img-auth-notindir'         => '要求されたパスは、設定済みのアップロード用ディレクトリーの中にありません。',
 'img-auth-badtitle'         => '「$1」からは有効なページ名を構築できません。',
 'img-auth-nologinnWL'       => 'ログインしておらず、さらに「$1」はホワイトリストに入っていません。',
@@ -2008,23 +2009,24 @@ URLが正しいものであるか、指定したサイトが現在使用可能�
 'filerevert-badversion'     => 'このファイルに指定された時刻印を持つ過去の版はありません。',
 
 # File deletion
-'filedelete'                  => '$1の削除',
-'filedelete-legend'           => 'ファイルの削除',
-'filedelete-intro'            => "'''[[Media:$1|$1]]'''をすべての履歴とともに削除しようとしています。",
-'filedelete-intro-old'        => "'''[[Media:$1|$1]]'''の[$4 $2$3の版]を削除しようとしています。",
-'filedelete-comment'          => '理由：',
-'filedelete-submit'           => '削除',
-'filedelete-success'          => "'''$1''' は削除されました。",
-'filedelete-success-old'      => "'''[[Media:$1|$1]]'''の$2$3の版は削除されています。",
-'filedelete-nofile'           => "'''$1'''は存在しません。",
-'filedelete-nofile-old'       => "指定された属性を持つ'''$1'''の古い版は存在しません。",
-'filedelete-otherreason'      => '他の、または追加の理由：',
-'filedelete-reason-otherlist' => 'その他の理由',
-'filedelete-reason-dropdown'  => '*よくある削除理由
+'filedelete'                   => '$1の削除',
+'filedelete-legend'            => 'ファイルの削除',
+'filedelete-intro'             => "'''[[Media:$1|$1]]'''をすべての履歴とともに削除しようとしています。",
+'filedelete-intro-old'         => "'''[[Media:$1|$1]]'''の[$4 $2$3の版]を削除しようとしています。",
+'filedelete-comment'           => '理由：',
+'filedelete-submit'            => '削除',
+'filedelete-success'           => "'''$1''' は削除されました。",
+'filedelete-success-old'       => "'''[[Media:$1|$1]]'''の$2$3の版は削除されています。",
+'filedelete-nofile'            => "'''$1'''は存在しません。",
+'filedelete-nofile-old'        => "指定された属性を持つ'''$1'''の古い版は存在しません。",
+'filedelete-otherreason'       => '他の、または追加の理由：',
+'filedelete-reason-otherlist'  => 'その他の理由',
+'filedelete-reason-dropdown'   => '*よくある削除理由
 ** 著作権侵害
 ** 重複ファイル',
-'filedelete-edit-reasonlist'  => '削除理由を編集する',
-'filedelete-maintenance'      => 'メンテナンス中のため、ファイルの削除と復帰は一時的に無効化されています。',
+'filedelete-edit-reasonlist'   => '削除理由を編集する',
+'filedelete-maintenance'       => 'メンテナンス中のため、ファイルの削除と復帰は一時的に無効化されています。',
+'filedelete-maintenance-title' => 'ファイルを削除できません',
 
 # MIME search
 'mimesearch'         => 'MIMEタイプ検索',
@@ -2174,8 +2176,8 @@ contenttype/subtypeの形式で指定してください（例：<tt>image/jpeg</
 'booksources-invalid-isbn'  => '指定されたISBN番号は有効ではないようです。参照している情報源から写し間違えていませんか。',
 
 # Special:Log
-'specialloguserlabel'  => '利用者名：',
-'speciallogtitlelabel' => 'ページ名：',
+'specialloguserlabel'  => '実行者:',
+'speciallogtitlelabel' => '対象（ページまたは利用者）:',
 'log'                  => '記録',
 'all-logs-page'        => 'すべての公開記録',
 'alllogstext'          => '{{SITENAME}}の取得可能な記録がまとめて表示されています。
@@ -2220,8 +2222,9 @@ contenttype/subtypeの形式で指定してください（例：<tt>image/jpeg</
 'linksearch-pat'   => '検索パターン：',
 'linksearch-ns'    => '名前空間：',
 'linksearch-ok'    => '検索',
-'linksearch-text'  => '"*.wikipedia.org" のようにワイルドカードを使うことができます。<br />
-対応プロトコル：<tt>$1</tt>',
+'linksearch-text'  => '"*.wikipedia.org" のようにワイルドカードを使うことができます。
+少なくとも、"*.org" のようなトップレベルドメインが必要です。<br />
+対応プロトコル: <tt>$1</tt> (これらを検索に含めないでください)。',
 'linksearch-line'  => '$1 が $2 からリンクされています',
 'linksearch-error' => 'ワイルドカードはホスト名の先頭でのみ使用できます。',
 
@@ -2440,7 +2443,10 @@ $2による最後の版へ変更されました。',
 'unprotectedarticle'          => '「[[$1]]」の保護を解除しました',
 'movedarticleprotection'      => '保護の設定を「[[$2]]」から「[[$1]]」へ移動しました',
 'protect-title'               => '「$1」の保護レベルを変更',
+'protect-title-notallowed'    => '「$1」の保護レベルを表示',
 'prot_1movedto2'              => '[[$1]] を [[$2]] へ移動',
+'protect-badnamespace-title'  => '保護不可能な名前空間',
+'protect-badnamespace-text'   => 'この名前空間のページは保護することができません。',
 'protect-legend'              => '保護の確認',
 'protectcomment'              => '理由：',
 'protectexpiry'               => '有効期限：',
@@ -2531,6 +2537,7 @@ $2による最後の版へ変更されました。',
 
 最近の削除と復帰の記録については[[Special:Log/delete|削除記録]]を参照してください。",
 'undelete-header'              => '最近削除されたページは[[Special:Log/delete|削除記録]]で確認できます。',
+'undelete-search-title'        => '削除されたページの検索',
 'undelete-search-box'          => '削除されたページを検索',
 'undelete-search-prefix'       => '表示を開始するページ名：',
 'undelete-search-submit'       => '検索',
@@ -2540,6 +2547,7 @@ $2による最後の版へ変更されました。',
 'undelete-cleanup-error'       => '未使用の保存版のファイル「$1」の削除中にエラーが発生しました。',
 'undelete-missing-filearchive' => 'データベースに存在しないため、ID$1を持つファイルの保存版を復元できません。
 既に復帰されている可能性があります。',
+'undelete-error'               => 'ページの復帰エラー',
 'undelete-error-short'         => 'ファイルの復帰エラー：$1',
 'undelete-error-long'          => 'ファイルの復帰中にエラーが発生しました：
 
@@ -2825,7 +2833,7 @@ hideuser権限を持っていないため、この利用者のブロックを閲
 移動先「[[:$1]]」は既に存在しています。
 移動するためにこのページを削除しますか？',
 'delete_and_move_confirm'      => 'ページを削除します',
-'delete_and_move_reason'       => '移動のために削除',
+'delete_and_move_reason'       => '「[[$1]]」からの移動のために削除',
 'selfmove'                     => '移動元と移動先のページ名が同じです。
 自分自身へは移動できません。',
 'immobile-source-namespace'    => '$1名前空間のページを移動させることはできません。',
@@ -2859,6 +2867,7 @@ hideuser権限を持っていないため、この利用者のブロックを閲
 'exportcuronly'     => 'すべての履歴はなしで、最新版のみを含める',
 'exportnohistory'   => "----
 '''注意：'''負荷上の理由により、このフォームによるページの完全な履歴の書き出しは無効化されています。",
+'exportlistauthors' => '各ページの投稿者の完全な一覧を含める',
 'export-submit'     => '書き出し',
 'export-addcattext' => 'カテゴリからページを追加：',
 'export-addcat'     => '追加',
@@ -3192,44 +3201,44 @@ Variants for Chinese language
 'variantname-zh-cn'   => '中国簡体',
 'variantname-zh-tw'   => '台湾正体',
 'variantname-zh-hk'   => '香港正体',
-'variantname-zh-mo'   => '中国(マカオ)',
+'variantname-zh-mo'   => 'マカオ',
 'variantname-zh-sg'   => 'シンガポール簡体',
-'variantname-zh-my'   => '中国(マレーシア)',
+'variantname-zh-my'   => 'マレーシア',
 'variantname-zh'      => '中文',
 
 # Variants for Gan language
-'variantname-gan-hans' => 'ガガウズ(hans)',
-'variantname-gan-hant' => 'ガガウズ(hant)',
-'variantname-gan'      => 'ガガウズ',
+'variantname-gan-hans' => 'hans',
+'variantname-gan-hant' => 'hant',
+'variantname-gan'      => 'ガガウズ語',
 
 # Variants for Serbian language
-'variantname-sr-ec' => 'セルビア(キリル)',
-'variantname-sr-el' => 'セルビア(ラテン)',
-'variantname-sr'    => 'セルビア',
+'variantname-sr-ec' => 'セルビア語 (キリル文字)',
+'variantname-sr-el' => 'セルビア語 (ラテン文字)',
+'variantname-sr'    => 'セルビア語',
 
 # Variants for Kazakh language
-'variantname-kk-kz'   => 'カザフ(カザフスタン)',
-'variantname-kk-tr'   => 'カザフ(トルコ)',
-'variantname-kk-cn'   => 'カザフ(中国)',
-'variantname-kk-cyrl' => 'カザフ(キリル)',
-'variantname-kk-latn' => 'カザフ(ラテン)',
-'variantname-kk-arab' => 'カザフ(アラブ)',
-'variantname-kk'      => 'カザフ',
+'variantname-kk-kz'   => 'カザフ語 (カザフスタン)',
+'variantname-kk-tr'   => 'カザフ語 (トルコ)',
+'variantname-kk-cn'   => 'カザフ語 (中国)',
+'variantname-kk-cyrl' => 'カザフ語 (キリル文字)',
+'variantname-kk-latn' => 'カザフ語 (ラテン文字)',
+'variantname-kk-arab' => 'カザフ語 (アラビア文字)',
+'variantname-kk'      => 'カザフ語',
 
 # Variants for Kurdish language
-'variantname-ku-arab' => 'クルド(アラブ)',
-'variantname-ku-latn' => 'クルド(ラテン)',
-'variantname-ku'      => 'クルド',
+'variantname-ku-arab' => 'クルド語 (アラビア文字)',
+'variantname-ku-latn' => 'クルド語 (ラテン文字)',
+'variantname-ku'      => 'クルド語',
 
 # Variants for Tajiki language
-'variantname-tg-cyrl' => 'タジク(キリル)',
-'variantname-tg-latn' => 'タジク(ラテン)',
-'variantname-tg'      => 'タジク',
+'variantname-tg-cyrl' => 'タジク語 (キリル文字)',
+'variantname-tg-latn' => 'タジク語 (ラテン文字)',
+'variantname-tg'      => 'タジク語',
 
 # Variants for Inuktitut language
-'variantname-ike-cans' => 'イヌイット(カナダ先住民文字)',
-'variantname-ike-latn' => 'イヌイット(ラテン)',
-'variantname-iu'       => 'イヌクティトゥト',
+'variantname-ike-cans' => 'イヌクティトゥット語 (カナダ先住民文字)',
+'variantname-ike-latn' => 'イヌクティトゥット語 (ラテン文字)',
+'variantname-iu'       => 'イヌクティトゥット語',
 
 # Metadata
 'metadata'          => 'メタデータ',
@@ -3383,9 +3392,13 @@ Variants for Chinese language
 'exif-objectname'                  => '短いタイトル',
 'exif-specialinstructions'         => '取扱いに関する特記事項',
 'exif-headline'                    => '見出し',
+'exif-credit'                      => '帰属/提供者',
 'exif-source'                      => 'ソース',
+'exif-editstatus'                  => '画像の編集上の状態',
 'exif-urgency'                     => '緊急',
 'exif-fixtureidentifier'           => 'フィクスチャ名',
+'exif-locationdest'                => '映っている場所',
+'exif-locationdestcode'            => '映っている場所のコード',
 'exif-objectcycle'                 => 'このメディアファイルによって意図されている時間帯',
 'exif-contact'                     => '連絡先情報',
 'exif-writer'                      => '記入者',
@@ -3393,27 +3406,48 @@ Variants for Chinese language
 'exif-iimversion'                  => 'IIM バージョン',
 'exif-iimcategory'                 => 'カテゴリー',
 'exif-iimsupplementalcategory'     => '補足カテゴリー',
+'exif-datetimeexpires'             => '使用期限',
+'exif-datetimereleased'            => '初公開日',
+'exif-originaltransmissionref'     => '原転送位置コード',
+'exif-identifier'                  => '識別子',
 'exif-lens'                        => '使用レンズ',
 'exif-serialnumber'                => 'カメラのシリアル番号',
 'exif-cameraownername'             => 'カメラの所有者',
 'exif-label'                       => 'ラベル',
+'exif-datetimemetadata'            => 'メタデータの最終更新日',
 'exif-nickname'                    => '画像の非公式名',
 'exif-rating'                      => '評価（5点満点）',
+'exif-rightscertificate'           => '権利管理証明書',
 'exif-copyrighted'                 => '著作権情報',
 'exif-copyrightowner'              => '著作権者',
 'exif-usageterms'                  => '使用条件',
+'exif-webstatement'                => 'オンライン上の著作権文',
+'exif-originaldocumentid'          => '元文書の一意な識別子',
+'exif-licenseurl'                  => '著作権ライセンスの URL',
+'exif-morepermissionsurl'          => '代替ライセンス情報',
+'exif-attributionurl'              => 'この作品を再利用する際に、次のURLにリンクしてください',
+'exif-preferredattributionname'    => 'この作品を再利用する際に、次の帰属表示を使ってください',
 'exif-pngfilecomment'              => 'PNGファイルのコメント',
 'exif-disclaimer'                  => '免責事項',
 'exif-contentwarning'              => 'コンテンツに関する警告',
 'exif-giffilecomment'              => 'GIFファイルのコメント',
+'exif-intellectualgenre'           => '項目の種類',
+'exif-subjectnewscode'             => '主題コード',
 'exif-scenecode'                   => 'IPTC シーンコード',
+'exif-event'                       => '映っている事象',
+'exif-organisationinimage'         => '映っている組織',
+'exif-personinimage'               => '映っている人物',
 'exif-originalimageheight'         => 'トリミングされる前の画像の高さ',
 'exif-originalimagewidth'          => 'トリミングされる前の画像の幅',
 
 # EXIF attributes
-'exif-compression-1' => '非圧縮',
-'exif-compression-6' => 'JPEG圧縮(旧式)',
+'exif-compression-1' => '無圧縮',
+'exif-compression-2' => 'CCITT Group 3 1次元修正ハフマン連長符号化',
+'exif-compression-3' => 'CCITT Group 3 ファックス符号化',
+'exif-compression-4' => 'CCITT Group 4 ファックス符号化',
+'exif-compression-6' => 'JPEG (旧式)',
 
+'exif-copyrighted-true'  => '著作権あり',
 'exif-copyrighted-false' => 'パブリック・ドメイン',
 
 'exif-unknowndate' => '不明な日付',
@@ -3545,6 +3579,10 @@ Variants for Chinese language
 'exif-gpslongitude-e' => '東経',
 'exif-gpslongitude-w' => '西経',
 
+# Pseudotags used for GPSAltitudeRef
+'exif-gpsaltitude-above-sealevel' => '海抜 $1 {{PLURAL:$1|メートル}}',
+'exif-gpsaltitude-below-sealevel' => '海抜マイナス $1 {{PLURAL:$1|メートル}}',
+
 'exif-gpsstatus-a' => '測位中',
 'exif-gpsstatus-v' => '未測位',
 
@@ -3561,6 +3599,12 @@ Variants for Chinese language
 'exif-gpsdestdistance-m' => 'マイル',
 'exif-gpsdestdistance-n' => '海里',
 
+'exif-gpsdop-excellent' => '優秀 ($1)',
+'exif-gpsdop-good'      => '良好 ($1)',
+'exif-gpsdop-moderate'  => '適度 ($1)',
+'exif-gpsdop-fair'      => '中程度 ($1)',
+'exif-gpsdop-poor'      => '劣悪 ($1)',
+
 'exif-objectcycle-a' => '午前中のみ',
 'exif-objectcycle-p' => '午後のみ',
 'exif-objectcycle-b' => '午後と午前の両方',
@@ -3569,9 +3613,16 @@ Variants for Chinese language
 'exif-gpsdirection-t' => '真方位',
 'exif-gpsdirection-m' => '磁方位',
 
-'exif-dc-date'   => '日付',
-'exif-dc-source' => 'ソースメディア',
-'exif-dc-type'   => 'メディアの種類',
+'exif-ycbcrpositioning-1' => '中央寄せ',
+
+'exif-dc-contributor' => '貢献者',
+'exif-dc-coverage'    => 'メディアの空間的または時間的範囲',
+'exif-dc-date'        => '日付',
+'exif-dc-publisher'   => '公開者',
+'exif-dc-relation'    => '関連メディア',
+'exif-dc-rights'      => '権利',
+'exif-dc-source'      => 'ソースメディア',
+'exif-dc-type'        => 'メディアの種類',
 
 'exif-rating-rejected' => '却下',
 
@@ -3594,6 +3645,11 @@ Variants for Chinese language
 'exif-iimcategory-spo' => 'スポーツ',
 'exif-iimcategory-war' => '戦争、紛争、動乱',
 'exif-iimcategory-wea' => '天気',
+
+'exif-urgency-normal' => '通常 ($1)',
+'exif-urgency-low'    => '低い ($1)',
+'exif-urgency-high'   => '高い ($1)',
+'exif-urgency-other'  => '利用者定義の優先度 ($1)',
 
 # External editor support
 'edit-externally'      => '外部アプリケーションを使ってこのファイルを編集する',
@@ -3679,13 +3735,6 @@ $5
 'scarytranscludedisabled' => '[ウィキ間の参照読み込みは無効になっています]',
 'scarytranscludefailed'   => '[$1に対してテンプレートの取得に失敗しました]',
 'scarytranscludetoolong'  => '[URLが長すぎます]',
-
-# Trackbacks
-'trackbackbox'      => 'このページへのトラックバック：<br />
-$1',
-'trackbackremove'   => '（[$1 削除]）',
-'trackbacklink'     => 'トラックバック',
-'trackbackdeleteok' => 'トラックバックは正常に削除されました。',
 
 # Delete conflict
 'deletedwhileediting'      => "'''警告：'''このページが、編集開始後に削除されました！",
@@ -3837,6 +3886,9 @@ $1',
 'hebrew-calendar-m11-gen' => 'アブ',
 'hebrew-calendar-m12-gen' => 'エルール',
 
+# Signatures
+'signature' => '[[{{ns:user}}:$1|$2]] ([[{{ns:user_talk}}:$1|会話]])',
+
 # Core parser functions
 'unknown_extension_tag' => '不明な拡張機能タグ「$1」です',
 'duplicate-defaultsort' => "'''警告：'''既定の並び替えキー「$2」が、その前に書かれている既定の並び替えキー「$1」を上書きしています。",
@@ -3854,7 +3906,7 @@ $1',
 'version-hooks'                 => 'フック',
 'version-extension-functions'   => '拡張機能関数',
 'version-parser-extensiontags'  => '構文解析拡張機能タグ',
-'version-parser-function-hooks' => '構文解析関数フック',
+'version-parser-function-hooks' => 'パーサー関数フック',
 'version-hook-name'             => 'フック名',
 'version-hook-subscribedby'     => '使用個所',
 'version-version'               => '（バージョン$1）',
@@ -3972,14 +4024,35 @@ MediaWikiは、有用であることを期待して配布されていますが�
 'sqlite-no-fts'  => '$1（全文検索なし）',
 
 # New logging system
-'revdelete-content-hid'   => '本文の不可視化',
-'revdelete-summary-hid'   => '編集要約の不可視化',
-'revdelete-uname-hid'     => '利用者名の不可視化',
-'revdelete-content-unhid' => '本文の可視化',
-'revdelete-summary-unhid' => '編集要約の可視化',
-'revdelete-uname-unhid'   => '利用者名の可視化',
-'revdelete-restricted'    => '管理者に対する制限を適用',
-'revdelete-unrestricted'  => '管理者に対する制限を除去しました',
-'newuserlog-byemail'      => 'パスワードを電子メールで送信しました',
+'logentry-delete-delete'              => '$1 がページ「$3」を{{GENDER:$2|削除しました}}',
+'logentry-delete-restore'             => '$1 がページ「$3」を{{GENDER:$2|復帰しました}}',
+'logentry-delete-event'               => '$1 が$3で{{PLURAL:$5|記録項目|$5件の記録項目}}の閲覧レベルを{{GENDER:$2|変更しました}}: $4',
+'logentry-delete-revision'            => '$1 がページ「$3」で{{PLURAL:$5|版|$5個の版}}の閲覧レベルを{{GENDER:$2|変更しました}}: $4',
+'logentry-delete-event-legacy'        => '$1 が$3で記録項目の閲覧レベルを{{GENDER:$2|変更しました}}',
+'logentry-delete-revision-legacy'     => '$1 がページ「$3」の版の閲覧レベルを{{GENDER:$2|変更しました}}',
+'logentry-suppress-delete'            => '$1 がページ「$3」を{{GENDER:$2|隠蔽しました}}',
+'logentry-suppress-event'             => '$1 が$3で{{PLURAL:$5|記録項目|$5件の記録項目}}の閲覧レベルを見えない形で{{GENDER:$2|変更しました}}: $4',
+'logentry-suppress-revision'          => '$1 がページ「$3」で{{PLURAL:$5|版|$5個の版}}の閲覧レベルを見えない形で{{GENDER:$2|変更しました}}: $4',
+'logentry-suppress-event-legacy'      => '$1 が$3で記録項目の閲覧レベルを見えない形で{{GENDER:$2|変更しました}}',
+'logentry-suppress-revision-legacy'   => '$1 がページ「$3」の版の閲覧レベルを見えない形で{{GENDER:$2|変更しました}}',
+'revdelete-content-hid'               => '本文の不可視化',
+'revdelete-summary-hid'               => '編集要約の不可視化',
+'revdelete-uname-hid'                 => '利用者名の不可視化',
+'revdelete-content-unhid'             => '本文の可視化',
+'revdelete-summary-unhid'             => '編集要約の可視化',
+'revdelete-uname-unhid'               => '利用者名の可視化',
+'revdelete-restricted'                => '管理者に対する制限の適用',
+'revdelete-unrestricted'              => '管理者に対する制限の除去',
+'logentry-move-move'                  => '$1 がページ「$3」を「$4」へと{{GENDER:$2|移動しました}}',
+'logentry-move-move-noredirect'       => '$1 がページ「$3」を「$4」へと、リダイレクトを残さずに{{GENDER:$2|移動しました}}',
+'logentry-move-move_redir'            => '$1 がページ「$3」をリダイレクトの「$4」へと{{GENDER:$2|移動しました}}',
+'logentry-move-move_redir-noredirect' => '$1 がページ「$3」をリダイレクトの「$4」へと、リダイレクトを残さずに{{GENDER:$2|移動しました}}',
+'logentry-patrol-patrol'              => '$1 がページ「$3」の版 $4をパトロール済みと{{GENDER:$2|しました}}',
+'logentry-patrol-patrol-auto'         => '$1 がページ「$3」の版 $4を自動的にパトロール済みと{{GENDER:$2|しました}}',
+'logentry-newusers-newusers'          => '$1 が利用者アカウントを{{GENDER:$2|作成しました}}',
+'logentry-newusers-create'            => '$1 が利用者アカウントを{{GENDER:$2|作成しました}}',
+'logentry-newusers-create2'           => '$1 が{{GENDER:$4|利用者アカウント}}「$3」を{{GENDER:$2|作成しました}}',
+'logentry-newusers-autocreate'        => 'アカウント「$1」が自動的に{{GENDER:$2|作成されました}}',
+'newuserlog-byemail'                  => 'パスワードを電子メールで送信しました',
 
 );

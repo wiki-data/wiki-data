@@ -1525,7 +1525,6 @@ Nếu bạn đồng ý cung cấp, nó sẽ dùng để ghi nhận công lao c�
 'right-autopatrol'            => 'Tự động đánh dấu tuần tra khi sửa đổi',
 'right-patrolmarks'           => 'Dùng tính năng tuần tra thay đổi gần đây',
 'right-unwatchedpages'        => 'Xem danh sách các trang chưa theo dõi',
-'right-trackback'             => 'Đăng trackback',
 'right-mergehistory'          => 'Trộn lịch sử trang',
 'right-userrights'            => 'Sửa tất cả quyền thành viên',
 'right-userrights-interwiki'  => 'Sửa quyền thành viên của các thành viên ở các wiki khác',
@@ -1572,11 +1571,11 @@ Nếu bạn đồng ý cung cấp, nó sẽ dùng để ghi nhận công lao c�
 'action-patrol'               => 'đánh dấu đã tuần tra vào sửa đổi của người khác',
 'action-autopatrol'           => 'tự động đánh dấu đã tuần tra vào sửa đổi của bạn',
 'action-unwatchedpages'       => 'xem danh sách các trang chưa được theo dõi',
-'action-trackback'            => 'gửi TrackBack',
 'action-mergehistory'         => 'hợp nhất lịch sử của trang này',
 'action-userrights'           => 'sửa đổi mọi quyền người dùng',
 'action-userrights-interwiki' => 'sửa đổi quyền của người dùng tại wiki khác',
 'action-siteadmin'            => 'khóa hoặc mở khóa cơ sở dữ liệu',
+'action-sendemail'            => 'gửi thư điện tử',
 
 # Recent changes
 'nchanges'                          => '$1 {{PLURAL:$1|thay đổi|thay đổi}}',
@@ -2055,8 +2054,8 @@ Xin lưu ý là các trang Web bên ngoài có thể liên kết đến một t�
 'booksources-invalid-isbn'  => 'ISBN mà bạn cung cấp dường như không đúng; xin hãy kiểm tra lại xem có lỗi gì khi sao chép từ nội dung gốc hay không.',
 
 # Special:Log
-'specialloguserlabel'  => 'Thành viên:',
-'speciallogtitlelabel' => 'Tên trang:',
+'specialloguserlabel'  => 'Người thực hiện:',
+'speciallogtitlelabel' => 'Mục tiêu (tiêu đề hoặc người dùng):',
 'log'                  => 'Nhật trình',
 'all-logs-page'        => 'Tất cả các nhật trình công khai',
 'alllogstext'          => 'Hiển thị tất cả các nhật trình đang có của {{SITENAME}} chung với nhau.
@@ -3586,13 +3585,6 @@ Mã xác nhận này sẽ hết hạn vào $4.',
 'scarytranscludedisabled' => '[Nhúng giữa các wiki bị tắt]',
 'scarytranscludefailed'   => '[Truy xuất bản mẫu cho $1 thất bại]',
 'scarytranscludetoolong'  => '[Địa chỉ URL quá dài]',
-
-# Trackbacks
-'trackbackbox'      => 'Các TrackBack về trang này:<br />
-$1',
-'trackbackremove'   => '([$1 Xóa])',
-'trackbacklink'     => 'TrackBack',
-'trackbackdeleteok' => 'Đã xóa trackback.',
 
 # Delete conflict
 'deletedwhileediting'      => "'''Cảnh báo''': Trang này đã bị xóa sau khi bắt đầu sửa đổi!",

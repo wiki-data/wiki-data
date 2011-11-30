@@ -474,32 +474,34 @@ Hadda gudaha ku gal',
 'resetpass-temp-password'   => 'Ereysir ku meel gaar ah:',
 
 # Special:PasswordReset
-'passwordreset'                => 'Bedel ereysirka',
-'passwordreset-legend'         => 'Bedel ereysirka',
-'passwordreset-username'       => 'Magaca gudagalka',
-'passwordreset-email'          => 'Ciwaanka e-mailka',
-'passwordreset-emailtext-ip'   => "(Qof laga yaabo in ee tahay adi, oo ka socdo ciwaanka IP'ka $1)  ayaa  codsaday xasuus tafaasiil akoonkaada {{SITENAME}}
+'passwordreset'                    => 'Bedel ereysirka',
+'passwordreset-legend'             => 'Bedel ereysirka',
+'passwordreset-username'           => 'Magaca gudagalka',
+'passwordreset-email'              => 'Ciwaanka e-mailka',
+'passwordreset-emailtext-ip'       => "(Qof laga yaabo in ee tahay adi, oo ka socdo ciwaanka IP'ka $1)  ayaa  codsaday xasuus tafaasiil akoonkaada {{SITENAME}}
 ($4). Isticmaaladaan soo socota {{PLURAL:$3|akoonkooda waxee|akoonkooda waxee}} la xiriiraan ciwaankaan e-mailka ah:
 
 $2
 
 {{PLURAL:$3|eraysirkaan kumeel gaarka ah|Eraysiryadaan kumeel gaarka ah}} waxee dhacaayaan {{PLURAL:$5|hal maalin|$5 maalmood}}.
 Waa in aad gudaha gashaa oo e-mail cusub doorataa hadda. Hadii ee qof kale codsigaan sameysay, ama hadii aad soo xasuusatay eraysirkaagii hore, oo aadna u baahneen in aad badashid, iska ilaaw fariintaan siina isticmaal eraysirkaagii duqi ahaa.",
-'passwordreset-emailtext-user' => 'Isticmaale $1 ee {{SITENAME}} wuxuu codsaday xasuus tafaasiil akoonkaada {{SITENAME}}
+'passwordreset-emailtext-user'     => 'Isticmaale $1 ee {{SITENAME}} wuxuu codsaday xasuus tafaasiil akoonkaada {{SITENAME}}
 ($4). Isticmaaladaan soo socota {{PLURAL:$3|akoonkooda waxee|akoonkooda waxee}} la xiriiraan ciwaankaan e-mailka ah:
 
 $2
 
 {{PLURAL:$3|eraysirkaan kumeel gaarka ah|Eraysiryadaan kumeel gaarka ah}} waxee dhacaayaan {{PLURAL:$5|hal maalin|$5 maalmood}}.
 Waa in aad gudaha gashaa oo e-mail cusub doorataa hadda. Hadii ee qof kale codsigaan sameysay, ama hadii aad soo xasuusatay eraysirkaagii hore, oo aadna u baahneen in aad badashid, iska ilaaw fariintaan siina isticmaal eraysirkaagii duqi ahaa.',
-'passwordreset-emailelement'   => 'Magaca gudagalka: $1
+'passwordreset-emailelement'       => 'Magaca gudagalka: $1
 Ereysirka kumeelgaarka ah: $2',
+'passwordreset-emailerror-capture' => 'E-mail xasuus ah ayaa la sameeyay, oo ka arki kartid hoosta,laakiin wuxuu ku guul dareestay in isticmaalaha loo diro: $1',
 
 # Special:ChangeEmail
 'changeemail'          => 'Bedel ciwaanka E-mailka',
 'changeemail-header'   => 'Bedel ciwaanka e-mailka akoonka',
 'changeemail-oldemail' => 'Ciwaanka e-mailka hadda jiro:',
 'changeemail-none'     => '(waxna)',
+'changeemail-submit'   => 'Bedel e-mailka',
 
 # Edit page toolbar
 'bold_sample'     => 'Far butac ah',
@@ -561,7 +563,8 @@ Akoonkaan cusub eraysirkiisa waxaa ku badali kartaa  bogga ''[[Special:ChangePas
 Hadii aad rabto in aad sameyso bogga, hoos ka bilaaw qoraalkaada (fiiri [[{{MediaWiki:Helppage}}|bogga caawinaada]] wax war ah oo kale).
 hadii aad meeshaan ku soo qaldantay, riix batoonka barowsahaaga  '''gadaal uuga noqo''' .",
 'anontalkpagetext'                 => "----''Meeshaan waa bogga wadahadalka isticmaalayaasha la aqoon oo aanan weli sameysanin akoon, ama  wali isticmaalin. 
-Sidaas darteed, waa in aan isticmaalnaa lambar cinwaaneedka IP:ga. Cinwaanka IP:ga waxaa suurto gal ah in ay wada isticmaalaan dad badan. Hadii aad tahay isticmaale aanan la'aqoonsanin oo aad dareemaysid in laguu gafay, fadlan  [[Special:UserLogin/signup|sameyso akoon]]  ama [[Special:UserLogin|gudaha gal]] si aad u dhowrsatid in hadhowdi laguugu qaldo isticmaalada kale oo aann la'aqoonsanin.''",
+Sidaas darteed, waa in aan isticmaalnaa lambar cinwaaneedka IP:ga si aan u ogaano asiga/ayada. Cinwaanka IP:ga waxaa suurto gal ah in ay qeybsadaan isticmaaleyaal badan.
+Hadii aad tahay isticmaale aanan la'aqoonsanin oo aad dareemaysid in laguu gafay, fadlan  [[Special:UserLogin/signup|sameyso akoon]]  ama [[Special:UserLogin|gudaha gal]] si aad u dhowrsatid in hadhowdi laguugu qaldo isticmaalada kale oo aann la'aqoonsanin.''",
 'noarticletext'                    => 'Boggaan hadda wax qoraal ah kuma qorno.
 Waxaa  [[Special:Search/{{PAGENAME}}|magaca boggaan]] ka raadin kartaa bogyaasha kale,
 <span class="plainlinks">[{{fullurl:{{#Special:Log}}|page={{FULLPAGENAMEE}}}} raadi kuwo la mid ah],
@@ -597,7 +600,8 @@ Hadii aad keydisid, waxaa dhumidoona caddadyadii kan ka dambeeyey.'''",
 'yourdiff'                         => 'Kala duwanaanshaha',
 'protectedpagewarning'             => "'''Digniin: Boggaan waa la difaacay si ee isticmaalada heesto maamulnimada kaliya wax uuga badali karaan'''
 Fariintii gudagalihii ugu danbeeyay hoostaan ee ku qorontahay:",
-'semiprotectedpagewarning'         => "'''Fiiro gaar ah:''' Beyjkan waa laxiray, kuwa magaca gudagal ka leh kaliya ayaa wax ka badalikara.",
+'semiprotectedpagewarning'         => "'''Fiiro gaar ah:''' Boggaan waa difaacay si ee isticmaalada isdiiwaan geliyay kaliya wax uuga badalaan.
+Fariintii gudagalihii ugu danbeeyay hoostaan ee ku qorontahay:",
 'cascadeprotectedwarning'          => "'''Digniin:''' Boggaan waa la difaacay si ee maamulada kaliya wax uuga badalaan, sababtoo ah waxaa ku jirto kaskadyadaan la difaacay oo soo sosocoto {{PLURAL:$1|bog|boggaga}}:",
 'templatesused'                    => '{{PLURAL:$1|Tusmo|Tusmooyinka}} lagu isticmaalay boggaan:',
 'template-protected'               => '(waa la difaacay)',

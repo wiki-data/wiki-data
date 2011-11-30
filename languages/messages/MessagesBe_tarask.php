@@ -1491,7 +1491,6 @@ $1",
 'right-autopatrol'            => 'аўтаматычнае пазначэньне рэдагаваньняў як «патруляваных»',
 'right-patrolmarks'           => 'прагляд пазначэньняў пра патруляваньне ў апошніх зьменах',
 'right-unwatchedpages'        => 'прагляд сьпісу старонак, за якімі ніхто не назірае',
-'right-trackback'             => 'адпраўка trackback',
 'right-mergehistory'          => 'аб’яднаньне гісторыі старонак',
 'right-userrights'            => 'рэдагаваньне правоў усіх удзельнікаў',
 'right-userrights-interwiki'  => 'рэдагаваньне правоў удзельнікаў у іншых вікі',
@@ -1538,11 +1537,11 @@ $1",
 'action-patrol'               => 'пазначэньне чужых рэдагаваньняў як «патруляваныя»',
 'action-autopatrol'           => 'пазначэньне ўласных рэдагаваньняў як «патруляваныя»',
 'action-unwatchedpages'       => 'прагляд сьпісу старонак, за якімі ніхто не назірае',
-'action-trackback'            => 'адпраўку trackback',
 'action-mergehistory'         => "аб'яднаньне гісторыі гэтай старонкі",
 'action-userrights'           => 'рэдагаваньне правоў усіх удзельнікаў',
 'action-userrights-interwiki' => 'рэдагаваньне правоў удзельнікаў у іншых вікі',
 'action-siteadmin'            => 'блякаваньне і разблякаваньне базы зьвестак',
+'action-sendemail'            => 'адпраўку электронных лістоў іншым удзельнікам',
 
 # Recent changes
 'nchanges'                          => '$1 {{PLURAL:$1|зьмена|зьмены|зьменаў}}',
@@ -2012,8 +2011,8 @@ $1',
 'booksources-invalid-isbn'  => 'Пададзены няслушны ISBN; праверце, магчыма ўзьніклі памылкі пры пераносе нумару з арыгінальнай крыніцы.',
 
 # Special:Log
-'specialloguserlabel'  => 'Удзельнік/удзельніца:',
-'speciallogtitlelabel' => 'Назва:',
+'specialloguserlabel'  => 'Выканаўца:',
+'speciallogtitlelabel' => 'Мэта (назва ці удзельнік):',
 'log'                  => 'Журналы падзеяў',
 'all-logs-page'        => 'Усе публічныя журналы падзеяў',
 'alllogstext'          => 'Сумесны паказ усіх журналаў падзеяў {{GRAMMAR:родны|{{SITENAME}}}}.
@@ -2466,7 +2465,7 @@ $1',
 'ipbcreateaccount'                => 'Забараніць стварэньне рахункаў',
 'ipbemailban'                     => 'Забараніць удзельніку дасылаць лісты па электроннай пошце',
 'ipbenableautoblock'              => 'Аўтаматычна блякаваць апошні IP-адрас гэтага ўдзельніка, і ўсіх наступных IP-адрасоў зь якіх ён будзе спрабаваць рэдагаваць',
-'ipbsubmit'                       => 'Заблякаваць гэтага удзельніка',
+'ipbsubmit'                       => 'Заблякаваць гэтага ўдзельніка',
 'ipbother'                        => 'Іншы тэрмін:',
 'ipboptions'                      => '2 гадзіны:2 hours,1 дзень:1 day,3 дні:3 days,1 тыдзень:1 week,2 тыдні:2 weeks,1 месяц:1 month,3 месяцы:3 months,6 месяцаў:6 months,1 год:1 year,назаўсёды:infinite',
 'ipbotheroption'                  => 'іншы',
@@ -3455,13 +3454,6 @@ $5
 'scarytranscludedisabled' => '[Улучэньне інтэрвікі было адключанае]',
 'scarytranscludefailed'   => '[Памылка атрыманьня шаблёну $1]',
 'scarytranscludetoolong'  => '[Занадта даўгі URL-адрас]',
-
-# Trackbacks
-'trackbackbox'      => 'Trackback для гэтай старонкі:<br />
-$1',
-'trackbackremove'   => '([$1 выдаліць])',
-'trackbacklink'     => 'Trackback',
-'trackbackdeleteok' => 'Trackback быў пасьпяхова выдалены.',
 
 # Delete conflict
 'deletedwhileediting'      => "'''Увага''': Гэтая старонка была выдаленая пасьля таго, як Вы пачалі яе рэдагаваньне!",

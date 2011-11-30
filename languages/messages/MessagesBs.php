@@ -1520,7 +1520,6 @@ Ako izaberete da date ime, biće korišteno za pripisivanje za vaš rad.',
 'right-autopatrol'            => 'Vlastite izmjene se automatski označavaju kao patrolirane',
 'right-patrolmarks'           => 'Pregled oznaka patroliranja u spisku nedavnih izmjena',
 'right-unwatchedpages'        => 'Gledanje spiska nepraćenih stranica',
-'right-trackback'             => "Slanje ''trackbacka''",
 'right-mergehistory'          => 'Spajanje historije stranica',
 'right-userrights'            => 'Uređivanje svih korisničkih prava',
 'right-userrights-interwiki'  => 'Uređivanje korisničkih prava korisnika na drugim wikijima',
@@ -1566,7 +1565,6 @@ Ako izaberete da date ime, biće korišteno za pripisivanje za vaš rad.',
 'action-patrol'               => 'označite izmjene drugih kao patrolirane',
 'action-autopatrol'           => 'da Vaše izmjene budu označene kao patrolirane',
 'action-unwatchedpages'       => 'pregledate spisak nepraćenih stranica',
-'action-trackback'            => "pošaljete ''trackback''",
 'action-mergehistory'         => 'spajate historiju ove stranice',
 'action-userrights'           => 'uređujete sva korisnička prava',
 'action-userrights-interwiki' => 'uređujete korisnička prava korisnika na drugim wikijima',
@@ -3520,13 +3518,6 @@ Ovaj kod za potvrdu će isteći u $4.',
 'scarytranscludefailed'   => '[Neuspješno preusmjerenje šablona na $1]',
 'scarytranscludetoolong'  => '[URL je predugačak]',
 
-# Trackbacks
-'trackbackbox'      => 'Trackbacks za ovu stranicu:<br />
-$1',
-'trackbackremove'   => '([$1 Brisanje])',
-'trackbacklink'     => 'Vraćanje',
-'trackbackdeleteok' => 'Trackback je uspješno obrisan.',
-
 # Delete conflict
 'deletedwhileediting'      => "'''Upozorenje''': Ova stranica je obrisana prije nego što ste počeli uređivati!",
 'confirmrecreate'          => "Korisnik [[User:$1|$1]] ([[User talk:$1|razgovor]]) je obrisao ovaj članak pošto ste počeli uređivanje sa razlogom:
@@ -3629,18 +3620,18 @@ Također možete [[Special:EditWatchlist|koristiti standardni uređivač]].',
 'iranian-calendar-m12' => 'Esfand',
 
 # Hijri month names
-'hijri-calendar-m1'  => 'Muharem',
-'hijri-calendar-m2'  => 'Safer',
-'hijri-calendar-m3'  => 'Rebiul-evel',
-'hijri-calendar-m4'  => 'Rebiul-ahir',
-'hijri-calendar-m5'  => 'Džumadel-ula',
-'hijri-calendar-m6'  => 'Džumadel-uhra',
-'hijri-calendar-m7'  => 'Redžeb',
-'hijri-calendar-m8'  => 'Šaban',
-'hijri-calendar-m9'  => 'Ramazan',
-'hijri-calendar-m10' => 'Ševal',
-'hijri-calendar-m11' => 'Zulkada',
-'hijri-calendar-m12' => 'Zulhidže',
+'hijri-calendar-m1'  => 'muharrem',
+'hijri-calendar-m2'  => 'safer',
+'hijri-calendar-m3'  => 'rebiul-evvel',
+'hijri-calendar-m4'  => 'rebiul-ahir',
+'hijri-calendar-m5'  => 'džumadel-ula',
+'hijri-calendar-m6'  => 'džumadel-uhra',
+'hijri-calendar-m7'  => 'redžeb',
+'hijri-calendar-m8'  => "ša'ban",
+'hijri-calendar-m9'  => 'ramazan',
+'hijri-calendar-m10' => 'ševval',
+'hijri-calendar-m11' => "zul-ka'de",
+'hijri-calendar-m12' => 'zul-hidždže',
 
 # Hebrew month names
 'hebrew-calendar-m1'      => 'Tishrei',
@@ -3673,6 +3664,7 @@ Također možete [[Special:EditWatchlist|koristiti standardni uređivač]].',
 'hebrew-calendar-m12-gen' => 'Elul',
 
 # Signatures
+'signature'    => '[[{{ns:user}}:$1|$2]] ([[{{ns:user_talk}}:$1|razgovor]])',
 'timezone-utc' => 'KSV',
 
 # Core parser functions

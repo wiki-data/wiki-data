@@ -1552,7 +1552,6 @@ Om du väljer att ange ditt riktiga namn, kommer det att användas för att till
 'right-autopatrol'            => 'Får automatiskt sina ändringar markerade som patrullerade',
 'right-patrolmarks'           => 'Se markeringar av opatrullerade ändringar i senaste ändringarna',
 'right-unwatchedpages'        => 'Se listan över obevakade sidor',
-'right-trackback'             => 'Lägga till trackback',
 'right-mergehistory'          => 'Sammanfoga sidhistoriker',
 'right-userrights'            => 'Ändra alla användarrättigheter',
 'right-userrights-interwiki'  => 'Ändra rättigheter för användare på andra wikier',
@@ -1599,11 +1598,11 @@ Om du väljer att ange ditt riktiga namn, kommer det att användas för att till
 'action-patrol'               => 'märka annans redigering som patrullerad',
 'action-autopatrol'           => 'få din redigering märkt som patrullerad',
 'action-unwatchedpages'       => 'se listan över obevakade sidor',
-'action-trackback'            => 'lägga in en trackback',
 'action-mergehistory'         => 'slå ihop historiken för denna sida',
 'action-userrights'           => 'ändra alla användarrättigheter',
 'action-userrights-interwiki' => 'ändra rättigheter för användare på andra wikier',
 'action-siteadmin'            => 'låsa eller låsa upp databasen',
+'action-sendemail'            => 'skicka e-post',
 
 # Recent changes
 'nchanges'                          => '$1 {{PLURAL:$1|ändring|ändringar}}',
@@ -1917,23 +1916,24 @@ Beskrivningen på dess [$2 filbeskrivningssida] visas nedan.',
 'filerevert-badversion'     => 'Det finns ingen tidigare version av filen från den angivna tidpunkten.',
 
 # File deletion
-'filedelete'                  => 'Radera $1',
-'filedelete-legend'           => 'Radera fil',
-'filedelete-intro'            => "Du håller på att radera filen '''[[Media:$1|$1]]''' tillsammans med hela dess historik.",
-'filedelete-intro-old'        => "Du håller på att radera versionen av '''[[Media:$1|$1]]''' från [$4 $2 kl. $3].",
-'filedelete-comment'          => 'Anledning:',
-'filedelete-submit'           => 'Radera',
-'filedelete-success'          => "'''$1''' har raderats.",
-'filedelete-success-old'      => "Versionen av '''[[Media:$1|$1]]''' från $2 kl. $3 har raderats.",
-'filedelete-nofile'           => "Filen '''$1''' finns inte.",
-'filedelete-nofile-old'       => "Den versionen av '''$1''' kan inte raderas eftersom den inte finns.",
-'filedelete-otherreason'      => 'Annan/ytterligare anledning:',
-'filedelete-reason-otherlist' => 'Annan anledning',
-'filedelete-reason-dropdown'  => '*Vanliga anledningar till radering
+'filedelete'                   => 'Radera $1',
+'filedelete-legend'            => 'Radera fil',
+'filedelete-intro'             => "Du håller på att radera filen '''[[Media:$1|$1]]''' tillsammans med hela dess historik.",
+'filedelete-intro-old'         => "Du håller på att radera versionen av '''[[Media:$1|$1]]''' från [$4 $2 kl. $3].",
+'filedelete-comment'           => 'Anledning:',
+'filedelete-submit'            => 'Radera',
+'filedelete-success'           => "'''$1''' har raderats.",
+'filedelete-success-old'       => "Versionen av '''[[Media:$1|$1]]''' från $2 kl. $3 har raderats.",
+'filedelete-nofile'            => "Filen '''$1''' finns inte.",
+'filedelete-nofile-old'        => "Den versionen av '''$1''' kan inte raderas eftersom den inte finns.",
+'filedelete-otherreason'       => 'Annan/ytterligare anledning:',
+'filedelete-reason-otherlist'  => 'Annan anledning',
+'filedelete-reason-dropdown'   => '*Vanliga anledningar till radering
 ** Upphovsrättsbrott
 ** Dubblettfil',
-'filedelete-edit-reasonlist'  => 'Redigera anledningar för radering',
-'filedelete-maintenance'      => 'Radering och återställning av filer tillfälligt avaktiverat under underhåll.',
+'filedelete-edit-reasonlist'   => 'Redigera anledningar för radering',
+'filedelete-maintenance'       => 'Radering och återställning av filer tillfälligt avaktiverat under underhåll.',
+'filedelete-maintenance-title' => 'Kan inte radera filen',
 
 # MIME search
 'mimesearch'         => 'MIME-sökning',
@@ -2080,8 +2080,8 @@ Lägg märke till att andra webbplatser kan länka till en fil med en direkt URL
 'booksources-invalid-isbn'  => 'Det angivna ISBN-numret verkar inte vara giltigt. Kontrollera källan för eventuella fel.',
 
 # Special:Log
-'specialloguserlabel'  => 'Användare:',
-'speciallogtitlelabel' => 'Titel:',
+'specialloguserlabel'  => 'Utförare:',
+'speciallogtitlelabel' => 'Mål (titel eller användare):',
 'log'                  => 'Loggar',
 'all-logs-page'        => 'Alla publika loggar',
 'alllogstext'          => 'Kombinerad visning av alla tillgängliga loggar för {{SITENAME}}.
@@ -2125,8 +2125,9 @@ Se även [[Special:WantedCategories|önskade kategorier]].',
 'linksearch-pat'   => 'Sökmönster:',
 'linksearch-ns'    => 'Namnrymd:',
 'linksearch-ok'    => 'Sök',
-'linksearch-text'  => 'Jokertecken (wildcards) som t ex "*.wikipedia.org" kan användas.<br />
-Stödda protokoll: <tt>$1</tt>',
+'linksearch-text'  => 'Jokertecken (wildcards) som t.ex. "*.wikipedia.org" kan användas.
+Det krävs åtminstone en toppnivå-domän, t.ex. "*.org".<br />
+Protokoll som stöds: <tt>$1</tt> (lägg inte till något av dessa i din sökning).',
 'linksearch-line'  => '$1 länkas från $2',
 'linksearch-error' => 'Jokertecken kan bara användas i början av domännamnet.',
 
@@ -2753,6 +2754,7 @@ I det senare fallet kan du även använda en länk, exempel [[{{#Special:Export}
 'exportcuronly'     => 'Inkludera endast den nuvarande versionen, inte hela historiken',
 'exportnohistory'   => "----
 '''OBS:''' export av fullständig sidhistorik med hjälp av detta formulär har stängts av på grund av prestandaskäl.",
+'exportlistauthors' => 'Innehålla en fullständig lista över bidragsgivare för varje sida',
 'export-submit'     => 'Exportera',
 'export-addcattext' => 'Lägg till sidor från kategori:',
 'export-addcat'     => 'Lägg till',
@@ -3546,13 +3548,6 @@ Denna bekräftelsekod kommer att sluta fungera efter $4.',
 'scarytranscludedisabled' => '[Interwiki-inklusion är inte aktiverad]',
 'scarytranscludefailed'   => '[Hämtning av mall för $1 misslyckades]',
 'scarytranscludetoolong'  => '[För lång URL]',
-
-# Trackbacks
-'trackbackbox'      => 'Till denna sida finns följande trackback:<br />
-$1',
-'trackbackremove'   => '([$1 Ta bort])',
-'trackbacklink'     => 'Trackback',
-'trackbackdeleteok' => 'Trackback har tagits bort.',
 
 # Delete conflict
 'deletedwhileediting'      => "'''Varning''': Denna sida raderades efter att du började redigera!",

@@ -27,7 +27,7 @@ abstract class Action {
 
 	/**
 	 * Page on which we're performing the action
-	 * @var Article
+	 * @var Page
 	 */
 	protected $page;
 
@@ -72,14 +72,15 @@ abstract class Action {
 	/**
 	 * Get an appropriate Action subclass for the given action
 	 * @param $action String
-	 * @param $page Article
+	 * @param $page Page
+	 * @param $context IContextSource
 	 * @return Action|false|null false if the action is disabled, null
 	 *     if it is not recognised
 	 */
-	public final static function factory( $action, Page $page ) {
+	public final static function factory( $action, Page $page, IContextSource $context = null ) {
 		$class = self::getClass( $action, $page->getActionOverrides() );
 		if ( $class ) {
-			$obj = new $class( $page );
+			$obj = new $class( $page, $context );
 			return $obj;
 		}
 		return $class;
@@ -147,8 +148,18 @@ abstract class Action {
 	 *
 	 * @return Skin
 	 */
+	public final function getLanguage() {
+		return $this->getContext()->getLanguage();
+	}
+
+	/**
+	 * Shortcut to get the user Language being used for this instance
+	 *
+	 * @deprecated 1.19 Use getLanguage instead
+	 * @return Skin
+	 */
 	public final function getLang() {
-		return $this->getContext()->getLang();
+		return $this->getLanguage();
 	}
 
 	/**
@@ -173,10 +184,12 @@ abstract class Action {
 	/**
 	 * Protected constructor: use Action::factory( $action, $page ) to actually build
 	 * these things in the real world
-	 * @param Page $page
+	 * @param $page Page
+	 * @param $context IContextSource
 	 */
-	protected function __construct( Page $page ) {
+	protected function __construct( Page $page, IContextSource $context = null ) {
 		$this->page = $page;
+		$this->context = $context;
 	}
 
 	/**

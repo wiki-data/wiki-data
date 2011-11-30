@@ -1576,7 +1576,6 @@ Tuto operaci nelze vrátit zpět.',
 'right-autopatrol'            => 'Automatické označování editací jako prověřených',
 'right-patrolmarks'           => 'Zobrazování patrolovacích značek v Posledních změnách',
 'right-unwatchedpages'        => 'Zobrazování seznamu nesledovaných stránek',
-'right-trackback'             => 'Zasílání trackbacku',
 'right-mergehistory'          => 'Slučování historií stránek',
 'right-userrights'            => 'Nastavování práv ostatním uživatelům',
 'right-userrights-interwiki'  => 'Nastavování práv ostatním uživatelům na jiných wiki',
@@ -1623,11 +1622,11 @@ Tuto operaci nelze vrátit zpět.',
 'action-patrol'               => 'označit úpravy ostatních jako zhlédnuté',
 'action-autopatrol'           => 'označit vlastní úpravy jako zhlédnuté',
 'action-unwatchedpages'       => 'zobrazit seznam nesledovaných stránek',
-'action-trackback'            => 'poslat trackback',
 'action-mergehistory'         => 'sloučit historii této stránky',
 'action-userrights'           => 'upravovat práva všech uživatelů',
 'action-userrights-interwiki' => 'upravovat práva uživatelů na jiných wiki',
 'action-siteadmin'            => 'zamykat nebo odemykat databázi',
+'action-sendemail'            => 'posílat e-maily',
 
 # Recent changes
 'nchanges'                          => '$1 {{PLURAL:$1|změna|změny|změn}}',
@@ -2097,8 +2096,8 @@ Uvědomte si, že jiné webové stránky mohou na soubor odkazovat pomocí pří
 'booksources-invalid-isbn'  => 'Zadané ISBN se zdá být neplatné. Zkontrolujte jej s originálním zdrojem.',
 
 # Special:Log
-'specialloguserlabel'  => 'Uživatel:',
-'speciallogtitlelabel' => 'Název:',
+'specialloguserlabel'  => 'Původce:',
+'speciallogtitlelabel' => 'Cíl (název nebo uživatel):',
 'log'                  => 'Protokolovací záznamy',
 'all-logs-page'        => 'Všechny veřejné záznamy',
 'alllogstext'          => 'Společné zobrazení všech dostupných protokolovacích záznamů pro {{grammar:4sg|{{SITENAME}}}}.
@@ -2142,8 +2141,9 @@ Podívejte se také na [[Special:WantedCategories|žádané kategorie]].',
 'linksearch-pat'   => 'Vyhledávací vzor:',
 'linksearch-ns'    => 'Jmenný prostor:',
 'linksearch-ok'    => 'Hledat',
-'linksearch-text'  => 'Lze používat zástupné znaky, např. „*.wikipedia.org“.<br />
-Podporované protokoly: <tt>$1</tt>',
+'linksearch-text'  => 'Lze používat zástupné znaky, např. „*.wikipedia.org“.
+Povinná je přinejmenším doména nejvyššího řádu, např. „*.org“.<br />
+Podporované protokoly: <tt>$1</tt> (nepřidávejte je do hledání).',
 'linksearch-line'  => '$2 odkazuje na $1',
 'linksearch-error' => 'Zástupné znaky lze použít jen na začátku doménového jména.',
 
@@ -2753,6 +2753,7 @@ V druhém případě můžete také používat přímý odkaz, např. pomocí [[
 'exportcuronly'     => 'Zahrnout jen současnou verzi, ne plnou historii',
 'exportnohistory'   => "----
 '''Poznámka:''' export plných historií prostřednictvím tohoto formuláře byl z výkonnostních důvodů zakázán.",
+'exportlistauthors' => 'U každé stránky vypsat úplný seznam přispěvatelů',
 'export-submit'     => 'Exportovat',
 'export-addcattext' => 'Přidat stránky z kategorie:',
 'export-addcat'     => 'Přidat',
@@ -3541,13 +3542,6 @@ Platnost tohoto potvrzovacího kódu vyprší $4.',
 'scarytranscludedisabled' => '[Vkládání šablon mezi wiki je vypnuto]',
 'scarytranscludefailed'   => '[Nepodařilo se načíst šablonu pro $1]',
 'scarytranscludetoolong'  => '[Příliš dlouhé URL]',
-
-# Trackbacks
-'trackbackbox'      => 'Zpětné odkazy k této stránce:<br />
-$1',
-'trackbackremove'   => '([$1 Smazat])',
-'trackbacklink'     => 'Zpětný odkaz',
-'trackbackdeleteok' => 'Zpětný odkaz byl úspěšně smazán.',
 
 # Delete conflict
 'deletedwhileediting'      => "'''Upozornění''': V průběhu vaší editace byla tato stránka smazána!",

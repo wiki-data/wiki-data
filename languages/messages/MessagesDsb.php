@@ -1362,7 +1362,6 @@ Móžoš toś ten bok wužywaś, aby slědk stajił swóje nastajenja na standar
 'right-autopatrol'            => 'Swójske změny awtomatiski ako doglědowane markěrowane',
 'right-patrolmarks'           => 'Kontrolne wobznamjenja w aktualnych změnach',
 'right-unwatchedpages'        => 'Lisćinu njewobglědowanych bokow woglědaś',
-'right-trackback'             => 'Trackback wótpósłaś',
 'right-mergehistory'          => 'Stawizny wersijow bokow zjadnośiś',
 'right-userrights'            => 'Wšykne wužywarske pšawa wobźěłaś',
 'right-userrights-interwiki'  => 'Wužywarske pšawa w drugich wikijach wobźěłaś',
@@ -1409,11 +1408,11 @@ Móžoš toś ten bok wužywaś, aby slědk stajił swóje nastajenja na standar
 'action-patrol'               => 'změny drugich wužywarjow ako doglědowane markěrowaś',
 'action-autopatrol'           => 'twóju změnu ako doglědowanu markěrowaś daś',
 'action-unwatchedpages'       => 'lisćinu njewobglědowanych bokow zwobrazniś',
-'action-trackback'            => 'trackback pósłaś',
 'action-mergehistory'         => 'Stawizny toś togo boka zjadnośiś',
 'action-userrights'           => 'wše wužywarske pšawa wobźěłaś',
 'action-userrights-interwiki' => 'wužywarske pšawa wužywarjow w drugich wikijach wobźěłaś',
 'action-siteadmin'            => 'datowu banku zastajiś abo wótworiś',
+'action-sendemail'            => 'E-maile pósłaś',
 
 # Recent changes
 'nchanges'                          => '$1 {{PLURAL:$1|změna|změnje|změny}}',
@@ -1884,8 +1883,8 @@ Pšosym glědaj na to, až druge websedła móžu k drugej dataji z direktnym UR
 'booksources-invalid-isbn'  => 'Pódane ISBN-cysło njezda se płaśiwe byś; pséglědaj za zmólkami, z tym až kopěrujoš z originalnego žrědła.',
 
 # Special:Log
-'specialloguserlabel'  => 'Wužywaŕ:',
-'speciallogtitlelabel' => 'Nadpismo:',
+'specialloguserlabel'  => 'Wuwjeźaŕ:',
+'speciallogtitlelabel' => 'Cel (titel abo wužywaŕ):',
 'log'                  => 'Protokole',
 'all-logs-page'        => 'Wšykne zjawne protokole',
 'alllogstext'          => 'To jo kombiněrowane zwobraznjenje wšyknych we {{GRAMMAR:lokatiw|{{SITENAME}}}} k dispoziciji stojecych protokolow. Móžoš naglěd pśez wubraśe protokolowego typa, wužywarskego mjenja (pód źiwanim wjelikopisanja) abo pótrjefjonego boka (teke pód źiwanim wjelikopisanja) wobgranicowaś.',
@@ -3302,13 +3301,6 @@ Toś ten wobkšuśeński kod płaśi až do $4.',
 'scarytranscludedisabled' => '[Pśidawanje interwiki jo deaktiwěrowane]',
 'scarytranscludefailed'   => '[Zapśěgnjenje pśedłogi za $1 njejo se raźiło]',
 'scarytranscludetoolong'  => '[URL jo pśedłujki]',
-
-# Trackbacks
-'trackbackbox'      => 'Trackbacki za toś ten bok:<br />
-$1',
-'trackbackremove'   => '([$1 wulašowaś])',
-'trackbacklink'     => 'Trackback',
-'trackbackdeleteok' => 'Trackback jo wuspěšnje wulašowany.',
 
 # Delete conflict
 'deletedwhileediting'      => "'''Warnowanje''': Toś ten bok se wulašujo, gaž zachopijoš jen wobźěłaś!",

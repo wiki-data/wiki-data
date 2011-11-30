@@ -9,6 +9,7 @@
  *
  * @author Alma
  * @author Gallaecio
+ * @author Gustronico
  * @author Lameiro
  * @author Prevert
  * @author Toliño
@@ -545,8 +546,8 @@ A última consulta á base de datos foi:
 desde a función "$2".
 A base de datos devolveu o erro "$3: $4"',
 'laggedslavemode'      => "'''Aviso:''' A páxina pode non conter as actualizacións recentes.",
-'readonly'             => 'Base de datos fechada',
-'enterlockreason'      => 'Dea unha razón para o fechamento, incluíndo unha estimación de até cando se manterá.',
+'readonly'             => 'Base de datos pechada',
+'enterlockreason'      => 'Dea unha razón para o peche, incluíndo unha estimación de até cando se manterá',
 'readonlytext'         => 'Nestes intres a base de datos está pechada a novas entradas e outras modificacións, probabelmente debido a rutinas de mantemento, tras as que volverá á normalidade.
 
 O administrador que a pechou deu esta explicación: $1',
@@ -615,7 +616,7 @@ A razón dada foi ''$2''.",
 'logouttext'                 => "'''Agora está fóra do sistema.'''
 
 Pode continuar usando {{SITENAME}} de xeito anónimo, ou pode [[Special:UserLogin|acceder de novo]] co mesmo nome de usuario ou con outro.
-Teña en conta que mentres non se limpa a memoria caché do seu navegador algunhas páxinas poden continuar a ser amosadas como se aínda estivese dentro do sistema.",
+Teña en conta que mentres non se limpa a memoria caché do seu navegador algunhas páxinas poden continuar aparecendo como se aínda estivese dentro do sistema.",
 'welcomecreation'            => '== Reciba a nosa benvida, $1! ==
 A súa conta foi creada correctamente.
 Non esqueza personalizar as súas [[Special:Preferences|preferencias de {{SITENAME}}]].',
@@ -664,7 +665,7 @@ Os nomes de usuario diferencian entre maiúsculas e minúsculas.
 Verifique o nome que inseriu ou [[Special:UserLogin/signup|cree unha nova conta]].',
 'nosuchusershort'            => 'Non existe ningún usuario chamado "$1".
 Verifique o nome que inseriu.',
-'nouserspecified'            => 'Debe especificar un nome de usuario.',
+'nouserspecified'            => 'Cómpre especificar un nome de usuario.',
 'login-userblocked'          => 'Este usuario está bloqueado. Acceso non autorizado.',
 'wrongpassword'              => 'O contrasinal escrito é incorrecto.
 Por favor, insira outro.',
@@ -731,7 +732,7 @@ Por favor, agarde antes de probar outra vez.',
 'retypenew'                 => 'Insira outra vez o novo contrasinal:',
 'resetpass_submit'          => 'Poñer o contrasinal e entrar',
 'resetpass_success'         => 'O cambio do contrasinal realizouse con éxito! Agora pode entrar...',
-'resetpass_forbidden'       => 'Os contrasinais non poden ser mudados',
+'resetpass_forbidden'       => 'Non se poden mudar os contrasinais',
 'resetpass-no-info'         => 'Debe rexistrarse para acceder directamente a esta páxina.',
 'resetpass-submit-loggedin' => 'Cambiar o contrasinal',
 'resetpass-submit-cancel'   => 'Cancelar',
@@ -907,7 +908,7 @@ Lembre que as páxinas .css e .js personalizadas utilizan un título en minúscu
 'updated'                          => '(Actualizado)',
 'note'                             => "'''Nota:'''",
 'previewnote'                      => "'''Lembre que esta é só unha vista previa e que aínda non gardou os seus cambios!'''",
-'previewconflict'                  => 'Esta vista previa amosa o texto na área superior tal e como aparecerá se escolle gardar.',
+'previewconflict'                  => 'Esta vista previa mostra o texto na área superior tal e como aparecerá se escolle gardar.',
 'session_fail_preview'             => "'''O sistema non pode procesar a súa edición porque se perderon os datos de inicio da sesión.
 Por favor, inténteo de novo.
 Se segue sen funcionar, probe a [[Special:UserLogout|saír do sistema]] e volver entrar.'''",
@@ -945,10 +946,10 @@ Do mesmo xeito, comprométese a que o que vostede escriba sexa da súa autoría 
 '''NON ENVÍE SEN PERMISO TRABALLOS CON DEREITOS DE COPIA!'''",
 'longpageerror'                    => "'''Erro: O texto que pretende gardar ocupa $1 kilobytes, e existe un límite dun máximo de $2 kilobytes.'''
 Polo tanto, non se pode gardar.",
-'readonlywarning'                  => "'''Atención: A base de datos foi fechada para facer mantemento, polo que non vai poder gardar as súas edicións polo de agora.'''
+'readonlywarning'                  => "'''Atención: A base de datos foi pechada para facer mantemento, polo que non vai poder gardar as súas edicións polo de agora.'''
 Se cadra, pode cortar e pegar o texto nun ficheiro de texto e gardalo para despois.
 
-O administrador que a fechou deu esta explicación: $1",
+O administrador que a pechou deu esta explicación: $1",
 'protectedpagewarning'             => "'''Aviso: Esta páxina foi protexida de xeito que só os usuarios con privilexios de administrador a poidan editar.'''
 Velaquí está a última entrada no rexistro, por se quere consultala:",
 'semiprotectedpagewarning'         => "'''Nota:''' Esta páxina foi protexida de xeito que só os usuarios rexistrados a poidan editar.
@@ -1280,9 +1281,9 @@ Note que os seus índices do contido de {{SITENAME}} poden estar desactualizados
 'prefs-personal'                => 'Información do usuario',
 'prefs-rc'                      => 'Cambios recentes',
 'prefs-watchlist'               => 'Lista de vixilancia',
-'prefs-watchlist-days'          => 'Días para amosar na lista de vixilancia:',
+'prefs-watchlist-days'          => 'Número de días que mostrar na lista de vixilancia:',
 'prefs-watchlist-days-max'      => 'Máximo 7 días',
-'prefs-watchlist-edits'         => 'Número de edicións para mostrar na lista de vixilancia completa:',
+'prefs-watchlist-edits'         => 'Número máximo de edicións que mostrar na lista de vixilancia completa:',
 'prefs-watchlist-edits-max'     => 'Número máximo: 1000',
 'prefs-watchlist-token'         => 'Pase para a lista de vixilancia:',
 'prefs-misc'                    => 'Preferencias varias',
@@ -1363,7 +1364,7 @@ Ha de ter menos {{PLURAL:$1|dun carácter|de $1 caracteres}}.',
 'prefs-help-realname'           => 'O seu nome real é opcional, pero se escolle dalo utilizarase para atribuírlle o seu traballo.',
 'prefs-help-email'              => 'O enderezo de correo electrónico é opcional, pero permite que se lle envíe un contrasinal novo se se esquece del.',
 'prefs-help-email-others'       => 'Tamén pode optar por deixar aos outros que se poidan poñer en contacto con vostede a través da súa páxina de usuario sen necesidade de revelar a súa identidade.',
-'prefs-help-email-required'     => 'Requírese o enderezo de correo electrónico.',
+'prefs-help-email-required'     => 'Cómpre o enderezo de correo electrónico.',
 'prefs-info'                    => 'Información básica',
 'prefs-i18n'                    => 'Internacionalización',
 'prefs-signature'               => 'Sinatura',
@@ -1451,7 +1452,7 @@ Ha de ter menos {{PLURAL:$1|dun carácter|de $1 caracteres}}.',
 'right-bot'                   => 'Ser tratado coma un proceso automatizado',
 'right-nominornewtalk'        => 'As edicións pequenas nas páxinas de conversa non lanzan o aviso de mensaxes novas',
 'right-apihighlimits'         => 'Usar os límites superiores nas peticións API',
-'right-writeapi'              => 'Usar o API para modificar o wiki',
+'right-writeapi'              => 'Usar a API para modificar o wiki',
 'right-delete'                => 'Borrar páxinas',
 'right-bigdelete'             => 'Borrar páxinas con historiais grandes',
 'right-deleterevision'        => 'Borrar e restaurar versións específicas de páxinas',
@@ -1482,11 +1483,10 @@ Ha de ter menos {{PLURAL:$1|dun carácter|de $1 caracteres}}.',
 'right-autopatrol'            => 'Ter as edicións marcadas automaticamente como patrulladas',
 'right-patrolmarks'           => 'Ver os cambios que están marcados coma patrullados',
 'right-unwatchedpages'        => 'Ver unha lista de páxinas que non están vixiadas',
-'right-trackback'             => 'Enviar un trackback',
 'right-mergehistory'          => 'Fusionar o historial das páxinas',
 'right-userrights'            => 'Editar todos os dereitos de usuario',
 'right-userrights-interwiki'  => 'Editar os dereitos de usuario dos usuarios doutros wikis',
-'right-siteadmin'             => 'Fechar e abrir a base de datos',
+'right-siteadmin'             => 'Pechar e abrir a base de datos',
 'right-override-export-depth' => 'Exportar páxinas incluíndo as páxinas ligadas ata unha profundidade de 5',
 'right-sendemail'             => 'Enviar correos electrónicos a outros usuarios',
 'right-passwordreset'         => 'Ver os correos electrónicos de restablecemento de contrasinais',
@@ -1529,11 +1529,11 @@ Ha de ter menos {{PLURAL:$1|dun carácter|de $1 caracteres}}.',
 'action-patrol'               => 'marcar a edición doutro como patrullada',
 'action-autopatrol'           => 'marcar a súa edición como patrullada',
 'action-unwatchedpages'       => 'ver a lista das páxinas non vixiadas',
-'action-trackback'            => 'enviar un trackback',
 'action-mergehistory'         => 'fusionar o historial desta páxina',
 'action-userrights'           => 'editar todos os permisos de usuario',
 'action-userrights-interwiki' => 'editar os permisos de usuario dos usuarios doutros wikis',
 'action-siteadmin'            => 'bloquear ou desbloquear a base de datos',
+'action-sendemail'            => 'enviar correos electrónicos',
 
 # Recent changes
 'nchanges'                          => '$1 {{PLURAL:$1|cambio|cambios}}',
@@ -1641,7 +1641,7 @@ Por favor, cambie o nome do ficheiro e intente cargalo de novo.',
 'tmp-create-error'            => 'Non se puido crear o ficheiro temporal.',
 'tmp-write-error'             => 'Houbo un erro ao gravar o ficheiro temporal.',
 'large-file'                  => 'Recoméndase que o tamaño dos ficheiros non supere os $1; este ficheiro ocupa $2.',
-'largefileserver'             => 'Este ficheiro é de maior tamaño có permitido pola configuración do servidor.',
+'largefileserver'             => 'Este ficheiro é de maior tamaño ca o permitido pola configuración do servidor.',
 'emptyfile'                   => 'O ficheiro que cargou semella estar baleiro.
 Isto pode deberse a un erro ortográfico no seu nome.
 Por favor, verifique se realmente quere cargar este ficheiro.',
@@ -1993,7 +1993,7 @@ As entradas <del>riscadas</del> xa foron resoltas.',
 'protectedtitlestext'     => 'Os seguintes títulos están protexidos da creación',
 'protectedtitlesempty'    => 'Actualmente non están protexidos títulos con eses parámetros.',
 'listusers'               => 'Lista de usuarios',
-'listusers-editsonly'     => 'Amosar só os usuarios con edicións',
+'listusers-editsonly'     => 'Mostrar só os usuarios con edicións',
 'listusers-creationsort'  => 'Ordenar por data de creación',
 'usereditcount'           => '$1 {{PLURAL:$1|edición|edicións}}',
 'usercreated'             => '{{GENDER:$3|Creado|Creada}} o $1 ás $2',
@@ -2022,8 +2022,8 @@ Por favor, teña en conta que outras páxinas web poden ligar cara a un ficheiro
 'booksources-invalid-isbn'  => 'O ISBN inserido parece non ser válido; comprobe que non haxa erros ao copialo da fonte orixinal.',
 
 # Special:Log
-'specialloguserlabel'  => 'Usuario:',
-'speciallogtitlelabel' => 'Título:',
+'specialloguserlabel'  => 'Executante:',
+'speciallogtitlelabel' => 'Obxectivo (título ou usuario):',
 'log'                  => 'Rexistros',
 'all-logs-page'        => 'Todos os rexistros públicos',
 'alllogstext'          => 'Vista combinada de todos os rexistros dipoñibles en {{SITENAME}}.
@@ -2051,7 +2051,7 @@ Pode precisar máis a vista seleccionando o tipo de rexistro, o nome do usuario 
 # Special:Categories
 'categories'                    => 'Categorías',
 'categoriespagetext'            => '{{PLURAL:$1|A seguinte categoría contén|As seguintes categorías conteñen}} páxinas ou contidos multimedia.
-Aquí non se amosan as [[Special:UnusedCategories|categorías sen uso]].
+Aquí non se mostran as [[Special:UnusedCategories|categorías sen uso]].
 Olle tamén as [[Special:WantedCategories|categorías requiridas]].',
 'categoriesfrom'                => 'Mostrar as categorías que comecen por:',
 'special-categories-sort-count' => 'ordenar por número',
@@ -2165,7 +2165,7 @@ Os cambios futuros nesta páxina e na súa páxina de conversa asociada serán l
 'unwatchthispage'      => 'Deixar de vixiar',
 'notanarticle'         => 'Non é unha páxina de contido',
 'notvisiblerev'        => 'A revisión foi borrada',
-'watchnochange'        => 'Ningún dos elementos baixo vixilancia foi editado no período de tempo amosado.',
+'watchnochange'        => 'Ningún dos elementos baixo vixilancia foi editado no período de tempo indicado.',
 'watchlist-details'    => 'Hai {{PLURAL:$1|unha páxina|$1 páxinas}} na súa lista de vixilancia, sen contar as de conversa.',
 'wlheader-enotif'      => '* Está dispoñible a notificación por correo electrónico.',
 'wlheader-showupdated' => "* As páxinas que cambiaron desde a súa última visita móstranse en '''negra'''",
@@ -2228,7 +2228,7 @@ Axuda:
 'deletepage'             => 'Borrar a páxina',
 'confirm'                => 'Confirmar',
 'excontent'              => 'o contido era: "$1"',
-'excontentauthor'        => 'o contido era: "$1" (e o único editor foi "[[Special:Contributions/$2|$2]]")',
+'excontentauthor'        => 'o contido era: "$1" (e o único editor foi [[Special:Contributions/$2|$2]])',
 'exbeforeblank'          => 'o contido antes do baleirado era: "$1"',
 'exblank'                => 'a páxina estaba baleira',
 'delete-confirm'         => 'Borrar "$1"',
@@ -2579,20 +2579,20 @@ Polo tanto, non pode crear unha conta",
 'ipbnounblockself'                => 'Non ten os permisos necesarios para desbloquearse a si mesmo',
 
 # Developer tools
-'lockdb'              => 'Fechar a base de datos',
+'lockdb'              => 'Pechar a base de datos',
 'unlockdb'            => 'Desbloquear a base de datos',
-'lockdbtext'          => 'Ao fechar a base de datos quitaralles aos usuarios a posibilidade de editar páxinas, cambiar as súas preferencias, editar as súas listas de vixilancia e outras cousas que requiren cambios na base de datos.
+'lockdbtext'          => 'Ao pechar a base de datos quitaralles aos usuarios a posibilidade de editar páxinas, cambiar as súas preferencias, editar as súas listas de vixilancia e outras cousas que requiren cambios na base de datos.
 Por favor, confirme que isto é o que realmente quere facer e que retirará o bloqueo da base de datos cando remate co mantemento.',
 'unlockdbtext'        => 'O desbloqueo da base de datos vai permitir que os usuarios poidan editar páxinas, cambiar as súas preferencias, editar as súas listas de vixilancia e outras accións que requiran cambios na base de datos.
 Por favor confirme que isto é o que quere facer.',
-'lockconfirm'         => 'Si, realmente quero fechar a base de datos.',
+'lockconfirm'         => 'Si, realmente quero pechar a base de datos.',
 'unlockconfirm'       => 'Si, realmente quero desbloquear a base de datos',
-'lockbtn'             => 'Fechar a base de datos',
+'lockbtn'             => 'Pechar a base de datos',
 'unlockbtn'           => 'Desbloquear a base de datos',
 'locknoconfirm'       => 'Non marcou a caixa de confirmación.',
-'lockdbsuccesssub'    => 'A base de datos foi fechada con éxito',
+'lockdbsuccesssub'    => 'A base de datos foi pechada correctamente',
 'unlockdbsuccesssub'  => 'Quitouse a protección da base de datos',
-'lockdbsuccesstext'   => 'Fechouse a base de datos.<br />
+'lockdbsuccesstext'   => 'Pechouse a base de datos.<br />
 Lembre [[Special:UnlockDB|eliminar o bloqueo]] unha vez completado o seu mantemento.',
 'unlockdbsuccesstext' => 'A base de datos foi desbloqueada.',
 'lockfilenotwritable' => 'Non se pode escribir no ficheiro de bloqueo da base de datos. Para bloquear ou desbloquear a base de datos, o servidor web ten que poder escribir neste ficheiro.',
@@ -2791,7 +2791,7 @@ Gárdeo no seu disco duro e cárgueo aquí.',
 'import-logentry-interwiki-detail' => '$1 {{PLURAL:$1|revisión|revisións}} de $2',
 
 # Tooltip help for the actions
-'tooltip-pt-userpage'             => 'A súa páxina de {{GENDER:{{BASEPAGENAME}}|usuario|usuaria}}',
+'tooltip-pt-userpage'             => 'A súa páxina de {{GENDER:|usuario|usuaria}}',
 'tooltip-pt-anonuserpage'         => 'A páxina de usuario do enderezo IP desde o que está a editar',
 'tooltip-pt-mytalk'               => 'A súa páxina de conversa',
 'tooltip-pt-anontalk'             => 'Conversa acerca de edicións feitas desde este enderezo IP',
@@ -3511,13 +3511,6 @@ O código de confirmación caduca o $6 ás $7.',
 'scarytranscludedisabled' => '[A transclusión interwiki está desactivada]',
 'scarytranscludefailed'   => '[Fallou a busca do modelo "$1"]',
 'scarytranscludetoolong'  => '[O enderezo URL é demasiado longo]',
-
-# Trackbacks
-'trackbackbox'      => 'Trackbacks para esta páxina:<br />
-$1',
-'trackbackremove'   => '([$1 Borrar])',
-'trackbacklink'     => 'Trackback',
-'trackbackdeleteok' => 'O trackback foi eliminado sen problemas.',
 
 # Delete conflict
 'deletedwhileediting'      => "'''Aviso:''' Esta páxina foi borrada despois de que comezase a editala!",

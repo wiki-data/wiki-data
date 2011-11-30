@@ -107,6 +107,7 @@ abstract class Installer {
 		'envCheckUploadsDirectory',
 		'envCheckLibicu',
 		'envCheckSuhosinMaxValueLength',
+		'envCheckCtype',
 	);
 
 	/**
@@ -205,7 +206,6 @@ abstract class Installer {
 	protected $objectCaches = array(
 		'xcache' => 'xcache_get',
 		'apc' => 'apc_fetch',
-		'eaccel' => 'eaccelerator_get',
 		'wincache' => 'wincache_ucache_get'
 	);
 
@@ -296,11 +296,13 @@ abstract class Installer {
 	 * The parameters are like parameters to wfMsg().
 	 * The messages will be in wikitext format, which will be converted to an
 	 * output format such as HTML or text before being sent to the user.
+	 * @param $msg
 	 */
 	public abstract function showMessage( $msg /*, ... */ );
 
 	/**
 	 * Same as showMessage(), but for displaying errors
+	 * @param $msg
 	 */
 	public abstract function showError( $msg /*, ... */ );
 
@@ -621,6 +623,7 @@ abstract class Installer {
 
 	/**
 	 * Environment check for DB types.
+	 * @return bool
 	 */
 	protected function envCheckDB() {
 		global $wgLang;
@@ -852,10 +855,10 @@ abstract class Installer {
 	/**
 	 * Environment check for the server hostname.
 	 */
-	protected function envCheckServer() {
-		if ( $this->getVar( 'wgServer' ) ) {
+	protected function envCheckServer( $srv = null ) {
+		if ( $srv ) {
 			// wgServer was pre-defined, perhaps by the cli installer
-			$server = $this->getVar( 'wgServer' );
+			$server = $srv;
 		} else {
 			$server = WebRequest::detectServer();
 		}
@@ -865,6 +868,7 @@ abstract class Installer {
 
 	/**
 	 * Environment check for setting $IP and $wgScriptPath.
+	 * @return bool
 	 */
 	protected function envCheckPath() {
 		global $IP;
@@ -890,6 +894,7 @@ abstract class Installer {
 
 	/**
 	 * TODO: document
+	 * @return bool
 	 */
 	protected function envCheckShellLocale() {
 		$os = php_uname( 's' );
@@ -1063,6 +1068,13 @@ abstract class Installer {
 			if( $needsUpdate ) {
 				$this->showMessage( 'config-unicode-update-warning' );
 			}
+		}
+	}
+
+	protected function envCheckCtype() {
+		if ( !function_exists( 'ctype_digit' ) ) {
+			$this->showError( 'config-ctype' );
+			return false;
 		}
 	}
 
@@ -1475,6 +1487,9 @@ abstract class Installer {
 		return $status;
 	}
 
+	/**
+	 * @param $s Status
+	 */
 	private function subscribeToMediaWikiAnnounce( Status $s ) {
 		$params = array(
 			'email'    => $this->getVar( '_AdminEmail' ),

@@ -514,6 +514,7 @@ $messages = array(
 'vector-view-viewsource'   => 'Қайнар көзін қарау',
 'actions'                  => 'Әрекеттер',
 'namespaces'               => 'Есім аялары',
+'variants'                 => 'Нұсқалар',
 
 'errorpagetitle'    => 'Қателік',
 'returnto'          => '$1 дегенге қайта келу.',
@@ -529,6 +530,7 @@ $messages = array(
 'printableversion'  => 'Басып шығару үшін',
 'permalink'         => 'Тұрақты сілтеме',
 'print'             => 'Басып шығару',
+'view'              => 'Қарау',
 'edit'              => 'Өңдеу',
 'create'            => 'Бастау',
 'editthispage'      => 'Бетті өңдеу',
@@ -539,8 +541,8 @@ $messages = array(
 'protect'           => 'Қорғау',
 'protect_change'    => 'өзгерту',
 'protectthispage'   => 'Бетті қорғау',
-'unprotect'         => 'Қорғамау',
-'unprotectthispage' => 'Бетті қорғамау',
+'unprotect'         => 'Қорғауын өзгерту',
+'unprotectthispage' => 'Бұл беттің қорғауын өзгерту',
 'newpage'           => 'Жаңа бет',
 'talkpage'          => 'Бетті талқылау',
 'talkpagelinktext'  => 'Талқылауы',
@@ -568,6 +570,7 @@ $messages = array(
 'jumpto'            => 'Мында өту:',
 'jumptonavigation'  => 'шарлау',
 'jumptosearch'      => 'іздеу',
+'pool-errorunknown' => 'Белгісіз қате',
 
 # All link text and link target definitions of links into project namespace that get used by other message strings, with the exception of user group pages (see grouppage) and the disambiguation template definition (see disambiguations).
 'aboutsite'            => '{{SITENAME}} туралы',
@@ -1321,7 +1324,6 @@ $3 келтірілген себебі: ''$2''",
 'right-autopatrol'           => 'Өз өңдемелерін зерттелді деп өздіктік белгілеу',
 'right-patrolmarks'          => 'Жуықтағы өзгерістердегі зерттеу белгілерін көру',
 'right-unwatchedpages'       => 'Бақыланылмаған бет тізімін көру',
-'right-trackback'            => 'Аңыстауды жөнелту',
 'right-mergehistory'         => 'Беттердің тарихын қосып беру',
 'right-userrights'           => 'Қатысушылардың барлық құқықтарын өңдеу',
 'right-userrights-interwiki' => 'Басқа үикилердегі қатысушылардың құқықтарын өңдеу',
@@ -2770,13 +2772,6 @@ $5
 'scarytranscludedisabled' => '[Уики-аралық кірікбеттер өшірілген]',
 'scarytranscludefailed'   => '[$1 үшін үлгі келтіруі сәтсіз бітті; ғафу етіңіз]',
 'scarytranscludetoolong'  => '[URL тым ұзын; ғафу етіңіз]',
-
-# Trackbacks
-'trackbackbox'      => 'Бұл беттің аңыстаулары:<br />
-$1',
-'trackbackremove'   => '([$1 Жою])',
-'trackbacklink'     => 'Аңыстау',
-'trackbackdeleteok' => 'Аңыстау сәтті жойылды.',
 
 # Delete conflict
 'deletedwhileediting' => 'Құлақтандыру: Бұл бетті өңдеуіңізді бастағанда, осы бет жойылды!',

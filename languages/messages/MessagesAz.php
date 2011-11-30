@@ -894,7 +894,7 @@ $1",
 'shown-title'                      => 'Səhifə üçün $1 {{PLURAL:$1|nəticə|nəticəyə}} bax',
 'viewprevnext'                     => 'Göstər ($1 {{int:pipe-separator}} $2) ($3).',
 'searchmenu-legend'                => 'Axtarış kriteriyaları',
-'searchmenu-exists'                => "'''Bu vikidə \"[[:\$1]]\" adında səhifə mövcutdur'''",
+'searchmenu-exists'                => "'''Bu vikidə \"[[:\$1]]\" adında səhifə mövcuddur'''",
 'searchmenu-new'                   => "'''Bu vikidə \"[[:\$1]]\" səhifəsini yarat!'''",
 'searchhelp-url'                   => 'Help:Mündəricət',
 'searchmenu-prefix'                => '[[Special:PrefixIndex/$1|Bu cür prefiksli səhifələri göstər]]',
@@ -1156,7 +1156,6 @@ Həmçinin kimliyinizi gostərmədən belə, başqalarının sizinlə istifadə�
 'right-autopatrol'           => 'Dəyişikliklər avtomatik patrullanmış kimi işarələnir',
 'right-patrolmarks'          => 'Bütün patrullanmış son dəyişikliklərə bax',
 'right-unwatchedpages'       => 'Müşahidə olunmayan səhifələrin siyahısına baxış',
-'right-trackback'            => 'Trackback göndər',
 'right-mergehistory'         => 'Səhifələrin tarixini birləşdirmək',
 'right-userrights'           => 'Bütün istifadəçi hüquqlarının redaktə edilməsi',
 'right-userrights-interwiki' => 'Digər vikilərdəki istifadəçilərin istifadəçi hüquqlarını dəyişdir',
@@ -1198,7 +1197,6 @@ Həmçinin kimliyinizi gostərmədən belə, başqalarının sizinlə istifadə�
 'action-patrol'               => 'Digərlərinin dəyişikliklərini patrullanmış olaraq işarələ',
 'action-autopatrol'           => 'öz redaktələrinizi patrullanmış olarq işarələmək',
 'action-unwatchedpages'       => 'müşahidə olunmayan səhifələrin siyahısına baxış',
-'action-trackback'            => 'Trackback göndər',
 'action-mergehistory'         => 'Bu səhifənin tarixini birləşdirmək',
 'action-userrights'           => 'Bütün istifadəçi hüquqlarını redaktə et',
 'action-userrights-interwiki' => 'Digər vikilərdəki istifadəçilərin istifadəçi hüquqlarını dəyişdir',
@@ -1685,9 +1683,7 @@ Fərdi hüquqlar haqqında əlavə məlumatı [[{{MediaWiki:Listgrouprights-help
 'watchnologin'         => 'Daxil olmamısınız',
 'watchnologintext'     => 'İzləmə siyahınızda dəyişiklik aparmaq üçün [[Special:UserLogin|daxil olmalısınız]].',
 'addwatch'             => 'İzləmə siyahısına əlavə et',
-'addedwatchtext'       => '"$1" səhifəsi [[Special:Watchlist|izlədiyiniz səhifələrə]] əlavə edildi. Bu səhifədə və əlaqəli müzakirə səhifəsində olacaq dəyişikliklər orada göstəriləcək və səhifə asanlıqla seçiləbilmək üçün [[Special:RecentChanges|son dəyişikliklər]]-də qalın şriftlərlə görsənəcəkdir.
-
-Səhifəni izləmə sıyahınızdan çıxarmaq üçün yan lovhədəki "izləmə" düyməsinə vurun.',
+'addedwatchtext'       => '"[[:$1]]" səhifəsi [[Special:Watchlist|izlədiyiniz səhifələr]] siyahısına əlavə edildi. Bu səhifədə və əlaqəli müzakirə səhifəsindəki bütün dəyişikliklər orada göstəriləcək və səhifə asanlıqla seçiləbilmək üçün [[Special:RecentChanges|son dəyişikliklərdə]] qalın şriftlərlə görünəcəkdir. <p> Səhifəni izləmə siyahınızdan çıxarmaq üçün yan lövhədəki "izləmə" düyməsinə vurun.',
 'removedwatchtext'     => '"[[:$1]]" səhifəsi [[Special:Watchlist|izləmə siyahınızdan]] çıxarıldı.',
 'watch'                => 'İzlə',
 'watchthispage'        => 'Bu səhifəni izlə',
@@ -2766,13 +2762,6 @@ Variants for Chinese language
 # Scary transclusion
 'scarytranscludedisabled' => '[«Interwiki transcluding»dən çıxılmışdır]',
 'scarytranscludetoolong'  => '[URL uzundur]',
-
-# Trackbacks
-'trackbackbox'      => 'Bu səhifə üçün geri izləmələr:<br />
-$1',
-'trackbackremove'   => '([$1 Sil])',
-'trackbacklink'     => 'Trackback',
-'trackbackdeleteok' => 'Geri izləmə uğurla silindi.',
 
 # Delete conflict
 'deletedwhileediting' => "'''Diqqət!''' Bu səhifə siz redaktə etməyə başladıqdan sonra silinmişdir!",

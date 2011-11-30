@@ -47,7 +47,7 @@ class BitmapHandler extends ImageHandler {
 		if ( is_null( $checkImageAreaHookResult ) ) {
 			global $wgMaxImageArea;
 			
-			if ( $this->getImageArea( $image ) > $wgMaxImageArea &&
+			if ( $srcWidth * $srcHeight > $wgMaxImageArea &&
 					!( $image->getMimeType() == 'image/jpeg' && 
 						self::getScalerType( false, false ) == 'im' ) ) {
 				# Only ImageMagick can efficiently downsize jpg images without loading
@@ -287,8 +287,7 @@ class BitmapHandler extends ImageHandler {
 			$quality = "-quality 95"; // zlib 9, adaptive filtering
 
 		} elseif ( $params['mimeType'] == 'image/gif' ) {
-			if ( $this->getImageArea( $image, $params['srcWidth'],
-					$params['srcHeight'] ) > $wgMaxAnimatedGifArea ) {
+			if ( $this->getImageArea( $image ) > $wgMaxAnimatedGifArea ) {
 				// Extract initial frame only; we're so big it'll
 				// be a total drag. :P
 				$scene = 0;
@@ -376,8 +375,7 @@ class BitmapHandler extends ImageHandler {
 			} elseif( $params['mimeType'] == 'image/png' ) {
 				$im->setCompressionQuality( 95 );
 			} elseif ( $params['mimeType'] == 'image/gif' ) {
-				if ( $this->getImageArea( $image, $params['srcWidth'],
-						$params['srcHeight'] ) > $wgMaxAnimatedGifArea ) {
+				if ( $this->getImageArea( $image ) > $wgMaxAnimatedGifArea ) {
 					// Extract initial frame only; we're so big it'll
 					// be a total drag. :P
 					$im->setImageScene( 0 );

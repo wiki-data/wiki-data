@@ -104,6 +104,7 @@ $wgAutoloadLocalClasses = array(
 	'HTMLHiddenField' => 'includes/HTMLForm.php',
 	'HTMLInfoField' => 'includes/HTMLForm.php',
 	'HTMLIntField' => 'includes/HTMLForm.php',
+	'HTMLItemsPerPageField' => 'includes/Pager.php',
 	'HTMLMultiSelectField' => 'includes/HTMLForm.php',
 	'HTMLRadioField' => 'includes/HTMLForm.php',
 	'HTMLSelectAndOtherField' => 'includes/HTMLForm.php',
@@ -255,7 +256,6 @@ $wgAutoloadLocalClasses = array(
 
 	# includes/actions
 	'CreditsAction' => 'includes/actions/CreditsAction.php',
-	'DeletetrackbackAction' => 'includes/actions/DeletetrackbackAction.php',
 	'HistoryAction' => 'includes/actions/HistoryAction.php',
 	'HistoryPage' => 'includes/actions/HistoryAction.php',
 	'HistoryPager' => 'includes/actions/HistoryAction.php',
@@ -598,7 +598,6 @@ $wgAutoloadLocalClasses = array(
 	'APCBagOStuff' => 'includes/objectcache/APCBagOStuff.php',
 	'BagOStuff' => 'includes/objectcache/BagOStuff.php',
 	'DBABagOStuff' => 'includes/objectcache/DBABagOStuff.php',
-	'eAccelBagOStuff' => 'includes/objectcache/eAccelBagOStuff.php',
 	'EhcacheBagOStuff' => 'includes/objectcache/EhcacheBagOStuff.php',
 	'EmptyBagOStuff' => 'includes/objectcache/EmptyBagOStuff.php',
 	'FakeMemCachedClient' => 'includes/objectcache/EmptyBagOStuff.php',
@@ -886,11 +885,13 @@ $wgAutoloadLocalClasses = array(
 	'textStatsOutput' => 'maintenance/language/StatOutputs.php',
 	'wikiStatsOutput' => 'maintenance/language/StatOutputs.php',
 
+	# maintenance/term
+	'AnsiTermColorer'  => 'maintenance/term/MWTerm.php',
+	'DummyTermColorer' => 'maintenance/term/MWTerm.php',
+
 	# tests
-	'AnsiTermColorer' => 'tests/testHelpers.inc',
 	'DbTestPreviewer' => 'tests/testHelpers.inc',
 	'DbTestRecorder' => 'tests/testHelpers.inc',
-	'DummyTermColorer' => 'tests/testHelpers.inc',
 	'TestFileIterator' => 'tests/testHelpers.inc',
 	'TestRecorder' => 'tests/testHelpers.inc',
 

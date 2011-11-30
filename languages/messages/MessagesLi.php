@@ -1384,7 +1384,6 @@ Deze informatie is zichbaar veur angere gebroekers.',
 'right-autopatrol'            => 'Bewerkinge waere automatisch es gecontroleerd gemarkeerd',
 'right-patrolmarks'           => 'Kontraolteikes in recènte verangeringe bekieke.',
 'right-unwatchedpages'        => "'n lies mit pagina's die neet op 'n volglies staon bekieke",
-'right-trackback'             => "'n trackback opgeve",
 'right-mergehistory'          => "De gesjiedenis van pagina's samevoege",
 'right-userrights'            => 'Alle gebroekersrechte bewerke',
 'right-userrights-interwiki'  => "Gebroekersrechte van gebroekers in angere wiki's wijzige",
@@ -1431,11 +1430,11 @@ Deze informatie is zichbaar veur angere gebroekers.',
 'action-patrol'               => 'bewerkinge van angere es gecontroleerd te markere',
 'action-autopatrol'           => 'eige bewerkinge as gecontroleerd te laote markere',
 'action-unwatchedpages'       => "de lies met pagina's die neet op 'n volglies staon  te bekieke",
-'action-trackback'            => 'ne trackback op te gaeve',
 'action-mergehistory'         => 'de gesjiedenis van deze pagina same te voge',
 'action-userrights'           => 'alle gebroekersrechte te bewerke',
 'action-userrights-interwiki' => "gebroekersrechte van gebroekers van anger wiki's te bewerke",
 'action-siteadmin'            => 'de database aaf te sloete of aope te stelle',
+'action-sendemail'            => 'Sjik e-mails',
 
 # Recent changes
 'nchanges'                          => '$1 {{PLURAL:$1|bewerking|bewerkinge}}',
@@ -1900,8 +1899,8 @@ E bestandj kèn hie dös verkieërdj ópgenómme zeen.",
 Controleer of se wellich n fout höbs gemaak bie de inveur.',
 
 # Special:Log
-'specialloguserlabel'  => 'Gebroeker:',
-'speciallogtitlelabel' => 'Titel:',
+'specialloguserlabel'  => 'Oetveurder:',
+'speciallogtitlelabel' => 'Doel (pagina of gebroeker):',
 'log'                  => 'Logbeuk',
 'all-logs-page'        => 'Alle aopenbaar logbeuk',
 'alllogstext'          => "Dit is 't gecombineerd logbook ven {{SITENAME}}. De kins ouch 'n bepaald logbook keze, of filtere op gebroekersnaam of  pazjena, beide huidlettergeveulig.",
@@ -3314,13 +3313,6 @@ De bevestigingscode vervilt op \$4.",
 'scarytranscludedisabled' => '[Interwikitransclusie is oetgesjakeld]',
 'scarytranscludefailed'   => '[Sjabloon $1 kós neet opgehaold waer]',
 'scarytranscludetoolong'  => '[URL is te lank]',
-
-# Trackbacks
-'trackbackbox'      => 'Trackbacks veur deze pazjena:<br />
-$1',
-'trackbackremove'   => '([$1 Wusje])',
-'trackbacklink'     => 'Trackback',
-'trackbackdeleteok' => 'De trackback is gewusj.',
 
 # Delete conflict
 'deletedwhileediting'      => "'''Waorsjoewing''': Dees pazjena is gewis naodats doe bis begós mit bewirke!",

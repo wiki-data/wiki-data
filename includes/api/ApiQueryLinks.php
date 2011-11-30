@@ -44,7 +44,7 @@ class ApiQueryLinks extends ApiQueryGeneratorBase {
 				$this->description = 'link';
 				$this->titlesParam = 'titles';
 				$this->titlesParamDescription = 'Only list links to these titles. Useful for checking whether a certain page links to a certain title.';
-				$this->helpUrl = 'http://www.mediawiki.org/wiki/API:Properties#links_.2F_pl';
+				$this->helpUrl = 'https://www.mediawiki.org/wiki/API:Properties#links_.2F_pl';
 				break;
 			case self::TEMPLATES:
 				$this->table = 'templatelinks';
@@ -52,7 +52,7 @@ class ApiQueryLinks extends ApiQueryGeneratorBase {
 				$this->description = 'template';
 				$this->titlesParam = 'templates';
 				$this->titlesParamDescription = 'Only list these templates. Useful for checking whether a certain page uses a certain template.';
-				$this->helpUrl = 'http://www.mediawiki.org/wiki/API:Properties#templates_.2F_tl';
+				$this->helpUrl = 'https://www.mediawiki.org/wiki/API:Properties#templates_.2F_tl';
 				break;
 			default:
 				ApiBase::dieDebug( __METHOD__, 'Unknown module name' );
@@ -246,6 +246,6 @@ class ApiQueryLinks extends ApiQueryGeneratorBase {
 	}
 
 	public function getVersion() {
-		return __CLASS__ . ': $Id: ApiQueryLinks.php 103273 2011-11-16 00:17:26Z johnduhart $';
+		return __CLASS__ . ': $Id: ApiQueryLinks.php 104445 2011-11-28 15:43:11Z reedy $';
 	}
 }

@@ -343,7 +343,7 @@ pe titlul secțiunii (JavaScript)',
 'tog-ccmeonemails'            => 'Doresc să primesc o copie a mesajelor e-mail pe care le trimit',
 'tog-diffonly'                => 'Nu arăta conținutul paginii sub dif',
 'tog-showhiddencats'          => 'Arată categoriile ascunse',
-'tog-noconvertlink'           => 'Dezactivați conversia titlurilor',
+'tog-noconvertlink'           => 'Dezactivează conversia titlurilor',
 'tog-norollbackdiff'          => 'Nu arăta diferența după efectuarea unei reveniri',
 
 'underline-always'  => 'Întotdeauna',
@@ -1544,7 +1544,6 @@ Dacă decideți furnizarea sa, acesta va fi folosit pentru a vă atribui munca.'
 'right-autopatrol'            => 'Modificările proprii marcate ca patrulate',
 'right-patrolmarks'           => 'Vizualizează pagini recent patrulate',
 'right-unwatchedpages'        => 'Vizualizezaă listă de pagini neurmărite',
-'right-trackback'             => 'Trimite un urmăritor',
 'right-mergehistory'          => 'Unește istoricele paginilor',
 'right-userrights'            => 'Modifică toate permisiunile de utilizator',
 'right-userrights-interwiki'  => 'Modifică permisiunile de utilizator pentru utilizatorii de pe alte wiki',
@@ -1591,11 +1590,11 @@ Dacă decideți furnizarea sa, acesta va fi folosit pentru a vă atribui munca.'
 'action-patrol'               => 'marcați modificările celorlalți ca patrulate',
 'action-autopatrol'           => 'marcați modificarea drept patrulată',
 'action-unwatchedpages'       => 'vizualizați lista de pagini neurmărite',
-'action-trackback'            => 'aplicați un trackback',
 'action-mergehistory'         => 'uniți istoricul acestei pagini',
 'action-userrights'           => 'modificați toate permisiunile utilizatorilor',
 'action-userrights-interwiki' => 'modificați permisiunile utilizatorilor de pe alte wiki',
 'action-siteadmin'            => 'blocați sau deblocați baza de date',
+'action-sendemail'            => 'trimite e-mailuri',
 
 # Recent changes
 'nchanges'                          => '$1 {{PLURAL:$1|modificare|modificări|de modificări}}',
@@ -2078,8 +2077,8 @@ Vă rugăm să aveți în vedere faptul că alte saituri web pot avea o legătur
 'booksources-invalid-isbn'  => 'Codul ISBN oferit nu este valid; verificați dacă a fost copiat corect de la sursa originală.',
 
 # Special:Log
-'specialloguserlabel'  => 'Utilizator:',
-'speciallogtitlelabel' => 'Titlu:',
+'specialloguserlabel'  => 'Executant:',
+'speciallogtitlelabel' => 'Destinație (titlu sau utilizator):',
 'log'                  => 'Jurnale',
 'all-logs-page'        => 'Toate jurnalele publice',
 'alllogstext'          => 'Afișare combinată a tuturor jurnalelor {{SITENAME}}.
@@ -2762,6 +2761,7 @@ Pentru a exporta, introduceți titlurile în căsuța de mai jos, unul pe linie,
 În al doilea caz puteți folosi o legătură, de exemplu [[{{#Special:Export}}/{{MediaWiki:Mainpage}}]] pentru pagina „[[{{MediaWiki:Mainpage}}]]”.',
 'exportcuronly'     => 'Include numai versiunea curentă, nu și toată istoria',
 'exportnohistory'   => "---- '''Notă:''' exportarea versiunii complete a paginilor prin acest formular a fost scoasă din uz din motive de performanță.",
+'exportlistauthors' => 'Include o listă completă a contribuitorilor pentru fiecare pagină',
 'export-submit'     => 'Exportă',
 'export-addcattext' => 'Adaugă pagini din categoria:',
 'export-addcat'     => 'Adaugă',
@@ -3264,6 +3264,7 @@ Altele vor fi ascunse implicit.
 'exif-compression-2' => 'CCITT Grupa 3 Lungimea codificării Huffman modificată de dimensiune 1',
 'exif-compression-3' => 'CCITT Grupa 3 codificare fax',
 'exif-compression-4' => 'CCITT Grupa 4 codificare fax',
+'exif-compression-6' => 'JPEG (vechi)',
 
 'exif-copyrighted-true'  => 'Sub incidența drepturilor de autor',
 'exif-copyrighted-false' => 'Domeniu public',
@@ -3542,13 +3543,6 @@ Acest cod de confirmare va expira la $4.',
 'scarytranscludedisabled' => '[Transcluderea interwiki este dezactivată]',
 'scarytranscludefailed'   => '[Șiretlicul formatului a dat greș pentru $1]',
 'scarytranscludetoolong'  => '[URL-ul este prea lung]',
-
-# Trackbacks
-'trackbackbox'      => 'Urmăritori la acest articol:<br />
-$1',
-'trackbackremove'   => '([$1 Șterge])',
-'trackbacklink'     => 'Urmăritor',
-'trackbackdeleteok' => 'Urmăritorul a fost șters cu succes.',
 
 # Delete conflict
 'deletedwhileediting'      => "'''Atenție''': Această pagină a fost ștearsă după ce ați început s-o modificați!",

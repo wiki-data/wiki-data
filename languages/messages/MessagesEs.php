@@ -55,6 +55,7 @@
  * @author Pertile
  * @author Piolinfax
  * @author Platonides
+ * @author PoLuX124
  * @author Remember the dot
  * @author Richard Wolf VI
  * @author Sanbec
@@ -1582,7 +1583,6 @@ Tu dirección de correo-e no se revela cuando otros usuarios te contactan.',
 'right-autopatrol'            => 'Marcar como patrulladas sus ediciones automáticamente',
 'right-patrolmarks'           => 'Ver las marcas de patrullaje de cambios recientes',
 'right-unwatchedpages'        => 'Ver una lista de páginas no vigiladas',
-'right-trackback'             => "Enviar un ''trackback''",
 'right-mergehistory'          => 'Fusionar historiales',
 'right-userrights'            => 'Modificar todos los derechos de usuario',
 'right-userrights-interwiki'  => 'Modificar los derechos de usuarios en otros wikis',
@@ -1629,7 +1629,6 @@ Tu dirección de correo-e no se revela cuando otros usuarios te contactan.',
 'action-patrol'               => 'marcar ediciones de otros como patrulladas',
 'action-autopatrol'           => 'marcar como patrulladas tus propias ediciones',
 'action-unwatchedpages'       => 'ver la lista de páginas no vigiladas',
-'action-trackback'            => 'enviar una notificación de enlace',
 'action-mergehistory'         => 'fusionar el historial de esta página',
 'action-userrights'           => 'modificar todos los derechos de usuario',
 'action-userrights-interwiki' => 'modificar los derechos de usuarios en otros wikis',
@@ -1870,7 +1869,7 @@ Para óptima seguridad, img_auth.php está desactivado.',
 
 # Special:ListFiles
 'listfiles-summary'     => 'Esta página especial muestra todos los archivos subidos.
-Cuando es filytrado por el usuario, sólo los archivos cargados por el usuario se muestran en su versión más reciente.',
+Cuando es filtrado por el usuario, sólo los archivos cargados por el usuario se muestran en su versión más reciente.',
 'listfiles_search_for'  => 'Buscar por nombre de imagen:',
 'imgfile'               => 'archivo',
 'listfiles'             => 'Lista de archivos',
@@ -2857,7 +2856,7 @@ No hay un directorio temporal.',
 'import-logentry-interwiki-detail' => '$1 {{PLURAL:$1|revisión|revisiones}} desde $2',
 
 # Tooltip help for the actions
-'tooltip-pt-userpage'             => 'Tu página de usuario',
+'tooltip-pt-userpage'             => 'Tu página de {{gender:|usuario|usuaria}}',
 'tooltip-pt-anonuserpage'         => 'La página de usuario de la IP desde la que editas',
 'tooltip-pt-mytalk'               => 'Tu página de discusión',
 'tooltip-pt-anontalk'             => 'Discusión sobre ediciones hechas desde esta dirección IP',
@@ -3561,13 +3560,6 @@ Este código de confirmación caducará el $4.',
 'scarytranscludedisabled' => '[Transclusión interwiki está deshabilitada]',
 'scarytranscludefailed'   => '[Obtención de plantilla falló para $1]',
 'scarytranscludetoolong'  => '[El URL es demasiado largo]',
-
-# Trackbacks
-'trackbackbox'      => "''Trackbacks'' para este artículo:<br />
-$1",
-'trackbackremove'   => '([$1 Borrar])',
-'trackbacklink'     => "''Trackback''",
-'trackbackdeleteok' => 'El trackback se borró correctamente.',
 
 # Delete conflict
 'deletedwhileediting'      => "'''Aviso''': ¡Esta página fue borrada después de que usted empezara a editar!",

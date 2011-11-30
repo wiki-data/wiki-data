@@ -35,15 +35,15 @@ class SpecialCategories extends SpecialPage {
 		$this->outputHeader();
 		$this->getOutput()->allowClickjacking();
 
-		$from = $this->getRequest()->getText( 'from', $par );
+		$from = $this->getRequest()->getText( 'wpFrom', $par );
 
 		$cap = new CategoryPager( $this->getContext(), $from );
 		$cap->doQuery();
 
 		$this->getOutput()->addHTML(
 			Html::openElement( 'div', array( 'class' => 'mw-spcontent' ) ) .
-			wfMsgExt( 'categoriespagetext', array( 'parse' ), $cap->getNumRows() ) .
-			$cap->getStartForm( $from ) .
+			$this->msg( 'categoriespagetext', $cap->getNumRows() )->parseAsBlock() .
+			$cap->buildHTMLForm() .
 			$cap->getNavigationBar() .
 			'<ul>' . $cap->getBody() . '</ul>' .
 			$cap->getNavigationBar() .
@@ -114,22 +114,25 @@ class CategoryPager extends AlphabeticPager {
 	function formatRow($result) {
 		$title = Title::makeTitle( NS_CATEGORY, $result->cat_title );
 		$titleText = Linker::link( $title, htmlspecialchars( $title->getText() ) );
-		$lang = $this->getLang();
-		$count = wfMsgExt( 'nmembers', array( 'parsemag', 'escape' ),
-				$lang->formatNum( $result->cat_pages ) );
-		return Xml::tags('li', null, $lang->specialList( $titleText, $count ) ) . "\n";
+		$count = $this->msg( 'nmembers' )->numParams( $result->cat_pages )->escaped();
+		return Xml::tags( 'li', null, $this->getLanguage()->specialList( $titleText, $count ) ) . "\n";
 	}
 
-	public function getStartForm( $from ) {
-		global $wgScript;
+	protected function getHTMLFormFields() {
+		return array(
+			'From' => array(
+				'type' => 'text',
+				'label-message' => 'categoriesfrom',
+				'size' => '20',
+			),
+		);
+	}
 
-		return
-			Xml::tags( 'form', array( 'method' => 'get', 'action' => $wgScript ),
-				Html::hidden( 'title', $this->getTitle()->getPrefixedText() ) .
-				Xml::fieldset( wfMsg( 'categories' ),
-					Xml::inputLabel( wfMsg( 'categoriesfrom' ),
-						'from', 'from', 20, $from ) .
-					' ' .
-					Xml::submitButton( wfMsg( 'allpagessubmit' ) ) ) );
+	protected function getHTMLFormLegend() {
+		return 'categories';
+	}
+
+	protected function getHTMLFormSubmit() {
+		return 'allpagessubmit';
 	}
 }

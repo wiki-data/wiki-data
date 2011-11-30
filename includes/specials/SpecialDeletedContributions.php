@@ -95,7 +95,7 @@ class DeletedContribsPager extends IndexPager {
 		if ( isset( $this->mNavigationBar ) ) {
 			return $this->mNavigationBar;
 		}
-		$lang = $this->getLang();
+		$lang = $this->getLanguage();
 		$fmtLimit = $lang->formatNum( $this->mLimit );
 		$linkTexts = array(
 			'prev' => wfMsgExt( 'pager-newer-n', array( 'escape', 'parsemag' ), $fmtLimit ),
@@ -182,7 +182,7 @@ class DeletedContribsPager extends IndexPager {
 		}
 
 		$comment = Linker::revComment( $rev );
-		$date = htmlspecialchars( $this->getLang()->timeanddate( $rev->getTimestamp(), true ) );
+		$date = htmlspecialchars( $this->getLanguage()->timeanddate( $rev->getTimestamp(), true ) );
 
 		if( !$user->isAllowed( 'undelete' ) || !$rev->userCan( Revision::DELETED_TEXT, $user ) ) {
 			$link = $date; // unusable link
@@ -217,7 +217,7 @@ class DeletedContribsPager extends IndexPager {
 		$tools = Html::rawElement(
 			'span',
 			array( 'class' => 'mw-deletedcontribs-tools' ),
-			wfMsg( 'parentheses', $this->getLang()->pipeList( array( $last, $dellog, $reviewlink ) ) )
+			wfMsg( 'parentheses', $this->getLanguage()->pipeList( array( $last, $dellog, $reviewlink ) ) )
 		);
 
 		$ret = "{$del}{$link} {$tools} . . {$mflag} {$pagelink} {$comment}";
@@ -287,15 +287,16 @@ class DeletedContributionsPage extends SpecialPage {
 		$options['limit'] = $request->getInt( 'limit', $wgQueryPageDefaultLimit );
 		$options['target'] = $target;
 
-		$nt = Title::makeTitleSafe( NS_USER, $target );
-		if ( !$nt ) {
+		$userObj = User::newFromName( $target );
+		if ( !$userObj ) {
 			$out->addHTML( $this->getForm( '' ) );
 			return;
 		}
-		$id = User::idFromName( $nt->getText() );
+		$nt = $userObj->getUserPage();
+		$id = $userObj->getID();
 
-		$target = $nt->getText();
-		$out->addSubtitle( $this->getSubTitle( $nt, $id ) );
+		$target = $userObj->getName();
+		$out->addSubtitle( $this->getSubTitle( $userObj ) );
 
 		if ( ( $ns = $request->getVal( 'namespace', null ) ) !== null && $ns !== '' ) {
 			$options['namespace'] = intval( $ns );
@@ -336,18 +337,18 @@ class DeletedContributionsPage extends SpecialPage {
 
 	/**
 	 * Generates the subheading with links
-	 * @param $nt Title object for the target
-	 * @param $id Integer: User ID for the target
+	 * @param $userObj User object for the target
 	 * @return String: appropriately-escaped HTML to be output literally
 	 * @todo FIXME: Almost the same as contributionsSub in SpecialContributions.php. Could be combined.
 	 */
-	function getSubTitle( $nt, $id ) {
-		if ( $id === null ) {
-			$user = htmlspecialchars( $nt->getText() );
+	function getSubTitle( $userObj ) {
+		if ( $userObj->isAnon() ) {
+			$user = htmlspecialchars( $userObj->getName() );
 		} else {
-			$user = Linker::link( $nt, htmlspecialchars( $nt->getText() ) );
+			$user = Linker::link( $userObj->getUserPage(), htmlspecialchars( $userObj->getName() ) );
 		}
-		$userObj = User::newFromName( $nt->getText(), /* check for username validity not needed */ false );
+		$nt = $userObj->getUserPage();
+		$id = $userObj->getID();
 		$talk = $nt->getTalkPage();
 		if( $talk ) {
 			# Talk page link
@@ -411,7 +412,7 @@ class DeletedContributionsPage extends SpecialPage {
 
 			wfRunHooks( 'ContributionsToolLinks', array( $id, $nt, &$tools ) );
 
-			$links = $this->getLang()->pipeList( $tools );
+			$links = $this->getLanguage()->pipeList( $tools );
 
 			// Show a note if the user is blocked and display the last block log entry.
 			if ( $userObj->isBlocked() ) {

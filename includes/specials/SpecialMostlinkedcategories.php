@@ -25,7 +25,7 @@
  */
 
 /**
- * A querypage to show categories ordered in descending order by the pages  in them
+ * A querypage to show categories ordered in descending order by the pages in them
  *
  * @ingroup SpecialPage
  */
@@ -35,16 +35,14 @@ class MostlinkedCategoriesPage extends QueryPage {
 		parent::__construct( $name );
 	}
 
-	function isExpensive() { return true; }
 	function isSyndicated() { return false; }
 
 	function getQueryInfo() {
 		return array (
-			'tables' => array ( 'categorylinks' ),
-			'fields' => array ( 'cl_to AS title',
+			'tables' => array ( 'category' ),
+			'fields' => array ( 'cat_title AS title',
 					NS_CATEGORY . ' AS namespace',
-					'COUNT(*) AS value' ),
-			'options' => array ( 'GROUP BY' => 'cl_to' )
+					'cat_pages AS value' ),
 		);
 	}
 
@@ -84,6 +82,6 @@ class MostlinkedCategoriesPage extends QueryPage {
 		$plink = Linker::link( $nt, htmlspecialchars( $text ) );
 
 		$nlinks = $this->msg( 'nmembers' )->numParams( $result->value )->escaped();
-		return $this->getLang()->specialList( $plink, $nlinks );
+		return $this->getLanguage()->specialList( $plink, $nlinks );
 	}
 }

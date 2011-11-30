@@ -43,7 +43,7 @@ class ApiRsd extends ApiBase {
 
 		$service = array( 'apis' => $this->formatRsdApiList() );
 		ApiResult::setContent( $service, 'MediaWiki', 'engineName' );
-		ApiResult::setContent( $service, 'http://www.mediawiki.org/', 'engineLink' );
+		ApiResult::setContent( $service, 'https://www.mediawiki.org/', 'engineLink' );
 		ApiResult::setContent( $service, Title::newMainPage()->getCanonicalUrl(), 'homePageLink' );
 
 		$result->setIndexedTagName( $service['apis'], 'api' );
@@ -97,7 +97,7 @@ class ApiRsd extends ApiBase {
 				'apiLink' => wfExpandUrl( wfScript( 'api' ), PROTO_CURRENT ),
 
 				// Docs link is optional, but recommended.
-				'docs' => 'http://www.mediawiki.org/wiki/API',
+				'docs' => 'https://www.mediawiki.org/wiki/API',
 
 				// Some APIs may need a blog ID, but it may be left blank.
 				'blogID' => '',
@@ -157,7 +157,7 @@ class ApiRsd extends ApiBase {
 	}
 
 	public function getVersion() {
-		return __CLASS__ . ': $Id: ApiRsd.php 103273 2011-11-16 00:17:26Z johnduhart $';
+		return __CLASS__ . ': $Id: ApiRsd.php 104445 2011-11-28 15:43:11Z reedy $';
 	}
 }
 
@@ -172,6 +172,6 @@ class ApiFormatXmlRsd extends ApiFormatXml {
 	}
 
 	public function getVersion() {
-		return __CLASS__ . ': $Id: ApiRsd.php 103273 2011-11-16 00:17:26Z johnduhart $';
+		return __CLASS__ . ': $Id: ApiRsd.php 104445 2011-11-28 15:43:11Z reedy $';
 	}
 }

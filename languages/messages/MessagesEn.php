@@ -1975,7 +1975,6 @@ Your e-mail address is not revealed when other users contact you.',
 'right-autopatrol'            => "Have one's own edits automatically marked as patrolled",
 'right-patrolmarks'           => 'View recent changes patrol marks',
 'right-unwatchedpages'        => 'View a list of unwatched pages',
-'right-trackback'             => 'Submit a trackback',
 'right-mergehistory'          => 'Merge the history of pages',
 'right-userrights'            => 'Edit all user rights',
 'right-userrights-interwiki'  => 'Edit user rights of users on other wikis',
@@ -2022,11 +2021,11 @@ Your e-mail address is not revealed when other users contact you.',
 'action-patrol'               => "mark others' edit as patrolled",
 'action-autopatrol'           => 'have your edit marked as patrolled',
 'action-unwatchedpages'       => 'view the list of unwatched pages',
-'action-trackback'            => 'submit a trackback',
 'action-mergehistory'         => 'merge the history of this page',
 'action-userrights'           => 'edit all user rights',
 'action-userrights-interwiki' => 'edit user rights of users on other wikis',
 'action-siteadmin'            => 'lock or unlock the database',
+'action-sendemail'            => 'send e-mails',
 
 # Recent changes
 'nchanges'                          => '$1 {{PLURAL:$1|change|changes}}',
@@ -2573,8 +2572,8 @@ Please note that other web sites may link to a file with a direct URL, and so ma
 'pubmedurl' => '//www.ncbi.nlm.nih.gov/pubmed/$1?dopt=Abstract', # do not translate or duplicate this message to other languages
 
 # Special:Log
-'specialloguserlabel'  => 'User:',
-'speciallogtitlelabel' => 'Title:',
+'specialloguserlabel'  => 'Performer:',
+'speciallogtitlelabel' => 'Target (title or user):',
 'log'                  => 'Logs',
 'all-logs-page'        => 'All public logs',
 'alllogstext'          => 'Combined display of all available logs of {{SITENAME}}.
@@ -4272,15 +4271,6 @@ This confirmation code will expire at $4.',
 'scarytranscludedisabled' => '[Interwiki transcluding is disabled]',
 'scarytranscludefailed'   => '[Template fetch failed for $1]',
 'scarytranscludetoolong'  => '[URL is too long]',
-
-# Trackbacks
-'trackbackbox'      => 'Trackbacks for this page:<br />
-$1',
-'trackback'         => '; $4 $5: [$2 $1]', # only translate this message to other languages if you have to change it
-'trackbackexcerpt'  => '; $4 $5: [$2 $1]: <nowiki>$3</nowiki>', # only translate this message to other languages if you have to change it
-'trackbackremove'   => '([$1 Delete])',
-'trackbacklink'     => 'Trackback',
-'trackbackdeleteok' => 'The trackback was successfully deleted.',
 
 # Delete conflict
 'deletedwhileediting'      => "'''Warning''': This page was deleted after you started editing!",

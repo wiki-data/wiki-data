@@ -111,7 +111,7 @@ class SpecialNewpages extends IncludableSpecialPage {
 				$this->opts->setValue( 'username', $m[1] );
 			}
 			if ( preg_match( '/^namespace=(.*)$/', $bit, $m ) ) {
-				$ns = $this->getLang()->getNsIndex( $m[1] );
+				$ns = $this->getLanguage()->getNsIndex( $m[1] );
 				if( $ns !== false ) {
 					$this->opts->setValue( 'namespace',  $ns );
 				}
@@ -200,7 +200,7 @@ class SpecialNewpages extends IncludableSpecialPage {
 			$links[$key] = wfMsgHtml( $msg, $link );
 		}
 
-		return $this->getLang()->pipeList( $links );
+		return $this->getLanguage()->pipeList( $links );
 	}
 
 	protected function form() {
@@ -294,10 +294,10 @@ class SpecialNewpages extends IncludableSpecialPage {
 
 		$classes = array();
 
-		$lang = $this->getLang();
+		$lang = $this->getLanguage();
 		$dm = $lang->getDirMark();
 
-		$title = Title::makeTitleSafe( $result->rc_namespace, $result->rc_title );
+		$title = Title::newFromRow( $result );
 		$spanTime = Html::element( 'span', array( 'class' => 'mw-newpages-time' ),
 			$lang->timeanddate( $result->rc_timestamp, true )
 		);
@@ -508,7 +508,8 @@ class NewPagesPager extends ReverseChronologicalPager {
 		$fields = array(
 			'rc_namespace', 'rc_title', 'rc_cur_id', 'rc_user', 'rc_user_text',
 			'rc_comment', 'rc_timestamp', 'rc_patrolled','rc_id', 'rc_deleted',
-			'page_len AS length', 'page_latest AS rev_id', 'ts_tags', 'rc_this_oldid'
+			'page_len AS length', 'page_latest AS rev_id', 'ts_tags', 'rc_this_oldid',
+			'page_namespace', 'page_title'
 		);
 		$join_conds = array( 'page' => array( 'INNER JOIN', 'page_id=rc_cur_id' ) );
 

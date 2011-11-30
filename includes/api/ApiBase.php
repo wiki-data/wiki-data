@@ -235,7 +235,7 @@ abstract class ApiBase extends ContextSource {
 	public function makeHelpMsg() {
 		static $lnPrfx = "\n  ";
 
-		$msg = $this->getDescription();
+		$msg = $this->getFinalDescription();
 
 		if ( $msg !== false ) {
 
@@ -463,7 +463,7 @@ abstract class ApiBase extends ContextSource {
 		// This is necessary to make stuff like ApiMain::getVersion()
 		// returning the version string for ApiBase work
 		if ( $path ) {
-			return "{$matches[0]}\n   http://svn.wikimedia.org/" .
+			return "{$matches[0]}\n   https://svn.wikimedia.org/" .
 				"viewvc/mediawiki/trunk/" . dirname( $path ) .
 				"/{$matches[2]}";
 		}
@@ -510,6 +510,7 @@ abstract class ApiBase extends ContextSource {
 	/**
 	 * Get final list of parameters, after hooks have had a chance to
 	 * tweak it as needed.
+	 *
 	 * @return array or false
 	 */
 	public function getFinalParams() {
@@ -519,13 +520,26 @@ abstract class ApiBase extends ContextSource {
 	}
 
 	/**
-	 * Get final description, after hooks have had a chance to tweak it as
+	 * Get final parameter descriptions, after hooks have had a chance to tweak it as
 	 * needed.
+	 *
 	 * @return array
 	 */
 	public function getFinalParamDescription() {
 		$desc = $this->getParamDescription();
 		wfRunHooks( 'APIGetParamDescription', array( &$this, &$desc ) );
+		return $desc;
+	}
+
+	/**
+	 * Get final module description, after hooks have had a chance to tweak it as
+	 * needed.
+	 *
+	 * @return array
+	 */
+	public function getFinalDescription() {
+		$desc = $this->getDescription();
+		wfRunHooks( 'APIGetDescription', array( &$this, &$desc ) );
 		return $desc;
 	}
 
@@ -1148,7 +1162,7 @@ abstract class ApiBase extends ContextSource {
 		'mustbeposted' => array( 'code' => 'mustbeposted', 'info' => "The \$1 module requires a POST request" ),
 		'show' => array( 'code' => 'show', 'info' => 'Incorrect parameter - mutually exclusive values may not be supplied' ),
 		'specialpage-cantexecute' => array( 'code' => 'specialpage-cantexecute', 'info' => "You don't have permission to view the results of this special page" ),
-		'invalidoldimage' => array( 'code' => 'invalidoldimage', 'info' => 'The oldid parameter has invalid format' ),
+		'invalidoldimage' => array( 'code' => 'invalidoldimage', 'info' => 'The oldimage parameter has invalid format' ),
 		'nodeleteablefile' => array( 'code' => 'nodeleteablefile', 'info' => 'No such old version of the file' ),
 
 		// ApiEditPage messages
@@ -1301,7 +1315,7 @@ abstract class ApiBase extends ContextSource {
 	public function getWatchlistUser( $params ) {
 		if ( !is_null( $params['owner'] ) && !is_null( $params['token'] ) ) {
 			$user = User::newFromName( $params['owner'], false );
-			if ( !$user->getId() ) {
+			if ( !($user && $user->getId()) ) {
 				$this->dieUsage( 'Specified user does not exist', 'bad_wlowner' );
 			}
 			$token = $user->getOption( 'watchlisttoken' );
@@ -1504,6 +1518,6 @@ abstract class ApiBase extends ContextSource {
 	 * @return string
 	 */
 	public static function getBaseVersion() {
-		return __CLASS__ . ': $Id: ApiBase.php 103332 2011-11-16 15:57:56Z ialex $';
+		return __CLASS__ . ': $Id: ApiBase.php 104470 2011-11-28 19:17:06Z reedy $';
 	}
 }

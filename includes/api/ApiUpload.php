@@ -609,10 +609,10 @@ class ApiUpload extends ApiBase {
 	}
 
 	public function getHelpUrls() {
-		return 'http://www.mediawiki.org/wiki/API:Upload';
+		return 'https://www.mediawiki.org/wiki/API:Upload';
 	}
 
 	public function getVersion() {
-		return __CLASS__ . ': $Id: ApiUpload.php 103273 2011-11-16 00:17:26Z johnduhart $';
+		return __CLASS__ . ': $Id: ApiUpload.php 104445 2011-11-28 15:43:11Z reedy $';
 	}
 }

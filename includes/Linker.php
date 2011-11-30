@@ -969,6 +969,8 @@ class Linker {
 			$items[] = self::emailLink( $userId, $userText );
 		}
 
+		wfRunHooks( 'UserToolLinksEdit', array( $userId, $userText, &$items ) );
+
 		if ( $items ) {
 			return ' <span class="mw-usertoollinks">(' . $wgLang->pipeList( $items ) . ')</span>';
 		} else {
@@ -1713,10 +1715,6 @@ class Linker {
 	 *   escape), or false for no title attribute
 	 */
 	public static function titleAttrib( $name, $options = null ) {
-		global $wgEnableTooltipsAndAccesskeys;
-		if ( !$wgEnableTooltipsAndAccesskeys )
-			return false;
-
 		wfProfileIn( __METHOD__ );
 
 		$message = wfMessage( "tooltip-$name" );
@@ -2006,9 +2004,6 @@ class Linker {
 	 * Returns the attributes for the tooltip and access key.
 	 */
 	public static function tooltipAndAccesskeyAttribs( $name ) {
-		global $wgEnableTooltipsAndAccesskeys;
-		if ( !$wgEnableTooltipsAndAccesskeys )
-			return array();
 		# @todo FIXME: If Sanitizer::expandAttributes() treated "false" as "output
 		# no attribute" instead of "output '' as value for attribute", this
 		# would be three lines.
@@ -2030,9 +2025,6 @@ class Linker {
 	 * Returns raw bits of HTML, use titleAttrib()
 	 */
 	public static function tooltip( $name, $options = null ) {
-		global $wgEnableTooltipsAndAccesskeys;
-		if ( !$wgEnableTooltipsAndAccesskeys )
-			return '';
 		# @todo FIXME: If Sanitizer::expandAttributes() treated "false" as "output
 		# no attribute" instead of "output '' as value for attribute", this
 		# would be two lines.

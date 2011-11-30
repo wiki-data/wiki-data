@@ -152,7 +152,7 @@ CREATE TABLE /*_*/user_groups (
   -- with particular permissions. A user will have the combined
   -- permissions of any group they're explicitly in, plus
   -- the implicit '*' and 'user' groups.
-  ug_group varbinary(16) NOT NULL default ''
+  ug_group varbinary(32) NOT NULL default ''
 ) /*$wgDBTableOptions*/;
 
 CREATE UNIQUE INDEX /*i*/ug_user_group ON /*_*/user_groups (ug_user,ug_group);
@@ -1245,17 +1245,6 @@ CREATE TABLE /*_*/log_search (
 ) /*$wgDBTableOptions*/;
 CREATE UNIQUE INDEX /*i*/ls_field_val ON /*_*/log_search (ls_field,ls_value,ls_log_id);
 CREATE INDEX /*i*/ls_log_id ON /*_*/log_search (ls_log_id);
-
-
-CREATE TABLE /*_*/trackbacks (
-  tb_id int PRIMARY KEY AUTO_INCREMENT,
-  tb_page int REFERENCES /*_*/page(page_id) ON DELETE CASCADE,
-  tb_title varchar(255) NOT NULL,
-  tb_url blob NOT NULL,
-  tb_ex text,
-  tb_name varchar(255)
-) /*$wgDBTableOptions*/;
-CREATE INDEX /*i*/tb_page ON /*_*/trackbacks (tb_page);
 
 
 -- Jobs performed by parallel apache threads or a command-line daemon

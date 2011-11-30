@@ -135,26 +135,33 @@ class SpecialEditWatchlist extends UnlistedSpecialPage {
 			}
 
 			if( count( $toWatch ) > 0 ) {
-				$this->successMessage .= wfMessage(
+				$this->successMessage .= ' ' . wfMessage(
 					'watchlistedit-raw-added',
-					$this->getLang()->formatNum( count( $toWatch ) )
+					$this->getLanguage()->formatNum( count( $toWatch ) )
 				);
 				$this->showTitles( $toWatch, $this->successMessage );
 			}
 
 			if( count( $toUnwatch ) > 0 ) {
-				$this->successMessage .= wfMessage(
+				$this->successMessage .= ' ' . wfMessage(
 					'watchlistedit-raw-removed',
-					$this->getLang()->formatNum( count( $toUnwatch ) )
+					$this->getLanguage()->formatNum( count( $toUnwatch ) )
 				);
 				$this->showTitles( $toUnwatch, $this->successMessage );
 			}
 		} else {
 			$this->clearWatchlist();
 			$this->getUser()->invalidateCache();
-			$this->successMessage .= wfMessage(
+
+			if( count( $current ) > 0 ){
+				$this->successMessage = wfMessage( 'watchlistedit-raw-done' )->parse();
+			} else {
+				return false;
+			}
+
+			$this->successMessage .= ' ' . wfMessage(
 				'watchlistedit-raw-removed',
-				$this->getLang()->formatNum( count( $current ) )
+				$this->getLanguage()->formatNum( count( $current ) )
 			);
 			$this->showTitles( $current, $this->successMessage );
 		}
@@ -353,7 +360,7 @@ class SpecialEditWatchlist extends UnlistedSpecialPage {
 		if( count( $removed ) > 0 ) {
 			$this->successMessage = wfMessage(
 				'watchlistedit-normal-done',
-				$this->getLang()->formatNum( count( $removed ) )
+				$this->getLanguage()->formatNum( count( $removed ) )
 			);
 			$this->showTitles( $removed, $this->successMessage );
 			return true;
@@ -409,8 +416,8 @@ class SpecialEditWatchlist extends UnlistedSpecialPage {
 				$nsText = ($ns == NS_MAIN)
 					? wfMsgHtml( 'blanknamespace' )
 					: htmlspecialchars( $wgContLang->getFormattedNsText( $ns ) );
-				$this->toc .= Linker::tocLine( "mw-htmlform-{$data['section']}", $nsText,
-					$this->getLang()->formatNum( ++$tocLength ), 1 ) . Linker::tocLineEnd();
+				$this->toc .= Linker::tocLine( "editwatchlist-{$data['section']}", $nsText,
+					$this->getLanguage()->formatNum( ++$tocLength ), 1 ) . Linker::tocLineEnd();
 			}
 			$this->toc = Linker::tocList( $this->toc );
 		} else {
@@ -456,7 +463,7 @@ class SpecialEditWatchlist extends UnlistedSpecialPage {
 
 		wfRunHooks( 'WatchlistEditorBuildRemoveLine', array( &$tools, $title, $title->isRedirect(), $this->getSkin() ) );
 
-		return $link . " (" . $this->getLang()->pipeList( $tools ) . ")";
+		return $link . " (" . $this->getLanguage()->pipeList( $tools ) . ")";
 	}
 
 	/**
@@ -550,7 +557,10 @@ class EditWatchlistNormalHTMLForm extends HTMLForm {
 		$namespace = substr( $namespace, 2 );
 		return $namespace == NS_MAIN
 			? wfMsgHtml( 'blanknamespace' )
-			: htmlspecialchars( $this->getContext()->getLang()->getFormattedNsText( $namespace ) );
+			: htmlspecialchars( $this->getContext()->getLanguage()->getFormattedNsText( $namespace ) );
+	}
+	public function getBody() {
+		return $this->displaySection( $this->mFieldTree, '', 'editwatchlist-' );
 	}
 }
 

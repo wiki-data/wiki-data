@@ -30,6 +30,17 @@
  */
 class SpecialLog extends SpecialPage {
 
+	/**
+	 * List log type for which the target is a user
+	 * Thus if the given target is in NS_MAIN we can alter it to be an NS_USER
+	 * Title user instead. 
+	 */
+	private $typeOnUser = array(
+		'block',
+		'newusers',
+		'right',
+	);
+
 	public function __construct() {
 		parent::__construct( 'Log' );
 	}
@@ -85,6 +96,20 @@ class SpecialLog extends SpecialPage {
 			}
 		}
 
+		# Some log types are only for a 'User:' title but we might have been given
+		# only the username instead of the full title 'User:username'. This part try
+		# to lookup for a user by that name and eventually fix user input. See bug 1697.
+		if( in_array( $opts->getValue( 'type' ), $this->typeOnUser ) ) {
+			# ok we have a type of log which expect a user title.
+			$target = Title::newFromText( $opts->getValue( 'page' ) );
+			if( $target && $target->getNamespace() === NS_MAIN ) {
+				# User forgot to add 'User:', we are adding it for him
+				$opts->setValue( 'page',
+					Title::makeTitleSafe( NS_USER, $opts->getValue( 'page' ) )
+				);
+			}
+		}
+
 		$this->show( $opts, $qc );
 	}
 
@@ -119,7 +144,7 @@ class SpecialLog extends SpecialPage {
 		}
 
 		# Show form options
-		$loglist->showOptions( $pager->getType(), $pager->getPerformer(), $pager->getPage(), $pager->getPattern(),
+		$loglist->showOptions( $pager->getType(), $opts->getValue( 'user' ), $pager->getPage(), $pager->getPattern(),
 			$pager->getYear(), $pager->getMonth(), $pager->getFilterParams(), $opts->getValue( 'tagfilter' ) );
 
 		# Insert list

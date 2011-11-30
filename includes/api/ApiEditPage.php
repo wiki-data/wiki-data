@@ -240,14 +240,7 @@ class ApiEditPage extends ApiBase {
 		$ep->importFormData( $req );
 
 		// Run hooks
-		// Handle CAPTCHA parameters
-		if ( !is_null( $params['captchaid'] ) ) {
-			$wgRequest->setVal( 'wpCaptchaId', $params['captchaid'] );
-		}
-		if ( !is_null( $params['captchaword'] ) ) {
-			$wgRequest->setVal( 'wpCaptchaWord', $params['captchaword'] );
-		}
-
+		// Handle APIEditBeforeSave parameters
 		$r = array();
 		if ( !wfRunHooks( 'APIEditBeforeSave', array( $ep, $ep->textbox1, &$r ) ) ) {
 			if ( count( $r ) ) {
@@ -422,8 +415,6 @@ class ApiEditPage extends ApiBase {
 			'recreate' => false,
 			'createonly' => false,
 			'nocreate' => false,
-			'captchaword' => null,
-			'captchaid' => null,
 			'watch' => array(
 				ApiBase::PARAM_DFLT => false,
 				ApiBase::PARAM_DEPRECATED => true,
@@ -482,8 +473,6 @@ class ApiEditPage extends ApiBase {
 			'watch' => 'Add the page to your watchlist',
 			'unwatch' => 'Remove the page from your watchlist',
 			'watchlist' => 'Unconditionally add or remove the page from your watchlist, use preferences or do not change watch',
-			'captchaid' => 'CAPTCHA ID from previous request',
-			'captchaword' => 'Answer to the CAPTCHA',
 			'md5' => array(	"The MD5 hash of the {$p}text parameter, or the {$p}prependtext and {$p}appendtext parameters concatenated.",
 					'If set, the edit won\'t be done unless the hash is correct' ),
 			'prependtext' => "Add this text to the beginning of the page. Overrides {$p}text",
@@ -514,10 +503,10 @@ class ApiEditPage extends ApiBase {
 	}
 
 	public function getHelpUrls() {
-		return 'http://www.mediawiki.org/wiki/API:Edit';
+		return 'https://www.mediawiki.org/wiki/API:Edit';
 	}
 
 	public function getVersion() {
-		return __CLASS__ . ': $Id: ApiEditPage.php 103451 2011-11-17 10:33:20Z ialex $';
+		return __CLASS__ . ': $Id: ApiEditPage.php 104445 2011-11-28 15:43:11Z reedy $';
 	}
 }

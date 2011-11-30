@@ -585,8 +585,8 @@ Morda bodo nekatere strani še naprej prikazane, kot da ste prijavljeni, dokler 
 'welcomecreation'            => '== Dobrodošli, $1! ==
 Ustvarili ste račun.
 Ne pozabite si prilagoditi vaših [[Special:Preferences|nastavitev {{GRAMMAR:rodilnik|{{SITENAME}}}}]].',
-'yourname'                   => 'Uporabniško ime',
-'yourpassword'               => 'Geslo',
+'yourname'                   => 'Uporabniško ime:',
+'yourpassword'               => 'Geslo:',
 'yourpasswordagain'          => 'Ponovno vpišite geslo',
 'remembermypassword'         => 'Zapomni si me na tem računalniku (za največ $1 {{PLURAL:$1|dan|dneva|dni}})',
 'securelogin-stick-https'    => 'Po prijavi ostani povezan preko HTTPS',
@@ -1446,7 +1446,6 @@ Podatek bo javno prikazan.',
 'right-autopatrol'            => 'Označevanje urejanj drugih za samodejno nadzarovana',
 'right-patrolmarks'           => 'Ogled oznak nadzorov v zadnjih spremembah',
 'right-unwatchedpages'        => 'Preglejte seznam ne spremljanih strani',
-'right-trackback'             => 'Pošlje sledilnik',
 'right-mergehistory'          => 'Spoji zgodovino strani',
 'right-userrights'            => 'Urejanje vseh uporabniških pravic',
 'right-userrights-interwiki'  => 'Urejanje uporabniških pravic uporabnikov na drugih wikijih',
@@ -1458,7 +1457,7 @@ Podatek bo javno prikazan.',
 # User rights log
 'rightslog'                  => 'Dnevnik uporabniških pravic',
 'rightslogtext'              => 'Prikazan je dnevnik sprememb uporabniških pravic.',
-'rightslogentry'             => '- sprememba pravic uporabnika $1 iz $2 v $3',
+'rightslogentry'             => 'je spremenil(-a) pravice uporabnika $1 iz $2 v $3',
 'rightslogentry-autopromote' => 'je bil(-a) samodejno povišan(-a) z $2 na $3',
 'rightsnone'                 => '(nobeno)',
 
@@ -1493,11 +1492,11 @@ Podatek bo javno prikazan.',
 'action-patrol'               => 'označevanje sprememb drugih kot nadzorovane',
 'action-autopatrol'           => 'označevanje svojih urejanj kot nadzorovane',
 'action-unwatchedpages'       => 'ogled seznama nenadzorovanih strani',
-'action-trackback'            => 'pošlje sledilnik',
 'action-mergehistory'         => 'združitev zgodovine te strani',
 'action-userrights'           => 'upravljanje vseh uporabnikovih pravic',
 'action-userrights-interwiki' => 'upravljanje uporabniških pravic za uporabnike drugih wikijev',
 'action-siteadmin'            => 'zaklenitev ali odklepanje podatkovne baze',
+'action-sendemail'            => 'pošiljanje e-sporočil',
 
 # Recent changes
 'nchanges'                          => '$1 {{PLURAL:$1|sprememba|spremembi|spremembe|sprememb|sprememb}}',
@@ -1989,8 +1988,8 @@ Prosimo, upoštevajte, da se lahko druge spletne strani povezujejo na datoteko z
 'booksources-invalid-isbn'  => 'Za dani ISBN se ne zdi, da je veljaven; preverite za morebitne napake pri kopiranju iz prvotnega vira.',
 
 # Special:Log
-'specialloguserlabel'  => 'Uporabnik:',
-'speciallogtitlelabel' => 'Naslov:',
+'specialloguserlabel'  => 'Izvajalec:',
+'speciallogtitlelabel' => 'Cilj (naslov ali uporabnik):',
 'log'                  => 'Dnevniki',
 'all-logs-page'        => 'Vsi javni dnevniki',
 'alllogstext'          => 'Združeno so prikazani dnevniki sprememb uporabniških pravic, preimenovanj uporabnikov, nalaganja predstavnostnih datotek, prestavljanja in zaščite strani, brisanja, registracij uporabnikov, sprememb položaja botov ter blokiranja in deblokiranja uporabnikov na strani {{SITENAME}}. Pogled lahko zožite z izbiro dnevnika, uporabniškega imena ali strani. Vedite, da polje »Uporabnik« razlikuje med malimi in velikimi črkami.',
@@ -3451,13 +3450,6 @@ Potrditvena koda poteče $4.',
 'scarytranscludedisabled' => '[Prevključevanje med wikiji je onemogočeno]',
 'scarytranscludefailed'   => '[Pridobivanje predloge za $1 ni uspelo]',
 'scarytranscludetoolong'  => '[Spletni naslov je predolg]',
-
-# Trackbacks
-'trackbackbox'      => 'Sledilniki članka:<br />
-$1',
-'trackbackremove'   => '([$1 Izbris])',
-'trackbacklink'     => 'Sledilnik',
-'trackbackdeleteok' => 'Sledilnik je uspešno izbrisan.',
 
 # Delete conflict
 'deletedwhileediting'      => "'''Opozorilo''': Med vašim urejanjem je bila stran izbrisana!",

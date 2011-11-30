@@ -1503,7 +1503,6 @@ Jeśli zdecydujesz się je podać, zostaną użyte, by udokumentować Twoje auto
 'right-autopatrol'            => 'Własne edycje automatycznie oznaczane jako „sprawdzone”',
 'right-patrolmarks'           => 'Podgląd znaczników patrolowania ostatnich zmian – oznaczania jako „sprawdzone”',
 'right-unwatchedpages'        => 'Podgląd listy stron nieobserwowanych',
-'right-trackback'             => 'Wysyłanie trackback',
 'right-mergehistory'          => 'Łączenie historii edycji stron',
 'right-userrights'            => 'Edycja uprawnień wszystkich użytkowników',
 'right-userrights-interwiki'  => 'Edycja uprawnień użytkowników innych witryn wiki',
@@ -1550,7 +1549,6 @@ Jeśli zdecydujesz się je podać, zostaną użyte, by udokumentować Twoje auto
 'action-patrol'               => 'oznaczenia cudzej edycji jako „sprawdzonej”',
 'action-autopatrol'           => 'oznaczenia własnej edycji jako „sprawdzonej”',
 'action-unwatchedpages'       => 'podglądu listy nieobserwowanych stron',
-'action-trackback'            => 'wysyłania trackbacka',
 'action-mergehistory'         => 'łączenia historii edycji tej strony',
 'action-userrights'           => 'edytowania uprawnień wszystkich użytkowników',
 'action-userrights-interwiki' => 'edytowania uprawnień użytkowników na innych witrynach wiki',
@@ -2040,8 +2038,8 @@ Inne witryny mogą odwoływać się do tych plików, używając bezpośrednich a
 'booksources-invalid-isbn'  => 'Podany numer ISBN został rozpoznany jako nieprawidłowy. Sprawdź czy podany numer zgadza się z numerem zaczerpniętym ze źródła.',
 
 # Special:Log
-'specialloguserlabel'  => 'Użytkownik',
-'speciallogtitlelabel' => 'Tytuł',
+'specialloguserlabel'  => 'Kto',
+'speciallogtitlelabel' => 'Co (tytuł lub użytkownik)',
 'log'                  => 'Rejestr operacji',
 'all-logs-page'        => 'Wszystkie publiczne operacje',
 'alllogstext'          => 'Wspólny rejestr wszystkich typów operacji dla {{GRAMMAR:D.lp|{{SITENAME}}}}.
@@ -2085,8 +2083,9 @@ Zobacz również [[Special:WantedCategories|brakujące kategorie]].',
 'linksearch-pat'   => 'Wzorzec wyszukiwania',
 'linksearch-ns'    => 'Przestrzeń nazw',
 'linksearch-ok'    => 'Szukaj',
-'linksearch-text'  => 'Można użyć symbolu wieloznacznego „*”. Dla przykładu „*.wikipedia.org” spowoduje wyszukanie wszystkich linków prowadzących do domeny „wikipedia.org” i jej poddomen.<br />
-Obsługiwane protokoły: <tt>$1</tt>',
+'linksearch-text'  => 'Można użyć symboli wieloznacznych jak „*.wikipedia.org”.
+Wymaga podania co najmniej domeny najwyższego poziomu np. „*.org”.<br />
+Obsługiwane protokoły: <tt>$1</tt> (nie podawaj ich podczas wyszukiwania).',
 'linksearch-line'  => '$1 link na stronie $2',
 'linksearch-error' => 'Symbolu wieloznacznego można użyć wyłącznie na początku nazwy hosta.',
 
@@ -2719,6 +2718,7 @@ Możesz również użyć linku, np. [[{{#Special:Export}}/{{MediaWiki:Mainpage}}
 'exportcuronly'     => 'Tylko bieżąca wersja, bez historii',
 'exportnohistory'   => "----
 '''Uwaga:''' Wyłączono możliwość eksportowania pełnej historii stron z użyciem tego narzędzia z powodu kłopotów z wydajnością.",
+'exportlistauthors' => 'Dołącz pełną listę autorów dla każdej strony',
 'export-submit'     => 'Eksportuj',
 'export-addcattext' => 'Dodaj strony z kategorii',
 'export-addcat'     => 'Dodaj',
@@ -3531,13 +3531,6 @@ Kod zawarty w linku straci ważność $4.',
 'scarytranscludedisabled' => '[Transkluzja przez interwiki jest wyłączona]',
 'scarytranscludefailed'   => '[Pobranie szablonu dla $1 nie powiodło się]',
 'scarytranscludetoolong'  => '[zbyt długi adres URL]',
-
-# Trackbacks
-'trackbackbox'      => 'Komunikaty TrackBack dla tej strony:<br />
-$1',
-'trackbackremove'   => '([$1 Usuń])',
-'trackbacklink'     => 'TrackBack',
-'trackbackdeleteok' => 'TrackBack został usunięty.',
 
 # Delete conflict
 'deletedwhileediting'      => "'''Uwaga!''' Ta strona została usunięta po tym, jak rozpoczął{{GENDER:|eś|aś|eś(‐aś)}} jej edycję!",

@@ -59,19 +59,19 @@ class ApiQueryBacklinks extends ApiQueryGeneratorBase {
 			'code' => 'bl',
 			'prefix' => 'pl',
 			'linktbl' => 'pagelinks',
-			'helpurl' => 'http://www.mediawiki.org/wiki/API:Backlinks',
+			'helpurl' => 'https://www.mediawiki.org/wiki/API:Backlinks',
 		),
 		'embeddedin' => array(
 			'code' => 'ei',
 			'prefix' => 'tl',
 			'linktbl' => 'templatelinks',
-			'helpurl' => 'http://www.mediawiki.org/wiki/API:Embeddedin',
+			'helpurl' => 'https://www.mediawiki.org/wiki/API:Embeddedin',
 		),
 		'imageusage' => array(
 			'code' => 'iu',
 			'prefix' => 'il',
 			'linktbl' => 'imagelinks',
-			'helpurl' => 'http://www.mediawiki.org/wiki/API:Imageusage',
+			'helpurl' => 'https://www.mediawiki.org/wiki/API:Imageusage',
 		)
 	);
 
@@ -530,6 +530,6 @@ class ApiQueryBacklinks extends ApiQueryGeneratorBase {
 	}
 
 	public function getVersion() {
-		return __CLASS__ . ': $Id: ApiQueryBacklinks.php 103273 2011-11-16 00:17:26Z johnduhart $';
+		return __CLASS__ . ': $Id: ApiQueryBacklinks.php 104445 2011-11-28 15:43:11Z reedy $';
 	}
 }

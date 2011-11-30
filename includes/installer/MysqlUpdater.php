@@ -66,7 +66,6 @@ class MysqlUpdater extends DatabaseUpdater {
 			array( 'addTable', 'user_newtalk',                      'patch-usernewtalk2.sql' ),
 			array( 'addTable', 'transcache',                        'patch-transcache.sql' ),
 			array( 'addField', 'interwiki',     'iw_trans',         'patch-interwiki-trans.sql' ),
-			array( 'addTable', 'trackbacks',                        'patch-trackbacks.sql' ),
 
 			// 1.6
 			array( 'doWatchlistNull' ),
@@ -189,7 +188,8 @@ class MysqlUpdater extends DatabaseUpdater {
 			array( 'dropField', 'user',         'user_options', 'patch-drop-user_options.sql' ),
 			array( 'addField', 'revision',      'rev_sha1',         'patch-rev_sha1.sql' ),
 			array( 'addField', 'archive',       'ar_sha1',          'patch-ar_sha1.sql' ),
-			array( 'addIndex', 'page', 'page_redirect_namespace_len', 'patch-page_redirect_namespace_len.sql' )
+			array( 'addIndex', 'page', 'page_redirect_namespace_len', 'patch-page_redirect_namespace_len.sql' ),
+			array( 'modifyField', 'user', 'ug_group', 'patch-ug_group-length-increase.sql' ),
 		);
 	}
 
@@ -228,12 +228,12 @@ class MysqlUpdater extends DatabaseUpdater {
 		if ( $info ) {
 			foreach ( $info as $row ) {
 				if ( $row->Column_name == $field ) {
-					$this->output( "...index $index on table $table includes field $field\n" );
+					$this->output( "...index $index on table $table includes field $field.\n" );
 					return true;
 				}
 			}
 		}
-		$this->output( "...index $index on table $table has no field $field; adding\n" );
+		$this->output( "...index $index on table $table has no field $field; added.\n" );
 		return false;
 	}
 
@@ -250,7 +250,7 @@ class MysqlUpdater extends DatabaseUpdater {
 
 		$this->output( 'Creating interwiki table...' );
 		$this->applyPatch( 'patch-interwiki.sql' );
-		$this->output( "ok\n" );
+		$this->output( "done.\n" );
 		$this->output( 'Adding default interwiki definitions...' );
 		$this->applyPatch( "$IP/maintenance/interwiki.sql", true );
 		$this->output( "done.\n" );
@@ -265,7 +265,7 @@ class MysqlUpdater extends DatabaseUpdater {
 			throw new MWException( 'Missing rc_timestamp field of recentchanges table. Should not happen.' );
 		}
 		if ( $meta->isMultipleKey() ) {
-			$this->output( "...indexes seem up to 20031107 standards\n" );
+			$this->output( "...indexes seem up to 20031107 standards.\n" );
 			return;
 		}
 
@@ -299,7 +299,7 @@ class MysqlUpdater extends DatabaseUpdater {
 		$talk = $this->db->selectField( 'watchlist', 'count(*)', 'wl_namespace & 1', __METHOD__ );
 		$nontalk = $this->db->selectField( 'watchlist', 'count(*)', 'NOT (wl_namespace & 1)', __METHOD__ );
 		if ( $talk == $nontalk ) {
-			$this->output( "...watchlist talk page rows already present\n" );
+			$this->output( "...watchlist talk page rows already present.\n" );
 			return;
 		}
 
@@ -562,11 +562,11 @@ class MysqlUpdater extends DatabaseUpdater {
 				$newug = $this->db->tableName( 'user_groups_bogus' );
 				$this->output( "user_groups table exists but is in bogus intermediate format. Renaming to $newug... " );
 				$this->db->query( "ALTER TABLE $oldug RENAME TO $newug", __METHOD__ );
-				$this->output( "ok\n" );
+				$this->output( "done.\n" );
 
 				$this->output( "Re-adding fresh user_groups table... " );
 				$this->applyPatch( 'patch-user_groups.sql' );
-				$this->output( "ok\n" );
+				$this->output( "done.\n" );
 
 				$this->output( "***\n" );
 				$this->output( "*** WARNING: You will need to manually fix up user permissions in the user_groups\n" );
@@ -580,13 +580,13 @@ class MysqlUpdater extends DatabaseUpdater {
 
 		$this->output( "Adding user_groups table... " );
 		$this->applyPatch( 'patch-user_groups.sql' );
-		$this->output( "ok\n" );
+		$this->output( "done.\n" );
 
 		if ( !$this->db->tableExists( 'user_rights', __METHOD__ ) ) {
 			if ( $this->db->fieldExists( 'user', 'user_rights', __METHOD__ ) ) {
 				$this->output( "Upgrading from a 1.3 or older database? Breaking out user_rights for conversion..." );
 				$this->db->applyPatch( 'patch-user_rights.sql' );
-				$this->output( "ok\n" );
+				$this->output( "done.\n" );
 			} else {
 				$this->output( "*** WARNING: couldn't locate user_rights table or field for upgrade.\n" );
 				$this->output( "*** You may need to manually configure some sysops by manipulating\n" );

@@ -259,10 +259,10 @@ class ApiQueryCategories extends ApiQueryGeneratorBase {
 	}
 
 	public function getHelpUrls() {
-		return 'http://www.mediawiki.org/wiki/API:Properties#categories_.2F_cl';
+		return 'https://www.mediawiki.org/wiki/API:Properties#categories_.2F_cl';
 	}
 
 	public function getVersion() {
-		return __CLASS__ . ': $Id: ApiQueryCategories.php 103273 2011-11-16 00:17:26Z johnduhart $';
+		return __CLASS__ . ': $Id: ApiQueryCategories.php 104445 2011-11-28 15:43:11Z reedy $';
 	}
 }

@@ -42,6 +42,7 @@
  * @author Krinkle
  * @author Kropotkine 113
  * @author Litlok
+ * @author Lloffiwr
  * @author Louperivois
  * @author Lucyin
  * @author McDutchie
@@ -66,6 +67,7 @@
  * @author Verdy p
  * @author Wyz
  * @author Yumeki
+ * @author Zebulon84
  * @author Zetud
  * @author Горан Анђелковић
  * @author לערי ריינהארט
@@ -456,15 +458,15 @@ $messages = array(
 'october-gen'   => 'octobre',
 'november-gen'  => 'novembre',
 'december-gen'  => 'décembre',
-'jan'           => 'jan',
-'feb'           => 'fév',
-'mar'           => 'mar',
+'jan'           => 'janv',
+'feb'           => 'févr',
+'mar'           => 'mars',
 'apr'           => 'avr',
 'may'           => 'mai',
-'jun'           => 'jun',
-'jul'           => 'jul',
-'aug'           => 'aoû',
-'sep'           => 'sep',
+'jun'           => 'juin',
+'jul'           => 'juil',
+'aug'           => 'août',
+'sep'           => 'sept',
 'oct'           => 'oct',
 'nov'           => 'nov',
 'dec'           => 'déc',
@@ -761,7 +763,7 @@ N’oubliez pas de personnaliser vos [[Special:Preferences|préférences sur {{S
 'yourname'                   => 'Nom d’utilisateur :',
 'yourpassword'               => 'Mot de passe :',
 'yourpasswordagain'          => 'Confirmez le mot de passe :',
-'remembermypassword'         => 'Me reconnecter automatiquement aux prochaines visites (au maximum $1 {{PLURAL:$1|jour|jours}})',
+'remembermypassword'         => 'Me reconnecter automatiquement aux prochaines visites avec ce navigateur (au maximum $1 {{PLURAL:$1|jour|jours}})',
 'securelogin-stick-https'    => 'Rester connecté en HTTPS après la connexion',
 'yourdomainname'             => 'Votre domaine',
 'externaldberror'            => 'Une erreur s’est produite avec la base de données d’authentification externe, ou bien vous n’êtes pas autorisé{{GENDER:||e|(e)}} à mettre à jour votre compte externe.',
@@ -1586,7 +1588,6 @@ Elle ne doit pas dépasser $1 caractère{{PLURAL:$1||s}}.',
 'right-autopatrol'            => 'Avoir ses modifications automatiquement marquées comme surveillées',
 'right-patrolmarks'           => 'Voir les marquages de surveillance dans les modifications récentes',
 'right-unwatchedpages'        => 'Voir la liste des pages non suivies',
-'right-trackback'             => 'Ajouter des rétroliens',
 'right-mergehistory'          => 'Fusionner les historiques des pages',
 'right-userrights'            => 'Modifier tous les droits d’un utilisateur',
 'right-userrights-interwiki'  => 'Modifier les droits d’utilisateurs qui sont sur un autre wiki',
@@ -1633,11 +1634,11 @@ Elle ne doit pas dépasser $1 caractère{{PLURAL:$1||s}}.',
 'action-patrol'               => 'marquer la modification des autres comme relue',
 'action-autopatrol'           => 'avoir votre modification marquée comme relue',
 'action-unwatchedpages'       => 'voir la liste des pages non suivies',
-'action-trackback'            => 'soumettre un rétrolien',
 'action-mergehistory'         => 'fusionner l’historique de cette page',
 'action-userrights'           => 'modifier tous les droits d’utilisateur',
 'action-userrights-interwiki' => 'modifier les droits des utilisateurs sur d’autres wikis',
 'action-siteadmin'            => 'verrouiller ou déverrouiller la base de données',
+'action-sendemail'            => 'envoyer des courriels',
 
 # Recent changes
 'nchanges'                          => '$1 modification{{PLURAL:$1||s}}',
@@ -2120,8 +2121,8 @@ Veuillez noter que d’autres sites peuvent avoir un lien direct vers un fichier
 'booksources-invalid-isbn'  => 'L’ISBN donné ne semble pas être correct ; vérifiez si vous avez fait une erreur en copiant la source originale.',
 
 # Special:Log
-'specialloguserlabel'  => 'Utilisateur :',
-'speciallogtitlelabel' => 'Titre :',
+'specialloguserlabel'  => 'Auteur :',
+'speciallogtitlelabel' => 'Cible (titre ou utilisateur):',
 'log'                  => 'Journaux d’opérations',
 'all-logs-page'        => 'Tous les journaux publics',
 'alllogstext'          => 'Affichage combiné de tous les journaux disponibles sur {{SITENAME}}.<br />
@@ -3604,13 +3605,6 @@ $5',
 'scarytranscludedisabled' => '[La transclusion interwiki est désactivée]',
 'scarytranscludefailed'   => '[La récupération de modèle a échoué pour $1]',
 'scarytranscludetoolong'  => '[L’URL est trop longue]',
-
-# Trackbacks
-'trackbackbox'      => 'Rétroliens vers cette page :<br />
-$1',
-'trackbackremove'   => '([$1 Supprimer])',
-'trackbacklink'     => 'Rétrolien',
-'trackbackdeleteok' => 'Le rétrolien a été supprimé avec succès.',
 
 # Delete conflict
 'deletedwhileediting'      => "'''Attention''' : cette page a été supprimée après que vous avez commencé à la modifier !",

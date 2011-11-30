@@ -158,9 +158,19 @@ class DerivativeContext extends ContextSource {
 	/**
 	 * Set the Language object
 	 *
+	 * @deprecated 1.19 Use setLanguage instead
 	 * @param $l Mixed Language instance or language code
 	 */
 	public function setLang( $l ) {
+		$this->setLanguage( $l );
+	}
+
+	/**
+	 * Set the Language object
+	 *
+	 * @param $l Mixed Language instance or language code
+	 */
+	public function setLanguage( $l ) {
 		if ( $l instanceof Language ) {
 			$this->lang = $l;
 		} elseif ( is_string( $l ) ) {
@@ -173,15 +183,23 @@ class DerivativeContext extends ContextSource {
 	}
 
 	/**
+	 * @deprecated 1.19 Use getLanguage instead
+	 * @return Language
+	 */
+	public function getLang() {
+		$this->getLanguage();
+	}
+
+	/**
 	 * Get the Language object
 	 *
 	 * @return Language
 	 */
-	public function getLang() {
+	public function getLanguage() {
 		if ( !is_null( $this->lang ) ) {
 			return $this->lang;
 		} else {
-			return $this->getContext()->getLang();
+			return $this->getContext()->getLanguage();
 		}
 	}
 

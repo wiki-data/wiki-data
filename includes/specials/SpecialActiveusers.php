@@ -42,13 +42,18 @@ class ActiveUsersPager extends UsersPager {
 	 */
 	protected $groups;
 
-	function __construct( IContextSource $context = null, $group = null ) {
+	/**
+	 * @param $context IContextSource
+	 * @param $group null Unused
+	 * @param $par string Parameter passed to the page
+	 */
+	function __construct( IContextSource $context = null, $group = null, $par = null ) {
 		global $wgActiveUserDays;
 
 		parent::__construct( $context );
 
 		$this->RCMaxAge = $wgActiveUserDays;
-		$un = $this->getRequest()->getText( 'username' );
+		$un = $this->getRequest()->getText( 'wpUsername', $par );
 		$this->requestedUser = '';
 		if ( $un != '' ) {
 			$username = Title::makeTitleSafe( NS_USER, $un );
@@ -63,16 +68,16 @@ class ActiveUsersPager extends UsersPager {
 	public function setupOptions() {
 		$this->opts = new FormOptions();
 
-		$this->opts->add( 'hidebots', false, FormOptions::BOOL );
-		$this->opts->add( 'hidesysops', false, FormOptions::BOOL );
+		$this->opts->add( 'wpHideBots', false, FormOptions::BOOL );
+		$this->opts->add( 'wpHideSysops', false, FormOptions::BOOL );
 
 		$this->opts->fetchValuesFromRequest( $this->getRequest() );
 
 		$this->groups = array();
-		if ( $this->opts->getValue( 'hidebots' ) == 1 ) {
+		if ( $this->opts->getValue( 'wpHideBots' ) == 1 ) {
 			$this->groups['bot'] = true;
 		}
-		if ( $this->opts->getValue( 'hidesysops' ) == 1 ) {
+		if ( $this->opts->getValue( 'wpHideSysops' ) == 1 ) {
 			$this->groups['sysop'] = true;
 		}
 	}
@@ -119,7 +124,7 @@ class ActiveUsersPager extends UsersPager {
 		$ulinks = Linker::userLink( $row->user_id, $userName );
 		$ulinks .= Linker::userToolLinks( $row->user_id, $userName );
 
-		$lang = $this->getLang();
+		$lang = $this->getLanguage();
 
 		$list = array();
 		foreach( self::getGroups( $row->user_id ) as $group ) {
@@ -138,30 +143,32 @@ class ActiveUsersPager extends UsersPager {
 		return Html::rawElement( 'li', array(), "{$item} [{$count}]{$blocked}" );
 	}
 
-	function getPageHeader() {
-		global $wgScript;
+	protected function getHTMLFormFields() {
+		$f = array(
+			'Username' => array(
+				'type' => 'text',
+				'label-message' => 'activeusers-from',
+				'size' => 30,
+			),
+			'HideBots' => array(
+				'type' => 'check',
+				'label-message' => 'activeusers-hidebots',
+			),
+			'HideSysops' => array(
+				'type' => 'check',
+				'label-message' => 'activeusers-hidesysops',
+			),
+		);
 
-		$self = $this->getTitle();
-		$limit = $this->mLimit ? Html::hidden( 'limit', $this->mLimit ) : '';
+		return $f;
+	}
 
-		$out = Xml::openElement( 'form', array( 'method' => 'get', 'action' => $wgScript ) ); # Form tag
-		$out .= Xml::fieldset( $this->msg( 'activeusers' )->text() ) . "\n";
-		$out .= Html::hidden( 'title', $self->getPrefixedDBkey() ) . $limit . "\n";
+	protected function getHTMLFormLegend() {
+		return 'activeusers';
+	}
 
-		$out .= Xml::inputLabel( $this->msg( 'activeusers-from' )->text(),
-			'username', 'offset', 20, $this->requestedUser ) . '<br />';# Username field
-
-		$out .= Xml::checkLabel( $this->msg( 'activeusers-hidebots' )->text(),
-			'hidebots', 'hidebots', $this->opts->getValue( 'hidebots' ) );
-
-		$out .= Xml::checkLabel( $this->msg( 'activeusers-hidesysops' )->text(),
-			'hidesysops', 'hidesysops', $this->opts->getValue( 'hidesysops' ) ) . '<br />';
-
-		$out .= Xml::submitButton( $this->msg( 'allpagessubmit' )->text() ) . "\n";# Submit button and form bottom
-		$out .= Xml::closeElement( 'fieldset' );
-		$out .= Xml::closeElement( 'form' );
-
-		return $out;
+	protected function getHTMLFormSubmit() {
+		return 'allpagessubmit';
 	}
 }
 
@@ -190,14 +197,14 @@ class SpecialActiveUsers extends SpecialPage {
 
 		$out = $this->getOutput();
 		$out->wrapWikiMsg( "<div class='mw-activeusers-intro'>\n$1\n</div>",
-			array( 'activeusers-intro', $this->getLang()->formatNum( $wgActiveUserDays ) ) );
+			array( 'activeusers-intro', $this->getLanguage()->formatNum( $wgActiveUserDays ) ) );
 
-		$up = new ActiveUsersPager( $this->getContext() );
+		$up = new ActiveUsersPager( $this->getContext(), null, $par );
 
 		# getBody() first to check, if empty
 		$usersbody = $up->getBody();
 
-		$out->addHTML( $up->getPageHeader() );
+		$out->addHTML( $up->buildHTMLForm() );
 		if ( $usersbody ) {
 			$out->addHTML(
 				$up->getNavigationBar() .

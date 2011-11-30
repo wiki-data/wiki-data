@@ -101,6 +101,8 @@ class ApiQuery extends ApiBase {
 	private $mSlaveDB = null;
 	private $mNamedDB = array();
 
+	protected $mAllowedGenerators = array();
+
 	public function __construct( $main, $action ) {
 		parent::__construct( $main, $action );
 
@@ -114,9 +116,8 @@ class ApiQuery extends ApiBase {
 		$this->mListModuleNames = array_keys( $this->mQueryListModules );
 		$this->mMetaModuleNames = array_keys( $this->mQueryMetaModules );
 
-		// Allow the entire list of modules at first,
-		// but during module instantiation check if it can be used as a generator.
-		$this->mAllowedGenerators = array_merge( $this->mListModuleNames, $this->mPropModuleNames );
+		$this->makeHelpMsgHelper( $this->mQueryPropModules, 'prop' );
+		$this->makeHelpMsgHelper( $this->mQueryListModules, 'list' );
 	}
 
 	/**
@@ -631,6 +632,9 @@ class ApiQuery extends ApiBase {
 		$moduleDescriptions = array();
 
 		foreach ( $moduleList as $moduleName => $moduleClass ) {
+			/**
+			 * @var $module ApiQueryBase
+			 */
 			$module = new $moduleClass( $this, $moduleName, null );
 
 			$msg = ApiMain::makeHelpMsgHeader( $module, $paramName );
@@ -701,16 +705,16 @@ class ApiQuery extends ApiBase {
 
 	public function getHelpUrls() {
 		return array(
-			'http://www.mediawiki.org/wiki/API:Meta',
-			'http://www.mediawiki.org/wiki/API:Properties',
-			'http://www.mediawiki.org/wiki/API:Lists',
+			'https://www.mediawiki.org/wiki/API:Meta',
+			'https://www.mediawiki.org/wiki/API:Properties',
+			'https://www.mediawiki.org/wiki/API:Lists',
 		);
 	}
 
 	public function getVersion() {
 		$psModule = new ApiPageSet( $this );
 		$vers = array();
-		$vers[] = __CLASS__ . ': $Id: ApiQuery.php 103273 2011-11-16 00:17:26Z johnduhart $';
+		$vers[] = __CLASS__ . ': $Id: ApiQuery.php 104480 2011-11-28 20:35:32Z reedy $';
 		$vers[] = $psModule->getVersion();
 		return $vers;
 	}

@@ -1286,7 +1286,6 @@ $1 {{PLURAL:$1|бэлиэттэн|бэлиэттэн (буукубаттан)}} 
 'right-autopatrol'            => 'Уларытыылар ботуруулламмыт курдук аптамаатынан бэлиэтэнэллэр',
 'right-patrolmarks'           => 'Кэнники уларытыыларга бэрэбиэркэлэммиттэрин туһунан бэлиэлэри көрүү',
 'right-unwatchedpages'        => 'Кэтэммэт сирэйдэр тиһиктэрин көрүү',
-'right-trackback'             => 'Trackback ыытыы',
 'right-mergehistory'          => 'Сирэйдэр историяларын холбооһун',
 'right-userrights'            => 'Кытааччылар бырааптарын барытын уларытыы',
 'right-userrights-interwiki'  => 'Атын биики-саайтарга кыттааччылар бырааптарын уларытыы',
@@ -1333,7 +1332,6 @@ $1 {{PLURAL:$1|бэлиэттэн|бэлиэттэн (буукубаттан)}} 
 'action-patrol'               => 'атыттар көннөрүүлэрин ботуруулламмыт курдук бэлиэтээ',
 'action-autopatrol'           => 'бэйэ көннөрүүтүн ботуруулламмыт курдук бэлиэтээһин',
 'action-unwatchedpages'       => 'ким да кэтээбэт сирэйдэрин тиһиктэрин көрүү',
-'action-trackback'            => 'trackback ыытыы',
 'action-mergehistory'         => 'бу сирэй историятын холбооһун',
 'action-userrights'           => 'кыттар бары бырааптарын уларытыы',
 'action-userrights-interwiki' => 'атын биикигэ кыттыы бырааптарын уларытыы',
@@ -1549,9 +1547,9 @@ $1',
 # img_auth script messages
 'img-auth-accessdenied'     => 'Киирии бобуллубут',
 'img-auth-nopathinfo'       => 'PATH_INFO суох.
-Эн сиэбэрин маннык сибидиэнньэни ыытар курдук туруоруута суох.
+Эн сиэбэриҥ маннык сибидиэнньэни ыытар курдук туруоруута суох.
 Баҕар кини CGI олоҕурара буолуо ол иһин img_auth өйөөбөтө буолуо.
-Көр http://www.mediawiki.org/wiki/Manual:Image_Authorization.',
+[http://www.mediawiki.org/wiki/Manual:Image_Authorization Ойууну бигэргэтиини] көр.',
 'img-auth-notindir'         => 'Көрдөөбүт суолуҥ эрдэттэн туруоруллубут хачайдыыр паапкаҕа сыһыана суох.',
 'img-auth-badtitle'         => 'Мантан «$1» сөптөөх ааты оҥорор кыах суох.',
 'img-auth-nologinnWL'       => 'Эн тиһиликкэ киирбэтэххин, уонна «$1» үрүҥ (көҥүллэммит) тиһиккэ киирбэт эбит.',
@@ -1715,7 +1713,7 @@ $1',
 'statistics-users-active-desc' => 'Ааспыт {{PLURAL:$1|биир хонук иһигэр|$1 хонукка}} тугу эмэ оҥорбут кыттааччылар',
 'statistics-mostpopular'       => 'Саамай элбэхтик көрүллэр ыстатыйалар',
 
-'disambiguations'      => 'Элбэх суолталаах өйдөбүллэр сирэйдэрэ',
+'disambiguations'      => 'Элбэх суолталаах өйдөбүллэргэ сигэнэр сирэйдэр',
 'disambiguationspage'  => 'Template:элбэх суолталаах өйдөбүллэр',
 'disambiguations-text' => "Маннык сирэйдэр '''омонимнар сирэйдэрин''' кытта сибээстээхтэр. Ол оннугар чуолаан теманы кытта сибээстэһиэхтээхтэр.<br />Өскө бу халыыбы [[MediaWiki:Disambiguationspage]] туттубут буоллахтарына, сирэй омонимнары суох оҥоруу курдук обработкаламмыт.",
 
@@ -1812,8 +1810,8 @@ $1',
 'booksources-invalid-isbn'  => 'ISBN, арааһа, сыыһалаах. Нүөмэр көһөрөргө алҕас тахсыбатаҕын хат көр эрэ.',
 
 # Special:Log
-'specialloguserlabel'  => 'Кыттааччы:',
-'speciallogtitlelabel' => 'Баһа:',
+'specialloguserlabel'  => 'Толорооччу:',
+'speciallogtitlelabel' => 'Сорук (тиэкис эбэтэр киһи аата)',
 'log'                  => 'Сурунааллар',
 'all-logs-page'        => 'Көстөр сурунааллар барыта',
 'alllogstext'          => '{{SITENAME}} сурунаалларын уопсай испииһэгэ.
@@ -3260,13 +3258,6 @@ $5
 'scarytranscludedisabled' => '[Interwiki transcluding араҕыста]',
 'scarytranscludefailed'   => '[$1 халыыбы туһанар табыллыбата]',
 'scarytranscludetoolong'  => '[URL наһаа уһун]',
-
-# Trackbacks
-'trackbackbox'      => 'Бу ыстатыйа Trackback`а:<br />
-$1',
-'trackbackremove'   => '([$1 сотуу])',
-'trackbacklink'     => 'Урукку суола',
-'trackbackdeleteok' => 'trackback сотулунна.',
 
 # Delete conflict
 'deletedwhileediting'      => "'''Болҕой''': Сирэйи көннөрө олордоххуна ким эрэ сотон кэбистэ!",

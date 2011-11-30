@@ -54,7 +54,7 @@ class ApiExpandTemplates extends ApiBase {
 
 		// Parse text
 		global $wgParser;
-		$options = new ParserOptions();
+		$options = ParserOptions::newFromContext( $this->getContext() );
 
 		if ( $params['includecomments'] ) {
 			$options->setRemoveComments( false );
@@ -120,10 +120,10 @@ class ApiExpandTemplates extends ApiBase {
 	}
 
 	public function getHelpUrls() {
-		return 'http://www.mediawiki.org/wiki/API:Parsing_wikitext#expandtemplates';
+		return 'https://www.mediawiki.org/wiki/API:Parsing_wikitext#expandtemplates';
 	}
 
 	public function getVersion() {
-		return __CLASS__ . ': $Id: ApiExpandTemplates.php 103273 2011-11-16 00:17:26Z johnduhart $';
+		return __CLASS__ . ': $Id: ApiExpandTemplates.php 104445 2011-11-28 15:43:11Z reedy $';
 	}
 }

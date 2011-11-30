@@ -1096,7 +1096,7 @@ Zur Information folgt der aktuelle Logbucheintrag:",
 'sectioneditnotsupported-text'     => 'Die Bearbeitung von Abschnitten wird auf dieser Bearbeitungsseite nicht unterstützt.',
 'permissionserrors'                => 'Berechtigungsfehler',
 'permissionserrorstext'            => 'Du bist nicht berechtigt, die Aktion auszuführen. {{PLURAL:$1|Grund|Gründe}}:',
-'permissionserrorstext-withaction' => 'Du bist nicht berechtigt, $2.
+'permissionserrorstext-withaction' => 'Du bist nicht berechtigt $2.
 {{PLURAL:$1|Grund|Gründe}}:',
 'recreate-moveddeleted-warn'       => "'''Achtung: Du erstellst eine Seite, die bereits früher gelöscht wurde.'''
 
@@ -1599,7 +1599,6 @@ Dies kann nicht mehr rückgängig gemacht werden.',
 'right-autopatrol'            => 'Eigene Bearbeitungen automatisch als kontrolliert markieren',
 'right-patrolmarks'           => 'Kontrollmarkierungen in den letzten Änderungen sehen',
 'right-unwatchedpages'        => 'Liste der unbeobachteten Seiten ansehen',
-'right-trackback'             => 'Trackback übermitteln',
 'right-mergehistory'          => 'Versionsgeschichten von Seiten vereinen',
 'right-userrights'            => 'Benutzerrechte bearbeiten',
 'right-userrights-interwiki'  => 'Benutzerrechte in anderen Wikis bearbeiten',
@@ -1646,11 +1645,11 @@ Dies kann nicht mehr rückgängig gemacht werden.',
 'action-patrol'               => 'die Bearbeitungen andere Benutzer zu kontrollieren',
 'action-autopatrol'           => 'eigene Bearbeitungen als kontrolliert zu markieren',
 'action-unwatchedpages'       => 'die Liste der unbeobachteten Seiten einzusehen',
-'action-trackback'            => 'einen Trackback zu übertragen',
 'action-mergehistory'         => 'die Versionengeschichten von Seiten zu vereinen',
 'action-userrights'           => 'Benutzerrechte zu ändern',
 'action-userrights-interwiki' => 'die Rechte von Benutzern in anderen Wikis zu ändern',
 'action-siteadmin'            => 'die Datenbank zu sperren oder freizugeben',
+'action-sendemail'            => 'E-Mails zu senden',
 
 # Recent changes
 'nchanges'                          => '$1 {{PLURAL:$1|Änderung|Änderungen}}',
@@ -2130,8 +2129,8 @@ Jede Zeile enthält Links zu der ersten und zweiten Weiterleitung sowie das Ziel
 Bitte prüfe, ob sie korrekt von der Quelle übertragen wurde.',
 
 # Special:Log
-'specialloguserlabel'  => 'Benutzer:',
-'speciallogtitlelabel' => 'Titel:',
+'specialloguserlabel'  => 'Ausführender Benutzer:',
+'speciallogtitlelabel' => 'Ziel (Titel oder Benutzer):',
 'log'                  => 'Logbücher',
 'all-logs-page'        => 'Alle öffentlichen Logbücher',
 'alllogstext'          => 'Dies ist die kombinierte Anzeige aller in {{SITENAME}} geführten Logbücher.
@@ -2760,7 +2759,8 @@ Bitte den '''neuen''' Titel unter '''Ziel''' eintragen, darunter die Umbenennung
 Die Seite „[[:$1]]“ existiert bereits. Möchtest du diese löschen, um die Seite verschieben zu können?',
 'delete_and_move_confirm'      => 'Ja, Seite löschen',
 'delete_and_move_reason'       => 'gelöscht, um Platz für die Verschiebung von „[[$1]]“ zu machen',
-'selfmove'                     => 'Ursprungs- und Zielname sind gleich; eine Seite kann nicht auf sich selbst verschoben werden.',
+'selfmove'                     => 'Ursprungs- und Zielname sind gleich.
+Eine Seite kann nicht auf sich selbst verschoben werden.',
 'immobile-source-namespace'    => 'Seiten des „$1“-Namensraums können nicht verschoben werden',
 'immobile-target-namespace'    => 'Seiten können nicht in den „$1“-Namensraum verschoben werden',
 'immobile-target-namespace-iw' => 'Interwiki-Link ist kein gültiges Ziel für Seitenverschiebungen.',
@@ -3598,13 +3598,6 @@ Dieser Bestätigungscode ist gültig bis $4.',
 'scarytranscludefailed'   => '[Vorlageneinbindung für $1 ist gescheitert]',
 'scarytranscludetoolong'  => '[URL ist zu lang]',
 
-# Trackbacks
-'trackbackbox'      => 'Trackbacks für diese Seite:<br />
-$1',
-'trackbackremove'   => '([$1 löschen])',
-'trackbacklink'     => 'Trackback',
-'trackbackdeleteok' => 'Trackback wurde erfolgreich gelöscht.',
-
 # Delete conflict
 'deletedwhileediting'      => 'Achtung: Diese Seite wurde gelöscht, nachdem du angefangen hast sie zu bearbeiten!
 Im [{{fullurl:{{#special:Log}}|type=delete&page={{FULLPAGENAMEE}}}} Lösch-Logbuch] findest du den Grund für die Löschung. Wenn du die Seite speicherst, wird sie neu angelegt.',
@@ -3691,7 +3684,7 @@ Du kannst auch die [[Special:EditWatchlist|Standardseite]] zum Bearbeiten benutz
 # Watchlist editing tools
 'watchlisttools-view' => 'Beobachtungsliste: Änderungen',
 'watchlisttools-edit' => 'normal bearbeiten',
-'watchlisttools-raw'  => 'Listenformat bearbeiten (Import/Export)',
+'watchlisttools-raw'  => 'im Listenformat bearbeiten (Import/Export)',
 
 # Hijri month names
 'hijri-calendar-m3'  => 'Rabiʿ al-auwal',
@@ -3771,7 +3764,7 @@ Eine [{{SERVER}}{{SCRIPTPATH}}/COPYING Kopie der ''GNU General Public License'']
 'specialpages-group-media'       => 'Medien',
 'specialpages-group-users'       => 'Benutzer und Rechte',
 'specialpages-group-highuse'     => 'Häufig benutzte Seiten',
-'specialpages-group-pages'       => 'Listen von Seiten',
+'specialpages-group-pages'       => 'Seitenlisten',
 'specialpages-group-pagetools'   => 'Seitenwerkzeuge',
 'specialpages-group-wiki'        => 'Systemdaten und Werkzeuge',
 'specialpages-group-redirects'   => 'Weiterleitende Spezialseiten',

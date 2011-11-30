@@ -475,7 +475,7 @@ $messages = array(
 'returnto'          => 'Retornar para $1.',
 'tagline'           => 'De {{SITENAME}}',
 'help'              => 'Ajuda',
-'search'            => 'Pesquisa',
+'search'            => 'Pesquisar',
 'searchbutton'      => 'Pesquisa',
 'go'                => 'Ir',
 'searcharticle'     => 'Ir',
@@ -1357,7 +1357,7 @@ Note que os índices do sistema de busca externo poderão conter referências de
 'prefs-edit-boxsize'            => 'Tamanho da janela de edição.',
 'rows'                          => 'Linhas:',
 'columns'                       => 'Colunas:',
-'searchresultshead'             => 'Pesquisa',
+'searchresultshead'             => 'Pesquisar',
 'resultsperpage'                => 'Resultados por página:',
 'stub-threshold'                => 'Links para páginas de conteúdo aparecerão <a href="#" class="stub">desta forma</a> se elas possuírem menos de (bytes):',
 'stub-threshold-disabled'       => 'Desabilitado',
@@ -1542,7 +1542,6 @@ Caso decida fornecê-lo, este será utilizado para dar-lhe crédito pelo seu tra
 'right-autopatrol'            => 'Ter edições automaticamente marcadas como patrulhadas',
 'right-patrolmarks'           => 'Usar funcionalidades de patrulhagem das mudanças recentes',
 'right-unwatchedpages'        => 'Ver uma lista de páginas não vigiadas',
-'right-trackback'             => "Submeter um 'trackback'",
 'right-mergehistory'          => 'Fundir o histórico de páginas',
 'right-userrights'            => 'Editar todos os direitos de usuário',
 'right-userrights-interwiki'  => 'Editar direitos de usuário de usuários outros sites wiki',
@@ -1589,11 +1588,11 @@ Caso decida fornecê-lo, este será utilizado para dar-lhe crédito pelo seu tra
 'action-patrol'               => 'marcar as edições de outros usuários como patrulhadas',
 'action-autopatrol'           => 'ter suas edições marcadas como patrulhadas',
 'action-unwatchedpages'       => 'ver a lista de páginas não-vigiadas',
-'action-trackback'            => "enviar um ''trackback''",
 'action-mergehistory'         => 'fundir o histórico de edições desta página',
 'action-userrights'           => 'editar todos os privilégios de usuário',
 'action-userrights-interwiki' => 'editar privilégios de usuários de outras wikis',
 'action-siteadmin'            => 'bloquear ou desbloquear o banco de dados',
+'action-sendemail'            => 'enviar e-mail',
 
 # Recent changes
 'nchanges'                          => '$1 {{PLURAL:$1|alteração|alterações}}',
@@ -2068,8 +2067,8 @@ Por favor note que outros websites podem apontar para um arquivo através de um 
 'booksources-invalid-isbn'  => 'O número ISBN fornecido não parece ser válido; verifique se houve erros ao copiar da fonte original.',
 
 # Special:Log
-'specialloguserlabel'  => 'Usuário:',
-'speciallogtitlelabel' => 'Título:',
+'specialloguserlabel'  => 'Executor:',
+'speciallogtitlelabel' => 'Destino (título ou usuário):',
 'log'                  => 'Registros',
 'all-logs-page'        => 'Todos os registros públicos',
 'alllogstext'          => 'Exibição combinada de todos registros disponíveis para o {{SITENAME}}.
@@ -2113,8 +2112,9 @@ Veja também [[Special:WantedCategories|categorias pedidas]].',
 'linksearch-pat'   => 'Procurar padrão:',
 'linksearch-ns'    => 'Espaço nominal:',
 'linksearch-ok'    => 'Pesquisar',
-'linksearch-text'  => 'É possível utilizar "caracteres mágicos" como em "*.wikipedia.org".<br />
-Protocolos suportados: <tt>$1</tt>',
+'linksearch-text'  => 'É possível usar caracteres curinga, como "*.wikipedia.org".
+É necessário, pelo menos, um domínio de nível superior, por exemplo "*.org".<br />
+Protocolos suportados: <tt>$1</tt> (não adicionado nenhum desses em sua pesquisa).',
 'linksearch-line'  => '$1 está lincado a partir de $2',
 'linksearch-error' => "\"Caracteres mágicos\" (''wildcards'') só podem ser suados no início do endereço.",
 
@@ -3522,13 +3522,6 @@ Este código de confirmação irá expirar em $4.',
 'scarytranscludedisabled' => '[A transclusão de páginas de outros wikis encontra-se desabilitada]',
 'scarytranscludefailed'   => '[Não foi possível obter a predefinição a partir de $1]',
 'scarytranscludetoolong'  => '[URL longa demais]',
-
-# Trackbacks
-'trackbackbox'      => 'Trackbacks para esta página:<br />
-$1',
-'trackbackremove'   => '([$1 Eliminar])',
-'trackbacklink'     => 'Trackback',
-'trackbackdeleteok' => 'O trackback foi eliminado com sucesso.',
 
 # Delete conflict
 'deletedwhileediting'      => "'''Aviso''': Esta página foi eliminada após você ter começado a editar!",

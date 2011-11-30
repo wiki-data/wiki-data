@@ -292,12 +292,12 @@ class ApiQuerySiteinfo extends ApiQueryBase {
 			if ( isset( $langNames[$prefix] ) ) {
 				$val['language'] = $langNames[$prefix];
 			}
-			$val['url'] = wfExpandUrl( $row->iw_url, PROTO_CURRENT );
-			if( isset( $row->iw_wikiid ) ) {
-				$val['wikiid'] = $row->iw_wikiid;
+			$val['url'] = wfExpandUrl( $row['iw_url'], PROTO_CURRENT );
+			if( isset( $row['iw_wikiid'] ) ) {
+				$val['wikiid'] = $row['iw_wikiid'];
 			}
-			if( isset( $row->iw_api ) ) {
-				$val['api'] = $row->iw_api;
+			if( isset( $row['iw_api'] ) ) {
+				$val['api'] = $row['iw_api'];
 			}
 
 			$data[] = $val;
@@ -636,10 +636,10 @@ class ApiQuerySiteinfo extends ApiQueryBase {
 	}
 
 	public function getHelpUrls() {
-		return 'http://www.mediawiki.org/wiki/API:Meta#siteinfo_.2F_si';
+		return 'https://www.mediawiki.org/wiki/API:Meta#siteinfo_.2F_si';
 	}
 
 	public function getVersion() {
-		return __CLASS__ . ': $Id: ApiQuerySiteinfo.php 103494 2011-11-17 19:06:30Z reedy $';
+		return __CLASS__ . ': $Id: ApiQuerySiteinfo.php 104573 2011-11-29 16:48:37Z robin $';
 	}
 }

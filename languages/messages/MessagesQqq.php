@@ -38,6 +38,7 @@
  * @author Fryed-peach
  * @author Garas
  * @author GerardM
+ * @author Gustronico
  * @author Hamilton Abreu
  * @author Helix84
  * @author Holek
@@ -52,6 +53,7 @@
  * @author Klenje
  * @author Klutzy
  * @author Krinkle
+ * @author Ktkaushik
  * @author Kwj2772
  * @author Leinad
  * @author Lejonel
@@ -112,6 +114,7 @@
  * @author Waldir
  * @author Whym
  * @author Yekrats
+ * @author Ynwala
  * @author Yuriy Apostol
  * @author Yyy
  * @author Žekřil71pl
@@ -166,7 +169,8 @@ Is only shown if {{msg-mw|tog-enotifusertalkpages}} or/and {{msg-mw|tog-enotifwa
 'tog-watchlisthideliu'        => "Option in tab 'Watchlist' of [[Special:Preferences]]. {{Gender}}",
 'tog-watchlisthideanons'      => "Option in tab 'Watchlist' of [[Special:Preferences]]. {{Gender}}",
 'tog-watchlisthidepatrolled'  => 'Option in Watchlist tab of [[Special:Preferences]]. {{Gender}}',
-'tog-nolangconversion'        => 'In user preferences.',
+'tog-nolangconversion'        => '{{optional}}
+In user preferences.',
 'tog-ccmeonemails'            => 'Option in [[Special:Preferences]] > {{int:prefs-personal}} > {{int:email}}. {{Gender}}',
 'tog-diffonly'                => 'Toggle option used in [[Special:Preferences]]. {{Gender}}',
 'tog-showhiddencats'          => 'Toggle option used in [[Special:Preferences]]. {{Gender}}',
@@ -326,6 +330,7 @@ This can also appear in the credits page if the credits feature is enabled,for e
 # Cologne Blue skin
 'qbfind'         => 'Alternative for "search" as used in Cologne Blue skin.
 {{Identical|Find}}',
+'qbbrowse'       => '{{Identical|Browse}}',
 'qbedit'         => '{{Identical|Edit}}',
 'qbmyoptions'    => '{{Identical|My pages}}',
 'qbspecialpages' => '{{Identical|Special pages}}',
@@ -334,33 +339,34 @@ This can also appear in the credits page if the credits feature is enabled,for e
 {{doc-important|Do not translate <tt>Project:</tt> part.}}",
 
 # Vector skin
-'vector-action-addsection' => 'Used in the Vector skin. See for example http://translatewiki.net/wiki/Talk:Main_Page?useskin=vector',
-'vector-action-delete'     => 'Used in the Vector skin, as the name of a tab at the top of the page. See for example http://translatewiki.net/wiki/Main_Page?useskin=vector
+'vector-action-addsection'       => 'Used in the Vector skin. See for example http://translatewiki.net/wiki/Talk:Main_Page?useskin=vector',
+'vector-action-delete'           => 'Used in the Vector skin, as the name of a tab at the top of the page. See for example http://translatewiki.net/wiki/Main_Page?useskin=vector
 
 {{Identical|Delete}}',
-'vector-action-move'       => 'Used in the Vector skin, on the tabs at the top of the page. See for example http://translatewiki.net/wiki/Talk:Main_Page?useskin=vector
+'vector-action-move'             => 'Used in the Vector skin, on the tabs at the top of the page. See for example http://translatewiki.net/wiki/Talk:Main_Page?useskin=vector
 
 {{Identical|Move}}',
-'vector-action-protect'    => 'Tab at top of page, in vector skin
+'vector-action-protect'          => 'Tab at top of page, in vector skin
 
 {{Identical|Protect}}',
-'vector-action-undelete'   => 'Tab at top of page, in vector skin.
+'vector-action-undelete'         => 'Tab at top of page, in vector skin.
 {{Identical|Undelete}}',
-'vector-action-unprotect'  => 'Tab at top of page, in vector skin.
+'vector-action-unprotect'        => 'Tab at top of page, in vector skin.
 
 {{Identical|Unprotect}}',
-'vector-view-create'       => 'Tab label in the Vector skin. See for example http://translatewiki.net/wiki/Foo?useskin=vector
+'vector-simplesearch-preference' => 'Preference for enhanced search suggestion in the Vector skin.',
+'vector-view-create'             => 'Tab label in the Vector skin. See for example http://translatewiki.net/wiki/Foo?useskin=vector
 {{Identical|Create}}',
-'vector-view-edit'         => 'Tab label in the Vector skin. See for example http://translatewiki.net/wiki/Main_Page?useskin=vector
+'vector-view-edit'               => 'Tab label in the Vector skin. See for example http://translatewiki.net/wiki/Main_Page?useskin=vector
 {{Identical|Edit}}',
-'vector-view-history'      => 'Tab label in the Vector skin. See for example http://translatewiki.net/wiki/Main_Page?useskin=vector
+'vector-view-history'            => 'Tab label in the Vector skin. See for example http://translatewiki.net/wiki/Main_Page?useskin=vector
 {{Identical|View history}}',
-'vector-view-view'         => 'Tab label in the Vector skin (verb). See for example http://translatewiki.net/w/i.php?title=Main_Page&useskin=vector',
-'vector-view-viewsource'   => 'Tab label in the Vector skin.
+'vector-view-view'               => 'Tab label in the Vector skin (verb). See for example http://translatewiki.net/w/i.php?title=Main_Page&useskin=vector',
+'vector-view-viewsource'         => 'Tab label in the Vector skin.
 {{Identical|View source}}',
-'actions'                  => '{{Identical|Action}}',
-'namespaces'               => '{{Identical|Namespace}}',
-'variants'                 => 'Used by the Vector skin.',
+'actions'                        => '{{Identical|Action}}',
+'namespaces'                     => '{{Identical|Namespace}}',
+'variants'                       => 'Used by the Vector skin.',
 
 'errorpagetitle'    => 'Message shown in browser title bar when encountering error operation.
 
@@ -776,6 +782,7 @@ Parameters:
 'resetpass'                 => 'The caption of [[Special:ChangePassword]]
 
 {{Identical|Change password}}',
+'resetpass_text'            => '{{optional}}',
 'resetpass_header'          => 'Header on box on special page [[Special:ChangePassword]].
 
 {{Identical|Reset password}}',
@@ -863,9 +870,8 @@ Tip for internal links',
 'headline_tip'    => 'This is the text that appears when you hover the mouse over the fifth button from the left on the edit toolbar.',
 'nowiki_sample'   => 'Text inserted between nowiki tags',
 'nowiki_tip'      => 'This is the text that appears when you hover the mouse over the third button from the right on the edit toolbar.',
-'image_sample'    => 'Used in text generated by Picture button in toolbar.
-
-{{optional}}',
+'image_sample'    => '{{optional}}
+Used in text generated by Picture button in toolbar.',
 'image_tip'       => 'This is the text that appears when you hover the mouse over the sixth (middle) button on the edit toolbar.
 
 {{Identical|Embedded file}}',
@@ -969,7 +975,8 @@ See also {{msg-mw|Noarticletext-nopermission}}.',
 'template-protected'               => '{{Identical|Protected}}',
 'template-semiprotected'           => 'Used on [[Special:ProtectedPages]]. Appears in brackets after listed page titles which are semi-protected.',
 'hiddencategories'                 => "This message is shown below the edit form, like you have a section ''\"Templates used on this page\"''.",
-'edittools'                        => 'This text will be shown below edit and upload forms. It can be used to offer special characters not present on most keyboards for copying/pasting, and also often makes them clickable for insertion via a javascript. Since these are seen as specific to a wiki, however, this message should not contain anything but an html comment explaining how it should be used once the wiki has been installed.',
+'edittools'                        => '{{optional}}
+This text will be shown below edit and upload forms. It can be used to offer special characters not present on most keyboards for copying/pasting, and also often makes them clickable for insertion via a javascript. Since these are seen as specific to a wiki, however, this message should not contain anything but an html comment explaining how it should be used once the wiki has been installed.',
 'edittools-upload'                 => '{{optional}}
 This text will be shown below upload forms. It will default to the contents of edittools.',
 'sectioneditnotsupported-title'    => 'Page title of special page, which presumably appears when someone tries to edit a section, and section editing is disabled. Explanation of section editing on [http://meta.wikimedia.org/wiki/Help:Section_editing#Section_editing meta].',
@@ -1217,6 +1224,7 @@ See also {{msg-mw|difference}}.',
 * $2 is the number of users that were found, which was limited at 100.",
 
 # Search results
+'searchresults'                  => '{{Identical|Search results}}',
 'searchresults-title'            => 'Appears as page title in the html header of the search result special page.',
 'notitlematches'                 => 'Header of results page after a search for a title for which no page exists',
 'textmatches'                    => 'When displaying search results',
@@ -1629,11 +1637,6 @@ The rate limits have no effect on the groups that have this right. Rate limits i
 'right-autopatrol'            => '{{doc-right|autopatrol}}',
 'right-patrolmarks'           => '{{doc-right|patrolmarks}}',
 'right-unwatchedpages'        => '{{doc-right|unwatchedpages}}',
-'right-trackback'             => '{{doc-right|trackback}}
-
-"Submit" in this instance means that something called [[:wikipedia:trackback|trackback]] is being sent to the wiki, and the wiki accepts it. When the right is not given to the user, the wiki rejects, or ignores it. There is a nice description at [http://cruftbox.com/cruft/docs/trackback.html How TrackBack Works]. In MediaWiki it is one of those obscure features that probably nobody uses (it is a huge spam trap).
-
-An alternative wording for translators could be \'Get the wiki to accept a trackback\'.',
 'right-mergehistory'          => '{{doc-right|mergehistory}}',
 'right-userrights'            => '{{doc-right|userrights}}',
 'right-userrights-interwiki'  => '{{doc-right|userrights-interwiki}}',
@@ -1695,13 +1698,13 @@ API is an abbreviation for [http://en.wikipedia.org/wiki/API application program
 'action-patrol'               => '{{Doc-action|patrol}}',
 'action-autopatrol'           => '{{Doc-action|autopatrol}}',
 'action-unwatchedpages'       => '{{Doc-action|unwatchedpages}}',
-'action-trackback'            => '{{Doc-action|trackback}}',
 'action-mergehistory'         => '{{Doc-action|mergehistory}}',
 'action-userrights'           => '{{Doc-action|userrights}}
 
 This action allows editing of all of the "user rights", not just the rights of the group "all users".',
 'action-userrights-interwiki' => '{{Doc-action|userrights-interwiki}}',
 'action-siteadmin'            => '{{Doc-action|siteadmin}}',
+'action-sendemail'            => '{{doc-action|sendemail}}',
 
 # Recent changes
 'nchanges'                        => 'Appears on the [[Special:RecentChanges]] special page in brackets after pages having more than one change on that date. $1 is the number of changes on that day.',
@@ -1800,6 +1803,7 @@ Text displayed when uploading a file using [[Special:Upload]].",
 
 {{Identical|Source}}',
 'ignorewarnings'              => 'In [[Special:Upload]]',
+'filename-toolong'            => 'Error message when uploading a file with a filename longer than the hardcoded limit of 240 bytes. This limit will never change and is hardcoded in the message',
 'filetype-mime-mismatch'      => 'Upload error. Parameters:
 * $1 is the extension of the uploaded file
 * $2 is the MIME type of the uploaded file',
@@ -1845,7 +1849,8 @@ $1 is the value in KB/MB/GB',
 'filewasdeleted'              => 'This warning is shown when trying to upload a file that does not exist, but has previously been deleted.
 Parameters:
 * $1 is a link to the deletion log, with the text from {{msg|deletionlog}}.',
-'filename-prefix-blacklist'   => "Do not translate the file name prefixes before the hash mark (#). Leave all the wiki markup, including the spaces, as is. You can translate the text, including 'Leave this line exactly as it is'. The first line of this messages has one (1) leading space.",
+'filename-prefix-blacklist'   => "{{optional}}
+Do not translate the file name prefixes before the hash mark (#). Leave all the wiki markup, including the spaces, as is. You can translate the text, including 'Leave this line exactly as it is'. The first line of this messages has one (1) leading space.",
 'upload-success-msg'          => '$1 is the local file name after uploading
 $2 is the url the file was uploaded from, when using upload-by-url.',
 'upload-failure-msg'          => '$1 is the specific error message
@@ -2211,12 +2216,8 @@ The title is {{msg-mw|nopagetitle}}.',
 'booksources-invalid-isbn'  => 'This message is displayed after an invalid ISBN is entered on Special:Booksources.',
 
 # Special:Log
-'specialloguserlabel'  => 'Used in [[Special:Log]].
-
-{{Identical|User}}',
-'speciallogtitlelabel' => 'Used in [[Special:Log]].
-
-{{Identical|Title}}',
+'specialloguserlabel'  => 'Used in [[Special:Log]] as a label for an input field with which the log can be filtered for entries describing actions \'\'performed\'\' by the specified user.  "Carried out" and "done" are possible alternatives for "performed".',
+'speciallogtitlelabel' => 'Used in [[Special:Log]] as a label for an input field with which the log can be filtered.  This filter selects for pages or users on which a log action was performed.',
 'log'                  => 'Name of special page displayed in [[Special:SpecialPages]]',
 'all-logs-page'        => 'Title of [[Special:Log]].',
 'alllogstext'          => 'Header of [[Special:Log]]',
@@ -2397,8 +2398,9 @@ This is a button text used in [[Special:Emailuser]] when called without a (valid
 * $2: username of the recipient',
 
 # User Messenger
-'usermessage-summary' => 'This message is used as an edit summary for any message that is posted because of a system event. Translate "leaving a message" in the sense of: to give a message to someone; to deliver a message somewhere; to deposit.',
-'usermessage-editor'  => 'The user name for the user that is the editor of system messages. See [http://translatewiki.net/wiki/Thread:Support/Message_info_please discussion on Support].',
+'usermessage-summary'  => 'This message is used as an edit summary for any message that is posted because of a system event. Translate "leaving a message" in the sense of: to give a message to someone; to deliver a message somewhere; to deposit.',
+'usermessage-editor'   => 'The user name for the user that is the editor of system messages. See [http://translatewiki.net/wiki/Thread:Support/Message_info_please discussion on Support].',
+'usermessage-template' => '{{optional}}',
 
 # Watchlist
 'watchlist'            => '{{Identical|My watchlist}}',
@@ -2989,7 +2991,7 @@ See also:
 * $1 is the name of the imported file',
 
 # Tooltip help for the actions
-'tooltip-pt-userpage'             => 'This text appears in the tool-tip when you hover the mouse over your the tab with you User name on it',
+'tooltip-pt-userpage'             => 'Tooltip shown when hovering the mouse over the link to your own User page in the upper-side personal toolbox.',
 'tooltip-pt-mytalk'               => 'Tooltip shown when hovering over the "my talk" link in your personal toolbox (upper right side).',
 'tooltip-pt-preferences'          => 'Tooltip shown when hovering over the "my preferences" ([[MediaWiki:Mypreferences]]) link in your personal toolbox (upper right side).
 
@@ -3061,13 +3063,44 @@ If the length of the translated message is over 60 characters (including spaces)
 {{Identical|Undo}}{{Identical|Revert}}',
 
 # Stylesheets
-'common.css'   => 'CSS applied to all users.',
-'monobook.css' => 'CSS applied to users using Monobook skin.',
-'handheld.css' => 'Style that can be applied on [[w:handheld devices|handheld devices]] (e.g. mobile phones), <code>$wgHandheldStyle</code> is an optional configuration variable which specifies a style sheet file for handheld devices.',
+'common.css'              => '{{optional}}
+CSS applied to all users.',
+'standard.css'            => '{{optional}}',
+'nostalgia.css'           => '{{optional}}',
+'cologneblue.css'         => '{{optional}}',
+'monobook.css'            => '{{optional}}
+CSS applied to users using Monobook skin.',
+'myskin.css'              => '{{optional}}',
+'chick.css'               => '{{optional}}',
+'simple.css'              => '{{optional}}',
+'modern.css'              => '{{optional}}',
+'vector.css'              => '{{optional}}',
+'print.css'               => '{{optional}}',
+'handheld.css'            => '{{optional}}
+Style that can be applied on [[w:handheld devices|handheld devices]] (e.g. mobile phones), <code>$wgHandheldStyle</code> is an optional configuration variable which specifies a style sheet file for handheld devices.',
+'noscript.css'            => '{{optional}}',
+'group-autoconfirmed.css' => '{{optional}}',
+'group-bot.css'           => '{{optional}}',
+'group-sysop.css'         => '{{optional}}',
+'group-bureaucrat.css'    => '{{optional}}',
 
 # Scripts
-'common.js'   => 'JS for all users.',
-'monobook.js' => 'JS for users using Monobook skin.',
+'common.js'              => '{{optional}}
+JS for all users.',
+'standard.js'            => '{{optional}}',
+'nostalgia.js'           => '{{optional}}',
+'cologneblue.js'         => '{{optional}}',
+'monobook.js'            => '{{optional}}
+JS for users using Monobook skin.',
+'myskin.js'              => '{{optional}}',
+'chick.js'               => '{{optional}}',
+'simple.js'              => '{{optional}}',
+'modern.js'              => '{{optional}}',
+'vector.js'              => '{{optional}}',
+'group-autoconfirmed.js' => '{{optional}}',
+'group-bot.js'           => '{{optional}}',
+'group-sysop.js'         => '{{optional}}',
+'group-bureaucrat.js'    => '{{optional}}',
 
 # Attribution
 'anonymous'        => 'This message is shown when viewing the credits of a page (example: {{fullurl:Main Page|action=credits}}). Note that this action is disabled by default (currently enabled on translatewiki.net).
@@ -3142,6 +3175,7 @@ See also {{msg-mw|Anonuser}} and {{msg-mw|Siteusers}}.',
 'skinname-chick'       => '{{optional}}',
 'skinname-simple'      => '{{optional}}',
 'skinname-modern'      => '{{optional}}',
+'skinname-vector'      => '{{optional}}',
 
 # Patrolling
 'markedaspatrolledtext' => '{{Identical|Markedaspatrolled}}',
@@ -3870,7 +3904,8 @@ $1 is maxaperture in APEX units (APEX aperture units = 2log<sub>2</sub>(f-number
 'exif-iimcategory-clj' => 'Displayed as part of the iimcategory field if the 3 letter code is recognized, or as part {{msg-mw|exif-subjectnewscode-value}}',
 'exif-iimcategory-dis' => 'Displayed as part of the iimcategory field if the 3 letter code is recognized, or as part {{msg-mw|exif-subjectnewscode-value}}',
 'exif-iimcategory-fin' => 'Displayed as part of the iimcategory field if the 3 letter code is recognized, or as part {{msg-mw|exif-subjectnewscode-value}}',
-'exif-iimcategory-edu' => 'Displayed as part of the iimcategory field if the 3 letter code is recognized, or as part {{msg-mw|exif-subjectnewscode-value}}',
+'exif-iimcategory-edu' => 'Displayed as part of the iimcategory field if the 3 letter code is recognized, or as part {{msg-mw|exif-subjectnewscode-value}}.
+{{Identical|Education}}',
 'exif-iimcategory-evn' => 'Displayed as part of the iimcategory field if the 3 letter code is recognized, or as part {{msg-mw|exif-subjectnewscode-value}}',
 'exif-iimcategory-hth' => 'Displayed as part of the iimcategory field if the 3 letter code is recognized, or as part {{msg-mw|exif-subjectnewscode-value}}',
 'exif-iimcategory-hum' => 'Displayed as part of the iimcategory field if the 3 letter code is recognized, or as part {{msg-mw|exif-subjectnewscode-value}}',
@@ -3959,31 +3994,6 @@ See also [[MediaWiki:Confirmemail_body_changed]].
 'confirmemail_invalidated'  => 'This is the text of the special page [[Special:InvalidateEmail|InvalidateEmail]] (with the title in {{msg-mw|Invalidateemail}}) where user goes if he chooses the cancel e-mail confirmation link from the confirmation e-mail.',
 'invalidateemail'           => "This is the '''name of the special page''' where user goes if he chooses the cancel e-mail confirmation link from the confirmation e-mail.",
 
-# Trackbacks
-'trackbackbox'     => '* $1 is the content of [[MediaWiki:Trackbackexcerpt]] or [[MediaWiki:Trackback]], depending if the trackback has an excerpt
-
-{{doc-important|Do not remove the linebreak. $1 has to be the first character on a new line because it contains wiki markup}}
-
-For information on trackback see [//www.mediawiki.org/wiki/Manual:$wgUseTrackbacks mediawiki manual].',
-'trackback'        => '{{optional}}
-
-Do \'\'not\'\' change the leading ;  and the first : as it is wiki markup.
-
-* $1: title of the trackback
-* $2: URL of the trackback
-* <span style="color:grey;">$3: unused in this message, see [[MediaWiki:trackbackexcerpt]] instead</span>
-* $4: name of the trackback
-* $5: a link to delete the trackback. The content of [[MediaWiki:Trackbackremove]] is injected here.',
-'trackbackexcerpt' => "{{optional}}
-
-Do ''not'' change the leading ;  and the first : as it is wiki markup.
-
-* $1: title of the trackback
-* $2: URL of the trackback
-* $3: an excerpt of the trackback
-* $4: name of the trackback
-* $5: a link to delete the trackback. The content of [[MediaWiki:Trackbackremove]] is injected here.",
-
 'unit-pixel' => '{{optional}}',
 
 # action=purge
@@ -4004,6 +4014,7 @@ Change it only if your language uses another character for ':' or it needs an ex
 This is a string which is (usually) put between words of the language. It is used, e.g. when messages are concatenated (appended to each other). Note that you must express a space as html entity &amp;#32; because the editing and updating process strips leading and trailing spaces from messages.
 
 Most languages use a space, but some Asian languages, such as Thai and Chinese, do not.',
+'ellipsis'            => '{{optional}}',
 'percent'             => '{{optional}}',
 'parentheses'         => '{{optional}}',
 
@@ -4210,7 +4221,8 @@ There are no such extensions here, so look at [[wikipedia:Special:Version]] for 
 'version-hook-name'             => 'Shown in [[Special:Version]]',
 'version-hook-subscribedby'     => 'Shown in [[Special:Version]]',
 'version-version'               => '{{Identical|Version}}',
-'version-svn-revision'          => 'This is being used in [[Special:Version]], preceeding the subversion revision numbers of the extensions loaded inside brackets, like this: "({{int:version-revision}} r012345")
+'version-svn-revision'          => '{{optional}}
+This is being used in [[Special:Version]], preceeding the subversion revision numbers of the extensions loaded inside brackets, like this: "({{int:version-revision}} r012345")
 
 {{Identical|Revision}}',
 'version-license'               => '{{Identical|License}}',

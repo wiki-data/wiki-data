@@ -1241,7 +1241,7 @@ Smě mjenje hač $1 {{PLURAL:$1|znamješko|znamješce|znamješka|znamješkow}} d
 'prefs-help-realname'           => '* Woprawdźite mjeno (opcionalne): jeli so rozsudźiš to zapodać, budźe to so wužiwać, zo by tebi woprawnjenje za twoje dźěło dało.',
 'prefs-help-email'              => 'E-mejlowa adresa je opcionalna, ale zmóžnja ći nowe hesło emejlować, jeli sy swoje hesło zabył.',
 'prefs-help-email-others'       => 'Móžeš tež druhim dowolić, so z tobu přez swoju diskusijnu stronu do zwiska stajić, bjeztoho zo dyrbiš swoju identitu přeradźić.',
-'prefs-help-email-required'     => 'Je płaćiwa emejlowa adresa trjeba.',
+'prefs-help-email-required'     => 'E-mejlowa adresa je trěbna.',
 'prefs-info'                    => 'Zakładne informacije',
 'prefs-i18n'                    => 'Internacionalizacija',
 'prefs-signature'               => 'Podpis',
@@ -1360,7 +1360,6 @@ Smě mjenje hač $1 {{PLURAL:$1|znamješko|znamješce|znamješka|znamješkow}} d
 'right-autopatrol'            => 'Změny awtomatisce jako dohladowane markěrować dać',
 'right-patrolmarks'           => 'Kontrolowe marki w najnowšich změnach wobhladać',
 'right-unwatchedpages'        => 'Lisćinu njewobkedźbowanych stronow wobhladać',
-'right-trackback'             => 'Trackback pósłać',
 'right-mergehistory'          => 'Stawizny stronow zjednoćić',
 'right-userrights'            => 'Wužiwarske prawa wobdźěłać',
 'right-userrights-interwiki'  => 'Wužiwarske prawa wužiwarjow druhich wikijow wobdźěłać',
@@ -1407,11 +1406,11 @@ Smě mjenje hač $1 {{PLURAL:$1|znamješko|znamješce|znamješka|znamješkow}} d
 'action-patrol'               => 'Změny druhich wužiwarjiw jako dohladowane markować',
 'action-autopatrol'           => 'twoju změnu jako dohladowanu markować dać',
 'action-unwatchedpages'       => 'lisćinu njewobkedźbowanych stronow zwobraznić',
-'action-trackback'            => 'Trackback pósłać',
 'action-mergehistory'         => 'stawizny tuteje strony zjednoćić',
 'action-userrights'           => 'wšě wužiwarske prawa wobdźěłać',
 'action-userrights-interwiki' => 'Wužiwarske prawa wužiwarjow w druhich wikijach wobdźěłać',
 'action-siteadmin'            => 'Datowu banku zawrěć abo wotewrić',
+'action-sendemail'            => 'E-mejle pósłać',
 
 # Recent changes
 'nchanges'                          => '$1 {{PLURAL:$1|změna|změnje|změny|změnow}}',
@@ -1884,8 +1883,8 @@ Prošu wobkedźbuj, zo druhe websydła móža na dataju z direktnym URL wotkazow
 'booksources-invalid-isbn'  => 'Podate ISBN-čisło njezda so płaćiwe być; přepruwuj za zmylkami, z tym zo z orginialneho žórła kopěruješ.',
 
 # Special:Log
-'specialloguserlabel'  => 'Wužiwar:',
-'speciallogtitlelabel' => 'Strona:',
+'specialloguserlabel'  => 'Wukonjer:',
+'speciallogtitlelabel' => 'Cil (titul abo wužiwar):',
 'log'                  => 'Protokole',
 'all-logs-page'        => 'Wšě zjawne protokole',
 'alllogstext'          => 'Kombinowane zwobraznjenje wšěch k dispozicij stejacych protokolow w {{GRAMMAR:lokatiw|{{SITENAME}}}}. Móžeš napohlad wobmjezować, wuběrajo typ protokola, wužiwarske mjeno (dźiwajo na wulkopisanje) abo potrjechu stronu (tež dźiwajo na wulkopisanje).',
@@ -3295,13 +3294,6 @@ Tutón wobkrućenski kod spadnje $4.',
 'scarytranscludedisabled' => '[Zapřijeće mjezyrěčnych wotkazow je znjemóžnjene]',
 'scarytranscludefailed'   => '[Zapřijimanje předłohi za $1 je so njeporadźiło]',
 'scarytranscludetoolong'  => '[URL je předołhi]',
-
-# Trackbacks
-'trackbackbox'      => 'Trackbacks za tutón nastawk:<br />
-$1',
-'trackbackremove'   => '([$1 wušmórnyć])',
-'trackbacklink'     => 'Wróćosćěhowanje',
-'trackbackdeleteok' => 'Trackback bu wuspěšnje wušmórnjeny.',
 
 # Delete conflict
 'deletedwhileediting'      => "'''Kedźbu''': Tuta strona bu wušmórnjena, po tym zo sy započał ju wobdźěłać!",

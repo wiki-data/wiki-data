@@ -551,6 +551,7 @@ Potser ja ha estat esborrat per algú altre.",
 Funció: $1<br />
 Consulta: $2',
 'viewsource'           => 'Mostra la font',
+'viewsource-title'     => 'Mostra la font per a$1',
 'actionthrottled'      => 'Acció limitada',
 'actionthrottledtext'  => "Com a mesura per a prevenir la propaganda indiscriminada (spam), no podeu fer aquesta acció tantes vegades en un període de temps tan curt. Torneu-ho a intentar d'ací uns minuts.",
 'protectedpagetext'    => 'Aquesta pàgina està protegida per evitar modificacions.',
@@ -1412,7 +1413,6 @@ Ha de tenir com a molt {{PLURAL:$1|un caràcter|$1 caràcters}}.',
 'right-autopatrol'            => 'Que les edicions pròpies es marquin automàticament com a patrullades',
 'right-patrolmarks'           => 'Veure les marques de patrulla als canvis recents',
 'right-unwatchedpages'        => 'Veure la llista de les pàgines no vigilades',
-'right-trackback'             => 'Trametre un trackback',
 'right-mergehistory'          => "Fusionar l'historial de les pàgines",
 'right-userrights'            => 'Editar els drets dels usuaris',
 'right-userrights-interwiki'  => "Editar els drets dels usuaris d'altres wikis",
@@ -1459,7 +1459,6 @@ Ha de tenir com a molt {{PLURAL:$1|un caràcter|$1 caràcters}}.',
 'action-patrol'               => 'marcar les edicions dels altres com a supervisades',
 'action-autopatrol'           => 'marcar les vostres edicions com a supervisades',
 'action-unwatchedpages'       => 'visualitzar la llista de pàgines no vigilades',
-'action-trackback'            => 'enviar una referència',
 'action-mergehistory'         => "fusionar l'historial d'aquesta pàgina",
 'action-userrights'           => "modificar tots els permisos d'usuari",
 'action-userrights-interwiki' => "modificar permisos d'usuari en altres wikis",
@@ -1654,10 +1653,10 @@ No s'hi ha pogut comprovar la seguretat.",
 
 # img_auth script messages
 'img-auth-accessdenied'     => 'Accés denegat',
-'img-auth-nopathinfo'       => 'Falta PATH_INFO.
-El vostre servidor no està configurat per a tractar aquesta informació.
-Pot estar basat en CGI i no soportar img_auth.
-Vegeu http://www.mediawiki.org/wiki/Manual:Image_Authorization.',
+'img-auth-nopathinfo'       => "Falta PATH_INFO.
+El servidor no està configurat per passar aquesta informació.
+Això pot ser basat en CGI i no és compatible amb img_auth.
+[//www.mediawiki.org/wiki/Manual:Image_Authorization Vegeu l'auturització de la imatge.]",
 'img-auth-notindir'         => "No s'ha trobat la ruta sol·licitada al directori de càrrega configurat.",
 'img-auth-badtitle'         => 'No s\'ha pogut construir un títol vàlid a partir de "$1".',
 'img-auth-nologinnWL'       => 'No has iniciat sessió i "$1" no està a la llista blanca.',
@@ -1756,23 +1755,24 @@ La descripció de la seva [$2 pàgina de descripció] es mostra a continuació.'
 'filerevert-badversion'     => "No hi ha cap versió local anterior d'aquest fitxer amb la marca horària que es proporciona.",
 
 # File deletion
-'filedelete'                  => 'Suprimeix $1',
-'filedelete-legend'           => 'Suprimeix el fitxer',
-'filedelete-intro'            => "Esteu eliminant el fitxer '''[[Media:$1|$1]]''' juntament amb el seu historial.",
-'filedelete-intro-old'        => "Esteu eliminant la versió de '''[[Media:$1|$1]]''' com de [$4 $3, $2].",
-'filedelete-comment'          => 'Motiu:',
-'filedelete-submit'           => 'Suprimeix',
-'filedelete-success'          => "'''$1''' s'ha eliminat.",
-'filedelete-success-old'      => "<span class=\"plainlinks\">La versió de '''[[Media:\$1|\$1]]''' s'ha eliminat el \$2 a les \$3.</span>",
-'filedelete-nofile'           => "'''$1''' no existeix.",
-'filedelete-nofile-old'       => "No hi ha cap versió arxivada de '''$1''' amb els atributs especificats.",
-'filedelete-otherreason'      => 'Motius alternatius/addicionals:',
-'filedelete-reason-otherlist' => 'Altres motius',
-'filedelete-reason-dropdown'  => "*Motius d'eliminació comuns
+'filedelete'                   => 'Suprimeix $1',
+'filedelete-legend'            => 'Suprimeix el fitxer',
+'filedelete-intro'             => "Esteu eliminant el fitxer '''[[Media:$1|$1]]''' juntament amb el seu historial.",
+'filedelete-intro-old'         => "Esteu eliminant la versió de '''[[Media:$1|$1]]''' com de [$4 $3, $2].",
+'filedelete-comment'           => 'Motiu:',
+'filedelete-submit'            => 'Suprimeix',
+'filedelete-success'           => "'''$1''' s'ha eliminat.",
+'filedelete-success-old'       => "<span class=\"plainlinks\">La versió de '''[[Media:\$1|\$1]]''' s'ha eliminat el \$2 a les \$3.</span>",
+'filedelete-nofile'            => "'''$1''' no existeix.",
+'filedelete-nofile-old'        => "No hi ha cap versió arxivada de '''$1''' amb els atributs especificats.",
+'filedelete-otherreason'       => 'Motius alternatius/addicionals:',
+'filedelete-reason-otherlist'  => 'Altres motius',
+'filedelete-reason-dropdown'   => "*Motius d'eliminació comuns
 ** Violació dels drets d'autor / copyright
 ** Fitxer duplicat",
-'filedelete-edit-reasonlist'  => "Edita els motius d'eliminació",
-'filedelete-maintenance'      => "L'esborrament i recuperació de fitxers està temporalment deshabilitada durant el manteniment.",
+'filedelete-edit-reasonlist'   => "Edita els motius d'eliminació",
+'filedelete-maintenance'       => "L'esborrament i recuperació de fitxers està temporalment deshabilitada durant el manteniment.",
+'filedelete-maintenance-title' => 'No pot suprimir arxiu',
 
 # MIME search
 'mimesearch'         => 'Cerca per MIME',
@@ -1820,7 +1820,7 @@ La descripció de la seva [$2 pàgina de descripció] es mostra a continuació.'
 'statistics-users-active-desc' => "Usuaris que han dut a terme alguna acció en {{PLURAL:$1|l'últim dia|els últims $1 dies}}",
 'statistics-mostpopular'       => 'Pàgines més visualitzades',
 
-'disambiguations'      => 'Pàgines de desambiguació',
+'disambiguations'      => 'Pàgines amb enllaços a pàgines de desambiguació',
 'disambiguationspage'  => 'Template:Desambiguació',
 'disambiguations-text' => "Les següents pàgines enllacen a una '''pàgina de desambiguació'''.
 Per això, caldria que enllacessin al tema apropiat.<br />
@@ -1964,7 +1964,9 @@ Vegeu també [[Special:WantedCategories|les categories soŀlicitades]].",
 'linksearch-pat'   => 'Patró de cerca:',
 'linksearch-ns'    => 'Espai de noms:',
 'linksearch-ok'    => 'Cerca',
-'linksearch-text'  => 'Es poden fer servir caràcters comodí com «*.wikipedia.org».<br />Protocols admesos: <tt>$1</tt>',
+'linksearch-text'  => 'Comodins com "*. wikipedia.org" es pot utilitzar.
+Necessita com a mínim un domini de primer nivell, per exemple "*.org".<br />
+Dóna suport a protocols: <tt> $1 </tt> (no afegir algun d\'aquests en la seva recerca).',
 'linksearch-line'  => '$1 enllaçat a $2',
 'linksearch-error' => "Els caràcters comodí només poden aparèixer a l'inici de l'url.",
 
@@ -2599,6 +2601,7 @@ En el darrer cas, podeu fer servir un enllaç com ara [[{{#Special:Export}}/{{Me
 'exportcuronly'     => "Exporta únicament la versió actual en voltes de l'historial sencer",
 'exportnohistory'   => "----
 '''Nota:''' s'ha inhabilitat l'exportació sencera d'historial de pàgines mitjançant aquest formulari a causa de problemes de rendiment del servidor.",
+'exportlistauthors' => 'Inclouen una llista completa dels contribuents per a cada pàgina',
 'export-submit'     => 'Exporta',
 'export-addcattext' => 'Afegeix pàgines de la categoria:',
 'export-addcat'     => 'Afegeix',
@@ -3375,13 +3378,6 @@ Aquest codi de confirmació caducarà el $4.",
 'scarytranscludedisabled' => "[S'ha inhabilitat la transclusió interwiki]",
 'scarytranscludefailed'   => '[Ha fallat la recuperació de la plantilla per a $1]',
 'scarytranscludetoolong'  => "[L'URL és massa llarg]",
-
-# Trackbacks
-'trackbackbox'      => "Referències d'aquesta pàgina:<br />
-$1",
-'trackbackremove'   => '([$1 eliminada])',
-'trackbacklink'     => 'Referència',
-'trackbackdeleteok' => "La referència s'ha eliminat amb èxit.",
 
 # Delete conflict
 'deletedwhileediting'      => "'''Avís''': S'ha eliminat aquesta pàgina després que haguéssiu començat a modificar-la!",

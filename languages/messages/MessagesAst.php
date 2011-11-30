@@ -1171,7 +1171,7 @@ Esto nun se pue desfacer.',
 'prefs-memberingroups'          => 'Miembru {{PLURAL:$1|del grupu|de los grupos}}:',
 'prefs-registration'            => 'Hora del rexistru:',
 'yourrealname'                  => 'Nome real:',
-'yourlanguage'                  => 'Idioma de los menús:',
+'yourlanguage'                  => 'Llingua:',
 'yourvariant'                   => 'Variante llingüística del conteníu:',
 'prefs-help-variant'            => "La ortografía o variante que prefieres p'amosar el conteníu de les páxines d'esta wiki.",
 'yournick'                      => 'Firma:',
@@ -1308,7 +1308,6 @@ Esta información sedrá pública.",
 'right-autopatrol'            => 'Marcar automáticamente les ediciones como supervisaes',
 'right-patrolmarks'           => 'Ver les marques de supervisión de los cambeos recientes',
 'right-unwatchedpages'        => 'Ver una llista de páxines non vixilaes',
-'right-trackback'             => 'Añader un retroenllaz',
 'right-mergehistory'          => 'Fusionar historiales de páxines',
 'right-userrights'            => "Editar tolos drechos d'usuariu",
 'right-userrights-interwiki'  => "Editar los drechos d'usuariu d'usuarios d'otros sitios wiki",
@@ -1355,11 +1354,11 @@ Esta información sedrá pública.",
 'action-patrol'               => "marcar les ediciones d'otros como supervisaes",
 'action-autopatrol'           => 'marcar la to edición como supervisada',
 'action-unwatchedpages'       => 'ver la llista de páxines non vixilaes',
-'action-trackback'            => 'añader un retroenllaz',
 'action-mergehistory'         => "fusionar l'historial d'esta páxina",
 'action-userrights'           => "editar tolos drechos d'usuariu",
 'action-userrights-interwiki' => "editar los drechos d'usuariu d'usuarios d'otres wikis",
 'action-siteadmin'            => 'candar o descandar la base de datos',
+'action-sendemail'            => 'unviar correos',
 
 # Recent changes
 'nchanges'                          => '{{PLURAL:$1|un cambéu|$1 cambeos}}',
@@ -1627,7 +1626,7 @@ Al peñerar por usuariu, s'amuesa namái la cabera versión de los ficheros que 
 'imgfile'               => 'archivu',
 'listfiles'             => "Llista d'imáxenes",
 'listfiles_thumb'       => 'Miniatura',
-'listfiles_date'        => 'Fecha',
+'listfiles_date'        => 'Data',
 'listfiles_name'        => 'Nome',
 'listfiles_user'        => 'Usuariu',
 'listfiles_size'        => 'Tamañu',
@@ -1846,8 +1845,8 @@ Date cuenta de qu'otros sitios web puen enllazar a un ficheru con una URL direut
 'booksources-invalid-isbn'  => 'El códigu ISBN que puxisti nun paez que valga; mira que te vien copiáu de la fonte orixinal.',
 
 # Special:Log
-'specialloguserlabel'  => 'Usuariu:',
-'speciallogtitlelabel' => 'Títulu:',
+'specialloguserlabel'  => 'Pol usuariu:',
+'speciallogtitlelabel' => 'Col títulu:',
 'log'                  => 'Rexistros',
 'all-logs-page'        => 'Tolos rexistros públicos',
 'alllogstext'          => "Visualización combinada de tolos rexistros disponibles de {{SITENAME}}.
@@ -1891,7 +1890,9 @@ Ver tamién les [[Special:WantedCategories|categoríes más buscaes]].",
 'linksearch-pat'   => 'Patrón de busca:',
 'linksearch-ns'    => 'Espaciu de nomes:',
 'linksearch-ok'    => 'Guetar',
-'linksearch-text'  => 'Puen usase comodinos como "*.wikipedia.org".<br />Protocolos almitíos: <tt>$1</tt>',
+'linksearch-text'  => 'Se puen usar comodinos como "*.wikipedia.org".
+Necesita polo menos un dominiu de primer nivel, como "*.org".<br />
+Protocolos almitíos: <tt>$1</tt> (nun amiestes dengún d\'estos na to gueta).',
 'linksearch-line'  => '$1 enllaciáu dende $2',
 'linksearch-error' => 'Los comodinos namái puen apaecer al entamu del nome del güéspede.',
 
@@ -2532,6 +2533,7 @@ Por último, tamién pues usar un enllaz: p.e. [[{{#Special:Export}}/{{MediaWiki
 'exportcuronly'     => 'Amestar namái la revisión actual, non tol historial',
 'exportnohistory'   => "----
 '''Nota:''' Desactivóse la esportación del historial completu de páxines al traviés d'esti formulariu por motivos de rendimientu.",
+'exportlistauthors' => 'Incluir una llista completa de collaboradores pa cada páxina',
 'export-submit'     => 'Esportar',
 'export-addcattext' => 'Añader páxines dende la categoría:',
 'export-addcat'     => 'Amestar',
@@ -3338,13 +3340,6 @@ Esti códigu de confirmación caduca\'l $4.',
 'scarytranscludedisabled' => '[La tresclusión interwiki ta desactivada]',
 'scarytranscludefailed'   => '[La obtención de la plantía falló pa $1]',
 'scarytranscludetoolong'  => '[La URL ye demasiao llarga]',
-
-# Trackbacks
-'trackbackbox'      => 'Retroenllaces pa esta páxina:<br />
-$1',
-'trackbackremove'   => '([$1 Esborrar])',
-'trackbacklink'     => 'Retroenllaz',
-'trackbackdeleteok' => 'El retroenllaz esborróse correutamente.',
 
 # Delete conflict
 'deletedwhileediting'      => "'''Avisu''': ¡Esta páxina foi esborrada depués de qu'entamaras a editala!",

@@ -210,7 +210,7 @@ $messages = array(
 'tog-watchdefault'            => 'Tambahkan laman yang saya sunting ke dalam senarai pantau',
 'tog-watchmoves'              => 'Tambahkan laman yang saya pindahkan ke dalam senarai pantau',
 'tog-watchdeletion'           => 'Tambahkan laman yang saya hapuskan ke dalam senarai pantau',
-'tog-minordefault'            => 'Tandakan semua suntingan sebagai kecil secara tersedia',
+'tog-minordefault'            => 'Tandakan semua suntingan sebagai kecil secara asali',
 'tog-previewontop'            => 'Tunjukkan pratonton di atas kotak sunting',
 'tog-previewonfirst'          => 'Tunjukkan pratonton pada suntingan pertama',
 'tog-nocache'                 => 'Lumpuhkan pengagregatan laman',
@@ -453,7 +453,7 @@ $1',
 'versionrequired'     => 'MediaWiki versi $1 diperlukan',
 'versionrequiredtext' => 'MediaWiki versi $1 diperlukan untuk menggunakan laman ini. Sila lihat [[Special:Version|laman versi]].',
 
-'ok'                      => 'Baik',
+'ok'                      => 'OK',
 'pagetitle'               => '$1 - {{SITENAME}}',
 'pagetitle-view-mainpage' => '{{SITENAME}}',
 'retrievedfrom'           => 'Diambil daripada "$1"',
@@ -1184,7 +1184,7 @@ Sila pastikan bahawa perubahan ini akan mengekalkan kesinambungan sejarah laman.
 'showingresults'                   => "Yang berikut ialah '''$1''' hasil bermula daripada yang {{PLURAL:$2|pertama|ke-'''$2'''}}.",
 'showingresultsnum'                => "Yang berikut ialah '''$3''' hasil bermula daripada yang {{PLURAL:$2|pertama|ke-'''$2'''}}.",
 'showingresultsheader'             => "{{PLURAL:$5|Keputusan '''$1''' daripada '''$3'''|Keputusan '''$1 - $2''' daripada '''$3'''}} untuk '''$4'''",
-'nonefound'                        => "'''Catatan''': Hanya sesetengah ruang nama dicari mengikut tetapan tersedia.
+'nonefound'                        => "'''Catatan''': Hanya sesetengah ruang nama dicari secara asali.
 Cuba berikan awalan ''all:'' untuk mencari semua kandungan (termasuk laman perbincangan, templat, dan lain-lain), atau gunakan ruang nama yang dikehendaki sebagai awalan.",
 'search-nonefound'                 => 'Tiada hasil yang sepadan dengan pertanyaan.',
 'powersearch'                      => 'Carian lanjutan',
@@ -1236,7 +1236,7 @@ Cuba berikan awalan ''all:'' untuk mencari semua kandungan (termasuk laman perbi
 'prefs-rendering'               => 'Penampilan',
 'saveprefs'                     => 'Simpan',
 'resetprefs'                    => 'Set semula',
-'restoreprefs'                  => 'Pulihkan semua tetapan sediakala',
+'restoreprefs'                  => 'Pulihkan semua tetapan asali',
 'prefs-editing'                 => 'Menyunting',
 'prefs-edit-boxsize'            => 'Saiz kotak sunting.',
 'rows'                          => 'Baris:',
@@ -1247,7 +1247,7 @@ Cuba berikan awalan ''all:'' untuk mencari semua kandungan (termasuk laman perbi
 'stub-threshold-disabled'       => 'Dimatikan',
 'recentchangesdays'             => 'Bilangan hari dalam perubahan terkini:',
 'recentchangesdays-max'         => '(had $1 hari)',
-'recentchangescount'            => 'Bilangan suntingan yang dipaparkan mengikut tetapan tersedia:',
+'recentchangescount'            => 'Bilangan suntingan yang dipaparkan mengikut tetapan asali:',
 'prefs-help-recentchangescount' => 'Ini termasuklah perubahan terkini, sejarah laman dan log.',
 'prefs-help-watchlist-token'    => 'Mengisi medan ini dengan kunci rahsia akan menghasilkan suapan RSS untuk senarai pantau anda.
 Sesiapa yang mengetahui kunci dalam medan ini akan dapat membaca senarai pantau anda, jadi pilihlah nilai selamat.
@@ -1274,12 +1274,12 @@ Di sini ada nilai yang dihasilkan secara rawak yang boleh anda guna: $1',
 'prefs-searchoptions'           => 'Pilihan carian',
 'prefs-namespaces'              => 'Ruang nama',
 'defaultns'                     => 'Jika tidak cari dalam ruang nama ini:',
-'default'                       => 'tersedia',
+'default'                       => 'asali',
 'prefs-files'                   => 'Fail',
 'prefs-custom-css'              => 'CSS tempahan',
 'prefs-custom-js'               => 'JS tempahan',
 'prefs-common-css-js'           => 'CSS/JavaScript kongsi untuk semua rupa:',
-'prefs-reset-intro'             => 'Anda boleh menggunakan laman ini untuk menetapkan semula keutamaan anda kepada tetapan sediakala (sewaktu anda mulai menjadi ahli) tapak ini.
+'prefs-reset-intro'             => 'Anda boleh menggunakan laman ini untuk menetapkan semula keutamaan anda kepada tetapan asali.
 Tindakan ini tidak boleh dibatalkan.',
 'prefs-emailconfirm-label'      => 'Pengesahan e-mail:',
 'prefs-textboxsize'             => 'Saiz tetingkap penyuntingan',
@@ -1427,7 +1427,6 @@ Tindakan ini tidak boleh dibatalkan.',
 'right-autopatrol'            => 'Suntingannya ditandakan sebagai telah diperiksa secara automatik',
 'right-patrolmarks'           => 'Melihat tanda pemeriksaan dalam senarai perubahan terkini',
 'right-unwatchedpages'        => 'Melihat senarai laman yang tidak dipantau',
-'right-trackback'             => 'Mengirim jejak balik',
 'right-mergehistory'          => 'Menggabungkan sejarah laman',
 'right-userrights'            => 'Menyerahkan dan menarik balik sebarang hak pengguna',
 'right-userrights-interwiki'  => 'Menyerahkan dan menarik balik hak pengguna di wiki lain',
@@ -1474,11 +1473,11 @@ Tindakan ini tidak boleh dibatalkan.',
 'action-patrol'               => 'menanda ronda suntingan orang lain',
 'action-autopatrol'           => 'menanda ronda suntingan anda sendiri',
 'action-unwatchedpages'       => 'melihat senarai laman tidak dipantau',
-'action-trackback'            => 'mengirim jejak balik',
 'action-mergehistory'         => 'menggabungkan sejarah laman ini',
 'action-userrights'           => 'mengubah semua hak pengguna',
 'action-userrights-interwiki' => 'mengubah hak pengguna dari wiki lain',
 'action-siteadmin'            => 'mengunci atau membuka kunci pangkalan data wiki ini',
+'action-sendemail'            => 'menghantar e-mel',
 
 # Recent changes
 'nchanges'                          => '$1 perubahan',
@@ -1935,8 +1934,8 @@ serta mungkin mempunyai maklumat lanjut mengenai buku yang anda cari:',
 'booksources-invalid-isbn'  => 'ISBN yang dinyatakan tidak sah. Sila semak sekali lagi.',
 
 # Special:Log
-'specialloguserlabel'  => 'Pengguna:',
-'speciallogtitlelabel' => 'Tajuk:',
+'specialloguserlabel'  => 'Pelaku:',
+'speciallogtitlelabel' => 'Sasaran (tajuk atau pengguna):',
 'log'                  => 'Log',
 'all-logs-page'        => 'Semua log awam',
 'alllogstext'          => 'Yang berikut ialah gabungan bagi semua log yang ada bagi {{SITENAME}}. Anda boleh menapis senarai ini dengan memilih jenis log, nama pengguna (peka huruf besar), atau nama laman yang terjejas (juga peka huruf besar).',
@@ -2917,7 +2916,7 @@ Sebarang pautan berikutnya pada baris yang sama dikira sebagai pengecualian (ren
 'metadata-expand'   => 'Tunjukkan butiran penuh',
 'metadata-collapse' => 'Sembunyikan butiran penuh',
 'metadata-fields'   => 'Ruangan metadata EXIF yang disenaraikan dalam mesej ini akan ditunjukkan pada laman imej apabila jadual metadata dikecilkan.
-Ruangan lain akan disembunyikan secara sediakala.
+Ruangan-ruangan yang lain pula akan disembunyikan pada asali.
 * make
 * model
 * datetimeoriginal
@@ -3396,13 +3395,6 @@ Kod pengesahan ini akan luput pada $4.',
 'scarytranscludefailed'   => '[Gagal mendapatkan templat $1]',
 'scarytranscludetoolong'  => '[URL terlalu panjang]',
 
-# Trackbacks
-'trackbackbox'      => 'Jejak balik bagi laman ini:<br />
-$1',
-'trackbackremove'   => '([$1 Hapus])',
-'trackbacklink'     => 'Jejak balik',
-'trackbackdeleteok' => 'Jejak balik dihapuskan.',
-
 # Delete conflict
 'deletedwhileediting'      => "'''Amaran''': Laman ini dihapuskan ketika anda sedang menyuntingnya!",
 'confirmrecreate'          => "Pengguna [[User:$1|$1]] ([[User talk:$1|perbincangan]]) telah menghapuskan laman ini ketika anda sedang menyunting atas sebab berikut:
@@ -3501,7 +3493,7 @@ Anda juga boleh [[Special:EditWatchlist|menggunakan penyunting piawai]].',
 
 # Core parser functions
 'unknown_extension_tag' => 'Tag penyambung "$1" tidak dikenali',
-'duplicate-defaultsort' => 'Amaran: Kunci susunan tersedia "$2" mengatasi kunci susunan tersedia "$1" sebelumnya.',
+'duplicate-defaultsort' => '\'\'\'Amaran\'\'\': Kunci susunan asali "$2" membatalkan kunci susunan asali "$1" yang sebelumnya.',
 
 # Special:Version
 'version'                       => 'Versi',

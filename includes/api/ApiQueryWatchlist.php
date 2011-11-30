@@ -129,7 +129,7 @@ class ApiQueryWatchlist extends ApiQueryGeneratorBase {
 
 		$db = $this->getDB();
 
-		$this->addTimestampWhereRange( 'rc_timestamp', $params['dir'], 
+		$this->addTimestampWhereRange( 'rc_timestamp', $params['dir'],
 			$params['start'], $params['end'] );
 		$this->addWhereFld( 'wl_namespace', $params['namespace'] );
 
@@ -445,10 +445,10 @@ class ApiQueryWatchlist extends ApiQueryGeneratorBase {
 	}
 
 	public function getHelpUrls() {
-		return 'http://www.mediawiki.org/wiki/API:Watchlist';
+		return 'https://www.mediawiki.org/wiki/API:Watchlist';
 	}
 
 	public function getVersion() {
-		return __CLASS__ . ': $Id: ApiQueryWatchlist.php 103273 2011-11-16 00:17:26Z johnduhart $';
+		return __CLASS__ . ': $Id: ApiQueryWatchlist.php 104445 2011-11-28 15:43:11Z reedy $';
 	}
 }

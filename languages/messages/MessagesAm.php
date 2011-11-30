@@ -199,7 +199,7 @@ $messages = array(
 'vector-view-create'       => 'አዲስ ፍጠር',
 'vector-view-edit'         => 'አርም',
 'vector-view-history'      => ' ታሪኩን አሳይ',
-'vector-view-view'         => ' የተነበበ',
+'vector-view-view'         => 'ለማንበብ',
 'vector-view-viewsource'   => 'ጥሬ ኮድ ለመመልከት',
 
 'errorpagetitle'    => 'ስህተት',
@@ -282,7 +282,7 @@ $1',
 
 'badaccess'        => 'ያልተፈቀደ - አይቻልም',
 'badaccess-group0' => 'የጠየቁት አድራጎት እንዲፈጸም ፈቃድ የለዎም።',
-'badaccess-groups' => ' ጥያቂዎት ለሚተሉት ተጥቃሚዎች የተገደበ ነው  {{PLURAL:$2|ማህበር|ከማህበራት ላንዱ}}: $1.',
+'badaccess-groups' => 'የጠየቁት አድራጎት ለ$1 {{PLURAL:$2|ማዕረግ ላላቸው|ማዕረጎች ላሏቸው}} አባላት ብቻ ይፈቀዳል።',
 
 'versionrequired'     => 'የMediaWiki ዝርያ $1 ያስፈልጋል።',
 'versionrequiredtext' => 'ይህንን ገጽ ለመጠቀም የMediaWiki ዝርያ $1 ያስፈልጋል። [[Special:Version|የዝርያውን ገጽ]] ይዩ።',
@@ -908,7 +908,6 @@ $1ን ወይም ማንም ሌላ [[{{MediaWiki:Grouppage-sysop}}|መጋቢ]] ስ
 'right-import'           => 'ከሌላ ዊኪ ገጾችን ለማስገባት',
 'right-patrol'           => 'የሰው ለውጦች የተሣለፉ ሆነው ለማመልከት',
 'right-autopatrol'       => 'የራሱ ለውጦች በቀጥታ የተሣለፉ ሆነው መመልከት',
-'right-trackback'        => 'trackback ለማቅረብ',
 'right-mergehistory'     => 'የገጾች እትሞችን ታሪክ ለመዋሐድ',
 'right-userrights'       => 'ያባላት ሁሉ መብቶች ለማስተካከል',
 
@@ -940,7 +939,6 @@ $1ን ወይም ማንም ሌላ [[{{MediaWiki:Grouppage-sysop}}|መጋቢ]] ስ
 'action-import'           => 'ይህን ገጽ ከሌላ ዊኪ ለማስገባት',
 'action-patrol'           => 'የሰው ለውጦች የተሣለፉ ሆነው ለማመልከት',
 'action-autopatrol'       => 'የራስዎ ለውጥ የተሣለፈ ሆኖ መመልከት',
-'action-trackback'        => 'trackback ለማቅረብ',
 'action-mergehistory'     => 'የዚሁን ገጽ ዕትሞች ታሪክ ለማዋሐድ',
 'action-userrights'       => 'ያባላት ሁሉ መብቶች ለማስተካከል',
 
@@ -2151,9 +2149,6 @@ $3
 
 # Scary transclusion
 'scarytranscludetoolong' => '[URL ከመጠን በላይ የረዘመ ነው]',
-
-# Trackbacks
-'trackbackremove' => '([$1 ማጥፋት])',
 
 # Delete conflict
 'deletedwhileediting' => "'''ማስጠንቀቂያ'''፦ መዘጋጀት ከጀመሩ በኋላ ገጹ ጠፍቷል!",

@@ -127,7 +127,7 @@ class SpecialVersion extends SpecialPage {
 		// be loaded here, so feel free to use wfMsg*() in the 'name'. Raw HTML or wikimarkup
 		// can be used.
 		$software = array();
-		$software['[http://www.mediawiki.org/ MediaWiki]'] = self::getVersionLinked();
+		$software['[//www.mediawiki.org/ MediaWiki]'] = self::getVersionLinked();
 		$software['[http://www.php.net/ PHP]'] = phpversion() . " (" . php_sapi_name() . ")";
 		$software[$dbr->getSoftwareLink()] = $dbr->getServerInfo();
 
@@ -362,7 +362,7 @@ class SpecialVersion extends SpecialPage {
 		if( $a['name'] === $b['name'] ) {
 			return 0;
 		} else {
-			return $this->getLang()->lc( $a['name'] ) > $this->getLang()->lc( $b['name'] )
+			return $this->getLanguage()->lc( $a['name'] ) > $this->getLanguage()->lc( $b['name'] )
 				? 1
 				: -1;
 		}
@@ -546,7 +546,7 @@ class SpecialVersion extends SpecialPage {
 			if ( $sort ) {
 				sort( $list );
 			}
-			return $this->getLang()->listToText( array_map( array( __CLASS__, 'arrayToString' ), $list ) );
+			return $this->getLanguage()->listToText( array_map( array( __CLASS__, 'arrayToString' ), $list ) );
 		}
 	}
 

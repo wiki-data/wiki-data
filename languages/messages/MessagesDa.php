@@ -1411,7 +1411,6 @@ Hvis du vælger at oplyse dit navn, vil det blive brugt til at tilskrive dig dit
 'right-autopatrol'            => 'Egne redigeringer vises automatisk som patruljerede',
 'right-patrolmarks'           => 'Se de seneste patruljeringer',
 'right-unwatchedpages'        => 'Se en liste over uovervågede sider',
-'right-trackback'             => 'Tilføje trackback',
 'right-mergehistory'          => 'Sammenflette sidehistorik',
 'right-userrights'            => 'Ændre alle brugerrettigheder',
 'right-userrights-interwiki'  => 'Ændre brugerrettigheder på andre wikier',
@@ -1458,11 +1457,11 @@ Hvis du vælger at oplyse dit navn, vil det blive brugt til at tilskrive dig dit
 'action-patrol'               => 'patruljere andres redigeringer',
 'action-autopatrol'           => 'patruljere din redigering',
 'action-unwatchedpages'       => 'se listen over uovervågede sider',
-'action-trackback'            => 'tilføj et trackback',
 'action-mergehistory'         => 'flette denne sides historik',
 'action-userrights'           => 'ændre alle brugerrettigheder',
 'action-userrights-interwiki' => 'ændre brugerrettigheder for brugere på andre wikier',
 'action-siteadmin'            => 'låse eller låse databasen op',
+'action-sendemail'            => 'sende email',
 
 # Recent changes
 'nchanges'                          => '$1 {{PLURAL:$1|ændring|ændringer}}',
@@ -1758,24 +1757,25 @@ Indholdet på dens [$2 filbeskrivelsesside] er vist herunder.',
 'filerevert-badversion'     => 'Der findes ingen lokal udgave af denne fil med det opgivne tidsstempel.',
 
 # File deletion
-'filedelete'                  => 'Slet $1',
-'filedelete-legend'           => 'Slet fil',
-'filedelete-intro'            => "Du er ved at slette filen '''[[Media:$1|$1]]''' sammen med hele dens historik.",
-'filedelete-intro-old'        => '<span class="plainlinks">Du er ved at slette en tidligere version af \'\'\'[[Media:$1|$1]]\'\'\' fra [$4 $2, $3].</span>',
-'filedelete-comment'          => 'Begrundelse:',
-'filedelete-submit'           => 'Slet',
-'filedelete-success'          => "'''$1''' er blevet slettet.",
-'filedelete-success-old'      => "Versionen af '''[[Media:$1|$1]]''' fra $2 $3 er blevet slettet.",
-'filedelete-nofile'           => "'''$1''' findes ikke.",
-'filedelete-nofile-old'       => "Det er ingen version af '''$1''' med de anførte attributter.",
-'filedelete-otherreason'      => 'Anden/uddybende begrundelse:',
-'filedelete-reason-otherlist' => 'Anden begrundelse',
-'filedelete-reason-dropdown'  => '*Hyppige sletningsbegrundelser
+'filedelete'                   => 'Slet $1',
+'filedelete-legend'            => 'Slet fil',
+'filedelete-intro'             => "Du er ved at slette filen '''[[Media:$1|$1]]''' sammen med hele dens historik.",
+'filedelete-intro-old'         => '<span class="plainlinks">Du er ved at slette en tidligere version af \'\'\'[[Media:$1|$1]]\'\'\' fra [$4 $2, $3].</span>',
+'filedelete-comment'           => 'Begrundelse:',
+'filedelete-submit'            => 'Slet',
+'filedelete-success'           => "'''$1''' er blevet slettet.",
+'filedelete-success-old'       => "Versionen af '''[[Media:$1|$1]]''' fra $2 $3 er blevet slettet.",
+'filedelete-nofile'            => "'''$1''' findes ikke.",
+'filedelete-nofile-old'        => "Det er ingen version af '''$1''' med de anførte attributter.",
+'filedelete-otherreason'       => 'Anden/uddybende begrundelse:',
+'filedelete-reason-otherlist'  => 'Anden begrundelse',
+'filedelete-reason-dropdown'   => '*Hyppige sletningsbegrundelser
 ** Ophavsretskrænkelse
 ** Dubletfil
 ** Filen er ubrugt',
-'filedelete-edit-reasonlist'  => 'Rediger sletningsårsager',
-'filedelete-maintenance'      => 'Sletning og gendannelse af filer er midlertidigt forhindret på grund af vedligeholdelse.',
+'filedelete-edit-reasonlist'   => 'Rediger sletningsårsager',
+'filedelete-maintenance'       => 'Sletning og gendannelse af filer er midlertidigt forhindret på grund af vedligeholdelse.',
+'filedelete-maintenance-title' => 'Kan ikke slette fil',
 
 # MIME search
 'mimesearch'         => 'Søge efter MIME-type',
@@ -1796,7 +1796,7 @@ Husk at kontrollere for andre henvisninger til skabelonerne før de slettes.',
 'unusedtemplateswlh'  => 'andre henvisninger',
 
 # Random page
-'randompage'         => 'Tilfældig artikel',
+'randompage'         => 'Tilfældig side',
 'randompage-nopages' => 'Der er ingen sider i {{PLURAL:$2|navnerummet|disse navnerum:}} $1.',
 
 # Random redirect
@@ -1921,8 +1921,8 @@ Læg mærke til at andre hjemmesider kan henvise til filen med et direkte URL, o
 'booksources-invalid-isbn'  => 'Det angivne ISBN-nummer ser forkert ud. Tjek med kilden om det er skrevet korrekt.',
 
 # Special:Log
-'specialloguserlabel'  => 'Bruger:',
-'speciallogtitlelabel' => 'Titel:',
+'specialloguserlabel'  => 'Udført af:',
+'speciallogtitlelabel' => 'Mål (titel eller bruger):',
 'log'                  => 'Loglister',
 'all-logs-page'        => 'Alle offentlige logger',
 'alllogstext'          => 'Samlet visning af alle loggene på {{SITENAME}}.
@@ -1966,7 +1966,9 @@ Se også [[Special:WantedCategories|ønskede kategorier]].',
 'linksearch-pat'   => 'Søg efter links til:',
 'linksearch-ns'    => 'Navnerum:',
 'linksearch-ok'    => 'Søg',
-'linksearch-text'  => 'Wildcards som "*.wikipedia.org" kan benyttes.<br />Understøttede protokoller: <tt>$1</tt>',
+'linksearch-text'  => 'Wildcards som "*.wikipedia.org" kan benyttes.
+Der skal som minimum angives et topniveau-domæne som f. eks. "*.org".<br />
+Understøttede protokoller: <tt>$1</tt> (tilføj ikke protokollerne til din søgning).',
 'linksearch-line'  => '$2 linker til $1',
 'linksearch-error' => 'Wildcards må kun benyttes i starten af hostnavnet.',
 
@@ -2574,6 +2576,7 @@ For at eksportere sider skal du skrive sidetitlerne i tekstboksen herunder med �
 Hvis du kun vil have den seneste version, kan du også bruge en henvisning, for eksempel [[{{#Special:Export}}/{{MediaWiki:Mainpage}}]] for siden "[[{{MediaWiki:Mainpage}}]]".',
 'exportcuronly'     => 'Eksportér kun den nuværende version, ikke hele historikken',
 'exportnohistory'   => "---- '''Bemærk:''' Eksporten af en komplet versionshistorik er pga. ydelsesårsager pt. ikke mulig.",
+'exportlistauthors' => 'Inkluder en komplet liste over bidragyderne til hver side',
 'export-submit'     => 'Eksporter',
 'export-addcattext' => 'Tilføj sider fra kategori:',
 'export-addcat'     => 'Tilføj',
@@ -2693,7 +2696,7 @@ Du kan se på kildeteksten.',
 'tooltip-n-portal'                => 'Om projektet, hvad du kan gøre, hvor tingene findes',
 'tooltip-n-currentevents'         => 'Find baggrundsinformation om aktuelle begivenheder',
 'tooltip-n-recentchanges'         => 'Listen over de seneste ændringer i wikien.',
-'tooltip-n-randompage'            => 'Gå til en tilfældig artikel',
+'tooltip-n-randompage'            => 'Gå til en tilfældig side',
 'tooltip-n-help'                  => 'Hvordan gør jeg ...',
 'tooltip-t-whatlinkshere'         => 'Liste med alle sider som henviser hertil',
 'tooltip-t-recentchangeslinked'   => 'Seneste ændringer i sider som denne side henviser til',
@@ -2786,7 +2789,7 @@ Dette skyldes sandsynligvis en henvisning til et sortlistet eksternt websted.',
 
 # Patrolling
 'markaspatrolleddiff'                 => 'Markér som patruljeret',
-'markaspatrolledtext'                 => 'Markér denne artikel som patruljeret',
+'markaspatrolledtext'                 => 'Markér denne side som patruljeret',
 'markedaspatrolled'                   => 'Markeret som patruljeret',
 'markedaspatrolledtext'               => 'Den valgte redigering af [[:$1]] er nu markeret som patruljeret.',
 'rcpatroldisabled'                    => 'Seneste ændringer-patruljeringen er slået fra',
@@ -3342,13 +3345,6 @@ Denne bekræftelseskode vil udløbe den $4.',
 'scarytranscludedisabled' => '[Interwiki-tilkobling er deaktiveret]',
 'scarytranscludefailed'   => '[Hentning af skabelon for $1 mislykkedes]',
 'scarytranscludetoolong'  => "[URL'en er for lang]",
-
-# Trackbacks
-'trackbackbox'      => 'Trackbacks for denne side:<br />
-$1',
-'trackbackremove'   => '([$1 slet])',
-'trackbacklink'     => 'Trackback',
-'trackbackdeleteok' => 'Trackback blev slettet.',
 
 # Delete conflict
 'deletedwhileediting'      => 'Bemærk: Det blev forsøgt at slette denne side, efter at du var begyndt, at ændre den!

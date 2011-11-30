@@ -552,7 +552,7 @@ $1',
 'helppage'             => 'Help:Tartalom',
 'mainpage'             => 'Kezdőlap',
 'mainpage-description' => 'Kezdőlap',
-'policy-url'           => 'Project:Nyilatkozat',
+'policy-url'           => 'Project:Irányelvek',
 'portal'               => 'Közösségi portál',
 'portal-url'           => 'Project:Közösségi portál',
 'privacy'              => 'Adatvédelmi irányelvek',
@@ -587,19 +587,20 @@ További információkat a [[Special:Version|verzióinformációs lapon]] talál
 'viewdeleted'             => '$1 megtekintése',
 'restorelink'             => '{{PLURAL:$1|Egy|$1}} törölt szerkesztés',
 'feedlinks'               => 'Hírcsatorna:',
-'feed-invalid'            => 'Érvénytelen a figyelt hírcsatorna típusa.',
-'feed-unavailable'        => 'Ezen wikin nincs elérhető hírcsatorna',
-'site-rss-feed'           => '$1 RSS csatorna',
-'site-atom-feed'          => '$1 Atom hírcsatorna',
-'page-rss-feed'           => '„$1” RSS hírcsatorna',
-'page-atom-feed'          => '„$1” Atom hírcsatorna',
+'feed-invalid'            => 'A figyelt hírcsatorna típusa érvénytelen.',
+'feed-unavailable'        => 'Nincs elérhető hírcsatorna',
+'site-rss-feed'           => '$1 RSS-hírcsatorna',
+'site-atom-feed'          => '$1 Atom-hírcsatorna',
+'page-rss-feed'           => '„$1” RSS-hírcsatorna',
+'page-atom-feed'          => '„$1” Atom-hírcsatorna',
+'feed-rss'                => 'RSS',
 'red-link-title'          => '$1 (a lap nem létezik)',
 'sort-descending'         => 'Csökkenő sorrend',
 'sort-ascending'          => 'Növekvő sorrend',
 
 # Short words for each namespace, by default used in the namespace tab in monobook
 'nstab-main'      => 'Szócikk',
-'nstab-user'      => 'Szerkesztői lap',
+'nstab-user'      => 'Felhasználói lap',
 'nstab-media'     => 'Média',
 'nstab-special'   => 'Speciális lap',
 'nstab-project'   => 'Projektlap',
@@ -611,19 +612,19 @@ További információkat a [[Special:Version|verzióinformációs lapon]] talál
 
 # Main script and global functions
 'nosuchaction'      => 'Nincs ilyen művelet',
-'nosuchactiontext'  => 'Az URL-ben megadott műveletet érvénytelen.
-Valószínűleg elgépelted, hibás hivatkozásra kattintottál, vagy a
-a(z) {{SITENAME}} által használt szoftver hibája is lehet.',
+'nosuchactiontext'  => 'Az URL-ben megadott művelet érvénytelen.
+Valószínűleg elgépelted vagy hibás hivatkozásra kattintottál.
+Az is előfordulhat, hogy a(z) {{SITENAME}} wiki szoftverében hiba található.',
 'nosuchspecialpage' => 'Nem létezik ilyen speciális lap',
 'nospecialpagetext' => '<strong>Érvénytelen speciális lapot akartál megtekinteni.</strong>
 
-Az érvényes speciális lapok listáját a [[Special:SpecialPages|Speciális lapok]] oldalon találod.',
+Az érvényes speciális lapok listáját a [[Special:SpecialPages|{{int:specialpages}}]] oldalon találod.',
 
 # General errors
 'error'                => 'Hiba',
 'databaseerror'        => 'Adatbázishiba',
 'dberrortext'          => 'Szintaktikai hiba található az adatbázis-lekérdezésben.
-Ez szoftverhiba miatt történhetett.
+Ezt szoftverhiba okozhatta.
 Az utolsó adatbázis-lekérdezés a(z) „<tt>$2</tt>” függvényből történt, és a következő volt:
 <blockquote><tt>$1</tt></blockquote>
 Az adatbázis ezzel a hibával tért vissza: „<tt>$3: $4</tt>”.',
@@ -631,7 +632,7 @@ Az adatbázis ezzel a hibával tért vissza: „<tt>$3: $4</tt>”.',
 Az utolsó adatbázis-lekérdezés a(z) „$2” függvényből történt, és a következő volt:
 „$1”
 Az adatbázis ezzel a hibával tért vissza: „$3: $4”.',
-'laggedslavemode'      => 'Figyelem: Ez a lap nem feltétlenül tartalmazza a legfrissebb változtatásokat!',
+'laggedslavemode'      => "'''Figyelem:''' Ez a lap nem feltétlenül tartalmazza a legfrissebb változtatásokat!",
 'readonly'             => 'Az adatbázis le van zárva',
 'enterlockreason'      => 'Add meg a lezárás okát, valamint egy becslést, hogy mikor kerül a lezárás feloldásra',
 'readonlytext'         => 'A wiki adatbázisa ideiglenesen le van zárva (valószínűleg adatbázis-karbantartás miatt). A lezárás időtartama alatt a lapok nem szerkeszthetők, és új szócikkek sem hozhatóak létre, az oldalak azonban továbbra is böngészhetőek.
@@ -676,6 +677,7 @@ Lekérdezés: $2',
 'actionthrottledtext'  => 'A spamek elleni védekezés miatt nem végezheted el a műveletet túl sokszor egy adott időn belül, és te átlépted a megengedett határt. Próbálkozz újra néhány perc múlva.',
 'protectedpagetext'    => 'Ez egy védett lap, nem szerkeszthető.',
 'viewsourcetext'       => 'Megtekintheted és másolhatod a lap forrását:',
+'viewyourtext'         => "Megtekintheted és kimásolhatod a '''saját szerkesztéseidet''' az alábbi lapon:",
 'protectedinterface'   => 'Ez a lap a szoftver felületéhez szolgáltat szöveget, és a visszaélések elkerülése miatt le van zárva.',
 'editinginterface'     => "'''Vigyázat:''' egy olyan lapot szerkesztesz, ami a MediaWiki szoftver felületéthez tarzozik. A lap megváltoztatása hatással lesz más szerkesztők számára is. Fordításra inkább használd a MediaWiki fordítására indított kezdeményezést, a [//translatewiki.net/wiki/Main_Page?setlang=hu translatewiki.net-et].",
 'sqlhidden'            => '(rejtett SQL lekérdezés)',
@@ -814,21 +816,32 @@ Lehet, hogy már sikeresen megváltoztattad a jelszavad, vagy pedig időközben 
 'resetpass-temp-password'   => 'Ideiglenes jelszó:',
 
 # Special:PasswordReset
-'passwordreset'                   => 'Jelszó beállítása',
-'passwordreset-text'              => 'Az alábbi űrlap kitöltése után egy értesítő e-mailt kapsz a fiók adataival.',
-'passwordreset-legend'            => 'Új jelszó kérése',
-'passwordreset-disabled'          => 'Új jelszó kérése nem engedélyezett ezen a wikin.',
-'passwordreset-pretext'           => '{{PLURAL:$1||Írd be az alábbi adatok egyikét}}',
-'passwordreset-username'          => 'Felhasználónév:',
-'passwordreset-domain'            => 'Tartomány:',
-'passwordreset-capture'           => 'Meg szeretnéd nézni az elkészült üzenetet?',
-'passwordreset-capture-help'      => 'Ha kipipálod a dobozt, amellett, hogy kiküldődik az üzenet a felhasználónak, megjelenik számodra (az ideiglenes jelszavakkal együtt)',
-'passwordreset-email'             => 'E-mail cím:',
-'passwordreset-emailtitle'        => 'A(z) {{SITENAME}}-fiók adatai',
-'passwordreset-emailelement'      => 'Felhaználónév: $1
+'passwordreset'                    => 'Jelszó beállítása',
+'passwordreset-text'               => 'Az alábbi űrlap kitöltése után egy értesítő e-mailt kapsz a fiók adataival.',
+'passwordreset-legend'             => 'Új jelszó kérése',
+'passwordreset-disabled'           => 'Új jelszó kérése nem engedélyezett ezen a wikin.',
+'passwordreset-pretext'            => '{{PLURAL:$1||Írd be az alábbi adatok egyikét}}',
+'passwordreset-username'           => 'Felhasználónév:',
+'passwordreset-domain'             => 'Tartomány:',
+'passwordreset-capture'            => 'Meg szeretnéd nézni az elkészült üzenetet?',
+'passwordreset-capture-help'       => 'Ha kipipálod a dobozt, amellett, hogy kiküldődik az üzenet a felhasználónak, megjelenik számodra (az ideiglenes jelszavakkal együtt)',
+'passwordreset-email'              => 'E-mail cím:',
+'passwordreset-emailtitle'         => 'A(z) {{SITENAME}}-fiók adatai',
+'passwordreset-emailtext-ip'       => 'Valaki (vélhetően Te, a $1 IP-címrő)l emlékeztetők kért a {{SITENAME}} ($4) oldalon felvett fiókokról. A következő felhasználói {{PLURAL:$3|fiók van|fiókok vannak}} hozzárendelve ehhez az e-mail címhez:
+
+$2
+
+{{PLURAL:$3|Ez az ideiglenes jelszó|Ezek az ideiglenes jelszavak}} $5 nap múlva {{PLURAL:$3|jár|járnak}} le. Jelentkezz be, és cseréld le a jelszavadat. Ha valaki más kérte az emlékeztetőt, vagy eszedbe jutott a régi jelszó, és nem akarod lecserélni a jelszavadat, hagyd figyelmen kívül ezt az üzenetet, és használd a régi jelszavadat.',
+'passwordreset-emailtext-user'     => '$1 felhasználó emlékeztetők kért a {{SITENAME}} ($4) oldalon felvett fiókokról. A következő felhasználói {{PLURAL:$3|fiók van|fiókok vannak}} hozzárendelve ehhez az e-mail címhez:
+
+$2
+
+{{PLURAL:$3|Ez az ideiglenes jelszó|Ezek az ideiglenes jelszavak}} $5 nap múlva {{PLURAL:$3|jár|járnak}} le. Jelentkezz be, és cseréld le a jelszavadat. Ha valaki más kérte az emlékeztetőt, vagy eszedbe jutott a régi jelszó, és nem akarod lecserélni a jelszavadat, hagyd figyelmen kívül ezt az üzenetet, és használd a régi jelszavadat.',
+'passwordreset-emailelement'       => 'Felhaználónév: $1
 Ideiglenes jelszó: $2',
-'passwordreset-emailsent'         => 'Emlékeztető e-mail elküldve.',
-'passwordreset-emailsent-capture' => 'Az alább látható emlékeztető e-mail elküldve.',
+'passwordreset-emailsent'          => 'Emlékeztető e-mail elküldve.',
+'passwordreset-emailsent-capture'  => 'Az alább látható emlékeztető e-mail elküldve.',
+'passwordreset-emailerror-capture' => 'Az emlékeztető levél generálása megtörtént, mint az alább látszik, de elküldése a szerkesztőnek nem sikerült: $1',
 
 # Special:ChangeEmail
 'changeemail'          => 'E-mail cím megváltoztatása',
@@ -1106,26 +1119,25 @@ További információkat a [{{fullurl:{{#Special:Log}}/delete|page={{FULLPAGENAM
 További részleteket a [{{fullurl:{{#Special:Log}}/delete|page={{FULLPAGENAMEE}}}} törlési naplóban] találhatsz.
 Mivel adminisztrátor vagy, még mindig [$1 megtekintheted a tartalmát], ha szeretnéd.",
 'rev-suppressed-text-unhide'  => "A lap ezen változatát '''elrejtették'''.
-További részleteket az [{{fullurl:{{#Special:Log}}/delete|page={{FULLPAGENAMEE}}}} elrejtési naplóban] találhatsz.
+További részleteket az [{{fullurl:{{#Special:Log}}/suppress|page={{FULLPAGENAMEE}}}} elrejtési naplóban] találhatsz.
 Mivel adminisztrátor vagy, még mindig [$1 megtekintheted a tartalmát], ha szeretnéd.",
 'rev-deleted-text-view'       => "A lap ezen változatát '''törölték'''.
-Adminisztrátorként megnézheted; további részleteket a [{{fullurl:{{#Special:Log}}/delete|page={{FULLPAGENAMEE}}}} törlési naplóban] találhatsz.",
+Te megnézheted. További részleteket a [{{fullurl:{{#Special:Log}}/delete|page={{FULLPAGENAMEE}}}} törlési naplóban] találhatsz.",
 'rev-suppressed-text-view'    => "A lap ezen változatát '''elrejtették'''.
-Mivel adminisztrátor vagy, még mindig megtekintheted.
-További részleteket az [{{fullurl:{{#Special:Log}}/delete|page={{FULLPAGENAMEE}}}} elrejtési naplóban] találhatsz.",
+Te megtekintheted. További részleteket az [{{fullurl:{{#Special:Log}}/suppress|page={{FULLPAGENAMEE}}}} elrejtési naplóban] találhatsz.",
 'rev-deleted-no-diff'         => "Nem nézheted meg a két változat közötti eltérést, mert a változatok egyikét '''törölték'''.
 További részleteket a [{{fullurl:{{#Special:Log}}/delete|page={{FULLPAGENAMEE}}}} törlési naplóban] találhatsz.",
 'rev-suppressed-no-diff'      => "Nem nézheted meg ezt a változtatást, mert az egyik változatot '''törölték'''.",
 'rev-deleted-unhide-diff'     => "A változatok közötti eltéréshez kiválasztott változatok egyike '''törölve''' lett.
 További részleteket a [{{fullurl:{{#Special:Log}}/delete|page={{FULLPAGENAMEE}}}} törlési naplóban] találhatsz.
-Mivel adminisztrátor vagy, még mindig [$1 megtekintheted a változatok közötti eltérést], ha szeretnéd.",
+Te még mindig [$1 megtekintheted a változatok közötti eltérést], ha szeretnéd.",
 'rev-suppressed-unhide-diff'  => "A változatok közötti eltéréshez kiválasztott változatok egyike '''el lett rejtve'''.
 Részleteket az [{{fullurl:{{#Special:Log}}/suppress|page={{FULLPAGENAMEE}}}} elrejtési naplójában találhatsz].
-Mivel adminisztrátor vagy, még mindig [$1 megtekintheted a változatok közötti eltérést], ha szeretnéd.",
+Te még mindig [$1 megtekintheted a változatok közötti eltérést], ha szeretnéd.",
 'rev-deleted-diff-view'       => "A változatok közötti eltéréshez kiválasztott változatok egyike '''törölve''' lett.
-Mivel adminisztrátor vagy, még mindig megtekintheted a változatok közötti eltérést; további részleteket pedig a [{{fullurl:{{#Special:Log}}/delete|page={{FULLPAGENAMEE}}}} törlési naplóban] találhatsz.",
+Te még mindig megtekintheted a változatok közötti eltérést. További részleteket a [{{fullurl:{{#Special:Log}}/delete|page={{FULLPAGENAMEE}}}} törlési naplóban] találhatsz.",
 'rev-suppressed-diff-view'    => "A változatok közötti eltéréshez kiválasztott változatok egyike '''el lett rejtve'''.
-Mivel adminisztrátor vagy, még mindig megtekintheted a változatok közötti eltérést; további részleteket pedig az [{{fullurl:{{#Special:Log}}/suppress|page={{FULLPAGENAMEE}}}} elrejtési naplójában találhatsz].",
+Te még mindig megtekintheted a változatok közötti eltérést. További részleteket az [{{fullurl:{{#Special:Log}}/suppress|page={{FULLPAGENAMEE}}}} elrejtési naplójában találhatsz].",
 'rev-delundel'                => 'megjelenítés/elrejtés',
 'rev-showdeleted'             => 'megjelenítés',
 'revisiondelete'              => 'Változatok törlése vagy helyreállítása',
@@ -1390,6 +1402,7 @@ A műveletet nem lehet visszavonni.',
 'yourrealname'                  => 'Valódi neved:',
 'yourlanguage'                  => 'A felület nyelve:',
 'yourvariant'                   => 'A tartalom nyelvváltozata:',
+'prefs-help-variant'            => 'A választott variánsod vagy rendezési sorrendek, ahogy a wiki lapokat meg akarod jeleníteni.',
 'yournick'                      => 'Aláírás:',
 'prefs-help-signature'          => 'A vitalapra írt hozzászólásaidat négy hullámvonallal (<nowiki>~~~~</nowiki>) írd alá. A lap mentésekor ez lecserélődik az aláírásodra és egy időbélyegre.',
 'badsig'                        => 'Érvénytelen aláírás; ellenőrizd a HTML-formázást.',
@@ -1522,7 +1535,6 @@ A műveletet nem lehet visszavonni.',
 'right-autopatrol'            => 'szerkesztések automatikusan ellenőrzöttként való jelölése',
 'right-patrolmarks'           => 'járőrök jelzéseinek megtekintése a friss változásokban',
 'right-unwatchedpages'        => 'nem figyelt lapok listájának megtekintése',
-'right-trackback'             => 'trackback küldése',
 'right-mergehistory'          => 'laptörténetek egyesítése',
 'right-userrights'            => 'az összes szerkesztő jogainak módosítása',
 'right-userrights-interwiki'  => 'más wikik szerkesztői jogainak módosítása',
@@ -1532,10 +1544,11 @@ A műveletet nem lehet visszavonni.',
 'right-passwordreset'         => 'Jelszó visszaállítási emailek megtekintése',
 
 # User rights log
-'rightslog'      => 'Szerkesztői jogosultságok naplója',
-'rightslogtext'  => 'Ez a rendszernapló a felhasználó jogosultságok változásait mutatja.',
-'rightslogentry' => 'megváltoztatta $1 szerkesztő felhasználó jogait (régi: $2; új: $3)',
-'rightsnone'     => '(semmi)',
+'rightslog'                  => 'Szerkesztői jogosultságok naplója',
+'rightslogtext'              => 'Ez a rendszernapló a felhasználó jogosultságok változásait mutatja.',
+'rightslogentry'             => 'megváltoztatta $1 szerkesztő felhasználó jogait (régi: $2; új: $3)',
+'rightslogentry-autopromote' => 'automatikusan $2 helyett $3 jogokat kapott',
+'rightsnone'                 => '(semmi)',
 
 # Associated actions - in the sentence "You do not have permission to X"
 'action-read'                 => 'lap olvasása',
@@ -1562,16 +1575,17 @@ A műveletet nem lehet visszavonni.',
 'action-suppressionlog'       => 'privát napló megtekintése',
 'action-block'                => 'szerkesztő blokkolása',
 'action-protect'              => 'lap védelmi szintjének megváltoztatása',
+'action-rollback'             => 'szerkesztések gyors visszaállítása az utolsó szerkesztő változatára egy adott oldalon',
 'action-import'               => 'lap importálása más wikiből',
 'action-importupload'         => 'lap importálása fájl feltöltésével',
 'action-patrol'               => 'mások szerkesztéseinek ellenőrzöttként való megjelölése',
 'action-autopatrol'           => 'saját szerkesztések ellenőrzöttként való megjelölése',
 'action-unwatchedpages'       => 'nem figyelt lapok listájának megtekintése',
-'action-trackback'            => 'trackback küldése',
 'action-mergehistory'         => 'lap laptörténetének egyesítése',
 'action-userrights'           => 'összes szerkesztő jogainak módosítása',
 'action-userrights-interwiki' => 'más wikik szerkesztői jogainak módosítása',
 'action-siteadmin'            => 'adatbázis lezárása vagy felnyitása',
+'action-sendemail'            => 'e-mailek küldése',
 
 # Recent changes
 'nchanges'                          => '{{PLURAL:$1|egy|$1}} változtatás',
@@ -2048,8 +2062,8 @@ további információkat lelhetsz ott az általad keresett könyvekről:',
 'booksources-invalid-isbn'  => 'A megadott ISBN hibásnak tűnik; ellenőrizd, hogy jól másoltad-e át az eredeti forrásból.',
 
 # Special:Log
-'specialloguserlabel'  => 'Felhasználó:',
-'speciallogtitlelabel' => 'Cím:',
+'specialloguserlabel'  => 'Szerkesztő:',
+'speciallogtitlelabel' => 'Cél (cím vagy felhasználó):',
 'log'                  => 'Rendszernaplók',
 'all-logs-page'        => 'Minden nyilvános napló',
 'alllogstext'          => 'A(z) {{SITENAME}} naplóinak összesített listája.
@@ -2093,8 +2107,8 @@ Lásd még a [[Special:WantedCategories|keresett kategóriák]] listáját.',
 'linksearch-pat'   => 'Keresett minta:',
 'linksearch-ns'    => 'Névtér:',
 'linksearch-ok'    => 'keresés',
-'linksearch-text'  => 'Helyettesítő karaktereket is lehet használni, például "*.wikipedia.org".<br />
-Támogatott protokollok: <tt>$1</tt>',
+'linksearch-text'  => 'Helyettesítő karaktereket is lehet használni, például "*.wikipedia.org". Legalább egy felső szintű tartománynak lennie kell, például "*.org"<br />
+Támogatott protokollok: <tt>$1</tt> (ezeket ne írd be a keresésbe).',
 'linksearch-line'  => '$1 hivatkozva innen: $2',
 'linksearch-error' => 'Helyettesítő karakterek csak a cím elején szerepelhetnek.',
 
@@ -2308,6 +2322,7 @@ A [[Special:ProtectedPages|védett lapok listáján]] megtekintheted a jelenleg 
 'unprotectedarticle'          => 'eltávolította a védelmet a(z) „[[$1]]” lapról',
 'movedarticleprotection'      => 'áthelyezte „[[$2]]” védelmi beállításait „[[$1]]” cím alá',
 'protect-title'               => '„$1” levédése',
+'protect-title-notallowed'    => '„$1” védelmi szintjének megtekintése',
 'prot_1movedto2'              => '[[$1]] lapot átneveztem [[$2]] névre',
 'protect-badnamespace-title'  => 'Nem védhető névtér',
 'protect-badnamespace-text'   => 'Ebben a névtérben az oldalak nem védhetők.',
@@ -2691,7 +2706,7 @@ Kérlek, válassz egy másik nevet.',
 
 Az átnevezés céljaként megadott „[[:$1]]” szócikk már létezik.  Ha az átnevezést végre akarod hajtani, ezt a lapot törölni kell.  Valóban ezt szeretnéd?',
 'delete_and_move_confirm'      => 'Igen, töröld a lapot',
-'delete_and_move_reason'       => 'átnevezendő lap célneve felszabadítva',
+'delete_and_move_reason'       => 'Törölve, hogy legyen hely átmozgatni [[$1]] lapot.',
 'selfmove'                     => 'A cikk jelenlegi címe megegyezik azzal, amire át szeretnéd mozgatni. Egy szócikket saját magára mozgatni nem lehet.',
 'immobile-source-namespace'    => 'A(z) „$1” névtér lapjai nem nevezhetőek át',
 'immobile-target-namespace'    => 'A(z) „$1” névtérbe nem mozgathatsz át lapokat',
@@ -2728,6 +2743,7 @@ Az utóbbi esetben közvetlen hivatkozást is használhatsz, például a [[{{#Sp
 'exportcuronly'     => 'Csak a legfrissebb állapot, teljes laptörténet nélkül',
 'exportnohistory'   => "----
 '''Megjegyzés:''' A lapok teljes előzményeinek ezen az űrlapon keresztül történő exportálása teljesítményporlbémák miatt letiltott.",
+'exportlistauthors' => 'Minden lap valamennyi szerkesztőjének hozzávétele',
 'export-submit'     => 'Exportálás',
 'export-addcattext' => 'Lapok hozzáadása kategóriából:',
 'export-addcat'     => 'Hozzáadás',
@@ -2804,6 +2820,8 @@ Mentsd el a számítógépedre, majd töltsd fel ide.',
 'import-upload'              => 'XML-adatok feltöltése',
 'import-token-mismatch'      => 'Elveszett a session adat, próbálkozz újra.',
 'import-invalid-interwiki'   => 'A kijelölt wikiből nem lehet importálni.',
+'import-error-edit'          => '„$1” lap nem került importálásra, mert nem szerkesztheted azt.',
+'import-error-create'        => '„$1” lap nem került importálásra, mert nem hozhatod létre azt.',
 
 # Import log
 'importlogpage'                    => 'Importnapló',
@@ -2881,20 +2899,29 @@ Mentsd el a számítógépedre, majd töltsd fel ide.',
 'tooltip-summary'                 => 'Adj meg egy rövid összefoglalót',
 
 # Stylesheets
-'common.css'   => '/* Közös CSS az összes felületnek */',
-'monobook.css' => '/* Az ide elhelyezett CSS hatással lesz a Monobook felület használóira */',
-'vector.css'   => '/******************************************************************************************\\
-*                   Ezek a stílusok csak a Vector felületre vonatkoznak                    *
-*    A nem kifejezetten Vector-specifikus stílusokat a [[MediaWiki:Common.css]]-be írd!    *
-\\******************************************************************************************/',
+'common.css'      => '/* Közös CSS az összes felületnek */',
+'standard.css'    => '/* Az ide elhelyezett CSS hatással lesz a Klasszikus felület használóira */',
+'nostalgia.css'   => '/* Az ide elhelyezett CSS hatással lesz a Nosztalgia felület használóira */',
+'cologneblue.css' => '/* Az ide elhelyezett CSS hatással lesz a Kölni kék felület használóira */',
+'monobook.css'    => '/* Az ide elhelyezett CSS hatással lesz a Monobook felület használóira */',
+'myskin.css'      => '/* Az ide elhelyezett CSS hatással lesz a MySkin felület használóira */',
+'chick.css'       => '/* Az ide elhelyezett CSS hatással lesz a Chick felület használóira */',
+'simple.css'      => '/* Az ide elhelyezett CSS hatással lesz a Egyszerű felület használóira */',
+'modern.css'      => '/* Az ide elhelyezett CSS hatással lesz a Modern felület használóira */',
+'vector.css'      => '/* Az ide elhelyezett CSS hatással lesz a Vector felület használóira */',
+'print.css'       => '/* Az ide elhelyezett CSS hatással lesz a nyomtatás kimenetelére */',
 
 # Scripts
-'common.js'   => '/* Az ide elhelyezett JavaScript kód minden felhasználó számára lefut az oldalak betöltésekor. */',
-'monobook.js' => '/* A Monobook felületet használó szerkesztők számára betöltendő JavaScriptek */',
-'vector.js'   => '/******************************************************************************************\\
-*                   Ezek a szkriptek csak a Vector skin alatt futnak le.                   *
-*    A nem kifejezetten Vector-specifikus szkripteket a [[MediaWiki:Common.js]]-be írd!    *
-\\******************************************************************************************/',
+'common.js'      => '/* Az ide elhelyezett JavaScript kód minden felhasználó számára lefut az oldalak betöltésekor. */',
+'standard.js'    => '/* A Klasszikus felületet használó szerkesztők számára betöltendő JavaScriptek */',
+'nostalgia.js'   => '/* A Nosztalgia felületet használó szerkesztők számára betöltendő JavaScriptek */',
+'cologneblue.js' => '/* A Kölni kék felületet használó szerkesztők számára betöltendő JavaScriptek */',
+'monobook.js'    => '/* A Monobook felületet használó szerkesztők számára betöltendő JavaScriptek */',
+'myskin.js'      => '/* A MySkin felületet használó szerkesztők számára betöltendő JavaScriptek */',
+'chick.js'       => '/* A Chick felületet használó szerkesztők számára betöltendő JavaScriptek */',
+'simple.js'      => '/* Az Egyszerű felületet használó szerkesztők számára betöltendő JavaScriptek */',
+'modern.js'      => '/* A Modern felületet használó szerkesztők számára betöltendő JavaScriptek */',
+'vector.js'      => '/* A Vector felületet használó szerkesztők számára betöltendő JavaScriptek */',
 
 # Metadata
 'notacceptable' => 'A wiki kiszolgálója nem tudja olyan formátumban biztosítani az adatokat, amit a kliens olvasni tud.',
@@ -3156,16 +3183,29 @@ míg a többi elem a táblázat összecsukása után alapértelmezett esetben re
 'exif-gpsdifferential'             => 'GPS különbözeti korrekció',
 'exif-jpegfilecomment'             => 'JPEG fájlmegjegyzés',
 'exif-keywords'                    => 'Kulcsszavak',
+'exif-worldregioncreated'          => 'Világrész, ahol a kép készült',
+'exif-countrycreated'              => 'Ország, ahol a kép készült',
+'exif-countrycodecreated'          => 'Ország kódja, ahol a kép készült',
+'exif-provinceorstatecreated'      => 'Tartomány vagy állam, ahol a kép készült',
+'exif-citycreated'                 => 'Város, ahol a kép készült',
+'exif-sublocationcreated'          => 'Városbeli hely, ahol a kép készült',
 'exif-worldregiondest'             => 'Ábrázolt világrész',
 'exif-countrydest'                 => 'Ábrázolt ország',
+'exif-countrycodedest'             => 'Ábrázolt ország kódja',
 'exif-provinceorstatedest'         => 'Ábrázolt tartomány vagy állam',
 'exif-citydest'                    => 'Ábrázolt város',
+'exif-sublocationdest'             => 'Ábrázolt városbeli hely',
 'exif-objectname'                  => 'Rövid cím',
 'exif-specialinstructions'         => 'Különleges utasítások',
 'exif-headline'                    => 'Fejléc',
+'exif-credit'                      => 'Köszönet/Készítő',
 'exif-source'                      => 'Forrás',
+'exif-editstatus'                  => 'Kép szerkesztési állapota',
 'exif-urgency'                     => 'Sürgősség',
+'exif-fixtureidentifier'           => 'A készülék neve',
 'exif-locationdest'                => 'Ábrázolt helyszín',
+'exif-locationdestcode'            => 'Ábrázolt helyszín kódja',
+'exif-objectcycle'                 => 'Napszak, amikorra a média készült',
 'exif-contact'                     => 'Elérhetőségi adatok',
 'exif-writer'                      => 'Író',
 'exif-languagecode'                => 'Nyelv',
@@ -3174,12 +3214,16 @@ míg a többi elem a táblázat összecsukása után alapértelmezett esetben re
 'exif-iimsupplementalcategory'     => 'Kiegészítő kategóriák',
 'exif-datetimeexpires'             => 'Nem használandó ezután',
 'exif-datetimereleased'            => 'Megjelenés ideje',
+'exif-originaltransmissionref'     => 'Eredeti átviteli hely kódja',
 'exif-identifier'                  => 'Azonosító',
 'exif-lens'                        => 'Használt lencse',
 'exif-serialnumber'                => 'Kamera sorozatszáma',
 'exif-cameraownername'             => 'Kamera tulajdonosa',
 'exif-label'                       => 'Címke',
+'exif-datetimemetadata'            => 'Dátum metaadat utolsó módosítása',
+'exif-nickname'                    => 'A kép informális neve',
 'exif-rating'                      => 'Értékelés (5-ből)',
+'exif-rightscertificate'           => 'Jogokat kezelő tanúsítvány',
 'exif-copyrighted'                 => 'Szerzői jogi állapot',
 'exif-copyrightowner'              => 'Szerzői jog tulajdonosa',
 'exif-usageterms'                  => 'Felhasználási feltételek',
@@ -3187,11 +3231,15 @@ míg a többi elem a táblázat összecsukása után alapértelmezett esetben re
 'exif-originaldocumentid'          => 'Eredeti dokumentum egyedi azonosítója',
 'exif-licenseurl'                  => 'Szerzői jog engedély URL-címe',
 'exif-morepermissionsurl'          => 'Alternatív licencinformáció',
+'exif-attributionurl'              => 'Újrafelhasználás során hivatkozz erre:',
+'exif-preferredattributionname'    => 'Ha újra felhasználód, köszönd meg:',
 'exif-pngfilecomment'              => 'PNG fájlmegjegyzés',
 'exif-disclaimer'                  => 'Jogi nyilatkozat',
+'exif-contentwarning'              => 'Tartalom figyelmeztetés',
 'exif-giffilecomment'              => 'GIF fájlmegjegyzés',
 'exif-intellectualgenre'           => 'Elemtípus',
 'exif-subjectnewscode'             => 'Tárgykód',
+'exif-scenecode'                   => 'IPTC jelenet kód',
 'exif-event'                       => 'Ábrázolt esemény',
 'exif-organisationinimage'         => 'Ábrázolt szervezet',
 'exif-personinimage'               => 'Ábrázolt személy',
@@ -3200,6 +3248,9 @@ míg a többi elem a táblázat összecsukása után alapértelmezett esetben re
 
 # EXIF attributes
 'exif-compression-1' => 'Nem tömörített',
+'exif-compression-2' => 'CCITT Group 3 1 dimenziós módosított Huffman kódolás',
+'exif-compression-3' => 'CCITT Group 3 fax kódolás',
+'exif-compression-4' => 'CCITT Group 4 fax kódolás',
 
 'exif-copyrighted-true'  => 'Szerzői jog által védett',
 'exif-copyrighted-false' => 'Közkincs',
@@ -3246,7 +3297,7 @@ míg a többi elem a táblázat összecsukása után alapértelmezett esetben re
 'exif-lightsource-0'   => 'Ismeretlen',
 'exif-lightsource-1'   => 'Természetes fény',
 'exif-lightsource-2'   => 'Fénycső',
-'exif-lightsource-3'   => 'Tungsten (izzófény)',
+'exif-lightsource-3'   => 'Wolfram (izzófény)',
 'exif-lightsource-4'   => 'Vaku',
 'exif-lightsource-9'   => 'Derült idő',
 'exif-lightsource-10'  => 'Felhős idő',
@@ -3356,6 +3407,7 @@ míg a többi elem a táblázat összecsukása után alapértelmezett esetben re
 'exif-gpsdop-excellent' => 'Kiváló ($1)',
 'exif-gpsdop-good'      => 'Jó ($1)',
 'exif-gpsdop-moderate'  => 'Mérsékelt ($1)',
+'exif-gpsdop-fair'      => 'Elfogadható ($1)',
 'exif-gpsdop-poor'      => 'Gyenge ($1)',
 
 'exif-objectcycle-a' => 'Csak reggel',
@@ -3365,6 +3417,9 @@ míg a többi elem a táblázat összecsukása után alapértelmezett esetben re
 # Pseudotags used for GPSTrackRef, GPSImgDirectionRef and GPSDestBearingRef
 'exif-gpsdirection-t' => 'Igazi irány',
 'exif-gpsdirection-m' => 'Mágneses irány',
+
+'exif-ycbcrpositioning-1' => 'Központosított',
+'exif-ycbcrpositioning-2' => 'Szomszédos',
 
 'exif-dc-contributor' => 'Közreműködők',
 'exif-dc-coverage'    => 'A média térbeli vagy időbeli hatálya',
@@ -3482,13 +3537,6 @@ Ez a megerősítő e-mail $4-ig érvényes.',
 'scarytranscludefailed'   => '[$1 sablon letöltése sikertelen]',
 'scarytranscludetoolong'  => '[Az URL túl hosszú]',
 
-# Trackbacks
-'trackbackbox'      => 'Visszakövetések ehhez a szócikkhez:<br />
-$1',
-'trackbackremove'   => '([$1 törlése])',
-'trackbacklink'     => 'Visszakövetés',
-'trackbackdeleteok' => 'A visszakövetés törlése sikerült.',
-
 # Delete conflict
 'deletedwhileediting'      => "'''Figyelmeztetés:''' A lapot a szerkesztés megkezdése után törölték!",
 'confirmrecreate'          => "Miután elkezdted szerkeszteni, [[User:$1|$1]] ([[User talk:$1|vita]]) törölte ezt a lapot a következő indokkal:
@@ -3570,6 +3618,9 @@ minden egyes sor egy figyelt lap címe. Ha kész vagy, kattints a lista alatt ta
 'watchlisttools-view' => 'Kapcsolódó változtatások',
 'watchlisttools-edit' => 'A figyelőlista megtekintése és szerkesztése',
 'watchlisttools-raw'  => 'A nyers figyelőlista szerkesztése',
+
+# Signatures
+'signature' => '[[{{ns:user}}:$1|$2]] ([[{{ns:user_talk}}:$1|vita]])',
 
 # Core parser functions
 'unknown_extension_tag' => 'Ismeretlen tag kiterjesztés: $1',
@@ -3705,15 +3756,35 @@ A képek teljes méretben jelennek meg, más fájltípusok közvetlenül a hozz�
 'sqlite-no-fts'  => '$1 teljes szöveges keresés támogatása nélkül',
 
 # New logging system
-'logentry-delete-delete'          => '$1 {{GENDER:$2|törölte}} a következő lapot: $3',
-'logentry-delete-restore'         => '$1 {{GENDER:$2|helyreállította}} a következő lapot: $3',
-'logentry-delete-event'           => '$1 {{GENDER:$2|módosította}} {{PLURAL:$5|egy|$1}} naplóbejegyzés láthatóságát: $4',
-'logentry-delete-revision'        => '$1 {{GENDER:$2|módosította}} a(z) $3 című lap {{PLURAL:$5|egy|$1}} lapváltozatának láthatóságát: $4',
-'logentry-delete-event-legacy'    => '$1 {{GENDER:$2|módosította}} a(z) $3 című lap naplóbejegyzéseinek láthatóságát',
-'logentry-delete-revision-legacy' => '$1 {{GENDER:$2|módosította}} a(z) $3 című lap lapváltozatainak láthatóságát',
-'revdelete-restricted'            => 'elrejtett az adminisztrátorok elől',
-'revdelete-unrestricted'          => 'felfedett az adminisztrátoroknak',
-'logentry-move-move'              => '$1 {{GENDER:$2|átnevezte}} a(z) $3 lapot a következő névre: $4',
-'newuserlog-byemail'              => 'a jelszót kiküldtük a megadott e-mail címre',
+'logentry-delete-delete'              => '$1 {{GENDER:$2|törölte}} a következő lapot: $3',
+'logentry-delete-restore'             => '$1 {{GENDER:$2|helyreállította}} a következő lapot: $3',
+'logentry-delete-event'               => '$1 {{GENDER:$2|megváltoztatta}} {{PLURAL:$5|egy napló bejegyzés|$5 napló bejegyzés}} láthatóságát $3 lapon: $4',
+'logentry-delete-revision'            => '$1 {{GENDER:$2|módosította}} a(z) $3 című lap {{PLURAL:$5|egy|$1}} lapváltozatának láthatóságát: $4',
+'logentry-delete-event-legacy'        => '$1 {{GENDER:$2|módosította}} a(z) $3 című lap naplóbejegyzéseinek láthatóságát',
+'logentry-delete-revision-legacy'     => '$1 {{GENDER:$2|módosította}} a(z) $3 című lap lapváltozatainak láthatóságát',
+'logentry-suppress-delete'            => '$1 {{GENDER:$2|elrejtette}} a következő lapot: $3',
+'logentry-suppress-event'             => '$1 rejtetten {{GENDER:$2|megváltoztatta}} {{PLURAL:$5|egy napló bejegyzés|$5 napló bejegyzés}} láthatóságát $3 lapon: $4',
+'logentry-suppress-revision'          => '$1 rejtetten {{GENDER:$2|megváltoztatta}} {{PLURAL:$5|egy változat|$5 változat}} láthatóságát $3 lapon: $4',
+'logentry-suppress-event-legacy'      => '$1 rejtetten {{GENDER:$2|megváltoztatta}} napló bejegyzések láthatóságát a(z) $3 lapon',
+'logentry-suppress-revision-legacy'   => '$1 rejtetten {{GENDER:$2|megváltoztatta}} változatok láthatóságát a(z) $3 lapon',
+'revdelete-content-hid'               => 'rejtett tartalom',
+'revdelete-summary-hid'               => 'elrejtett összefoglaló szerkesztése',
+'revdelete-uname-hid'                 => 'szerkesztő elrejtve',
+'revdelete-content-unhid'             => 'tartalom megjelenítve',
+'revdelete-summary-unhid'             => 'szerkesztési összefoglalás megjelenítve',
+'revdelete-uname-unhid'               => 'szerkesztő megjelenítve',
+'revdelete-restricted'                => 'elrejtett az adminisztrátorok elől',
+'revdelete-unrestricted'              => 'felfedett az adminisztrátoroknak',
+'logentry-move-move'                  => '$1 {{GENDER:$2|átnevezte}} a(z) $3 lapot a következő névre: $4',
+'logentry-move-move-noredirect'       => '$1 {{GENDER:$2|átnevezte}} a(z) $3 lapot $4 lapra átirányítás nélkül',
+'logentry-move-move_redir'            => '$1 {{GENDER:$2|átmozgatta}} a(z) $3 lapot $4 lapra átirányítással',
+'logentry-move-move_redir-noredirect' => '$1 {{GENDER:$2|átnevezte}} a(z) $3 lapot $4 lapra átirányítás nélkül',
+'logentry-patrol-patrol'              => '$1 a(z) $3 lap $4 változatát ellenőrzöttnek {{GENDER:$2|jelölte}}',
+'logentry-patrol-patrol-auto'         => '$1 a(z) $3 lap $4 változatát automatikusan ellenőrzöttnek {{GENDER:$2|jelölte}}',
+'logentry-newusers-newusers'          => '$1 {{GENDER:$2|létrehozott}} egy felhasználói fiókot',
+'logentry-newusers-create'            => '$1 {{GENDER:$2|létrehozott}} egy felhasználói fiókot',
+'logentry-newusers-create2'           => '$1 {{GENDER:$2|létrehozott}} {{GENDER:$4|egy felhasználói fiókot}} $3',
+'logentry-newusers-autocreate'        => '$1 fiók automatikusan {{GENDER:$2|létrehozva}}',
+'newuserlog-byemail'                  => 'a jelszót kiküldtük a megadott e-mail címre',
 
 );

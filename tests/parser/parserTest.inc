@@ -105,6 +105,9 @@ class ParserTest {
 
 		$this->showOutput = isset( $options['show-output'] );
 
+		if ( isset( $options['filter'] ) ) {
+			$options['regex'] = $options['filter'];
+		}
 
 		if ( isset( $options['regex'] ) ) {
 			if ( isset( $options['record'] ) ) {
@@ -179,7 +182,7 @@ class ParserTest {
 		// $wgContLang = new StubContLang;
 		$wgUser = new User;
 		$context = new RequestContext;
-		$wgLang = $context->getLang();
+		$wgLang = $context->getLanguage();
 		$wgOut = $context->getOutput();
 		$wgParser = new StubObject( 'wgParser', $wgParserConf['class'], array( $wgParserConf ) );
 		$wgRequest = $context->getRequest();
@@ -692,7 +695,7 @@ class ParserTest {
 		$GLOBALS['wgMemc'] = new EmptyBagOStuff;
 
 		$context = new RequestContext();
-		$GLOBALS['wgLang'] = $context->getLang();
+		$GLOBALS['wgLang'] = $context->getLanguage();
 		$GLOBALS['wgOut'] = $context->getOutput();
 
 		$GLOBALS['wgUser'] = new User();
