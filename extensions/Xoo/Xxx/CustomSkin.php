@@ -59,32 +59,6 @@ class XxxCustomSkin extends Xxx
 		{
 		  $this->context = RequestContext::getMain();
 		  $this->context->setSkin(new SkinCustomSkin());
-//			$wgUser->setOption('skin',$this->getSkinName());
-//			$wgUser->mSkin =& 
-		}
-		return true;
-	}
-	
-	function hook_ArticleSaveComplete()
-	{
-		global $wgRequest;
-		if ($r = $wgRequest->getText('backlink',false))
-		{
-			global $wgOut;
-			$t = Title::newFromText($r);
-			if ($t) $wgOut->redirect($t->getFullUrl());
-			header("Location: " . $t->getFullUrl('action=purge'));
-			$wgOut->disable();
-		}
-		return true;
-	}
-	
-	function hook_EditPageBeforeEditButtons(&$editPage,&$buttons)
-	{
-		global $wgRequest;
-		if ($r = $wgRequest->getText('backlink',false))
-		{
-			$buttons[]='<input type="hidden" name="backlink" value="'.htmlspecialchars($r).'"> will return to '.$r;
 		}
 		return true;
 	}
@@ -98,7 +72,6 @@ class XxxCustomSkin extends Xxx
 	{
 		return $this->applyCustomSkin();
 	}
-
 	var $skinParsing=false;
 	var $skinArgs=array();
 	
@@ -116,32 +89,79 @@ class XxxCustomSkin extends Xxx
 		$this->extraHeadText .= "\n$text";
 #		die (htmlspecialchars($this->extraHeadText));
 	}
+
+  /*** BACK LINK FROM EDIT ***/
+  function hook_ArticleSaveComplete()
+	{
+		global $wgRequest;
+		if ($r = $wgRequest->getText('backlink',false))
+		{
+			global $wgOut;
+			$t = Title::newFromText($r);
+			if ($t) {
+			  $wgOut->redirect($t->getFullUrl());
+  			header("Location: " . $t->getFullUrl('action=purge'));
+  			$wgOut->disable();
+  		} else {
+  		  die("bad backlink:$r");
+  		}
+		}
+		return true;
+	}
+	
+	function hook_EditPageBeforeEditButtons(&$editPage,&$buttons)
+	{
+		global $wgRequest;
+		if ($r = $wgRequest->getText('backlink',false))
+		{
+			$buttons[]='<input type="hidden" name="backlink" value="'.htmlspecialchars($r).'"> will return to '.$r;
+		}
+		return true;
+	}
+ 
+  /*** VIRTUAL SUBPAGES ***/
 	function hook_ShowMissingArticle ($a) {
 		global $wgOut,$wgNamespacesWithSubpages;
 		$t = Title::newFromText($a->mTitle->getPrefixedText());
 		$ns = $t->getNamespace();
 		if (!$t->isSubpage()) return true;
-		$parts = explode( '/', $t->getText());
-		$args = array();
-		$suffix = '';
-		while (count ($parts)>1) {
-		   array_unshift($args,array_pop($parts));
-		   $suffix .= "";
-		   $title = Title::newFromText(implode('/',$parts).$suffix,$ns);
-		   if(!$title->exists()) continue;
-		   
-		   $text = '{{:' . $title->getPrefixedText();
-		   $text .= "|path=" . preg_replace('/{/','&#123;',implode('/',$args));
-		   foreach ($args as $k=>$v) {
-		      $text.= '|'.($k+1) . "=" . preg_replace('/{/','&#123;',$v);
-		      $text.= '|sub'.($k+1) . "=" . preg_replace('/{/','&#123;',$v);
-		   }
-		   $text.="}}";
-			$wgOut->addWikiText($text);
-			return false;
-		}	
-		return true;
+
+	  $dbr = wfGetDB( DB_SLAVE );
+		$res = $dbr->selectField( 
+		  array('page', 'page_props' ),
+		  'page_title',
+		  array( 
+		    'pp_page = page_id', 
+		    'pp_propname' => 'xooVirtualSubpages', 
+		    'page_namespace' => $t->getNamespace(),
+		    $dbr->addQuotes($t->getDbKey()) . " LIKE CONCAT(page_title,'/%')"
+		  ),
+		  array(
+		    'ORDER BY' => 'page_title DESC'
+		  ),
+		  __METHOD__ 
+		);
+		if(!$res) return true;
+		$p = Title::makeTitle($t->getNamespace(),$res);
+			
+		$tparts = explode( '/', $t->getText());
+		$pparts = explode('/', $p->getText());
+		$args = array_slice($tparts,count($pparts));
+    $text = '{{:' . $p->getPrefixedText();
+    $text .= "|path=" . preg_replace('/{/','&#123;',implode('/',$args));
+    foreach ($args as $k=>$v) {
+      $text.= '|'.($k+1) . "=" . preg_replace('/{/','&#123;',$v);
+      $text.= '|sub'.($k+1) . "=" . preg_replace('/{/','&#123;',$v);
+    }
+    $text.="}}";
+    $wgOut->addWikiText($text);
+    return false;
 	}	
+	function var_VIRTUALSUBPAGES (&$parser) {
+	  $parser->getOutput()->setProperty('xooVirtualSubpages','1');
+	  return false;
+	}
+	/*** SYNTAX HIGHLIGHTING ***/
 	function hook_UnknownAction($action,$article)
 	{
 		global $wgOut;
@@ -166,36 +186,29 @@ class XxxCustomSkin extends Xxx
 
       $depth = 0;
       $color = 0;
-			while (preg_match('/^([\s\S]*?)<(\/?)(.\w+)(.*?)(\/?)>([\s\S]*?)(<\/\3>[\s\S]*)?$/',$text,$m))
-			{
+			while (preg_match('/^([\s\S]*?)<(\/?)(.\w+)(.*?)(\/?)>([\s\S]*?)(<\/\3>[\s\S]*)?$/',$text,$m)) {
 				list ($all,$before,$prefix,$tag,$attrs,$postfix,$value,$after) = $m;
 				$text=$value.$after;
-				if ($prefix)
-				{
+				if ($prefix) {
 					array_pop($tagStack);
 				}
-				elseif (!$postfix)
-				{
+				elseif (!$postfix) {
 					array_push($tagStack,$tag);
 				}
 				$parentTag = $tagStack[count($tagStack)-1];
 				
 				$chunks = explode("\n",$before);
 				$outchunks=array();
-				foreach ($chunks as $chunk)
-				{
-					if (trim($chunk))
-					{
+				foreach ($chunks as $chunk)	{
+					if (trim($chunk))	{
 						$outchunks[]= trim($chunk);
 					}
 				}
 				$out.=implode("\n".str_repeat ("\t",$depth+1),$outchunks);
 
-				switch ($_REQUEST['format'])
-				{
+				switch ($_REQUEST['format']) {
 				case 'highlight':
-					switch ("$prefix$tag$postfix")
-					{
+					switch ("$prefix$tag$postfix") {
 					case 'root':
 						$out .= "<span class=\"wiki-$tag\">";
 						$depth = -1;
@@ -307,10 +320,12 @@ class XxxCustomSkin extends Xxx
 		}
 		return true;
 	}
-
-
 	function setupExtension()
 	{
+	  global $wgXxxUseCustomSkin;
+//	  die(print_r(array($wgXxxUseCustomSkin),1));
+	  if ($wgXxxUseCustomSkin===false) return;
+	  
 		global $wgXxxCustomSkin;
 		global $wgMessageCache;
 		global $wgExtensionMessagesFiles; 
@@ -320,6 +335,7 @@ class XxxCustomSkin extends Xxx
 		wfXxxCustomSkinDeclare();
 		$this->applyCustomSkin();
 	}
+
 }
 
 function wfXxxCustomSkinDeclare()

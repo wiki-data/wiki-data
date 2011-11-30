@@ -10,5 +10,6 @@ require_once (dirname(__FILE__).'/Title.php');
 require_once (dirname(__FILE__).'/Image.php');
 require_once (dirname(__FILE__).'/Template.php');
 require_once (dirname(__FILE__).'/TemplateProfiler.php');
+require_once (dirname(__FILE__).'/List.php');
 
 

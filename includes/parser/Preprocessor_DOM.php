@@ -543,6 +543,9 @@ class Preprocessor_DOM implements Preprocessor {
 						'open' => $curChar,
 						'close' => $rule['end'],
 						'count' => $count,
+/*** START HACK ***/
+						'startPos' => $i,
+/*** END HACK ***/						
 						'lineStart' => ($i > 0 && $text[$i-1] == "\n"),
 					);
 
@@ -603,7 +606,9 @@ class Preprocessor_DOM implements Preprocessor {
 					} else {
 						$attr = '';
 					}
-
+/* START HACK */					
+					$attr .= ' start="' . $piece->startPos . '" end="' . ($i+$count) . '"';
+/* END HACK */
 					$element = "<$name$attr>";
 					$element .= "<title>$title</title>";
 					$argIndex = 1;
@@ -1064,10 +1069,19 @@ class PPFrame_DOM implements PPFrame {
 						$newIterator = $this->virtualBracketedImplode( '{{', '|', '}}', $title, $parts );
 					} else {
 						$lineStart = $contextNode->getAttribute( 'lineStart' );
+/*** START HACK ***/							
+						$startPos = $contextNode->getAttribute( 'start' );
+						$endPos = $contextNode->getAttribute( 'end' );
+/*** END HACK ***/							
 						$params = array(
 							'title' => new PPNode_DOM( $title ),
 							'parts' => new PPNode_DOM( $parts ),
-							'lineStart' => $lineStart );
+							'lineStart' => $lineStart,
+/*** START HACK ***/							
+              'startPos' => $startPos,
+              'endPos' => $endPos
+/*** END HACK ***/							
+						);
 						$ret = $this->parser->braceSubstitution( $params, $this );
 						if ( isset( $ret['object'] ) ) {
 							$newIterator = $ret['object'];

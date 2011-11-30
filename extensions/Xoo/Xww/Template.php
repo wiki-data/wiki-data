@@ -115,14 +115,15 @@ echo "</pre>";
 			global $wgAllowEvalHtmlIn;
 			if (!isset($wgAllowEvalHtmlIn[$frame->title->getNamespace()])) return $this->notFound();
 			$ret=array();
-			for ($i=1;$i<=$args->count;$i++)
-			{
+			for ($i=1;$i<=$args->count;$i++) {
 				$ret[] = $args->expand($i);
 			}
-			$ret = join('',$ret);
+			$ret = implode('|',$ret);
+			$ret = $parser->mStripState->unstripBoth($ret);
 			$ret = htmlspecialchars_decode($ret);
 			$ret =str_replace('&amp;','&',$ret);
-#			$ret = $args->cropExpand(1);
+			$ret = preg_replace('/\\s+/',' ',$ret);
+			#print_r(array($ret));
 			return array($ret,'isHTML'=>true,'noparse'=>false);
 
 		case 'expand':
@@ -132,7 +133,7 @@ echo "</pre>";
         
 
 		case 'wiki':
-/*		    
+		    
 		case 'parse':
 			$command=array_shift($a); #
 			$lastArg=array_pop($a);
@@ -146,7 +147,6 @@ echo "</pre>";
 			$newParser = new Parser();
 			$options = ParserOptions::newFromUser($wgUser);
 			return array($newParser->parse( $text, $parser->mTitle, $options, false)->mText,'isHTML'=>true);
-*/
 		case 'time':
 			$before = microtime(true);
 			$ret = $frame->expand($args[0]);
@@ -178,7 +178,7 @@ echo "</pre>";
 				(
 					'isHTML'=>true,
 #					'isChildObj'=>true,
-					'<a href="' . $frame->parent->title->getFullUrl("action=edit&startpos={$frame->startPos}&endpos={$frame->endPos}").'">'.$editText.'</a>'
+					'<span class="editcall"><a href="' . $frame->parent->title->getFullUrl("action=edit&startpos={$frame->startPos}&endpos={$frame->endPos}").'">'.$editText.'</a></span>'
 				);
 			return $this->notFound();
 
@@ -232,16 +232,15 @@ function efXwwShow(&$editPage)
 	$startPos=$wgRequest->getInt('startpos',-1);
 	$endPos=$wgRequest->getInt('endpos',-1);
 
-	if ($startPos>-1 && $endPos>-1)
-	{
-		if ($editPage->formtype=='initial')
-		{
+	if ($startPos>-1 && $endPos>-1) {
+		if (!$wgRequest->getInt('editpos',false))	{
 			$editPage->textbox1=substr($editPage->textbox1,$startPos,$endPos-$startPos);
 		}
 		
 		$wgOut->addHTML( '
 	<input type="hidden" value="'.$startPos.'" name="startpos" />
 	<input type="hidden" value="'.$endPos.'" name="endpos" />
+	<input type="hidden" value="true" name="editpos" />
 	');
 	}
 	return true;

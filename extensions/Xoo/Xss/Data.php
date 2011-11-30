@@ -463,7 +463,7 @@ END;
 			{
 				$tableBody.=$this->formatCellRow($fName, $fValue);
 			}
-			$returnText .= $this->formatTable($tableHead, $tableBody);
+			$returnText .= $this->formatTable($tableHead, $tableBody,'xss-rowtable');
 			$returnText .= $error;
 			return "<h2>$rowName</h2>$returnText $errorMessage";
 
@@ -1119,7 +1119,7 @@ ORDER BY ta, fi;
 						if ($args->isNamed($i)) {
 							$fieldName = $args->getName($i);
 						} else {
-							$fieldName = $args->trimExpand($i);
+							$fieldName = $fieldName;
 						}
 						if (!$this->normalizeName ($fieldName)) 
 						{
@@ -1133,13 +1133,15 @@ ORDER BY ta, fi;
 							if ($args->isNamed($i)) {
 								$argValue = $args->cropExpandValue($i);
 							} else {
+							  $argValue = $args->cropExpand($i);
+/*							
 								$argName = $args->trimExpand($i);
 								if ($frame->parent && isset($frame->namedArgs[$argName]) ) {
 									$argValue = $frame->parent->expand($frame->namedArgs[$argName]);
 								} else {
 									$argValue = '';
 								}
-							}
+*/							}
 							$argValue = $parser->mStripState->unstripBoth($argValue);
 
 							if($fieldType=='reference')		#TODO fix this ugly hack
@@ -1307,19 +1309,17 @@ ORDER BY ta, fi;
 		$tableName = $tableDef['name'];
 		$pageTitle=Title::NewFromText($tableName,NS_XSSDATA);
 		# done looping through arguments, display stuff
-		$returnText = '<h2>Table definition <small><a href="'
-					. $pageTitle->escapeFullUrl('command=browse') 
-					. '">(browse)</a></small></h2>';
+				$returnText = '<div class="xss-tabledef-heading"><a class="xss-button selected" href="' . $pageTitle->escapeFullUrl() . '">table definition</a> <a class="xss-button" href="' . $pageTitle->escapeFullUrl('command=browse') . '">browse data</a></div>';
 		# display table def
-		$tableHead = $this->formatHeaderRow('field name','field type','default value','reference table','reverse reference name');
+		$tableHead = $this->formatHeaderRow('field name','field type','default value','referenced table.field');
 		$tableBody='';
 		foreach ($tableDef['fieldsByNumber'] as $fieldRow)
 		{
-			$cellRow = array_slice($fieldRow,1);
+			$cellRow = array_slice($fieldRow,1,-1);
 			if ($cellRow['field_reference']) 
 			{
 				$refTitle=Title::newFromText($cellRow['field_reference'],NS_XSSDATA);
-				$cellRow['field_reference']='<a class="'.($refTitle->exists()?'':'new').'" href="'. $refTitle->escapeFullUrl() .'">'. $refTitle->getText() .'</a>';
+				$cellRow['field_reference']='<a class="'.($refTitle->exists()?'':'new').'" href="'. $refTitle->escapeFullUrl() .'">'. $refTitle->getText() .'.#</a>';
 			}
 			$tableBody.=$this->formatCellRow($cellRow);
 #				$tableBody.=$this->formatCellRow(array_keys($cellRow));
@@ -1331,8 +1331,7 @@ ORDER BY ta, fi;
 				$reverseRow['field_reverse'],
 				$reverseRow['field_reverse'] ? 'reverse' : 'related',
 				'',
-				'<a href="'. $revTitle->escapeFullUrl() .'">'. $revTitle->getText() .'</a>',
-				$reverseRow['field_name']
+				'<a href="'. $revTitle->escapeFullUrl() .'">'. $revTitle->getText() .'.' .$reverseRow['field_name'] . '</a>'
 			);
 			$tableBody.=$this->formatCellRow($cellRow);
 #				$tableBody.=$this->formatCellRow(array_keys($cellRow));
@@ -1352,35 +1351,76 @@ ORDER BY ta, fi;
 
 		if ($dbr->tableExists($this->getDataTableName($tableName)))
 		{
-			global $wgRequest;
-			$returnText.='<h2> Browse';
-			$returnText.=' <small><a href="' . $pageTitle->escapeFullUrl() . '">(table definition)</a></small>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<small>';
-			$offset = $wgRequest->getInt('data_offset',0);
-			$limit = $wgRequest->getInt('data_limit',20);
-			if ($limit>2000) $limit=2000;
-			if ($offset>0)				
-			{
-				$returnText.='<a href="'. $pageTitle->escapeFullUrl("command=browse&sort={$_GET['sort']}&direction={$_GET['direction']}&data_offset=".($offset-$limit>0?$offset-$limit:0)."&data_limit=$limit").'" onclick="if(window.loadContent) { loadContent(this) ; return false }">◀</a> ';
+		  global $wgRequest;
+		  $args = array(
+  			'offset' => $wgRequest->getInt('data_offset',0),
+			  'limit' => $wgRequest->getInt('data_limit',20),
+			  'sort' => $wgRequest->getText('data_sort','_page_title'),
+			  'dir' => $wgRequest->getText('data_dir','asc'),
+			);
+			
+		  $base = $pageTitle->escapeFullUrl('command=browse');
+			
+			function browseButton($base, $args, $arg, $value, $text) {
+			  $url = $base;
+			  $sel = ' selected';
+			  foreach ($args as $k=>$v) {
+			    $url .= "&data_$k=" . urlencode($k==$arg ? $value : $v); 
+			    if ($k===$arg && $v!==$value) $sel = '';
+			  }
+			  return "<a href=\"$url\" class=\"xss-button$sel\">$text</a>";
 			}
-			$returnText.='<a href="'. $pageTitle->escapeFullUrl("command=browse&sort={$_GET['sort']}&direction={$_GET['direction']}&data_offset=".($offset+$limit)."&data_limit=$limit").'" onclick="if(window.loadContent) { loadContent(this) ; return false }">▶</a>';
-			$returnText.='</small></h2>'; 
+
+			function sortButton($base, $args, $sort, $dir, $text) {
+			  $url = $base;
+			  $sel = ($sort == $args['sort'] && $dir == $args['dir']) ? ' selected' : '';
+			  $url .= "&data_offset={$args['offset']}&data_limit={$args['limit']}&data_sort={$sort}&data_dir={$dir}";
+			  return "<a href=\"$url\" class=\"xss-sort $dir$sel\">$text</a>";
+			}
+
+
+			global $wgRequest;
+				$returnText = '<div class="xss-tabledef-heading"><a class="xss-button" href="' . $pageTitle->escapeFullUrl() . '">table definition</a> <a class="xss-button selected" href="'.$baseBrowseUrl.'">browse data</a></div>';
+				
+			
+
+
+			if ($limit>2000) $limit=2000;
+			$returnText 
+			.=  '<div class="xss-browse-nav">' 
+			.   browseButton($base,$args,'offset',max($args['offset']-$args['limit'],0),'◀')
+			.   ' '
+			.   browseButton($base,$args,'offset',$args['offset']+$args['limit'],'▶')
+			.   '</div>'
+			;
+
+			$returnText 
+			.=  '<div class="xss-browse-limit">' 
+			.   browseButton($base,$args,'limit',10,'10')
+			.   ' '
+			.   browseButton($base,$args,'limit',20,'20')
+			.   ' '
+			.   browseButton($base,$args,'limit',50,'50')
+			.   ' '
+			.   browseButton($base,$args,'limit',100,'100')
+			.   '</div>'
+			;
+
 			
 			//TODO:: Use XssQuery::MakeQuery (?) for browsing table data
 			
-			$DIR = $_GET['direction'] == 'desc' ? 'DESC' : 'ASC'; 
-			$ORDERBY = $_GET['sort'] ? "ORDER BY" . $this->escapeName($_GET['sort']) . " $DIR" : '';
-			$res= $dbr->query('SELECT * FROM ' . $this->escapeDataTableName($tableName) ." $ORDERBY LIMIT $limit OFFSET $offset");
+			
+			$DIR = $args['dir'] == 'desc' ? 'DESC' : 'ASC'; 
+			$ORDERBY = $args['sort'] ? "ORDER BY" . $this->escapeName($args['sort']) . " $DIR" : '';
+			$res= $dbr->query('SELECT * FROM ' . $this->escapeDataTableName($tableName) ." $ORDERBY LIMIT {$args['limit']} OFFSET {$args['offset']}");
 			
 			$headerRow=array();
 			$headerRow=$tableDef['fieldNames'];
 			array_unshift($headerRow,'_row_ref');
-			array_unshift($headerRow,'_page');
+			array_unshift($headerRow,'_page_title');
 			$missingFields=array();
-			foreach ($headerRow as $k=>$fName)
-			{
-				$urlAsc = $pageTitle->escapeFullUrl("command=browse&sort=$fName&direction=asc");
-				$urlDesc = $pageTitle->escapeFullUrl("command=browse&sort=$fName&direction=desc");
-				$headerRow[$k]="<a href=\"$urlDesc\" onclick=\"if(window.loadContent) { loadContent(this) ; return false }\">▼</a>&nbsp;$fName&nbsp;<a href=\"$urlAsc\" onclick=\"if(window.loadContent) { loadContent(this) ; return false }\">▲</a><a name=\"column_$fName\"/>";
+			foreach ($headerRow as $k=>$fName) {
+			  $headerRow[$k]=sortButton($base,$args,$fName,'desc',"▼") ." $fName " . sortButton($base,$args,$fName,'asc',"▲");
 			}
 			for ($i=5;$i<$dbr->numFields($res);$i++)
 			{
@@ -1396,13 +1436,13 @@ ORDER BY ta, fi;
 			$tableBody='';
 			while ($row=$dbr->fetchRow($res))
 			{	
-				$rowTitle=Title::newFromText($row['_page_title']);
+				$rowTitle=Title::makeTitle($row['_page_namespace'],$row['_page_title']);
 				$rowName=preg_replace('/_/',' ',$row['_row_name']);
 				$rowRef=$row['_row_ref'];
 				$cellRow=array
 				(
-					'<a href="' . $rowTitle->escapeFullUrl() .'">' . $rowTitle->getFullText() . '</a>',
-					'<a href="' . $rowTitle->escapeFullUrl() . '#' . $rowName . '">' . $rowRef . '</a>'
+					'<a title = "'.$rowTitle->getFullText().'" href="' . $rowTitle->escapeFullUrl() .'">' . $rowTitle->getFullText() . '</a>',
+					'<a title = "'.$rowRef.'" href="' . $rowTitle->escapeFullUrl() . '#' . $rowName . '">' . $rowRef . '</a>'
 				);
 				foreach ($tableDef['fieldsByNumber'] as $fieldNumber=>$fieldDef)
 				{
@@ -1416,19 +1456,19 @@ ORDER BY ta, fi;
 #						$displayValue=$fixValue;
 					if (!$cast)
 					{
-						$cellRow[]='<div class="xss-cell" style="position:relative;color:red">'.$displayValue.'</div>';
+						$cellRow[]='<div class="xss-cell" title="'.$displayValue.'" style="position:relative;color:red">'.$displayValue.'</div>';
 					}
 					elseif ($value!=$row[$fName])
 					{
-						$cellRow[]='<div class="xss-cell" style="position:relative;color:navy">'.$displayValue.'</div>';
+						$cellRow[]='<div class="xss-cell" title="'.$displayValue.'" style="position:relative;color:navy">'.$displayValue.'</div>';
 					}
 					elseif ($value!==$fValue)
 					{
-						$cellRow[]='<div class="xss-cell" style="position:relative">'.$displayValue.'</div>';
+						$cellRow[]='<div class="xss-cell" title="'.$displayValue.'" style="position:relative">'.$displayValue.'</div>';
 					}
 					else
 					{
-						$cellRow[]='<div class="xss-cell" style="position:relative;">'.$displayValue.'</div>';
+						$cellRow[]='<div class="xss-cell" title="'.$displayValue.'" style="position:relative;">'.$displayValue.'</div>';
 					}
 				}
 				foreach ($missingFields as $fName)
@@ -1444,12 +1484,12 @@ ORDER BY ta, fi;
 	
 	function formatError($errorText)
 	{
-		return '<span class="xss-error" style="color:red;font-weight:bold">'.$errorText.'</span>';
+		return '<div class="xss-error" style="color:red;font-weight:bold">'.$errorText.'</div>';
 	}
 	
-	function formatTable($head, $content='')
+	function formatTable($head, $content='',$class='')
 	{
-		return '<div class="xss-outer-wrap"><div class="xss-inner-wrap"><table class="xss-table" cellspacing="0" cellpadding="0">'.$head.''.$content."</table></div></div>";
+		return '<div class="xss-outer-wrap"><div class="xss-inner-wrap"><table class="xss-table ' . $class.'" cellspacing="0" cellpadding="0">'.$head.''.$content."</table></div></div>";
 	}
 
 

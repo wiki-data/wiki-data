@@ -22,11 +22,11 @@
 		var $mMessages = array('add-link'=>'Add link');
 		function setup()  { .... if ($success) return true; else return false; }
 
-		function var_foo  (&$parser) {};
-		function fn_fpp   (&$parser, $arg1, $arg2...) {};
-		function fl_fqq   (&$parser, &$frame, &$args) {};
-		function fn_frr   (&$parser, $arg1, $arg2...) {};
-		function fl_fss   (&$parser, &$frame, &$args) {};
+		function var_foo  (&$parser) {};  # {{FOO}}
+		function fnx_fpp   (&$parser, $cmd, $arg1, $arg2...) {}; {{fpp:cmd|arg1|...}}, precalculated args
+		function flx_fqq   (&$parser, &$frame, &$args) {}; {{#fqq:cmd|arg1|...}}, precalculated args
+		function fn_frr   (&$parser, $arg1, $arg2...) {}; {{frr:cmd|arg1|...}}, lazy args
+		function fl_fss   (&$parser, &$frame, &$args) {}; {{#fss:cmd|arg1|...}}, lazy args
 		function tag_ftt  ($text, $args, &$parser) {};
 		function hook_fuu (&$parser, ...) {};
 	}

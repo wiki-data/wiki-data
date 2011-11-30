@@ -418,7 +418,9 @@ class Preprocessor_Hash implements Preprocessor {
 						'open' => "\n",
 						'close' => "\n",
 						'parts' => array( new PPDPart_Hash( str_repeat( '=', $count ) ) ),
+/*** START HACK ***/
 						'startPos' => $i,
+/*** END HACK ***/						
 						'count' => $count );
 					$stack->push( $piece );
 					$accum =& $stack->getAccum();
@@ -498,6 +500,7 @@ class Preprocessor_Hash implements Preprocessor {
 						'open' => $curChar,
 						'close' => $rule['end'],
 						'count' => $count,
+						'startPos' => $i,
 						'lineStart' => ($i > 0 && $text[$i-1] == "\n"),
 					);
 
@@ -552,6 +555,11 @@ class Preprocessor_Hash implements Preprocessor {
 					unset( $parts[0] );
 
 					$element = new PPNode_Hash_Tree( $name );
+/* START HACK */					
+					$element->addChild( new PPNode_Hash_Attr( 'startPos', $piece->startPos ) );
+					$element->addChild( new PPNode_Hash_Attr( 'endPos', $i+$count) );
+/* END HACK */
+
 
 					# The invocation is at the start of the line if lineStart is set in
 					# the stack, and all opening brackets are used up.
@@ -1715,7 +1723,15 @@ class PPNode_Hash_Tree implements PPNode {
 			if ( $child->name == 'lineStart' ) {
 				$bits['lineStart'] = '1';
 			}
+/* START HACK */			
+			if ( $child->name == 'startPos' ) {
+				$bits['startPos'] = $child->value;
+			}
+			if ( $child->name == 'endPos' ) {
+				$bits['endPos'] = $child->value;
+			}
 		}
+/* END HACK */			
 		if ( !isset( $bits['title'] ) ) {
 			throw new MWException( 'Invalid node passed to ' . __METHOD__ );
 		}

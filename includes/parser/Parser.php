@@ -344,7 +344,7 @@ class Parser {
 		wfRunHooks( 'ParserAfterStrip', array( &$this, &$text, &$this->mStripState ) );
 		$text = $this->internalParse( $text );
 
-		$text = $this->mStripState->unstripGeneral( $text );
+#		$text = $this->mStripState->unstripGeneral( $text );
 
 		# Clean up special characters, only run once, next-to-last before doBlockLevels
 		$fixtags = array(
@@ -3322,6 +3322,10 @@ class Parser {
 		if ( $isChildObj ) {
 			# Clean up argument array
 			$newFrame = $frame->newChild( $args, $title );
+/* START HACK */			
+			$newFrame->startPos = $piece['startPos'];
+			$newFrame->endPos = $piece['endPos'];
+/* END HACK */			
 
 			if ( $nowiki ) {
 				$text = $newFrame->expand( $text, PPFrame::RECOVER_ORIG );
