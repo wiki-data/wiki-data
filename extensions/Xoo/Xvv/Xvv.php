@@ -184,6 +184,79 @@ class Xvv extends Xxx
 		return  $this->notFound();
 	}
 
+
+//MI.TKO
+############################
+#
+#	{{#fetch:imgheight|url|desired width}} -> proportionally scaled (desired) height
+#	{{#fetch:rss|url}} -> array for dataloop
+#
+############################
+
+ 	function fl_fetch(&$parser, $f, $a)
+	{   
+		$args=new XxxArgs($f, $a);
+		$cmd= $args->command;
+		if ($cmd=='imgheight') {
+			$img = $args->trimExpand(1);
+			$width = $args->trimExpand(2);
+			$size = getimagesize($img);
+			return round($width*$size[1]/$size[0]);
+		} else if ($cmd=='rss') {
+			$url = $args->trimExpand(1);
+			$text = file_get_contents($url);
+//echo 'loaded text<br>';
+			$data = simplexml_load_string($text);
+			$items = $data->xpath('//item');
+			$arr=array();
+			foreach ($items as $item) {
+				$attrib = $item->enclosure->attributes();
+				$item_array = array(
+					'type' => (string)$item->content,
+					'title' => (string)$item->title,
+					'description' => (string)$item->description,
+					'date' => (string)$item->pubDate,
+					'image' => (string)$attrib['url'],
+				);				
+				$id = $this->arrMake($item_array);
+				$arr[] = $id;
+			}
+			$id = $this->arrMake($arr);
+			return array('0'=>$id);
+		} else if ($cmd=='atom') {
+			$url = $args->trimExpand(1);
+			$max = $args->trimExpand(2);
+			$text = file_get_contents($url);
+			$data = simplexml_load_string($text);
+			$items = $data->entry;//('//entry');
+//echo 'loaded text<br><pre>'.print_r($items,1).'</pre>';
+			$arr=array();
+			foreach ($items as $item) {
+			   if (!$max) break;
+			   $link = $item->link->attributes();
+				$item_array = array(
+					'source' => (string)$item->source->title,
+					'title' => (string)$item->title,
+					'date' => (string)$item->updated,
+					'link' => (string)$link['href'],
+					'content' => (string)$item->content->asXML(),
+				);				
+				if ($item_array['title']) {
+   				$id = $this->arrMake($item_array);
+	   			$arr[] = $id;
+	   			$max--;
+	   		}
+			}
+			$id = $this->arrMake($arr);
+			return array('0'=>$id);
+		} else if ($cmd=='raw') {
+			$url = $args->trimExpand(1);
+			$data = file_get_contents($url);
+			return array($data);
+		}
+		return  $this->notFound();
+	}	
+//MI.TKO
 	
 
 ############################
@@ -194,7 +267,7 @@ class Xvv extends Xxx
 
 	function flx_DOLLAR(&$parser,&$f, &$a)
 	{
-		$args=new XxxArgs(&$f,&$a);
+		$args=new XxxArgs($f,$a);
 		$currentId = 'vars';
 		$varPathParts = explode('#',$args->command);
 		$lastKey=array_pop($varPathParts);
@@ -524,8 +597,9 @@ class Xvv extends Xxx
 	            else return $this->notFound();
 			}
 			else return $this->notFound();
-		case 'inc':
-		case 'dec':
+// MI.TKO - commented out - defined above!
+//		case 'inc':
+//		case 'dec':
 		case 'odd':
 		case 'even':
 		default:
@@ -548,7 +622,8 @@ function fl_prop (&$P, $F, $A)
 		case 'get':	
 			if ($args->count < 2 || $args->count > 3) return $this->notFound();
 			$t = $args->trimExpand(1);
-			$title=Title::newFromText($t);
+			if ($t==='') $title = $P->mTitle;
+			else $title=Title::newFromText($t);
 			if(!$title) return $this->notFound();
 			$article=new Article($title);
 			$pid=$article->getId();
@@ -560,23 +635,22 @@ function fl_prop (&$P, $F, $A)
 				if($pid==0) return $this->notFound();						
 			}
 			$prop = $args->trimExpand(2);
-			
-			$dbr = wfGetDB( DB_SLAVE );
+
+    	$dbr = wfGetDB( DB_SLAVE );
 			$res = $dbr->select( array('page_props' ),
 				array( 'pp_value' ),
 				array( 'pp_propname' => $prop, 'pp_page' => $pid),
 				__METHOD__ );
-			if( $res === false ) return $args->count>2 ? $args->cropExpand(3) : $this->notFound();
+			if( !$dbr->numRows($res) ) return $args->count>2 ? $args->cropExpand(3) : $this->notFound();
 			foreach( $res as $row ) {
 				$val=$row->pp_value;
 			}
-			
 			$dbr = wfGetDB( DB_SLAVE );
 			$res = $dbr->select( array('page_props' ),
 				array( 'pp_value' ),
 				array( 'pp_propname' => "{$prop}__StripState__", 'pp_page' => $pid),
 				__METHOD__ );
-			if( $res === false ) return $args->count>2 ? $args->cropExpand(3) : $this->notFound();
+			if( !$dbr->numRows($res) ) return $args->count>2 ? $args->cropExpand(3) : $this->notFound();
 			foreach( $res as $row ) {
 				$stripState=unserialize($row->pp_value);
 			}
@@ -694,7 +768,13 @@ function fl_prop (&$P, $F, $A)
 			{
 				return array('found'=>false);
 			}
-
+      case 'random':
+      	$id  = $args->trimExpand(1);
+			if (!$this->arrExists($id)) return $this->notFound();
+			$a = $this->getArray($id);
+		   $keys = array_keys($a);
+		   $n = rand(0,count($keys)-1);
+		   return $this->arrGetItem($id,$keys[$n]);
 		case 'set':
 		case 'setitem':
 			if( $args->count !=3 ) return array( 'found' => false );
@@ -1252,7 +1332,7 @@ function fl_prop (&$P, $F, $A)
 		if ($parentCount<0) return $this->notFound();
 		array_shift($a);array_shift($a);
 		array_unshift($a,$command);
-		return $this->fl_this(&$parser, $frame, $a, $parentCount);
+		return $this->fl_this($parser, $frame, $a, $parentCount);
 	}
 	
 	function fl_this(&$parser, $frame, $a, $parentCount=0)

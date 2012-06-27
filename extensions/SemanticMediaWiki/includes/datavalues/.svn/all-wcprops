@@ -1,0 +1,101 @@
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svnroot/mediawiki/!svn/ver/114490/trunk/extensions/SemanticMediaWiki/includes/datavalues
+END
+SMW_DV_Number.php
+K 25
+svn:wc:ra_dav:version-url
+V 107
+/svnroot/mediawiki/!svn/ver/106558/trunk/extensions/SemanticMediaWiki/includes/datavalues/SMW_DV_Number.php
+END
+SMW_DV_Error.php
+K 25
+svn:wc:ra_dav:version-url
+V 106
+/svnroot/mediawiki/!svn/ver/102355/trunk/extensions/SemanticMediaWiki/includes/datavalues/SMW_DV_Error.php
+END
+SMW_DV_Bool.php
+K 25
+svn:wc:ra_dav:version-url
+V 105
+/svnroot/mediawiki/!svn/ver/102353/trunk/extensions/SemanticMediaWiki/includes/datavalues/SMW_DV_Bool.php
+END
+SMW_DV_Concept.php
+K 25
+svn:wc:ra_dav:version-url
+V 108
+/svnroot/mediawiki/!svn/ver/112435/trunk/extensions/SemanticMediaWiki/includes/datavalues/SMW_DV_Concept.php
+END
+SMW_DV_Temperature.php
+K 25
+svn:wc:ra_dav:version-url
+V 112
+/svnroot/mediawiki/!svn/ver/105669/trunk/extensions/SemanticMediaWiki/includes/datavalues/SMW_DV_Temperature.php
+END
+SMW_DV_Time.php
+K 25
+svn:wc:ra_dav:version-url
+V 105
+/svnroot/mediawiki/!svn/ver/114490/trunk/extensions/SemanticMediaWiki/includes/datavalues/SMW_DV_Time.php
+END
+SMW_DV_URI.php
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/svnroot/mediawiki/!svn/ver/111141/trunk/extensions/SemanticMediaWiki/includes/datavalues/SMW_DV_URI.php
+END
+SMW_DV_WikiPage.php
+K 25
+svn:wc:ra_dav:version-url
+V 109
+/svnroot/mediawiki/!svn/ver/105669/trunk/extensions/SemanticMediaWiki/includes/datavalues/SMW_DV_WikiPage.php
+END
+SMW_DV_Types.php
+K 25
+svn:wc:ra_dav:version-url
+V 106
+/svnroot/mediawiki/!svn/ver/106430/trunk/extensions/SemanticMediaWiki/includes/datavalues/SMW_DV_Types.php
+END
+SMW_DV_String.php
+K 25
+svn:wc:ra_dav:version-url
+V 107
+/svnroot/mediawiki/!svn/ver/102353/trunk/extensions/SemanticMediaWiki/includes/datavalues/SMW_DV_String.php
+END
+SMW_DV_Import.php
+K 25
+svn:wc:ra_dav:version-url
+V 107
+/svnroot/mediawiki/!svn/ver/105669/trunk/extensions/SemanticMediaWiki/includes/datavalues/SMW_DV_Import.php
+END
+SMW_DataValue.php
+K 25
+svn:wc:ra_dav:version-url
+V 107
+/svnroot/mediawiki/!svn/ver/114406/trunk/extensions/SemanticMediaWiki/includes/datavalues/SMW_DataValue.php
+END
+SMW_DV_Quantity.php
+K 25
+svn:wc:ra_dav:version-url
+V 109
+/svnroot/mediawiki/!svn/ver/111248/trunk/extensions/SemanticMediaWiki/includes/datavalues/SMW_DV_Quantity.php
+END
+SMW_DV_Record.php
+K 25
+svn:wc:ra_dav:version-url
+V 107
+/svnroot/mediawiki/!svn/ver/105669/trunk/extensions/SemanticMediaWiki/includes/datavalues/SMW_DV_Record.php
+END
+SMW_DV_PropertyList.php
+K 25
+svn:wc:ra_dav:version-url
+V 113
+/svnroot/mediawiki/!svn/ver/105669/trunk/extensions/SemanticMediaWiki/includes/datavalues/SMW_DV_PropertyList.php
+END
+SMW_DV_Property.php
+K 25
+svn:wc:ra_dav:version-url
+V 109
+/svnroot/mediawiki/!svn/ver/108604/trunk/extensions/SemanticMediaWiki/includes/datavalues/SMW_DV_Property.php
+END

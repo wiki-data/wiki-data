@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svnroot/mediawiki/!svn/ver/108971/trunk/extensions/SemanticMediaWiki/includes/articlepages
+END
+SMW_ConceptPage.php
+K 25
+svn:wc:ra_dav:version-url
+V 111
+/svnroot/mediawiki/!svn/ver/108971/trunk/extensions/SemanticMediaWiki/includes/articlepages/SMW_ConceptPage.php
+END
+SMW_OrderedListPage.php
+K 25
+svn:wc:ra_dav:version-url
+V 115
+/svnroot/mediawiki/!svn/ver/108971/trunk/extensions/SemanticMediaWiki/includes/articlepages/SMW_OrderedListPage.php
+END
+SMW_PropertyPage.php
+K 25
+svn:wc:ra_dav:version-url
+V 112
+/svnroot/mediawiki/!svn/ver/102968/trunk/extensions/SemanticMediaWiki/includes/articlepages/SMW_PropertyPage.php
+END

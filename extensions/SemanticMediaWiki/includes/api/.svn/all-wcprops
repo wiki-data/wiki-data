@@ -1,0 +1,29 @@
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svnroot/mediawiki/!svn/ver/112438/trunk/extensions/SemanticMediaWiki/includes/api
+END
+ApiAskArgs.php
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/svnroot/mediawiki/!svn/ver/112438/trunk/extensions/SemanticMediaWiki/includes/api/ApiAskArgs.php
+END
+ApiSMWQuery.php
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/svnroot/mediawiki/!svn/ver/112438/trunk/extensions/SemanticMediaWiki/includes/api/ApiSMWQuery.php
+END
+ApiAsk.php
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svnroot/mediawiki/!svn/ver/112438/trunk/extensions/SemanticMediaWiki/includes/api/ApiAsk.php
+END
+ApiSMWInfo.php
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/svnroot/mediawiki/!svn/ver/112438/trunk/extensions/SemanticMediaWiki/includes/api/ApiSMWInfo.php
+END

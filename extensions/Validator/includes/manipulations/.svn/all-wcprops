@@ -1,0 +1,41 @@
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svnroot/mediawiki/!svn/ver/103602/trunk/extensions/Validator/includes/manipulations
+END
+ParamManipulationFunctions.php
+K 25
+svn:wc:ra_dav:version-url
+V 114
+/svnroot/mediawiki/!svn/ver/86919/trunk/extensions/Validator/includes/manipulations/ParamManipulationFunctions.php
+END
+ParamManipulationImplode.php
+K 25
+svn:wc:ra_dav:version-url
+V 112
+/svnroot/mediawiki/!svn/ver/74219/trunk/extensions/Validator/includes/manipulations/ParamManipulationImplode.php
+END
+ParamManipulationInteger.php
+K 25
+svn:wc:ra_dav:version-url
+V 112
+/svnroot/mediawiki/!svn/ver/74293/trunk/extensions/Validator/includes/manipulations/ParamManipulationInteger.php
+END
+ParamManipulationBoolean.php
+K 25
+svn:wc:ra_dav:version-url
+V 113
+/svnroot/mediawiki/!svn/ver/103602/trunk/extensions/Validator/includes/manipulations/ParamManipulationBoolean.php
+END
+ParamManipulationFloat.php
+K 25
+svn:wc:ra_dav:version-url
+V 110
+/svnroot/mediawiki/!svn/ver/74293/trunk/extensions/Validator/includes/manipulations/ParamManipulationFloat.php
+END
+ParamManipulationString.php
+K 25
+svn:wc:ra_dav:version-url
+V 111
+/svnroot/mediawiki/!svn/ver/83266/trunk/extensions/Validator/includes/manipulations/ParamManipulationString.php
+END

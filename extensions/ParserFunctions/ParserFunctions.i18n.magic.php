@@ -15,6 +15,7 @@ function efParserFunctionsWords( $lang ) {
 	$words['en'] = array(
 		'expr'       => array( 0, 'expr' ),
 		'if'         => array( 0, 'if' ),
+		'if2'        => array( 0, 'if2' ),
 		'ifeq'       => array( 0, 'ifeq' ),
 		'ifexpr'     => array( 0, 'ifexpr' ),
 		'iferror'    => array( 0, 'iferror' ),

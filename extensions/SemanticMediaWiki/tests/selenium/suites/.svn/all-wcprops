@@ -1,0 +1,17 @@
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svnroot/mediawiki/!svn/ver/99813/trunk/extensions/SemanticMediaWiki/tests/selenium/suites
+END
+SMWSeleniumTestSuite.php
+K 25
+svn:wc:ra_dav:version-url
+V 115
+/svnroot/mediawiki/!svn/ver/92601/trunk/extensions/SemanticMediaWiki/tests/selenium/suites/SMWSeleniumTestSuite.php
+END
+TemplateTestCase.php
+K 25
+svn:wc:ra_dav:version-url
+V 111
+/svnroot/mediawiki/!svn/ver/92601/trunk/extensions/SemanticMediaWiki/tests/selenium/suites/TemplateTestCase.php
+END

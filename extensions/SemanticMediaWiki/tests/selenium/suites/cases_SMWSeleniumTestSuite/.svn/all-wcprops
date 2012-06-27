@@ -1,0 +1,173 @@
+K 25
+svn:wc:ra_dav:version-url
+V 117
+/svnroot/mediawiki/!svn/ver/99813/trunk/extensions/SemanticMediaWiki/tests/selenium/suites/cases_SMWSeleniumTestSuite
+END
+EmbedValueWithShowParserFunction.php
+K 25
+svn:wc:ra_dav:version-url
+V 154
+/svnroot/mediawiki/!svn/ver/99813/trunk/extensions/SemanticMediaWiki/tests/selenium/suites/cases_SMWSeleniumTestSuite/EmbedValueWithShowParserFunction.php
+END
+CopyQuerySyntaxFromSpecialAsk.php
+K 25
+svn:wc:ra_dav:version-url
+V 151
+/svnroot/mediawiki/!svn/ver/92601/trunk/extensions/SemanticMediaWiki/tests/selenium/suites/cases_SMWSeleniumTestSuite/CopyQuerySyntaxFromSpecialAsk.php
+END
+RefreshLinkForEveryPage.php
+K 25
+svn:wc:ra_dav:version-url
+V 145
+/svnroot/mediawiki/!svn/ver/99813/trunk/extensions/SemanticMediaWiki/tests/selenium/suites/cases_SMWSeleniumTestSuite/RefreshLinkForEveryPage.php
+END
+SelectPagesByPropertyValue.php
+K 25
+svn:wc:ra_dav:version-url
+V 148
+/svnroot/mediawiki/!svn/ver/99813/trunk/extensions/SemanticMediaWiki/tests/selenium/suites/cases_SMWSeleniumTestSuite/SelectPagesByPropertyValue.php
+END
+BuiltInTypeString.php
+K 25
+svn:wc:ra_dav:version-url
+V 139
+/svnroot/mediawiki/!svn/ver/92601/trunk/extensions/SemanticMediaWiki/tests/selenium/suites/cases_SMWSeleniumTestSuite/BuiltInTypeString.php
+END
+SelectPagesByPropertyAnnotationByWildcard.php
+K 25
+svn:wc:ra_dav:version-url
+V 163
+/svnroot/mediawiki/!svn/ver/99813/trunk/extensions/SemanticMediaWiki/tests/selenium/suites/cases_SMWSeleniumTestSuite/SelectPagesByPropertyAnnotationByWildcard.php
+END
+CreatePropertyPageTestCase.php
+K 25
+svn:wc:ra_dav:version-url
+V 148
+/svnroot/mediawiki/!svn/ver/99813/trunk/extensions/SemanticMediaWiki/tests/selenium/suites/cases_SMWSeleniumTestSuite/CreatePropertyPageTestCase.php
+END
+BuildInTypeNumber.php
+K 25
+svn:wc:ra_dav:version-url
+V 139
+/svnroot/mediawiki/!svn/ver/92601/trunk/extensions/SemanticMediaWiki/tests/selenium/suites/cases_SMWSeleniumTestSuite/BuildInTypeNumber.php
+END
+MakePropertySubpropertyOfAnotherOneTestCase.php
+K 25
+svn:wc:ra_dav:version-url
+V 165
+/svnroot/mediawiki/!svn/ver/99813/trunk/extensions/SemanticMediaWiki/tests/selenium/suites/cases_SMWSeleniumTestSuite/MakePropertySubpropertyOfAnotherOneTestCase.php
+END
+SpecialAskProvidesGUIForQueries.php
+K 25
+svn:wc:ra_dav:version-url
+V 153
+/svnroot/mediawiki/!svn/ver/92601/trunk/extensions/SemanticMediaWiki/tests/selenium/suites/cases_SMWSeleniumTestSuite/SpecialAskProvidesGUIForQueries.php
+END
+AnnotatePageWithProperty.php
+K 25
+svn:wc:ra_dav:version-url
+V 146
+/svnroot/mediawiki/!svn/ver/92601/trunk/extensions/SemanticMediaWiki/tests/selenium/suites/cases_SMWSeleniumTestSuite/AnnotatePageWithProperty.php
+END
+UnusedPropertiesOnSpecialPageTestCase.php
+K 25
+svn:wc:ra_dav:version-url
+V 159
+/svnroot/mediawiki/!svn/ver/99813/trunk/extensions/SemanticMediaWiki/tests/selenium/suites/cases_SMWSeleniumTestSuite/UnusedPropertiesOnSpecialPageTestCase.php
+END
+FactboxLinksToSpecialBrowse.php
+K 25
+svn:wc:ra_dav:version-url
+V 149
+/svnroot/mediawiki/!svn/ver/92601/trunk/extensions/SemanticMediaWiki/tests/selenium/suites/cases_SMWSeleniumTestSuite/FactboxLinksToSpecialBrowse.php
+END
+SearchByPropertyWithNumericValueTestCase.php
+K 25
+svn:wc:ra_dav:version-url
+V 162
+/svnroot/mediawiki/!svn/ver/99813/trunk/extensions/SemanticMediaWiki/tests/selenium/suites/cases_SMWSeleniumTestSuite/SearchByPropertyWithNumericValueTestCase.php
+END
+DefineAllowedValuesTestCase.php
+K 25
+svn:wc:ra_dav:version-url
+V 149
+/svnroot/mediawiki/!svn/ver/99813/trunk/extensions/SemanticMediaWiki/tests/selenium/suites/cases_SMWSeleniumTestSuite/DefineAllowedValuesTestCase.php
+END
+ViewValuesOfPropertyOnSpecialPage.php
+K 25
+svn:wc:ra_dav:version-url
+V 155
+/svnroot/mediawiki/!svn/ver/92601/trunk/extensions/SemanticMediaWiki/tests/selenium/suites/cases_SMWSeleniumTestSuite/ViewValuesOfPropertyOnSpecialPage.php
+END
+FactboxLinksToSearchByProperty.php
+K 25
+svn:wc:ra_dav:version-url
+V 152
+/svnroot/mediawiki/!svn/ver/92601/trunk/extensions/SemanticMediaWiki/tests/selenium/suites/cases_SMWSeleniumTestSuite/FactboxLinksToSearchByProperty.php
+END
+PropertyTypePageIsDefaultTestCase.php
+K 25
+svn:wc:ra_dav:version-url
+V 155
+/svnroot/mediawiki/!svn/ver/99813/trunk/extensions/SemanticMediaWiki/tests/selenium/suites/cases_SMWSeleniumTestSuite/PropertyTypePageIsDefaultTestCase.php
+END
+SearchByPropertyWithStringValueTestCase.php
+K 25
+svn:wc:ra_dav:version-url
+V 161
+/svnroot/mediawiki/!svn/ver/99813/trunk/extensions/SemanticMediaWiki/tests/selenium/suites/cases_SMWSeleniumTestSuite/SearchByPropertyWithStringValueTestCase.php
+END
+DefineTypeOfPropertyTestCase.php
+K 25
+svn:wc:ra_dav:version-url
+V 150
+/svnroot/mediawiki/!svn/ver/99813/trunk/extensions/SemanticMediaWiki/tests/selenium/suites/cases_SMWSeleniumTestSuite/DefineTypeOfPropertyTestCase.php
+END
+BuildChainOfPropertiesInAQuery.php
+K 25
+svn:wc:ra_dav:version-url
+V 152
+/svnroot/mediawiki/!svn/ver/99813/trunk/extensions/SemanticMediaWiki/tests/selenium/suites/cases_SMWSeleniumTestSuite/BuildChainOfPropertiesInAQuery.php
+END
+RefreshInlineQuery.php
+K 25
+svn:wc:ra_dav:version-url
+V 140
+/svnroot/mediawiki/!svn/ver/99813/trunk/extensions/SemanticMediaWiki/tests/selenium/suites/cases_SMWSeleniumTestSuite/RefreshInlineQuery.php
+END
+ShowFactboxTestCase.php
+K 25
+svn:wc:ra_dav:version-url
+V 141
+/svnroot/mediawiki/!svn/ver/99813/trunk/extensions/SemanticMediaWiki/tests/selenium/suites/cases_SMWSeleniumTestSuite/ShowFactboxTestCase.php
+END
+WantedPropertiesOnSpecialPageTestCase.php
+K 25
+svn:wc:ra_dav:version-url
+V 159
+/svnroot/mediawiki/!svn/ver/99813/trunk/extensions/SemanticMediaWiki/tests/selenium/suites/cases_SMWSeleniumTestSuite/WantedPropertiesOnSpecialPageTestCase.php
+END
+FactboxShowsProperties.php
+K 25
+svn:wc:ra_dav:version-url
+V 144
+/svnroot/mediawiki/!svn/ver/92601/trunk/extensions/SemanticMediaWiki/tests/selenium/suites/cases_SMWSeleniumTestSuite/FactboxShowsProperties.php
+END
+PropertiesListedOnSpecialPageTestCase.php
+K 25
+svn:wc:ra_dav:version-url
+V 159
+/svnroot/mediawiki/!svn/ver/99813/trunk/extensions/SemanticMediaWiki/tests/selenium/suites/cases_SMWSeleniumTestSuite/PropertiesListedOnSpecialPageTestCase.php
+END
+ChangeSeparatorForTypeNumber.php
+K 25
+svn:wc:ra_dav:version-url
+V 150
+/svnroot/mediawiki/!svn/ver/92601/trunk/extensions/SemanticMediaWiki/tests/selenium/suites/cases_SMWSeleniumTestSuite/ChangeSeparatorForTypeNumber.php
+END
+AvoidPropertyCreationTestCase.php
+K 25
+svn:wc:ra_dav:version-url
+V 151
+/svnroot/mediawiki/!svn/ver/99813/trunk/extensions/SemanticMediaWiki/tests/selenium/suites/cases_SMWSeleniumTestSuite/AvoidPropertyCreationTestCase.php
+END

@@ -1,0 +1,59 @@
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svnroot/mediawiki/!svn/ver/93973/trunk/extensions/SemanticMediaWiki/libs/jquery-ui
+END
+jquery-ui.tabs.min.js
+K 25
+svn:wc:ra_dav:version-url
+V 105
+/svnroot/mediawiki/!svn/ver/93962/trunk/extensions/SemanticMediaWiki/libs/jquery-ui/jquery-ui.tabs.min.js
+END
+jquery.ui.core.min.js
+K 25
+svn:wc:ra_dav:version-url
+V 105
+/svnroot/mediawiki/!svn/ver/71373/trunk/extensions/SemanticMediaWiki/libs/jquery-ui/jquery.ui.core.min.js
+END
+jquery-ui-i18n.js
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/svnroot/mediawiki/!svn/ver/71373/trunk/extensions/SemanticMediaWiki/libs/jquery-ui/jquery-ui-i18n.js
+END
+jquery.ui.button.min.js
+K 25
+svn:wc:ra_dav:version-url
+V 107
+/svnroot/mediawiki/!svn/ver/71373/trunk/extensions/SemanticMediaWiki/libs/jquery-ui/jquery.ui.button.min.js
+END
+jquery.ui.datepicker.min.js
+K 25
+svn:wc:ra_dav:version-url
+V 111
+/svnroot/mediawiki/!svn/ver/71373/trunk/extensions/SemanticMediaWiki/libs/jquery-ui/jquery.ui.datepicker.min.js
+END
+jquery-ui.dialog.min.js
+K 25
+svn:wc:ra_dav:version-url
+V 107
+/svnroot/mediawiki/!svn/ver/93962/trunk/extensions/SemanticMediaWiki/libs/jquery-ui/jquery-ui.dialog.min.js
+END
+jquery.ui.autocomplete.min.js
+K 25
+svn:wc:ra_dav:version-url
+V 113
+/svnroot/mediawiki/!svn/ver/71373/trunk/extensions/SemanticMediaWiki/libs/jquery-ui/jquery.ui.autocomplete.min.js
+END
+jquery.ui.widget.min.js
+K 25
+svn:wc:ra_dav:version-url
+V 107
+/svnroot/mediawiki/!svn/ver/71373/trunk/extensions/SemanticMediaWiki/libs/jquery-ui/jquery.ui.widget.min.js
+END
+jquery.ui.position.min.js
+K 25
+svn:wc:ra_dav:version-url
+V 109
+/svnroot/mediawiki/!svn/ver/71373/trunk/extensions/SemanticMediaWiki/libs/jquery-ui/jquery.ui.position.min.js
+END

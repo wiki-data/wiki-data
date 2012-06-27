@@ -1,0 +1,17 @@
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svnroot/mediawiki/!svn/ver/107116/trunk/extensions/SemanticMediaWiki/includes/jobs
+END
+SMW_UpdateJob.php
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/svnroot/mediawiki/!svn/ver/107116/trunk/extensions/SemanticMediaWiki/includes/jobs/SMW_UpdateJob.php
+END
+SMW_RefreshJob.php
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/svnroot/mediawiki/!svn/ver/86605/trunk/extensions/SemanticMediaWiki/includes/jobs/SMW_RefreshJob.php
+END

@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svnroot/mediawiki/!svn/ver/111318/trunk/extensions/SemanticMediaWiki/includes/sparql
+END
+SMW_SparqlResultWrapper.php
+K 25
+svn:wc:ra_dav:version-url
+V 112
+/svnroot/mediawiki/!svn/ver/88652/trunk/extensions/SemanticMediaWiki/includes/sparql/SMW_SparqlResultWrapper.php
+END
+SMW_SparqlDatabaseVirtuoso.php
+K 25
+svn:wc:ra_dav:version-url
+V 116
+/svnroot/mediawiki/!svn/ver/111318/trunk/extensions/SemanticMediaWiki/includes/sparql/SMW_SparqlDatabaseVirtuoso.php
+END
+SMW_SparqlDatabase.php
+K 25
+svn:wc:ra_dav:version-url
+V 108
+/svnroot/mediawiki/!svn/ver/111316/trunk/extensions/SemanticMediaWiki/includes/sparql/SMW_SparqlDatabase.php
+END
+SMW_SparqlDatabase4Store.php
+K 25
+svn:wc:ra_dav:version-url
+V 114
+/svnroot/mediawiki/!svn/ver/111245/trunk/extensions/SemanticMediaWiki/includes/sparql/SMW_SparqlDatabase4Store.php
+END
+SMW_SparqlResultParser.php
+K 25
+svn:wc:ra_dav:version-url
+V 111
+/svnroot/mediawiki/!svn/ver/88652/trunk/extensions/SemanticMediaWiki/includes/sparql/SMW_SparqlResultParser.php
+END

@@ -1,0 +1,95 @@
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svnroot/mediawiki/!svn/ver/114764/trunk/extensions/SemanticMediaWiki/includes/storage
+END
+SMW_SparqlStoreQueryEngine.php
+K 25
+svn:wc:ra_dav:version-url
+V 117
+/svnroot/mediawiki/!svn/ver/111325/trunk/extensions/SemanticMediaWiki/includes/storage/SMW_SparqlStoreQueryEngine.php
+END
+SMW_SQLStore2_Queries.php
+K 25
+svn:wc:ra_dav:version-url
+V 112
+/svnroot/mediawiki/!svn/ver/111255/trunk/extensions/SemanticMediaWiki/includes/storage/SMW_SQLStore2_Queries.php
+END
+SMW_Store.php
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/svnroot/mediawiki/!svn/ver/114456/trunk/extensions/SemanticMediaWiki/includes/storage/SMW_Store.php
+END
+SMW_SQLStore2.php
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/svnroot/mediawiki/!svn/ver/114764/trunk/extensions/SemanticMediaWiki/includes/storage/SMW_SQLStore2.php
+END
+SMW_SqlStore2IdCache.php
+K 25
+svn:wc:ra_dav:version-url
+V 111
+/svnroot/mediawiki/!svn/ver/102353/trunk/extensions/SemanticMediaWiki/includes/storage/SMW_SqlStore2IdCache.php
+END
+SMW_SQLStoreLight.php
+K 25
+svn:wc:ra_dav:version-url
+V 108
+/svnroot/mediawiki/!svn/ver/102355/trunk/extensions/SemanticMediaWiki/includes/storage/SMW_SQLStoreLight.php
+END
+SMW_QueryResult.php
+K 25
+svn:wc:ra_dav:version-url
+V 106
+/svnroot/mediawiki/!svn/ver/109014/trunk/extensions/SemanticMediaWiki/includes/storage/SMW_QueryResult.php
+END
+SMW_Query.php
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/svnroot/mediawiki/!svn/ver/102358/trunk/extensions/SemanticMediaWiki/includes/storage/SMW_Query.php
+END
+SMW_PrintRequest.php
+K 25
+svn:wc:ra_dav:version-url
+V 107
+/svnroot/mediawiki/!svn/ver/102358/trunk/extensions/SemanticMediaWiki/includes/storage/SMW_PrintRequest.php
+END
+SMW_SQLStore2Table.php
+K 25
+svn:wc:ra_dav:version-url
+V 108
+/svnroot/mediawiki/!svn/ver/73457/trunk/extensions/SemanticMediaWiki/includes/storage/SMW_SQLStore2Table.php
+END
+SMW_SqlStubSemanticData.php
+K 25
+svn:wc:ra_dav:version-url
+V 114
+/svnroot/mediawiki/!svn/ver/102352/trunk/extensions/SemanticMediaWiki/includes/storage/SMW_SqlStubSemanticData.php
+END
+SMW_ResultArray.php
+K 25
+svn:wc:ra_dav:version-url
+V 106
+/svnroot/mediawiki/!svn/ver/111951/trunk/extensions/SemanticMediaWiki/includes/storage/SMW_ResultArray.php
+END
+SMW_SparqlStore.php
+K 25
+svn:wc:ra_dav:version-url
+V 106
+/svnroot/mediawiki/!svn/ver/111314/trunk/extensions/SemanticMediaWiki/includes/storage/SMW_SparqlStore.php
+END
+SMW_SQLHelpers.php
+K 25
+svn:wc:ra_dav:version-url
+V 105
+/svnroot/mediawiki/!svn/ver/107709/trunk/extensions/SemanticMediaWiki/includes/storage/SMW_SQLHelpers.php
+END
+SMW_Description.php
+K 25
+svn:wc:ra_dav:version-url
+V 106
+/svnroot/mediawiki/!svn/ver/112432/trunk/extensions/SemanticMediaWiki/includes/storage/SMW_Description.php
+END

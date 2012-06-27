@@ -1,0 +1,185 @@
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svnroot/mediawiki/!svn/ver/114400/trunk/extensions/UploadWizard/resources
+END
+mw.Firefogg.js
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svnroot/mediawiki/!svn/ver/101815/trunk/extensions/UploadWizard/resources/mw.Firefogg.js
+END
+mw.UploadWizardLicenseInput.js
+K 25
+svn:wc:ra_dav:version-url
+V 105
+/svnroot/mediawiki/!svn/ver/106926/trunk/extensions/UploadWizard/resources/mw.UploadWizardLicenseInput.js
+END
+mw.UtilitiesTime.js
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svnroot/mediawiki/!svn/ver/84149/trunk/extensions/UploadWizard/resources/mw.UtilitiesTime.js
+END
+mw.ApiUploadFormDataHandler.js
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/svnroot/mediawiki/!svn/ver/98840/trunk/extensions/UploadWizard/resources/mw.ApiUploadFormDataHandler.js
+END
+mw.UploadWizardUploadInterface.js
+K 25
+svn:wc:ra_dav:version-url
+V 108
+/svnroot/mediawiki/!svn/ver/114400/trunk/extensions/UploadWizard/resources/mw.UploadWizardUploadInterface.js
+END
+ext.upwiz.campaigns.js
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/svnroot/mediawiki/!svn/ver/112463/trunk/extensions/UploadWizard/resources/ext.upwiz.campaigns.js
+END
+mw.MockUploadHandler.js
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/svnroot/mediawiki/!svn/ver/70924/trunk/extensions/UploadWizard/resources/mw.MockUploadHandler.js
+END
+uploadWizard.css
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svnroot/mediawiki/!svn/ver/111665/trunk/extensions/UploadWizard/resources/uploadWizard.css
+END
+mw.FlickrChecker.js
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svnroot/mediawiki/!svn/ver/102461/trunk/extensions/UploadWizard/resources/mw.FlickrChecker.js
+END
+mw.units.js
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svnroot/mediawiki/!svn/ver/89998/trunk/extensions/UploadWizard/resources/mw.units.js
+END
+mw.UploadWizardUtil.js
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/svnroot/mediawiki/!svn/ver/105616/trunk/extensions/UploadWizard/resources/mw.UploadWizardUtil.js
+END
+mw.FirefoggTransport.js
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/svnroot/mediawiki/!svn/ver/102461/trunk/extensions/UploadWizard/resources/mw.FirefoggTransport.js
+END
+mw.UploadWizard.js
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svnroot/mediawiki/!svn/ver/114400/trunk/extensions/UploadWizard/resources/mw.UploadWizard.js
+END
+mw.GroupProgressBar.js
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svnroot/mediawiki/!svn/ver/77098/trunk/extensions/UploadWizard/resources/mw.GroupProgressBar.js
+END
+mw.DestinationChecker.js
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/svnroot/mediawiki/!svn/ver/107651/trunk/extensions/UploadWizard/resources/mw.DestinationChecker.js
+END
+mw.ErrorDialog.js
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svnroot/mediawiki/!svn/ver/102461/trunk/extensions/UploadWizard/resources/mw.ErrorDialog.js
+END
+mw.UploadWizardDescription.js
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/svnroot/mediawiki/!svn/ver/114400/trunk/extensions/UploadWizard/resources/mw.UploadWizardDescription.js
+END
+mw.fileApi.js
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svnroot/mediawiki/!svn/ver/111604/trunk/extensions/UploadWizard/resources/mw.fileApi.js
+END
+mw.FormDataTransport.js
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/svnroot/mediawiki/!svn/ver/103062/trunk/extensions/UploadWizard/resources/mw.FormDataTransport.js
+END
+mw.UploadWizardUpload.js
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/svnroot/mediawiki/!svn/ver/108415/trunk/extensions/UploadWizard/resources/mw.UploadWizardUpload.js
+END
+mw.ConfirmCloseWindow.js
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/svnroot/mediawiki/!svn/ver/105616/trunk/extensions/UploadWizard/resources/mw.ConfirmCloseWindow.js
+END
+mw.UploadWizardDetails.js
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/svnroot/mediawiki/!svn/ver/114400/trunk/extensions/UploadWizard/resources/mw.UploadWizardDetails.js
+END
+mw.canvas.js
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svnroot/mediawiki/!svn/ver/102461/trunk/extensions/UploadWizard/resources/mw.canvas.js
+END
+mw.ApiUploadHandler.js
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svnroot/mediawiki/!svn/ver/86744/trunk/extensions/UploadWizard/resources/mw.ApiUploadHandler.js
+END
+mw.ApiQueryImageInfo.js
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/svnroot/mediawiki/!svn/ver/105616/trunk/extensions/UploadWizard/resources/mw.ApiQueryImageInfo.js
+END
+mw.IframeTransport.js
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svnroot/mediawiki/!svn/ver/84220/trunk/extensions/UploadWizard/resources/mw.IframeTransport.js
+END
+mw.Log.js
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svnroot/mediawiki/!svn/ver/87722/trunk/extensions/UploadWizard/resources/mw.Log.js
+END
+mw.LanguageUpWiz.js
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svnroot/mediawiki/!svn/ver/85953/trunk/extensions/UploadWizard/resources/mw.LanguageUpWiz.js
+END
+mw.FirefoggHandler.js
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svnroot/mediawiki/!svn/ver/105647/trunk/extensions/UploadWizard/resources/mw.FirefoggHandler.js
+END
+mw.UploadWizardDeed.js
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/svnroot/mediawiki/!svn/ver/106923/trunk/extensions/UploadWizard/resources/mw.UploadWizardDeed.js
+END

@@ -149,7 +149,7 @@ static function guessValue($type,&$value)
 			if (count($ref_parts)==2)
 			{
 				$ref_page=$ref_parts[0]; $ref_name=$ref_parts[1];
-				if (self::normalizeName($ref_name))
+				if (self::normalizeRef($ref_name))
 				{
 					$t=Title::newFromText($ref_page);
 					if ($t)	{ $value=$t->getPrefixedDBkey()."#".$ref_name; return true;}
@@ -157,7 +157,7 @@ static function guessValue($type,&$value)
 			}
 			elseif (count($ref_parts)==1)
 			{
-				$value=self::normalizeName($value);
+				$value=self::normalizeRef($value);
 				return true;
 			}
 			return false;
@@ -175,6 +175,10 @@ static function guessValue($type,&$value)
 
 	static function castValue($type,&$value)
 	{
+	  if ($value==='' && $type!='text') {
+	    $value = NULL;
+	    return true;
+	  }
 		switch ($type)
 		{
 			case 'number'   : $value = (float)$value; 						return true;
@@ -213,7 +217,7 @@ static function guessValue($type,&$value)
 				if (count($ref_parts)==2)
 				{
 					$ref_page=$ref_parts[0]; $ref_name=$ref_parts[1];
-					if (self::normalizeName($ref_name))
+					if (self::normalizeRef($ref_name))
 					{
 						$t=Title::newFromText($ref_page);
 						if ($t)	{ $value=$t->getPrefixedDBkey()."#".$ref_name; return true;}
@@ -221,7 +225,7 @@ static function guessValue($type,&$value)
 				}
 				elseif (count($ref_parts)==1)
 				{
-					$value=self::normalizeName($value);
+					$value=self::normalizeRef($value);
 					return true;
 				}
 				return false;
@@ -238,6 +242,7 @@ static function guessValue($type,&$value)
 		if(!$dt) return '';
 		return date_format($dt,$format);
 	}
+	
 
 	function displayValue($type,$value)	#TODO: use properly localized display dates from mediawiki settings
 	{
@@ -268,7 +273,7 @@ static function guessValue($type,&$value)
 				if (count($ref_parts)==2)
 				{
 					$ref_page=$ref_parts[0]; $ref_name=$ref_parts[1];
-					if ($this->normalizeName($ref_name))
+					if ($this->normalizeRef($ref_name))
 					{
 						$t=Title::newFromText($ref_page);
 						if ($t)	{ $value='[['.$t->getFullText()."#".preg_replace('/_/',' ',$ref_name).']]'; return $value;}
@@ -276,7 +281,7 @@ static function guessValue($type,&$value)
 				}
 				elseif (count($ref_parts)==1)
 				{
-					$value = $this->normalizeName($value);
+					$value = $this->normalizeRef($value);
 					return $value;
 				}
 				return $value;
@@ -287,7 +292,7 @@ static function guessValue($type,&$value)
 		}
 	}
 
-	function getDbFieldType($type,$db='mysql') 
+	static function getDbFieldType($type,$db='mysql') 
 	{
 		static $dbFieldTypeMap=array
 		(
@@ -332,7 +337,7 @@ static function guessValue($type,&$value)
 ##
 ###################################
 	
-	function fl_cast($parser,&$f,&$a)
+	function fl_cast($parser,$f,$a)
 	{
 		$args=new XxxArgs($f,$a);
 		if ($args->count<1 or $args->count>2) return $this->notFound();
@@ -367,14 +372,17 @@ static function guessValue($type,&$value)
 	    }
 	    return $this->notFound();
 	}	
-	static function normalizeName(&$s)
+	static function normalizeRef(&$s)
 	{
 		if ($s==='' or preg_match('/[#=]/',$s)) return false;
 		$s=trim(preg_replace('/[_\s]+/',' ',$s));
 		if (is_numeric($s)) return false;
 		$t=Title::newFromText($s);
 		if (!$t) return false;
-		$s=$t->getPrefixedDBkey();
+		global $wgXttSettings;
+		
+		if ($wgXttSettings['nounderline']) $s=$t->getPrefixedText();
+		else $s=$t->getPrefixedDBkey();
 		return $s;
 	}
 }

@@ -1,0 +1,49 @@
+10
+
+dir
+115055
+http://svn.wikimedia.org/svnroot/mediawiki/trunk/extensions/SemanticMediaWiki/specials
+http://svn.wikimedia.org/svnroot/mediawiki
+
+
+
+2012-04-02T12:09:40.752155Z
+114651
+jeroendedauw
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+dd0e9695-b195-4be7-bd10-2dea1a65a6b6
+
+AskSpecial
+dir
+
+SMWAdmin
+dir
+
+Export
+dir
+
+URIResolver
+dir
+
+QueryPages
+dir
+
+SearchTriple
+dir
+
+Statistics
+dir
+

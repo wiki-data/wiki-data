@@ -14,13 +14,19 @@ XxxInstaller::Install('XwwList');
 
 class XwwList extends Xxx {	
 
-  function link($title,$text=NULL) {
+  function link($title,$text=NULL,$alt=NULL) {
     if (is_array($title)) {
-      $text = $title[1];
+      $text = $title[1] ? $title[1] : $title[0];
+      $alt = $title[2] ? $title[2] : $title[0];
       $title = $title[0];
+    } else {
+      $text = $text ? $text : $title->getFullText();
+      $alt = $alt ? $alt : $title->getFullText(); 
     }
     return  '<a href="' . $title->getFullUrl() 
-    .       '" class="link-list">'
+    .       '" class="link-list"'
+    .       '" title="'.$alt.'"'
+    .       '>'
     .       ($text ? $text : $title->getFullText())
     .       '</a>';
 
@@ -58,21 +64,19 @@ class XwwList extends Xxx {
   
   static function getRecent($limit) {
     $dbr = wfGetDB( DB_SLAVE );
-	  $res = $dbr->select( 
+	  $res = $dbr->query('SELECT DISTINCT * FROM ('. $dbr->selectSQLText( 
 	    array('recentchanges' ),
 	    array('rc_namespace','rc_title'),
-	    array( 
-	    ),
+	    array(),
 	    __METHOD__,
 	    array(
 	      'ORDER BY' => 'rc_timestamp DESC',
-	      'LIMIT' => $limit ? min($limit,200) : 20,
-	      'DISTINCT' 
+	      
 	    )
-	  );
+	  ).") AS rc LIMIT " . ($limit ? min($limit,200) : 20));
 	  $ret = array();
 	  foreach ($res as $row) {
-	    $ret[] = Title::makeTitle($row->rc_namespace, $row->rc_title);
+	    $ret[] = array(Title::makeTitle($row->rc_namespace, $row->rc_title));
 	  }
 	  return $ret;
   }

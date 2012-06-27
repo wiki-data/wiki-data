@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svnroot/mediawiki/!svn/ver/107641/trunk/extensions/UploadWizard/test/jasmine/spec
+END
+mw.pubsub.spec.js
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/svnroot/mediawiki/!svn/ver/89999/trunk/extensions/UploadWizard/test/jasmine/spec/mw.pubsub.spec.js
+END
+mw.units.spec.js
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/svnroot/mediawiki/!svn/ver/89998/trunk/extensions/UploadWizard/test/jasmine/spec/mw.units.spec.js
+END
+mw.Api.spec.js
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svnroot/mediawiki/!svn/ver/75907/trunk/extensions/UploadWizard/test/jasmine/spec/mw.Api.spec.js
+END
+mw.Api.edit.spec.js
+K 25
+svn:wc:ra_dav:version-url
+V 102
+/svnroot/mediawiki/!svn/ver/107641/trunk/extensions/UploadWizard/test/jasmine/spec/mw.Api.edit.spec.js
+END
+mediawiki.parser2.spec.js
+K 25
+svn:wc:ra_dav:version-url
+V 107
+/svnroot/mediawiki/!svn/ver/82775/trunk/extensions/UploadWizard/test/jasmine/spec/mediawiki.parser2.spec.js
+END

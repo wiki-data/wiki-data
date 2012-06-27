@@ -1,0 +1,71 @@
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svnroot/mediawiki/!svn/ver/114491/trunk/extensions/SemanticMediaWiki/includes/queryprinters
+END
+SMW_QP_Aggregatable.php
+K 25
+svn:wc:ra_dav:version-url
+V 116
+/svnroot/mediawiki/!svn/ver/114144/trunk/extensions/SemanticMediaWiki/includes/queryprinters/SMW_QP_Aggregatable.php
+END
+SMW_QP_RSSlink.php
+K 25
+svn:wc:ra_dav:version-url
+V 111
+/svnroot/mediawiki/!svn/ver/108990/trunk/extensions/SemanticMediaWiki/includes/queryprinters/SMW_QP_RSSlink.php
+END
+SMW_QP_JSONlink.php
+K 25
+svn:wc:ra_dav:version-url
+V 112
+/svnroot/mediawiki/!svn/ver/108990/trunk/extensions/SemanticMediaWiki/includes/queryprinters/SMW_QP_JSONlink.php
+END
+SMW_QP_Table.php
+K 25
+svn:wc:ra_dav:version-url
+V 109
+/svnroot/mediawiki/!svn/ver/107709/trunk/extensions/SemanticMediaWiki/includes/queryprinters/SMW_QP_Table.php
+END
+SMW_QP_Embedded.php
+K 25
+svn:wc:ra_dav:version-url
+V 111
+/svnroot/mediawiki/!svn/ver/99872/trunk/extensions/SemanticMediaWiki/includes/queryprinters/SMW_QP_Embedded.php
+END
+SMW_QueryPrinter.php
+K 25
+svn:wc:ra_dav:version-url
+V 113
+/svnroot/mediawiki/!svn/ver/114491/trunk/extensions/SemanticMediaWiki/includes/queryprinters/SMW_QueryPrinter.php
+END
+SMW_QP_CSV.php
+K 25
+svn:wc:ra_dav:version-url
+V 107
+/svnroot/mediawiki/!svn/ver/108990/trunk/extensions/SemanticMediaWiki/includes/queryprinters/SMW_QP_CSV.php
+END
+SMW_QP_List.php
+K 25
+svn:wc:ra_dav:version-url
+V 108
+/svnroot/mediawiki/!svn/ver/114491/trunk/extensions/SemanticMediaWiki/includes/queryprinters/SMW_QP_List.php
+END
+SMW_QP_RDF.php
+K 25
+svn:wc:ra_dav:version-url
+V 107
+/svnroot/mediawiki/!svn/ver/108990/trunk/extensions/SemanticMediaWiki/includes/queryprinters/SMW_QP_RDF.php
+END
+SMW_QP_DSV.php
+K 25
+svn:wc:ra_dav:version-url
+V 107
+/svnroot/mediawiki/!svn/ver/110944/trunk/extensions/SemanticMediaWiki/includes/queryprinters/SMW_QP_DSV.php
+END
+SMW_QP_Category.php
+K 25
+svn:wc:ra_dav:version-url
+V 112
+/svnroot/mediawiki/!svn/ver/114317/trunk/extensions/SemanticMediaWiki/includes/queryprinters/SMW_QP_Category.php
+END

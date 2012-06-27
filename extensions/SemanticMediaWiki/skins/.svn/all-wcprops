@@ -1,0 +1,29 @@
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svnroot/mediawiki/!svn/ver/112820/trunk/extensions/SemanticMediaWiki/skins
+END
+LICENSE
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svnroot/mediawiki/!svn/ver/23995/trunk/extensions/SemanticMediaWiki/skins/LICENSE
+END
+SMW_custom.css
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svnroot/mediawiki/!svn/ver/95097/trunk/extensions/SemanticMediaWiki/skins/SMW_custom.css
+END
+SMW_custom_rtl.css
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svnroot/mediawiki/!svn/ver/95097/trunk/extensions/SemanticMediaWiki/skins/SMW_custom_rtl.css
+END
+SMW_tooltip.js
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svnroot/mediawiki/!svn/ver/111458/trunk/extensions/SemanticMediaWiki/skins/SMW_tooltip.js
+END

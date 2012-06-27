@@ -1,0 +1,65 @@
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svnroot/mediawiki/!svn/ver/114400/trunk/extensions/UploadWizard
+END
+UploadWizard.alias.php
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svnroot/mediawiki/!svn/ver/107294/trunk/extensions/UploadWizard/UploadWizard.alias.php
+END
+UploadWizard.sql
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svnroot/mediawiki/!svn/ver/112144/trunk/extensions/UploadWizard/UploadWizard.sql
+END
+INSTALL
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svnroot/mediawiki/!svn/ver/92465/trunk/extensions/UploadWizard/INSTALL
+END
+languageStats.php
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svnroot/mediawiki/!svn/ver/87315/trunk/extensions/UploadWizard/languageStats.php
+END
+UploadWizard.i18n.php
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svnroot/mediawiki/!svn/ver/114400/trunk/extensions/UploadWizard/UploadWizard.i18n.php
+END
+UploadWizard.php
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svnroot/mediawiki/!svn/ver/113683/trunk/extensions/UploadWizard/UploadWizard.php
+END
+README
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svnroot/mediawiki/!svn/ver/95108/trunk/extensions/UploadWizard/README
+END
+UploadWizardPage.js
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svnroot/mediawiki/!svn/ver/107641/trunk/extensions/UploadWizard/UploadWizardPage.js
+END
+UploadWizard.config.php
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svnroot/mediawiki/!svn/ver/114400/trunk/extensions/UploadWizard/UploadWizard.config.php
+END
+UploadWizardHooks.php
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/svnroot/mediawiki/!svn/ver/113683/trunk/extensions/UploadWizard/UploadWizardHooks.php
+END

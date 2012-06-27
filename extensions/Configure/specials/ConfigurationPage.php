@@ -348,7 +348,7 @@ abstract class ConfigurationPage extends SpecialPage {
 					}
 				}
 
-				if ( !$this->showOldVersionMessage( $version ) )
+				if ( $this->showOldVersionMessage( $version ) )
 					return false;
 			} else {
 				$wgOut->wrapWikiMsg( '<div class="errorbox">$1</div>',

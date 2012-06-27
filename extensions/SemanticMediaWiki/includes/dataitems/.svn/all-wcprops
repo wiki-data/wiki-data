@@ -1,0 +1,83 @@
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svnroot/mediawiki/!svn/ver/114490/trunk/extensions/SemanticMediaWiki/includes/dataitems
+END
+SMW_DI_Error.php
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/svnroot/mediawiki/!svn/ver/88308/trunk/extensions/SemanticMediaWiki/includes/dataitems/SMW_DI_Error.php
+END
+SMW_DI_Bool.php
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/svnroot/mediawiki/!svn/ver/88308/trunk/extensions/SemanticMediaWiki/includes/dataitems/SMW_DI_Bool.php
+END
+SMW_DI_Concept.php
+K 25
+svn:wc:ra_dav:version-url
+V 106
+/svnroot/mediawiki/!svn/ver/88308/trunk/extensions/SemanticMediaWiki/includes/dataitems/SMW_DI_Concept.php
+END
+SMW_DataItem.php
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/svnroot/mediawiki/!svn/ver/93184/trunk/extensions/SemanticMediaWiki/includes/dataitems/SMW_DataItem.php
+END
+SMW_DI_Blob.php
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/svnroot/mediawiki/!svn/ver/88308/trunk/extensions/SemanticMediaWiki/includes/dataitems/SMW_DI_Blob.php
+END
+SMW_DI_Time.php
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/svnroot/mediawiki/!svn/ver/114490/trunk/extensions/SemanticMediaWiki/includes/dataitems/SMW_DI_Time.php
+END
+SMW_DI_URI.php
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/svnroot/mediawiki/!svn/ver/102353/trunk/extensions/SemanticMediaWiki/includes/dataitems/SMW_DI_URI.php
+END
+SMW_DI_WikiPage.php
+K 25
+svn:wc:ra_dav:version-url
+V 108
+/svnroot/mediawiki/!svn/ver/102395/trunk/extensions/SemanticMediaWiki/includes/dataitems/SMW_DI_WikiPage.php
+END
+SMW_DI_GeoCoord.php
+K 25
+svn:wc:ra_dav:version-url
+V 108
+/svnroot/mediawiki/!svn/ver/104580/trunk/extensions/SemanticMediaWiki/includes/dataitems/SMW_DI_GeoCoord.php
+END
+SMW_DI_Container.php
+K 25
+svn:wc:ra_dav:version-url
+V 109
+/svnroot/mediawiki/!svn/ver/102353/trunk/extensions/SemanticMediaWiki/includes/dataitems/SMW_DI_Container.php
+END
+SMW_DI_Property.php
+K 25
+svn:wc:ra_dav:version-url
+V 108
+/svnroot/mediawiki/!svn/ver/113725/trunk/extensions/SemanticMediaWiki/includes/dataitems/SMW_DI_Property.php
+END
+SMW_DI_String.php
+K 25
+svn:wc:ra_dav:version-url
+V 105
+/svnroot/mediawiki/!svn/ver/89769/trunk/extensions/SemanticMediaWiki/includes/dataitems/SMW_DI_String.php
+END
+SMW_DI_Number.php
+K 25
+svn:wc:ra_dav:version-url
+V 105
+/svnroot/mediawiki/!svn/ver/88308/trunk/extensions/SemanticMediaWiki/includes/dataitems/SMW_DI_Number.php
+END

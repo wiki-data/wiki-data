@@ -80,6 +80,14 @@ class ApiQueryAllpages extends ApiQueryGeneratorBase {
 		$this->addWhereRange( 'page_title', $dir, $from, $to );
 
 		if ( isset( $params['prefix'] ) ) {
+		  
+### START HACK ###			
+      if ( isset( $params['subpages'] ) ) {
+  			$this->addWhere( 'page_title' . $db->buildLike( $this->titlePartToKey( $params['prefix']) ,'/', $db->anyString() ) );
+  			$this->addWhere( 'page_title NOT' . $db->buildLike( $this->titlePartToKey( $params['prefix']) ,'/', $db->anyString(), '/', $db->anyString() ) );
+  		} else 
+### END HACK ###		
+
 			$this->addWhere( 'page_title' . $db->buildLike( $this->titlePartToKey( $params['prefix'] ), $db->anyString() ) );
 		}
 
@@ -204,6 +212,11 @@ class ApiQueryAllpages extends ApiQueryGeneratorBase {
 			'from' => null,
 			'to' => null,
 			'prefix' => null,
+
+### START HACK ###			
+			'subpages' => null,
+### END HACK ###		
+			
 			'namespace' => array(
 				ApiBase::PARAM_DFLT => 0,
 				ApiBase::PARAM_TYPE => 'namespace',
@@ -277,6 +290,11 @@ class ApiQueryAllpages extends ApiQueryGeneratorBase {
 			'from' => 'The page title to start enumerating from',
 			'to' => 'The page title to stop enumerating at',
 			'prefix' => 'Search for all page titles that begin with this value',
+
+### START HACK ###			
+			'subpages' => 'Search only for direct subpages of the prefix',
+### END HACK ###		
+	
 			'namespace' => 'The namespace to enumerate',
 			'filterredir' => 'Which pages to list',
 			'dir' => 'The direction in which to list',

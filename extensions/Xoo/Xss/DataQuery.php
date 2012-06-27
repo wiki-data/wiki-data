@@ -28,7 +28,7 @@ class XssQuery
 			$this->mError="no Xoo Simple Schemas object passed to the constructor";
 		}
 		$this->mXss=&$xss;
-		$this->mDbr=&$xss->getDbr();
+		$this->mDbr = $xss->getDbr();
 		if (!$this->mDbr) 
 		{
 			$this->mError="no database connection";
@@ -305,7 +305,7 @@ class XssQuery
 											. $this->escapeName("__{$cAlias}__{$cPartAlias}")."._row_ref"
 											. ")";
 				$tableName = $subTableName;
-			} elseif($subTableName=$this->getReverseReferencedTable($tableName,$cPart,&$fieldName)) {
+			} elseif($subTableName=$this->getReverseReferencedTable($tableName,$cPart,$fieldName)) {
 				$this->mTableNames[$cIdent]=$subTableName;
 				$this->mFroms[$rootTable]	.= "\nLEFT JOIN " . $this->mXss->escapeDataTableName($subTableName) 
 											. " AS "
@@ -343,7 +343,7 @@ class XssQuery
 											. ")";
 				$tableName = $subTableName;
 				$this->mError=null;
-			} elseif($subTableName=$this->getReverseMultiTable($tableName,$cPart,&$fieldName)) {
+			} elseif($subTableName=$this->getReverseMultiTable($tableName,$cPart,$fieldName)) {
 			
 				if (!$this->mTableNames[$cIdent.'__x'])
 				{
@@ -399,7 +399,7 @@ class XssQuery
 			$tableAlias = "__{$cAlias}__x__{$cPartAlias}";
 			$tableName=$multiTableName;
 			$fieldName="_multi_to";
-		} elseif($subTableName=$this->getReverseMultiTable($tableName,$last,&$subFieldName)) {
+		} elseif($subTableName=$this->getReverseMultiTable($tableName,$last,$subFieldName)) {
 			if (!$this->splitTableName($last,$cPart,$cPartAlias)) return false;
 			$cIdent="$cIdent.{$cPart}__x";
 			if (!$this->mTableNames[$cIdent])

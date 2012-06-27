@@ -1,0 +1,17 @@
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svnroot/mediawiki/!svn/ver/104210/trunk/extensions/Validator/includes/parserHooks
+END
+Validator_ListErrors.php
+K 25
+svn:wc:ra_dav:version-url
+V 106
+/svnroot/mediawiki/!svn/ver/82067/trunk/extensions/Validator/includes/parserHooks/Validator_ListErrors.php
+END
+Validator_Describe.php
+K 25
+svn:wc:ra_dav:version-url
+V 105
+/svnroot/mediawiki/!svn/ver/104210/trunk/extensions/Validator/includes/parserHooks/Validator_Describe.php
+END

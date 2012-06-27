@@ -46,6 +46,12 @@ class XwwImage extends Xxx
 	}
 	var $imgCommands = array(	
 		'mime'=>array('mime','text'),
+		'height'=>array('width','numeric'),
+		'width'=>array('height','numeric'),
+		'orientation'=>array('orientation','text'),
+		'portrait'=>array('portrait','text'),
+		'landscape'=>array('landscape','text'),
+		'square'=>array('square','text'),
 		'thumb'=>array('thumb','img'),
 		'thumb:url'=>array('thumb','url'),
 		'thumburl'=>array('thumb','url'),
@@ -192,6 +198,19 @@ class XwwImage extends Xxx
 		#set defaults
 		$thumbHeight = $scaleHeight = $img->height;
 		$thumbWidth = $scaleWidth = $img->width;
+
+		if ($cmd=='width') return $img->width;
+		if ($cmd=='height') return $img->height;
+		if ($cmd=='orientation') {
+			if ($img->width > $img->height) return 'LANDSCAPE';
+			if ($img->width < $img->height) return 'PORTRAIT';
+			return 'SQUARE';
+		}
+		if ($cmd=='landscape') return ($img->width > $img->height) ? 'LANDSCAPE' : '';
+		if ($cmd=='portrait') return ($img->width < $img->height) ? 'PORTRAIT' : '';
+		if ($cmd=='square') return ($img->width == $img->height) ? 'SQUARE' : '';
+		
+		
 		$offsetLeft = $offsetTop = 0;		
 		$backgroundColor = 'transparent';
 		$ratio=$img->width / $img->height;
@@ -416,9 +435,36 @@ class XwwImage extends Xxx
 		global $wgUploadPath, $wgUploadDirectory, $wgImageMagickConvertCommand;
 	    $args=new XxxArgs($f,$a);
 	    $command=$args->command;
+		
+		
+		switch($args->command) {
+		case 'arcf':
+		  $x = $args->trimExpand(1,0);
+		  $y = $args->trimExpand(2,0);
+		  $r = $args->trimExpand(3,100);
+		  $start = $args->trimExpand(4,0);
+		  $size = $args->trimExpand(5,0);
+      $v1 = $start+0.25;
+      $v3 = $v1+$size;
+      $v2 = ($v1+$v3)/2;
+      $a1 = ($v1)*2*3.141592653589;
+      $a2 = ($v2)*2*3.141592653589;
+      $a3 = ($v3)*2*3.141592653589;
+      
+      $long = 1;
+      $sweep = 0;
+      $x1 = ($x+cos($a1)*$r); 
+      $y1 = ($y+sin($a1)*$r); 
+      $x2 = ($x+cos($a2)*$r);  
+      $y2 = ($y+sin($a2)*$r);  
+      $x3 = ($x+cos($a3)*$r);  
+      $y3 = ($y+sin($a3)*$r);  
+      return "$x1 $y1 A $r $r 0 $sweep $long $x2 $y2 A $r $r 0 $sweep $long $x3 $y3";		  
+		}
+
 		if ($args->count<2) 
 			return $this->notFound();	    
-		if (!in_array($command,array('thumb','thumburl','extend','extendurl','crop','cropurl','stretch','stretchurl'))) 
+		if (!in_array($command,array('inline','thumb','thumburl','extend','extendurl','crop','cropurl','stretch','stretchurl'))) 
 			return $this->notFound();	    
 		
 		$val = $args->trimExpand(1);
@@ -439,8 +485,21 @@ class XwwImage extends Xxx
 			$code = $args->cropExpand(3);
 			$fileExt = $args->cropExpand(2);
 		}
+
+		if ($args->command == 'inline') {
+  	$source = <<<END
+<svg width="{$width}px" height="{$height}px" version="1.2">
+$code
+</svg>
+END;
+      return array($source,'isHTML'=>true);
+    }
+
+		
+
 		$hash = md5($code);
-		$source = <<<END
+
+  	$source = <<<END
 <?xml version="1.0" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" 
 "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
@@ -450,6 +509,7 @@ xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http:///www.w3.org/1999/xlink">
 $code
 </svg>
 END;
+
 
 		$filePath = "svg/" . $hash{0} . "/" . $hash{0} . $hash{1};
 		$fileDir = "$wgUploadDirectory/$filePath";

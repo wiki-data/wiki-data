@@ -70,7 +70,6 @@ class ConfigurationSettings {
 				$list[] = $ext;
 			#}
 		}
-		
 		$this->extensionsObjects = $list;
 		
 		wfProfileOut( __METHOD__ );

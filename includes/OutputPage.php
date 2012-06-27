@@ -2730,7 +2730,11 @@ $templates
 	 * have to be purged on configuration changes.
 	 * @return array
 	 */
-	protected function getJSVars() {
+
+### START HACK ###	 
+	function getJSVars() {
+### END HACK ###
+	
 		global $wgUseAjax, $wgEnableMWSuggest;
 
 		$title = $this->getTitle();

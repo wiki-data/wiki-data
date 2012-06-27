@@ -6,7 +6,8 @@
 
 // Tabs and TOC
 // ------------
-
+$(function() {
+var stylepath="w/skins";
 $( '#configure' )
 	.addClass( 'jsprefs' )
 	.wrap( '<table><tbody><tr><td class="config-col-form"></td></tr></tbody></table>' )
@@ -147,7 +148,7 @@ window.fixAssocTable = function( table ){
 	var startName = 'wp' + table.attr( 'id' );
 	table.chidren( 'tr' ).each( function( i ) {
 		if ( i == 0 ) {
-			continue;
+			return;
 		}
 		var inputs = $( this ).chidren( 'input' );
 		inputs[0].attr( 'name', startName + '-key-' + (i - 1) );
@@ -471,6 +472,7 @@ window.allSettings = undefined;
 
 	// For each section...
 	var rootElement = document.getElementById( 'configure' );
+	if(!rootElement) return;
 	var fieldsets = rootElement.getElementsByTagName( 'fieldset' );
 	for( var fid=0; fid<fieldsets.length; ++fid ) {
 		// For each subsection...
@@ -547,3 +549,4 @@ $( '#configure-search-input' ).keyup( function() {
 		}
 	}
 } );
+});

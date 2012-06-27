@@ -123,6 +123,23 @@ class Xuu extends Xxx
 			if(!$args->exists(3)) return substr($str,(int)$args->trimExpand(2));
 			return substr($str,(int)$args->trimExpand(2),(int)$args->trimExpand(3));
 
+		case 'substrw':
+			if(!$args->exists(2)) return $this->notFound();
+   	   $start = (int)$args->trimExpand(2);
+			if(!$args->exists(3)) {
+			   if ($start!=0) return preg_replace('/^\S*\s*/','',substr($str,$start-1));
+			   return preg_replace('/^\s*/','',substr($str,$start));
+			}
+   	   $len = (int)$args->trimExpand(3);
+		   if ($start!=0) $str = preg_replace('/^\S*\s*/','',substr($str,$start-1,$len+1));   	   
+			else $str = preg_replace('/^\s*/','',substr($str,$start,$len+1));
+			return preg_replace('/\s*\S*$/','',$str);
+
+		case 'strpos':
+		case 'instr':
+			if(!$args->exists(2)) return $this->notFound();
+			$pos = strpos($str,(int)$args->trimExpand(2));
+			return ($pos!==false) ? $pos : $this->notFound();
 
 		case 'collapse':
 			$out=array();
@@ -172,7 +189,7 @@ class Xuu extends Xxx
 				$replaceParts[] = $args->cropExpand($i);
 			}
 			$replacePattern=join('|',$replaceParts);
-			#$replacePattern=str_replace('/','\x2f',$replacePattern);
+			$replacePattern=str_replace('/','\x2f',$replacePattern);
 			try {
 //echo "replacePattern: $replacePattern";
 				return preg_replace("/$replacePattern/",$replaceWith,$str);
@@ -262,7 +279,8 @@ class Xuu extends Xxx
 					$newFrame=clone $f;
 					foreach ($v as $index=>$match)
 					{
-						$this->addFrameArg($newFrame,'$'.$index,$match[0]);
+					   $newFrame->namedArgs['$'.$index] = $match[0]; 
+						//$this->addFrameArg($newFrame,'$'.$index,$match[0]);
 					}
 					$res = ($newFrame->expand($replaceWith));
 					$ret.=$res;XxxArgs::cropSpace($res);
@@ -297,7 +315,7 @@ class Xuu extends Xxx
 					$newFrame=clone $f;
 					foreach ($v as $index=>$match)
 					{
-						$this->addFrameArg($newFrame,'$'.$index,$match[0]);
+						//$this->addFrameArg($newFrame,'$'.$index,$match[0]);
 					}
 					$res = ($newFrame->expand($replaceWith));
 					$ret.=$res;
@@ -329,13 +347,18 @@ class Xuu extends Xxx
 			default:
 				return md5($str);
 			}
+		   
+		case 'time':
+			$format = $args->cropExpand(2);
+		   echo $out = "$str => ".print_r(date_parse_from_format($format,$str),1)."</br>";
+			return strtotime($out);
 		default:
 			return $this->notFound();
 		}
 		return $this->notFound(); # cosmic ray
 	}
     
-	function fl_number(&$parser,&$f,$a)
+	function fl_number($parser,$f,$a)
 	{
 		$args = new XxxArgs($f,$a);
 		switch($args->command)
@@ -639,12 +662,23 @@ END;
 	}
 	*/
 	
-	function fl_test(&$parser,&$f,$a)
+	function fl_iftest(&$parser,$frame,$args) {
+		$test = isset( $args[1] ) ? trim( $frame->expand( $args[1] ) ) : '';
+		if ( $test !== '' ) {
+			return isset( $args[2] ) ? trim( $frame->expand( $args[2] ) ) : '';
+		} else {
+			return isset( $args[3] ) ? trim( $frame->expand( $args[3] ) ) : '';
+		}
+	}
+	function fl_test(&$parser,$f,$a)
 	{
 		global $wgUser;
 		$args = new XxxArgs($f,$a);
 		switch($args->command)
 		{
+		case 'if': 
+		  if ($args->trimExpand(1,'')) return $args->trimExpand(2,'');
+		  else return $args->trimExpand(3,'');
 		case 'or':
 		  foreach($args->args as $i)
 		  {

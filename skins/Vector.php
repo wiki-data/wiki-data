@@ -40,7 +40,43 @@ class SkinVector extends SkinTemplate {
 				"/{$this->stylename}/csshover{$min}.htc\")}</style><![endif]-->"
 		);
 
+    $title = $this->getTitle();
 		$out->addModuleScripts( 'skins.vector' );
+		/*
+		
+		## MOVE TO CULTURE.SI
+		
+		
+		$out->addMeta('og:title',$title->getText());
+		$out->addMeta('og:type','article');
+		$out->addMeta('og:url','http://www.culture.si/'.$title->getLocalUrl());
+		$out->addMeta('og:site_name','Culture.si');
+		$out->addMeta('fb:app_id','241593819229289');
+		$out->addMeta('og:locale','en_US');
+	   $teaser = weGetPagePropertyParsed($title,'Teaser');
+	   if ($teaser == null) {
+		   if(MWNamespace::isContent($title->getNamespace()) and $title->getText() != "Main Page") {
+			   $out->addMeta('og:description','An article about ' . $title->getText() . ' from Culture.si, the encyclopedia of Slovenian culture.');
+		   } else {
+			   $out->addMeta('og:description','Culture.si, the encyclopedia of Slovenian culture.');
+		   }
+	   } else {		   
+		   $teaser = strip_tags($teaser);
+	   	$out->addMeta('og:description',$teaser);
+		}
+		*/
+		/*
+		<meta property="og:title" content="Culture.si Blog" />
+<meta property="og:type" content="blog" />
+<meta property="og:image" content="http://www.culture.si/blog/?al2fb_image=1" />
+<meta property="og:url" content="http://www.culture.si/blog" />
+<meta property="og:site_name" content="Culture.si Blog" />
+<meta property="og:description" content="A Gateway to Culture in Slovenia" />
+<meta property="fb:app_id" content="241593819229289" />
+<meta property="og:locale" content="en_US" />
+		
+		*/
+		
 	}
 
 	/**
@@ -119,6 +155,7 @@ class VectorTemplate extends BaseTemplate {
 			$this->data['personal_urls'] =
 				array_reverse( $this->data['personal_urls'] );
 		}
+		
 		// Output HTML Page
 		$this->html( 'headelement' );
 ?>
@@ -128,16 +165,11 @@ class VectorTemplate extends BaseTemplate {
 		<div id="content" class="mw-body">
 			<a id="top"></a>
 			<div id="mw-js-message" style="display:none;"<?php $this->html( 'userlangattributes' ) ?>></div>
-			<?php if ( $this->data['sitenotice'] ): ?>
-			<!-- sitenotice -->
-			<div id="siteNotice"><?php $this->html( 'sitenotice' ) ?></div>
-			<!-- /sitenotice -->
-			<?php endif; ?>
-			<!-- firstHeading -->
-			<h1 id="firstHeading" class="firstHeading"><?php $this->html( 'title' ) ?></h1>
-			<!-- /firstHeading -->
 			<!-- bodyContent -->
 			<div id="bodyContent">
+			   <!-- firstHeading -->
+			   <h1 id="firstHeading" class="firstHeading"><?php $this->html( 'title' ) ?></h1>
+			   <!-- /firstHeading -->
 				<?php if ( $this->data['isarticle'] ): ?>
 				<!-- tagline -->
 				<div id="siteSub"><?php $this->msg( 'tagline' ) ?></div>
@@ -189,6 +221,11 @@ class VectorTemplate extends BaseTemplate {
 				<?php $this->html( 'debughtml' ); ?>
 				<!-- /debughtml -->
 			</div>
+			<?php if ( $this->data['sitenotice'] ): ?>
+			<!-- sitenotice -->
+			<div id="siteNotice"><?php $this->html( 'sitenotice' ) ?></div>
+			<!-- /sitenotice -->
+			<?php endif; ?>
 			<!-- /bodyContent -->
 		</div>
 		<!-- /content -->
@@ -240,6 +277,19 @@ class VectorTemplate extends BaseTemplate {
 		<script type="<?php $this->text( 'jsmimetype' ) ?>"> if ( window.isMSIE55 ) fixalpha(); </script>
 		<!-- /fixalpha -->
 		<?php $this->printTrail(); ?>
+
+<!-- facebook -->
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+<!-- twitter -->
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
 
 	</body>
 </html>

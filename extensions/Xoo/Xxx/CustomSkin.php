@@ -62,14 +62,35 @@ class XxxCustomSkin extends Xxx
 		}
 		return true;
 	}
+	var $langCache = array(0=>false);
+	function hook_PageContentLanguage( $title, &$pageLang ) {
+    global $wgLang, $wgTitle;
+    $dbr = wfGetDB( DB_SLAVE );
+    $pid = $title->getArticleID();
+    if (!isset($this->langCache[$pid])) {
+      $res = $dbr->selectField( 'page_props','pp_value', array( 'pp_propname' => 'lang', 'pp_page' => $pid),	__METHOD__ );
+      $this->langCache[$pid] =  $res ?  Language::factory( $res ) : false;
+//      print "($pid:$res) ".print_r($this->langCache[$pid],true);
+      //print_r ($this->langCache[$pid]);
+    }
+    if ($this->langCache[$pid] !== false) {
+      $wgLang = $pageLang = $this->langCache[$pid];
+    }
+    else $pageLang = $wgLang;
+		return true;
+  }
 	
 	function hook_UserLoginComplete()
 	{
+ 	  global $wgXxxUseCustomSkin;
+	  if ($wgXxxUseCustomSkin===false) return true;
 		return $this->applyCustomSkin();
 	}
 
 	function hook_UserLogoutComplete()
 	{
+ 	  global $wgXxxUseCustomSkin;
+	  if ($wgXxxUseCustomSkin===false) return true;
 		return $this->applyCustomSkin();
 	}
 	var $skinParsing=false;
@@ -121,7 +142,7 @@ class XxxCustomSkin extends Xxx
  
   /*** VIRTUAL SUBPAGES ***/
 	function hook_ShowMissingArticle ($a) {
-		global $wgOut,$wgNamespacesWithSubpages;
+		global $wgOut,$wgNamespacesWithSubpages,$wgRequest;
 		$t = Title::newFromText($a->mTitle->getPrefixedText());
 		$ns = $t->getNamespace();
 		if (!$t->isSubpage()) return true;
@@ -147,15 +168,18 @@ class XxxCustomSkin extends Xxx
 		$tparts = explode( '/', $t->getText());
 		$pparts = explode('/', $p->getText());
 		$args = array_slice($tparts,count($pparts));
-    $text = '{{:' . $p->getPrefixedText();
-    $text .= "|path=" . preg_replace('/{/','&#123;',implode('/',$args));
-    foreach ($args as $k=>$v) {
-      $text.= '|'.($k+1) . "=" . preg_replace('/{/','&#123;',$v);
-      $text.= '|sub'.($k+1) . "=" . preg_replace('/{/','&#123;',$v);
-    }
-    $text.="}}";
-    $wgOut->addWikiText($text);
-    return false;
+      $text = '{{:' . $p->getPrefixedText();
+      $wgRequest->setVal(0,$p->getPrefixedText());
+      $text .= "|path=" . preg_replace('/{/','&#123;',implode('/',$args));
+      foreach ($args as $k=>$v) {
+        $val = preg_replace('/{/','&#123;',$v);
+        $wgRequest->setVal($k+1,$val);
+        $text.= '|'.($k+1) . "=" . $val;
+        $text.= '|sub'.($k+1) . "=" . $val;
+      }
+      $text.="}}";
+      $wgOut->addWikiText($text);
+      return false;
 	}	
 	function var_VIRTUALSUBPAGES (&$parser) {
 	  $parser->getOutput()->setProperty('xooVirtualSubpages','1');
@@ -320,6 +344,9 @@ class XxxCustomSkin extends Xxx
 		}
 		return true;
 	}
+	
+	
+	
 	function setupExtension()
 	{
 	  global $wgXxxUseCustomSkin;
@@ -342,7 +369,7 @@ function wfXxxCustomSkinDeclare()
 {
 	class SkinCustomSkin extends SkinTemplate 
 	{
-		function initPage(&$out) 
+		function initPage(OutputPage $out) 
 		{
 			global $wgXxxCustomSkin;
 			SkinTemplate::initPage($out);
@@ -373,9 +400,9 @@ function wfXxxCustomSkinDeclare()
 			wfSuppressWarnings();
 			global $wgUser,$wgTitle,$wgParser, $wgXxxCustomSkin,$wgRequest;
 			$skin = $wgUser->getSkin();
+      $out = $skin->getOutput();
 
 			wfSuppressWarnings();
-
 		 	$skinArgs = array();
 		
 
@@ -387,7 +414,15 @@ function wfXxxCustomSkinDeclare()
 			$skinArgs['HEADLINKS']		= $this->data['headlinks'];
 			$skinArgs['EXTRAHEAD']		= $wgXxxCustomSkin->extraHeadText; 
 			$skinArgs['HEADSCRIPTS'] 	= $this->data['headscripts'];
-//			$skinArgs['VARSCRIPT']		= Skin::makeGlobalVariablesScript( $this->data );
+
+      $vars = $out->getJSVars();
+      $varscript = "<script>\n";
+      foreach ($vars as $k=>$v) {
+        $varscript.= $k . "=" . json_encode($v) . ";\n";
+      }
+      $varscript.="</script>";
+      
+			$skinArgs['VARSCRIPT']		= $varscript;
 			$skinArgs['JSMIMETYPE']		= $this->data['jsmimetype'];
 			$skinArgs['STYLEPATH']		= $this->data['stylepath'];
 
@@ -530,11 +565,11 @@ function wfXxxCustomSkinDeclare()
 				{ 
 					$skinArgs['LANGLINKS']		.= '<li class="' . htmlspecialchars($langlink['class']).'">'
 												 . '<a href="' . htmlspecialchars($langlink['href']) .'">'
-												 . $langlink['text']
+												 . '<span class="langname">' . $langlink['text'] .'</span>'
 												 . '</a></li>';
 				}
-			} 
-
+			} else $skinArgs['LANGLINKS'] = '';
+/*
 			$skinArgs['SIDEBAR']		= '';
 			foreach($this->data['sidebar'] as $bar=>$cont) 
 			{ 
@@ -554,7 +589,7 @@ function wfXxxCustomSkinDeclare()
 				} 
  				$skinArgs['SIDEBAR']	.='</ul></div></div>';
 			}
-
+*/
 			$skinArgs['REPORTTIME'] 		= $this->data['reporttime'];
 
 			$skinArgs['CONTENT'] 			= $this->data['bodytext'];

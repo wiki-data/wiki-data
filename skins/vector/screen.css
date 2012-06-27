@@ -12,12 +12,58 @@
  */
 
 /* Framework */
+
+
+@font-face {
+font-family: Tisa;
+src: url("/fonts/TisaWebPro.eot");
+font-weight:normal;
+}
+
+@font-face {
+font-family: Tisa;
+src: url("/fonts/TisaWebPro.woff") format("woff");
+font-weight:normal;
+}
+
+@font-face {
+font-family: Tisa;
+src: url("/fonts/TisaWebPro-Bold.eot");
+font-weight:bold;
+}
+
+@font-face {
+font-family: Tisa;
+src: url("/fonts/TisaWebPro-Bold.woff") format("woff");
+font-weight:bold;
+}
+
+#toc,.editsection {
+display:none;
+}
+
+
+/* [[Category:EXPORT_SKIN]] */
+
+* {
+  margin:0;
+  padding:0;
+  list-style:none;
+  box-sizing:border-box;
+  -moz-box-sizing:border-box;
+  -webkit-box-sizing:border-box;
+}
+*:focus {
+  outline:0;
+}
+
+
 html,
 body {
 	height: 100%;
 	margin: 0;
 	padding: 0;
-	font-family: sans-serif;
+	font-family: Tisa,sans-serif;
 	font-size: 1em;
 }
 body {
@@ -832,7 +878,7 @@ div#bodyContent {
 	background-image: url(images/watch-icon-loading.gif);
 	background-position: 5px 60%;
 }
-#ca-unwatch.icon a span,
+#ca-unwatch.icon a span,elje_Museum_of_Recent_History
 #ca-watch.icon a span {
 	display: none;
 }
@@ -846,4 +892,39 @@ div.vectorTabs ul {
 /* Tooltips are outside of the normal body code, so this helps make the size of the text sensible */
 .tipsy {
 	font-size: 0.8em;
+}
+
+/* social icons */
+.social-icons {
+  box-sizing:border-box;
+  -moz-box-sizing:border-box;
+  -webkit-box-sizing:border-box;
+  border: 0px;
+  border-top: 6px solid #4F4F4F;
+  padding: 11px 10px 0px !important;
+  background: #76B82A;
+  color: #76B82A;
+  position:absolute;
+  right:-250px;
+  top:0px;
+  width:234px; 
+  height:50px;
+  xborder-top: 6px solid #efefef;
+  background: #dfdfdf;
+  color: #dfdfdf;
+
+}
+.social-icons a {
+  color: #76B82A;
+}
+.social-icons .fb {
+  position:absolute;
+  top:10px;
+  left:10px;
+}
+.social-icons .twitter {
+  position:absolute;
+  top:10px;
+  right:10px;
+  width:90px;
 }

@@ -1,0 +1,47 @@
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svnroot/mediawiki/!svn/ver/111254/trunk/extensions/SemanticMediaWiki/maintenance
+END
+SMW_setup_1.16.php
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/svnroot/mediawiki/!svn/ver/105757/trunk/extensions/SemanticMediaWiki/maintenance/SMW_setup_1.16.php
+END
+SMW_refreshData.php
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/svnroot/mediawiki/!svn/ver/111254/trunk/extensions/SemanticMediaWiki/maintenance/SMW_refreshData.php
+END
+SMW_Postgres_Schema.sql
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/svnroot/mediawiki/!svn/ver/30879/trunk/extensions/SemanticMediaWiki/maintenance/SMW_Postgres_Schema.sql
+END
+SMW_conceptCache.php
+K 25
+svn:wc:ra_dav:version-url
+V 102
+/svnroot/mediawiki/!svn/ver/111253/trunk/extensions/SemanticMediaWiki/maintenance/SMW_conceptCache.php
+END
+SMW_setup.php
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svnroot/mediawiki/!svn/ver/111254/trunk/extensions/SemanticMediaWiki/maintenance/SMW_setup.php
+END
+README
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svnroot/mediawiki/!svn/ver/38859/trunk/extensions/SemanticMediaWiki/maintenance/README
+END
+SMW_dumpRDF.php
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svnroot/mediawiki/!svn/ver/80089/trunk/extensions/SemanticMediaWiki/maintenance/SMW_dumpRDF.php
+END

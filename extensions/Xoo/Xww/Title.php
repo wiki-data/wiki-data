@@ -138,6 +138,12 @@ class XwwTitle extends Xxx
 	{
 		return $this->titleFunctions($parser, 'path',$parser->mTitle);
 	}
+
+	function var_RESOLVE(&$parser)
+	{
+		return $this->titleFunctions($parser, 'resolve',$parser->mTitle);
+	}
+
 	function var_EDITED(&$parser)
 	{
 		return $this->titleFunctions($parser, 'edited',$parser->mTitle);
@@ -172,11 +178,23 @@ class XwwTitle extends Xxx
 			array('rev_page' => $t->getArticleID()),
 			'XwwTitle::getEarliestRevID' );
 	}
+  var $resolveCache = array();
 
 	function titleFunctions(&$parser, $cmd,$t) {
 		global $wgContLang,$wgNamespacesWithSubpages;
 		if(!$t) return $this->notFound();
 		switch($cmd) {
+		case 'resolve':
+		  $text = $t->getFullText();
+		  if (!isset($this->resolveCache[$text])) {
+		    if ($t->isRedirect()) {
+		      $tt = WikiPage::factory( $t)->getRedirectTarget();
+    			$this->resolveCache[$text] = $tt->getPrefixedText();
+		    } else {
+    			$this->resolveCache[$text] = $text;
+		    }
+		  }
+   		return $this->resolveCache[$text];
 		case 'edited':
 			$lastrev = $t->getLatestRevID();
 			$rev = Revision::newFromId($lastrev);
@@ -197,10 +215,14 @@ class XwwTitle extends Xxx
 			return $t->getText();
 		case 'pagenamee':
 			return wfUrlEncode($t->getDBKey());
+		case 'pagenamek':
+			return $t->getDBKey();
 		case 'fullpagename':
 			return $t->getPrefixedText();
 		case 'fullpagenamee':
 			return $t->getPrefixedURL();
+		case 'fullpagenamek':
+			return $t->getPrefixedDBKey();
 		case 'subpagename':
 			return $t->getSubpageText();
 		case 'subpagenamee':
@@ -303,12 +325,17 @@ class XwwTitle extends Xxx
 		default: return $this->notFound();
 		}
 	}
-
+	
+	var $titlePath = null;
+	
 	function fl_title(&$parser, $f, $a, $titleText=null) {
 		global $wgContLang,$wgNamespacesWithSubpages;
-		$args = new xxxArgs(&$f,$a);
+		$args = new xxxArgs($f,$a);
 		$title = $args->trimExpand(1);
-		if(!$title)	return array('found'=>false);
+		if(!$title)	{
+		  if ($args->command=='link') return $args->trimExpand($args->count);
+		  return array('found'=>false);
+		} 
 		$t=Title::newFromText($title);
 		if ($t) {
 			switch($args->command)
@@ -326,7 +353,17 @@ class XwwTitle extends Xxx
 			case 'path':
 				return $this->makePath($t,$args); 
 			case 'link':
-				if ($args->count > 2 && $args->isNumbered($args->count))
+      	if (!$this->title_path) {
+        	$dbr = wfGetDB( DB_SLAVE );
+          $this->title_path = $dbr->selectField('page_props','pp_value', array( 
+			      'pp_page' => $parser->mTitle->getArticleId(),
+			      'pp_propname' => 'title_path'
+			    ), __METHOD__ );
+			    
+			    if (!$this->title_path) $this->title_path = $parser->mTitle->getFullText();
+			 }
+			  
+			 if ($args->count > 2 && $args->isNumbered($args->count))
 					$display=$args->cropExpand($args->count);
 				elseif ($args->count > 3 && $args->trimExpand($args->count-1) == '') 
 					$display=$args->cropExpand($args->count);
@@ -335,12 +372,12 @@ class XwwTitle extends Xxx
 
 				if ($t->getFullText()==$parser->mTitle->getFullText()) {
 				  $class = 'link-self';				  
-				} elseif (stripos($parser->mTitle->getFullText()."/",$t->getFullText())===0) {
+				} elseif (stripos($this->title_path."/",$t->getFullText())===0) {
 				  $class = 'link-active';
-				} 
+				}
 
 				$html = '<a href="' 
-				        . $t->getLocalUrl($this->makeUrlQuery($args))
+				        . $t->getLinkUrl($this->makeUrlQuery($args))
 				        . '" '
 						. $this->makeHtmlAttributes($args,array('class'=>"link $class"))
 						.'><span class="link-inner">' 

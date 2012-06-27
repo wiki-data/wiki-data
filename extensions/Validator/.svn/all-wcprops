@@ -1,0 +1,53 @@
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svnroot/mediawiki/!svn/ver/104616/trunk/extensions/Validator
+END
+INSTALL
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svnroot/mediawiki/!svn/ver/104616/trunk/extensions/Validator/INSTALL
+END
+RELEASE-NOTES
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svnroot/mediawiki/!svn/ver/104616/trunk/extensions/Validator/RELEASE-NOTES
+END
+COPYING
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svnroot/mediawiki/!svn/ver/72976/trunk/extensions/Validator/COPYING
+END
+Validator.i18n.php
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svnroot/mediawiki/!svn/ver/104298/trunk/extensions/Validator/Validator.i18n.php
+END
+Validator.php
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svnroot/mediawiki/!svn/ver/104616/trunk/extensions/Validator/Validator.php
+END
+Validator_Settings.php
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svnroot/mediawiki/!svn/ver/87615/trunk/extensions/Validator/Validator_Settings.php
+END
+README
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svnroot/mediawiki/!svn/ver/59578/trunk/extensions/Validator/README
+END
+Validator.hooks.php
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svnroot/mediawiki/!svn/ver/91907/trunk/extensions/Validator/Validator.hooks.php
+END

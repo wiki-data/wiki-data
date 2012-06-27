@@ -12,6 +12,8 @@ XxxInstaller::Install('XwwTemplate');
 #
 ############################################################################
 
+
+
 class XwwTemplate extends Xxx
 {	
 
@@ -37,6 +39,7 @@ echo "</pre>";
 		{
 		case 'local':
 		case 'parse':
+	   case 'text':
 		    $frameArgs=array();
 		    $counter=count($frame->namedArgs)+count($frame->numberedArgs)+1;
 		    
@@ -61,15 +64,18 @@ echo "</pre>";
 		    $parsedText = $customFrame->expand($dom);
 		    
 		    if ($args->command=='local') return $parsedText;
-		    elseif ($args->command=='parse') 
-		    {
+		    else {
 		    	global$wguser;
 		    	$newParser = new Parser();
 				$options = ParserOptions::newFromUser($wgUser);
 				$text =  $newParser->parse( $parsedText, $parser->mTitle, $options, false)->mText;
+				if ($args->command=='text') {
+				  $text = preg_replace('/<[^>]+>/','',$text);
+				  return $text;
+				}
 				return array($parser->mStripState->unstripBoth($text),'isHTML'=>true);
 		    }
-		    else die('cosmic ray');
+		    die('cosmic ray');
 
 		case 'parent':
 			if ($args->count != 1) return $this->notFound();
@@ -132,13 +138,11 @@ echo "</pre>";
 			return array(preg_replace('/\n/','<br/>',htmlspecialchars($args->cropExpand(1))),'isHTML'=>true);
         
 
-		case 'wiki':
-		    
-		case 'parse':
+      case 'text':
+         
 			$command=array_shift($a); #
 			$lastArg=array_pop($a);
-			foreach ($a as $i=>$arg)
-			{
+			foreach ($a as $i=>$arg) {
 				$a[$i]=$arg->node;
 			}
 			
@@ -146,7 +150,10 @@ echo "</pre>";
 			$text=$newFrame->expand($lastArg);
 			$newParser = new Parser();
 			$options = ParserOptions::newFromUser($wgUser);
-			return array($newParser->parse( $text, $parser->mTitle, $options, false)->mText,'isHTML'=>true);
+			$text = $newParser->parse( $text, $parser->mTitle, $options, false)->mText;
+			$text = preg_replace('/<[^>]+>/','',$text);
+  			return array($text);
+         
 		case 'time':
 			$before = microtime(true);
 			$ret = $frame->expand($args[0]);
@@ -158,6 +165,16 @@ echo "</pre>";
 		}
 	}
 	
+	function hook_LinkEnd(  $dummy, $target, $options, &$html, &$attribs, &$ret  ) {
+	   global $wgTitle;
+	   $t = $wgTitle;
+	   if ($t->getFullText()==$target->getFullText()) {
+		  $attribs['class'] = (isset($attribs['class']) ? $attribs['class'] . " ": "") . 'link-self';				  
+	   } elseif (stripos($wgTitle."/",$target->getFullText())===0) {
+		  $attribs['class'] = (isset($attribs['class']) ? $attribs['class'] . " ": "") . 'link-active';				  
+		} 
+	  return true;
+	}
 
 	function frameFunctions($fnName,&$frame,$arg=false)
 	{
@@ -227,20 +244,30 @@ $wgHooks['EditPage::attemptSave'][] = 'efXwwSave';
 function efXwwShow(&$editPage) 
 {
 	global $wgRequest, $wgOut;
+//  print_r($editPage);
 	
 	if (!$editPage->mTitle->exists()) return true;
-	$startPos=$wgRequest->getInt('startpos',-1);
-	$endPos=$wgRequest->getInt('endpos',-1);
-
+	$preload=$wgRequest->getVal('preload','');
+  
+	$end = $wgRequest->getVal('startpos','') == 'end';
+  if ($end) {
+    $startPos = $endPos = strlen($editPage->textbox1);
+  } else {
+	  $startPos=$wgRequest->getInt('startpos',-1);
+	  $endPos=$wgRequest->getInt('endpos',-1);
+  }
+  
 	if ($startPos>-1 && $endPos>-1) {
-		if (!$wgRequest->getInt('editpos',false))	{
-			$editPage->textbox1=substr($editPage->textbox1,$startPos,$endPos-$startPos);
+	  if ($editPage->firsttime) {
+	    if ($startPos!=$endPos)	{
+			  $editPage->textbox1=substr($editPage->textbox1,$startPos,$endPos-$startPos);
+			} else {
+  			$editPage->textbox1 = $editPage->getPreloadedText( $preload );
+  		}
 		}
-		
 		$wgOut->addHTML( '
 	<input type="hidden" value="'.$startPos.'" name="startpos" />
 	<input type="hidden" value="'.$endPos.'" name="endpos" />
-	<input type="hidden" value="true" name="editpos" />
 	');
 	}
 	return true;

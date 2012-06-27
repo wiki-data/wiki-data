@@ -321,14 +321,15 @@ class TemplateProfiler
 		$ret .= '<span class="profiler-time">' . ($time<.001 ? (int)($time*10000)/10 : (int)($time*1000)) .'</span>';
 		$ret.= '<span class="profiler-nettime">' . ($nettime<.001 ? (int)($nettime*10000)/10 : (int)($nettime*1000)) .'</span>';
 		$ret.= '<span class="profiler-title">';
-		$ret.= $this->getTitle($node['title']);
+		
+		$ret.= htmlspecialchars(substr($this->getTitle($node['title']),0,50));
 		$ret.='</span>';
 		if (count($node['children']))
 		{
 			$ret.='<ul>';
 			foreach ($node['children'] as &$child)
 			{
-				$ret.=$this->outputTreeNode(&$child,$minTime);
+				$ret.=$this->outputTreeNode($child,$minTime);
 			}
 			$ret.='</ul>';
 		}
@@ -345,7 +346,7 @@ class TemplateProfiler
 	function outputListData()
 	{
 		global $wgOut;
-		$wgOut->addHTML("<table id=\"profiler-list\"><tr id=\"profiler-listheader\"><th>group / item</th><th>count</th><th>net time (ms)</th><th>total time (ms)</th></th></tr>");
+		$wgOut->addHTML("<table id=\"profiler-list\"><tr id=\"profiler-listheader\"><th>group / item</th><th>count</th><th colspan=\"2\">net time (ms)</th><th colspan=\"2\">total time (ms)</th></th></tr>");
 		uasort($this->outputList,array($this,'compareNetTime'));
 		foreach ($this->outputList as $groupName=>$group)
 		{
@@ -354,7 +355,11 @@ class TemplateProfiler
 				$wgOut->addHTML("<tr class=\"profiler-listgroup\"><th>".($groupName?$groupName:'(main)').":</th><td>${group['count']}</td><td>"
 								.(int)($group['nettime']*1000)
 								."</td><td>"
+								.(int)($group['nettime']*1000/$group['count'])
+								."</td><td>"
 								.(int)($group['time']*1000)
+								."</td><td>"
+								.(int)($group['time']*1000/$group['count'])
 								."</td></tr>"
 								);
 				uasort($this->outputSubList[$groupName],array($this,'compareNetTime'));
@@ -362,10 +367,14 @@ class TemplateProfiler
 				{
 					if ($item['time']>=$this->min/1000)
 					{
-						$wgOut->addHTML("<tr class=\"profiler-listitem\"><th>$itemName</th><td>${item['count']}</td><td>"
+						$wgOut->addHTML("<tr class=\"profiler-listitem\"><th>" . htmlspecialchars(substr($itemName,0,50)) . "</th><td>${item['count']}</td><td>"
 										.(int)($item['nettime']*1000)
 										."</td><td>"
+	    							.(int)($item['nettime']*1000/$item['count'])
+  									."</td><td>"
 										.(int)($item['time']*1000)
+										."</td><td>"
+	    							.(int)($item['time']*1000/$item['count'])
 										."</td></tr>");	
 					}
 				}

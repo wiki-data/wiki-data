@@ -492,9 +492,9 @@ class XxxParserFunction extends Xxx {
 		$method="{$func}_{$args->cmd}";
 		$default = "{$func}__def";
 		if(method_exists($this,$method)) {
-			$this->method(&$P,&$F,&$args);
+			$this->method($P,$F,$args);
 		} elseif(method_exists($this,$default)) {
-			$this->$default(&$P,&$F,&$args);
+			$this->$default($P,$F,$args);
 		} 
 	}
 }

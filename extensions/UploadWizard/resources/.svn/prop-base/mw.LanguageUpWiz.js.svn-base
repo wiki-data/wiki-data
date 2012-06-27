@@ -1,0 +1,12 @@
+K 13
+svn:eol-style
+V 6
+native
+K 13
+svn:mergeinfo
+V 318
+/branches/REL1_15/phase3/js2/mwEmbed/modules/UploadWizard/mw.Language.js:51646
+/branches/sqlite/js2/mwEmbed/modules/UploadWizard/mw.Language.js:58211-58321
+/branches/uploadwizard/extensions/UploadWizard/resources/mw.LanguageUpWiz.js:73550-75905
+/trunk/phase3/extensions/UploadWizard/resources/mw.LanguageUpWiz.js:85939
+END

@@ -787,7 +787,9 @@ class EditPage {
 	 * @param $preload String: representing the title to preload from.
 	 * @return String
 	 */
-	protected function getPreloadedText( $preload ) {
+### HACK START ###
+	public function getPreloadedText( $preload ) {
+### HACK END ###
 		global $wgUser, $wgParser;
 
 		if ( !empty( $this->mPreloadText ) ) {

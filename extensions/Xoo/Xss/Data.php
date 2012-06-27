@@ -66,6 +66,7 @@ class Xss extends Xxx
 		"dbsuffix"			=> '_xss', 		# will be added to the wikibase name, if no dbname is provided
 		"tableprefix"		=> '',			# prefix for data tables
 		"internalprefix"	=> '_xss_',		# prefix for internal tables
+		"dbtype" 			=> XXX_LATER, 	# defaults to $wgDbType
 		"dbname" 			=> XXX_LATER, 	# defaults to $wgDbName . dbsuffix
 		"dbhost" 			=> XXX_LATER, 	# defaults to $wgDbServer
 		"dbuser" 			=> XXX_LATER, 	# defaults to $wgDbUser
@@ -74,74 +75,116 @@ class Xss extends Xxx
 		"nsname"			=> 'Data',
 		"nstalk"			=> 'Data_talk'
 	);
+	
+	function getSQL($which, $a1=NULL,$a2=NULL,$a3=NULL,$a4=NULL,$a5=NULL) {
+	  $type = $this->S('dbtype');
+	  switch ("$which|$type") {
+	  case 'tables|mysql':
+	    return "
+        CREATE TABLE `" . $this->S('internalprefix'). "tables` (
+          `table_name` char(160) NOT NULL,
+          `table_prop` char(160) NOT NULL,
+          `table_val` char(160) NOT NULL,
+          PRIMARY KEY  (`table_name`,`table_prop`)
+        ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+	    ";
+	  case 'tables|postgres':
+	    return "
+        CREATE TABLE " . $this->S('internalprefix'). "tables (
+          table_name TEXT NOT NULL,
+          table_prop TEXT NOT NULL,
+          table_val TEXT NOT NULL,
+          PRIMARY KEY  (table_name,table_prop)
+        );
+	    ";
+	  case 'fields|mysql':
+	    return "
+        CREATE TABLE " . $this->S('internalprefix'). "fields (
+          `field_table` char(160) NOT NULL,
+          `field_name` char(160) NOT NULL,
+          `field_type` char(64) NOT NULL,
+          `field_default` text,
+          `field_reference` char(160) default NULL,
+          `field_reverse` char(160) default NULL,
+          PRIMARY KEY  (`field_table`,`field_name`)
+        ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+      ";
+	  case 'fields|postgres':
+	    return "
+        CREATE TABLE " . $this->S('internalprefix'). "fields (
+          field_table TEXT NOT NULL,
+          field_name TEXT NOT NULL,
+          field_type TEXT NOT NULL,
+          field_default TEXT,
+          field_reference TEXT NULL,
+          field_reverse TEXT NULL,
+          PRIMARY KEY  (field_table, field_name)
+        );
+      ";
+	  case 'links|mysql':
+	    return "
+        CREATE TABLE " . $this->S('internalprefix'). "links (
+          `ln_from` int(11) NOT NULL,
+          `ln_title` char(255) NOT NULL,
+          PRIMARY KEY  (`ln_from`,`ln_title`)
+        ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+      ";
+	  case 'links|postgres':
+	    return "
+        CREATE TABLE " . $this->S('internalprefix'). "links (
+          ln_from INTEGER NOT NULL,
+          ln_title TEXT NOT NULL,
+          PRIMARY KEY (ln_from, ln_title)
+        )
+      ";
+	  case 'multilinks|mysql':
+	    return "
+        CREATE TABLE " . $this->S('internalprefix'). "multilinks (
+          `ml_from` int(11) NOT NULL,
+          `ml_table` char(255) NOT NULL,
+          PRIMARY KEY  (`ml_from`,`ml_table`)
+        ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+      ";
+	  case 'multilinks|postgres':
+	    return "
+        CREATE TABLE " . $this->S('internalprefix'). "multilinks (
+          ml_from INTEGER NOT NULL,
+          ml_table TEXT NOT NULL,
+          PRIMARY KEY  (ml_from,ml_table)
+        )
+      ";
+    }
+	}
 
 	function setupExtension() {
 		global $wgExtraNamespaces;
+		global $wgDBtype;
 		global $wgDBname;
 		global $wgDBserver;
 		global $wgDBuser;
 		global $wgDBpassword;
 
+		$this->setDefaultSetting('dbtype',$wgDBtype);
 		$this->setDefaultSetting('dbname',$wgDBname . $this->S('dbsuffix'));
 		$this->setDefaultSetting('dbhost',$wgDBserver);
 		$this->setDefaultSetting('dbuser',$wgDBuser);
 		$this->setDefaultSetting('dbpass',$wgDBpassword);
 
 		$dbr=$this->getDbr();
-		$pref=$this->S('internalprefix');
 
-		if (!$dbr->tableExists("{$pref}tables"))
-		{
-			$sql=<<<END
-CREATE TABLE `{$pref}tables` (
-  `table_name` char(160) NOT NULL,
-  `table_prop` char(160) NOT NULL,
-  `table_val` char(160) NOT NULL,
-  PRIMARY KEY  (`table_name`,`table_prop`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-END;
-			$dbr->query($sql,__METHOD__,__LINE__);
+	  if (!$dbr->tableExists("{$pref}tables")) {
+		  $dbr->query($this->getSql('tables'),__METHOD__,__LINE__);
+	  }
+	  if (!$dbr->tableExists("{$pref}fields")) {
+		  $dbr->query($this->getSql('fields'),__METHOD__,__LINE__);
 		}
-
-
-		if (!$dbr->tableExists("{$pref}fields"))
-		{
-			$sql=<<<END
-CREATE TABLE `{$pref}fields` (
-  `field_table` char(160) NOT NULL,
-  `field_name` char(160) NOT NULL,
-  `field_type` char(64) NOT NULL,
-  `field_default` text,
-  `field_reference` char(160) default NULL,
-  `field_reverse` char(160) default NULL,
-  PRIMARY KEY  (`field_table`,`field_name`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-END;
-			$dbr->query($sql,__METHOD__,__LINE__);
+	  if (!$dbr->tableExists("{$pref}links")) {
+		  $dbr->query($this->getSql('links'),__METHOD__,__LINE__);
 		}
-		
-		if (!$dbr->tableExists("{$pref}links"))
-		{
-			$sql=<<<END
-CREATE TABLE `{$pref}links` (
-  `ln_from` int(11) NOT NULL,
-  `ln_title` char(255) NOT NULL,
-  PRIMARY KEY  (`ln_from`,`ln_title`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-END;
-			$dbr->query($sql,__METHOD__,__LINE__);
+	  if (!$dbr->tableExists("{$pref}multilinks")) {
+		  $dbr->query($this->getSql('multilinks'),__METHOD__,__LINE__);
 		}
-		if (!$dbr->tableExists("{$pref}multilinks"))
-		{
-			$sql=<<<END
-CREATE TABLE `{$pref}multilinks` (
-  `ml_from` int(11) NOT NULL,
-  `ml_table` char(255) NOT NULL,
-  PRIMARY KEY  (`ml_from`,`ml_table`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-END;
-			$dbr->query($sql,__METHOD__,__LINE__);
-		}
+  		
 
 # 		TODO: Doesn't work here, so invent a way to make them customizable without breaking too much stuff
 #		define ("NS_XSSDATA",$this->S('nsnumber'));
@@ -211,7 +254,7 @@ END;
 			}
 			
 			# only one table per page allowed
-			if ($this->outputTableDefExists(&$parser)) return $this->formatError("Only one data def per page allowed");
+			if ($this->outputTableDefExists($parser)) return $this->formatError("Only one data def per page allowed");
 		
 			# construct a table def from arguments
 			
@@ -387,7 +430,7 @@ END;
 			}
 
 			$tableDef=$this->makeTableDef($tableName, $fieldRows);
-			$this->addOutputTableDef(&$parser, &$pageTitle, $tableDef);
+			$this->addOutputTableDef($parser, $pageTitle, $tableDef);
 			
 			$returnText = $this->formatTableDef($tableDef);
 			return array(0=>$returnText.$errorMessage,'isHTML'=>true,'noParse'=>true);
@@ -445,7 +488,7 @@ END;
 			# TODO: handle this more wiki way, probably display anyway, just not save
 
 			# add to the parser output, to be saved when links are updated, i.e. also in queued jobs
-			$this->addOutputRow (&$parser, &$pageTitle, $tableName, $rowName, $fieldValues);
+			$this->addOutputRow ($parser, $pageTitle, $tableName, $rowName, $fieldValues);
 			
 			# if we're setting, we're done;
 			if ($args->command=='set') return $errorMessage;
@@ -487,7 +530,7 @@ END;
 			# TODO: make this gracefully fail if the array extension is not installed
 			# we need exactly two arguments for getrow
 			# TODO: figure out why the following was commented
-#			if ($args->count<2) return $this->notFound();
+#			if ($args->count>2) return $this->notFound();
 		case 'maprow':
 		case 'evalrow':
 			#we need at least two arguments for anything
@@ -499,7 +542,7 @@ END;
 			
 			#get row ref
 			$rowRef=$this->escapeValue($args->trimExpand(2));
-			if (!$this->normalizeName($rowRef)) return $this->notFound();
+			if (!$this->normalizeRef($rowRef)) return $this->notFound();
 		
 			#check if the row is already in the cache
 			if(isset($this->dataRowCache[$tableName][$rowName]))
@@ -511,7 +554,7 @@ END;
 				#make SQL, get the row
 				$xssQuery = XssQuery::Make($this,array(""=>"$tableName.*"),array('where'=>"$tableName.#=$rowRef"));
 				$sql=$xssQuery->getSql();
-				$dbr=&$this->getDbr();
+				$dbr=$this->getDbr();
 				if (!$dbr) return $this->notFound();	
 				$res=$dbr->query($sql,__METHOD__,true);
 				if(!$res) return $this->notFound();
@@ -797,7 +840,7 @@ ORDER BY ta, fi;
 			}
 			else
 			{	
-				$this->mDbr=& wfGetDB( DB_MASTER );
+				$this->mDbr= wfGetDB( DB_MASTER );
 			}
 		}
 		return $this->mDbr; 
@@ -819,6 +862,12 @@ ORDER BY ta, fi;
 		$s=$t->getPrefixedDbKey();
 		return $s;
 	}
+
+	function normalizeRef(&$s)
+	{
+	  return Xtt::castValue('reference',$s);
+	}
+
 	
 	function getDataTableName($n)
 	{
@@ -956,7 +1005,7 @@ ORDER BY ta, fi;
 
 	function tableExists($tableName)
 	{
-	    $dbr =& $this->getDbr();
+	    $dbr = $this->getDbr();
     	if (!$dbr) return false; 
 		$tableName = $this->getDataTableName($tableName);
 		return $dbr->tableExists($tableName);
@@ -1005,9 +1054,9 @@ ORDER BY ta, fi;
 	{
 		$tableDef=$this->getTableDef($tableName);
 		$def=array();
-		foreach( $tableDef['fieldDefaults'] as $k=>$v) {
-			if($v) {
-				$def [$k]=$v;
+		foreach( $tableDef['fieldsByName'] as $k=>$v) {
+			if($v['field_type']!='multi') {
+				$def [$k]=isset($tableDef['fieldDefaults'][$k]) ? $tableDef['fieldDefaults'][$k] : null;
 			}
 		}
 		return $def;
@@ -1028,27 +1077,27 @@ ORDER BY ta, fi;
 	
 	function getFieldDef($tableName,$fieldName)
 	{
-		if (!$tableDef =&$this->getTableDef($tableName)) return false;
+		if (!$tableDef = $this->getTableDef($tableName)) return false;
 		if (!isset($tableDef['fieldsByName'][$fieldName])) return false;
 		return $tableDef['fieldsByName'][$fieldName];
 	}
 	
 	function getFieldProperty($tableName,$fieldName,$property)
 	{
-		if (!$fieldDef =&$this->getFieldDef($tableName,$fieldName)) return false;
+		if (!$fieldDef = $this->getFieldDef($tableName,$fieldName)) return false;
 		return $fieldDef['field_'.$property];
 	}
 
 	function getReverseDef($tableName,$fieldName)
 	{
-		if (!$tableDef=&$this->getTableDef($tableName)) return false;
+		if (!$tableDef= $this->getTableDef($tableName)) return false;
 		if (!isset($tableDef['reverseByName'][$fieldName])) return false;
 		return $tableDef['reverseByName'][$fieldName];
 	}
 	
 	function getReverseProperty($tableName,$fieldName,$property)
 	{
-		if (! $fieldDef=&$this->getReverseDef($tableName,$fieldName)) return false;
+		if (! $fieldDef= $this->getReverseDef($tableName,$fieldName)) return false;
 		return $fieldDef['field_'.$property];
 	}
 	
@@ -1075,7 +1124,7 @@ ORDER BY ta, fi;
 					$rowName = $parser->mTitle->getPrefixedDbKey().'#'. ($onMissingId ? $onMissingId : $parser->getRandomString());
 				} elseif ($rowName=='' && !$pref){
 					$rowName = 'guid_'.$parser->getRandomString();
-				} elseif (!$this->normalizeName ($rowName)) {
+				} elseif (!$this->normalizeRef ($rowName)) {
 					return array('fatal'=>true,'error'=> $this->formatError ("Bad row name $rowName (table $tableName)")); 
 				}
 				$argOffset=3;
@@ -1218,9 +1267,9 @@ ORDER BY ta, fi;
 		
 		if (!$fieldNames)
 		{
-			$dbr =& $this->getDbr();
+			$dbr = $this->getDbr();
 			if (!$dbr) return true; 
-			$wikiDbr =& wfGetDB( DB_MASTER );
+			$wikiDbr = wfGetDB( DB_MASTER );
 			$res = $dbr->query ('SELECT DISTINCT field_table FROM ' . $this->escapeInternalTableName('fields'));
 			$minDistance = 100000000;
 			while ($row = $dbr->fetchRow($res))
@@ -1285,7 +1334,7 @@ ORDER BY ta, fi;
 						$options[$name]=(int)$val; $optionFound=true; break;
 					case 'limit':
 						$val = $args->trimExpandValue($i);
-						$options[$name]=(int)$val > 200 ? 200 : (int)$val < 1 ? 1 : (int)$val; $optionFound=true; break;
+						$options[$name]=(int)$val > 2000 ? 2000 : (int)$val < 1 ? 1 : (int)$val; $optionFound=true; break;
 					}
 				}
 				else	if (!$optionFound)	$fields[$args->getKey($i)]=html_entity_decode($args->trimExpandValue($i));
@@ -1341,7 +1390,7 @@ ORDER BY ta, fi;
 		# if the table exists, show its data with the definition parsed from text
 		# this should allow friendly previews of edits to table definitions
 	
-		$dbr =&$this->getDbr();
+		$dbr = $this->getDbr();
 
 		if ($_GET['command']=='browse') $returnText='';
 		
@@ -1418,9 +1467,10 @@ ORDER BY ta, fi;
 			$headerRow=$tableDef['fieldNames'];
 			array_unshift($headerRow,'_row_ref');
 			array_unshift($headerRow,'_page_title');
+			array_unshift($headerRow,'');
 			$missingFields=array();
 			foreach ($headerRow as $k=>$fName) {
-			  $headerRow[$k]=sortButton($base,$args,$fName,'desc',"▼") ." $fName " . sortButton($base,$args,$fName,'asc',"▲");
+			  if ($fName) $headerRow[$k]=sortButton($base,$args,$fName,'desc',"▼") ." $fName " . sortButton($base,$args,$fName,'asc',"▲");
 			}
 			for ($i=5;$i<$dbr->numFields($res);$i++)
 			{
@@ -1434,6 +1484,7 @@ ORDER BY ta, fi;
 			}
 			$tableHead = $this->formatHeaderRow($headerRow);
 			$tableBody='';
+			$rowCounter = $args['offset'];
 			while ($row=$dbr->fetchRow($res))
 			{	
 				$rowTitle=Title::makeTitle($row['_page_namespace'],$row['_page_title']);
@@ -1441,6 +1492,7 @@ ORDER BY ta, fi;
 				$rowRef=$row['_row_ref'];
 				$cellRow=array
 				(
+				  ++$rowCounter,
 					'<a title = "'.$rowTitle->getFullText().'" href="' . $rowTitle->escapeFullUrl() .'">' . $rowTitle->getFullText() . '</a>',
 					'<a title = "'.$rowRef.'" href="' . $rowTitle->escapeFullUrl() . '#' . $rowName . '">' . $rowRef . '</a>'
 				);
@@ -1452,28 +1504,21 @@ ORDER BY ta, fi;
 					$fixValue=$value;
 					$fType=$tableDef['fieldsByName'][$fName]['field_type'];
 					$cast = Xtt::castValue($fType,$fixValue);
-					$displayValue=substr(htmlspecialchars($value),0,255);
+					$displayValue=substr(htmlspecialchars($fixValue),0,255);
 #						$displayValue=$fixValue;
-					if (!$cast)
-					{
-						$cellRow[]='<div class="xss-cell" title="'.$displayValue.'" style="position:relative;color:red">'.$displayValue.'</div>';
-					}
-					elseif ($value!=$row[$fName])
-					{
-						$cellRow[]='<div class="xss-cell" title="'.$displayValue.'" style="position:relative;color:navy">'.$displayValue.'</div>';
-					}
-					elseif ($value!==$fValue)
-					{
-						$cellRow[]='<div class="xss-cell" title="'.$displayValue.'" style="position:relative">'.$displayValue.'</div>';
-					}
-					else
-					{
+					if (!$cast)	{
+						$cellRow[]='<div class="xss-cell" title="'.$displayValue.'" style="position:relative;background:#f66;">&thinsp;'.$displayValue.'</div>';
+					}	elseif ($value && $value !== $fixValue) {
+						$cellRow[]='<div class="xss-cell" title="previously '.$value.'" style="position:relative;background:#fcc;">&thinsp;'.$displayValue.'</div>';
+					}	elseif ($value == $fValue) {
+						$cellRow[]='<div class="xss-cell" title="'.$displayValue.'" style="position:relative;background:#ffd;">&thinsp;'.$displayValue.'</div>';
+					}	else {
 						$cellRow[]='<div class="xss-cell" title="'.$displayValue.'" style="position:relative;">'.$displayValue.'</div>';
 					}
 				}
 				foreach ($missingFields as $fName)
 				{
-					$cellRow[]="<s>{$row[$fName]}</s>";
+					$cellRow[]="<div class=\"xss-cell\" style=\"color:red;position:relative;\"><s>{$row[$fName]}</s></div>";
 				}
 				$tableBody.=$this->formatCellRow($cellRow);
 			};
@@ -1593,8 +1638,8 @@ ORDER BY ta, fi;
 	}
 	
 	function makeMultiRow($fromRowName, $toRowName) {
-		if (!$this->normalizeName($fromRowName)) return false;
-		if (!$this->normalizeName($toRowName)) return false;
+		if (!$this->normalizeRef($fromRowName)) return false;
+		if (!$this->normalizeRef($toRowName)) return false;
 		
 		$rowData['_multi_from'] = $fromRowName;
 		$rowData['_multi_to'] = $toRowName;
@@ -1655,9 +1700,9 @@ ORDER BY ta, fi;
 		case 'ADD':
 			return "CREATE TABLE " . $multiTableName . "\n" 
 					. "( _multi_from CHAR(255), _multi_to CHAR(255), _multi_page_id INT(11),\n"
-					. "INDEX (_multi_from), INDEX (_multi_to), INDEX(_multi_page_id));\n";				
+					. "INDEX (_multi_from), INDEX (_multi_to), INDEX(_multi_page_id)) CHARACTER SET utf8;\n";				
 		case 'DROP':
-			return "DROP TABLE IF EXISTS " . $multiTableName . ";\n";
+			return "DROP TABLE IF EXISTS " . $multiTableName;
 		}
 		return "";
 	}
@@ -1690,7 +1735,7 @@ ORDER BY ta, fi;
 
 			# CREATE tbl_TableName from $this->mOutpuTableDef
 		
-			$sql= "CREATE TABLE " . $this->escapeDataTableName($tableName) . "\n(\n";
+			$sql= "CREATE TABLE  " . $this->escapeDataTableName($tableName) . "\n(\n";
 			$sql.= "\t`_page_id`\t INT(11) NOT NULL,\n";
 			$sql.= "\t`_page_ns`\tCHAR(255) NOT NULL,\n";
 			$sql.= "\t`_page_title`\tCHAR(255) NOT NULL, \n";
@@ -1713,7 +1758,7 @@ ORDER BY ta, fi;
 				}
 			}
 
-			$sql.="\n);\n\n";
+			$sql.="\n) CHARACTER SET utf8;\n\n";
 			if ($getSqlOnly) return $sql.join($multis,'\n');
 			$dbr->query($sql);
 			foreach($multis as $sql) {
@@ -1782,9 +1827,9 @@ ORDER BY ta, fi;
 	{
 	 	if ($pageTitle->getNamespace()==NS_XSSDATA) return false; # sanity check;
 
-    	$dbr =& $this->getDbr();
+    	$dbr = $this->getDbr();
     	if (!$dbr) return true; 
-		$wikiDbr =& wfGetDB( DB_MASTER );
+		$wikiDbr = wfGetDB( DB_MASTER );
 
 		$outputRows=$parserOutput->mXssOutputRows;
 		
@@ -1840,9 +1885,9 @@ ORDER BY ta, fi;
 	{
 	 	if ($pageTitle->getNamespace()==NS_XSSDATA) return false; # sanity check;
 
-    	$dbr =& $this->getDbr();
+    	$dbr = $this->getDbr();
     	if (!$dbr) return true; 
-		$wikiDbr =& wfGetDB( DB_MASTER );
+		$wikiDbr = wfGetDB( DB_MASTER );
 
 		$outputRows=$parserOutput->mXssMultiRows;
 		
@@ -1890,7 +1935,6 @@ ORDER BY ta, fi;
 			{
 				if ($fieldDef['field_type'] == 'multi') {
 					$multis[]= $this->makeMultiQuery($tableName,$fieldDef['field_name'],'DROP'); 
-					print($multis);
 				}
 			}
 			foreach($multis as $sql) {
@@ -1914,9 +1958,9 @@ ORDER BY ta, fi;
 
     	if ($title->getNamespace()==NS_XSSDATA) return false; # sanity check;
 
-    	$dbr =& $this->getDbr();
+    	$dbr = $this->getDbr();
     	if (!$dbr) return true; 
-		$wikiDbr =& wfGetDB( DB_MASTER );
+		$wikiDbr = wfGetDB( DB_MASTER );
 
 		
 		#get links from this page to individual tables and remove this page's rows from those tables
@@ -1948,7 +1992,7 @@ ORDER BY ta, fi;
 	function deleteMultiData(&$title,$pageId )
     {
     	if ($title->getNamespace()==NS_XSSDATA) return false; # sanity check;
-    	$dbr =& $this->getDbr(); if (!$dbr) return true; 
+    	$dbr = $this->getDbr(); if (!$dbr) return true; 
 		
 		#get links from this page to individual tables and remove this page's rows from those tables
 		$res= $dbr->query("SELECT ml_table FROM ".$this->getInternalTableName('multilinks')." WHERE ml_from=$pageId");
@@ -1968,11 +2012,12 @@ ORDER BY ta, fi;
 	# TODO: 
 	function updateRowDataOnPageMove(&$oldTitle, &$newTitle,$pageId)
     {
-    	if ($newTitle->getNamespace()==NS_XSSDATA) return false; # TODO: delete row data if page moved to Data: namespace
 
-    	$dbr =& $this->getDbr();
-    	if (!$dbr) return true; 
-		$wikiDbr =& wfGetDB( DB_MASTER );
+  	$dbr = $this->getDbr();
+  	if (!$dbr) return true; 
+		$wikiDbr = wfGetDB( DB_MASTER );
+
+   	if ($newTitle->getNamespace()==NS_XSSDATA) return false; # TODO: delete row data if page moved to Data: namespace
 
 		# Delete all data rows for this page and links from the page to individual tables
 
@@ -1986,9 +2031,8 @@ ORDER BY ta, fi;
 			{
 				$sql = "UPDATE ". $this->getDataTableName($row['ln_title']) . " SET "
 					 . '_page_ns =' . $newTitle->getNamespace() .','
-					 . '_page_title =' . $this->escapeValue($newTitle->getPrefixedDbKey()) . ','
-					 . '_row_ref = CONCAT(' . $this->escapeValue($newTitle->getPrefixedDbKey() . '#' ) . ', _row_name'
-					 . ') WHERE _page_id='.$pageId.' AND _row_ref LIKE ' . $this->escapeValue($oldTitle->getPrefixedDbKey() . '#%');
+					 . '_page_title =' . $this->escapeValue($newTitle->getPrefixedDbKey()) 
+					 . ') WHERE _page_id='.$pageId;
 				$dbr->query($sql);
 				$tableCounter++;		
 			}
@@ -2009,7 +2053,7 @@ ORDER BY ta, fi;
 
 	function hook_ArticleDelete(&$article)
 	{
-		$this->mSaveArticleIdForDelete=&$article->getID(); 	# This is too messay. TODO: Fix.
+		$this->mSaveArticleIdForDelete=$article->getID(); 	# This is too messay. TODO: Fix.
 		return true;
 	}
 	

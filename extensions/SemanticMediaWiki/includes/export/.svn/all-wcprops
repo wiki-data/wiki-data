@@ -1,0 +1,47 @@
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svnroot/mediawiki/!svn/ver/114456/trunk/extensions/SemanticMediaWiki/includes/export
+END
+SMW_Exp_Data.php
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/svnroot/mediawiki/!svn/ver/96744/trunk/extensions/SemanticMediaWiki/includes/export/SMW_Exp_Data.php
+END
+SMW_Exp_Element.php
+K 25
+svn:wc:ra_dav:version-url
+V 105
+/svnroot/mediawiki/!svn/ver/102358/trunk/extensions/SemanticMediaWiki/includes/export/SMW_Exp_Element.php
+END
+SMW_ExportController.php
+K 25
+svn:wc:ra_dav:version-url
+V 110
+/svnroot/mediawiki/!svn/ver/114456/trunk/extensions/SemanticMediaWiki/includes/export/SMW_ExportController.php
+END
+SMW_Serializer_RDFXML.php
+K 25
+svn:wc:ra_dav:version-url
+V 111
+/svnroot/mediawiki/!svn/ver/102355/trunk/extensions/SemanticMediaWiki/includes/export/SMW_Serializer_RDFXML.php
+END
+SMW_Exporter.php
+K 25
+svn:wc:ra_dav:version-url
+V 102
+/svnroot/mediawiki/!svn/ver/111407/trunk/extensions/SemanticMediaWiki/includes/export/SMW_Exporter.php
+END
+SMW_Serializer_Turtle.php
+K 25
+svn:wc:ra_dav:version-url
+V 111
+/svnroot/mediawiki/!svn/ver/102355/trunk/extensions/SemanticMediaWiki/includes/export/SMW_Serializer_Turtle.php
+END
+SMW_Serializer.php
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/svnroot/mediawiki/!svn/ver/102353/trunk/extensions/SemanticMediaWiki/includes/export/SMW_Serializer.php
+END

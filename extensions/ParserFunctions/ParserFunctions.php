@@ -27,6 +27,7 @@ class ExtParserFunctions {
 		if ( defined( get_class( $parser ) . '::SFH_OBJECT_ARGS' ) ) {
 			// These functions accept DOM-style arguments
 			$parser->setFunctionHook( 'if', array( &$this, 'ifObj' ), SFH_OBJECT_ARGS );
+			$parser->setFunctionHook( 'if2', array( &$this, 'ifTest' ), SFH_OBJECT_ARGS );
 			$parser->setFunctionHook( 'ifeq', array( &$this, 'ifeqObj' ), SFH_OBJECT_ARGS );
 			$parser->setFunctionHook( 'switch', array( &$this, 'switchObj' ), SFH_OBJECT_ARGS );
 			$parser->setFunctionHook( 'ifexist', array( &$this, 'ifexistObj' ), SFH_OBJECT_ARGS );
@@ -105,9 +106,18 @@ class ExtParserFunctions {
 		}
 	}
 
-	function ifObj( &$parser, $frame, $args ) {
-		$test = isset( $args[0] ) ? trim( $frame->expand( $args[0] ) ) : '';
+	function ifTest( &$parser, $frame, $args ) {
+		$test = isset( $args[1] ) ? trim( $frame->expand( $args[1] ) ) : '';
 		if ( $test !== '' ) {
+			return isset( $args[2] ) ? trim( $frame->expand( $args[2] ) ) : '';
+		} else {
+			return isset( $args[3] ) ? trim( $frame->expand( $args[3] ) ) : '';
+		}
+	}
+
+
+	function ifObj( &$parser, $frame, $args ) {
+		if (isset($args[0]) && trim( $frame->expand( $args[0] ) )!=='') {
 			return isset( $args[1] ) ? trim( $frame->expand( $args[1] ) ) : '';
 		} else {
 			return isset( $args[2] ) ? trim( $frame->expand( $args[2] ) ) : '';

@@ -1,0 +1,95 @@
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svnroot/mediawiki/!svn/ver/104210/trunk/extensions/Validator/includes
+END
+ListParameterCriterion.php
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svnroot/mediawiki/!svn/ver/87615/trunk/extensions/Validator/includes/ListParameterCriterion.php
+END
+ListParameterManipulation.php
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/svnroot/mediawiki/!svn/ver/87615/trunk/extensions/Validator/includes/ListParameterManipulation.php
+END
+ParameterCriterion.php
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svnroot/mediawiki/!svn/ver/87615/trunk/extensions/Validator/includes/ParameterCriterion.php
+END
+ParameterInput.php
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svnroot/mediawiki/!svn/ver/95879/trunk/extensions/Validator/includes/ParameterInput.php
+END
+ParameterManipulation.php
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svnroot/mediawiki/!svn/ver/87615/trunk/extensions/Validator/includes/ParameterManipulation.php
+END
+ValidationErrorHandler.php
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svnroot/mediawiki/!svn/ver/87615/trunk/extensions/Validator/includes/ValidationErrorHandler.php
+END
+ValidationError.php
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svnroot/mediawiki/!svn/ver/90289/trunk/extensions/Validator/includes/ValidationError.php
+END
+CriterionValidationResult.php
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/svnroot/mediawiki/!svn/ver/87615/trunk/extensions/Validator/includes/CriterionValidationResult.php
+END
+ListParameter.php
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svnroot/mediawiki/!svn/ver/95879/trunk/extensions/Validator/includes/ListParameter.php
+END
+ParserHook.php
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svnroot/mediawiki/!svn/ver/101575/trunk/extensions/Validator/includes/ParserHook.php
+END
+ItemParameterCriterion.php
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svnroot/mediawiki/!svn/ver/87615/trunk/extensions/Validator/includes/ItemParameterCriterion.php
+END
+Parameter.php
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svnroot/mediawiki/!svn/ver/103602/trunk/extensions/Validator/includes/Parameter.php
+END
+ItemParameterManipulation.php
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/svnroot/mediawiki/!svn/ver/87615/trunk/extensions/Validator/includes/ItemParameterManipulation.php
+END
+TopologicalSort.php
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svnroot/mediawiki/!svn/ver/90250/trunk/extensions/Validator/includes/TopologicalSort.php
+END
+Validator.php
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svnroot/mediawiki/!svn/ver/102904/trunk/extensions/Validator/includes/Validator.php
+END

@@ -1,0 +1,41 @@
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svnroot/mediawiki/!svn/ver/112487/trunk/extensions/UploadLocal
+END
+UploadLocalForm.php
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svnroot/mediawiki/!svn/ver/105917/trunk/extensions/UploadLocal/UploadLocalForm.php
+END
+UploadLocalDirectory.php
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svnroot/mediawiki/!svn/ver/112487/trunk/extensions/UploadLocal/UploadLocalDirectory.php
+END
+WebRequestUploadLocal.php
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svnroot/mediawiki/!svn/ver/105915/trunk/extensions/UploadLocal/WebRequestUploadLocal.php
+END
+UploadLocal_body.php
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svnroot/mediawiki/!svn/ver/111231/trunk/extensions/UploadLocal/UploadLocal_body.php
+END
+UploadLocal.i18n.php
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svnroot/mediawiki/!svn/ver/112386/trunk/extensions/UploadLocal/UploadLocal.i18n.php
+END
+UploadLocal.php
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svnroot/mediawiki/!svn/ver/106644/trunk/extensions/UploadLocal/UploadLocal.php
+END

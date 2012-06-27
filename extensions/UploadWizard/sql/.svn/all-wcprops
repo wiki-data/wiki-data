@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svnroot/mediawiki/!svn/ver/92413/trunk/extensions/UploadWizard/sql
+END
+UW_IndexCampaignsName.sql
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svnroot/mediawiki/!svn/ver/92413/trunk/extensions/UploadWizard/sql/UW_IndexCampaignsName.sql
+END
+UW_IndexConfIdProp.sql
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svnroot/mediawiki/!svn/ver/92413/trunk/extensions/UploadWizard/sql/UW_IndexConfIdProp.sql
+END
+UW_IndexConfProp.sql
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svnroot/mediawiki/!svn/ver/92413/trunk/extensions/UploadWizard/sql/UW_IndexConfProp.sql
+END

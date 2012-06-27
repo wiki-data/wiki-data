@@ -1,0 +1,71 @@
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svnroot/mediawiki/!svn/ver/97996/trunk/extensions/Validator/includes/criteria
+END
+CriterionHasLength.php
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/svnroot/mediawiki/!svn/ver/92206/trunk/extensions/Validator/includes/criteria/CriterionHasLength.php
+END
+CriterionIsNumeric.php
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/svnroot/mediawiki/!svn/ver/74520/trunk/extensions/Validator/includes/criteria/CriterionIsNumeric.php
+END
+CriterionMatchesRegex.php
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/svnroot/mediawiki/!svn/ver/74520/trunk/extensions/Validator/includes/criteria/CriterionMatchesRegex.php
+END
+CriterionNotEmpty.php
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/svnroot/mediawiki/!svn/ver/74520/trunk/extensions/Validator/includes/criteria/CriterionNotEmpty.php
+END
+CriterionTrue.php
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svnroot/mediawiki/!svn/ver/74360/trunk/extensions/Validator/includes/criteria/CriterionTrue.php
+END
+CriterionIsFloat.php
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/svnroot/mediawiki/!svn/ver/74887/trunk/extensions/Validator/includes/criteria/CriterionIsFloat.php
+END
+CriterionInRange.php
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/svnroot/mediawiki/!svn/ver/97996/trunk/extensions/Validator/includes/criteria/CriterionInRange.php
+END
+CriterionInArray.php
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/svnroot/mediawiki/!svn/ver/90250/trunk/extensions/Validator/includes/criteria/CriterionInArray.php
+END
+CriterionItemCount.php
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/svnroot/mediawiki/!svn/ver/92206/trunk/extensions/Validator/includes/criteria/CriterionItemCount.php
+END
+CriterionUniqueItems.php
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/svnroot/mediawiki/!svn/ver/75077/trunk/extensions/Validator/includes/criteria/CriterionUniqueItems.php
+END
+CriterionIsInteger.php
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/svnroot/mediawiki/!svn/ver/92197/trunk/extensions/Validator/includes/criteria/CriterionIsInteger.php
+END

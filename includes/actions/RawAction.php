@@ -197,6 +197,14 @@ class RawAction extends FormlessAction {
 		}
 
 		$allowedCTypes = array( 'text/x-wiki', $wgJsMimeType, 'text/css', 'application/x-zope-edit' );
+
+### START HACK ###		
+    global $wgExtraAllowedCTypes;
+    if (is_array ($wgExtraAllowedCTypes)) {
+      $allowedCTypes = array_merge($allowedCTypes,$wgExtraAllowedCTypes);
+    };
+### END HACK ###
+		
 		if ( $ctype == '' || !in_array( $ctype, $allowedCTypes ) ) {
 			$ctype = 'text/x-wiki';
 		}

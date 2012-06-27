@@ -11,4 +11,27 @@ require_once('Xvv/Xvv.php');
 require_once('Xuu/Xuu.php');
 require_once('Xtt/Xtt.php');
 require_once('Xss/Xss.php');
+
+$wgExtensionCredits['other']['Xoo'] = array(
+	'path' => __FILE__,
+	'name' => 'Xoo',
+	'author' => array( 'Zoran Obradović'),
+	'url' => 'http://www.wiki-data.org/',
+	'descriptionmsg' => 'xww-desc',
+	'version' => '0.5',
+);
+
+$wgConfigureAdditionalExtensions[] = array(
+    'name' => 'Xww',
+    'settings' => array(
+        'wgEvalHtmlIn' => 'array',
+    ),
+    'array' => array(
+        'wgEvalHtmlIn' => 'ns-bool',
+    ),
+    'schema' => false,
+    'url' => 'http://www.wiki-data.org/',
+    'dir' => 'Xoo/Xww'
+);
+
 #require_once('Xpp/Xpp.php');

@@ -1,0 +1,107 @@
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svnroot/mediawiki/!svn/ver/114764/trunk/extensions/SemanticMediaWiki/includes
+END
+SMW_Factbox.php
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svnroot/mediawiki/!svn/ver/104574/trunk/extensions/SemanticMediaWiki/includes/SMW_Factbox.php
+END
+SMW_DISerializer.php
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/svnroot/mediawiki/!svn/ver/109014/trunk/extensions/SemanticMediaWiki/includes/SMW_DISerializer.php
+END
+SMW_GlobalFunctions.php
+K 25
+svn:wc:ra_dav:version-url
+V 102
+/svnroot/mediawiki/!svn/ver/107709/trunk/extensions/SemanticMediaWiki/includes/SMW_GlobalFunctions.php
+END
+SMW_CompatibilityHelpers.php
+K 25
+svn:wc:ra_dav:version-url
+V 107
+/svnroot/mediawiki/!svn/ver/108966/trunk/extensions/SemanticMediaWiki/includes/SMW_CompatibilityHelpers.php
+END
+SMW_SemanticData.php
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/svnroot/mediawiki/!svn/ver/102353/trunk/extensions/SemanticMediaWiki/includes/SMW_SemanticData.php
+END
+SMW_DataValueFactory.php
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/svnroot/mediawiki/!svn/ver/114490/trunk/extensions/SemanticMediaWiki/includes/SMW_DataValueFactory.php
+END
+SMW_PageLister.php
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/svnroot/mediawiki/!svn/ver/106811/trunk/extensions/SemanticMediaWiki/includes/SMW_PageLister.php
+END
+SMW_Settings.php
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svnroot/mediawiki/!svn/ver/86694/trunk/extensions/SemanticMediaWiki/includes/SMW_Settings.php
+END
+SMW_Setup.php
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svnroot/mediawiki/!svn/ver/114280/trunk/extensions/SemanticMediaWiki/includes/SMW_Setup.php
+END
+SMW_ParseData.php
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svnroot/mediawiki/!svn/ver/112197/trunk/extensions/SemanticMediaWiki/includes/SMW_ParseData.php
+END
+SMW_QueryProcessor.php
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/svnroot/mediawiki/!svn/ver/114490/trunk/extensions/SemanticMediaWiki/includes/SMW_QueryProcessor.php
+END
+SMW_Infolink.php
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svnroot/mediawiki/!svn/ver/112203/trunk/extensions/SemanticMediaWiki/includes/SMW_Infolink.php
+END
+SMW_QueryLanguage.php
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/svnroot/mediawiki/!svn/ver/102353/trunk/extensions/SemanticMediaWiki/includes/SMW_QueryLanguage.php
+END
+SMW_ParserExtensions.php
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/svnroot/mediawiki/!svn/ver/109944/trunk/extensions/SemanticMediaWiki/includes/SMW_ParserExtensions.php
+END
+SMW_PageSchemas.php
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/svnroot/mediawiki/!svn/ver/107709/trunk/extensions/SemanticMediaWiki/includes/SMW_PageSchemas.php
+END
+SMW_QueryParser.php
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/svnroot/mediawiki/!svn/ver/107709/trunk/extensions/SemanticMediaWiki/includes/SMW_QueryParser.php
+END
+SMW_Outputs.php
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svnroot/mediawiki/!svn/ver/107709/trunk/extensions/SemanticMediaWiki/includes/SMW_Outputs.php
+END
